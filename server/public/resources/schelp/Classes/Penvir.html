@@ -1,0 +1,86 @@
+<html><head><title>Penvir</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events>Patterns>Data Sharing'>Streams-Patterns-Events>Patterns>Data Sharing</a></div>
+<h1>Penvir</h1>
+<div id='summary'>use an environment when embedding the pattern in a stream</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Ppatmod.sc'>Ppatmod.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Pkey.html">Pkey</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-embedInStream'>embedInStream</a> </li>
+<li class='toc3'><a href='#-envir'>envir</a> </li>
+<li class='toc3'><a href='#-independent'>independent</a> </li>
+<li class='toc3'><a href='#-pattern'>pattern</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>envir</span>, <span class='argstr'>pattern</span>, <span class='argstr'>independent: true</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>envir<td class='argumentdesc'>
+<p>an environment with objects to embed.<tr><td class='argumentname'>pattern<td class='argumentdesc'>
+<p>pattern or stream, ususally a <a href="./../Classes/Pfunc.html">Pfunc</a>, <a href="./../Classes/Prout.html">Prout</a>.<tr><td class='argumentname'>independent<td class='argumentdesc'>
+<p>if true streams can write to the environment without influencing other streams created from this pattern. if false, the streams write to a common namespace.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-embedInStream' href='./../Overviews/Methods.html#embedInStream'>embedInStream</a> (<span class='argstr'>inval</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-envir' href='./../Overviews/Methods.html#envir'>envir</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-envir' href='./../Overviews/Methods.html#envir'>envir</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-independent' href='./../Overviews/Methods.html#independent'>independent</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-independent' href='./../Overviews/Methods.html#independent'>independent</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pattern' href='./../Overviews/Methods.html#pattern'>pattern</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pattern' href='./../Overviews/Methods.html#pattern'>pattern</a> = value</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+x = (a:8);
+y = Penvir(
+    x,
+    Pfunc { ~a * 2 }
+);
+
+t = y.asStream;
+)
+
+t.next;
+
+
+
+(
+x = (a:8);
+y = Penvir(
+    x,
+    Pfunc { ~a = ~a * 2 }
+);
+
+t = y.asStream;
+z = y.asStream;
+)
+
+t.next;
+t.next;
+x.postln;    // x stays unchanged</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Penvir.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Penvir.schelp</a><br>link::Classes/Penvir::<br>sc version: 3.8dev</div></div></body></html>

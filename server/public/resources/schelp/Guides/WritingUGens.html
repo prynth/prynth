@@ -1,0 +1,230 @@
+<html><head><title>Writing Unit Generators</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider GUIDES</div>
+<div id='categories'><a href='./../Browse.html#Internals'>Internals</a></div>
+<h1>Writing Unit Generators</h1>
+<div id='summary'>Get started with writing unit generators</div>
+</div>
+<div class='subheader'>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#How Unit Generator plug-ins work.'>How Unit Generator plug-ins work.</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#The Entry Point'>The Entry Point</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#A Simple Unit Generator Plugin'>A Simple Unit Generator Plugin</a></li>
+<ul class='toc'><li class='toc2'><a href='#C++-side Definition of Unit Generators'>C++-side Definition of Unit Generators</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#SCLang-side Definition of Unit Generators'>SCLang-side Definition of Unit Generators</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Building Unit Generator Plugins'>Building Unit Generator Plugins</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Coding Guidelines'>Coding Guidelines</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Thread Safety'>Thread Safety</a></li>
+<ul class='toc'><li class='toc2'><a href='#Deadlock Prevention'>Deadlock Prevention</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='How Unit Generator plug-ins work.'>How Unit Generator plug-ins work.</a></h2>
+
+<p>The server loads unit generator plug-ins when it starts up. Unit Generator plug-ins are dynamically loaded libraries written in C++. Each library may contain one or multiple unit generator definitions. A plug-in can also define things other than unit generators such as buffer fill ("/b_gen") commands. Plug-ins are loaded during the startup of the synthesis server. Therefore the server will have to be restarted after (re-)compiling the plugin.<h2><a class='anchor' name='The Entry Point'>The Entry Point</a></h2>
+
+<p>When the library is loaded the server calls a function in the library, which is defined by the <code class='code prettyprint lang-sc'>PluginLoad()</code>macro. This entry point has two responsibilities:<ul>
+<li>It needs to store the passed in pointer to the InterfaceTable in a global variable.<li>It registers the unit generators.</ul>
+
+<p>Unit Generators are defined by calling a function in the InterfaceTable and passing it the name of the unit generator, the size of its C data struct, and pointers to functions for constructing and destructing it. There are 4 macros, which can be used to simplify the process.<dl>
+<dt>DefineSimpleUnit<dd>Define a `simple' unit generator<dt>DefineDtorUnit<dd>Define a unit generator with a descructor<dt>DefineSimpleCantAliasUnit<dd>Define a `simple' unit generator, whose input and output buffers cannot alias<dt>DefineDtorCantAliasUnit<dd>Define a unit generator with a destructor, whose input and output buffers cannot alias</dl>
+
+<p>These macros depend on a specific naming convention:<ul>
+<li>The unit generator struct is named like the plug-in.<li>The unit generator constructor is named <code class='code prettyprint lang-sc'>PluginName_Ctor</code><li>The unit generator destructor is named <code class='code prettyprint lang-sc'>PluginName_Dtor</code></ul>
+<h2><a class='anchor' name='A Simple Unit Generator Plugin'>A Simple Unit Generator Plugin</a></h2>
+
+<p>Unit generator plugins require two parts: A C++ part, which implements the server-side code that is loaded as a dynamically loaded library, and an SCLang class, that is required to build the <a href="./../Classes/SynthDef.html">SynthDef</a>. The following example implements a simple Sawtooth oscillator<h3><a class='anchor' name='C++-side Definition of Unit Generators'>C++-side Definition of Unit Generators</a></h3>
+
+<p>The following code shows the C++ source of a simple unit generator.<pre class='code prettyprint lang-sc'>#include "SC_PlugIn.h"
+
+// InterfaceTable contains pointers to functions in the host (server).
+static InterfaceTable *ft;
+
+// declare struct to hold unit generator state
+struct MySaw : public Unit
+{
+    double mPhase; // phase of the oscillator, from -1 to 1.
+    float mFreqMul; // a constant for multiplying frequency
+};
+
+// declare unit generator functions
+static void MySaw_next_a(MySaw *unit, int inNumSamples);
+static void MySaw_next_k(MySaw *unit, int inNumSamples);
+static void MySaw_Ctor(MySaw* unit);
+
+
+//////////////////////////////////////////////////////////////////
+
+// Ctor is called to initialize the unit generator.
+// It only executes once.
+
+// A Ctor usually does 3 things.
+// 1. set the calculation function.
+// 2. initialize the unit generator state variables.
+// 3. calculate one sample of output.
+void MySaw_Ctor(MySaw* unit)
+{
+    // 1. set the calculation function.
+    if (INRATE(0) == calc_FullRate) {
+        // if the frequency argument is audio rate
+        SETCALC(MySaw_next_a);
+    } else {
+        // if the frequency argument is control rate (or a scalar).
+        SETCALC(MySaw_next_k);
+    }
+
+    // 2. initialize the unit generator state variables.
+    // initialize a constant for multiplying the frequency
+    unit-&gt;mFreqMul = 2.0 * SAMPLEDUR;
+    // get initial phase of oscillator
+    unit-&gt;mPhase = IN0(1);
+
+    // 3. calculate one sample of output.
+    MySaw_next_k(unit, 1);
+}
+
+
+//////////////////////////////////////////////////////////////////
+
+// The calculation function executes once per control period
+// which is typically 64 samples.
+
+// calculation function for an audio rate frequency argument
+void MySaw_next_a(MySaw *unit, int inNumSamples)
+{
+    // get the pointer to the output buffer
+    float *out = OUT(0);
+
+    // get the pointer to the input buffer
+    float *freq = IN(0);
+
+    // get phase and freqmul constant from struct and store it in a
+    // local variable.
+    // The optimizer will cause them to be loaded it into a register.
+    float freqmul = unit-&gt;mFreqMul;
+    double phase = unit-&gt;mPhase;
+
+    // perform a loop for the number of samples in the control period.
+    // If this unit is audio rate then inNumSamples will be 64 or whatever
+    // the block size is. If this unit is control rate then inNumSamples will
+    // be 1.
+    for (int i=0; i &lt; inNumSamples; ++i)
+    {
+        // out must be written last for in place operation
+        float z = phase;
+        phase += freq[i] * freqmul;
+
+        // these if statements wrap the phase a +1 or -1.
+        if (phase &gt;= 1.f) phase -= 2.f;
+        else if (phase &lt;= -1.f) phase += 2.f;
+
+        // write the output
+        out[i] = z;
+    }
+
+    // store the phase back to the struct
+    unit-&gt;mPhase = phase;
+}
+
+//////////////////////////////////////////////////////////////////
+
+// calculation function for a control rate frequency argument
+void MySaw_next_k(MySaw *unit, int inNumSamples)
+{
+    // get the pointer to the output buffer
+    float *out = OUT(0);
+
+    // freq is control rate, so calculate it once.
+    float freq = IN0(0) * unit-&gt;mFreqMul;
+
+    // get phase from struct and store it in a local variable.
+    // The optimizer will cause it to be loaded it into a register.
+    double phase = unit-&gt;mPhase;
+
+    // since the frequency is not changing then we can simplify the loops
+    // by separating the cases of positive or negative frequencies.
+    // This will make them run faster because there is less code inside the loop.
+    if (freq &gt;= 0.f) {
+        // positive frequencies
+        for (int i=0; i &lt; inNumSamples; ++i)
+        {
+            out[i] = phase;
+            phase += freq;
+            if (phase &gt;= 1.f) phase -= 2.f;
+        }
+    } else {
+        // negative frequencies
+        for (int i=0; i &lt; inNumSamples; ++i)
+        {
+            out[i] = phase;
+            phase += freq;
+            if (phase &lt;= -1.f) phase += 2.f;
+        }
+    }
+
+    // store the phase back to the struct
+    unit-&gt;mPhase = phase;
+}
+
+
+// the entry point is called by the host when the plug-in is loaded
+PluginLoad(MySaw)
+{
+    // InterfaceTable *inTable implicitly given as argument to the load function
+    ft = inTable; // store pointer to InterfaceTable
+
+    DefineSimpleUnit(MySaw);
+}</pre>
+<h3><a class='anchor' name='SCLang-side Definition of Unit Generators'>SCLang-side Definition of Unit Generators</a></h3>
+
+<p>SuperCollider requires an SCLang class in order to build SynthDefs.
+<p>The arguments to the MySaw UGen are <code class='code prettyprint lang-sc'>freq</code> and <code class='code prettyprint lang-sc'>iphase</code>. The <code class='code prettyprint lang-sc'>multiNew</code> method handles multi channel expansion. The <code class='code prettyprint lang-sc'>madd</code> method provides support for the mul and add arguments. It will create a MulAdd UGen if necessary. You could write the class without mul and add arguments, but providing them makes it more convenient for the user. See <a href="./../Guides/WritingClasses.html">Writing Classes</a> for details on writing sclang classes.<pre class='code prettyprint lang-sc'>// without mul and add.
+MySaw : UGen {
+    *ar { arg freq = 440.0, iphase = 0.0;
+        ^this.multiNew('audio', freq, iphase)
+    }
+    *kr { arg freq = 440.0, iphase = 0.0;
+        ^this.multiNew('control', freq, iphase)
+    }
+}</pre>
+<h3><a class='anchor' name='Building Unit Generator Plugins'>Building Unit Generator Plugins</a></h3>
+
+<p>The most portable way to build plugins is using cmake<a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> , a cross-platform build system. In order build the example with cmake, the following code should go into a <code class='code prettyprint lang-sc'>CMakeLists.txt</code> file.<pre class='code prettyprint lang-sc'>cmake_minimum_required (VERSION 2.8)
+project (MySaw)
+
+include_directories(${SC_PATH}/include/plugin_interface)
+include_directories(${SC_PATH}/include/common)
+include_directories(${SC_PATH}/external_libraries/libsndfile/)
+
+set(CMAKE_SHARED_MODULE_PREFIX "")
+if(APPLE OR WIN32)
+set(CMAKE_SHARED_MODULE_SUFFIX ".scx")
+endif()
+
+add_library(MySaw MODULE MySaw.cpp)</pre>
+<h2><a class='anchor' name='Coding Guidelines'>Coding Guidelines</a></h2>
+
+<p>Unit generator plugins are called from the real-time context, which means that special care needs to be taken in order to avoid audio dropouts.<dl>
+<dt>Memory Allocation<dd>Do not allocate memory from the OS via <code class='code prettyprint lang-sc'>malloc</code> / <code class='code prettyprint lang-sc'>free</code> or <code class='code prettyprint lang-sc'>new</code>/ <code class='code prettyprint lang-sc'>delete</code>.  Instead you should use the real-time memory allocator via <code class='code prettyprint lang-sc'>RTAlloc</code> / <code class='code prettyprint lang-sc'>RTFree</code>.<dt>STL Containers<dd>It is generally not recommended to use STL containers, since they internally allocate memory. The only  way the STL containers can be used is by providing an Allocator, which maps to the allocating functions of  the server.<dt>Blocking API Calls<dd>Unit generators should not call any code, which could block the execution of the current thread. In  particular, system calls should be avoided. If synchronization with other threads is required, this has to be  done in a lock-free manner.</dl>
+<h2><a class='anchor' name='Thread Safety'>Thread Safety</a></h2>
+
+<p>There are two different implementations of the SuperCollider server. <strong>scsynth</strong> is the traditional server and <strong>supernova</strong> is a new implementation with support for multi-processor audio synthesis. Since the plugins in <strong>supernova</strong> can be called at the same time from multiple threads, write access to global data structures needs to be synchronized.<dl>
+<dt>Shared Global Data Structures<dd>Unit generators should not share data structures, which are written to. While it it safe to use  global data structures for read-only purposes (e.g. different unit generators could use the same constant wavetable),  the data structures that are modified by the unit generators should not be shared among different instances.<dt>Resource Locking<dd>SuperCollider's buffers and busses are global data structures, and access needs to be synchronized.  This is done internally by using reader-writer spinlocks. This is done by using the <code class='code prettyprint lang-sc'>ACQUIRE_</code>, <code class='code prettyprint lang-sc'>RELEASE_</code>, and  <code class='code prettyprint lang-sc'>LOCK_</code> macros, which are defined in SC_Unit.h. As exception, buffers in the wavetable format are not required to be  locked.</dl>
+<h3><a class='anchor' name='Deadlock Prevention'>Deadlock Prevention</a></h3>
+
+<p>In order to prevent deadlocks, a simple deadlock prevention scheme is implemented, based on the following constraints.<ul>
+<li>Lock resources only when required: few unit generators actually require the access to more than one resource at the same time.  The main exception of this rule are the FFT Chain ugens, which access multiple buffers at the same time. There is no known unit  generator, which accesses both buffers and busses at the same time.<li>Acquire reader locks if possible. Since multiple ugens can acquire a reader lock to the same resource at the same time, their  use reduces contention.<li>Resources have to be acquired in a well-defined order: busses should be acquired before buffers and resources with a high index  should be acquired before resources with a low index.</ul>
+
+<p><div class='footnotes'>
+<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - <a href="http://www.cmake.org">http://www.cmake.org</a></div></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/WritingUGens.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/WritingUGens.schelp</a><br>link::Guides/WritingUGens::<br>sc version: 3.8dev</div></div></body></html>

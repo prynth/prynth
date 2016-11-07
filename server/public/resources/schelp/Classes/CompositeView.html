@@ -1,0 +1,174 @@
+<html><head><title>CompositeView</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Views'>GUI>Views</a></div>
+<h1>CompositeView</h1>
+<div id='summary'>A view that contains other views.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/classNameRedirects.sc'>classNameRedirects.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/View.html">View</a> : <a href="../Classes/QObject.html">QObject</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/FlowView.html">FlowView</a>, <a href="./../Classes/FlowLayout.html">FlowLayout</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#Coordinate System'>Coordinate System</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Keydown Bubbling'>Keydown Bubbling</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Decorators'>Decorators</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Hiding / Swapping'>Hiding / Swapping</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Nested Example'>Nested Example</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<div class='note'><span class='notelabel'>NOTE:</span> In Qt GUI, every view can be a parent to other views, so CompositeView redirects to the same class as <a href="./../Classes/View.html">View</a> - you can use the latter equivalently.</div>
+<p>CompositeView can be used as the parent of other views, while also being a child of a Window or another CompositeView itself. Aside from that it has not special methods of its own.<div class='note'><span class='notelabel'>NOTE:</span> In Cocoa GUI, this view accepts key actions, but not mouse clicks or drags.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<h3><a class='anchor' name='Coordinate System'>Coordinate System</a></h3>
+
+<p>Containers use relative coordinates, i.e. views are placed relative to the upper left corner of the container.<pre class='code prettyprint lang-sc'>(
+w = Window.new;
+
+c = CompositeView(w, Rect(50, 0, 300, 300));
+a = Slider2D(c, Rect(0, 0, 100, 100)); // actually displays at (50, 0)
+b = Slider2D(c, Rect(100, 100, 100, 100));
+
+c.background = Color.rand;
+
+w.front;
+)
+
+c.bounds_(Rect(100, 0, 300, 300)); // contents adust since coords are relative
+c.resize_(6); // contents adust since coords are relative</pre>
+<h3><a class='anchor' name='Keydown Bubbling'>Keydown Bubbling</a></h3>
+
+<p>Key actions "bubble up" to the parent view if a view does not define one itself. In the following example, a and b do not have keyDown actions themselves, so the key event is passed to c, the parent, which defines the key down action. d's parent is the SCTopView, which has no key down action. See also <a href="./../Classes/View.html">View</a>.<pre class='code prettyprint lang-sc'>( //Click on the different views and hit keys on the keyboard.
+
+w = Window.new;
+
+c = CompositeView(w, Rect(0, 0, 200, 200)).background_(Color.grey.alpha_(0.3));
+
+a = Slider2D(c,Rect(0, 0, 100, 100)).background_(Color.rand);
+b = Slider2D(c,Rect(100, 100, 100, 100)).background_(Color.rand);
+
+w.front;
+
+c.keyDownAction = {
+    "keydown bubbled up to c".postln;
+};
+
+// d is on window w, not on composite view c
+d = Slider2D(w,Rect(200, 200, 100, 100));
+d.background = Color.black;
+)</pre>
+<h3><a class='anchor' name='Decorators'>Decorators</a></h3>
+
+<p>A 'decorator' object can be set to handle layout management. All views added to the CompositeView will now be placed by the decorator. Currently the only one existing is <a href="./../Classes/FlowLayout.html">FlowLayout</a>. You can use the ContainerView's addFlowLayout method as a short cut to assigning FlowLayout to decorator.<pre class='code prettyprint lang-sc'>(
+a = Window.new;
+
+b = CompositeView(a,Rect(0, 0, 500, 500));
+b.decorator = FlowLayout(b.bounds);
+//b.addFlowLayout; // you can also write this for convenience
+
+// adding views to b automatically use the decorator
+// no need to use parent.decorator.place
+c = Slider2D(b,Rect(0, 0, 100, 100)); // size matters
+d = Slider2D(b,Rect(0, 0, 100, 100)); // origin doesn't
+
+a.front;
+)</pre>
+
+<p>You can also use an empty composite view nicely as a spacer in <a href="./../Classes/VLayoutView.html">VLayoutView</a>, <a href="./../Classes/HLayoutView.html">HLayoutView</a>, or views that have a <a href="./../Classes/FlowLayout.html">FlowLayout</a> as their decorator.<pre class='code prettyprint lang-sc'>(
+a = Window.new;
+b = CompositeView(a, Rect(0, 0, 500, 500));
+
+b.decorator = FlowLayout(Rect(0, 0, 500, 500));
+
+Slider2D(b,Rect(0, 0, 100, 100)).background_(Color.rand);
+CompositeView(b, Rect(0, 0, 70, 100)); // just used for spacing
+Slider2D(b,Rect(0, 0, 100, 100)).background_(Color.rand);
+Slider2D(b,Rect(0, 0, 100, 100)).background_(Color.rand);
+
+b.decorator.nextLine;
+
+Slider2D(b, Rect(0, 0, 100, 100)).background_(Color.rand);
+Slider2D(b, Rect(0, 0, 100, 100)).background_(Color.rand);
+CompositeView(b, Rect(0, 0, 70, 100)); // just used for spacing
+Slider2D(b,Rect(0,0,100,100)).background_(Color.rand);
+
+a.front;
+)</pre>
+<h3><a class='anchor' name='Hiding / Swapping'>Hiding / Swapping</a></h3>
+
+<p>You can stack CompositeViews on top of each other and use a button show only one of them:<pre class='code prettyprint lang-sc'>(
+var colors = [Color.blue, Color.red, Color.green];
+a = Window.new;
+q = 3;
+
+b = Button(a, Rect(0, 0, 160, 20));
+
+b.states = Array.fill(q, { arg i;
+    [i.asString, Color.white, colors.wrapAt(i)]
+});
+
+b.action = { arg butt;
+    p.visible = false;
+    p = c.at(butt.value);
+    p.visible = true;
+};
+
+c = Array.fill(q, { arg i;
+    b = CompositeView(a, Rect(0, 25, 300, 300));
+    b.background = colors[i].alpha_(0.2);
+    b.visible = false;
+    b;
+});
+
+5.do{ arg i; Slider(c[0], Rect(10, i * 30 + 10, 150, 25)).value_(1.0.rand) };
+5.do{ arg i; Slider(c[1], Rect(i * 30 + 10, 10, 25, 150)).value_(1.0.rand) };
+Slider2D(c[2], Rect(10, 10, 155, 150)).x_(1.0.rand).y_(1.0.rand);
+
+p = c.at(0); // previous
+p.visible = true; // show first one
+
+a.front;
+)</pre>
+<h3><a class='anchor' name='Nested Example'>Nested Example</a></h3>
+
+<p>In this example, the <a href="./../Classes/StaticText.html">StaticText</a> accepts mouse clicks, since container views can't:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+v = CompositeView.new(w, w.view.bounds.insetBy(10)).background_(Color.rand);
+v.decorator = FlowLayout(v.bounds);
+
+l = "SUPERCOLLIDER".scramble;
+t = Array.fill(9, {arg i; var n, r, q;
+    n = CompositeView.new(v, Rect(20, 20, 121, 121)).background_(Color.rand);
+    q = StaticText(n, n.bounds.moveTo(0,0).insetBy(25)).string_(l[i]).align_(\center);
+    q.enabled = true;
+    q.font = Font("Geneva", 10);
+    q.background_(Color.rand);
+    q.mouseDownAction = {
+        n.background_(Color.rand);
+        q.font=q.font.size_(5 + q.font.size + 7 % 60)
+    };
+});
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/CompositeView.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/CompositeView.schelp</a><br>link::Classes/CompositeView::<br>sc version: 3.8dev</div></div></body></html>

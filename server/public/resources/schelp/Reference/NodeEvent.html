@@ -1,0 +1,100 @@
+<html><head><title>NodeEvent</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider REFERENCE</div>
+<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a></div>
+<h1>NodeEvent</h1>
+<div id='summary'>synth- and group- like interface of Event</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Classes/Event.html">Event</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Interface'>Interface</a></li>
+<ul class='toc'><li class='toc3'><a href='#.play'>play</a> </li>
+<li class='toc3'><a href='#.stop'>stop</a> </li>
+<li class='toc3'><a href='#.pause'>pause</a> </li>
+<li class='toc3'><a href='#.resume'>resume</a> </li>
+<li class='toc3'><a href='#.set'>set</a> </li>
+<li class='toc3'><a href='#.split'>split</a> </li>
+<li class='toc3'><a href='#.map'>map</a> </li>
+<li class='toc3'><a href='#.before'>before</a> </li>
+<li class='toc3'><a href='#.after'>after</a> </li>
+<li class='toc3'><a href='#.headOf'>headOf</a> </li>
+<li class='toc3'><a href='#.tailOf'>tailOf</a> </li>
+</ul><li class='toc2'><a href='#Multi-channel expansion'>Multi-channel expansion</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>The methods <a href="./../Classes/Event.html#-synth">Event: -synth</a> and <a href="./../Classes/Event.html#-group">Event: -group</a> set the parent event of the receiver to specialized events that duplicate the functionality of <a href="./../Classes/Synth.html">Synth</a> and <a href="./../Classes/Group.html">Group</a> objects. These objects follow the naming conventions of patterns (i.e., groups and addActions are integer ID's) and have the same stop/play/pause/resume interface as the EventStreamPlayers created by Pattern-play. So, they can be used interchangeably with patterns in control schemes and GUI's.
+<p>The following example creates a group with nodeID = 2 and plays a synth within it.<pre class='code prettyprint lang-sc'>g = (id: 2).group;
+g.play;
+a = (group: 2).synth;
+a.play;
+g.release;
+g.stop;</pre>
+<h3><a class='anchor' name='Interface'>Interface</a></h3>
+<h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.play' href='./../Overviews/Methods.html#play'>play</a> </h3>
+<div class='method'>
+<p>starts synth or group, returns this.delta</div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.stop' href='./../Overviews/Methods.html#stop'>stop</a> </h3>
+<div class='method'>
+<p>if ev[\hasGate] == true set gate to 0, otherwise frees the node</div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.pause' href='./../Overviews/Methods.html#pause'>pause</a> </h3>
+<div class='method'>
+<p>disables the node</div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.resume' href='./../Overviews/Methods.html#resume'>resume</a> </h3>
+<div class='method'>
+<p>reenables the node</div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.set' href='./../Overviews/Methods.html#set'>set</a> ( key, value)</h3>
+<div class='method'>
+<p>sets control identified by key to value</div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.split' href='./../Overviews/Methods.html#split'>split</a> </h3>
+<div class='method'>
+<p>returns an array of events, one for each synth or group specified by the receiver</div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.map' href='./../Overviews/Methods.html#map'>map</a> (key, busID)</h3>
+<div class='method'>
+<p>maps control to control bus</div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.before' href='./../Overviews/Methods.html#before'>before</a> (nodeID)</h3>
+<div class='method'>
+<p>moves to immediately before nodeID</div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.after' href='./../Overviews/Methods.html#after'>after</a> (nodeID)</h3>
+<div class='method'>
+<p>moves to immediately after nodeID</div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.headOf' href='./../Overviews/Methods.html#headOf'>headOf</a> (nodeID)</h3>
+<div class='method'>
+<p>moves to immediately to head of nodeID</div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.tailOf' href='./../Overviews/Methods.html#tailOf'>tailOf</a> (nodeID)</h3>
+<div class='method'>
+<p>moves to immediately to tail of nodeID</div><h3><a class='anchor' name='Multi-channel expansion'>Multi-channel expansion</a></h3>
+
+<p>With the exception of ~server, ~latency, and ~instrument any key in the event can have an array as a value and the standard rules of multi-channel expansion will be followed.<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// Here is a simple example of its use:
+
+// define a multiple Group event
+g = (id: [2,3,4,5,6], group: 0, addAction: 1).group;
+g.play; // play it
+
+// make a Synth event
+b = ( freq: [500,510], group: [2,3]).synth;
+b.play;
+
+b.set(\freq,[1000,1006]);
+
+g.release;
+
+b.play;
+h = g.split;    // split into individual group events
+c = b.split;    // and synth events
+c[0].set(\freq,700);
+c[1].set(\freq,400);
+
+h[0].stop;
+h[1].stop;
+
+g.stop;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/NodeEvent.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/NodeEvent.schelp</a><br>link::Reference/NodeEvent::<br>sc version: 3.8dev</div></div></body></html>

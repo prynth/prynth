@@ -1,0 +1,226 @@
+<html><head><title>J concepts in SC</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider GUIDES</div>
+<div id='categories'><a href='./../Browse.html#Language'>Language</a></div>
+<h1>J concepts in SC</h1>
+<div id='summary'>An overview of concepts borrowed from J</div>
+</div>
+<div class='subheader'>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Filling arrays'>Filling arrays</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Creating arrays'>Creating arrays</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Operator adverbs'>Operator adverbs</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Operator depth'>Operator depth</a></li>
+<ul class='toc'><li class='toc2'><a href='#deepCollect'>deepCollect</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Sections of multidimensional arrays'>Sections of multidimensional arrays</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Sorting order'>Sorting order</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Bubbling'>Bubbling</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Laminating with the +++ operator'>Laminating with the +++ operator</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#reshapeLike'>reshapeLike</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#measuring dimensionality and size'>measuring dimensionality and size</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#inverting dimensions'>inverting dimensions</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#allTuples'>allTuples</a></li>
+<ul class='toc'></ul></ul></div>
+<p>The J programming language is a successor of APL (<a href="http://www.jsoftware.com).">http://www.jsoftware.com).</a> These languages are made for processing arrays of data and are able to express complex notions of iteration implicitly.
+<p>The following are some concepts borrowed from or inspired by J. Thinking about multidimensional arrays can be both mind bending and mind expanding. It may take some effort to grasp what is happening in these examples.<h2><a class='anchor' name='Filling arrays'>Filling arrays</a></h2>
+
+<p>iota fills an array with a counter<pre class='code prettyprint lang-sc'>z = Array.iota(2, 3, 3);
+z.rank; // 3 dimensions
+z.shape; // gives the sizes of the dimensions
+z = z.reshape(3, 2, 3); // reshape changes the dimensions of an array
+z.rank; // 3 dimensions
+z.shape;</pre>
+
+<p>fill a multidimensional array<pre class='code prettyprint lang-sc'>// 2 dimensions
+Array.fill([3,3], { 1.0.rand.round(0.01) });
+Array.fill([2,3], {|i,j| i@j });
+
+// 3 dimensions
+Array.fill([2, 2, 2], { 1.0.rand.round(0.01) });
+Array.fill([2, 3, 4], {|i,j,k| [i, j, k].join });
+
+// a shorter variant of the above:
+{|i,j,k| [i, j, k].join } ! [2, 3, 4];
+
+// more dimensions
+Array.fill([2, 2, 4, 2], {|...args| args.join });</pre>
+<h2><a class='anchor' name='Creating arrays'>Creating arrays</a></h2>
+
+<p>using dup to create arrays<pre class='code prettyprint lang-sc'>(1..4) dup: 3;
+100.rand dup: 10;
+{100.rand} dup: 10;
+{100.rand} dup: 3 dup: 4;
+{{100.rand} dup: 3} dup: 4;
+{|i| i.squared} dup: 10;
+{|i| i.nthPrime} dup: 10;
+{ |i, j, k| i * j } dup: [5, 5]; // multidimensional dup</pre>
+
+<p>! is an abbreviation of dup<pre class='code prettyprint lang-sc'>(1..4) ! 3;
+100.rand ! 10;
+{100.rand} ! 10;
+{100.rand} ! 3 ! 4;
+{{100.rand} ! 3} ! 4;
+{|i| i.squared} ! 10;
+{|i| i.nthPrime} ! 10;
+{ |i, j| i * j } ! [5, 5];</pre>
+
+<p>other ways to do the same thing:<pre class='code prettyprint lang-sc'>// partial application
+_.squared ! 10;
+_.nthPrime ! 10;
+
+// operating on a list
+(0..9).squared;
+(0..9).nthPrime;</pre>
+<h2><a class='anchor' name='Operator adverbs'>Operator adverbs</a></h2>
+
+<p>Adverbs are a third argument passed to binary operators that modifies how they iterate over SequenceableCollections or Streams. See the <a href="./../Reference/Adverbs.html">Adverbs for Binary Operators</a> help file for more information.<pre class='code prettyprint lang-sc'>[10, 20, 30, 40, 50] + [1, 2, 3]; // normal
+[10, 20, 30, 40, 50] +.f [1, 2, 3]; // folded
+[10, 20, 30, 40, 50] +.s [1, 2, 3]; // shorter
+[10, 20, 30, 40, 50] +.x [1, 2, 3]; // cross
+[10, 20, 30, 40, 50] +.t [1, 2, 3]; // table</pre>
+<h2><a class='anchor' name='Operator depth'>Operator depth</a></h2>
+
+<p>J has a concept called verb rank, which is probably too complex to understand and implement in SC, but operator depth is similar and simpler. A binary operator can be given a depth at which to operate. Negative depths iterate the opposite operand. These are better understood by example. It is not currently possible to combine adverb and depth.<pre class='code prettyprint lang-sc'>z = Array.iota(3,3);
+y = [100, 200, 300];
+z + y;
+z +.0 y; // same as the above. y added to each row of z
+z +.1 y; // y added to each column of z
+z +.2 y; // y added to each element of z
+z +.-1 y; // z added to each element of y</pre>
+<h3><a class='anchor' name='deepCollect'>deepCollect</a></h3>
+
+<p>deepCollect operates a function at different dimensions or depths in an array.<pre class='code prettyprint lang-sc'>z = Array.iota(3, 2, 3);
+f = {|item| item.reverse };
+z.deepCollect(0, f);
+z.deepCollect(1, f);
+z.deepCollect(2, f);
+
+f = {|item| item.stutter };
+z.deepCollect(0, f);
+z.deepCollect(1, f);
+z.deepCollect(2, f);</pre>
+<h2><a class='anchor' name='Sections of multidimensional arrays'>Sections of multidimensional arrays</a></h2>
+
+<p>slice can get sections of multidimensional arrays. nil gets all the indices of a dimension.<pre class='code prettyprint lang-sc'>z = Array.iota(4, 5);
+z.slice(nil, (1..3));
+z.slice(2, (1..3));
+z.slice((2..3), (0..2));
+z.slice((1..3), 3);
+z.slice(2, 3);
+
+z = Array.iota(3, 3, 3);
+z.slice([0,1], [1,2], [0,2]);
+z.slice(nil, nil, [0,2]);
+z.slice(1);
+z.slice(nil, 1);
+z.slice(nil, nil, 1);
+z.slice(nil, 2, 1);
+z.slice(nil, 1, (1..2));
+z.slice(1, [0,1]);
+z.flop;</pre>
+<h2><a class='anchor' name='Sorting order'>Sorting order</a></h2>
+
+<p>generate a random array:<pre class='code prettyprint lang-sc'>z = {100.rand}.dup(10);</pre>
+
+<p>order returns an array of indices representing what would be the sorted order of the array:<pre class='code prettyprint lang-sc'>o = z.order;
+y = z[o]; // using the order as an index returns the sorted array</pre>
+
+<p>calling order on the order returns an array of indices that returns the sorted array to the original scrambled order:<pre class='code prettyprint lang-sc'>p = o.order;
+x = y[p];</pre>
+<h2><a class='anchor' name='Bubbling'>Bubbling</a></h2>
+
+<p>bubbling wraps an item in an array of one element. it takes the depth and levels as arguments.<pre class='code prettyprint lang-sc'>z = Array.iota(4,4);
+z.bubble;
+z.bubble(1);
+z.bubble(2);
+z.bubble(0,2);
+z.bubble(1,2);
+z.bubble(2,2);</pre>
+
+<p>similarly, unbubble unwraps an Array if it contains a single element.<pre class='code prettyprint lang-sc'>5.unbubble;
+[5].unbubble;
+[[5]].unbubble;
+[[5]].unbubble(0,2);
+[4,5].unbubble;
+[[4],[5]].unbubble;
+[[4],[5]].unbubble(1);
+z.bubble.unbubble;
+z.bubble(1).unbubble(1);
+z.bubble(2).unbubble(2);</pre>
+<h2><a class='anchor' name='Laminating with the +++ operator'>Laminating with the +++ operator</a></h2>
+
+<p>the +++ operator takes each item from the second list and appends it to the corresponding item in the first list. If the second list is shorter, it wraps.<pre class='code prettyprint lang-sc'>z = Array.iota(5,2);
+z +++ [77,88,99];
+z +++ [[77,88,99]];
+z +++ [[[77,88,99]]];
+z +++ [ [[77]],[[88]],[[99]] ];
+// same as:
+z +++ [77,88,99].bubble;
+z +++ [77,88,99].bubble(0,2);
+z +++ [77,88,99].bubble(1,2);
+
+z +++ [11,22,33].pyramidg;
+z +++ [11,22,33].pyramidg.bubble;
+z +++ [[11,22,33].pyramidg];
+z +++ [[[11,22,33].pyramidg]];
+
+
+(
+z = (1..4);
+10.do {|i|
+    z.pyramid(i+1).postln;
+    z.pyramidg(i+1).postln;
+    "".postln;
+};
+)</pre>
+<h2><a class='anchor' name='reshapeLike'>reshapeLike</a></h2>
+
+<p>reshapeLike allows you to make one nested array be restructured in the same manner as another.<pre class='code prettyprint lang-sc'>a = [[10,20],[30, 40, 50], 60, 70, [80, 90]];
+b = [[1, 2, [3, 4], [[5], 6], 7], 8, [[9]]];
+a.reshapeLike(b);
+b.reshapeLike(a);</pre>
+
+<p>If the lengths are different, the default behaviour is to wrap:<pre class='code prettyprint lang-sc'>a = [[10,20],[30, 40, 50]];
+b = [[1, 2, [3, 4], [[5], 6], 7], 8, [[9]]];
+a.reshapeLike(b);</pre>
+
+<p>but you can specify other index operators:<pre class='code prettyprint lang-sc'>a.reshapeLike(b, \foldAt);
+
+a.reshapeLike(b, \clipAt);
+
+a.reshapeLike(b, \at);</pre>
+<h2><a class='anchor' name='measuring dimensionality and size'>measuring dimensionality and size</a></h2>
+
+<p>maxSizeAtDepth allows you to check the maximum array size at a given depth dimension<pre class='code prettyprint lang-sc'>[[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxSizeAtDepth(2);
+[[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxSizeAtDepth(1);
+[[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxSizeAtDepth(0);
+(0..3).collect([[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxSizeAtDepth(_)) // max sizes for each dimension</pre>
+<h2><a class='anchor' name='inverting dimensions'>inverting dimensions</a></h2>
+
+<p>flopDeep allows you to to invert the outermost dimension with a dimension at any depth. This is analogous to flop, which does the same for 2-dimensional arrays.<pre class='code prettyprint lang-sc'>[[1, 2, 3], [[41, 52], 5, 6]].flopDeep(2);
+[[1, 2, 3], [[41, 52], 5, 6]].flopDeep(1);
+[[1, 2, 3], [[41, 52], 5, 6]].flopDeep(0);
+[[1, 2, 3], [[41, 52], 5, 6]].flopDeep; // without argument, flop from the deepest level
+
+[[[10, 100, 1000], 2, 3], [[41, 52], 5, 6]].flopDeep(2); // shorter array wraps
+[].flopDeep(1); // result is always one dimension higher.
+[[]].flopDeep(4);</pre>
+<h2><a class='anchor' name='allTuples'>allTuples</a></h2>
+
+<p>allTuples will generate all combinations of the sub arrays<pre class='code prettyprint lang-sc'>[[1, 2, 3], [4, 5], 6].allTuples;
+[[1, 2, 3], [4, 5, 6, 7], [8, 9]].allTuples;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/J-concepts-in-SC.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/J-concepts-in-SC.schelp</a><br>link::Guides/J-concepts-in-SC::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,59 @@
+<html><head><title>Event types</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider OVERVIEWS</div>
+<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events>Events'>Streams-Patterns-Events>Events</a></div>
+<h1>Event types</h1>
+<div id='summary'>Different ways that an Event can "play"</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Classes/Event.html">Event</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Currently existing event types:'>Currently existing event types:</a></li>
+<ul class='toc'><li class='toc2'><a href='#Some event types are used internally, e.g.:'>Some event types are used internally, e.g.:</a></li>
+<ul class='toc'></ul></ul></ul></div>
+<p>An <a href="./../Classes/Event.html">Event</a> responds to a <code class='code prettyprint lang-sc'>play</code> message by evaluating ~play in the event, and the default behaviour of ~play is determined by the value of ~type.<a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> <pre class='code prettyprint lang-sc'>a = (play: { ~word.scramble.postln }, word: "hello word");
+a.play;
+
+a = (type: \note, freq: [1310, 1321]); // choosing a play function by specifying type
+a.play;</pre>
+
+<p>The collection of eventTypes can be readily extended using <a href="./../Classes/Event.html#*addEventType">*addEventType</a>:<pre class='code prettyprint lang-sc'>Event.addEventType(\test, { "Your word is: ".post; ~word.scramble.postln });
+(type: \test, word: "annahme").play;</pre>
+<h2><a class='anchor' name='Currently existing event types:'>Currently existing event types:</a></h2>
+<div class='note'><span class='notelabel'>NOTE:</span> this documentation is incomplete.</div><dl>
+<dt>note<dd>Instantiate a synth on the server, with specified arguments, and later to free it. The choice of <a href="./../Classes/SynthDef.html">SynthDef</a> is specified using the \instrument key. This event type is what <code class='code prettyprint lang-sc'>Event.default</code> returns.
+<p><code class='code prettyprint lang-sc'>(degree: [0, 5, 7, 11]).play;</code>
+<p>Actually plays this event type:
+<p><code class='code prettyprint lang-sc'>(type: \note, degree: [0, 5, 7, 11], instrument: \default).play;</code><dt>set<dd>used to set parameters of some already-running node(s).<pre class='code prettyprint lang-sc'>a = (degree: 3, sustain: 40).play;
+fork { 10.do { (type: \set, id: a[\id], \degree: [0, 5, 8, 11].choose).play; 0.3.wait } };</pre>
+
+<p>(See also: note in <a href="./../Classes/Pmono.html">Pmono</a> helpfile)<dt>group<dd>creates a new group optional parameters:<table>
+<tr><td>~id<td>node ID, or node object<tr><td>~group<td>outer group id or object<tr><td>~addAction / ~lag / ~timingOffset<td>determine how and when the group is created</table>
+
+<p>Example:<pre class='code prettyprint lang-sc'>(type: \group, id: 2).play                    // create a group with nodeID 2
+(type: \note, freq: 500, group: 2).play        // play a synth in that group</pre>
+<dt>midi<dd>send note parameters to midi device optional parameters:<table>
+<tr><td>~id<td>node ID, or node object<tr><td>~group<td>outer group id or object<tr><td>~addAction / ~lag / ~timingOffset<td>determine how and when the group is created</table>
+<dt>on<dd>play synth, ~id must be specified<dt>off<dd>release synth (or free if no gate)<dt>kill<dd>free synth<dt>rest<dd>do nothing for a specified amount of time<dt>bus<dd>write ~array to control buses starting at ~out<dt>audioBus<dd>allocate ~channels consecutive audio buses<dt>controlBus<dd>allocate ~channels consecutive control buses<dt>alloc<dd>allocate ~bufnum with ~numframes and ~numchannels<dt>allocRead<dd>load a file from ~path, starting at ~firstFileFrame, reading ~numFrames sample frames<dt>cue<dd>cue a file for DiskIn, with ~bufferSize frames<dt>free<dd>free ~bufnum<dt>gen<dd>send ~gencmd to ~bufnum<dt>load<dd>load ~filename starting at ~frame into ~bufnum<dt>read<dd><dt>table<dd>load ~amps directly into a buffer<dt>sine1<dd>generate a buffer from ~amps<dt>sine2<dd>generate a buffer from ~freqs, ~amps<dt>sine3<dd>generate a buffer from ~freqs, ~amps, ~phases<dt>cheby<dd>generate a waveshape buffer from ~amps<dt>setProperties<dd>sends setter messages to ~receiver for each key in ~args that has a nonNil value in the Event.<dt>tree<dd>creates a tree of groups. ~tree can be an array of nodeIDs, and may contain associations to further nested arrays.<dt>phrase<dd>instead of playing a single synth from a SynthDef with ~instrument, it looks up a Pdef and plays a cluster of sounds.</dl>
+<h3><a class='anchor' name='Some event types are used internally, e.g.:'>Some event types are used internally, e.g.:</a></h3>
+<dl>
+<dt>monoNote<dd>used by Pmono<dt>monoSet<dd>used by Pmono<dt>monoOff<dd>used by Pmono</dl>
+
+<p><div class='footnotes'>
+<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - To see how event types are normally invoked, here is a slightly simplified version of the default definition of ~play as defined in the Event class:
+<p><code class='code prettyprint lang-sc'>{ ~eventTypes[~type].value(server); }</code>
+<p>The function uses the value of ~type to select a function from the Dictionary held in ~eventTypes.</div></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Overviews/Event_types.schelp'>/usr/local/share/SuperCollider/HelpSource/Overviews/Event_types.schelp</a><br>link::Overviews/Event_types::<br>sc version: 3.8dev</div></div></body></html>

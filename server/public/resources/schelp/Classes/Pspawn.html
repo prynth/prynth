@@ -1,0 +1,153 @@
+<html><head><title>Pspawn</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events>Patterns>Parallel'>Streams-Patterns-Events>Patterns>Parallel</a></div>
+<h1>Pspawn</h1>
+<div id='summary'>Spawns sub-patterns based on parameters in an event pattern</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Pspawner.sc'>Pspawner.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/FilterPattern.html">FilterPattern</a> : <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Pspawner.html">Pspawner</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Using references to protect patterns from embedding'>Using references to protect patterns from embedding</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-embedInStream'>embedInStream</a> </li>
+<li class='toc3'><a href='#-spawnProtoEvent'>spawnProtoEvent</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Pspawn is a pattern-based version of <a href="./../Classes/Pspawner.html">Pspawner</a>. Where Pspawner uses a Routine-style function to determine when and how to spawn child patterns into the result stream, Pspawn uses an event pattern to determine the actions to take.
+<p>Recommended to read the <a href="./../Classes/Pspawner.html">Pspawner</a> help file to become familiar with pattern spawning capabilities.<div class='note'><span class='notelabel'>NOTE:</span> Important: There are two kinds of events involved in Pspawn:<dl>
+<dt><strong>parent</strong> events<dd>which specify the pattern to embed, how to embed it (in parallel or sequence), and how long to wait until the next action;<dt><strong>child</strong> events<dd>which produce the resulting notes (or take other actions on the server).</dl>
+</div>
+<p>Of these, only the child events are returned to the event stream player during play. The parent events are used strictly internally to control spawning behavior. The parent and child event streams do not mix together. Thus pattern composition ( <a href="./../Classes/Pchain.html">Pchain</a> ) and parallelization ( <a href="./../Classes/Ppar.html">Ppar</a> ) may be used without special handling. It is up to the user to be aware of whether the parent or child stream should be subject to further manipulation, and put that manipulation in the right place. If it is to affect the child stream, it should enclose the entire Pspawn; for the parent stream, it should be inside Pspawn. (See the <a href="#Examples">Examples</a> below.)
+<p>Pspawn uses the following items in the parent pattern:<dl>
+<dt>method<dd>The action to call on the spawner object. Currently supported: wait, seq, par, suspendAll.<dt>delta<dd>How long to wait until the next action.<dt>dict<dd>If 'pattern' is given as a symbol (see below), this is the dictionary in which the pattern will be looked up. If not specified, the <a href="./../Classes/Pdef.html">Pdef</a> collection will be used.<dt>pattern<dd>If 'method' is seq or par, this is a pattern or function to be embedded, according to the following rules.</dl>
+<table>
+<tr><td><strong>'pattern' in the event</strong><td><strong>Resulting behavior</strong><tr><td>A <a href="./../Classes/Function.html">Function</a> : <code class='code prettyprint lang-sc'>{ ... }</code><td>The function should return a pattern; this pattern is spawned.<tr><td>A <a href="./../Classes/Ref.html">Ref</a> to a pattern: <code class='code prettyprint lang-sc'>`Pbind(...)</code><td>The referenced pattern is spawned.<tr><td>A <a href="./../Classes/Symbol.html">Symbol</a> : <code class='code prettyprint lang-sc'>\scaleUp</code><td>The pattern is looked up in the event's 'dict'.</table>
+<h3><a class='anchor' name='Using references to protect patterns from embedding'>Using references to protect patterns from embedding</a></h3>
+
+<p>Normally, when a pattern appears inside another pattern, the subpattern is embedded in the main output stream. It is not visible to the outside world as a pattern in itself; only its values appear.<pre class='code prettyprint lang-sc'>Pseq([Pwhite(0, 9, 5), Pwhite(10, 19, 5)], 1).asStream.all;</pre>
+
+<p>When using Pspawn, a sub pattern must be returned directly into the event. To accomplish this, every such pattern should be wrapped in a <a href="./../Classes/Ref.html">Ref</a> :<pre class='code prettyprint lang-sc'>Pseq([`Pwhite(0, 9, 5), `Pwhite(10, 19, 5)], 1).asStream.all;</pre>
+
+<p>Hint: <a href="./../Classes/Pfunc.html">Pfunc</a> is another good way to wrap patterns, because it simply returns its result values without further embedding. See the first example.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>pattern</span>, <span class='argstr'>spawnProtoEvent</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>pattern<td class='argumentdesc'>
+<p>An event pattern (typically <a href="./../Classes/Pbind.html">Pbind</a>) encapsulating the desired spawning behavior. Parameters in this event are described below.<tr><td class='argumentname'>spawnProtoEvent<td class='argumentdesc'>
+<p>The event prototype against which the pattern is evaluated. Good for giving default values that should apply to all spawning (parent) events.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-embedInStream' href='./../Overviews/Methods.html#embedInStream'>embedInStream</a> (<span class='argstr'>inevent</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-spawnProtoEvent' href='./../Overviews/Methods.html#spawnProtoEvent'>spawnProtoEvent</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-spawnProtoEvent' href='./../Overviews/Methods.html#spawnProtoEvent'>spawnProtoEvent</a> = value</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// Play overlapping major scales, up and down
+(
+p = Pspawn(Pbind(
+        // Pbind returned by Pfunc is not embedded, just placed in the event
+        // So, it can be spawned
+    \pattern, Pfunc { Pbind(\degree, Pseries(rrand(0, 10), #[-1, 1].choose, rrand(4, 10)), \dur, 0.125) },
+    \delta, Pwhite(1, 5, inf) * 0.125,
+    \method, \par
+)).play;
+)
+
+p.stop;
+
+
+// Same, using a dictionary of patterns, changing dur rhythm also
+(
+var    patternChoices = (
+    up: { Pbind(\degree, Pseries(rrand(-4, 5), 1, rrand(4, 10)), \dur, 0.125) },
+    down: { Pbind(\degree, Pseries(rrand(4, 11), -1, rrand(4, 10)), \dur, 0.125 * 4/3) }
+);
+
+p = Pspawn(Pbind(
+    \pattern, Prand([\up, \down], inf),
+    \delta, Pwhite(1, 5, inf) * 0.125,
+    \method, \par
+), (dict: patternChoices)).play;
+)
+
+p.stop;
+
+
+// Using pattern composition (perhaps gratuitously) to build the parent events
+(
+var    patternChoices = (
+    up: { Pbind(\degree, Pseries(rrand(-4, 5), 1, rrand(4, 10)), \dur, 0.125) },
+    down: { Pbind(\degree, Pseries(rrand(4, 11), -1, rrand(4, 10)), \dur, 0.125 * 4/3) }
+);
+
+p = Pspawn(Pchain(
+    Pbind(
+        \pattern, Prand([\up, \down], inf),
+        \method, \par
+    ),
+    Pbind(
+        \delta, Pwhite(1, 5, inf) * 0.125
+    )
+), (dict: patternChoices)).play;
+)
+
+p.stop;
+
+
+// Play parallel scales in the left channel and sequentially-arranged scales in the right
+// This means parallelizing (Ppar) the child streams; thus Ppar surrounds a pair of Pspawns
+
+// Handling of \pan is interesting: \pan needs to be a property of the patternChoices items
+// It is NOT a property of the spawning events
+// To reuse patternChoices, the Pspawns wrap the base patterns in a Pbindf, which adds new values
+(
+var    patternChoices = (
+    up: { Pbind(\degree, Pseries(rrand(-4, 5), 1, rrand(4, 10)), \dur, 0.125) },
+    down: { Pbind(\degree, Pseries(rrand(4, 11), -1, rrand(4, 10)), \dur, 0.125 * 4/3) }
+);
+
+p = Ppar([
+    Pspawn(Pbind(
+            // intermediate value
+        \patternKey, Prand([\up, \down], inf),
+            // pattern is selected and pan applied here
+        \pattern, Pfunc { |ev| Pbindf(ev.dict[ev.patternKey].value, \pan, -1) },
+        \delta, Pwhite(1, 5, inf) * 0.125,
+        \method, \par
+    ), (dict: patternChoices)),
+    Pspawn(Pbind(
+        \patternKey, Prand([\up, \down], inf),
+        \pattern, Pfunc { |ev| Pbindf(ev.dict[ev.patternKey].value, \pan, 1) },
+        \delta, Pwhite(1, 5, inf) * 0.125,
+        \method, \seq
+    ), (dict: patternChoices)),
+]).play;
+)
+
+p.stop;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Pspawn.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Pspawn.schelp</a><br>link::Classes/Pspawn::<br>sc version: 3.8dev</div></div></body></html>

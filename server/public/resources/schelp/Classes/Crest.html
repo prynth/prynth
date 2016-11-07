@@ -1,0 +1,69 @@
+<html><head><title>Crest</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Analysis'>UGens>Analysis</a></div>
+<h1>Crest</h1>
+<div id='summary'>Measure the temporal crest factor of a signal</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/MCLDFilterUGens.sc'>MCLDFilterUGens.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/FFTCrest.html">FFTCrest</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>This UGen measures the "crest factor" of a time-domain signal (not to be confused with <a href="./../Classes/FFTCrest.html">FFTCrest</a> which does the same thing for spectral data). The "crest factor" is the ratio of the absolute peak to the absolute mean over a certain time period. In pseudocode:
+<p> crest = (samples.abs.max) / (samples.abs.mean)
+<p>For Pulse waves the value will be 1 - because the mean and the maximum are the same. For SinOsc the theoretical value is 2.sqrt. For Saw it is 3.sqrt. These exact values might not occur in practice, because of anti-aliasing and other sampling factors.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>in</span>, <span class='argstr'>numsamps: 400</span>, <span class='argstr'>gate: 1</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>the signal to analyse. Can be audio rate or control rate.<tr><td class='argumentname'>numsamps<td class='argumentdesc'>
+<p>the number of samples over which to take the measurement. A buffer of this size is created internally (so be careful about specifying a massive number here). This value cannot be modulated.<tr><td class='argumentname'>gate<td class='argumentdesc'>
+<p>normally the statistic is calculated on every control block cycle. If you want it less often (eg to reduce CPU usage) you can modulate this - calculation only occurs if gate&gt;0<tr><td class='argumentname'>mul<td class='argumentdesc'><tr><td class='argumentname'>add<td class='argumentdesc'></table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>crest factor, measured on a linear scale. Sometimes it is required in dB values, for which you can simply use <a href="./../Classes/AbstractFunction.html#ampdb">ampdb</a> to convert the data. You may also wish to add a slight lag to the values you produce, if your window is short and/or your signal includes strong low frequencies, because the phase of the signal may affect the result.</div></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>s.boot;
+(
+{
+// Move the mouse. This varies from sinewave (left) to almost-square (right)
+var sig = (SinOsc.ar(MouseY.kr(100, 1000, 1)) * MouseX.kr(1,10)).clip2(1);
+var val = Crest.kr(sig, 440).poll;
+(sig * 0.1).dup
+}.play
+)
+
+(
+// Or as a plot (which shows the odd results you get over the first few samples):
+{
+var sig = (SinOsc.ar(440, pi.rand) * XLine.kr(1,10, 5)).clip2(1);
+var val = Crest.kr(sig, 440).poll;
+Out.ar(0, sig * 0.1.dup);
+K2A.ar(val);
+}.plot(5, minval:1, maxval: 4)
+)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/HelpSource/Classes/Crest.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/HelpSource/Classes/Crest.schelp</a><br>link::Classes/Crest::<br>sc version: 3.8dev</div></div></body></html>

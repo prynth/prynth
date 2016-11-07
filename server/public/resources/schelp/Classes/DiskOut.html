@@ -1,0 +1,131 @@
+<html><head><title>DiskOut</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>InOut'>UGens>InOut</a>, <a href='./../Browse.html#UGens>Buffer'>UGens>Buffer</a></div>
+<h1>DiskOut</h1>
+<div id='summary'>Record to a soundfile to disk.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/DiskIO.sc'>DiskIO.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/RecordBuf.html">RecordBuf</a>, <a href="./../Classes/DiskIn.html">DiskIn</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Disk recording procedure'>Disk recording procedure</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#Object Style'>Object Style</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Messaging Style'>Messaging Style</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Record to a soundfile to disk. Uses a <a href="./../Classes/Buffer.html">Buffer</a>.
+<p>See <a href="./../Classes/RecordBuf.html">RecordBuf</a> for recording into a buffer in memory.<h3><a class='anchor' name='Disk recording procedure'>Disk recording procedure</a></h3>
+
+<p>Recording to disk involves several steps, which should be taken in the right order. <a href="./../Classes/Server.html#-record">Server: -record</a> performs these steps for you. To record arbitrary buses using DiskOut explicitly, make sure to do the following:<ol>
+<li>Define a DiskOut <a href="./../Classes/SynthDef.html">SynthDef</a>, as shown in the example below.<li>Allocate a <a href="./../Classes/Buffer.html">Buffer</a> for recording.<ul>
+<li>The buffer size should be a power of two.<li>A duration of at least one second is recommended: <code class='code prettyprint lang-sc'>s.sampleRate.nextPowerOfTwo</code>.<li>Do not allocate the buffer inside the SynthDef.<li>Keep the buffer in a variable.</ul>
+
+<p><li>Specify the file path and recording format using <a href="./../Classes/Buffer.html#-write">Buffer: -write</a>, with the <code>leaveOpen</code> flag set to <code class='code prettyprint lang-sc'>true</code>. This is the only way to set the file path and recording format.<li>Create a <a href="./../Classes/Synth.html">Synth</a> node to run the DiskOut UGen.<li>When recording is finished, stop the DiskOut synth.<li>Close the buffer: <code class='code prettyprint lang-sc'>b.close</code>. This step updates the recorded file's audio header. Without it, the file will be unusable.<li>Free the buffer: <code class='code prettyprint lang-sc'>b.free</code>.</ol>
+
+<p>These steps are illustrated in the Examples section. In general, only the "Object Style" approach is needed. ("Messaging Style" is provided as a historical reference, but it isn't needed for typical use.)<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>bufnum</span>, <span class='argstr'>channelsArray</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bufnum<td class='argumentdesc'>
+<p>The number of the buffer to write to (prepared with /b-write or Buffer.write)<div class='note'><span class='notelabel'>NOTE:</span> The Buffer's numFrames must be a power of two and is recommended to be at least 65536 -- preferably 131072 or 262144. Smaller buffer sizes mean more frequent disk access, which can cause glitches.</div><tr><td class='argumentname'>channelsArray<td class='argumentdesc'>
+<p>The Array of channels to write to the file.<div class='note'><span class='notelabel'>NOTE:</span> The number of channels in the buffer and the channelsArray must be the same, otherwise DiskOut will fail silently (and not write anything to your file).</div></table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The number of frames written to disk.</div></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>s.boot; // start the server
+(
+// something to record
+SynthDef("bubbles", {
+    var f, zout;
+    f = LFSaw.kr(0.4, 0, 24, LFSaw.kr([8,7.23], 0, 3, 80)).midicps; // glissando function
+    zout = CombN.ar(SinOsc.ar(f, 0, 0.04), 0.2, 0.2, 4); // echoing sine wave
+    Out.ar(0, zout);
+}).send(s);
+
+// this will record to the disk
+SynthDef("help-Diskout", {arg bufnum;
+    DiskOut.ar(bufnum, In.ar(0,2));
+}).send(s);
+
+// this will play it back
+SynthDef("help-Diskin-2chan", { arg bufnum = 0;
+    Out.ar(0, DiskIn.ar(2, bufnum));
+}).send(s);
+)</pre>
+<h3><a class='anchor' name='Object Style'>Object Style</a></h3>
+<pre class='code prettyprint lang-sc'>// start something to record
+x = Synth.new("bubbles");
+
+// allocate a disk i/o buffer
+b= Buffer.alloc(s, 65536, 2);
+
+// create an output file for this buffer, leave it open
+b.write("~/diskouttest.aiff".standardizePath, "aiff", "int16", 0, 0, true);
+// create the diskout node; making sure it comes after the source
+d = Synth.tail(nil, "help-Diskout", ["bufnum", b]);
+// stop recording
+d.free;
+// stop the bubbles
+x.free;
+// close the buffer and the soundfile
+b.close;
+// free the buffer
+b.free;
+
+// play it back
+(
+x = Synth.basicNew("help-Diskin-2chan");
+m = { arg buf; x.addToHeadMsg(nil, [\bufnum,buf])};
+
+b = Buffer.cueSoundFile(s,"~/diskouttest.aiff".standardizePath, 0, 2, completionMessage: m);
+)
+x.free; b.close; b.free; // cleanup</pre>
+<h3><a class='anchor' name='Messaging Style'>Messaging Style</a></h3>
+<pre class='code prettyprint lang-sc'>// The same thing done in Messaging Style (less overhead but without the convienence of objects)
+// This does nothing different from the Messaging Style example.
+// If any of the following is confusing, stick to Object Style
+// and ignore this part.
+
+// start something to record
+s.sendMsg("/s_new", "bubbles", 2003, 1, 1);
+
+// allocate a disk i/o buffer
+s.sendMsg("/b_alloc", 0, 65536, 2); // Buffer number is 0
+
+// create an output file for this buffer, leave it open
+s.sendMsg("/b_write", 0, "~/diskouttest.aiff".standardizePath, "aiff", "int16", 0, 0, 1);
+
+// create the diskout node
+s.sendMsg("/s_new", "help-Diskout", 2004, 3, 2003, "bufnum", 0);
+
+s.sendMsg("/n_free", 2004); // stop recording
+s.sendMsg("/n_free", 2003); // stop the bubbles
+
+s.sendMsg("/b_close", 0); // close the file.
+s.sendMsg("/b_free", 0);</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/DiskOut.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/DiskOut.schelp</a><br>link::Classes/DiskOut::<br>sc version: 3.8dev</div></div></body></html>

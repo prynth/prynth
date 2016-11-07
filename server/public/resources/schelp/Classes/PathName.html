@@ -1,0 +1,313 @@
+<html><head><title>PathName</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Files'>Files</a></div>
+<h1>PathName</h1>
+<div id='summary'>file and directory path utilities</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Files/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Files/PathName.sc'>PathName.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/File.html">File</a>, <a href="./../Classes/String.html">String</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*tmp'>tmp</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*fromOS9'>fromOS9</a> </li>
+<li class='toc3'><a href='#*scroot'>scroot</a> </li>
+<li class='toc3'><a href='#*secondVolume'>secondVolume</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-fileName'>fileName</a> </li>
+<li class='toc3'><a href='#-fileNameWithoutExtension'>fileNameWithoutExtension</a> </li>
+<li class='toc3'><a href='#-extension'>extension</a> </li>
+<li class='toc3'><a href='#-pathOnly'>pathOnly</a> </li>
+<li class='toc3'><a href='#-isAbsolutePath'>isAbsolutePath</a>  <a href='#-asAbsolutePath'>asAbsolutePath</a>  <a href='#-isRelativePath'>isRelativePath</a>  <a href='#-asRelativePath'>asRelativePath</a> </li>
+<li class='toc3'><a href='#-folderName'>folderName</a> </li>
+<li class='toc3'><a href='#-fullPath'>fullPath</a> </li>
+<li class='toc3'><a href='#-entries'>entries</a> </li>
+<li class='toc3'><a href='#-files'>files</a> </li>
+<li class='toc3'><a href='#-folders'>folders</a> </li>
+<li class='toc3'><a href='#-isFile'>isFile</a> </li>
+<li class='toc3'><a href='#-isFolder'>isFolder</a> </li>
+<li class='toc3'><a href='#-filesDo'>filesDo</a> </li>
+<li class='toc3'><a href='#-allFolders'>allFolders</a> </li>
+<li class='toc3'><a href='#-diskName'>diskName</a> </li>
+<li class='toc3'><a href='#-+/+'>+/+</a> </li>
+<li class='toc3'><a href='#-endNumber'>endNumber</a> </li>
+<li class='toc3'><a href='#-noEndNumbers'>noEndNumbers</a> </li>
+<li class='toc3'><a href='#-nextName'>nextName</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-absolutePath'>absolutePath</a> </li>
+<li class='toc3'><a href='#-colonIndices'>colonIndices</a> </li>
+<li class='toc3'><a href='#-deepFiles'>deepFiles</a> </li>
+<li class='toc3'><a href='#-dumpToDoc'>dumpToDoc</a> </li>
+<li class='toc3'><a href='#-dumpTree'>dumpTree</a> </li>
+<li class='toc3'><a href='#-fileNameWithoutDoubleExtension'>fileNameWithoutDoubleExtension</a> </li>
+<li class='toc3'><a href='#-filesDoNoCVS'>filesDoNoCVS</a> </li>
+<li class='toc3'><a href='#-filesDoNoSVN'>filesDoNoSVN</a> </li>
+<li class='toc3'><a href='#-foldersWithoutCVS'>foldersWithoutCVS</a> </li>
+<li class='toc3'><a href='#-foldersWithoutSVN'>foldersWithoutSVN</a> </li>
+<li class='toc3'><a href='#-helpFilesDo'>helpFilesDo</a> </li>
+<li class='toc3'><a href='#-isCVS'>isCVS</a> </li>
+<li class='toc3'><a href='#-isSVN'>isSVN</a> </li>
+<li class='toc3'><a href='#-lastColonIndex'>lastColonIndex</a> </li>
+<li class='toc3'><a href='#-parentLevelPath'>parentLevelPath</a> </li>
+<li class='toc3'><a href='#-parentPath'>parentPath</a> </li>
+<li class='toc3'><a href='#-pathMatch'>pathMatch</a> </li>
+<li class='toc3'><a href='#-streamTree'>streamTree</a> </li>
+<li class='toc3'><a href='#-streamTreeNoCVS'>streamTreeNoCVS</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>PathName is a utility class for manipulating file names and paths. It expects a path to a file, and lets you access parts of that file path.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>path: ""</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>path<td class='argumentdesc'>
+<p>a <a href="./../Classes/String.html">String</a> which likely contains one or more / as typical for folder separation. ~ will be converted to your fully addressed home directory, as per <a href="./../Classes/String.html#-standardizePath">String: -standardizePath</a>.<pre class='code prettyprint lang-sc'>PathName.new("MyDisk/SC 2.2.8 f/Sounds/FunkyChicken");</pre>
+</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*tmp' href='./../Overviews/Methods.html#tmp'>tmp</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*tmp' href='./../Overviews/Methods.html#tmp'>tmp</a> = value</h3>
+<div class='method'>
+<p>Get or set the global temp directory as a <a href="./../Classes/String.html">String</a>. This is used by <a href="./../Classes/Buffer.html">Buffer</a>, etc. By default this is "/tmp/" for Linux and OSX, and "/WINDOWS/TEMP/" for Windows.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fromOS9' href='./../Overviews/Methods.html#fromOS9'>fromOS9</a> (<span class='argstr'>path: ""</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*scroot' href='./../Overviews/Methods.html#scroot'>scroot</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*scroot' href='./../Overviews/Methods.html#scroot'>scroot</a> = value</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*secondVolume' href='./../Overviews/Methods.html#secondVolume'>secondVolume</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*secondVolume' href='./../Overviews/Methods.html#secondVolume'>secondVolume</a> = value</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fileName' href='./../Overviews/Methods.html#fileName'>fileName</a> </h3>
+<div class='method'>
+<p>returns just the name of the file itself; i.e. everything after the last slash in the full path.<pre class='code prettyprint lang-sc'>(
+var myPath;
+myPath = PathName.new("MyDisk/SC 2.2.8 f/Sounds/FunkyChicken");
+myPath.fileName.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fileNameWithoutExtension' href='./../Overviews/Methods.html#fileNameWithoutExtension'>fileNameWithoutExtension</a> </h3>
+<div class='method'>
+<p>returns the name of the file itself without the file extension.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-extension' href='./../Overviews/Methods.html#extension'>extension</a> </h3>
+<div class='method'>
+<p>returns the file extension, i.e. everything after the last full-stop in the <a href="#-fileName">-fileName</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pathOnly' href='./../Overviews/Methods.html#pathOnly'>pathOnly</a> </h3>
+<div class='method'>
+<p>returns the full path up to the file name itself; i.e. everything up to and including the last slash. This is handy e.g. for storing several files in the same folder.<pre class='code prettyprint lang-sc'>(
+var myPath;
+myPath = PathName.new("MyDisk/SC 2.2.8 f/Sounds/FunkyChicken");
+myPath.pathOnly.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-isAbsolutePath' href='./../Overviews/Methods.html#isAbsolutePath'>isAbsolutePath</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asAbsolutePath' href='./../Overviews/Methods.html#asAbsolutePath'>asAbsolutePath</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isRelativePath' href='./../Overviews/Methods.html#isRelativePath'>isRelativePath</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asRelativePath' href='./../Overviews/Methods.html#asRelativePath'>asRelativePath</a> (<span class='argstr'>relativeTo</span>)</h3>
+<div class='method'>
+<p>you MUST have correctly initialized the scroot classvar for this to know what it is relative to !</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-folderName' href='./../Overviews/Methods.html#folderName'>folderName</a> </h3>
+<div class='method'>
+<p>returns only the name of the folder that the file is in; i.e. everything in between the last but one and the last slash.<pre class='code prettyprint lang-sc'>(
+var myPath;
+myPath = PathName.new("MyDisk/SC 2.2.8 f/Sounds/FunkyChicken");
+myPath.folderName.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fullPath' href='./../Overviews/Methods.html#fullPath'>fullPath</a> </h3>
+<div class='method'>
+<p>returns the full path name that PathName contains.<pre class='code prettyprint lang-sc'>(
+var myPath;
+myPath = PathName.new("MyDisk/SC 2.2.8 f/Sounds/FunkyChicken");
+myPath.fullPath.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-entries' href='./../Overviews/Methods.html#entries'>entries</a> </h3>
+<div class='method'>
+<p>returns a list of all the files+folders inside the folder represented by this path.<pre class='code prettyprint lang-sc'>(
+var myPath;
+myPath = PathName.new("./");
+myPath.entries.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-files' href='./../Overviews/Methods.html#files'>files</a> </h3>
+<div class='method'>
+<p>returns a list of all the files in the folder represented by this path.<pre class='code prettyprint lang-sc'>(
+var myPath;
+myPath = PathName.new("./");
+myPath.files.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-folders' href='./../Overviews/Methods.html#folders'>folders</a> </h3>
+<div class='method'>
+<p>returns a list of all the subfolders of the folder represented by this path.<pre class='code prettyprint lang-sc'>(
+var myPath;
+myPath = PathName.new("./");
+myPath.folders.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-isFile' href='./../Overviews/Methods.html#isFile'>isFile</a> </h3>
+<div class='method'>
+<p>returns a <a href="./../Classes/Boolean.html">Boolean</a> indicating whether or not the path represents a file (not a folder).<pre class='code prettyprint lang-sc'>(
+var myPath;
+myPath = PathName.new("./");
+myPath.isFile.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-isFolder' href='./../Overviews/Methods.html#isFolder'>isFolder</a> </h3>
+<div class='method'>
+<p>returns a <a href="./../Classes/Boolean.html">Boolean</a> indicating whether or not the path represents a folder (not a file).<pre class='code prettyprint lang-sc'>(
+var myPath;
+myPath = PathName.new("./");
+myPath.isFolder.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-filesDo' href='./../Overviews/Methods.html#filesDo'>filesDo</a> (<span class='argstr'>func</span>)</h3>
+<div class='method'>
+<p>Iterates over all files found in the pathname, including ones in subfolders.<pre class='code prettyprint lang-sc'>(
+var myPath;
+myPath = PathName.new("./");
+myPath.filesDo{|afile| afile.postln};
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-allFolders' href='./../Overviews/Methods.html#allFolders'>allFolders</a> </h3>
+<div class='method'>
+<p>returns a list of all the folder names contained in the pathname itself.<pre class='code prettyprint lang-sc'>(
+var myPath;
+myPath = PathName.new("MyDisk/SC 2.2.8 f/Sounds/FunkyChicken");
+myPath.allFolders.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-diskName' href='./../Overviews/Methods.html#diskName'>diskName</a> </h3>
+<div class='method'>
+<p>if path is an absolute path, returns the disk name; else a blank string.<pre class='code prettyprint lang-sc'>(
+var myPath;
+myPath = PathName.new("MyDisk/SC 2.2.8 f/Sounds/FunkyChicken");
+myPath.diskName.postln;
+)
+
+( // note the / at the start
+var myPath;
+myPath = PathName.new("/MyDisk/SC 2.2.8 f/Sounds/FunkyChicken");
+myPath.diskName.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-+/+' href='./../Overviews/Methods.html#+/+'>+/+</a> (<span class='argstr'>path</span>)</h3>
+<div class='method'>
+<p>Path concatenation operator - useful for avoiding doubling-up slashes unnecessarily.<pre class='code prettyprint lang-sc'>(PathName("/somewhere") +/+ PathName("over/the/rainbow")).postln;
+(PathName("/somewhere") +/+ PathName("/over/the/rainbow")).postln;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-endNumber' href='./../Overviews/Methods.html#endNumber'>endNumber</a> </h3>
+<div class='method'>
+<p>returns a number at the end of PathName. Returns zero if there is no number.<pre class='code prettyprint lang-sc'>PathName("floating1").endNumber.postln;
+PathName("floating").endNumber.postln;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-noEndNumbers' href='./../Overviews/Methods.html#noEndNumbers'>noEndNumbers</a> </h3>
+<div class='method'>
+<p>returns <a href="#-fullPath">-fullPath</a> without any numbers at the end.<pre class='code prettyprint lang-sc'>PathName("floating1").noEndNumbers.postln;
+PathName("floating").noEndNumbers.postln;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-nextName' href='./../Overviews/Methods.html#nextName'>nextName</a> </h3>
+<div class='method'>
+<p>generates a sensible next name for a file by incrementing a number at the end of PathName, or by adding one if there is none. This is useful for recording files with consecutive names, and e.g. to generate a new filename when you don't want to overwrite an existing file with the current name.<pre class='code prettyprint lang-sc'>PathName("floating34").nextName.postln;
+PathName("floating").nextName.postln;
+PathName("floating12_3A4X_56.7").nextName.postln;</pre>
+</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-absolutePath' href='./../Overviews/Methods.html#absolutePath'>absolutePath</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-colonIndices' href='./../Overviews/Methods.html#colonIndices'>colonIndices</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-deepFiles' href='./../Overviews/Methods.html#deepFiles'>deepFiles</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dumpToDoc' href='./../Overviews/Methods.html#dumpToDoc'>dumpToDoc</a> (<span class='argstr'>title: "Untitled"</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dumpTree' href='./../Overviews/Methods.html#dumpTree'>dumpTree</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fileNameWithoutDoubleExtension' href='./../Overviews/Methods.html#fileNameWithoutDoubleExtension'>fileNameWithoutDoubleExtension</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-filesDoNoCVS' href='./../Overviews/Methods.html#filesDoNoCVS'>filesDoNoCVS</a> (<span class='argstr'>func</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-filesDoNoSVN' href='./../Overviews/Methods.html#filesDoNoSVN'>filesDoNoSVN</a> (<span class='argstr'>func</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-foldersWithoutCVS' href='./../Overviews/Methods.html#foldersWithoutCVS'>foldersWithoutCVS</a> (<span class='argstr'>path</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-foldersWithoutSVN' href='./../Overviews/Methods.html#foldersWithoutSVN'>foldersWithoutSVN</a> (<span class='argstr'>path</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-helpFilesDo' href='./../Overviews/Methods.html#helpFilesDo'>helpFilesDo</a> (<span class='argstr'>func</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isCVS' href='./../Overviews/Methods.html#isCVS'>isCVS</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isSVN' href='./../Overviews/Methods.html#isSVN'>isSVN</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lastColonIndex' href='./../Overviews/Methods.html#lastColonIndex'>lastColonIndex</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-parentLevelPath' href='./../Overviews/Methods.html#parentLevelPath'>parentLevelPath</a> (<span class='argstr'>index</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/ATK/Classes/extPathName.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/ATK/Classes/extPathName.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-parentPath' href='./../Overviews/Methods.html#parentPath'>parentPath</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pathMatch' href='./../Overviews/Methods.html#pathMatch'>pathMatch</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-streamTree' href='./../Overviews/Methods.html#streamTree'>streamTree</a> (<span class='argstr'>str</span>, <span class='argstr'>tabs: 0</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-streamTreeNoCVS' href='./../Overviews/Methods.html#streamTreeNoCVS'>streamTreeNoCVS</a> (<span class='argstr'>str</span>, <span class='argstr'>tabs: 0</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>Here is an example that uses many instance methods. Just pick any file to see all the parts of its path.<pre class='code prettyprint lang-sc'>(
+GetFileDialog.new(
+    { arg ok, path;
+    var myPathName;
+    if (ok,
+        {
+            myPathName = PathName.new(path);
+
+            "New PathName object:  ".postc;
+            myPathName.postln;
+
+            "fileName only:        ".postc;
+            myPathName.fileName.postln;
+
+            "path up to file only: ".postc;
+            myPathName.pathOnly.postln;
+
+            "folder Name:          ".postc;
+            myPathName.folderName.postln;
+        }
+    )
+    }
+)
+)</pre>
+
+<p>Choose a soundfile to put into the library, using its foldername and filename.<pre class='code prettyprint lang-sc'>(
+GetFileDialog.new(
+    { arg ok, path;
+    var myPathName, myFile;
+    if (ok,
+        {
+            myPathName = PathName.new(path);
+
+            // read your file from disk, e.g. a soundFile/
+
+            myFile = SoundFile.new;
+            if (myFile.openRead(path),
+                {
+                    Library.put(
+                        [ myPathName.folderName.asSymbol, myPathName.fileName.asSymbol ],
+                        myFile);
+                    ("Check Library.global" + myPathName.folderName + "please.").postln;
+                },
+                { ("Could not read soundfile" + path ++ ".").postln; }
+            );
+            myFile.close;
+        }
+    )
+    }
+)
+)</pre>
+
+<p>Save three tables in the same folder. Note: The file name chosen in the dialog is ignored! The files are always named table1, table2, table3.<pre class='code prettyprint lang-sc'>(
+var table1, table2, table3;
+
+table1 = Wavetable.sineFill(1024, [1,2,3]);
+table2 = Signal.newClear.asWavetable;
+table3 = Wavetable.sineFill(1024, Array.rand(64, 0.0, 1.0));
+
+GetFileDialog.new(
+    { arg ok, path;
+    var myPathName, myPathOnly;
+    if (ok,
+        {
+            myPathName = PathName.new(path);
+            myPathOnly = myPathName.pathOnly;
+            ("writing files tables1-3 to"+myPathOnly).postln;
+            table1.write(myPathOnly ++ "table1");
+            table2.write(myPathOnly ++ "table2");
+            table3.write(myPathOnly ++ "table3");
+        }
+    )
+    }
+)
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/PathName.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/PathName.schelp</a><br>link::Classes/PathName::<br>sc version: 3.8dev</div></div></body></html>

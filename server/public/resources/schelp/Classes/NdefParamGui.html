@@ -1,0 +1,125 @@
+<html><head><title>NdefParamGui</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Libraries>JITLib>GUI'>Libraries>JITLib>GUI</a>, <a href='./../Browse.html#Live Coding'>Live Coding</a></div>
+<h1>NdefParamGui</h1>
+<div id='summary'>display the settings of a nodeproxy</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/NdefParamGui.sc'>NdefParamGui.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/EnvirGui.html">EnvirGui</a> : <a href="../Classes/JITGui.html">JITGui</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/EZText.html">EZText</a>, <a href="./../Classes/NdefGui.html">NdefGui</a>, <a href="./../Classes/EnvirGui.html">EnvirGui</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Creation'>Creation</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-name'>name</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-accepts'>accepts</a> </li>
+<li class='toc3'><a href='#-checkUpdate'>checkUpdate</a> </li>
+<li class='toc3'><a href='#-dragAction'>dragAction</a> </li>
+<li class='toc3'><a href='#-drags'>drags</a> </li>
+<li class='toc3'><a href='#-getState'>getState</a> </li>
+<li class='toc3'><a href='#-makeViews'>makeViews</a> </li>
+<li class='toc3'><a href='#-setByKeys'>setByKeys</a> </li>
+<li class='toc3'><a href='#-setDefaults'>setDefaults</a> </li>
+<li class='toc3'><a href='#-setFunc'>setFunc</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>NdefParamGui displays all settings and mappings of a nodeproxy, so one can change them flexibly. Single number get displayed with an <a href="./../Classes/EZSlider.html">EZSlider</a>, and anything else is shown as an <a href="./../Classes/EZText.html">EZText</a> (a text field). Its main use is within <a href="./../Classes/NdefGui.html">NdefGui</a>.
+<p>It inherits some useful methods from <a href="./../Classes/EnvirGui.html">EnvirGui</a>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Creation'>Creation</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>object</span>, <span class='argstr'>numItems: 8</span>, <span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>makeSkip: true</span>, <span class='argstr'>options: [  ]</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/EnvirGui.html'>EnvirGui</a></div>
+<div class='method'>
+<p>create a new NdefParamGui<pre class='code prettyprint lang-sc'>// simple example - see also NdefGui!
+
+g = NdefParamGui.new(nil, 5);    // empty with 5 slots
+g.parent.alwaysOnTop_(true);
+g.object_(Ndef(\a));        // put in a nodeproxy
+Ndef(\a, { |freq = 300, amp = 0.2| SinOsc.ar(freq) * amp ! 2 }).play;
+Ndef(\a).set(\freq, 200);    // add a setting
+Ndef(\a);
+g.object_(nil);            // put in nothing
+
+g.object_(Ndef(\a));         // put in a nodeproxy
+Ndef(\a).set(\amp, 0.125);    // add a setting
+Ndef(\a, { |freq = 300, amp = 0.2| SinOsc.ar(freq) * amp });
+Ndef(\a).set(\freq, 234);    // add a setting
+
+Ndef(\a).play
+Ndef(\lfo, { LFNoise0.kr([12, 8], 200).sum + 500 });
+Ndef(\a).map(\freq, Ndef(\lfo));// mapped proxies are shown
+
+g.useRanger = false;
+
+//Multichannel controls are shown in EZText
+g.putSpec(\freqs, \freq);
+Ndef(\a, { |freqs = #[300, 303], pan, amp = 0.2| SinOsc.ar(freqs).sum * amp });
+Ndef(\a).play
+Ndef(\a).setn(\freqs, [300, 350])
+Ndef(\a).setn(\freqs, [330, 350])
+Ndef(\a).set(\harm, 123)
+
+Ndef(\a).nodeMap.clear
+
+Ndef(\lfos, { LFNoise0.kr([12, 8], 200) + 500 });
+Ndef(\a).map(\freqs, Ndef(\lfos))
+
+g.parent.close</pre>
+<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>object<td class='argumentdesc'>
+<p>the nodeproxy whose settings are to be displayed.<tr><td class='argumentname'>numItems<td class='argumentdesc'>
+<p>the number of items to display. If an envir is given, and no num, num is envir.size.<tr><td class='argumentname'>parent<td class='argumentdesc'>
+<p>the parent view to display in; if none is given, a new window is created.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>the bounds within which to display; if none is given, bounds are calculated.<tr><td class='argumentname'>makeSkip<td class='argumentdesc'>
+<p>flag whether to make a skipjack to manage updates of the envirgui. default is true.<tr><td class='argumentname'>options<td class='argumentdesc'>
+<p>a list of additional information, e.g. flags about optional buttons.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a> = <span class='argstr'>name</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/EnvirGui.html'>EnvirGui</a></div>
+<div class='method'>
+<p>if in its own window, set the window's name<pre class='code prettyprint lang-sc'>g.name = "Yoohoo";</pre>
+</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-accepts' href='./../Overviews/Methods.html#accepts'>accepts</a> (<span class='argstr'>obj</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-checkUpdate' href='./../Overviews/Methods.html#checkUpdate'>checkUpdate</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dragAction' href='./../Overviews/Methods.html#dragAction'>dragAction</a> (<span class='argstr'>i</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-drags' href='./../Overviews/Methods.html#drags'>drags</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getState' href='./../Overviews/Methods.html#getState'>getState</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeViews' href='./../Overviews/Methods.html#makeViews'>makeViews</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setByKeys' href='./../Overviews/Methods.html#setByKeys'>setByKeys</a> (<span class='argstr'>newKeys</span>, <span class='argstr'>newSettings</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setDefaults' href='./../Overviews/Methods.html#setDefaults'>setDefaults</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setFunc' href='./../Overviews/Methods.html#setFunc'>setFunc</a> (<span class='argstr'>key</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>    // put an NdefParamGui in an existing window - margin becomes 0@0
+(
+w = Window().front;
+w.addFlowLayout;
+g = NdefParamGui(Ndef(\a), 3, w);
+NdefParamGui(Ndef(\c), 15, w);
+)
+    // even
+Ndef(\c).set(\otto, 123, \mops, [1,2,3], \kotzt, [0, 6, 0, 6]);
+Ndef(\c).nodeMap.clear;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/NdefParamGui.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/NdefParamGui.schelp</a><br>link::Classes/NdefParamGui::<br>sc version: 3.8dev</div></div></body></html>

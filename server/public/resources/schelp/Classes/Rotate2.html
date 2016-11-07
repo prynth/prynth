@@ -1,0 +1,111 @@
+<html><head><title>Rotate2</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Multichannel>Ambisonics'>UGens>Multichannel>Ambisonics</a>, <a href='./../Browse.html#UGens>Multichannel>Panners'>UGens>Multichannel>Panners</a></div>
+<h1>Rotate2</h1>
+<div id='summary'>Rotate a sound field.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Pan.sc'>Pan.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/BiPanB2.html">BiPanB2</a>, <a href="./../Classes/DecodeB2.html">DecodeB2</a>, <a href="./../Classes/PanB.html">PanB</a>, <a href="./../Classes/PanB2.html">PanB2</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Rotate2 can be used for rotating an ambisonic B-format sound field around an axis. Rotate2 does an equal power rotation so it also works well on stereo sounds. It takes two audio inputs (x, y) and an angle control (pos). It outputs two channels (x, y). It computes this:<pre class='code prettyprint lang-sc'>xout = cos(angle) * xin + sin(angle) * yin;</pre>
+<pre class='code prettyprint lang-sc'>yout = cos(angle) * yin - sin(angle) * xin;</pre>
+
+<p>where angle = pos * pi,  so that -1 becomes -pi and +1 becomes +pi. This allows you to use an LFSaw to do continuous rotation around a circle.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>, <span class='argstr'>pos: 0</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>, <span class='argstr'>pos: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>x<td class='argumentdesc'>
+<p>Input signal X.<tr><td class='argumentname'>y<td class='argumentdesc'>
+<p>Input signal Y.<tr><td class='argumentname'>pos<td class='argumentdesc'>
+<p>angle to rotate around the circle from -1 to +1. -1 is 180 degrees, -0.5 is left, 0 is forward, +0.5 is right, +1 is behind.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+{
+    var w, x, y, p, q, a, b, c, d;
+
+    p = WhiteNoise.ar(0.05); // source
+    q = LFSaw.ar(200,0,0.03)+LFSaw.ar(200.37,0,0.03)+LFSaw.ar(201,0,0.03);
+
+    // B-format encode 2 signals at opposite sides of the circle
+    #w, x, y = PanB2.ar(p, -0.5) + PanB2.ar(q, 0.5);
+
+    #x, y = Rotate2.ar(x, y, MouseX.kr(-1,1));
+
+    // B-format decode to quad
+    #a, b, c, d = DecodeB2.ar(4, w, x, y);
+
+    [a, b, d, c] // reorder to my speaker arrangement: Lf Rf Lr Rr
+}.play;
+)
+
+
+
+// Rotation of stereo sound:
+(
+{
+    // rotation via lfo
+    var x, y;
+    x = PinkNoise.ar(0.4);
+    y = LFTri.ar(800) * LFPulse.kr(3,0,0.3,0.2);
+    #x, y = Rotate2.ar(x, y, LFSaw.kr(0.1));
+    [x,y]
+}.play;
+)
+
+{
+    // rotation via mouse
+    var x, y;
+    x = Mix.fill(4, { LFSaw.ar(200 + 2.0.rand2, 0, 0.1) });
+    y = SinOsc.ar(900) * LFPulse.kr(3,0,0.3,0.2);
+    #x, y = Rotate2.ar(x, y, MouseX.kr(0,2));
+    [x,y]
+}.play;
+
+
+// Rotate B-format about Z axis:
+
+wout = win;
+zout = zin;
+#xout, yout = Rotate2.ar(xin, yin, pos);
+
+// Rotate B-format about Y axis:
+
+wout = win;
+yout = yin;
+#xout, zout = Rotate2.ar(xin, zin, pos);
+
+// Rotate B-format about X axis:
+
+wout = win;
+xout = xin;
+#yout, zout = Rotate2.ar(yin, zin, pos);</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Rotate2.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Rotate2.schelp</a><br>link::Classes/Rotate2::<br>sc version: 3.8dev</div></div></body></html>

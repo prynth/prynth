@@ -1,0 +1,181 @@
+<html><head><title>VLayoutView</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Views'>GUI>Views</a></div>
+<h1>VLayoutView</h1>
+<div id='summary'>A container view that arranges its children vertically</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/BasicViews.sc'>BasicViews.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/View.html">View</a> : <a href="../Classes/QObject.html">QObject</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/QVLayoutView.html">QVLayoutView</a></div>
+<div id='related'>See also: <a href="./../Classes/HLayoutView.html">HLayoutView</a>, <a href="./../Classes/CompositeView.html">CompositeView</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*qtClass'>qtClass</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<div class='note'><span class='notelabel'>NOTE:</span> In Qt GUI, this class has been rendered <strong>obsolete</strong> by a special set of layout classes; they are easier to use and more flexible. See <a href="./../Classes/VLayout.html">VLayout</a> for an equivalent to this class, and <a href="./../Guides/GUI-Layout-Management.html">Layout Management</a> for a general description of the Qt layout system.</div>
+<p>VLayoutView can be a parent to other views, and it automatically arranges its child views in vertical order, expanding their width to its own bounds. Only the height of the children is relevant.
+<p>When arranging its children, VLayoutView takes the values of their 'minHeight' and 'maxHeight' properties into account. This is useful when a child's <a href="./../Classes/View.html#-resize">resize</a> mode is set to 4, 5, or 6. See <a href="#examples">examples</a> below.
+<p>VLayoutView inherits some useful formatting methods from its superclasses.<div class='note'><span class='notelabel'>NOTE:</span> VLayoutView is designed mainly for grouping and placing widgets. While you can set it to accept key presses, it does not accept mouse clicks or drags.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*qtClass' href='./../Overviews/Methods.html#qtClass'>qtClass</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+q = 10;
+w = Window.new;
+
+v = VLayoutView(w,Rect(10,10,300,300));
+
+Array.fill(q,{ arg i;
+    Slider(v,Rect(0,0,75,20)).value_(i / q)
+});
+
+w.front
+)
+
+// show the area of the view.
+v.background_(Color.rand) // The sliders automatically expand to the optimal width</pre>
+
+<p>Stretching the layout view; Slider height is fixed:<pre class='code prettyprint lang-sc'>(
+q = 10;
+w = Window.new;
+
+v = VLayoutView(w,Rect(10,10,300,300));
+v.background_(Color.rand);
+v.resize = 5; // elastic
+Array.fill(q,{ arg i;
+    var s;
+    s = Slider(v,Rect(0,0,55,20));// The bounds.width are irrelevant here. They expand to the optimal width
+    s.value = i / q;
+    s
+});
+StaticText(v, Rect(0,0,55,20)).background_(Color.rand).string_("Some Example Text").align_(\center);
+w.front
+)</pre>
+
+<p>Stretching the layout view and the contents; if all the contents are elastic, the heights of the contents are perfectly divided up. In this example, the StaticText is not elastic in order to preserve its height.<pre class='code prettyprint lang-sc'>(
+q = 10;
+w = Window.new;
+
+v = VLayoutView(w,Rect(10,10,300,300));
+v.background_(Color.rand);
+v.resize = 5; // elastic
+Array.fill(q,{ arg i;
+    var s;
+    s = Slider(v,Rect(0,0,75,20));
+    s.resize = 5; // elastic
+    s.value = i / q;
+    s
+});
+StaticText(v, Rect(0,0,55,40))
+    .background_(Color.rand).string_("Some Example Text")
+    .align_(\center);
+
+w.front
+)</pre>
+
+<p>Mixed stretching modes:<pre class='code prettyprint lang-sc'>(
+q = 5;
+w = Window.new;
+
+v = VLayoutView(w,Rect(10,10,300,300));
+v.resize = 5; // elastic
+v.background_(Color.grey);
+Array.fill(q,{ arg i;
+    var s;
+    s = Slider(v,Rect(0,0,75,20)).background_(Color.rand);
+    s.value = i / 5;
+    if(i &lt; 2,{
+        s.resize = 5; // some elastic
+        s.setProperty(\minHeight,20);
+    },{
+        s.resize = 1; // some not elastic
+    });
+    s
+});
+StaticText(v, Rect(0,0,55,20)).background_(Color.rand).string_("Some Example Text").align_(\center);
+
+w.front
+)</pre>
+
+<p>Set minimum heights; beware that if the layout view height is smaller than the combined height of all the contents, things might disappear when you try to handle them with the mouse:<pre class='code prettyprint lang-sc'>(
+q = 5;
+w = Window.new;
+
+v = VLayoutView(w,Rect(10,10,300,300));
+v.resize = 5; // elastic
+v.background_(Color.grey);
+Array.fill(q,{ arg i;
+    var s;
+    s = Slider(v,Rect(0,0,75,20)).background_(Color.blue.alpha_(0.2));
+    s.value = i / 5;
+    s.resize = 5;
+    s.setProperty(\minHeight,20);
+    s.setProperty(\maxHeight,40);
+    s
+});
+w.front
+)</pre>
+
+<p>Spacing:<pre class='code prettyprint lang-sc'>(
+q = 10;
+w = Window.new;
+
+v = VLayoutView(w,Rect(10,10,300,300));
+v.setProperty(\spacing,0);
+
+Array.fill(q,{
+    Slider(v,Rect(0,0,75,20))
+});
+
+w.front
+)</pre>
+
+<p>Nesting: use VLayoutView and HLayoutView in combination:<pre class='code prettyprint lang-sc'>(
+q = 10;
+w = Window.new("nesting",Rect(30,30,400,700));
+
+v = VLayoutView(w,Rect(10,10,300,600));
+
+v.background = Color.rand;
+
+Array.fill(q,{ arg i;
+    Slider(v,Rect(0,0,75,20)).value_(i / q)
+});
+
+StaticText(v, Rect(0,0,55,20)).background_(Color.rand).string_("Some Example Text").align_(\center);
+
+h = HLayoutView(v,Rect(10,10,300,300));
+
+Array.fill(q,{ arg i;
+    Slider(h,Rect(0,0,20,70)).value_(i / q)
+});
+h.background = Color.rand;
+
+w.front
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/VLayoutView.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/VLayoutView.schelp</a><br>link::Classes/VLayoutView::<br>sc version: 3.8dev</div></div></body></html>

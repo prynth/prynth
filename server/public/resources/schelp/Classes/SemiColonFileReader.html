@@ -1,0 +1,99 @@
+<html><head><title>SemiColonFileReader</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Files'>Files</a></div>
+<h1>SemiColonFileReader</h1>
+<div id='summary'>file reader for semi-colon separated data</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/TabFileReader.sc'>TabFileReader.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/FileReader.html">FileReader</a> : <a href="../Classes/Stream.html">Stream</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/File.html">File</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*delim'>delim</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>SemiColonFileReader reads semi-colon delimited files into 2D arrays.
+<p>For tab delimited files use <a href="./../Classes/TabFileReader.html">TabFileReader</a>. For comma-separated files use <a href="./../Classes/CSVFileReader.html">CSVFileReader</a>. For space-delimited files, or custom delimiters, use <a href="./../Classes/FileReader.html">FileReader</a>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*delim' href='./../Overviews/Methods.html#delim'>delim</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+// write a test file:
+f = File("SemiColonTest.sc", "w");
+f.write(
+"Some semi-colon delimited data;
+
+123;;4;
+0.5;0.6;0.7
+"
+);
+f.close;
+)
+
+
+    // open file, read and put strings into array, close file.
+x = SemiColonFileReader.read("SemiColonTest.sc").postcs;
+
+    // can skip empty lines:
+x = SemiColonFileReader.read("SemiColonTest.sc", true).postcs;
+
+    // can skip blank entries caused by multiple commas:
+x = SemiColonFileReader.read("SemiColonTest.sc", true, true).postcs;
+
+    // do file open/close by hand if you prefer:
+f = File("SemiColonTest.sc", "r"); f.isOpen;
+t = SemiColonFileReader(f);
+t.read;
+f.close;
+
+(
+// write a test file with numbers:
+f = File("SemiColonTestNum.sc", "w");
+
+(1..10).do { |n| f.write(n.asString ++ ";"); };
+f.close;
+)
+
+x = SemiColonFileReader.read("SemiColonTestNum.sc").postcs;
+x.collect(_.collect(_.interpret));    // convert to numbers.
+
+    // or you can do it immediately:
+x = SemiColonFileReader.readInterpret("SemiColonTestNum.sc").postcs;
+
+(
+// write a test file with numbers:
+f = File("SemiColonTestNum.sc", "w");
+
+(1..100).do { |n|
+    f.write(n.asString ++ if (n % 10 != 0, $;, Char.nl)); };
+f.close;
+)
+
+
+x = SemiColonFileReader.readInterpret("SemiColonTestNum.sc").postln;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/SemiColonFileReader.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/SemiColonFileReader.schelp</a><br>link::Classes/SemiColonFileReader::<br>sc version: 3.8dev</div></div></body></html>

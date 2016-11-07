@@ -1,0 +1,299 @@
+<html><head><title>Knob</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Views'>GUI>Views</a></div>
+<h1>Knob</h1>
+<div id='summary'>A rotary controller view</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QKnob.sc'>QKnob.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/QAbstractStepValue.html">QAbstractStepValue</a> : <a href="../Classes/AbstractStepValue.html">AbstractStepValue</a> : <a href="../Classes/View.html">View</a> : <a href="../Classes/QObject.html">QObject</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/QKnob.html">QKnob</a></div>
+<div id='related'>See also: <a href="./../Classes/Slider.html">Slider</a>, <a href="./../Classes/Slider2D.html">Slider2D</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*defaultMode'>defaultMode</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*qtClass'>qtClass</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Data'>Data</a></li>
+<ul class='toc'><li class='toc3'><a href='#-value'>value</a> </li>
+<li class='toc3'><a href='#-valueAction'>valueAction</a> </li>
+<li class='toc3'><a href='#-increment'>increment</a> </li>
+<li class='toc3'><a href='#-decrement'>decrement</a> </li>
+</ul><li class='toc2'><a href='#Interaction'>Interaction</a></li>
+<ul class='toc'><li class='toc3'><a href='#-mode'>mode</a> </li>
+<li class='toc3'><a href='#-keystep'>keystep</a> </li>
+<li class='toc3'><a href='#-step'>step</a> </li>
+<li class='toc3'><a href='#-shift_scale'>shift_scale</a> </li>
+<li class='toc3'><a href='#-ctrl_scale'>ctrl_scale</a> </li>
+<li class='toc3'><a href='#-alt_scale'>alt_scale</a> </li>
+</ul><li class='toc2'><a href='#Appearance'>Appearance</a></li>
+<ul class='toc'><li class='toc3'><a href='#-centered'>centered</a> </li>
+<li class='toc3'><a href='#-color'>color</a> </li>
+</ul><li class='toc2'><a href='#Actions'>Actions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-action'>action</a> </li>
+<li class='toc3'><a href='#-defaultKeyDownAction'>defaultKeyDownAction</a> </li>
+</ul><li class='toc2'><a href='#Drag and drop'>Drag and drop</a></li>
+<ul class='toc'><li class='toc3'><a href='#-defaultGetDrag'>defaultGetDrag</a> </li>
+<li class='toc3'><a href='#-defaultCanReceiveDrag'>defaultCanReceiveDrag</a> </li>
+<li class='toc3'><a href='#-defaultReceiveDrag'>defaultReceiveDrag</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-background'>background</a> </li>
+<li class='toc3'><a href='#-getScale'>getScale</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#Basic Example'>Basic Example</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Centered Mode'>Centered Mode</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#step'>step</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#mouseOverAction'>mouseOverAction</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Drag and Drop'>Drag and Drop</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Knob displays a value from 0.0 to 1.0 in rotary fashon, and allows to control it with either circular or linear mouse motion.
+<p>It also displays the deviation of the value from either 0.0 or 0.5, which you can choose using <a href="#-centered">-centered</a>.
+<p>To switch between the mouse interaction modes, use <a href="#-mode">-mode</a>.
+<p>The amount by which the value changes at interaction can be fine-tuned using <a href="#-step">-step</a>, <a href="#-keystep">-keystep</a>, <a href="#-shift_scale">-shift_scale</a>, <a href="#-ctrl_scale">-ctrl_scale</a>, and <a href="#-alt_scale">-alt_scale</a><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*defaultMode' href='./../Overviews/Methods.html#defaultMode'>defaultMode</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*defaultMode' href='./../Overviews/Methods.html#defaultMode'>defaultMode</a> = value</h3>
+<div class='method'>
+<p> The default <a href="#-mode">-mode</a> for newly created Knobs.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>parent</span>, <span class='argstr'>bounds</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*qtClass' href='./../Overviews/Methods.html#qtClass'>qtClass</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Data'>Data</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-value' href='./../Overviews/Methods.html#value'>value</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-value' href='./../Overviews/Methods.html#value'>value</a> = <span class='argstr'>val</span></h3>
+<div class='method'>
+<p> The displayed value.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>val<td class='argumentdesc'>
+<p> A Number in the range of 0.0 to 1.0.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-valueAction' href='./../Overviews/Methods.html#valueAction'>valueAction</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-valueAction' href='./../Overviews/Methods.html#valueAction'>valueAction</a> = <span class='argstr'>val</span></h3>
+<div class='method'>
+<p> Sets the value and triggeres <a href="#-action">-action</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-increment' href='./../Overviews/Methods.html#increment'>increment</a> (<span class='argstr'>zoom: 1</span>)</h3>
+<div class='method'>
+<p> Increments the value by <a href="#-keystep">-keystep</a> multiplied by the argument.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>zoom<td class='argumentdesc'>
+<p> A Number.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-decrement' href='./../Overviews/Methods.html#decrement'>decrement</a> (<span class='argstr'>zoom: 1</span>)</h3>
+<div class='method'>
+<p> Decrements the value by <a href="#-keystep">-keystep</a> multiplied by the argument.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>zoom<td class='argumentdesc'>
+<p> A Number.</table></div><h3><a class='anchor' name='Interaction'>Interaction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mode' href='./../Overviews/Methods.html#mode'>mode</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mode' href='./../Overviews/Methods.html#mode'>mode</a> = <span class='argstr'>inputMode</span></h3>
+<div class='method'>
+<p> The way value is controlled with respect to mouse movement after clicking on the view:<ul>
+<li><code class='code prettyprint lang-sc'>\round</code> - value follows circular movement<li><code class='code prettyprint lang-sc'>\horiz</code> - value follows linear movement in horizontal direction<li><code class='code prettyprint lang-sc'>\vert</code> - value follows linear movement in vertical direction</ul>
+
+<p> Defaults to <code class='code prettyprint lang-sc'>\round</code>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>inputMode<td class='argumentdesc'>
+<p> One of the symbols listed above.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keystep' href='./../Overviews/Methods.html#keystep'>keystep</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keystep' href='./../Overviews/Methods.html#keystep'>keystep</a> = value</h3>
+<div class='method'>
+<p> The amount by which the value is incremented/decremented when pressing a relevant key.
+<p> Defaults to 0.01;<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
+<p> A Number.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-step' href='./../Overviews/Methods.html#step'>step</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-step' href='./../Overviews/Methods.html#step'>step</a> = <span class='argstr'>aFloat</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractStepValue.html'>AbstractStepValue</a></div>
+<div class='method'>
+<p> The amount by which the value is incremented/decremented using the mouse in 'horizontal' and 'vertical' <a href="#-mode">modes</a>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Number.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-shift_scale' href='./../Overviews/Methods.html#shift_scale'>shift_scale</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-shift_scale' href='./../Overviews/Methods.html#shift_scale'>shift_scale</a> = <span class='argstr'>aFloat</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractStepValue.html'>AbstractStepValue</a></div>
+<div class='method'>
+<p> The factor by which <a href="#-step">-step</a> or <a href="#-keystep">-keystep</a> is multiplied when used at mouse or keyboard interaction while the Shift key is pressed.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ctrl_scale' href='./../Overviews/Methods.html#ctrl_scale'>ctrl_scale</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ctrl_scale' href='./../Overviews/Methods.html#ctrl_scale'>ctrl_scale</a> = <span class='argstr'>aFloat</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractStepValue.html'>AbstractStepValue</a></div>
+<div class='method'>
+<p> The factor by which <a href="#-step">-step</a> or <a href="#-keystep">-keystep</a> is multiplied when used at mouse or keyboard interaction while the Ctrl key is pressed.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-alt_scale' href='./../Overviews/Methods.html#alt_scale'>alt_scale</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-alt_scale' href='./../Overviews/Methods.html#alt_scale'>alt_scale</a> = <span class='argstr'>aFloat</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractStepValue.html'>AbstractStepValue</a></div>
+<div class='method'>
+<p> The factor by which <a href="#-step">-step</a> or <a href="#-keystep">-keystep</a> is multiplied when used at mouse or keyboard interaction while the Alt key is pressed.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float.</table></div><h3><a class='anchor' name='Appearance'>Appearance</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-centered' href='./../Overviews/Methods.html#centered'>centered</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-centered' href='./../Overviews/Methods.html#centered'>centered</a> = <span class='argstr'>bool</span></h3>
+<div class='method'>
+<p> Whether the deviation of value will be displayed in relation to 0.0 or 0.5 (e.g. as in a panning controller);<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bool<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-color' href='./../Overviews/Methods.html#color'>color</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-color' href='./../Overviews/Methods.html#color'>color</a> = <span class='argstr'>colors</span></h3>
+<div class='method'>
+<p> The colors used by the Knob to draw the following elements:<ul>
+<li>the main Knob color<li>the value indicator<li>the deviation indicator<li>the background of the deviation indicator</ul>
+<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>colors<td class='argumentdesc'>
+<p> An Array of four Colors in the order listed above.</table></div><h3><a class='anchor' name='Actions'>Actions</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-action' href='./../Overviews/Methods.html#action'>action</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-action' href='./../Overviews/Methods.html#action'>action</a> = <span class='argstr'>func</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/View.html'>View</a></div>
+<div class='method'>
+<p> The action object evaluated whenever the user interacts with the Knob using the mouse or the keyboard.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultKeyDownAction' href='./../Overviews/Methods.html#defaultKeyDownAction'>defaultKeyDownAction</a> (<span class='argstr'>char</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>unicode</span>, <span class='argstr'>keycode</span>, <span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p> Implements the default effects of key presses as follows:<table>
+<tr><td><strong>Key</strong><td><strong>Effect</strong><tr><td>r<td>valueAction_(1.0.rand)<tr><td>n<td>valueAction_(0)<tr><td>x<td>valueAction_(1)<tr><td>c<td>valueAction_(0.5)<tr><td>]<td>increment<tr><td>[<td>decrement<tr><td>up arrow<td>increment<tr><td>down arrow<td>decrement<tr><td>right arrow<td>increment<tr><td>left arrow<td>decrement</table>
+
+<p> See also: <a href="#-keystep">-keystep</a>, <a href="#-shift_scale">-shift_scale</a>, <a href="#-ctrl_scale">-ctrl_scale</a>, <a href="#-alt_scale">-alt_scale</a>.</div><h3><a class='anchor' name='Drag and drop'>Drag and drop</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultGetDrag' href='./../Overviews/Methods.html#defaultGetDrag'>defaultGetDrag</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The <a href="#-value">-value</a>.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultCanReceiveDrag' href='./../Overviews/Methods.html#defaultCanReceiveDrag'>defaultCanReceiveDrag</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>True if the current drag data is a Number.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultReceiveDrag' href='./../Overviews/Methods.html#defaultReceiveDrag'>defaultReceiveDrag</a> </h3>
+<div class='method'>
+<p> Sets <a href="#-valueAction">-valueAction</a> to the current drag data.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-background' href='./../Overviews/Methods.html#background'>background</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-background' href='./../Overviews/Methods.html#background'>background</a> = <span class='argstr'>color</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getScale' href='./../Overviews/Methods.html#getScale'>getScale</a> (<span class='argstr'>modifiers</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<h3><a class='anchor' name='Basic Example'>Basic Example</a></h3>
+<pre class='code prettyprint lang-sc'>(
+var window, size = 32; // try different sizes - from 15 to 200 or more!
+window = Window.new("Knob", Rect(640,630,270,70)).front;
+k = Knob.new(window, Rect(20, 10, size, size));
+k.action_({|v,x,y,m| postf("action func called: %\n", v.value); });
+//k.color[1] = Color.gray(alpha:0);
+)
+
+k.value
+k.value = 0.25
+k.valueAction = 0.125
+
+// modes
+k.mode = \vert;
+k.mode = \horiz;
+k.mode = \round; // default
+
+k.visible
+k.visible = false
+k.visible = true
+k.enabled = false
+k.enabled_(true)
+k.canFocus = false
+k.canFocus = true</pre>
+<h3><a class='anchor' name='Centered Mode'>Centered Mode</a></h3>
+
+<p>Center mode is useful for pan or eq gain control etc.<pre class='code prettyprint lang-sc'>(
+var window;
+window = Window.new("Pan Knob", Rect(640,630,270,70)).front;
+k = Knob.new(window, Rect(20,10,36,36));
+k.action_({|v,x,y,m| \pan.asSpec.map(v.value).postln; })
+//  .mode_(\horiz)
+    .centered_(false)
+    .value_(\pan.asSpec.unmap(0)); // 0.5
+//k.color[1] = Color.gray(alpha:0);
+)
+k.centered
+k.centered = true
+k.centered = false</pre>
+<h3><a class='anchor' name='step'>step</a></h3>
+
+<p><a href="#-step">-step</a> only affects the 'horiz' and 'vert' modes:<pre class='code prettyprint lang-sc'>(
+var window, midispec;
+midispec = [0,127,'linear',1].asSpec;
+window = Window.new("step Knob", Rect(640,630,270,70)).front;
+k = Knob.new(window, Rect(20,10,32,32));
+k.action_({|v,x,y,m| midispec.map(v.value).postln; })
+       .value_(midispec.unmap(0));
+
+k.mode = \vert;
+
+)
+k.step
+k.step = 10/127 // step by 10
+
+k.mode = \horiz;
+k.mode = \round;</pre>
+<h3><a class='anchor' name='mouseOverAction'>mouseOverAction</a></h3>
+<pre class='code prettyprint lang-sc'>(
+var size = 28;
+w = Window.new("Knobs", Rect(250,500,270,70));
+w.acceptsMouseOver=true; // must be true in parent window!
+w.view.decorator = FlowLayout(w.view.bounds);
+h = StaticText(w, 150 @ 10);
+w.view.decorator.nextLine;
+k = Array(8);
+8.do({|item, i|
+    var knob;
+    knob = Knob.new(w, size @ size)
+        .action_({|v,x,y,m| h.string = "val: " ++ v.value.asString; })
+        .mouseOverAction_({|v,x,y| h.string = "val: " ++ v.value.asString; });
+
+    k = k.add(knob);
+});
+w.front
+)
+k[4].value</pre>
+<h3><a class='anchor' name='Drag and Drop'>Drag and Drop</a></h3>
+<pre class='code prettyprint lang-sc'>(
+var w, txt, size = 36;
+w = Window.new("Knobs", Rect(400,400,250,100)).front;
+w.acceptsMouseOver=true;
+w.view.decorator = FlowLayout(w.view.bounds).gap_(10 @ 10).margin_(10 @10);
+txt = StaticText(w, 200 @ 14);
+w.view.decorator.nextLine;
+
+k = Knob(w, size @ size);
+k.action = {arg v,x,y;  v.value.postln; txt.string_("value: " ++ v.value); };
+k.mouseOverAction = {|v| txt.string_("value: " ++ v.value); };
+
+j = Knob(w, size @ size);
+j.action = {arg v,x,y;  j.value.postln; txt.string_("value: " ++ v.value); };
+j.mouseOverAction = { txt.string_("value: " ++ j.value); };
+
+n = NumberBox(w, 100 @ 20);
+//n.setProperty(\boxColor,Color.grey(alpha:0.0));
+n.value = 0.0;
+)
+
+// customize drag and drop methods
+k.canReceiveDragHandler
+k.canReceiveDragHandler = false; // don't accept drops
+
+k.canReceiveDragHandler = { View.currentDrag.isFloat }; // accept only if drag is float
+
+k.receiveDragHandler = { ("value dropped in: " ++ View.currentDrag).postln }
+
+k.receiveDragHandler = { k.valueAction = View.currentDrag.clip(0.0, 1.0); }
+
+k.beginDragAction = { ("drag out -&gt; " ++ k.value).postln; }
+
+k.beginDragAction = { k.value.asFloat; }</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Knob.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Knob.schelp</a><br>link::Classes/Knob::<br>sc version: 3.8dev</div></div></body></html>

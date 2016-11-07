@@ -1,0 +1,769 @@
+<html><head><title>View</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Views'>GUI>Views</a></div>
+<h1>View</h1>
+<div id='summary'>The basic visible element of GUI</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QView.sc'>QView.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/QObject.html">QObject</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/AbstractScroll.html">AbstractScroll</a>, <a href="../Classes/AbstractStepValue.html">AbstractStepValue</a>, <a href="../Classes/Button.html">Button</a>, <a href="../Classes/CheckBox.html">CheckBox</a>, <a href="../Classes/CompositeView.html">CompositeView</a>, <a href="../Classes/EnvelopeView.html">EnvelopeView</a>, <a href="../Classes/HLayoutView.html">HLayoutView</a>, <a href="../Classes/ItemViewBase.html">ItemViewBase</a>, <a href="../Classes/LevelIndicator.html">LevelIndicator</a>, <a href="../Classes/MultiSliderView.html">MultiSliderView</a>, <a href="../Classes/QView.html">QView</a>, <a href="../Classes/QuartzComposerView.html">QuartzComposerView</a>, <span id='hiddensubclasses' style='display:none;'><a href="../Classes/SCScope.html">SCScope</a>, <a href="../Classes/ScopeView.html">ScopeView</a>, <a href="../Classes/SoundFileView.html">SoundFileView</a>, <a href="../Classes/TextViewBase.html">TextViewBase</a>, <a href="../Classes/TopView.html">TopView</a>, <a href="../Classes/TreeView.html">TreeView</a>, <a href="../Classes/UserView.html">UserView</a>, <a href="../Classes/VLayoutView.html">VLayoutView</a>, <a href="../Classes/WebView.html">WebView</a></span><a class='subclass_toggle' href='#' onclick='javascript:showAllSubclasses(this); return false'>&hellip;&nbsp;see&nbsp;all</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*globalKeyDownAction'>globalKeyDownAction</a> </li>
+<li class='toc3'><a href='#*globalKeyUpAction'>globalKeyUpAction</a> </li>
+<li class='toc3'><a href='#*currentDrag'>currentDrag</a> </li>
+<li class='toc3'><a href='#*currentDragString'>currentDragString</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*debug'>debug</a> </li>
+<li class='toc3'><a href='#*hSizePolicy'>hSizePolicy</a> </li>
+<li class='toc3'><a href='#*newCustom'>newCustom</a> </li>
+<li class='toc3'><a href='#*nonimpl'>nonimpl</a> </li>
+<li class='toc3'><a href='#*prClearCurrentDrag'>prClearCurrentDrag</a> </li>
+<li class='toc3'><a href='#*prSetCurrentDrag'>prSetCurrentDrag</a> </li>
+<li class='toc3'><a href='#*qtClass'>qtClass</a> </li>
+<li class='toc3'><a href='#*setGlobalEventEnabled'>setGlobalEventEnabled</a> </li>
+<li class='toc3'><a href='#*vSizePolicy'>vSizePolicy</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Hierarchy and existence'>Hierarchy and existence</a></li>
+<ul class='toc'><li class='toc3'><a href='#-parent'>parent</a> </li>
+<li class='toc3'><a href='#-parents'>parents</a> </li>
+<li class='toc3'><a href='#-getParents'>getParents</a> </li>
+<li class='toc3'><a href='#-children'>children</a> </li>
+<li class='toc3'><a href='#-remove'>remove</a> </li>
+<li class='toc3'><a href='#-removeAll'>removeAll</a> </li>
+<li class='toc3'><a href='#-close'>close</a> </li>
+<li class='toc3'><a href='#-isClosed'>isClosed</a> </li>
+<li class='toc3'><a href='#-notClosed'>notClosed</a> </li>
+<li class='toc3'><a href='#-asView'>asView</a> </li>
+</ul><li class='toc2'><a href='#Visibility'>Visibility</a></li>
+<ul class='toc'><li class='toc3'><a href='#-visible'>visible</a> </li>
+<li class='toc3'><a href='#-front'>front</a> </li>
+<li class='toc3'><a href='#-minimize'>minimize</a> </li>
+<li class='toc3'><a href='#-unminimize'>unminimize</a> </li>
+<li class='toc3'><a href='#-fullScreen'>fullScreen</a> </li>
+<li class='toc3'><a href='#-endFullScreen'>endFullScreen</a> </li>
+<li class='toc3'><a href='#-alwaysOnTop'>alwaysOnTop</a> </li>
+</ul><li class='toc2'><a href='#Size and position'>Size and position</a></li>
+<ul class='toc'><li class='toc3'><a href='#-bounds'>bounds</a> </li>
+<li class='toc3'><a href='#-absoluteBounds'>absoluteBounds</a> </li>
+<li class='toc3'><a href='#-sizeHint'>sizeHint</a> </li>
+<li class='toc3'><a href='#-minSizeHint'>minSizeHint</a> </li>
+<li class='toc3'><a href='#-maxSize'>maxSize</a> </li>
+<li class='toc3'><a href='#-minSize'>minSize</a> </li>
+<li class='toc3'><a href='#-fixedSize'>fixedSize</a> </li>
+<li class='toc3'><a href='#-fixedWidth'>fixedWidth</a> </li>
+<li class='toc3'><a href='#-fixedHeight'>fixedHeight</a> </li>
+<li class='toc3'><a href='#-maxWidth'>maxWidth</a> </li>
+<li class='toc3'><a href='#-minWidth'>minWidth</a> </li>
+<li class='toc3'><a href='#-maxHeight'>maxHeight</a> </li>
+<li class='toc3'><a href='#-minHeight'>minHeight</a> </li>
+<li class='toc3'><a href='#-moveTo'>moveTo</a> </li>
+<li class='toc3'><a href='#-resizeTo'>resizeTo</a> </li>
+<li class='toc3'><a href='#-resize'>resize</a> </li>
+<li class='toc3'><a href='#-decorator'>decorator</a> </li>
+<li class='toc3'><a href='#-addFlowLayout'>addFlowLayout</a> </li>
+<li class='toc3'><a href='#-flow'>flow</a> </li>
+<li class='toc3'><a href='#-layout'>layout</a> </li>
+<li class='toc3'><a href='#-mapToGlobal'>mapToGlobal</a> </li>
+</ul><li class='toc2'><a href='#Appearance'>Appearance</a></li>
+<ul class='toc'><li class='toc3'><a href='#-name'>name</a> </li>
+<li class='toc3'><a href='#-alpha'>alpha</a> </li>
+<li class='toc3'><a href='#-font'>font</a> </li>
+<li class='toc3'><a href='#-background'>background</a> </li>
+<li class='toc3'><a href='#-focusColor'>focusColor</a> </li>
+<li class='toc3'><a href='#-palette'>palette</a> </li>
+<li class='toc3'><a href='#-refresh'>refresh</a> </li>
+</ul><li class='toc2'><a href='#Common behavior'>Common behavior</a></li>
+<ul class='toc'><li class='toc3'><a href='#-userCanClose'>userCanClose</a> </li>
+<li class='toc3'><a href='#-deleteOnClose'>deleteOnClose</a> </li>
+<li class='toc3'><a href='#-enabled'>enabled</a> </li>
+<li class='toc3'><a href='#-canFocus'>canFocus</a> </li>
+<li class='toc3'><a href='#-focus'>focus</a> </li>
+<li class='toc3'><a href='#-hasFocus'>hasFocus</a> </li>
+<li class='toc3'><a href='#-acceptsMouse'>acceptsMouse</a> </li>
+<li class='toc3'><a href='#-acceptsMouseOver'>acceptsMouseOver</a> </li>
+</ul><li class='toc2'><a href='#Actions in general'>Actions in general</a></li>
+<ul class='toc'><li class='toc3'><a href='#-action'>action</a> </li>
+<li class='toc3'><a href='#-doAction'>doAction</a> </li>
+<li class='toc3'><a href='#-addAction'>addAction</a> </li>
+<li class='toc3'><a href='#-removeAction'>removeAction</a> </li>
+</ul><li class='toc2'><a href='#Key and mouse event processing'>Key and mouse event processing</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Mouse actions'>Mouse actions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-mouseDownAction'>mouseDownAction</a> </li>
+<li class='toc3'><a href='#-mouseUpAction'>mouseUpAction</a> </li>
+<li class='toc3'><a href='#-mouseMoveAction'>mouseMoveAction</a> </li>
+<li class='toc3'><a href='#-mouseOverAction'>mouseOverAction</a> </li>
+<li class='toc3'><a href='#-mouseWheelAction'>mouseWheelAction</a> </li>
+<li class='toc3'><a href='#-mouseEnterAction'>mouseEnterAction</a> </li>
+<li class='toc3'><a href='#-mouseLeaveAction'>mouseLeaveAction</a> </li>
+</ul><li class='toc2'><a href='#Key actions'>Key actions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-keyDownAction'>keyDownAction</a> </li>
+<li class='toc3'><a href='#-keyUpAction'>keyUpAction</a> </li>
+<li class='toc3'><a href='#-keyModifiersChangedAction'>keyModifiersChangedAction</a> </li>
+</ul><li class='toc2'><a href='#Drag and drop'>Drag and drop</a></li>
+<ul class='toc'><li class='toc3'><a href='#-beginDragAction'>beginDragAction</a> </li>
+<li class='toc3'><a href='#-canReceiveDragHandler'>canReceiveDragHandler</a> </li>
+<li class='toc3'><a href='#-receiveDragHandler'>receiveDragHandler</a> </li>
+<li class='toc3'><a href='#-dragLabel'>dragLabel</a> </li>
+</ul><li class='toc2'><a href='#Other actions and hooks'>Other actions and hooks</a></li>
+<ul class='toc'><li class='toc3'><a href='#-focusGainedAction'>focusGainedAction</a> </li>
+<li class='toc3'><a href='#-focusLostAction'>focusLostAction</a> </li>
+<li class='toc3'><a href='#-toFrontAction'>toFrontAction</a> </li>
+<li class='toc3'><a href='#-endFrontAction'>endFrontAction</a> </li>
+<li class='toc3'><a href='#-onResize'>onResize</a> </li>
+<li class='toc3'><a href='#-onMove'>onMove</a> </li>
+<li class='toc3'><a href='#-onClose'>onClose</a> </li>
+</ul><li class='toc2'><a href='#Subclassing'>Subclassing</a></li>
+<ul class='toc'><li class='toc3'><a href='#-defaultKeyDownAction'>defaultKeyDownAction</a> </li>
+<li class='toc3'><a href='#-defaultKeyUpAction'>defaultKeyUpAction</a> </li>
+<li class='toc3'><a href='#-keyDown'>keyDown</a> </li>
+<li class='toc3'><a href='#-keyUp'>keyUp</a> </li>
+<li class='toc3'><a href='#-keyModifiersChanged'>keyModifiersChanged</a> </li>
+<li class='toc3'><a href='#-keyTyped'>keyTyped</a> </li>
+<li class='toc3'><a href='#-mouseDown'>mouseDown</a> </li>
+<li class='toc3'><a href='#-mouseUp'>mouseUp</a> </li>
+<li class='toc3'><a href='#-mouseMove'>mouseMove</a> </li>
+<li class='toc3'><a href='#-mouseOver'>mouseOver</a> </li>
+<li class='toc3'><a href='#-mouseEnter'>mouseEnter</a> </li>
+<li class='toc3'><a href='#-mouseLeave'>mouseLeave</a> </li>
+<li class='toc3'><a href='#-defaultGetDrag'>defaultGetDrag</a> </li>
+<li class='toc3'><a href='#-defaultCanReceiveDrag'>defaultCanReceiveDrag</a> </li>
+<li class='toc3'><a href='#-defaultReceiveDrag'>defaultReceiveDrag</a> </li>
+<li class='toc3'><a href='#-beginDrag'>beginDrag</a> </li>
+<li class='toc3'><a href='#-canReceiveDrag'>canReceiveDrag</a> </li>
+<li class='toc3'><a href='#-receiveDrag'>receiveDrag</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-allChildren'>allChildren</a> </li>
+<li class='toc3'><a href='#-asFlowView'>asFlowView</a> </li>
+<li class='toc3'><a href='#-asPageLayout'>asPageLayout</a> </li>
+<li class='toc3'><a href='#-backColor'>backColor</a> </li>
+<li class='toc3'><a href='#-backgroundImage'>backgroundImage</a> </li>
+<li class='toc3'><a href='#-comp'>comp</a> </li>
+<li class='toc3'><a href='#-deepDo'>deepDo</a> </li>
+<li class='toc3'><a href='#-dragEnterEvent'>dragEnterEvent</a> </li>
+<li class='toc3'><a href='#-dragMoveEvent'>dragMoveEvent</a> </li>
+<li class='toc3'><a href='#-dropEvent'>dropEvent</a> </li>
+<li class='toc3'><a href='#-focusInEvent'>focusInEvent</a> </li>
+<li class='toc3'><a href='#-focusOutEvent'>focusOutEvent</a> </li>
+<li class='toc3'><a href='#-horz'>horz</a> </li>
+<li class='toc3'><a href='#-initView'>initView</a> </li>
+<li class='toc3'><a href='#-keyDownEvent'>keyDownEvent</a> </li>
+<li class='toc3'><a href='#-keyUpEvent'>keyUpEvent</a> </li>
+<li class='toc3'><a href='#-manageFunctionConnection'>manageFunctionConnection</a> </li>
+<li class='toc3'><a href='#-manageMethodConnection'>manageMethodConnection</a> </li>
+<li class='toc3'><a href='#-mouseDownEvent'>mouseDownEvent</a> </li>
+<li class='toc3'><a href='#-mouseEnterEvent'>mouseEnterEvent</a> </li>
+<li class='toc3'><a href='#-mouseLeaveEvent'>mouseLeaveEvent</a> </li>
+<li class='toc3'><a href='#-mouseMoveEvent'>mouseMoveEvent</a> </li>
+<li class='toc3'><a href='#-mouseUpEvent'>mouseUpEvent</a> </li>
+<li class='toc3'><a href='#-mouseWheel'>mouseWheel</a> </li>
+<li class='toc3'><a href='#-mouseWheelEvent'>mouseWheelEvent</a> </li>
+<li class='toc3'><a href='#-moveEvent'>moveEvent</a> </li>
+<li class='toc3'><a href='#-nonimpl'>nonimpl</a> </li>
+<li class='toc3'><a href='#-onCloseEvent'>onCloseEvent</a> </li>
+<li class='toc3'><a href='#-onWindowActivateEvent'>onWindowActivateEvent</a> </li>
+<li class='toc3'><a href='#-onWindowDeactivateEvent'>onWindowDeactivateEvent</a> </li>
+<li class='toc3'><a href='#-overrides'>overrides</a> </li>
+<li class='toc3'><a href='#-prOverrides'>prOverrides</a> </li>
+<li class='toc3'><a href='#-prSetLayout'>prSetLayout</a> </li>
+<li class='toc3'><a href='#-prStartDrag'>prStartDrag</a> </li>
+<li class='toc3'><a href='#-relativeOrigin'>relativeOrigin</a> </li>
+<li class='toc3'><a href='#-resizeEvent'>resizeEvent</a> </li>
+<li class='toc3'><a href='#-scroll'>scroll</a> </li>
+<li class='toc3'><a href='#-setBackgroundImage'>setBackgroundImage</a> </li>
+<li class='toc3'><a href='#-setDragEventsEnabled'>setDragEventsEnabled</a> </li>
+<li class='toc3'><a href='#-toolTip'>toolTip</a> </li>
+<li class='toc3'><a href='#-valueActionIfChanged'>valueActionIfChanged</a> </li>
+<li class='toc3'><a href='#-vert'>vert</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>The View class is the superclass of all view classes.
+<p>The view is the basic visible element of which the graphical user interface is composed. It occupies a rectangular space on screen within which it draws itself to display some data or to indicate a mode of interaction between the user and the program. Views receive keyboard and mouse events generated by the user and respond to them by controlling the behavior of the program. They also display information about the state of the program and the data on which it operates.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>parent</span>, <span class='argstr'>bounds</span>)</h3>
+<div class='method'>
+<p>Creates a new instance of View and makes it a child of another View or Window, effectively placing it within the parent's visual space. If there is a <a href="#-decorator">decorator</a> installed on the parent, it will manage the position of the new View.<div class='note'><span class='notelabel'>NOTE:</span> The 'parent' argument may be omitted, in which case the view will be displayed as a window on its own, when <a href="./../Classes/View.html#-front">shown</a>.
+<p>The 'bounds' argument may be omitted, in which case the view will be created with its preferred size at position (0,0).
+<p>If a parent is given and there is a layout installed on it, the layout will manage the position and size of this view and the 'bounds' argument will have no effect.</div><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>parent<td class='argumentdesc'>
+<p>The instance of View or Window that the new View will become a child of.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>A Rect or a Point describing size and position of the new View. If a Point is given, its coordinates will denote the view's size, while the view's position will be (0,0). Position is measured relative to the parent's top-left corner.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*globalKeyDownAction' href='./../Overviews/Methods.html#globalKeyDownAction'>globalKeyDownAction</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*globalKeyDownAction' href='./../Overviews/Methods.html#globalKeyDownAction'>globalKeyDownAction</a> = <span class='argstr'>action</span></h3>
+<div class='method'>
+<p> A settable class variable containing an object (e.g. an instance of Function or FunctionList) which is evaluated (i.e. <a href="./../Classes/Object.html#-value">value</a> method is called on it) whenever a key is pressed, independently of keyboard focus. See also <a href="#-addAction">-addAction</a>.
+<p> When the action object is evaluated, it is passed the following arguments: view, char, modifiers, unicode, keycode.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*globalKeyUpAction' href='./../Overviews/Methods.html#globalKeyUpAction'>globalKeyUpAction</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*globalKeyUpAction' href='./../Overviews/Methods.html#globalKeyUpAction'>globalKeyUpAction</a> = <span class='argstr'>action</span></h3>
+<div class='method'>
+<p> A settable class variable containing an object (e.g. an instance of Function or FunctionList) which is evaluated (i.e. <a href="./../Classes/Object.html#-value">value</a> method is called on it) whenever a key is released, independently of keyboard focus. See also <a href="#-addAction">-addAction</a>.
+<p> When the action object is evaluated, it is passed the following arguments: view, char, modifiers, unicode, keycode.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*currentDrag' href='./../Overviews/Methods.html#currentDrag'>currentDrag</a> </h3>
+<div class='method'>
+<p> A class variable holding the content of the current drag. It is set by beginDrag.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*currentDragString' href='./../Overviews/Methods.html#currentDragString'>currentDragString</a> </h3>
+<div class='method'>
+<p> A class variable holding the content of the current drag as <a href="./../Classes/Object.html#-asCompileString">"compile string"</a>. It is set by beginDrag.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*debug' href='./../Overviews/Methods.html#debug'>debug</a> (<span class='argstr'>level: 1</span>, <span class='argstr'>msg: ""</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*hSizePolicy' href='./../Overviews/Methods.html#hSizePolicy'>hSizePolicy</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*newCustom' href='./../Overviews/Methods.html#newCustom'>newCustom</a> (<span class='argstr'>customArgs</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*nonimpl' href='./../Overviews/Methods.html#nonimpl'>nonimpl</a> (<span class='argstr'>methodName</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*prClearCurrentDrag' href='./../Overviews/Methods.html#prClearCurrentDrag'>prClearCurrentDrag</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*prSetCurrentDrag' href='./../Overviews/Methods.html#prSetCurrentDrag'>prSetCurrentDrag</a> (<span class='argstr'>obj</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*qtClass' href='./../Overviews/Methods.html#qtClass'>qtClass</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*setGlobalEventEnabled' href='./../Overviews/Methods.html#setGlobalEventEnabled'>setGlobalEventEnabled</a> (<span class='argstr'>event</span>, <span class='argstr'>enabled</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*vSizePolicy' href='./../Overviews/Methods.html#vSizePolicy'>vSizePolicy</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Hierarchy and existence'>Hierarchy and existence</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-parent' href='./../Overviews/Methods.html#parent'>parent</a> (<span class='argstr'>class</span>)</h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The view's parent view, or nil if the view is a top view.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-parents' href='./../Overviews/Methods.html#parents'>parents</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>An array of all the parents, grandparents, etc., of the view.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-getParents' href='./../Overviews/Methods.html#getParents'>getParents</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>Same as <a href="#-parents">parents</a>.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-children' href='./../Overviews/Methods.html#children'>children</a> (<span class='argstr'>class</span>)</h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>An array of all immediate children of the view.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-remove' href='./../Overviews/Methods.html#remove'>remove</a> </h3>
+<div class='method'>
+<p> Removes the view from its parent view (if any) and destroys the view. After this method is called, the view is not usable anymore.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeAll' href='./../Overviews/Methods.html#removeAll'>removeAll</a> </h3>
+<div class='method'>
+<p> Removes all the children of the view and destroys them. After this method is called, the former child views are not usable anymore.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-close' href='./../Overviews/Methods.html#close'>close</a> </h3>
+<div class='method'>
+<p> If <a href="#-deleteOnClose">-deleteOnClose</a> is true, this method has the same effect as <a href="#-remove">-remove</a>, otherwise makes the view invisible.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-isClosed' href='./../Overviews/Methods.html#isClosed'>isClosed</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Boolean stating whether the view has been destroyed.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-notClosed' href='./../Overviews/Methods.html#notClosed'>notClosed</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Boolean, the opposite of 'isClosed'.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asView' href='./../Overviews/Methods.html#asView'>asView</a> </h3>
+<div class='method'>
+<p> Method that allows compatibility with Window and other classes that are not real subclasses of View, but implement a part of its interface.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>This view.</div></div><h3><a class='anchor' name='Visibility'>Visibility</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-visible' href='./../Overviews/Methods.html#visible'>visible</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-visible' href='./../Overviews/Methods.html#visible'>visible</a> = <span class='argstr'>bool</span></h3>
+<div class='method'>
+<p> Gets or sets wether the view is visible.
+<p> Making a child view invisible means it does not occupy any space from the standpoint of the layout that contains it, so the layout will distribute the space the view occupied when visible among other views. When the view becomes visible again it is given back the same space.
+<p> If the view has no parent, setting this to true has the same effect as <a href="#-front">-front</a>, and setting it to false closes the window without destroying it.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bool<td class='argumentdesc'>
+<p> A Boolean stating the visibility of the view.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-front' href='./../Overviews/Methods.html#front'>front</a> </h3>
+<div class='method'>
+<p> If the view does not have a parent, displays it on the screen as a window (it has the same effect as setting <a href="#-visible">-visible</a> to true), otherwise it has no effect.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minimize' href='./../Overviews/Methods.html#minimize'>minimize</a> </h3>
+<div class='method'>
+<p> If the view is a window, hides it (only keep it present in the dock/taskbar/etc.).</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-unminimize' href='./../Overviews/Methods.html#unminimize'>unminimize</a> </h3>
+<div class='method'>
+<p> If the view is a window, restores the its previous state after being minimized.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fullScreen' href='./../Overviews/Methods.html#fullScreen'>fullScreen</a> </h3>
+<div class='method'>
+<p> If the view is a window, displays it full-screen.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-endFullScreen' href='./../Overviews/Methods.html#endFullScreen'>endFullScreen</a> </h3>
+<div class='method'>
+<p> If the view is a window, restores its previous state after being displayed full-screen.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-alwaysOnTop' href='./../Overviews/Methods.html#alwaysOnTop'>alwaysOnTop</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-alwaysOnTop' href='./../Overviews/Methods.html#alwaysOnTop'>alwaysOnTop</a> = <span class='argstr'>boolean</span></h3>
+<div class='method'>
+<p> If the view is a window, gets or sets whether it should always stay on top of other windows.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>boolean<td class='argumentdesc'>
+<p> A Boolean stating whether the view should always stay on top.</table></div><h3><a class='anchor' name='Size and position'>Size and position</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a> = <span class='argstr'>rect</span></h3>
+<div class='method'>
+<p> Gets or sets both the position and the size of the view. The position is relative to the parent view's top-left corner. Some containers, such as HLayoutView and VLayoutView, will use only the width and height of a child view's bounds.
+<p> The setter takes a Rect or a Point interpreted <a href="./../Classes/Point.html#-asRect">as Rect</a>. The getter always returns a Rect.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-absoluteBounds' href='./../Overviews/Methods.html#absoluteBounds'>absoluteBounds</a> </h3>
+<div class='method'>
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Rect describing the absolute position and the size of the view on the screen.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sizeHint' href='./../Overviews/Methods.html#sizeHint'>sizeHint</a> </h3>
+<div class='method'>
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Size describing the preferred size of the view to comfortably display its contents and allow useful interaction.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minSizeHint' href='./../Overviews/Methods.html#minSizeHint'>minSizeHint</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Size describing the minimum size of the view to be able to display its contents and allow any interaction.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxSize' href='./../Overviews/Methods.html#maxSize'>maxSize</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxSize' href='./../Overviews/Methods.html#maxSize'>maxSize</a> = <span class='argstr'>size</span></h3>
+<div class='method'>
+<p> Set maximum allowed size of the view. The view will not be able to grow larger than this size, neither by user interaction nor programmatically.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p> A Size.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minSize' href='./../Overviews/Methods.html#minSize'>minSize</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minSize' href='./../Overviews/Methods.html#minSize'>minSize</a> = <span class='argstr'>size</span></h3>
+<div class='method'>
+<p> Set minimum allowed size of the view. The view will not be able to shrink smaller than this size, neither by user interaction nor programmatically.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p> A Size.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fixedSize' href='./../Overviews/Methods.html#fixedSize'>fixedSize</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fixedSize' href='./../Overviews/Methods.html#fixedSize'>fixedSize</a> = <span class='argstr'>size</span></h3>
+<div class='method'>
+<p> Set both minimum and maximum allowed size of the view, thus making it non-resizable.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p> A Size.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fixedWidth' href='./../Overviews/Methods.html#fixedWidth'>fixedWidth</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fixedWidth' href='./../Overviews/Methods.html#fixedWidth'>fixedWidth</a> = <span class='argstr'>width</span></h3>
+<div class='method'>
+<p> Set both minimum and maximum allowed width of the view, thus making it non-resizable.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>width<td class='argumentdesc'>
+<p> An Int.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fixedHeight' href='./../Overviews/Methods.html#fixedHeight'>fixedHeight</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fixedHeight' href='./../Overviews/Methods.html#fixedHeight'>fixedHeight</a> = <span class='argstr'>height</span></h3>
+<div class='method'>
+<p> Set both minimum and maximum allowed height of the view, thus making it non-resizable.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>height<td class='argumentdesc'>
+<p> An Int.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxWidth' href='./../Overviews/Methods.html#maxWidth'>maxWidth</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxWidth' href='./../Overviews/Methods.html#maxWidth'>maxWidth</a> = <span class='argstr'>width</span></h3>
+<div class='method'>
+<p> Set maximum allowed width of the view, the view will not be able to grow larger in width, neither by user interaction nor programmatically.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>width<td class='argumentdesc'>
+<p> An Int.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minWidth' href='./../Overviews/Methods.html#minWidth'>minWidth</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minWidth' href='./../Overviews/Methods.html#minWidth'>minWidth</a> = <span class='argstr'>width</span></h3>
+<div class='method'>
+<p> Set minimum allowed width of the view, the view will not be able to shrink smaller in width, neither by user interaction nor programmatically.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>width<td class='argumentdesc'>
+<p> An Int.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxHeight' href='./../Overviews/Methods.html#maxHeight'>maxHeight</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxHeight' href='./../Overviews/Methods.html#maxHeight'>maxHeight</a> = <span class='argstr'>height</span></h3>
+<div class='method'>
+<p> Set maximum allowed height of the view, the view will not be able to grow larger in height, neither by user interaction nor programmatically.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>height<td class='argumentdesc'>
+<p> An Int.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minHeight' href='./../Overviews/Methods.html#minHeight'>minHeight</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minHeight' href='./../Overviews/Methods.html#minHeight'>minHeight</a> = <span class='argstr'>height</span></h3>
+<div class='method'>
+<p> Set minimum allowed height of the view, the view will not be able to shrink smaller in height, neither by user interaction nor programmatically.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>height<td class='argumentdesc'>
+<p> An Int.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveTo' href='./../Overviews/Methods.html#moveTo'>moveTo</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<div class='method'>
+<p> Move the view to new position, preserving its size.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>x<td class='argumentdesc'>
+<p> An Int: the horizontal position of the new position.<tr><td class='argumentname'>y<td class='argumentdesc'>
+<p> An Int: the vertical position of the new position.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-resizeTo' href='./../Overviews/Methods.html#resizeTo'>resizeTo</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<div class='method'>
+<p> Resize the view, preserving its position.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>width<td class='argumentdesc'>
+<p> An Int: the new horizontal size of the view.<tr><td class='argumentname'>height<td class='argumentdesc'>
+<p> An Int: the new vertical size of the view.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-resize' href='./../Overviews/Methods.html#resize'>resize</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-resize' href='./../Overviews/Methods.html#resize'>resize</a> = <span class='argstr'>anInt</span></h3>
+<div class='method'>
+<p> Determines what happens with the view's position and size when its parent is resized. See <a href="./../Guides/GUI-Introduction.html#view">Introduction to GUI: view</a> for further explanation.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>anInt<td class='argumentdesc'>
+<p> An Int (1 to 9) defining the auto-resize behavior. See <a href="./../Reference/Resize.html">Resize behaviour</a> for a list of valid resize modes.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-decorator' href='./../Overviews/Methods.html#decorator'>decorator</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-decorator' href='./../Overviews/Methods.html#decorator'>decorator</a> = <span class='argstr'>decor</span></h3>
+<div class='method'>
+<p> Get or set the decorator object, that automatically manages the positioning of new children of the view when they are created. See <a href="./../Guides/GUI-Introduction.html#decorators">Introduction to GUI: decorators</a> for further explanation.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>decor<td class='argumentdesc'>
+<p> An instance of a decorator class (e.g. FlowLayout).</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addFlowLayout' href='./../Overviews/Methods.html#addFlowLayout'>addFlowLayout</a> (<span class='argstr'>margin</span>, <span class='argstr'>gap</span>)</h3>
+<div class='method'>
+<p> A convenience method which sets decorator to a new instance of FlowLayout. See <a href="./../Classes/FlowLayout.html">FlowLayout</a> for examples.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>margin<td class='argumentdesc'>
+<p> A Point describing the <a href="./../Classes/FlowLayout.html#-margin">margin</a> of the FlowLayout.<tr><td class='argumentname'>gap<td class='argumentdesc'>
+<p> A Point describing the <a href="./../Classes/FlowLayout.html#-gap">gap</a> of the FlowLayout.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The new FlowLayout instance.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-flow' href='./../Overviews/Methods.html#flow'>flow</a> (<span class='argstr'>func</span>, <span class='argstr'>bounds</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc</a></div>
+<div class='method'>
+<p> Creates a FlowView as a child of the view, and then evalutes the object given in the 'func' argument. It is most common to pass a Function for 'func' in which the FlowView is filled with other child views.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p> The object that will be evaluated after the creation of the FlowView, passing the new FlowView instance as an argument.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p> A Rect to set as the bounds of the FlowView, or nil, implying the size of this view and position (0,0).
+<p> After 'func' is evaluated, the FlowView will be resized to fit its contents and cast away any extra space it occupies.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The new FlowView instance.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-layout' href='./../Overviews/Methods.html#layout'>layout</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-layout' href='./../Overviews/Methods.html#layout'>layout</a> = <span class='argstr'>newLayout</span></h3>
+<div class='method'>
+<p> Get or set the layout object, that automatically manages the position and the size of the children of the view dynamically, in relation to the view's size. See <a href="./../Guides/GUI-Introduction.html#layouts">Introduction to GUI: layouts</a> for further explanation.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>newLayout<td class='argumentdesc'>
+<p> An instance of a subclass of Layout.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mapToGlobal' href='./../Overviews/Methods.html#mapToGlobal'>mapToGlobal</a> (<span class='argstr'>point</span>)</h3>
+<div class='method'>
+<p> Map a point relative to this view's top-left to absolute position on screen.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>point<td class='argumentdesc'>
+<p> A Point describing a position relative to the view.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Point describing the same position, but relative to the screen.</div></div><h3><a class='anchor' name='Appearance'>Appearance</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a> = <span class='argstr'>string</span></h3>
+<div class='method'>
+<p> If the view is a window, sets its title<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>string<td class='argumentdesc'>
+<p> A String containing text for the window title.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-alpha' href='./../Overviews/Methods.html#alpha'>alpha</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-alpha' href='./../Overviews/Methods.html#alpha'>alpha</a> = <span class='argstr'>aFloat</span></h3>
+<div class='method'>
+<p> If the view is a window, this controls its transparency.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float between 0.0 (invisible) and 1.0 (opaque).</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-font' href='./../Overviews/Methods.html#font'>font</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-font' href='./../Overviews/Methods.html#font'>font</a> = <span class='argstr'>f</span></h3>
+<div class='method'><div class='note'><span class='notelabel'>NOTE:</span> Every view has this method.</div>
+<p> The font used by the view to display text (if any).<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>f<td class='argumentdesc'>
+<p> A Font.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-background' href='./../Overviews/Methods.html#background'>background</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-background' href='./../Overviews/Methods.html#background'>background</a> = <span class='argstr'>color</span></h3>
+<div class='method'>
+<p> Get or set the color of whatever is considered the background of the view.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>color<td class='argumentdesc'>
+<p> A Color.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-focusColor' href='./../Overviews/Methods.html#focusColor'>focusColor</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-focusColor' href='./../Overviews/Methods.html#focusColor'>focusColor</a> = <span class='argstr'>color</span></h3>
+<div class='method'>
+<p> Get or set the color used to display keyboard focus on the view.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>color<td class='argumentdesc'>
+<p> A Color.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-palette' href='./../Overviews/Methods.html#palette'>palette</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-palette' href='./../Overviews/Methods.html#palette'>palette</a> = <span class='argstr'>p</span></h3>
+<div class='method'>
+<p> Get or set the palette to be used by the view.
+<p> When setting a palette, only those colors that have been set on the palette will take effect, other colors will be inherited from the parent view's palette. See also <a href="./../Classes/QPalette.html#-hasColor">QPalette: -hasColor</a>.
+<p> When getting a palette, it will return everytime a new copy of the view's palette. Therefore, if you wish to change the view's palette, you have to set the changed palette back on the view:<pre class='code prettyprint lang-sc'>    w = Window().front.layout_( HLayout( a = Slider() ) );
+    a.action = { |a|
+        a.palette = a.palette.buttonText_( if(a.value &gt; 0.5){Color.red}{Color.green} );
+    };
+    a.valueAction = 0.0;</pre>
+
+<p> To dynamically modify the view's palette, it is thus more efficient, if possible, to keep a palette instance to operate on. Note that this is also more efficient than using methods like <a href="./../Classes/Slider.html#-knobColor">Slider: -knobColor</a>, since internally they use the above approach:<pre class='code prettyprint lang-sc'>    w = Window().front.layout_( HLayout( a = Slider() ) );
+    p = QPalette();
+    a.action = { |a|
+        a.palette = p.buttonText_( if(a.value &gt; 0.5){Color.red}{Color.green} );
+    };
+    a.valueAction = 0.0;</pre>
+
+<p> See <a href="./../Classes/QPalette.html">QPalette</a> for detailed explanation of how palettes work.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>p<td class='argumentdesc'>
+<p> A QPalette.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-refresh' href='./../Overviews/Methods.html#refresh'>refresh</a> </h3>
+<div class='method'>
+<p> Redraws the view and all its children.</div><h3><a class='anchor' name='Common behavior'>Common behavior</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-userCanClose' href='./../Overviews/Methods.html#userCanClose'>userCanClose</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-userCanClose' href='./../Overviews/Methods.html#userCanClose'>userCanClose</a> = value</h3>
+<div class='method'>
+<p> If the view is a window, sets or gets whether the user can close it via mouse or key actions.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-deleteOnClose' href='./../Overviews/Methods.html#deleteOnClose'>deleteOnClose</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-deleteOnClose' href='./../Overviews/Methods.html#deleteOnClose'>deleteOnClose</a> = value</h3>
+<div class='method'>
+<p> Sets or gets whether the view should be destroyed when closed.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-enabled' href='./../Overviews/Methods.html#enabled'>enabled</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-enabled' href='./../Overviews/Methods.html#enabled'>enabled</a> = <span class='argstr'>bool</span></h3>
+<div class='method'>
+<p> Sets or gets whether the view allows the user to interact with it. Usually, when a view is disabled it will be displayed differently (typically it will be greyed out).<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bool<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-canFocus' href='./../Overviews/Methods.html#canFocus'>canFocus</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-canFocus' href='./../Overviews/Methods.html#canFocus'>canFocus</a> = <span class='argstr'>bool</span></h3>
+<div class='method'>
+<p> Sets or gets whether the view can receive keyboard focus.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bool<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-focus' href='./../Overviews/Methods.html#focus'>focus</a> (<span class='argstr'>flag: true</span>)</h3>
+<div class='method'>
+<p> If 'flag' is true, gives keyboard focus to the view (if possible), otherwise removes the keayboard focus from it.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>flag<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hasFocus' href='./../Overviews/Methods.html#hasFocus'>hasFocus</a> </h3>
+<div class='method'>
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Boolean, stating whether the view currently has the keyboard focus.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-acceptsMouse' href='./../Overviews/Methods.html#acceptsMouse'>acceptsMouse</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-acceptsMouse' href='./../Overviews/Methods.html#acceptsMouse'>acceptsMouse</a> = <span class='argstr'>bool</span></h3>
+<div class='method'>
+<p> Sets or gets whether the view responds to mouse interaction. If <code class='code prettyprint lang-sc'>false</code>, the view will be completely transparent for mouse and interaction will be possible with any view under.
+<p> Defaults to <code class='code prettyprint lang-sc'>true</code>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bool<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-acceptsMouseOver' href='./../Overviews/Methods.html#acceptsMouseOver'>acceptsMouseOver</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-acceptsMouseOver' href='./../Overviews/Methods.html#acceptsMouseOver'>acceptsMouseOver</a> = <span class='argstr'>flag</span></h3>
+<div class='method'>
+<p> If this is a top view, this variable defines whether the view and all its children receive mouse-over events. The default is <code class='code prettyprint lang-sc'>false</code>.
+<p> See also: <a href="#-mouseOverAction">-mouseOverAction</a>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>flag<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3><a class='anchor' name='Actions in general'>Actions in general</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-action' href='./../Overviews/Methods.html#action'>action</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-action' href='./../Overviews/Methods.html#action'>action</a> = <span class='argstr'>func</span></h3>
+<div class='method'>
+<p> Gets or sets the default action of the view, i.e. the object to be evaluated when the user interacts with the view in an essential way (e.g. a Button is clicked, a ListView item is selected, etc.).<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p> Any object to set as default action, usually a Function or a FunctionList. When evaluated, it will be passed the view as an argument.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-doAction' href='./../Overviews/Methods.html#doAction'>doAction</a> </h3>
+<div class='method'>
+<p> Evaluates the default <a href="#-action">action</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addAction' href='./../Overviews/Methods.html#addAction'>addAction</a> (<span class='argstr'>func</span>, <span class='argstr'>selector: 'action'</span>)</h3>
+<div class='method'></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeAction' href='./../Overviews/Methods.html#removeAction'>removeAction</a> (<span class='argstr'>func</span>, <span class='argstr'>selector: 'action'</span>)</h3>
+<div class='method'>
+<p> Adds/removes 'func' to or from the list of objects in the variable determined by 'selector'. If 'selector' is not an Array or a List, it will become one, containing the previous object plus 'func'.
+<p> This is useful for adding functionality to existing frameworks that have action functions already.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p> Any object to add as an action, usually a Function.<tr><td class='argumentname'>selector<td class='argumentdesc'>
+<p> A Symbol containing the name of the action variable to which 'func' will be added. In other words, 'add' method will be invoked on that variable; by default that is \action, but any other (sensible) instance or class variable of the view could work (e.g. \globalKeyDownAction or \mouseUpAction or \onClose, etc.). See the other action variables below.</table></div><h3><a class='anchor' name='Key and mouse event processing'>Key and mouse event processing</a></h3>
+
+<p>Both mouse and key events can propagate to the parent view. Event processing works differently: by default, after a mouse or key action is evaluated, the control returns to the C++ implementation of the view, and if no response to the particular mouse or key event is implemented there, it propagates to the parent.
+<p>If you wish to control whether the event will be propagated or not, return <code class='code prettyprint lang-sc'>true</code> or <code class='code prettyprint lang-sc'>false</code> from the action. True means you have responded to the event, and the propagation will be stopped; false means you are not interested in the event, and the event will propagate. However, returning either <code class='code prettyprint lang-sc'>true</code> or <code class='code prettyprint lang-sc'>false</code> will completely bypass the view's C++ implementation, so it will not get a chance at responding to the event with its standard behavior. Use this feature with care.<h3><a class='anchor' name='Mouse actions'>Mouse actions</a></h3>
+
+<p>Use the methods below to set or get the view's actions in response to mouse interaction with the view. A view must be enabled for the mouse actions to work.<div class='note'><span class='notelabel'>NOTE:</span> Mouse actions are subject to <em>event propagation</em>. See <a href="#Key and mouse event processing">Key and mouse event processing</a> for details.</div>
+<p>When the mouse action object is evaluated, it is passed one or more arguments from the following list (in that order):<ul>
+<li><strong>view</strong> - the view<li><strong>x</strong> - the x coordinate<li><strong>y</strong> - the y coordinate<li><strong>modifiers</strong> - A bitwise or of integers indicating the modifier keys in effect. For a list of these, see <a href="./../Reference/Modifiers.html">Modifier Keys</a>.<li><strong>buttonNumber</strong> - 0-left, 1-right, 2-middle, etc.<li><strong>clickCount</strong> - the number of clicks within the system click time limit. At least 1.</ul>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseDownAction' href='./../Overviews/Methods.html#mouseDownAction'>mouseDownAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseDownAction' href='./../Overviews/Methods.html#mouseDownAction'>mouseDownAction</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> The object to be evaluated when a mouse button is pressed on the view.
+<p> The following arguments are passed at evaluation: <strong>view, x, y, modifiers, buttonNumber, clickCount</strong>. See <a href="#Mouse actions">Mouse actions</a> for explanation of arguments.
+<p> The return value of evaluation controls the event propagation to parent view. See <a href="#Key and mouse event processing">Key and mouse event processing</a> for details.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseUpAction' href='./../Overviews/Methods.html#mouseUpAction'>mouseUpAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseUpAction' href='./../Overviews/Methods.html#mouseUpAction'>mouseUpAction</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> The object to be evaluated when a mouse button is released after it was pressed on the view.
+<p> The following arguments are passed at evaluation: <strong>view, x, y, modifiers</strong>. See <a href="#Mouse actions">Mouse actions</a> for explanation of arguments.
+<p> The return value of evaluation controls the event propagation to parent view. See <a href="#Key and mouse event processing">Key and mouse event processing</a> for details.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseMoveAction' href='./../Overviews/Methods.html#mouseMoveAction'>mouseMoveAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseMoveAction' href='./../Overviews/Methods.html#mouseMoveAction'>mouseMoveAction</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> The object to be evaluated whenever the mouse pointer moves after a mouse button was pressed on the view.
+<p> The following arguments are passed at evaluation: <strong>view, x, y, modifiers</strong>. See <a href="#Mouse actions">Mouse actions</a> for explanation of arguments.
+<p> The return value of evaluation controls the event propagation to parent view. See <a href="#Key and mouse event processing">Key and mouse event processing</a> for details.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseOverAction' href='./../Overviews/Methods.html#mouseOverAction'>mouseOverAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseOverAction' href='./../Overviews/Methods.html#mouseOverAction'>mouseOverAction</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> The object to be evaluated when the mouse pointer moves over the view with no mouse buttons pressed.
+<p> The following arguments are passed at evaluation: <strong>view, x, y</strong>. See <a href="#Mouse actions">Mouse actions</a> for explanation of arguments.
+<p> The object is evaluated only when <a href="./../Classes/Window.html#-acceptsMouseOver">Window: -acceptsMouseOver</a> of the containing Window (or <a href="#-acceptsMouseOver">-acceptsMouseOver</a> of the top View) is <code class='code prettyprint lang-sc'>true</code>.
+<p> The return value of evaluation controls the event propagation to parent view. See <a href="#Key and mouse event processing">Key and mouse event processing</a> for details.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseWheelAction' href='./../Overviews/Methods.html#mouseWheelAction'>mouseWheelAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseWheelAction' href='./../Overviews/Methods.html#mouseWheelAction'>mouseWheelAction</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> The object to be evaluated when the mouse wheel is used while the mouse is pointing onto the view.
+<p> The following arguments are passed at evaluation: <strong>view, x, y, modifiers, xDelta, yDelta</strong>. See <a href="#Mouse actions">Mouse actions</a> for explanation of arguments.
+<p> The xDelta and yDelta arguments express rotation in horizontal and vertical direction, respectively. The value is in degrees (typically, an event occurs every 15 degrees), and can be positive or negative, depending on the direction of rotation.
+<p> The return value of evaluation controls the event propagation to parent view. See <a href="#Key and mouse event processing">Key and mouse event processing</a> for details.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseEnterAction' href='./../Overviews/Methods.html#mouseEnterAction'>mouseEnterAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseEnterAction' href='./../Overviews/Methods.html#mouseEnterAction'>mouseEnterAction</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> The object to be evaluated when the mouse pointer enters the view.
+<p> The following arguments are passed at evaluation: <strong>view, x, y</strong>. See <a href="#Mouse actions">Mouse actions</a> for explanation of arguments.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseLeaveAction' href='./../Overviews/Methods.html#mouseLeaveAction'>mouseLeaveAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseLeaveAction' href='./../Overviews/Methods.html#mouseLeaveAction'>mouseLeaveAction</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> The object to be evaluated when the mouse pointer leaves the view.
+<p> The following arguments are passed at evaluation: <strong>view, x, y</strong>. See <a href="#Mouse actions">Mouse actions</a> for explanation of arguments.</div><h3><a class='anchor' name='Key actions'>Key actions</a></h3>
+
+<p>Use the methods below to set or get the view's actions in response to keyboard interaction when the view has the keyboard focus.<div class='note'><span class='notelabel'>NOTE:</span> Key actions are subject to <em>event propagation</em>. See <a href="#Key and mouse event processing">Key and mouse event processing</a> for details.</div>
+<p>When the key action object is evaluated, it is passed one or more arguments from the following list (in that order):<ul>
+<li><strong>view</strong> - The view.<li><strong>char</strong> - The character (<a href="./../Classes/Char.html">Char</a>) associated with the key, possibly unprintable. Character sequences (for example é) get passed as two characters, the first one blank ( ), the second one is the unmodified character (e). This will also vary depending on the nationality the keyboard is set to.<div class='note'><span class='notelabel'>NOTE:</span> Only characters with an ASCII code are passed. Non-ASCII keys (Ctrl/Alt/Cmd/Shift modifiers, arrow keys and other control sequences) will pass a <a href="./../Classes/Char.html">Char</a> with ASCII code 0. (Ctrl-characters <em>do</em> have ASCII codes, and are passed as a Char. The Ctrl key by itself also triggers the key action, but with ASCII code 0.) A useful test is <a href="./../Classes/Char.html#-isPrint">Char: -isPrint</a>.</div><li><strong>modifiers</strong> - A bitwise or of integers indicating the modifier keys in effect. You can examine individual flag settings using the C bitwise AND operator. For a list of these, see <a href="./../Reference/Modifiers.html">Modifier Keys</a>.<li><strong>unicode</strong> - The Integer unicode number associated with the 'char' passed.<li><strong>keycode</strong> - The hardware dependent keycode indicating the physical key. This will vary from machine to machine, but is useful for building musical interfaces using the computer keyboard.<div class='warning'><span class='warninglabel'>WARNING:</span> Function key modifier in combination with another key may change the latter's keycode.</div><li><strong>key</strong> - An Integer denoting a key, corresponding to the "Key" enum of the Qt C++ API. Comparing this value is the most reliable way to check which key was pressed. For a list of possible values, see: <a href="http://qt-project.org/doc/qt-4.8/qt.html#Key-enum">http://qt-project.org/doc/qt-4.8/qt.html#Key-enum</a>.</ul>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyDownAction' href='./../Overviews/Methods.html#keyDownAction'>keyDownAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyDownAction' href='./../Overviews/Methods.html#keyDownAction'>keyDownAction</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> The object to be evaluated when a key is pressed.
+<p> The following arguments are passed at evaluation: <strong>view, char, modifiers, unicode, keycode, key</strong>. See <a href="#Key actions">Key actions</a> for explanation of arguments.
+<p> The return value of evaluation controls the event propagation to parent view. See <a href="#Key and mouse event processing">Key and mouse event processing</a> for details.
+<p> If no <code class='code prettyprint lang-sc'>keyDownAction</code> is set, <a href="#-defaultKeyDownAction">-defaultKeyDownAction</a> is called instead, and its return value controls the event propagation.<pre class='code prettyprint lang-sc'>// open a new document that posts the parameters passed into the keydownAction function.
+(
+Document("test arguments").keyDownAction = { |doc, char, mod, unicode, keycode, key|
+    [doc, char, mod, unicode, keycode, key].postln
+};
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyUpAction' href='./../Overviews/Methods.html#keyUpAction'>keyUpAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyUpAction' href='./../Overviews/Methods.html#keyUpAction'>keyUpAction</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> The object to be evaluated when a key is released.
+<p> The following arguments are passed at evaluation: <strong>view, char, modifiers, unicode, keycode, key</strong>. See <a href="#Key actions">Key actions</a> for explanation of arguments.
+<p> The return value of evaluation controls the event propagation to parent view. See <a href="#Key and mouse event processing">Key and mouse event processing</a> for details.
+<p> If no <code class='code prettyprint lang-sc'>keyUpAction</code> is set, <a href="#-defaultKeyUpAction">-defaultKeyUpAction</a> is called instead, and its return value controls the event propagation.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyModifiersChangedAction' href='./../Overviews/Methods.html#keyModifiersChangedAction'>keyModifiersChangedAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyModifiersChangedAction' href='./../Overviews/Methods.html#keyModifiersChangedAction'>keyModifiersChangedAction</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> The object to be evaluated when a modifier key is pressed or released.
+<p> The following arguments are passed at evaluation: <strong>view, modifiers</strong>.</div><h3><a class='anchor' name='Drag and drop'>Drag and drop</a></h3>
+
+<p>Use the methods below to define or override how the view handles drag&amp;drop operations.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-beginDragAction' href='./../Overviews/Methods.html#beginDragAction'>beginDragAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-beginDragAction' href='./../Overviews/Methods.html#beginDragAction'>beginDragAction</a> = <span class='argstr'>handler</span></h3>
+<div class='method'>
+<p> Sets or gets the object evaluated when a drag&amp;drop operation is initiated.
+<p> At evaluation, the following arguments will be passed: <strong>view, x, y</strong>. The view expects an object to be returned which will become the data subject to the drag&amp;drop operation. Returning nil will prevent the drag&amp;drop operation to begin.
+<p> If this variable is nil (the default) the view's <a href="#-defaultGetDrag">-defaultGetDrag</a> method is called instead.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-canReceiveDragHandler' href='./../Overviews/Methods.html#canReceiveDragHandler'>canReceiveDragHandler</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-canReceiveDragHandler' href='./../Overviews/Methods.html#canReceiveDragHandler'>canReceiveDragHandler</a> = <span class='argstr'>handler</span></h3>
+<div class='method'>
+<p> Sets or gets the object evaluated when the mouse pointer moves over the view while a drag&amp;drop operation is taking place.
+<p> At evaluation, the following arguments will be passed: <strong>view, x, y</strong>. The view expects the <a href="#*currentDrag">drag&amp;drop data</a> to be examined, and a Boolean returned stating whether the view can make use of that data. If true is returned, the data may be dropped on the view, otherwise the drop event will not be handled by this view.
+<p> If this variable is nil (the default) the view's <a href="#-defaultCanReceiveDrag">-defaultCanReceiveDrag</a> method is called instead.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-receiveDragHandler' href='./../Overviews/Methods.html#receiveDragHandler'>receiveDragHandler</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-receiveDragHandler' href='./../Overviews/Methods.html#receiveDragHandler'>receiveDragHandler</a> = <span class='argstr'>handler</span></h3>
+<div class='method'>
+<p> Sets or gets the object evaluated when a drag&amp;drop operation finishes on this view.
+<p> At evaluation, the following arguments will be passed: <strong>view, x, y</strong>. The <a href="#*currentDrag">drag&amp;drop data</a> is expected to be applied to the view in some way.
+<p> If this variable is nil (the default) the view's <a href="#-defaultReceiveDrag">-defaultReceiveDrag</a> method is called instead.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-dragLabel' href='./../Overviews/Methods.html#dragLabel'>dragLabel</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dragLabel' href='./../Overviews/Methods.html#dragLabel'>dragLabel</a> = value</h3>
+<div class='method'>
+<p> Sets or gets the text displayed by the mouse pointer during the drag&amp;drop operation. It is expected to be set while handling the beginning of the operation, i.e. in <a href="#-beginDragAction">-beginDragAction</a> or <a href="#-defaultGetDrag">-defaultGetDrag</a>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
+<p> A String containing the text to be displayed.</table></div><h3><a class='anchor' name='Other actions and hooks'>Other actions and hooks</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-focusGainedAction' href='./../Overviews/Methods.html#focusGainedAction'>focusGainedAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-focusGainedAction' href='./../Overviews/Methods.html#focusGainedAction'>focusGainedAction</a> = <span class='argstr'>handler</span></h3>
+<div class='method'>
+<p> Sets or gets the object to be evaluated when the view gains the keyboard focus. It is passed the view as an argument.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-focusLostAction' href='./../Overviews/Methods.html#focusLostAction'>focusLostAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-focusLostAction' href='./../Overviews/Methods.html#focusLostAction'>focusLostAction</a> = <span class='argstr'>handler</span></h3>
+<div class='method'>
+<p> Sets or gets the object to be evaluated when the view looses the keyboard focus. It is passed the view as an argument.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-toFrontAction' href='./../Overviews/Methods.html#toFrontAction'>toFrontAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-toFrontAction' href='./../Overviews/Methods.html#toFrontAction'>toFrontAction</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> Sets or gets the object to be evaluated when the view becomes the active window. It is passed the view as an argument.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-endFrontAction' href='./../Overviews/Methods.html#endFrontAction'>endFrontAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-endFrontAction' href='./../Overviews/Methods.html#endFrontAction'>endFrontAction</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> Sets or gets the object to be evaluated when the view becomes the active window. It is passed the view as an argument.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-onResize' href='./../Overviews/Methods.html#onResize'>onResize</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-onResize' href='./../Overviews/Methods.html#onResize'>onResize</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> Sets or gets the object to be evaluated when the view changes its size. It is passed the view as an argument.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-onMove' href='./../Overviews/Methods.html#onMove'>onMove</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-onMove' href='./../Overviews/Methods.html#onMove'>onMove</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> Sets or gets the object to be evaluated when the view changes position relatively to its parent. It is passed the view as an argument.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-onClose' href='./../Overviews/Methods.html#onClose'>onClose</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-onClose' href='./../Overviews/Methods.html#onClose'>onClose</a> = <span class='argstr'>func</span></h3>
+<div class='method'>
+<p> Sets or gets the object to be evaluated when the view is destroyed (i.e. <a href="#-close">closed</a> or <a href="#-remove">removed</a>). It is passed the view as an argument.</div><h3><a class='anchor' name='Subclassing'>Subclassing</a></h3>
+
+<p>The following methods are the default handlers of key press and release events. When subclassing, override them to implement custom functionality. Many view classes in the standard library do that.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultKeyDownAction' href='./../Overviews/Methods.html#defaultKeyDownAction'>defaultKeyDownAction</a> (<span class='argstr'>char</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>unicode</span>, <span class='argstr'>keycode</span>, <span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p> The method called when a key is pressed and <a href="#-keyDownAction">-keyDownAction</a> is nil. Subclass it to define your own functionality on key presses.
+<p> See <a href="#Key actions">Key actions</a> for explanation of arguments.
+<p> The return value controls the event propagation to parent view. See <a href="#Key and mouse event processing">Key and mouse event processing</a> for details.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultKeyUpAction' href='./../Overviews/Methods.html#defaultKeyUpAction'>defaultKeyUpAction</a> (<span class='argstr'>char</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>unicode</span>, <span class='argstr'>keycode</span>, <span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p> The method called when a key is released and <a href="#-keyUpAction">-keyUpAction</a> is nil. Subclass it to define your own functionality on key-release.
+<p> See <a href="#Key actions">Key actions</a> for explanation of arguments.
+<p> The return value controls the event propagation to parent view. See <a href="#Key and mouse event processing">Key and mouse event processing</a> for details.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyDown' href='./../Overviews/Methods.html#keyDown'>keyDown</a> (<span class='argstr'>char</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>unicode</span>, <span class='argstr'>keycode</span>, <span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p> Handles response to a key press event. First evaluates <a href="#*globalKeyDownAction">*globalKeyDownAction</a>.<div class='note'><span class='notelabel'>NOTE:</span> This method directly triggers the action and returns, forwarding the action's return value. See <a href="#Key actions">Key actions</a> for detailed explanation.</div>
+<p> See <a href="#Key actions">Key actions</a> for explanation of arguments.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Boolean, stating whether the event was handled or not (and will not or will propagate to the parent view, respectively), or the view, in which case it lets the Qt view implementation handle the event.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyUp' href='./../Overviews/Methods.html#keyUp'>keyUp</a> (<span class='argstr'>char</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>unicode</span>, <span class='argstr'>keycode</span>, <span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p> Handles response to a key release event. Sets <a href="#-keyTyped">-keyTyped</a> to 'char', evaluates <a href="#*globalKeyUpAction">*globalKeyUpAction</a>, and then calls <a href="#-handleKeyUpBubbling">-handleKeyUpBubbling</a>.<div class='note'><span class='notelabel'>NOTE:</span> This method directly triggers the action and returns, forwarding the action's return value. See <a href="#Key actions">Key actions</a> for detailed explanation.</div>
+<p> See <a href="#Key actions">Key actions</a> for explanation of arguments.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Boolean, stating whether the event was handled or not (and will not or will propagate to the parent view, respectively), or the view, in which case it lets the Qt view implementation handle the event.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyModifiersChanged' href='./../Overviews/Methods.html#keyModifiersChanged'>keyModifiersChanged</a> (<span class='argstr'>modifiers</span>)</h3>
+<div class='method'>
+<p> Handles response to a modifier key press or release event. Calls <a href="#-handleKeyModifiersChangedBubbling">-handleKeyModifiersChangedBubbling</a>.<div class='note'><span class='notelabel'>NOTE:</span> Instead of calling <a href="#-handleKeyModifiersChangedBubbling">-handleKeyModifiersChangedBubbling</a>, a modifier key press or release event also produces a normal key press or release event, and it is the handling of those events that will determine propagation to the parent.</div>
+<p> See <a href="#Key actions">Key actions</a> for explanation of arguments.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyTyped' href='./../Overviews/Methods.html#keyTyped'>keyTyped</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyTyped' href='./../Overviews/Methods.html#keyTyped'>keyTyped</a> = value</h3>
+<div class='method'>
+<p> An instance variable containing the key just typed (after it is released).</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseDown' href='./../Overviews/Methods.html#mouseDown'>mouseDown</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>buttonNumber</span>, <span class='argstr'>clickCount</span>)</h3>
+<div class='method'>
+<p> Handles response to a mouse button press event. Evaluates <a href="#-mouseDownAction">-mouseDownAction</a>.
+<p> See <a href="#Mouse actions">Mouse actions</a> for explanation of arguments.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseUp' href='./../Overviews/Methods.html#mouseUp'>mouseUp</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>buttonNumber</span>)</h3>
+<div class='method'>
+<p> Handles response to a mouse button release event. Evaluates <a href="#-mouseDownAction">-mouseDownAction</a>.
+<p> See <a href="#Mouse actions">Mouse actions</a> for explanation of arguments.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseMove' href='./../Overviews/Methods.html#mouseMove'>mouseMove</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>, <span class='argstr'>modifiers</span>)</h3>
+<div class='method'>
+<p> Handles response to mouse pointer moving after a mouse button has been pressed on the view. Evaluates <a href="#-mouseMoveAction">-mouseMoveAction</a>.
+<p> See <a href="#Mouse actions">Mouse actions</a> for explanation of arguments.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseOver' href='./../Overviews/Methods.html#mouseOver'>mouseOver</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<div class='method'>
+<p> Handles response to mouse pointer moving over the view with no mouse buttons pressed. Evaluates <a href="#-mouseOverAction">-mouseOverAction</a>.
+<p> This method is called only if <a href="./../Classes/Window.html#-acceptsMouseOver">Window: -acceptsMouseOver</a> of the containing Window (or, <a href="#-acceptsMouseOver">-acceptsMouseOver</a> of the top View) is <code class='code prettyprint lang-sc'>true</code>.
+<p> See <a href="#Mouse actions">Mouse actions</a> for explanation of arguments.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseEnter' href='./../Overviews/Methods.html#mouseEnter'>mouseEnter</a> </h3>
+<div class='method'>
+<p> Handles response to mouse pointer entering the view. Evaluates <a href="#-mouseEnterAction">-mouseEnterAction</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseLeave' href='./../Overviews/Methods.html#mouseLeave'>mouseLeave</a> </h3>
+<div class='method'>
+<p> Handles response to mouse pointer leaving the view. Evaluates <a href="#-mouseLeaveAction">-mouseLeaveAction</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultGetDrag' href='./../Overviews/Methods.html#defaultGetDrag'>defaultGetDrag</a>: METHOD NOT FOUND!</h3>
+<div class='method'>
+<p><div class='note'><span class='notelabel'>NOTE:</span> Not yet implemented</div>
+<p> The view's default method to determine the content of the drag&amp;drop operation just initiated.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The object to be set as <a href="#*currentDrag">*currentDrag</a>. If nil is returned, the drag&amp;drop operation will not begin.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultCanReceiveDrag' href='./../Overviews/Methods.html#defaultCanReceiveDrag'>defaultCanReceiveDrag</a>: METHOD NOT FOUND!</h3>
+<div class='method'>
+<p><div class='note'><span class='notelabel'>NOTE:</span> Not yet implemented</div>
+<p> The view's default evaluation whether the content of the ongoing drag&amp;drop operation can be accepted.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Boolean stating whether <a href="#*currentDrag">*currentDrag</a> is useful. If false is returned, the drop will not be handled by this view.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultReceiveDrag' href='./../Overviews/Methods.html#defaultReceiveDrag'>defaultReceiveDrag</a>: METHOD NOT FOUND!</h3>
+<div class='method'>
+<p><div class='note'><span class='notelabel'>NOTE:</span> Not yet implemented</div>
+<p> The view's default handling of the data dropped on it (stored in <a href="#*currentDrag">*currentDrag</a>).</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-beginDrag' href='./../Overviews/Methods.html#beginDrag'>beginDrag</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<div class='method'>
+<p> Handles initiation of a drag&amp;drop operation. Evaluates <a href="#-beginDragAction">-beginDragAction</a> or calls <a href="#-defaultGetDrag">-defaultGetDrag</a> if the former is nil, then stores the object returned into <a href="#*currentDrag">*currentDrag</a>, and the object interpreted as <a href="./../Classes/Object.html#-asCompileString">"compile string"</a> into <a href="#*currentDragString">*currentDragString</a>. Returns whether <a href="#*currentDrag">*currentDrag</a> is not nil.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>x<td class='argumentdesc'>
+<p> Current horizontal position of the mouse pointer.<tr><td class='argumentname'>y<td class='argumentdesc'>
+<p> Current vertical position of the mouse pointer.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Boolean stating whether the drag&amp;drop operation shall begin.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-canReceiveDrag' href='./../Overviews/Methods.html#canReceiveDrag'>canReceiveDrag</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<div class='method'>
+<p> Handles evaluation whether the view can accept the current drag&amp;drop data. Evaluates <a href="#-canReceiveDragHandler">-canReceiveDragHandler</a> or calls <a href="#-defaultCanReceiveDrag">-defaultCanReceiveDrag</a> if the former is nil, then forwards the return value.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>x<td class='argumentdesc'>
+<p> Current horizontal position of the mouse pointer.<tr><td class='argumentname'>y<td class='argumentdesc'>
+<p> Current vertical position of the mouse pointer.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Boolean stating whether the current drag&amp;drop content can be dropped on the view.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-receiveDrag' href='./../Overviews/Methods.html#receiveDrag'>receiveDrag</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<div class='method'>
+<p> Handles the end of the drag&amp;drop operation. Evaluates <a href="#-receiveDragHandler">-receiveDragHandler</a> or calls <a href="#-defaultReceiveDrag">-defaultReceiveDrag</a> if the former is nil, then sets <a href="#*currentDrag">*currentDrag</a> and <a href="#*currentDragString">*currentDragString</a> to nil.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>x<td class='argumentdesc'>
+<p> Current horizontal position of the mouse pointer.<tr><td class='argumentname'>y<td class='argumentdesc'>
+<p> Current vertical position of the mouse pointer.</table></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-allChildren' href='./../Overviews/Methods.html#allChildren'>allChildren</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asFlowView' href='./../Overviews/Methods.html#asFlowView'>asFlowView</a> (<span class='argstr'>bounds</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asPageLayout' href='./../Overviews/Methods.html#asPageLayout'>asPageLayout</a> (<span class='argstr'>title</span>, <span class='argstr'>bounds</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/flowViewSupportQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/flowViewSupportQt.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-backColor' href='./../Overviews/Methods.html#backColor'>backColor</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-backColor' href='./../Overviews/Methods.html#backColor'>backColor</a> = <span class='argstr'>color</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-backgroundImage' href='./../Overviews/Methods.html#backgroundImage'>backgroundImage</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-backgroundImage' href='./../Overviews/Methods.html#backgroundImage'>backgroundImage</a> = <span class='argstr'>image</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-comp' href='./../Overviews/Methods.html#comp'>comp</a> (<span class='argstr'>func</span>, <span class='argstr'>bounds</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-deepDo' href='./../Overviews/Methods.html#deepDo'>deepDo</a> (<span class='argstr'>function</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dragEnterEvent' href='./../Overviews/Methods.html#dragEnterEvent'>dragEnterEvent</a> (<span class='argstr'>internal</span>, <span class='argstr'>data</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dragMoveEvent' href='./../Overviews/Methods.html#dragMoveEvent'>dragMoveEvent</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dropEvent' href='./../Overviews/Methods.html#dropEvent'>dropEvent</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-focusInEvent' href='./../Overviews/Methods.html#focusInEvent'>focusInEvent</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-focusOutEvent' href='./../Overviews/Methods.html#focusOutEvent'>focusOutEvent</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-horz' href='./../Overviews/Methods.html#horz'>horz</a> (<span class='argstr'>func</span>, <span class='argstr'>bounds</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-initView' href='./../Overviews/Methods.html#initView'>initView</a> (<span class='argstr'>parent</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyDownEvent' href='./../Overviews/Methods.html#keyDownEvent'>keyDownEvent</a> (<span class='argstr'>char</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>unicode</span>, <span class='argstr'>keycode</span>, <span class='argstr'>key</span>, <span class='argstr'>spontaneous</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyUpEvent' href='./../Overviews/Methods.html#keyUpEvent'>keyUpEvent</a> (<span class='argstr'>char</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>unicode</span>, <span class='argstr'>keycode</span>, <span class='argstr'>key</span>, <span class='argstr'>spontaneous</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-manageFunctionConnection' href='./../Overviews/Methods.html#manageFunctionConnection'>manageFunctionConnection</a> (<span class='argstr'>oldAction</span>, <span class='argstr'>newAction</span>, <span class='argstr'>signal</span>, <span class='argstr'>sync: false</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-manageMethodConnection' href='./../Overviews/Methods.html#manageMethodConnection'>manageMethodConnection</a> (<span class='argstr'>oldAction</span>, <span class='argstr'>newAction</span>, <span class='argstr'>signal</span>, <span class='argstr'>method</span>, <span class='argstr'>sync: false</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseDownEvent' href='./../Overviews/Methods.html#mouseDownEvent'>mouseDownEvent</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>buttonNumber</span>, <span class='argstr'>clickCount</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseEnterEvent' href='./../Overviews/Methods.html#mouseEnterEvent'>mouseEnterEvent</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseLeaveEvent' href='./../Overviews/Methods.html#mouseLeaveEvent'>mouseLeaveEvent</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseMoveEvent' href='./../Overviews/Methods.html#mouseMoveEvent'>mouseMoveEvent</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>buttons</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseUpEvent' href='./../Overviews/Methods.html#mouseUpEvent'>mouseUpEvent</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>buttonNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseWheel' href='./../Overviews/Methods.html#mouseWheel'>mouseWheel</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>xDelta</span>, <span class='argstr'>yDelta</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mouseWheelEvent' href='./../Overviews/Methods.html#mouseWheelEvent'>mouseWheelEvent</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>xDelta</span>, <span class='argstr'>yDelta</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveEvent' href='./../Overviews/Methods.html#moveEvent'>moveEvent</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nonimpl' href='./../Overviews/Methods.html#nonimpl'>nonimpl</a> (<span class='argstr'>methodName</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-onCloseEvent' href='./../Overviews/Methods.html#onCloseEvent'>onCloseEvent</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-onWindowActivateEvent' href='./../Overviews/Methods.html#onWindowActivateEvent'>onWindowActivateEvent</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-onWindowDeactivateEvent' href='./../Overviews/Methods.html#onWindowDeactivateEvent'>onWindowDeactivateEvent</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-overrides' href='./../Overviews/Methods.html#overrides'>overrides</a> (<span class='argstr'>method</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prOverrides' href='./../Overviews/Methods.html#prOverrides'>prOverrides</a> (<span class='argstr'>superclass</span>, <span class='argstr'>method</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prSetLayout' href='./../Overviews/Methods.html#prSetLayout'>prSetLayout</a> (<span class='argstr'>layout</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prStartDrag' href='./../Overviews/Methods.html#prStartDrag'>prStartDrag</a> (<span class='argstr'>label</span>, <span class='argstr'>data</span>, <span class='argstr'>dataAsString</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-relativeOrigin' href='./../Overviews/Methods.html#relativeOrigin'>relativeOrigin</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-resizeEvent' href='./../Overviews/Methods.html#resizeEvent'>resizeEvent</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-scroll' href='./../Overviews/Methods.html#scroll'>scroll</a> (<span class='argstr'>func</span>, <span class='argstr'>bounds</span>, <span class='argstr'>autohidesScrollers: true</span>, <span class='argstr'>autoScrolls: true</span>, <span class='argstr'>hasHorizontalScroller: true</span>, <span class='argstr'>hasVerticalScroller: true</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setBackgroundImage' href='./../Overviews/Methods.html#setBackgroundImage'>setBackgroundImage</a> (<span class='argstr'>image</span>, <span class='argstr'>tileMode: 1</span>, <span class='argstr'>alpha: 1</span>, <span class='argstr'>fromRect</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setDragEventsEnabled' href='./../Overviews/Methods.html#setDragEventsEnabled'>setDragEventsEnabled</a> (<span class='argstr'>enabled</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-toolTip' href='./../Overviews/Methods.html#toolTip'>toolTip</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-toolTip' href='./../Overviews/Methods.html#toolTip'>toolTip</a> = <span class='argstr'>t</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-valueActionIfChanged' href='./../Overviews/Methods.html#valueActionIfChanged'>valueActionIfChanged</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-valueActionIfChanged' href='./../Overviews/Methods.html#valueActionIfChanged'>valueActionIfChanged</a> = <span class='argstr'>val</span></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/extValueActionIfChanged.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/extValueActionIfChanged.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-vert' href='./../Overviews/Methods.html#vert'>vert</a> (<span class='argstr'>func</span>, <span class='argstr'>bounds</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc</a></div>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/View.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/View.schelp</a><br>link::Classes/View::<br>sc version: 3.8dev</div></div></body></html>

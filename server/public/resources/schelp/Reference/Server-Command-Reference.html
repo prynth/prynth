@@ -1,0 +1,739 @@
+<html><head><title>Server Command Reference</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider REFERENCE</div>
+<div id='categories'><a href='./../Browse.html#Server>Architecture'>Server>Architecture</a></div>
+<h1>Server Command Reference</h1>
+<div id='summary'>SuperCollider Server Synth Engine Command Reference</div>
+</div>
+<div class='subheader'>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Master Controls'>Master Controls</a></li>
+<ul class='toc'><li class='toc2'><a href='#/quit'>/quit</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/notify'>/notify</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/status'>/status</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/cmd'>/cmd</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/dumpOSC'>/dumpOSC</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/sync'>/sync</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/clearSched'>/clearSched</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/error'>/error</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Synth Definition Commands'>Synth Definition Commands</a></li>
+<ul class='toc'><li class='toc2'><a href='#/d_recv'>/d_recv</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/d_load'>/d_load</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/d_loadDir'>/d_loadDir</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/d_free'>/d_free</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Node Commands'>Node Commands</a></li>
+<ul class='toc'><li class='toc2'><a href='#/n_free'>/n_free</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_run'>/n_run</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_set'>/n_set</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_setn'>/n_setn</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_fill'>/n_fill</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_map'>/n_map</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_mapn'>/n_mapn</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_mapa'>/n_mapa</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_mapan'>/n_mapan</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_before'>/n_before</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_after'>/n_after</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_query'>/n_query</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_trace'>/n_trace</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_order'>/n_order</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Synth Commands'>Synth Commands</a></li>
+<ul class='toc'><li class='toc2'><a href='#/s_new'>/s_new</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/s_get'>/s_get</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/s_getn'>/s_getn</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/s_noid'>/s_noid</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Group Commands'>Group Commands</a></li>
+<ul class='toc'><li class='toc2'><a href='#/g_new'>/g_new</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/p_new'>/p_new</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/g_head'>/g_head</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/g_tail'>/g_tail</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/g_freeAll'>/g_freeAll</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/g_deepFree'>/g_deepFree</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/g_dumpTree'>/g_dumpTree</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/g_queryTree'>/g_queryTree</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Unit Generator Commands'>Unit Generator Commands</a></li>
+<ul class='toc'><li class='toc2'><a href='#/u_cmd'>/u_cmd</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Buffer Commands'>Buffer Commands</a></li>
+<ul class='toc'><li class='toc2'><a href='#/b_alloc'>/b_alloc</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_allocRead'>/b_allocRead</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_allocReadChannel'>/b_allocReadChannel</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_read'>/b_read</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_readChannel'>/b_readChannel</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_write'>/b_write</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_free'>/b_free</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_zero'>/b_zero</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_set'>/b_set</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_setn'>/b_setn</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_fill'>/b_fill</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_gen'>/b_gen</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_close'>/b_close</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_query'>/b_query</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_get'>/b_get</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/b_getn'>/b_getn</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Control Bus Commands'>Control Bus Commands</a></li>
+<ul class='toc'><li class='toc2'><a href='#/c_set'>/c_set</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/c_setn'>/c_setn</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/c_fill'>/c_fill</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/c_get'>/c_get</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/c_getn'>/c_getn</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Non Real Time Mode Commands'>Non Real Time Mode Commands</a></li>
+<ul class='toc'><li class='toc2'><a href='#/nrt_end'>/nrt_end</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Replies to Commands'>Replies to Commands</a></li>
+<ul class='toc'><li class='toc2'><a href='#/done'>/done</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/fail'>/fail</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/late'>/late</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Node Notifications from Server'>Node Notifications from Server</a></li>
+<ul class='toc'><li class='toc2'><a href='#/n_go'>/n_go</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_end'>/n_end</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_off'>/n_off</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_on'>/n_on</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_move'>/n_move</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#/n_info'>/n_info</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Trigger Notification'>Trigger Notification</a></li>
+<ul class='toc'><li class='toc2'><a href='#/tr'>/tr</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Buffer Fill Commands'>Buffer Fill Commands</a></li>
+<ul class='toc'><li class='toc2'><a href='#Wave Fill Commands'>Wave Fill Commands</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Other Commands'>Other Commands</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Command Numbers'>Command Numbers</a></li>
+<ul class='toc'></ul></ul></div>
+<p>The following is a list of all server commands and their arguments.
+<p>Each command has a command number which can be sent to the server as a 32 bit integer instead of an OSC style string. Command numbers are listed at the end of this document.
+<p>If a command's description contains the word <strong>Asynchronous</strong>, then that command will be passed to a background thread to complete so as not to steal CPU time from the audio synthesis thread. All asynchronous commands send a reply to the client when they are completed. Many asynchronous commands can contain an OSC message or bundle to be executed upon completion. eg.<pre class='code prettyprint lang-sc'>    ["/d_load", "synthdefs/void.scsyndef",
+        ["/s_new", "void", 1001, 1, 0] // completion message
+    ]</pre>
+<h2><a class='anchor' name='Master Controls'>Master Controls</a></h2>
+<h3><a class='anchor' name='/quit'>/quit</a></h3>
+
+<p>Quit program. Exits the synthesis server.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done</strong> just before completion.</dl>
+<h3><a class='anchor' name='/notify'>/notify</a></h3>
+
+<p>Register to receive notifications from server<table>
+<tr><td><strong>int</strong><td>one to receive notifications, zero to stop receiving them.</table>
+
+<p>If argument is one, server will remember your return address and send you notifications. if argument is zero, server will stop sending you notifications.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done /notify clientID</strong> when complete. If this client has registered for notifications before, this may be the same ID. Otherwise it will be a new one. Clients can use this ID in multi-client situations to avoid conflicts in node IDs, bus indices, buffer numbers, etc.</dl>
+<h3><a class='anchor' name='/status'>/status</a></h3>
+
+<p>Query the status. Replies to sender with the following message:<dl>
+<dt>/status.reply<dd><table>
+<tr><td>int<td>1. unused.<tr><td>int<td>number of unit generators.<tr><td>int<td>number of synths.<tr><td>int<td>number of groups.<tr><td>int<td>number of loaded synth definitions.<tr><td>float<td>average percent CPU usage for signal processing<tr><td>float<td>peak percent CPU usage for signal processing<tr><td>double<td>nominal sample rate<tr><td>double<td>actual sample rate</table>
+<div class='note'><span class='notelabel'>NOTE:</span> <code>/status</code> messages won't be posted, if the server is in <code>/dumpOSC</code> mode</div></dl>
+<h3><a class='anchor' name='/cmd'>/cmd</a></h3>
+
+<p>Plug-in defined command.<table>
+<tr><td><strong>string</strong><td>command name<tr><td><strong>...</strong><td>any arguments</table>
+
+<p>Commands are defined by plug-ins.<h3><a class='anchor' name='/dumpOSC'>/dumpOSC</a></h3>
+
+<p>Display incoming OSC messages.<table>
+<tr><td><strong>int</strong><td>code</table>
+
+<p>Turns on and off printing of the contents of incoming Open Sound Control messages. This is useful when debugging your command stream.
+<p>The values for the code are as follows:<table>
+<tr><td>0<td>turn dumping OFF.<tr><td>1<td>print the parsed contents of the message.<tr><td>2<td>print the contents in hexadecimal.<tr><td>3<td>print both the parsed and hexadecimal representations of the contents.</table>
+<h3><a class='anchor' name='/sync'>/sync</a></h3>
+
+<p>Notify when async commands have completed.<table>
+<tr><td><strong>int</strong><td>a unique number identifying this command.</table>
+
+<p>Replies with a <strong>/synced</strong> message when all asynchronous commands received before this one have completed. The reply will contain the sent unique ID.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/synced, ID</strong> when complete.</dl>
+<h3><a class='anchor' name='/clearSched'>/clearSched</a></h3>
+
+<p>Clear all scheduled bundles. Removes all bundles from the scheduling queue.<h3><a class='anchor' name='/error'>/error</a></h3>
+
+<p>Enable/disable error message posting.<table>
+<tr><td><strong>int</strong><td>mode</table>
+
+<p>Turn on or off error messages sent to the SuperCollider post window. Useful when sending a message, such as <strong>/n_free</strong>, whose failure does not necessarily indicate anything wrong.
+<p>The values for mode are as follows:<table>
+<tr><td>0<td>turn off error posting until the next ['/error', 1] message.<tr><td>1<td>turn on error posting.</table>
+
+<p>For convenience of client-side methods, you can also suppress errors temporarily, for the scope of a single bundle.<table>
+<tr><td>-1<td>turn off locally in the bundle -- error posting reverts to the "permanent" setting for the next message or bundle.<tr><td>-2<td>turn on locally in the bundle.</table>
+
+<p>These "temporary" states accumulate within a single bundle -- so if you have nested calls to methods that use bundle-local error suppression, error posting remains off until all the layers have been unwrapped. If you use ['/error', -1] within a self-bundling method, you should always close it with ['/error', -2] so that subsequent bundled messages will take the correct error posting status. However, even if this is not done, the next bundle or message received will begin with the standard error posting status, as set by modes 0 or 1.
+<p>Temporary error suppression may not affect asynchronous commands in every case.<h2><a class='anchor' name='Synth Definition Commands'>Synth Definition Commands</a></h2>
+<h3><a class='anchor' name='/d_recv'>/d_recv</a></h3>
+
+<p>Receive a synth definition file.<table>
+<tr><td><strong>bytes</strong><td>buffer of data.<tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
+
+<p>Loads a file of synth definitions from a buffer in the message. Resident definitions with the same names are overwritten.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done</strong> when complete.</dl>
+<h3><a class='anchor' name='/d_load'>/d_load</a></h3>
+
+<p>Load synth definition.<table>
+<tr><td><strong>string</strong><td>pathname of file. Can be a pattern like <code class='code prettyprint lang-sc'>"synthdefs/perc-*"</code><tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
+
+<p>Loads a file of synth definitions. Resident definitions with the same names are overwritten.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done</strong> when complete.</dl>
+<h3><a class='anchor' name='/d_loadDir'>/d_loadDir</a></h3>
+
+<p>Load a directory of synth definitions.<table>
+<tr><td><strong>string</strong><td>pathname of directory.<tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
+
+<p>Loads a directory of synth definitions files. Resident definitions with the same names are overwritten.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done</strong> when complete.</dl>
+<h3><a class='anchor' name='/d_free'>/d_free</a></h3>
+
+<p>Delete synth definition.<table>
+<tr><td>N * <strong>string</strong><td>synth def name</table>
+
+<p>Removes a synth definition. The definition is removed immediately, and does not wait for synth nodes based on that definition to end.<h2><a class='anchor' name='Node Commands'>Node Commands</a></h2>
+<h3><a class='anchor' name='/n_free'>/n_free</a></h3>
+
+<p>Delete a node.<table>
+<tr><td>N * <strong>int</strong><td>node ID</table>
+
+<p>Stops a node abruptly, removes it from its group, and frees its memory. A list of node IDs may be specified. Using this method can cause a click if the node is not silent at the time it is freed.<h3><a class='anchor' name='/n_run'>/n_run</a></h3>
+
+<p>Turn node on or off.<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>node ID<tr><td><strong>int</strong><td>run flag</table>
+</table>
+
+<p><ul>
+<li>If the run flag set to zero then the node will not be executed.<li>If the run flag is set back to one, then it will be executed.</ul>
+
+<p>Using this method to start and stop nodes can cause a click if the node is not silent at the time run flag is toggled.<h3><a class='anchor' name='/n_set'>/n_set</a></h3>
+
+<p>Set a node's control value(s).<table>
+<tr><td><strong>int</strong><td>node ID<tr><td>N *<td><table>
+<tr><td><strong>int</strong> or <strong>string</strong><td>a control index or name<tr><td><strong>float</strong> or <strong>int</strong><td>a control value</table>
+</table>
+
+<p>Takes a list of pairs of control indices and values and sets the controls to those values. If the node is a group, then it sets the controls of every node in the group.
+<p>This message now supports array type tags ($[ and $]) in the control/value component of the OSC message. Arrayed control values are applied in the manner of n_setn (i.e., sequentially starting at the indexed or named control).<h3><a class='anchor' name='/n_setn'>/n_setn</a></h3>
+
+<p>Set ranges of a node's control value(s).<table>
+<tr><td><strong>int</strong><td>node ID<tr><td>N *<td><table>
+<tr><td><strong>int</strong> or <strong>string</strong><td>a control index or name<tr><td><strong>int</strong><td>number of sequential controls to change (M)<tr><td>M * <strong>float</strong> or <strong>int</strong><td>control value(s)</table>
+</table>
+
+<p>Set contiguous ranges of control indices to sets of values. For each range, the starting control index is given followed by the number of controls to change, followed by the values. If the node is a group, then it sets the controls of every node in the group.<h3><a class='anchor' name='/n_fill'>/n_fill</a></h3>
+
+<p>Fill ranges of a node's control value(s).<table>
+<tr><td><strong>int</strong><td>node ID<tr><td>N *<td><table>
+<tr><td><strong>int</strong> or <strong>string</strong><td>a control index or name<tr><td><strong>int</strong><td>number of values to fill (M)<tr><td><strong>float</strong> or <strong>int</strong><td>value</table>
+</table>
+
+<p>Set contiguous ranges of control indices to single values. For each range, the starting control index is given followed by the number of controls to change, followed by the value to fill. If the node is a group, then it sets the controls of every node in the group.<h3><a class='anchor' name='/n_map'>/n_map</a></h3>
+
+<p>Map a node's controls to read from a bus.<table>
+<tr><td><strong>int</strong><td>node ID<tr><td>N *<td><table>
+<tr><td><strong>int</strong> or <strong>string</strong><td>a control index or name<tr><td><strong>int</strong><td>control bus index</table>
+</table>
+
+<p>Takes a list of pairs of control names or indices and bus indices and causes those controls to be read continuously from a global control bus. If the node is a group, then it maps the controls of every node in the group. If the control bus index is -1 then any current mapping is undone. Any n_set, n_setn and n_fill command will also unmap the control.<h3><a class='anchor' name='/n_mapn'>/n_mapn</a></h3>
+
+<p>Map a node's controls to read from buses.<table>
+<tr><td><strong>int</strong><td>node ID<tr><td>N *<td><table>
+<tr><td><strong>int</strong> or <strong>string</strong><td>a control index or name<tr><td><strong>int</strong><td>control bus index<tr><td><strong>int</strong><td>number of controls to map</table>
+</table>
+
+<p>Takes a list of triplets of control names or indices, bus indices, and number of controls to map and causes those controls to be mapped sequentially to buses. If the node is a group, then it maps the controls of every node in the group. If the control bus index is -1 then any current mapping is undone. Any n_set, n_setn and n_fill command will also unmap the control.<h3><a class='anchor' name='/n_mapa'>/n_mapa</a></h3>
+
+<p>Map a node's controls to read from an audio bus.<table>
+<tr><td><strong>int</strong><td>node ID<tr><td>N *<td><table>
+<tr><td><strong>int</strong> or <strong>string</strong><td>a control index or name<tr><td><strong>int</strong><td>control bus index</table>
+</table>
+
+<p>Takes a list of pairs of control names or indices and audio bus indices and causes those controls to be read continuously from a global audio bus. If the node is a group, then it maps the controls of every node in the group. If the audio bus index is -1 then any current mapping is undone. Any n_set, n_setn and n_fill command will also unmap the control. For the full audio rate signal, the argument must have its rate set to \ar.<h3><a class='anchor' name='/n_mapan'>/n_mapan</a></h3>
+
+<p>Map a node's controls to read from audio buses.<table>
+<tr><td><strong>int</strong><td>node ID<tr><td>N *<td><table>
+<tr><td><strong>int</strong> or <strong>string</strong><td>a control index or name<tr><td><strong>int</strong><td>control bus index<tr><td><strong>int</strong><td>number of controls to map</table>
+</table>
+
+<p>Takes a list of triplets of control names or indices, audio bus indices, and number of controls to map and causes those controls to be mapped sequentially to buses. If the node is a group, then it maps the controls of every node in the group. If the audio bus index is -1 then any current mapping is undone. Any n_set, n_setn and n_fill command will also unmap the control. For the full audio rate signal, the argument must have its rate set to \ar.<h3><a class='anchor' name='/n_before'>/n_before</a></h3>
+
+<p>Place a node before another.<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>the ID of the node to place (A)<tr><td><strong>int</strong><td>the ID of the node before which the above is placed (B)</table>
+</table>
+
+<p>Places node A in the same group as node B, to execute immediately before node B.<h3><a class='anchor' name='/n_after'>/n_after</a></h3>
+
+<p>Place a node after another.<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>the ID of the node to place (A)<tr><td><strong>int</strong><td>the ID of the node after which the above is placed (B)</table>
+</table>
+
+<p>Places node A in the same group as node B, to execute immediately after node B.<h3><a class='anchor' name='/n_query'>/n_query</a></h3>
+
+<p>Get info about a node.<table>
+<tr><td>N * <strong>int</strong><td>node ID</table>
+
+<p>The server sends an /n_info message for each node to registered clients. See Node Notifications below for the format of the /n_info message.<h3><a class='anchor' name='/n_trace'>/n_trace</a></h3>
+
+<p>Trace a node.<table>
+<tr><td>N * <strong>int</strong><td>node IDs</table>
+
+<p>Causes a synth to print out the values of the inputs and outputs of its unit generators for one control period. Causes a group to print the node IDs and names of each node in the group for one control period.<h3><a class='anchor' name='/n_order'>/n_order</a></h3>
+
+<p>Move and order a list of nodes.<table>
+<tr><td><strong>int</strong><td>add action (0,1,2, 3 or 4 see below)<tr><td><strong>int</strong><td>add target ID<tr><td>N * <strong>int</strong><td>node IDs</table>
+
+<p>Move the listed nodes to the location specified by the target and add action, and place them in the order specified. Nodes which have already been freed will be ignored.<dl>
+<dt>add actions:<dd><table>
+<tr><td>0<td>construct the node order at the head of the group specified by the add target ID.<tr><td>1<td>construct the node order at the tail of the group specified by the add target ID.<tr><td>2<td>construct the node order just before the node specified by the add target ID.<tr><td>3<td>construct the node order just after the node specified by the add target ID.</table>
+</dl>
+<h2><a class='anchor' name='Synth Commands'>Synth Commands</a></h2>
+<h3><a class='anchor' name='/s_new'>/s_new</a></h3>
+
+<p>Create a new synth.<table>
+<tr><td><strong>string</strong><td>synth definition name<tr><td><strong>int</strong><td>synth ID<tr><td><strong>int</strong><td>add action (0,1,2, 3 or 4 see below)<tr><td><strong>int</strong><td>add target ID<tr><td>N *<td><table>
+<tr><td><strong>int</strong> or <strong>string</strong><td>a control index or name<tr><td><strong>float</strong> or <strong>int</strong> or <strong>string</strong><td>floating point and integer arguments are interpreted as control value.  a symbol argument consisting of the letter 'c' or 'a' (for control or audio) followed by the bus's index.</table>
+</table>
+
+<p>Create a new synth from a synth definition, give it an ID, and add it to the tree of nodes. There are four ways to add the node to the tree as determined by the add action argument which is defined as follows:<dl>
+<dt>add actions:<dd><table>
+<tr><td>0<td>add the new node to the the head of the group specified by the add target ID.<tr><td>1<td>add the new node to the the tail of the group specified by the add target ID.<tr><td>2<td>add the new node just before the node specified by the add target ID.<tr><td>3<td>add the new node just after the node specified by the add target ID.<tr><td>4<td>the new node replaces the node specified by the add target ID. The target node is freed.</table>
+</dl>
+
+<p>Controls may be set when creating the synth. The control arguments are the same as for the n_set command.
+<p>If you send <strong>/s_new</strong> with a synth ID of -1, then the server will generate an ID for you. The server reserves all negative IDs. Since you don't know what the ID is, you cannot talk to this node directly later. So this is useful for nodes that are of finite duration and that get the control information they need from arguments and buses or messages directed to their group. In addition no notifications are sent when there are changes of state for this node, such as <strong>/go</strong>, <strong>/end</strong>, <strong>/on</strong>, <strong>/off</strong>.
+<p>If you use a node ID of -1 for any other command, such as <strong>/n_map</strong>, then it refers to the most recently created node by <strong>/s_new</strong> (auto generated ID or not). This is how you can map the controls of a node with an auto generated ID. In a multi-client situation, the only way you can be sure what node -1 refers to is to put the messages in a bundle.
+<p>This message now supports array type tags ($[ and $]) in the control/value component of the OSC message. Arrayed control values are applied in the manner of n_setn (i.e., sequentially starting at the indexed or named control). See the <a href="./../Guides/NodeMessaging.html">Node Messaging</a> helpfile.<h3><a class='anchor' name='/s_get'>/s_get</a></h3>
+
+<p>Get control value(s).<table>
+<tr><td><strong>int</strong><td>synth ID<tr><td>N * <strong>int</strong> or <strong>string</strong><td>a control index or name</table>
+
+<p>Replies to sender with the corresponding <strong>/n_set</strong> command.<h3><a class='anchor' name='/s_getn'>/s_getn</a></h3>
+
+<p>Get ranges of control value(s).<table>
+<tr><td><strong>int</strong><td>synth ID<tr><td>N *<td><table>
+<tr><td><strong>int</strong> or <strong>string</strong><td>a control index or name<tr><td><strong>int</strong><td>number of sequential controls to get (M)</table>
+</table>
+
+<p>Get contiguous ranges of controls. Replies to sender with the corresponding <strong>/n_setn</strong> command.<h3><a class='anchor' name='/s_noid'>/s_noid</a></h3>
+
+<p>Auto-reassign synth's ID to a reserved value.<table>
+<tr><td>N * <strong>int</strong><td>synth IDs</table>
+
+<p>This command is used when the client no longer needs to communicate with the synth and wants to have the freedom to reuse the ID. The server will reassign this synth to a reserved negative number. This command is purely for bookkeeping convenience of the client. No notification is sent when this occurs.<h2><a class='anchor' name='Group Commands'>Group Commands</a></h2>
+<h3><a class='anchor' name='/g_new'>/g_new</a></h3>
+
+<p>Create a new group.<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>new group ID<tr><td><strong>int</strong><td>add action (0,1,2, 3 or 4 see below)<tr><td><strong>int</strong><td>add target ID</table>
+</table>
+
+<p>Create a new group and add it to the tree of nodes. There are four ways to add the group to the tree as determined by the add action argument which is defined as follows (the same as for <strong>/s_new</strong>):<dl>
+<dt>add actions:<dd><table>
+<tr><td>0<td>add the new group to the the head of the group specified by the add target ID.<tr><td>1<td>add the new group to the the tail of the group specified by the add target ID.<tr><td>2<td>add the new group just before the node specified by the add target ID.<tr><td>3<td>add the new group just after the node specified by the add target ID.<tr><td>4<td>the new node replaces the node specified by the add target ID. The target node is freed.</table>
+</dl>
+
+<p>Multiple groups may be created in one command by adding arguments.<h3><a class='anchor' name='/p_new'>/p_new</a></h3>
+
+<p>Create a new parallel group.<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>new group ID<tr><td><strong>int</strong><td>add action (0,1,2, 3 or 4 see below)<tr><td><strong>int</strong><td>add target ID</table>
+</table>
+
+<p>Create a new parallel group and add it to the tree of nodes. Parallel groups are relaxed groups, their child nodes are evaluated in unspecified order. There are four ways to add the group to the tree as determined by the add action argument which is defined as follows (the same as for <strong>/s_new</strong>):<dl>
+<dt>add actions:<dd><table>
+<tr><td>0<td>add the new group to the the head of the group specified by the add target ID.<tr><td>1<td>add the new group to the the tail of the group specified by the add target ID.<tr><td>2<td>add the new group just before the node specified by the add target ID.<tr><td>3<td>add the new group just after the node specified by the add target ID.<tr><td>4<td>the new node replaces the node specified by the add target ID. The target node is freed.</table>
+</dl>
+
+<p>Multiple groups may be created in one command by adding arguments.<h3><a class='anchor' name='/g_head'>/g_head</a></h3>
+
+<p>Add node to head of group.<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>group ID<tr><td><strong>int</strong><td>node ID</table>
+</table>
+
+<p>Adds the node to the head (first to be executed) of the group.<h3><a class='anchor' name='/g_tail'>/g_tail</a></h3>
+
+<p>Add node to tail of group.<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>group ID<tr><td><strong>int</strong><td>node ID</table>
+</table>
+
+<p>Adds the node to the tail (last to be executed) of the group.<h3><a class='anchor' name='/g_freeAll'>/g_freeAll</a></h3>
+
+<p>Delete all nodes in a group.<table>
+<tr><td>N * <strong>int</strong><td>group ID(s)</table>
+
+<p>Frees all nodes in the group. A list of groups may be specified.<h3><a class='anchor' name='/g_deepFree'>/g_deepFree</a></h3>
+
+<p>Free all synths in this group and all its sub-groups.<table>
+<tr><td>N * <strong>int</strong><td>group ID(s)</table>
+
+<p>Traverses all groups below this group and frees all the synths. Sub-groups are not freed. A list of groups may be specified.<h3><a class='anchor' name='/g_dumpTree'>/g_dumpTree</a></h3>
+
+<p>Post a representation of this group's node subtree.<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>group ID<tr><td><strong>int</strong><td>flag; if not 0 the current control (arg) values for synths will be posted</table>
+</table>
+
+<p>Posts a representation of this group's node subtree, i.e. all the groups and synths contained within it, optionally including the current control values for synths.<h3><a class='anchor' name='/g_queryTree'>/g_queryTree</a></h3>
+
+<p>Get a representation of this group's node subtree.<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>group ID<tr><td><strong>int</strong><td>flag: if not 0 the current control (arg) values for synths will be included</table>
+</table>
+
+<p>Request a representation of this group's node subtree, i.e. all the groups and synths contained within it. Replies to the sender with a <strong>/g_queryTree.reply</strong> message listing all of the nodes contained within the group in the following format:<table>
+<tr><td><strong>int</strong><td>flag: if synth control values are included 1, else 0<tr><td><strong>int</strong><td>node ID of the requested group<tr><td><strong>int</strong><td>number of child nodes contained within the requested group<tr><td>then for each node in the subtree:<td><table>
+<tr><td><strong>int</strong><td>node ID<tr><td><strong>int</strong><td>number of child nodes contained within this node. If -1 this is a synth, if &gt;=0 it's a group<tr><td>then, if this node is a synth:<tr><td><strong>symbol</strong><td>the SynthDef name for this node.<tr><td>then, if flag (see above) is true:<tr><td><strong>int</strong><td>numControls for this synth (M)<tr><td>M *<td><table>
+<tr><td><strong>symbol</strong> or <strong>int</strong><td>control name or index<tr><td><strong>float</strong> or <strong>symbol</strong><td>value or control bus mapping symbol (e.g. 'c1')</table>
+</table>
+</table>
+
+<p>N.B. The order of nodes corresponds to their execution order on the server. Thus child nodes (those contained within a group) are listed immediately following their parent. See the method Server:queryAllNodes for an example of how to process this reply.<h2><a class='anchor' name='Unit Generator Commands'>Unit Generator Commands</a></h2>
+<h3><a class='anchor' name='/u_cmd'>/u_cmd</a></h3>
+
+<p>Send a command to a unit generator.<table>
+<tr><td><strong>int</strong><td>node ID<tr><td><strong>int</strong><td>unit generator index<tr><td><strong>string</strong><td>command name<tr><td><strong>...</strong><td>any arguments</table>
+
+<p>Sends all arguments following the command name to the unit generator to be performed. Commands are defined by unit generator plug ins.<h2><a class='anchor' name='Buffer Commands'>Buffer Commands</a></h2>
+
+<p>Buffers are stored in a global array, indexed by integers starting at zero.<h3><a class='anchor' name='/b_alloc'>/b_alloc</a></h3>
+
+<p>Allocate buffer space.<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td><strong>int</strong><td>number of frames<tr><td><strong>int</strong><td>number of channels (optional. default = 1 channel)<tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
+
+<p>Allocates zero filled buffer to number of channels and samples.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done /b_alloc bufNum</strong> when complete.</dl>
+<h3><a class='anchor' name='/b_allocRead'>/b_allocRead</a></h3>
+
+<p>Allocate buffer space and read a sound file.<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td><strong>string</strong><td>path name of a sound file.<tr><td><strong>int</strong><td>starting frame in file (optional. default = 0)<tr><td><strong>int</strong><td>number of frames to read (optional. default = 0, see below)<tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
+
+<p>Allocates buffer to number of channels of file and number of samples requested, or fewer if sound file is smaller than requested. Reads sound file data from the given starting frame in the file. If the number of frames argument is less than or equal to zero, the entire file is read.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done /b_allocRead bufNum</strong> when complete.</dl>
+<h3><a class='anchor' name='/b_allocReadChannel'>/b_allocReadChannel</a></h3>
+
+<p>Allocate buffer space and read channels from a sound file.<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td><strong>string</strong><td>path name of a sound file<tr><td><strong>int</strong><td>starting frame in file<tr><td><strong>int</strong><td>number of frames to read<tr><td>N *<td>N &gt;= 0<table>
+<tr><td><strong>int</strong><td>source file channel index</table>
+
+<p><tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
+
+<p>As b_allocRead, but reads individual channels into the allocated buffer in the order specified.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done /b_allocReadChannel bufNum</strong> when complete.</dl>
+<h3><a class='anchor' name='/b_read'>/b_read</a></h3>
+
+<p>Read sound file data into an existing buffer.<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td><strong>string</strong><td>path name of a sound file.<tr><td><strong>int</strong><td>starting frame in file (optional. default = 0)<tr><td><strong>int</strong><td>number of frames to read (optional. default = -1, see below)<tr><td><strong>int</strong><td>starting frame in buffer (optional. default = 0)<tr><td><strong>int</strong><td>leave file open (optional. default = 0)<tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
+
+<p>Reads sound file data from the given starting frame in the file and writes it to the given starting frame in the buffer. If number of frames is less than zero, the entire file is read. If reading a file to be used by <a href="./../Classes/DiskIn.html">DiskIn</a> ugen then you will want to set "leave file open" to one, otherwise set it to zero.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done /b_read bufNum</strong> when complete.</dl>
+<h3><a class='anchor' name='/b_readChannel'>/b_readChannel</a></h3>
+
+<p>Read sound file channel data into an existing buffer.<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td><strong>string</strong><td>path name of a sound file<tr><td><strong>int</strong><td>starting frame in file<tr><td><strong>int</strong><td>number of frames to read<tr><td><strong>int</strong><td>starting frame in buffer<tr><td><strong>int</strong><td>leave file open<tr><td>N *<td>N &gt;= 0<table>
+<tr><td><strong>int</strong><td>source file channel index</table>
+
+<p><tr><td><strong>bytes</strong><td>completion message</table>
+
+<p>As <strong>b_read</strong>, but reads individual channels in the order specified. The number of channels requested must match the number of channels in the buffer.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done /b_readChannel bufNum</strong> when complete.</dl>
+<h3><a class='anchor' name='/b_write'>/b_write</a></h3>
+
+<p>Write sound file data.<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td><strong>string</strong><td>path name of a sound file.<tr><td><strong>string</strong><td>header format.<tr><td><strong>string</strong><td>sample format.<tr><td><strong>int</strong><td>number of frames to write (optional. default = -1, see below)<tr><td><strong>int</strong><td>starting frame in buffer (optional. default = 0)<tr><td><strong>int</strong><td>leave file open (optional. default = 0)<tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
+
+<p>Write a buffer as a sound file.<dl>
+<dt>Header format is one of:<dd>"aiff", "next", "wav", "ircam"", "raw"<dt>Sample format is one of:<dd>"int8", "int16", "int24", "int32", "float", "double", "mulaw", "alaw"</dl>
+
+<p>Not all combinations of header format and sample format are possible. If number of frames is less than zero, all samples from the starting frame to the end of the buffer are written. If opening a file to be used by DiskOut ugen then you will want to set "leave file open" to one, otherwise set it to zero. If "leave file open" is set to one then the file is created, but no frames are written until the DiskOut ugen does so.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done /b_write bufNum</strong> when complete.</dl>
+<h3><a class='anchor' name='/b_free'>/b_free</a></h3>
+
+<p>Free buffer data.<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
+
+<p>Frees buffer space allocated for this buffer.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done /b_free bufNum</strong> when complete.</dl>
+<h3><a class='anchor' name='/b_zero'>/b_zero</a></h3>
+
+<p>Zero sample data.<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
+
+<p>Sets all samples in the buffer to zero.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done /b_zero bufNum</strong> when complete.</dl>
+<h3><a class='anchor' name='/b_set'>/b_set</a></h3>
+
+<p>Set sample value(s).<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>a sample index<tr><td><strong>float</strong><td>a sample value</table>
+</table>
+
+<p>Takes a list of pairs of sample indices and values and sets the samples to those values.<h3><a class='anchor' name='/b_setn'>/b_setn</a></h3>
+
+<p>Set ranges of sample value(s).<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>sample starting index<tr><td><strong>int</strong><td>number of sequential samples to change (M)<tr><td>M * <strong>float</strong><td>a sample value</table>
+</table>
+
+<p>Set contiguous ranges of sample indices to sets of values. For each range, the starting sample index is given followed by the number of samples to change, followed by the values.<h3><a class='anchor' name='/b_fill'>/b_fill</a></h3>
+
+<p>Fill ranges of sample value(s).<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>sample starting index<tr><td><strong>int</strong><td>number of samples to fill (M)<tr><td><strong>float</strong><td>value</table>
+</table>
+
+<p>Set contiguous ranges of sample indices to single values. For each range, the starting sample index is given followed by the number of samples to change, followed by the value to fill. This is only meant for setting a few samples, not whole buffers or large sections.<h3><a class='anchor' name='/b_gen'>/b_gen</a></h3>
+
+<p>Call a command to fill a buffer.<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td><strong>string</strong><td>command name<tr><td><strong>...</strong><td>command arguments</table>
+
+<p>Plug-ins can define commands that operate on buffers. The arguments after the command name are defined by the command. The currently defined buffer fill commands are listed below in a separate section.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done /b_gen bufNum</strong> when complete.</dl>
+<h3><a class='anchor' name='/b_close'>/b_close</a></h3>
+
+<p>Close soundfile.<table>
+<tr><td><strong>int</strong><td>buffer number</table>
+
+<p>After using a buffer with <a href="./../Classes/DiskOut.html">DiskOut</a>, close the soundfile and write header information.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done /b_close bufNum</strong> when complete.</dl>
+<h3><a class='anchor' name='/b_query'>/b_query</a></h3>
+
+<p>Get buffer info.<table>
+<tr><td>N * <strong>int</strong><td>buffer number(s)</table>
+
+<p>Responds to the sender with a <strong>/b_info</strong> message. The arguments to /b_info are as follows:<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>buffer number<tr><td><strong>int</strong><td>number of frames<tr><td><strong>int</strong><td>number of channels<tr><td><strong>float</strong><td>sample rate</table>
+</table>
+<h3><a class='anchor' name='/b_get'>/b_get</a></h3>
+
+<p>Get sample value(s).<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td>N * <strong>int</strong><td>a sample index</table>
+
+<p>Replies to sender with the corresponding <strong>/b_set</strong> command.<h3><a class='anchor' name='/b_getn'>/b_getn</a></h3>
+
+<p>Get ranges of sample value(s).<table>
+<tr><td><strong>int</strong><td>buffer number<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>starting sample index<tr><td><strong>int</strong><td>number of sequential samples to get (M)</table>
+</table>
+
+<p>Get contiguous ranges of samples. Replies to sender with the corresponding <strong>/b_setn</strong> command. This is only meant for getting a few samples, not whole buffers or large sections.<h2><a class='anchor' name='Control Bus Commands'>Control Bus Commands</a></h2>
+<h3><a class='anchor' name='/c_set'>/c_set</a></h3>
+
+<p>Set bus value(s).<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>a bus index<tr><td><strong>float</strong> or <strong>int</strong><td>a control value</table>
+</table>
+
+<p>Takes a list of pairs of bus indices and values and sets the buses to those values.<h3><a class='anchor' name='/c_setn'>/c_setn</a></h3>
+
+<p>Set ranges of bus value(s).<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>starting bus index<tr><td><strong>int</strong><td>number of sequential buses to change (M)<tr><td>M *<td><table>
+<tr><td><strong>float</strong> or <strong>int</strong><td>a control value</table>
+</table>
+</table>
+
+<p>Set contiguous ranges of buses to sets of values. For each range, the starting bus index is given followed by the number of channels to change, followed by the values.<h3><a class='anchor' name='/c_fill'>/c_fill</a></h3>
+
+<p>Fill ranges of bus value(s).<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>starting bus index<tr><td><strong>int</strong><td>number of buses to fill (M)<tr><td><strong>float</strong> or <strong>int</strong><td>value</table>
+</table>
+
+<p>Set contiguous ranges of buses to single values. For each range, the starting sample index is given followed by the number of buses to change, followed by the value to fill.<h3><a class='anchor' name='/c_get'>/c_get</a></h3>
+
+<p>Get bus value(s).<table>
+<tr><td>N * <strong>int</strong><td>a bus index</table>
+
+<p>Takes a list of buses and replies to sender with the corresponding <strong>/c_set</strong> command.<h3><a class='anchor' name='/c_getn'>/c_getn</a></h3>
+
+<p>Get ranges of bus value(s).<table>
+<tr><td>N *<td><table>
+<tr><td><strong>int</strong><td>starting bus index<tr><td><strong>int</strong><td>number of sequential buses to get (M)</table>
+</table>
+
+<p>Get contiguous ranges of buses. Replies to sender with the corresponding <strong>/c_setn</strong> command.<h2><a class='anchor' name='Non Real Time Mode Commands'>Non Real Time Mode Commands</a></h2>
+<h3><a class='anchor' name='/nrt_end'>/nrt_end</a></h3>
+
+<p>End real time mode, close file. Not yet implemented.
+<p>This message should be sent in a bundle in non real time mode. The bundle timestamp will establish the ending time of the file. This command will end non real time mode and close the sound file. Replies to sender with <strong>/done</strong> when complete.<h2><a class='anchor' name='Replies to Commands'>Replies to Commands</a></h2>
+
+<p>These messages are sent by the server in reponse to some commands.<h3><a class='anchor' name='/done'>/done</a></h3>
+
+<p>An asynchronous message has completed.<table>
+<tr><td><strong>string</strong><td>the name of the command<tr><td><strong>other</strong><td>(optional) some commands provide other information, for example a buffer index.</table>
+
+<p>Sent in response to all asynchronous commands. Sent only to the sender of the original message.<h3><a class='anchor' name='/fail'>/fail</a></h3>
+
+<p>An error occurred.<table>
+<tr><td><strong>string</strong><td>the name of the command<tr><td><strong>string</strong><td>the error message.<tr><td><strong>other</strong><td>(optional) some commands provide other information, for example a buffer index.</table>
+
+<p>There was a problem. Sent only to the sender of the original message.<h3><a class='anchor' name='/late'>/late</a></h3>
+
+<p>A command was received too late. not yet implemented<table>
+<tr><td><strong>int</strong><td>the high 32 bits of the original time stamp.<tr><td><strong>int</strong><td>the low 32 bits of the original time stamp.<tr><td><strong>int</strong><td>the high 32 bits of the time it was executed.<tr><td><strong>int</strong><td>the low 32 bits of the time it was executed.</table>
+
+<p>The command was received too late to be executed on time. Sent only to the sender of the original message.<h2><a class='anchor' name='Node Notifications from Server'>Node Notifications from Server</a></h2>
+
+<p>These messages are sent as notification of some event to all clients who have registered via the <strong>/notify</strong> command.
+<p>All of these have the same arguments:<table>
+<tr><td><strong>int</strong><td>node ID<tr><td><strong>int</strong><td>the node's parent group ID<tr><td><strong>int</strong><td>previous node ID, -1 if no previous node.<tr><td><strong>int</strong><td>next node ID, -1 if no next node.<tr><td><strong>int</strong><td>1 if the node is a group, 0 if it is a synth<tr><td>The following two arguments are only sent if the node is a group:<tr><td><strong>int</strong><td>the ID of the head node, -1 if there is no head node.<tr><td><strong>int</strong><td>the ID of the tail node, -1 if there is no tail node.</table>
+<h3><a class='anchor' name='/n_go'>/n_go</a></h3>
+
+<p>A node was started. This command is sent to all registered clients when a node is created.<h3><a class='anchor' name='/n_end'>/n_end</a></h3>
+
+<p>A node ended. This command is sent to all registered clients when a node ends and is deallocated.<h3><a class='anchor' name='/n_off'>/n_off</a></h3>
+
+<p>A node was turned off. This command is sent to all registered clients when a node is turned off.<h3><a class='anchor' name='/n_on'>/n_on</a></h3>
+
+<p>A node was turned on. This command is sent to all registered clients when a node is turned on.<h3><a class='anchor' name='/n_move'>/n_move</a></h3>
+
+<p>A node was moved. This command is sent to all registered clients when a node is moved.<h3><a class='anchor' name='/n_info'>/n_info</a></h3>
+
+<p>Reply to /n_query. This command is sent to all registered clients in response to an <strong>/n_query</strong> command.<h2><a class='anchor' name='Trigger Notification'>Trigger Notification</a></h2>
+
+<p>These messages are sent as notification of some event to all clients who have registered via the <strong>/notify</strong> command.<h3><a class='anchor' name='/tr'>/tr</a></h3>
+
+<p>A trigger message.<table>
+<tr><td><strong>int</strong><td>node ID<tr><td><strong>int</strong><td>trigger ID<tr><td><strong>float</strong><td>trigger value</table>
+
+<p>This command is the mechanism that synths can use to trigger events in clients. The node ID is the node that is sending the trigger. The trigger ID and value are determined by inputs to the SendTrig unit generator which is the originator of this message.<h2><a class='anchor' name='Buffer Fill Commands'>Buffer Fill Commands</a></h2>
+
+<p>These are the currently defined fill routines for use with the <strong>/b_gen</strong> command.<h3><a class='anchor' name='Wave Fill Commands'>Wave Fill Commands</a></h3>
+
+<p>There are three defined fill routines for sine waves.
+<p>The flags are defined as follows:<table>
+<tr><td>1<td>normalize - Normalize peak amplitude of wave to 1.0.<tr><td>2<td>wavetable - If set, then the buffer is written in wavetable format so that it can be read by interpolating oscillators.<tr><td>4<td>clear - if set then the buffer is cleared before new partials are written into it. Otherwise the new partials are summed with the existing contents of the buffer.</table>
+<dl>
+<dt>sine1<dd><table>
+<tr><td><strong>int</strong><td>flags, see above<tr><td>N *<td><table>
+<tr><td><strong>float</strong><td>partial amplitude</table>
+</table>
+
+<p>Fills a buffer with a series of sine wave partials. The first float value specifies the amplitude of the first partial, the second float value specifies the amplitude of the second partial, and so on.<dt>sine2<dd><table>
+<tr><td><strong>int</strong><td>flags, see above<tr><td>N *<td><table>
+<tr><td><strong>float</strong><td>partial frequency (in cycles per buffer)<tr><td><strong>float</strong><td>partial amplitude</table>
+</table>
+
+<p>Similar to sine1 except that each partial frequency is specified explicitly instead of being an integer series of partials. Non-integer partial frequencies are possible.<dt>sine3<dd><table>
+<tr><td><strong>int</strong><td>flags, see above<tr><td>N *<td><table>
+<tr><td><strong>float</strong><td>partial frequency (in cycles per buffer)<tr><td><strong>float</strong><td>partial amplitude<tr><td><strong>float</strong><td>partial phase</table>
+</table>
+
+<p>Similar to sine2 except that each partial may have a nonzero starting phase.<dt>cheby<dd><table>
+<tr><td><strong>int</strong><td>flags, see above<tr><td>N *<td><table>
+<tr><td><strong>float</strong><td>amplitude</table>
+</table>
+
+<p>Fills a buffer with a series of chebyshev polynomials, which can be defined as:<pre class='code prettyprint lang-sc'>cheby(n) = amplitude * cos(n * acos(x))</pre>
+
+<p>The first float value specifies the amplitude for n = 1, the second float value specifies the amplitude for n = 2, and so on. To eliminate a DC offset when used as a waveshaper, the wavetable is offset so that the center value is zero.</dl>
+<h3><a class='anchor' name='Other Commands'>Other Commands</a></h3>
+<dl>
+<dt>copy<dd><table>
+<tr><td><strong>int</strong><td>sample position in destination<tr><td><strong>int</strong><td>source buffer number<tr><td><strong>int</strong><td>sample position in source<tr><td><strong>int</strong><td>number of samples to copy</table>
+
+<p>Copy samples from the source buffer to the destination buffer specified in the b_gen command. If the number of samples to copy is negative, the maximum number of samples possible is copied.<dl>
+<dt>Asynchronous.<dd>Replies to sender with <strong>/done</strong> when complete.</dl>
+</dl>
+<h2><a class='anchor' name='Command Numbers'>Command Numbers</a></h2>
+
+<p>These are the currently defined command numbers. More may be added to the end of the list in the future.<pre class='code prettyprint lang-sc'>enum {
+    cmd_none = 0,
+
+    cmd_notify = 1,
+    cmd_status = 2,
+    cmd_quit = 3,
+    cmd_cmd = 4,
+
+    cmd_d_recv = 5,
+    cmd_d_load = 6,
+    cmd_d_loadDir = 7,
+    cmd_d_freeAll = 8,
+
+    cmd_s_new = 9,
+
+    cmd_n_trace = 10,
+    cmd_n_free = 11,
+    cmd_n_run = 12,
+    cmd_n_cmd = 13,
+    cmd_n_map = 14,
+    cmd_n_set = 15,
+    cmd_n_setn = 16,
+    cmd_n_fill = 17,
+    cmd_n_before = 18,
+    cmd_n_after = 19,
+
+    cmd_u_cmd = 20,
+
+    cmd_g_new = 21,
+    cmd_g_head = 22,
+    cmd_g_tail = 23,
+    cmd_g_freeAll = 24,
+
+    cmd_c_set = 25,
+    cmd_c_setn = 26,
+    cmd_c_fill = 27,
+
+    cmd_b_alloc = 28,
+    cmd_b_allocRead = 29,
+    cmd_b_read = 30,
+    cmd_b_write = 31,
+    cmd_b_free = 32,
+    cmd_b_close = 33,
+    cmd_b_zero = 34,
+    cmd_b_set = 35,
+    cmd_b_setn = 36,
+    cmd_b_fill = 37,
+    cmd_b_gen = 38,
+
+    cmd_dumpOSC = 39,
+
+    cmd_c_get = 40,
+    cmd_c_getn = 41,
+    cmd_b_get = 42,
+    cmd_b_getn = 43,
+    cmd_s_get = 44,
+    cmd_s_getn = 45,
+
+    cmd_n_query = 46,
+    cmd_b_query = 47,
+
+    cmd_n_mapn = 48,
+    cmd_s_noid = 49,
+
+    cmd_g_deepFree = 50,
+    cmd_clearSched = 51,
+
+    cmd_sync = 52,
+
+    cmd_d_free = 53,
+
+    cmd_b_allocReadChannel = 54,
+    cmd_b_readChannel = 55,
+
+    cmd_g_dumpTree = 56,
+    cmd_g_queryTree = 57,
+
+
+    cmd_error = 58,
+
+    cmd_s_newargs = 59,
+
+    cmd_n_mapa = 60,
+    cmd_n_mapan = 61,
+    cmd_n_order = 62,
+
+    NUMBER_OF_COMMANDS = 63
+};</pre>
+
+<p>copyright © 2002 James McCartney - <span class='soft'>converted to ScDoc format 2011 by Jonatan Liljedahl</span><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/Server-Command-Reference.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/Server-Command-Reference.schelp</a><br>link::Reference/Server-Command-Reference::<br>sc version: 3.8dev</div></div></body></html>

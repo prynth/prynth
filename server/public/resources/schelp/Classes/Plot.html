@@ -1,0 +1,519 @@
+<html><head><title>Plot</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Undocumented classes'>Undocumented classes</a></div>
+<h1>Plot</h1>
+<div id='summary'>(Undocumented class)</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>PlotView.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*initClass'>initClass</a> </li>
+<li class='toc3'><a href='#*new'>new</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-backgroundColor'>backgroundColor</a> </li>
+<li class='toc3'><a href='#-bounds'>bounds</a> </li>
+<li class='toc3'><a href='#-copy'>copy</a> </li>
+<li class='toc3'><a href='#-dataCoordinates'>dataCoordinates</a> </li>
+<li class='toc3'><a href='#-domainCoordinates'>domainCoordinates</a> </li>
+<li class='toc3'><a href='#-domainSpec'>domainSpec</a> </li>
+<li class='toc3'><a href='#-draw'>draw</a> </li>
+<li class='toc3'><a href='#-drawBackground'>drawBackground</a> </li>
+<li class='toc3'><a href='#-drawData'>drawData</a> </li>
+<li class='toc3'><a href='#-drawGrid'>drawGrid</a> </li>
+<li class='toc3'><a href='#-drawLabels'>drawLabels</a> </li>
+<li class='toc3'><a href='#-editData'>editData</a> </li>
+<li class='toc3'><a href='#-editDataIndex'>editDataIndex</a> </li>
+<li class='toc3'><a href='#-editDataLine'>editDataLine</a> </li>
+<li class='toc3'><a href='#-font'>font</a> </li>
+<li class='toc3'><a href='#-fontColor'>fontColor</a> </li>
+<li class='toc3'><a href='#-getDataPoint'>getDataPoint</a> </li>
+<li class='toc3'><a href='#-getIndex'>getIndex</a> </li>
+<li class='toc3'><a href='#-getRelativePositionX'>getRelativePositionX</a> </li>
+<li class='toc3'><a href='#-getRelativePositionY'>getRelativePositionY</a> </li>
+<li class='toc3'><a href='#-gridColorX'>gridColorX</a> </li>
+<li class='toc3'><a href='#-gridColorY'>gridColorY</a> </li>
+<li class='toc3'><a href='#-gridLinePattern'>gridLinePattern</a> </li>
+<li class='toc3'><a href='#-gridLineSmoothing'>gridLineSmoothing</a> </li>
+<li class='toc3'><a href='#-gridOnX'>gridOnX</a> </li>
+<li class='toc3'><a href='#-gridOnY'>gridOnY</a> </li>
+<li class='toc3'><a href='#-hasSteplikeDisplay'>hasSteplikeDisplay</a> </li>
+<li class='toc3'><a href='#-init'>init</a> </li>
+<li class='toc3'><a href='#-labelX'>labelX</a> </li>
+<li class='toc3'><a href='#-labelY'>labelY</a> </li>
+<li class='toc3'><a href='#-levels'>levels</a> </li>
+<li class='toc3'><a href='#-linear'>linear</a> </li>
+<li class='toc3'><a href='#-plines'>plines</a> </li>
+<li class='toc3'><a href='#-plotBounds'>plotBounds</a> </li>
+<li class='toc3'><a href='#-plotColor'>plotColor</a> </li>
+<li class='toc3'><a href='#-plotter'>plotter</a> </li>
+<li class='toc3'><a href='#-points'>points</a> </li>
+<li class='toc3'><a href='#-prResampValues'>prResampValues</a> </li>
+<li class='toc3'><a href='#-resampledDomainSpec'>resampledDomainSpec</a> </li>
+<li class='toc3'><a href='#-resampledSize'>resampledSize</a> </li>
+<li class='toc3'><a href='#-spec'>spec</a> </li>
+<li class='toc3'><a href='#-steps'>steps</a> </li>
+<li class='toc3'><a href='#-value'>value</a> </li>
+<li class='toc3'><a href='#-zoomFont'>zoomFont</a> </li>
+</ul></ul><li class='toc1'><a href='#Help template'>Help template</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>This class is missing documentation.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*initClass' href='./../Overviews/Methods.html#initClass'>initClass</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>plotter</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-backgroundColor' href='./../Overviews/Methods.html#backgroundColor'>backgroundColor</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-backgroundColor' href='./../Overviews/Methods.html#backgroundColor'>backgroundColor</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a> = <span class='argstr'>rect</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-copy' href='./../Overviews/Methods.html#copy'>copy</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dataCoordinates' href='./../Overviews/Methods.html#dataCoordinates'>dataCoordinates</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-domainCoordinates' href='./../Overviews/Methods.html#domainCoordinates'>domainCoordinates</a> (<span class='argstr'>size</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-domainSpec' href='./../Overviews/Methods.html#domainSpec'>domainSpec</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-domainSpec' href='./../Overviews/Methods.html#domainSpec'>domainSpec</a> = <span class='argstr'>sp</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-draw' href='./../Overviews/Methods.html#draw'>draw</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-drawBackground' href='./../Overviews/Methods.html#drawBackground'>drawBackground</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-drawData' href='./../Overviews/Methods.html#drawData'>drawData</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-drawGrid' href='./../Overviews/Methods.html#drawGrid'>drawGrid</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-drawGrid' href='./../Overviews/Methods.html#drawGrid'>drawGrid</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-drawLabels' href='./../Overviews/Methods.html#drawLabels'>drawLabels</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-editData' href='./../Overviews/Methods.html#editData'>editData</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>, <span class='argstr'>plotIndex</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-editDataIndex' href='./../Overviews/Methods.html#editDataIndex'>editDataIndex</a> (<span class='argstr'>index</span>, <span class='argstr'>x</span>, <span class='argstr'>y</span>, <span class='argstr'>plotIndex</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-editDataLine' href='./../Overviews/Methods.html#editDataLine'>editDataLine</a> (<span class='argstr'>pt1</span>, <span class='argstr'>pt2</span>, <span class='argstr'>plotIndex</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-font' href='./../Overviews/Methods.html#font'>font</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-font' href='./../Overviews/Methods.html#font'>font</a> = <span class='argstr'>f</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fontColor' href='./../Overviews/Methods.html#fontColor'>fontColor</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fontColor' href='./../Overviews/Methods.html#fontColor'>fontColor</a> = <span class='argstr'>c</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getDataPoint' href='./../Overviews/Methods.html#getDataPoint'>getDataPoint</a> (<span class='argstr'>x</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getIndex' href='./../Overviews/Methods.html#getIndex'>getIndex</a> (<span class='argstr'>x</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getRelativePositionX' href='./../Overviews/Methods.html#getRelativePositionX'>getRelativePositionX</a> (<span class='argstr'>x</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getRelativePositionY' href='./../Overviews/Methods.html#getRelativePositionY'>getRelativePositionY</a> (<span class='argstr'>y</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridColorX' href='./../Overviews/Methods.html#gridColorX'>gridColorX</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridColorX' href='./../Overviews/Methods.html#gridColorX'>gridColorX</a> = <span class='argstr'>c</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridColorY' href='./../Overviews/Methods.html#gridColorY'>gridColorY</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridColorY' href='./../Overviews/Methods.html#gridColorY'>gridColorY</a> = <span class='argstr'>c</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridLinePattern' href='./../Overviews/Methods.html#gridLinePattern'>gridLinePattern</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridLinePattern' href='./../Overviews/Methods.html#gridLinePattern'>gridLinePattern</a> = <span class='argstr'>pattern</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridLineSmoothing' href='./../Overviews/Methods.html#gridLineSmoothing'>gridLineSmoothing</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridLineSmoothing' href='./../Overviews/Methods.html#gridLineSmoothing'>gridLineSmoothing</a> = <span class='argstr'>bool</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridOnX' href='./../Overviews/Methods.html#gridOnX'>gridOnX</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridOnX' href='./../Overviews/Methods.html#gridOnX'>gridOnX</a> = <span class='argstr'>bool</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridOnY' href='./../Overviews/Methods.html#gridOnY'>gridOnY</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridOnY' href='./../Overviews/Methods.html#gridOnY'>gridOnY</a> = <span class='argstr'>bool</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hasSteplikeDisplay' href='./../Overviews/Methods.html#hasSteplikeDisplay'>hasSteplikeDisplay</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-init' href='./../Overviews/Methods.html#init'>init</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-labelX' href='./../Overviews/Methods.html#labelX'>labelX</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-labelX' href='./../Overviews/Methods.html#labelX'>labelX</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-labelY' href='./../Overviews/Methods.html#labelY'>labelY</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-labelY' href='./../Overviews/Methods.html#labelY'>labelY</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-levels' href='./../Overviews/Methods.html#levels'>levels</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-linear' href='./../Overviews/Methods.html#linear'>linear</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-plines' href='./../Overviews/Methods.html#plines'>plines</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-plotBounds' href='./../Overviews/Methods.html#plotBounds'>plotBounds</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-plotColor' href='./../Overviews/Methods.html#plotColor'>plotColor</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-plotColor' href='./../Overviews/Methods.html#plotColor'>plotColor</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-plotter' href='./../Overviews/Methods.html#plotter'>plotter</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-plotter' href='./../Overviews/Methods.html#plotter'>plotter</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-points' href='./../Overviews/Methods.html#points'>points</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prResampValues' href='./../Overviews/Methods.html#prResampValues'>prResampValues</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-resampledDomainSpec' href='./../Overviews/Methods.html#resampledDomainSpec'>resampledDomainSpec</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-resampledSize' href='./../Overviews/Methods.html#resampledSize'>resampledSize</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-spec' href='./../Overviews/Methods.html#spec'>spec</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-spec' href='./../Overviews/Methods.html#spec'>spec</a> = <span class='argstr'>sp</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-steps' href='./../Overviews/Methods.html#steps'>steps</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-value' href='./../Overviews/Methods.html#value'>value</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-value' href='./../Overviews/Methods.html#value'>value</a> = <span class='argstr'>array</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-zoomFont' href='./../Overviews/Methods.html#zoomFont'>zoomFont</a> (<span class='argstr'>val</span>)</h3>
+<h2><a class='anchor' name='Help template'>Help template</a></h2>
+
+<p>Copy and paste the text below and save to HelpSource/Classes/Plot.schelp<pre class='code prettyprint lang-sc'>TITLE:: Plot
+summary:: (put short description here)
+categories:: Undocumented classes
+related:: Classes/SomeRelatedClass, Reference/SomeRelatedStuff, etc.
+
+DESCRIPTION::
+(put long description here)
+
+
+CLASSMETHODS::
+
+METHOD:: new
+(describe method here)
+
+ARGUMENT:: plotter
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: initClass
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+
+INSTANCEMETHODS::
+
+METHOD:: plotColor
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: zoomFont
+(describe method here)
+
+ARGUMENT:: val
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: plines
+(describe method here)
+
+ARGUMENT:: x
+(describe argument here)
+
+ARGUMENT:: y
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: gridOnX
+(describe method here)
+
+ARGUMENT:: bool
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: bounds
+(describe method here)
+
+ARGUMENT:: rect
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: editDataLine
+(describe method here)
+
+ARGUMENT:: pt1
+(describe argument here)
+
+ARGUMENT:: pt2
+(describe argument here)
+
+ARGUMENT:: plotIndex
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: editDataIndex
+(describe method here)
+
+ARGUMENT:: index
+(describe argument here)
+
+ARGUMENT:: x
+(describe argument here)
+
+ARGUMENT:: y
+(describe argument here)
+
+ARGUMENT:: plotIndex
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: drawBackground
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: getDataPoint
+(describe method here)
+
+ARGUMENT:: x
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: levels
+(describe method here)
+
+ARGUMENT:: x
+(describe argument here)
+
+ARGUMENT:: y
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: spec
+(describe method here)
+
+ARGUMENT:: sp
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: steps
+(describe method here)
+
+ARGUMENT:: x
+(describe argument here)
+
+ARGUMENT:: y
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: value
+(describe method here)
+
+ARGUMENT:: array
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: backgroundColor
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: resampledSize
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: getIndex
+(describe method here)
+
+ARGUMENT:: x
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: linear
+(describe method here)
+
+ARGUMENT:: x
+(describe argument here)
+
+ARGUMENT:: y
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: getRelativePositionY
+(describe method here)
+
+ARGUMENT:: y
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: gridLineSmoothing
+(describe method here)
+
+ARGUMENT:: bool
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: labelX
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: labelY
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: drawLabels
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: dataCoordinates
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: gridLinePattern
+(describe method here)
+
+ARGUMENT:: pattern
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: font
+(describe method here)
+
+ARGUMENT:: f
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: draw
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: copy
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: getRelativePositionX
+(describe method here)
+
+ARGUMENT:: x
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: init
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: gridColorX
+(describe method here)
+
+ARGUMENT:: c
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: hasSteplikeDisplay
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: drawGrid
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: gridColorY
+(describe method here)
+
+ARGUMENT:: c
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: editData
+(describe method here)
+
+ARGUMENT:: x
+(describe argument here)
+
+ARGUMENT:: y
+(describe argument here)
+
+ARGUMENT:: plotIndex
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: resampledDomainSpec
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: points
+(describe method here)
+
+ARGUMENT:: x
+(describe argument here)
+
+ARGUMENT:: y
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: drawData
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: plotter
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: plotBounds
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: gridOnY
+(describe method here)
+
+ARGUMENT:: bool
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: fontColor
+(describe method here)
+
+ARGUMENT:: c
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: domainCoordinates
+(describe method here)
+
+ARGUMENT:: size
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: prResampValues
+(describe method here)
+
+returns:: (describe returnvalue here)
+
+METHOD:: domainSpec
+(describe method here)
+
+ARGUMENT:: sp
+(describe argument here)
+
+returns:: (describe returnvalue here)
+
+
+EXAMPLES::
+
+code::
+(some example code)
+::
+</pre>
+<div class='doclink'>link::Classes/Plot::<br>sc version: 3.8dev</div></div></body></html>

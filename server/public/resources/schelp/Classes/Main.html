@@ -1,0 +1,187 @@
+<html><head><title>Main</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Core>Kernel'>Core>Kernel</a></div>
+<h1>Main</h1>
+<div id='summary'>The concrete instance of Process</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/Main.sc'>Main.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Process.html">Process</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/StartUp.html">StartUp</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc3'><a href='#.thisProcess'>thisProcess</a> </li>
+</ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#SuperCollider version'>SuperCollider version</a></li>
+<ul class='toc'><li class='toc3'><a href='#*version'>version</a> </li>
+<li class='toc3'><a href='#*versionAtLeast'>versionAtLeast</a> </li>
+<li class='toc3'><a href='#*versionAtMost'>versionAtMost</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*overwriteMsg'>overwriteMsg</a> </li>
+<li class='toc3'><a href='#*packages'>packages</a> </li>
+<li class='toc3'><a href='#*scVersionMajor'>scVersionMajor</a> </li>
+<li class='toc3'><a href='#*scVersionMinor'>scVersionMinor</a> </li>
+<li class='toc3'><a href='#*scVersionPostfix'>scVersionPostfix</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-startup'>startup</a> </li>
+<li class='toc3'><a href='#-shutdown'>shutdown</a> </li>
+<li class='toc3'><a href='#-run'>run</a> </li>
+<li class='toc3'><a href='#-addOSCRecvFunc'>addOSCRecvFunc</a> </li>
+<li class='toc3'><a href='#-removeOSCRecvFunc'>removeOSCRecvFunc</a> </li>
+<li class='toc3'><a href='#-replaceOSCRecvFunc'>replaceOSCRecvFunc</a> </li>
+<li class='toc3'><a href='#-openUDPPort'>openUDPPort</a> </li>
+<li class='toc3'><a href='#-openPorts'>openPorts</a> </li>
+<li class='toc3'><a href='#-pid'>pid</a> </li>
+<li class='toc3'><a href='#-preferencesAction'>preferencesAction</a> </li>
+<li class='toc3'><a href='#-recompile'>recompile</a> </li>
+<li class='toc3'><a href='#-platform'>platform</a> </li>
+<li class='toc3'><a href='#-argv'>argv</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-escapeWindow'>escapeWindow</a> </li>
+<li class='toc3'><a href='#-exitFullScreen'>exitFullScreen</a> </li>
+<li class='toc3'><a href='#-hardStop'>hardStop</a> </li>
+<li class='toc3'><a href='#-platformClass'>platformClass</a> </li>
+<li class='toc3'><a href='#-recvOSCmessage'>recvOSCmessage</a> </li>
+<li class='toc3'><a href='#-showClassBrowser'>showClassBrowser</a> </li>
+<li class='toc3'><a href='#-showHelp'>showHelp</a> </li>
+<li class='toc3'><a href='#-showHelpBrowser'>showHelpBrowser</a> </li>
+<li class='toc3'><a href='#-showHelpSearch'>showHelpSearch</a> </li>
+<li class='toc3'><a href='#-stop'>stop</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Main is the concrete instance of <a href="./../Classes/Process.html">Process</a> (the runtime environment for the virtual machine and interpreter). Main overrides some methods of Process. There are two methods of interest. One is named startup and is called after the class library has been compiled. The other is called shutdown which gets called when the library gets re-compiled.<h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.thisProcess' href='./../Overviews/Methods.html#thisProcess'>thisProcess</a> </h3>
+<div class='method'>
+<p>The singleton instance of Main is available through the special keyword thisProcess. For example, to find out what platform you're on:<pre class='code prettyprint lang-sc'>thisProcess.platform;    // --&gt; e.g. "an OSXPlatform", "a LinuxPlatform", ...</pre>
+</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='SuperCollider version'>SuperCollider version</a></h3>
+
+<p>These class methods tell you which version of SuperCollider you are running and whether that version complies to your required minimum / maximum settings:<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*version' href='./../Overviews/Methods.html#version'>version</a> </h3>
+<div class='method'>
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the current version as a human readable string</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*versionAtLeast' href='./../Overviews/Methods.html#versionAtLeast'>versionAtLeast</a> (<span class='argstr'>maj</span>, <span class='argstr'>min</span>)</h3>
+<div class='method'>
+<p>check if we are running at least version maj.min<pre class='code prettyprint lang-sc'>Main.versionAtLeast( 3, 1 );</pre>
+
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>true or false</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*versionAtMost' href='./../Overviews/Methods.html#versionAtMost'>versionAtMost</a> (<span class='argstr'>maj</span>, <span class='argstr'>min</span>)</h3>
+<div class='method'>
+<p>check if we are running version maj.min or older<pre class='code prettyprint lang-sc'>Main.versionAtMost( 3, 1 );</pre>
+
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>true or false</div></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*overwriteMsg' href='./../Overviews/Methods.html#overwriteMsg'>overwriteMsg</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*packages' href='./../Overviews/Methods.html#packages'>packages</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Quarks/packages.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Quarks/packages.sc</a></div>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*scVersionMajor' href='./../Overviews/Methods.html#scVersionMajor'>scVersionMajor</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*scVersionMinor' href='./../Overviews/Methods.html#scVersionMinor'>scVersionMinor</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*scVersionPostfix' href='./../Overviews/Methods.html#scVersionPostfix'>scVersionPostfix</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-startup' href='./../Overviews/Methods.html#startup'>startup</a> </h3>
+<div class='method'>
+<p>Called after the class library has been compiled.<h4>Discussion:</h4>
+
+<p>This calls the superclass' startup, which among other things initializes the <a href="./../Classes/AppClock.html">AppClock</a> and the top-level <a href="./../Classes/Environment.html">Environment</a>.
+<p>Main's startup then stores Server.default in the interpreter variable s, sets the platform default's <a href="./../Classes/GUI.html">GUI</a> kit, calls a <a href="./../Classes/Platform.html">Platform</a> specific startup method (for example OSXPlatform's startup opens the server windows), and finally invokes StartUp.run.
+<p>To add your own startup functionalities, you could either edit the special startup-file (discussed in <a href="./../Reference/StartupFile.html">Sclang Startup File</a>), or use StartUp.add as discussed in the <a href="./../Classes/StartUp.html">StartUp</a> help file.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-shutdown' href='./../Overviews/Methods.html#shutdown'>shutdown</a> </h3>
+<div class='method'>
+<p>Called after SuperCollider is quit or the class library is about to be re-compiled.<h4>Discussion:</h4>
+
+<p>This will quit all audio <a href="./../Classes/Server.html">Server</a> instances, perform a platform specific shutdown (e.g. the HID subsystem is released), finally Process' shutdown method is called, resulting in successive calls to UI.shutdown, NetAddr.disconnectAll, File.closeAll, and Archive.write. To register your own shutdown code, use a call like this:<pre class='code prettyprint lang-sc'>ShutDown.add({ "Good bye!!".postln });</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-run' href='./../Overviews/Methods.html#run'>run</a> </h3>
+<div class='method'>
+<p>Override this to do whatever you want, e. g. add a class extension file like this to the class library:<pre class='code prettyprint lang-sc'>+ Main {
+    run { "myPatch.rtf".load }
+}</pre>
+<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(newFunc)<td class='argumentdesc'>
+<p>A <a href="./../Classes/Function.html">Function</a> or similar object to be set. When evaluated, this function will be passed the arguments time, replyAddr, and message, corresponding to the time the message was sent, the <a href="./../Classes/NetAddr.html">NetAddr</a> of the sender, and the message itself as an <a href="./../Classes/Array.html">Array</a>.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addOSCRecvFunc' href='./../Overviews/Methods.html#addOSCRecvFunc'>addOSCRecvFunc</a> (<span class='argstr'>func</span>)</h3>
+<div class='method'>
+<p>Register a <a href="./../Classes/Function.html">Function</a> to be evaluated whenever SuperCollider language (the client) receives an OSC message. This will not overwrite any previously registered functions.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A <a href="./../Classes/Function.html">Function</a> or similar object to be added. When evaluated, this function will be passed the arguments msg, time, replyAddr, and recvPort, corresponding to the message itself as an <a href="./../Classes/Array.html">Array</a>, the time the message was sent, the <a href="./../Classes/NetAddr.html">NetAddr</a> of the sender, and the port on which the message was received. Note that this order differs from that used by the deprecated method <a href="#-recvOSCfunc">-recvOSCfunc</a>.<pre class='code prettyprint lang-sc'>// post all incoming traffic except the server status messages
+// basically the same as OSCFunc.trace
+(
+f = { |msg, time, replyAddr, recvPort|
+    if(msg[0] != '/status.reply') {
+        "At time %s received message % from % on port%\n".postf( time, msg, replyAddr, recvPort )
+    }
+};
+thisProcess.addOSCRecvFunc(f);
+);
+
+// stop posting.
+thisProcess.removeOSCRecvFunc(f);</pre>
+</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeOSCRecvFunc' href='./../Overviews/Methods.html#removeOSCRecvFunc'>removeOSCRecvFunc</a> (<span class='argstr'>func</span>)</h3>
+<div class='method'>
+<p>Remove a <a href="./../Classes/Function.html">Function</a> from the list of those evaluated whenever SuperCollider language (the client) receives an OSC message. This will leave any other registered functions in place.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A <a href="./../Classes/Function.html">Function</a> or similar object to be removed.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-replaceOSCRecvFunc' href='./../Overviews/Methods.html#replaceOSCRecvFunc'>replaceOSCRecvFunc</a> (<span class='argstr'>func</span>, <span class='argstr'>newFunc</span>)</h3>
+<div class='method'>
+<p>Replace a <a href="./../Classes/Function.html">Function</a> in the list of those evaluated whenever SuperCollider language (the client) receives an OSC message with a different one. This will leave any other registered functions in place.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>The <a href="./../Classes/Function.html">Function</a> or similar object to be replaced.<tr><td class='argumentname'>newFunc<td class='argumentdesc'>
+<p>A <a href="./../Classes/Function.html">Function</a> or similar object to be replace the one being removed. When evaluated, this function will be passed the arguments time, replyAddr, recvPort, and message, corresponding to the time the message was sent, the <a href="./../Classes/NetAddr.html">NetAddr</a> of the sender, the port on which the message was received, and the message itself as an <a href="./../Classes/Array.html">Array</a>.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-openUDPPort' href='./../Overviews/Methods.html#openUDPPort'>openUDPPort</a> (<span class='argstr'>portNum</span>)</h3>
+<div class='method'>
+<p>Attempt to open a new UDP port for receiving OSC traffic. If another application has already bound to the requested port this will fail. Once opened, ports remain bound until SC is recompiled.
+<p>If the port was already opened by SC it will return true directly without trying to open the port again.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>portNum<td class='argumentdesc'>
+<p>An <a href="./../Classes/Integer.html">Integer</a> indicating the port to attempt to bind.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A <a href="./../Classes/Boolean.html">Boolean</a> indicating whether the attempt was successful.<pre class='code prettyprint lang-sc'>thisProcess.openUDPPort(3000); // will return true or false.
+thisProcess.openPorts; // returns all open ports</pre>
+</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-openPorts' href='./../Overviews/Methods.html#openPorts'>openPorts</a> </h3>
+<div class='method'>
+<p>Get a collection of all active UDP ports, including the main sclang port <code class='code prettyprint lang-sc'>NetAddr.langPort</code>.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A <a href="./../Classes/Set.html">Set</a>.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pid' href='./../Overviews/Methods.html#pid'>pid</a> </h3>
+<div class='method'>
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The operating system's pid (process ID) for the process.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-preferencesAction' href='./../Overviews/Methods.html#preferencesAction'>preferencesAction</a>: METHOD NOT FOUND!</h3>
+<div class='method'><div class='note'><span class='notelabel'>NOTE:</span> SCApp only!</div>
+<p>A function to evaluate when the SuperCollider preferences menu is selected.<pre class='code prettyprint lang-sc'>thisProcess.preferencesAction = { arg process; SCWindow.new.front; }</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-recompile' href='./../Overviews/Methods.html#recompile'>recompile</a> </h3>
+<div class='method'>
+<p>Recompiles the class library. This is equivalent to restarting SC. Currently OSX (SuperCollider.app) only.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-platform' href='./../Overviews/Methods.html#platform'>platform</a> </h3>
+<div class='method'>
+<p>Get the current <a href="./../Classes/Platform.html">Platform</a></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-argv' href='./../Overviews/Methods.html#argv'>argv</a> </h3>
+<div class='method'>
+<p>Get the command-line arguments passed to sclang.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-escapeWindow' href='./../Overviews/Methods.html#escapeWindow'>escapeWindow</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-exitFullScreen' href='./../Overviews/Methods.html#exitFullScreen'>exitFullScreen</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hardStop' href='./../Overviews/Methods.html#hardStop'>hardStop</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-platformClass' href='./../Overviews/Methods.html#platformClass'>platformClass</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Platform/linux/extMain.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Platform/linux/extMain.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-recvOSCmessage' href='./../Overviews/Methods.html#recvOSCmessage'>recvOSCmessage</a> (<span class='argstr'>time</span>, <span class='argstr'>replyAddr</span>, <span class='argstr'>recvPort</span>, <span class='argstr'>msg</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-showClassBrowser' href='./../Overviews/Methods.html#showClassBrowser'>showClassBrowser</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-showHelp' href='./../Overviews/Methods.html#showHelp'>showHelp</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-showHelpBrowser' href='./../Overviews/Methods.html#showHelpBrowser'>showHelpBrowser</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-showHelpSearch' href='./../Overviews/Methods.html#showHelpSearch'>showHelpSearch</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-stop' href='./../Overviews/Methods.html#stop'>stop</a> </h3>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Main.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Main.schelp</a><br>link::Classes/Main::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,83 @@
+<html><head><title>GrainIn</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Generators>Granular'>UGens>Generators>Granular</a></div>
+<h1>GrainIn</h1>
+<div id='summary'>Granulate an input signal</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/GrainUGens.sc'>GrainUGens.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/GrainSin.html">GrainSin</a>, <a href="./../Classes/GrainFM.html">GrainFM</a>, <a href="./../Classes/GrainBuf.html">GrainBuf</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>numChannels: 1</span>, <span class='argstr'>trigger: 0</span>, <span class='argstr'>dur: 1</span>, <span class='argstr'>in</span>, <span class='argstr'>pan: 0</span>, <span class='argstr'>envbufnum: -1</span>, <span class='argstr'>maxGrains: 512</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>the number of channels to output. If 1, mono is returned and pan is ignored.<tr><td class='argumentname'>trigger<td class='argumentdesc'>
+<p>a kr or ar trigger to start a new grain. If ar, grains after the start of the synth are sample accurate.<tr><td class='argumentname'>dur<td class='argumentdesc'>
+<p>size of the grain (in seconds).<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>the input to granulate<tr><td class='argumentname'>pan<td class='argumentdesc'>
+<p>determines where to pan the output.<ul>
+<li>If numChannels = 1, no panning is done.<li>If numChannels = 2, panning is similar to Pan2.<li>If numChannels &gt; 2, pannins is the same as PanAz.</ul>
+<tr><td class='argumentname'>envbufnum<td class='argumentdesc'>
+<p>the buffer number containing a singal to use for the grain envelope. -1 uses a built-in Hann envelope.<tr><td class='argumentname'>maxGrains<td class='argumentdesc'>
+<p>the maximum number of overlapping grains that can be used at a given time. This value is set at the UGens init time and can't be modified. Defaults to 512. This can be set lower for more efficient use of memory.<div class='warning'><span class='warninglabel'>WARNING:</span> The above parameter is new (post SC 3.3.1) and has the potential to break code written &lt;= 3.3.1. This parameter is BEFORE the mul slot, and you may need to update code to account for this difference.</div><tr><td class='argumentname'>mul<td class='argumentdesc'><tr><td class='argumentname'>add<td class='argumentdesc'></table><h4>Discussion:</h4>
+
+<p>All args except numChannels and trigger are polled at grain creation time.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>s.boot;
+
+(
+var winenv;
+// a custom envelope
+winenv = Env([0, 1, 0], [0.5, 0.5], [8, -8]);
+z = Buffer.sendCollection(s, winenv.discretize, 1);
+
+SynthDef(\in_grain_test, {arg gate = 1, amp = 1, envbuf;
+    var pan, env;
+    // use mouse x to control panning
+    pan = MouseX.kr(-1, 1);
+    env = EnvGen.kr(
+        Env([0, 1, 0], [1, 1], \sin, 1),
+        gate,
+        levelScale: amp,
+        doneAction: 2);
+    Out.ar(0,
+        GrainIn.ar(2, Impulse.kr(32), 1, PinkNoise.ar * 0.05, pan, envbuf) * env)
+    }).send(s);
+
+)
+
+// use built-in env
+x = Synth(\in_grain_test, [\envbuf, -1])
+
+// switch to the custom env
+x.set(\envbuf, z)
+x.set(\envbuf, -1);
+
+x.set(\gate, 0);</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/GrainIn.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/GrainIn.schelp</a><br>link::Classes/GrainIn::<br>sc version: 3.8dev</div></div></body></html>

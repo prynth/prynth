@@ -1,0 +1,80 @@
+<html><head><title>IdentityBag</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Collections>Unordered'>Collections>Unordered</a></div>
+<h1>IdentityBag</h1>
+<div id='summary'>A Bag according to identity</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/Bag.sc'>Bag.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Bag.html">Bag</a> : <a href="../Classes/Collection.html">Collection</a> : <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Adding and Removing'>Adding and Removing</a></li>
+<ul class='toc'><li class='toc3'><a href='#-add'>add</a> </li>
+<li class='toc3'><a href='#-remove'>remove</a> </li>
+<li class='toc3'><a href='#-contents'>contents</a> </li>
+</ul><li class='toc2'><a href='#Iteration'>Iteration</a></li>
+<ul class='toc'><li class='toc3'><a href='#-do'>do</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#Difference between Bag and IdentityBag'>Difference between Bag and IdentityBag</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>An IdentityBag is an unordered collection of objects. In some languages it is referred to as a counted set. A Bag keeps track of the number of times objects are inserted and requires that objects be removed the same number of times. There is only one instance of an object in a Bag even if the object has been added to the Bag multiple times (test is for <strong>identity</strong>).
+<p>The contents of a IdentityBag are unordered. You must not depend on the order of items in a set.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Adding and Removing'>Adding and Removing</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-add' href='./../Overviews/Methods.html#add'>add</a> (<span class='argstr'>item</span>, <span class='argstr'>count: 1</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Bag.html'>Bag</a></div>
+<div class='method'>
+<p>Add anObject to the Bag. A Bag may contain multiple entries of the same object.<pre class='code prettyprint lang-sc'>IdentityBag[1, 2, 3].add(4);
+IdentityBag[1, 2, 3].add(3);
+IdentityBag["abc", "def", "ghi"].add("jkl");
+IdentityBag["abc", "def", "ghi"].add("def");</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-remove' href='./../Overviews/Methods.html#remove'>remove</a> (<span class='argstr'>item</span>, <span class='argstr'>count: 1</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Bag.html'>Bag</a></div>
+<div class='method'>
+<p>Remove anObject from the IdentityBag.<pre class='code prettyprint lang-sc'>IdentityBag[1, 2, 3].remove(3);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-contents' href='./../Overviews/Methods.html#contents'>contents</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Bag.html'>Bag</a></div>
+<div class='method'>
+<p>Returns the dictionary that stores the objects in pairs (obj -&gt; numberOfObjects)<pre class='code prettyprint lang-sc'>IdentityBag[\a, \b, \c, \c].contents;</pre>
+</div><h3><a class='anchor' name='Iteration'>Iteration</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-do' href='./../Overviews/Methods.html#do'>do</a> (<span class='argstr'>function</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Bag.html'>Bag</a></div>
+<div class='method'>
+<p>Evaluates function for each item in the IdentityBag. The function is passed two arguments, the item and an integer index.<pre class='code prettyprint lang-sc'>IdentityBag[1, 2, 3, 300].do({ arg item, i; item.postln });</pre>
+</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='Difference between Bag and IdentityBag'>Difference between Bag and IdentityBag</a></h2>
+<pre class='code prettyprint lang-sc'>// the two strings are equal, but not identical
+"something" == "something"; // true
+"something" === "something" // false
+
+a = Bag.new;
+a.add("something");
+a.add("something");
+a.contents; // only one object in the bag really
+
+a = IdentityBag.new;
+a.add("something");
+a.add("something");
+a.contents; // two objects in the bag</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/IdentityBag.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/IdentityBag.schelp</a><br>link::Classes/IdentityBag::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,166 @@
+<html><head><title>BBlockerProgram</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#Convenience'>Convenience</a></div>
+<h1>BBlockerProgram</h1>
+<div id='summary'>Convenience class to create and store BetaBlocker programs</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/BetablockerUGens/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/BetablockerUGens/BBlockerProgram.sc'>BBlockerProgram.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/BBlockerBuf.html">BBlockerBuf</a>, <a href="./../Classes/BBlockerProgram.html">BBlockerProgram</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*instructions'>instructions</a> </li>
+<li class='toc3'><a href='#*descs'>descs</a> </li>
+<li class='toc3'><a href='#*printDescs'>printDescs</a> </li>
+<li class='toc3'><a href='#*find'>find</a> </li>
+<li class='toc3'><a href='#*descOf'>descOf</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*initStates'>initStates</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-fillBuffer'>fillBuffer</a> </li>
+<li class='toc3'><a href='#-program'>program</a> </li>
+<li class='toc3'><a href='#-makeBuffer'>makeBuffer</a> </li>
+<li class='toc3'><a href='#-collection'>collection</a> </li>
+<li class='toc3'><a href='#-asLocalBuf'>asLocalBuf</a> </li>
+<li class='toc3'><a href='#-play'>play</a> </li>
+<li class='toc3'><a href='#-ar'>ar</a> </li>
+<li class='toc3'><a href='#-fillUpRandom'>fillUpRandom</a> </li>
+<li class='toc3'><a href='#-scope'>scope</a> </li>
+<li class='toc3'><a href='#-plot'>plot</a> </li>
+<li class='toc3'><a href='#-decompile'>decompile</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-pr_rTranslate'>pr_rTranslate</a> </li>
+<li class='toc3'><a href='#-pr_translate'>pr_translate</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Convenience class to create and store assembly programs for the BetaBlocker VChip. 
+<p>See <a href="http://tai-studio.org/index.php/chipinterpretations/">http://tai-studio.org/index.php/chipinterpretations/</a> for details.<div class='image'><img src='betablocker-01-small.png'/></div>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>program</span>)</h3>
+<div class='method'>
+<p>creates a new BBlocker program:<pre class='code prettyprint lang-sc'>// sawtooth ramp
+a = BBlockerProgram([\ORG, \INC, \JMP, 1]);</pre>
+<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>program<td class='argumentdesc'>
+<p>Mixed array of instructions (Symbols) and Integers (will be interpreted either as instructions or as values for unary instructions like <code class='code prettyprint lang-sc'>\JMP</code> or <code class='code prettyprint lang-sc'>\PHSL</code>).</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*instructions' href='./../Overviews/Methods.html#instructions'>instructions</a> </h3>
+<div class='method'>
+<p>all instructions </div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*descs' href='./../Overviews/Methods.html#descs'>descs</a> </h3>
+<div class='method'>
+<p>all descriptions</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*printDescs' href='./../Overviews/Methods.html#printDescs'>printDescs</a> </h3>
+<div class='method'>
+<p>print description for each instruction</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*find' href='./../Overviews/Methods.html#find'>find</a> (<span class='argstr'>identifier</span>)</h3>
+<div class='method'>
+<p>search for command<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>identifier<td class='argumentdesc'>
+<p>search term</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>array of commands</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*descOf' href='./../Overviews/Methods.html#descOf'>descOf</a> (<span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p>find description for command<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>key<td class='argumentdesc'>
+<p>command</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>description string</div></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*initStates' href='./../Overviews/Methods.html#initStates'>initStates</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fillBuffer' href='./../Overviews/Methods.html#fillBuffer'>fillBuffer</a> (<span class='argstr'>buffer</span>)</h3>
+<div class='method'>
+<p>fill Buffer with compiled code.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>buffer<td class='argumentdesc'>
+<p>buffer to be filled.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-program' href='./../Overviews/Methods.html#program'>program</a> </h3>
+<div class='method'>
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the program</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeBuffer' href='./../Overviews/Methods.html#makeBuffer'>makeBuffer</a> (<span class='argstr'>server</span>, <span class='argstr'>action</span>)</h3>
+<div class='method'>
+<p>create a Buffer and fill it with conpiled code.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>server<td class='argumentdesc'>
+<p>instance of Server on which the Buffer is created<tr><td class='argumentname'>action<td class='argumentdesc'>
+<p>action to be evaluated after successful buffer creation</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the Buffer</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-collection' href='./../Overviews/Methods.html#collection'>collection</a> (<span class='argstr'>force: false</span>)</h3>
+<div class='method'>
+<p>array with <code class='code prettyprint lang-sc'>256</code> entries containing the codeified program.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>force<td class='argumentdesc'>
+<p>if <code class='code prettyprint lang-sc'>true</code>, force re-computation.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asLocalBuf' href='./../Overviews/Methods.html#asLocalBuf'>asLocalBuf</a> </h3>
+<div class='method'>
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>compiled program as a LocalBuf object</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-play' href='./../Overviews/Methods.html#play'>play</a> (<span class='argstr'>rate</span>, <span class='argstr'>using</span>, <span class='argstr'>leak: false</span>, <span class='argstr'>vol: 0.1</span>)</h3>
+<div class='method'>
+<p>play program.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>rate<td class='argumentdesc'>
+<p>rate of operation<tr><td class='argumentname'>using<td class='argumentdesc'>
+<p>instance of <a href="./../Classes/Server.html">Server</a> or <a href="./../Classes/Buffer.html">Buffer</a>. If a buffer is given, this is used to load the program into.<tr><td class='argumentname'>leak<td class='argumentdesc'>
+<p>if <code class='code prettyprint lang-sc'>true</code>, encapsulate output by a <a href="./../Classes/LeakDC.html">LeakDC</a>.<tr><td class='argumentname'>vol<td class='argumentdesc'>
+<p>attenuation</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p><a href="./../Classes/Synth.html">Synth</a> evaluating and playing the program.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>rate</span>, <span class='argstr'>using</span>, <span class='argstr'>leak: false</span>, <span class='argstr'>vol: 1</span>)</h3>
+<div class='method'>
+<p>server playback.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>rate<td class='argumentdesc'>
+<p>rate of operation<tr><td class='argumentname'>using<td class='argumentdesc'>
+<p>instance of <a href="./../Classes/Server.html">Server</a> or <a href="./../Classes/Buffer.html">Buffer</a>. If a buffer is given, this is used to load the program into.<tr><td class='argumentname'>leak<td class='argumentdesc'>
+<p>if <code class='code prettyprint lang-sc'>true</code>, encapsulate output by a <a href="./../Classes/LeakDC.html">LeakDC</a>.<tr><td class='argumentname'>vol<td class='argumentdesc'>
+<p>attenuation</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fillUpRandom' href='./../Overviews/Methods.html#fillUpRandom'>fillUpRandom</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fillUpRandom' href='./../Overviews/Methods.html#fillUpRandom'>fillUpRandom</a> = value</h3>
+<div class='method'>
+<p>if <code class='code prettyprint lang-sc'>true</code>, fill remaining space in collection/<a href="./../Classes/Buffer.html">Buffer</a> with random numbers between <code class='code prettyprint lang-sc'>0</code> and <code class='code prettyprint lang-sc'>255</code>. </div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-scope' href='./../Overviews/Methods.html#scope'>scope</a> (<span class='argstr'>rate</span>, <span class='argstr'>using</span>, <span class='argstr'>leak: false</span>, <span class='argstr'>vol: 0.1</span>)</h3>
+<div class='method'>
+<p>run program and scope it. <h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>rate<td class='argumentdesc'>
+<p>rate of operation<tr><td class='argumentname'>using<td class='argumentdesc'>
+<p>instance of <a href="./../Classes/Server.html">Server</a> or <a href="./../Classes/Buffer.html">Buffer</a>. If a buffer is given, this is used to load the program into.<tr><td class='argumentname'>leak<td class='argumentdesc'>
+<p>if <code class='code prettyprint lang-sc'>true</code>, encapsulate output by a <a href="./../Classes/LeakDC.html">LeakDC</a>.<tr><td class='argumentname'>vol<td class='argumentdesc'>
+<p>attenuation</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-plot' href='./../Overviews/Methods.html#plot'>plot</a> (<span class='argstr'>rate</span>, <span class='argstr'>using</span>, <span class='argstr'>leak: false</span>, <span class='argstr'>duration: 1</span>)</h3>
+<div class='method'>
+<p>run program and plot its results.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>rate<td class='argumentdesc'>
+<p>rate of operation<tr><td class='argumentname'>using<td class='argumentdesc'>
+<p>instance of <a href="./../Classes/Server.html">Server</a> or <a href="./../Classes/Buffer.html">Buffer</a>. If a buffer is given, this is used to load the program into.<tr><td class='argumentname'>leak<td class='argumentdesc'>
+<p>if <code class='code prettyprint lang-sc'>true</code>, encapsulate output by a <a href="./../Classes/LeakDC.html">LeakDC</a>.<tr><td class='argumentname'>duration<td class='argumentdesc'>
+<p>time to run in seconds.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-decompile' href='./../Overviews/Methods.html#decompile'>decompile</a> (<span class='argstr'>force: false</span>)</h3>
+<div class='method'>
+<p>decompile content of collection.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>force<td class='argumentdesc'>
+<p>if <code class='code prettyprint lang-sc'>true</code>, force re-write of (intermediately used) collection.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>program</div></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pr_rTranslate' href='./../Overviews/Methods.html#pr_rTranslate'>pr_rTranslate</a> (<span class='argstr'>val</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pr_translate' href='./../Overviews/Methods.html#pr_translate'>pr_translate</a> (<span class='argstr'>val</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(some example code)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/BetablockerUGens/HelpSource/Classes/BBlockerProgram.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/BetablockerUGens/HelpSource/Classes/BBlockerProgram.schelp</a><br>link::Classes/BBlockerProgram::<br>sc version: 3.8dev</div></div></body></html>

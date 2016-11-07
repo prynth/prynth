@@ -1,0 +1,176 @@
+<html><head><title>FFT Overview</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider GUIDES</div>
+<div id='categories'><a href='./../Browse.html#UGens>FFT'>UGens>FFT</a></div>
+<h1>FFT Overview</h1>
+<div id='summary'>Overview of the Fast Fourier Transform (FFT) UGens</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Classes/FFT.html">FFT</a>, <a href="./../Classes/IFFT.html">IFFT</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#FFT and IFFT'>FFT and IFFT</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Phase Vocoder UGens and Spectral Processing'>Phase Vocoder UGens and Spectral Processing</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Multichannel Expansion with FFT UGens'>Multichannel Expansion with FFT UGens</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#PV and FFT UGens in the Standard Library'>PV and FFT UGens in the Standard Library</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='FFT and IFFT'>FFT and IFFT</a></h2>
+
+<p>SuperCollider implements a number of UGens supporting Fast Fourier Transform (FFT) based processing. The most basic of these are FFT and IFFT (inverse-FFT) which convert data between the time and frequency domains:<pre class='code prettyprint lang-sc'>chain = FFT(buffer, input)</pre>
+
+<p><pre class='code prettyprint lang-sc'>output = IFFT(chain)</pre>
+
+<p><a href="./../Classes/FFT.html">FFT</a> stores spectral data in a local buffer ( see <a href="./../Classes/Buffer.html">Buffer</a> ) in the following order: DC, nyquist, real 1f, imag 1f, real 2f, imag 2f, ... real (N-1)f, imag (N-1)f, where f is the frequency corresponding to the window size, and N is the window size / 2.
+<p>The buffer's size must correspond to a power of 2, and must also be a multiple of SC's block size. The window size is equivalent to the buffer size, and the window overlap defaults to 2. Both <a href="./../Classes/FFT.html">FFT</a> and <a href="./../Classes/IFFT.html">IFFT</a> use a Sine window by default, the combination of which (i.e. raised sine, that is, sine squared) is a Hanning window.<h2><a class='anchor' name='Phase Vocoder UGens and Spectral Processing'>Phase Vocoder UGens and Spectral Processing</a></h2>
+
+<p>In between an FFT and an IFFT one can chain together a number of Phase Vocoder UGens (i.e. 'PV_...') to manipulate blocks of spectral data before reconversion. The process of buffering the appropriate amount of audio, windowing, conversion, overlap-add, etc. is handled for you automatically.<pre class='code prettyprint lang-sc'>(
+{ var in, chain;
+    in = WhiteNoise.ar(0.8);
+    chain = FFT(LocalBuf(2048), in);
+    chain = PV_RandComb(chain, 0.95, Impulse.kr(0.4));
+    IFFT(chain);
+}.play;
+)</pre>
+
+<p>In order to expand PV UGens for a multichannel input signal, an appropriate array of buffers must be provided (not a multichannel buffer):<pre class='code prettyprint lang-sc'>(
+{ var in, chain;
+    in = Ringz.ar(Impulse.ar([2, 3]), [700, 800], 0.1) * 5;
+    chain = FFT({ LocalBuf(2048) } ! 2, in);
+    chain = PV_RandComb(chain, 0.95, Impulse.kr(0.4));
+    IFFT(chain);
+}.play;
+)</pre>
+
+<p>PV Ugens write their output data <em>in place</em>, i.e. back into the same buffer from which they read. PV UGens which require two buffers write their data into the first buffer, usually called 'bufferA'.<pre class='code prettyprint lang-sc'>(
+{ var inA, chainA, inB, chainB, chain;
+    inA = LFSaw.ar(MouseY.kr(100, 1000, 1), 0, 0.2);
+    inB = Ringz.ar(Impulse.ar(MouseX.kr(1, 100, 1)), 700, 0.5);
+    chainA = FFT(LocalBuf(2048), inA);
+    chainB = FFT(LocalBuf(2048), inB);
+    chain = PV_MagMul(chainA, chainB); // writes into bufferA
+    0.1 * IFFT(chain);
+}.play;
+)
+
+d.free;</pre>
+
+<p>A similar example using a soundfile in an external buffer:<pre class='code prettyprint lang-sc'>d = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+
+(
+{ var inA, chainA, inB, chainB, chain;
+    inA = LFSaw.ar(100, 0, 0.2);
+    inB = PlayBuf.ar(1, d, BufRateScale.kr(d), loop: 1);
+    chainA = FFT(LocalBuf(2048), inA);
+    chainB = FFT(LocalBuf(2048), inB);
+    chain = PV_MagMul(chainA, chainB); // writes into bufferA
+    0.1 * IFFT(chain);
+}.play;
+)
+
+d.free;</pre>
+
+<p>Because each PV UGen overwrites the output of the previous one, it is necessary to copy the data to an additional buffer at the desired point in the chain in order to do parallel processing of input without using multiple FFT UGens. <a href="./../Classes/PV_Copy.html">PV_Copy</a> allows for this.<pre class='code prettyprint lang-sc'>(
+b = Buffer.alloc(s,2048,1); // use global buffers for plotting the data
+c = Buffer.alloc(s,2048,1);
+)
+
+//// proof of concept
+(
+x = { var inA, chainA, chainB;
+    inA = LFClipNoise.ar(100);
+    chainA = FFT(b, inA);
+    chainB = PV_Copy(chainA, c);
+    IFFT(chainA) - IFFT(chainB); // cancels to zero so silent!
+}.play;
+)
+x.free;
+// IFFTed frames contain the same windowed output data
+b.plot(\b, Rect(200, 430, 700, 300), nil, nil); c.plot(\c, Rect(200, 100, 700, 300), nil, nil);
+[b, c].do(_.free);</pre>
+
+<p>Note that PV UGens convert as needed between cartesian (complex) and polar representations, therefore when using multiple PV UGens it may be impossible to know in which form the values will be at any given time. FFT produces complex output (see above), so while the following produces a reliable magnitude plot:<pre class='code prettyprint lang-sc'>b = Buffer.alloc(s,1024); // use global buffers for plotting the data
+a = { FFT(b, LFSaw.ar(4000)); 0.0 }.play;
+(
+b.getn(0, 1024, { arg buf;
+    var z, x;
+    z = buf.clump(2).flop;
+    z = [Signal.newFrom(z[0]), Signal.newFrom(z[1])];
+    x = Complex(z[0], z[1]);
+    {x.magnitude.plot}.defer
+})
+)
+a.free; b.free;</pre>
+
+<p>any Synth using PV UGens might not.
+<p>It is possible to manipulate the FFT data directly within a synth graph (if there doesn't already exist a PV UGen which will do what you want), using the methods pvcalc, pvcalc2, pvcollect. Here's an example which uses the <a href="./../Classes/SequenceableCollection.html">SequenceableCollection</a> methods clump and flop to rearrange the order of the spectral bins:<pre class='code prettyprint lang-sc'>c = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+
+(
+x = {
+  var in, numFrames=2048, chain, v;
+  in = PlayBuf.ar(1, c, loop: 1);
+  chain = FFT(LocalBuf(numFrames), in);
+
+  chain = chain.pvcalc(numFrames, {|mags, phases|
+      /* Play with the mags and phases, then return them */
+      [mags, phases].flop.clump(2).flop.flatten
+  }, tobin: 250);
+
+  Out.ar(0, 0.5 * IFFT(chain).dup);
+}.play;
+)
+x.free; c.free;</pre>
+<h2><a class='anchor' name='Multichannel Expansion with FFT UGens'>Multichannel Expansion with FFT UGens</a></h2>
+
+<p>Care must be taken when using multichannel expansion with FFT UGens, as they require separate buffers. Code such as this can be deceptive:<pre class='code prettyprint lang-sc'>chain = FFT(bufnum, {WhiteNoise.ar(0.2)}.dup);</pre>
+
+<p>The above may seem to work, but does not. It does result in two FFT UGens, but as they both write to the same buffer, the second simply overwrites the data from the first, thus wasting CPU and accomplishing nothing.
+<p>When using multichannel expansion with FFT UGens it is necessary to ensure that each one writes to a different buffer. Here's an example of one way to do this:<pre class='code prettyprint lang-sc'>(
+SynthDef("help-multichannel FFT", { arg out=0; // bufnum is an array
+    var in, chain;
+    in = [SinOsc.ar(200, 0, 0.2), WhiteNoise.ar(0.2)];
+    chain = FFT(LocalBuf([2048, 2048]), in); // each FFT has a different buffer
+    // now we can multichannel expand as normal
+    chain = PV_BrickWall(chain, SinOsc.kr(-0.1));
+    Out.ar(out, IFFT(chain));
+}).play;
+)
+
+// or using global buffers
+
+b = {Buffer.alloc(s,2048,1)}.dup;
+
+(
+SynthDef("help-multichannel FFT", { arg out=0, bufnum= #[0, 1]; // bufnum is an array
+    var in, chain;
+    in = [SinOsc.ar(200, 0, 0.2), WhiteNoise.ar(0.2)];
+    chain = FFT(bufnum, in); // each FFT has a different buffer
+    // now we can multichannel expand as normal
+    chain = PV_BrickWall(chain, SinOsc.kr(-0.1));
+    Out.ar(out, IFFT(chain));
+}).play(s,[\bufnum, b]);
+)</pre>
+
+<p>Note that dup on a UGen just makes a reference to that UGen, because UGen defines -copy to simply return the receiver. (See <a href="./../Classes/UGen.html">UGen</a> for more detail.)<pre class='code prettyprint lang-sc'>a = SinOsc.ar;
+a.dup[1] === a
+
+true</pre>
+
+<p>Code like <code class='code prettyprint lang-sc'>IFFT(chain).dup</code> is found throughout the PV help files , and is just a convenient way to copy a mono signal to stereo, without further computation.
+<p>See also <a href="./../Guides/Multichannel-Expansion.html">Multichannel Expansion</a>.<h2><a class='anchor' name='PV and FFT UGens in the Standard Library'>PV and FFT UGens in the Standard Library</a></h2>
+
+<p>The following PV UGens are included in the standard SC distribution:<dl>
+<dt><a href="./../Classes/FFT.html">FFT</a><dd>Fast Fourier Transform<dt><a href="./../Classes/IFFT.html">IFFT</a><dd>Inverse Fast Fourier Transform<dt><a href="./../Classes/PV_Add.html">PV_Add</a><dd>complex addition<dt><a href="./../Classes/PV_BinScramble.html">PV_BinScramble</a><dd>scramble bins<dt><a href="./../Classes/PV_BinShift.html">PV_BinShift</a><dd>shift and stretch bin position<dt><a href="./../Classes/PV_BinWipe.html">PV_BinWipe</a><dd>combine low and high bins from two inputs<dt><a href="./../Classes/PV_BrickWall.html">PV_BrickWall</a><dd>zero bins<dt><a href="./../Classes/PV_ConformalMap.html">PV_ConformalMap</a><dd>complex plane attack<dt><a href="./../Classes/PV_Copy.html">PV_Copy</a><dd>copy an FFT buffer<dt><a href="./../Classes/PV_CopyPhase.html">PV_CopyPhase</a><dd>copy magnitudes and phases<dt><a href="./../Classes/PV_Diffuser.html">PV_Diffuser</a><dd>random phase shifting<dt><a href="./../Classes/PV_HainsworthFoote.html">PV_HainsworthFoote</a><dd>onset detection<dt><a href="./../Classes/PV_JensenAndersen.html">PV_JensenAndersen</a><dd>onset detection<dt><a href="./../Classes/PV_LocalMax.html">PV_LocalMax</a><dd>pass bins which are a local maximum<dt><a href="./../Classes/PV_MagAbove.html">PV_MagAbove</a><dd>pass bins above a threshold<dt><a href="./../Classes/PV_MagBelow.html">PV_MagBelow</a><dd>pass bins below a threshold<dt><a href="./../Classes/PV_MagClip.html">PV_MagClip</a><dd>clip bins to a threshold<dt><a href="./../Classes/PV_MagFreeze.html">PV_MagFreeze</a><dd>freeze magnitudes<dt><a href="./../Classes/PV_MagMul.html">PV_MagMul</a><dd>multiply magnitudes<dt><a href="./../Classes/PV_MagDiv.html">PV_MagDiv</a><dd>division of magnitudes<dt><a href="./../Classes/PV_MagNoise.html">PV_MagNoise</a><dd>multiply magnitudes by noise<dt><a href="./../Classes/PV_MagShift.html">PV_MagShift</a><dd>shift and stretch magnitude bin position<dt><a href="./../Classes/PV_MagSmear.html">PV_MagSmear</a><dd>average magnitudes across bins<dt><a href="./../Classes/PV_MagSquared.html">PV_MagSquared</a><dd>square magnitudes<dt><a href="./../Classes/PV_Max.html">PV_Max</a><dd>maximum magnitude<dt><a href="./../Classes/PV_Min.html">PV_Min</a><dd>minimum magnitude<dt><a href="./../Classes/PV_Mul.html">PV_Mul</a><dd>complex multiply<dt><a href="./../Classes/PV_PhaseShift.html">PV_PhaseShift</a><dd>shift phase of all bins<dt><a href="./../Classes/PV_PhaseShift270.html">PV_PhaseShift270</a><dd>shift phase by 270 degrees<dt><a href="./../Classes/PV_PhaseShift90.html">PV_PhaseShift90</a><dd>shift phase by 90 degrees<dt><a href="./../Classes/PV_RandComb.html">PV_RandComb</a><dd>pass random bins<dt><a href="./../Classes/PV_RandWipe.html">PV_RandWipe</a><dd>crossfade in random bin order<dt><a href="./../Classes/PV_RectComb.html">PV_RectComb</a><dd>make gaps in spectrum<dt><a href="./../Classes/PV_RectComb2.html">PV_RectComb2</a><dd>make gaps in spectrum<dt><a href="./../Classes/UnpackFFT.html">UnpackFFT</a>, <a href="./../Classes/PackFFT.html">PackFFT</a>, <a href="./../Classes/Unpack1FFT.html">Unpack1FFT</a><dd>"unpacking" components used in pvcalc, pvcalc2, pvcollect (can also be used on their own)</dl>
+
+<p>For a full list of FFT UGens, see <strong>UGens&gt;FFT</strong> in the <a href="./../Browse.html#UGens>FFT">Browse: UGens&gt;FFT</a> page.<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/FFT-Overview.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/FFT-Overview.schelp</a><br>link::Guides/FFT-Overview::<br>sc version: 3.8dev</div></div></body></html>

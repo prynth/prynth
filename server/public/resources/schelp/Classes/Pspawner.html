@@ -1,0 +1,209 @@
+<html><head><title>Pspawner</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events>Patterns>Parallel'>Streams-Patterns-Events>Patterns>Parallel</a></div>
+<h1>Pspawner</h1>
+<div id='summary'>dynamic control of multiple event streams from a Routine</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Pspawner.sc'>Pspawner.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Prout.html">Prout</a> : <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Pspawn.html">Pspawn</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-asStream'>asStream</a> </li>
+<li class='toc3'><a href='#-embedInStream'>embedInStream</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Pspawner allows a routine to dynamically start and stop subpatterns.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>routineFunc</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Prout.html'>Prout</a></div>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>function<td class='argumentdesc'>
+<p>The function defines a <a href="./../Classes/Routine.html">Routine</a> that receives a <a href="./../Classes/Spawner.html">Spawner</a> as its sole argument. All control of subpatterns is through the spawner.
+<p><a href="./../Classes/Spawner.html">Spawner</a> responds to the messages:<dl>
+<dt>par<dd>Begin an event stream in parallel to the routine. If delta is non-zero, the pattern will begin that many beats after 'now', provided that now + delta is later than the next event that the Spawner will generate. The method returns the stream. This may be called from any object.<dt>seq<dd>Run the entire pattern and then return control to the routine.<dt>wait<dd>Wait <strong>dur</strong> seconds and then return control to the routine.<dt>suspend<dd>Find the stream in the Spawner and stop it, returns nil if the stream is not found, the stream otherwise.<dt>suspendAll<dd>Stop all substreams of the Spawner.</dl>
+<div class='note'><span class='notelabel'>NOTE:</span> We should move the documentation of above methods to the <a href="./../Classes/Spawner.html">Spawner</a> helpfile...</div></table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asStream' href='./../Overviews/Methods.html#asStream'>asStream</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-embedInStream' href='./../Overviews/Methods.html#embedInStream'>embedInStream</a> (<span class='argstr'>inevent</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// example 1: a simple Pspawner
+
+(
+Pspawner({ | sp |
+
+// parallel in-c'ish pulses will run throughout the example
+    sp.par(Pbind(*[ degree: [0,7], octave: 7, dur: 0.2, db: Pseq([-20, -24, -22, -24], inf)]) );
+
+// scales in sequence with pauses
+    sp.seq(
+        Pbind(*[ degree: Pseq((0..7).mirror), dur: 0.2])
+    );
+    sp.wait(0.4);
+    sp.seq(
+        Ppar([
+            Pbind(*[ degree: Pseq((0..7).mirror), dur: 0.2, octave: 4]),
+            Pbind(*[ degree: Pseq((0..7).reverse.mirror), dur: 0.2])
+        ])
+
+    );
+    sp.wait(3);
+    sp.seq(
+        Pbind(*[ degree: Pseq((0..7).mirror), dur: 0.2, mtranspose: (0,2..14)])
+    );
+
+// scales overlaped at 0.4 second intervals
+
+    10.do {
+        sp.par(
+            Pbind(*[ degree: Pseq((0..7).mirror), dur: 0.2])
+        );
+
+        sp.wait(0.4)
+    };
+    sp.wait(1.6);
+    sp.suspendAll;
+}).play
+)
+
+
+(
+// example 2: create 6 streams at 4 second intervals
+// then delete them in the order they were created
+
+Pspawner({ | sp |
+    var streams, stream;
+    // start patterns, collect the resultant event streams
+    streams = [2, 3, 4, 6, 7, 8].collect { | i |
+        stream = sp.par(Pbind(*[
+            harmonic: i,
+            ctranspose:     [0, 1, 3]/40,
+            octave:    Pbrown(2,8,2), dur: 1/i, db: -30
+        ]) );
+        sp.wait(4);
+        stream;
+    };
+
+    // now stop those streams one by one
+    streams.do { | s | sp.suspend(s); sp.wait(4) };
+}).play
+)
+
+(
+// example 3: define a Pspawner and use Pattern manipulations
+p = Pspawner({ | sp |
+    var pat = Pbrown( -7, 7, 3);
+
+    sp.par(Pbind(*[octave: 5, degree: pat, dur: 1/4]) );
+    sp.wait(2);
+    sp.par(Pbind(*[octave: 6, degree: pat, dur: 1/8]) );
+    sp.wait(3);
+    sp.par(Pbind(*[octave: 7, degree: pat, dur: 1/6, db: -20]) );
+    sp.wait(4);
+    sp.par(Pbind(*[octave: 4, degree: pat, dur: 1/4]) );
+    
+    sp.wait(8);
+    sp.suspendAll;
+});
+)
+
+// play the basic patten
+p.play;
+
+(
+// manipulate basic pattern with Pchain
+Pchain(
+    Pbind(*[mtranspose: Pkey(\mtranspose) + Pstutter(8, Prand([0,[0,3,-2],[0,2,4]], inf)) ] ), //make some notes into triads
+    Pbind(*[ctranspose: Pwhite(-0.1, 0.1)]), //add random detuning to notes
+    Pbind(*[\scale, Scale.minor]), //alter the scale
+    Pn(Pseq([p, (type:\rest, dur: 1.0)]) ), //repeat the pattern after a 1 second pause
+    Pbind(*[
+        db: Pstep(Pseq([-10, -13, -13, -11, -13, -13], inf), 0.1) - 10,
+        mtranspose: Pstep(Pwhite(-7,7), Prand([5,4,2],inf) ) //random modal transposition
+    ])
+).play(protoEvent: Event.default)
+)
+
+// example 4: altering the contents of the Pspawner from separate code
+
+(
+a = Pspawner({ |sp |
+    c = sp;             // store the Spawner in a global variable
+    100.do{ sp.wait(1) }
+});
+a.play;
+)
+
+(                    // c will not be valid until the Pspawner has run
+b = c.par(                // now start a pattern in spawner
+    Pbind(*[degree: Pseq((0..6) ++ (7..1), inf), dur: 0.2])
+);
+)
+c.suspend(b)                // we can suspend and resume the stream
+c.par(b)
+c.suspend(b)
+(
+b = c.par(                // or just start up a new pattern
+    Pbind(*[degree: Pseq((0..6) ++ (7..1), inf), dur: 0.2])
+);
+)
+
+// example 5: Spawner can be used directly in the manner of Pspawner.
+// This allows external code to access to the spawner whether or not it has run
+(
+c = Spawner({ |sp |
+    100.do{ sp.wait(1) }
+});
+b = c.par(                // now start a pattern in spawner
+    Pbind(*[degree: Pseq((0..6) ++ (7..1), inf), dur: 0.2])
+);
+c.play;                    // in this case, c is always valid
+)
+c.suspend(b)                // we can suspend and resume the stream
+c.par(b)
+c.suspend(b)
+(
+b = c.par(                // or just start up a new pattern
+    Pbind(*[degree: Pseq((0..6) ++ (7..1), inf), dur: 0.2])
+);
+)
+
+(
+Pspawner({ | sp |
+    (1..5).do { | i |
+        sp.par(Pbind(*[
+            octave: i + 2,
+            degree:    Pwhite(0,7), dur: 1/i, db: -30
+        ]) );
+        sp.wait(4);
+    };
+    sp.suspendAll;
+}).play
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Pspawner.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Pspawner.schelp</a><br>link::Classes/Pspawner::<br>sc version: 3.8dev</div></div></body></html>

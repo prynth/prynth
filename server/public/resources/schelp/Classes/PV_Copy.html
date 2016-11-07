@@ -1,0 +1,167 @@
+<html><head><title>PV_Copy</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>FFT'>UGens>FFT</a></div>
+<h1>PV_Copy</h1>
+<div id='summary'>Copy an FFT buffer</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/FFT.sc'>FFT.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/PV_MagMul.html">PV_MagMul</a> : <a href="../Classes/PV_ChainUGen.html">PV_ChainUGen</a> : <a href="../Classes/WidthFirstUGen.html">WidthFirstUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Copies the spectral frame in bufferA to bufferB at that point in the chain of PV UGens. This allows for parallel processing of spectral data without the need for multiple FFT UGens, and to copy out data at that point in the chain for other purposes. bufferA and bufferB must be the same size.<div class='note'><span class='notelabel'>NOTE:</span> As of SC 3.7 instances of PV_Copy are added automatically where necessary for parallel processing. This document is provided for legacy purposes only. (Existing code explicitly using PV_Copy should continue to work.)</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>bufferA</span>, <span class='argstr'>bufferB</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/PV_MagMul.html'>PV_MagMul</a></div>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bufferA<td class='argumentdesc'>
+<p>source buffer.<tr><td class='argumentname'>bufferB<td class='argumentdesc'>
+<p>destination buffer.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+s.waitForBoot({
+    d = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+})
+)
+
+
+//// crossfade between original and magmul-ed whitenoise
+(
+x = { var in, in2, chain, chainB, chainC;
+    in = PlayBuf.ar(1, d, BufRateScale.kr(d), loop: 1) * 2;
+    in2 = WhiteNoise.ar;
+    chain = FFT(LocalBuf(2048), in);
+    chainB = FFT(LocalBuf(2048), in2);
+    chainC = PV_Copy(chain, LocalBuf(2048));
+    chainB = PV_MagMul(chainB, chainC);
+    XFade2.ar(IFFT(chain), IFFT(chainB) * 0.1, SinOsc.kr(0.1, 1.5pi));
+}.play(s);
+)
+x.free;
+
+
+
+
+//// as previous but with Blip for 'vocoder' cross synthesis effect
+(
+x = { var in, in2, chain, chainB, chainC;
+    in = PlayBuf.ar(1, d, BufRateScale.kr(d), loop: 1) * 2;
+    in2 = Blip.ar(100, 50);
+    chain = FFT(LocalBuf(2048), in);
+    chainB = FFT(LocalBuf(2048), in2);
+    chainC = PV_Copy(chain, LocalBuf(2048));
+    chainB = PV_MagMul(chainB, chainC);
+    XFade2.ar(IFFT(chain), IFFT(chainB) * 0.1, SinOsc.ar(0.1));
+}.play(s);
+)
+x.free;
+
+
+//// Spectral 'pan'
+(
+x = { var in, chain, chainB, pan;
+    in = PlayBuf.ar(1, d, BufRateScale.kr(d), loop: 1);
+    chain = FFT(LocalBuf(2048), in);
+    chainB = PV_Copy(chain, LocalBuf(2048));
+    pan = MouseX.kr(0.001, 1.001, 'exponential') - 0.001;
+    chain = PV_BrickWall(chain, pan);
+    chainB = PV_BrickWall(chainB, -1 + pan);
+    0.5 * IFFT([chain, chainB]);
+}.play(s);
+)
+x.free;
+
+
+(
+s.waitForBoot({
+    b = Buffer.alloc(s,2048,1);
+    c = Buffer.alloc(s,2048,1);
+    d = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+    e = Buffer.alloc(s,2048,1);
+    f = Buffer.alloc(s,2048,1);
+})
+)
+
+
+//// proof of concept
+(
+x = { var inA, chainA, inB, chainB, chain;
+    inA = LFClipNoise.ar(100);
+    chainA = FFT(b, inA);
+    chainB = PV_Copy(chainA, c);
+    IFFT(chainA) - IFFT(chainB); // cancels to zero so silent!
+}.play(s);
+)
+x.free;
+// IFFTed frames contain the same windowed output data
+b.plot(\b, Rect(200, 430, 700, 300)); c.plot(\c, Rect(200, 100, 700, 300));
+
+
+
+//// Multiple Magnitude plots
+(
+x = { var in, chain, chainB, chainC;
+    in = WhiteNoise.ar;
+    chain = FFT(b, in);
+    PV_Copy(chain, LocalBuf(2048)); // initial spectrum
+    chain = PV_RectComb(chain, 20, 0, 0.2);
+    PV_Copy(chain, LocalBuf(2048)); // after comb
+    2.do({chain = PV_MagSquared(chain)});
+    PV_Copy(chain, LocalBuf(2048)); // after magsquared
+    0.00001 * Pan2.ar(IFFT(chain));
+}.play(s);
+)
+x.free;
+
+(
+c.getToFloatArray(action: { arg array;
+    var z, x;
+    z = array.clump(2).flop;
+    // Initially data is in complex form
+    z = [Signal.newFrom(z[0]), Signal.newFrom(z[1])];
+    x = Complex(z[0], z[1]);
+    {x.magnitude.plot('Initial', Rect(200, 560, 700, 200))}.defer
+});
+e.getToFloatArray(action: { arg array;
+    var z, x;
+    z = array.clump(2).flop;
+    // RectComb doesn't convert, so it's still complex
+    z = [Signal.newFrom(z[0]), Signal.newFrom(z[1])];
+    x = Complex(z[0], z[1]);
+    {x.magnitude.plot('After RectComb', Rect(200, 330, 700, 200))}.defer
+});
+f.getToFloatArray(action: { arg array;
+    var z, x;
+    z = array.clump(2).flop;
+    // MagSquared converts to Polar
+    x = Signal.newFrom(z[0]); // magnitude first
+    {x.plot('After MagSquared', Rect(200, 100, 700, 200))}.defer
+})
+)
+
+[b, c, d, e, f].do(_.free); // free the buffers</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/PV_Copy.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/PV_Copy.schelp</a><br>link::Classes/PV_Copy::<br>sc version: 3.8dev</div></div></body></html>

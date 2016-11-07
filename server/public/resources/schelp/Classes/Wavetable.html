@@ -1,0 +1,139 @@
+<html><head><title>Wavetable</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Collections>Ordered'>Collections>Ordered</a></div>
+<h1>Wavetable</h1>
+<div id='summary'>sampled audio buffer in wavetable format</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Math/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Math/Signal.sc'>Signal.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/FloatArray.html">FloatArray</a> : <a href="../Classes/RawArray.html">RawArray</a> : <a href="../Classes/ArrayedCollection.html">ArrayedCollection</a> : <a href="../Classes/SequenceableCollection.html">SequenceableCollection</a> : <a href="../Classes/Collection.html">Collection</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Signal.html">Signal</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*sineFill'>sineFill</a> </li>
+<li class='toc3'><a href='#*chebyFill'>chebyFill</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*chebyFill_old'>chebyFill_old</a> </li>
+<li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*newClear'>newClear</a> </li>
+<li class='toc3'><a href='#*readNew'>readNew</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-plot'>plot</a> </li>
+<li class='toc3'><a href='#-asSignal'>asSignal</a> </li>
+<li class='toc2'><a href='#Advanced notes: wavetable format'>Advanced notes: wavetable format</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-blend'>blend</a> </li>
+<li class='toc3'><a href='#-write'>write</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A Wavetable is a FloatArray in a special format used by SuperCollider's interpolating oscillators. Wavetables cannot be created by <strong>new</strong>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*sineFill' href='./../Overviews/Methods.html#sineFill'>sineFill</a> (<span class='argstr'>size</span>, <span class='argstr'>amplitudes</span>, <span class='argstr'>phases</span>)</h3>
+<div class='method'>
+<p>Fill a Wavetable of the given size with a sum of sines at the given amplitudes and phases. The Wavetable will be normalized.<pre class='code prettyprint lang-sc'>Wavetable.sineFill(512, 1.0/[1, 2, 3, 4, 5, 6]).plot;</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p>must be a power of 2.<tr><td class='argumentname'>amplitudes<td class='argumentdesc'>
+<p>an Array of amplitudes for each harmonic beginning with the fundamental.<tr><td class='argumentname'>phases<td class='argumentdesc'>
+<p>an Array of phases in radians for each harmonic beginning with the fundamental.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*chebyFill' href='./../Overviews/Methods.html#chebyFill'>chebyFill</a> (<span class='argstr'>size</span>, <span class='argstr'>amplitudes</span>, <span class='argstr'>normalize: true</span>, <span class='argstr'>zeroOffset: false</span>)</h3>
+<div class='method'>
+<p>Fill a Wavetable of the given size with a sum of Chebyshev polynomials at the given amplitudes for use in waveshaping by the <a href="./../Classes/Shaper.html">Shaper</a> ugen.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p>must be a power of 2 plus 1, eventual wavetable is next power of two size up.<tr><td class='argumentname'>amplitudes<td class='argumentdesc'>
+<p>an <a href="./../Classes/Array.html">Array</a> of amplitudes for each Chebyshev polynomial beginning with order 1.<tr><td class='argumentname'>normalize<td class='argumentdesc'>
+<p>a <a href="./../Classes/Boolean.html">Boolean</a> indicating whether to normalize the resulting Wavetable. If the zeroOffset argument is true, the normalization is done for use as a transfer function, using <a href="./../Classes/Signal.html#-normalizeTransfer">normalizeTransfer</a>, otherwise it just uses <a href="./../Classes/Signal.html#-normalize">normalize</a> to make the absolute peak value 1. Default is true.<tr><td class='argumentname'>zeroOffset<td class='argumentdesc'>
+<p>a <a href="./../Classes/Boolean.html">Boolean</a> indicating whether to offset the middle of each polynomial to zero. If true, then a zero input will always result in a zero output when used as a <a href="./../Classes/Shaper.html">waveshaper</a>. If false, then the "raw" (unshifted) Chebyshev polynomials are used. Default is false.</table><h4>Discussion:</h4>
+<div class='note'><span class='notelabel'>NOTE:</span> In previous versions, chebyFill always offset the curves to ensure the center value was zero. The zeroOffset argument was added in version 3.7, and the default behavior was changed, so that it no longer offsets.</div>
+<p><pre class='code prettyprint lang-sc'>Wavetable.chebyFill(513, [1]).plot;
+
+// shifted to avoid DC offset when waveshaping a zero signal
+Wavetable.chebyFill(513, [0, 1], zeroOffset: true).plot;
+
+// normalized sum of (unshifted) Chebyshev polynomials (the default)
+Wavetable.chebyFill(513, [0, 1, 0, 0, 0, 1], normalize: true, zeroOffset: false).plot;
+
+Wavetable.chebyFill(513, [0, 0, 1]).plot;
+Wavetable.chebyFill(513, [0.3, -0.8, 1.1]).plot;
+
+
+// This waveshaping example uses two buffers, one with zero offset and
+// the other not.
+//
+// 1. The offset version gives zero output (DC free) when waveshaping an
+// input signal with amplitude of zero (e.g. DC.ar(0)).
+//
+// 2. The non-offset version makes better use of the full (-1 to 1) range
+// when waveshaping a varying signal with amplitude near 1, but (if even
+// Chebyshev polynomial degrees are used) will have a DC offset when
+// waveshaping a signal with amplitude of zero.
+//
+// 3. Wrapping the non-offset Shaper in a LeakDC (the third signal in the
+// example) cancels out any DC offsets (third version), while making full use
+// of the -1 to 1 range.
+(
+s.waitForBoot({
+    var amplitudes = [0, 1, 1, -2, 1];
+    var wavs = [
+        Wavetable.chebyFill(256+1, amplitudes, normalize: true, zeroOffset: true),
+        Wavetable.chebyFill(256+1, amplitudes, normalize: true, zeroOffset: false)
+    ];
+    b = wavs.collect{ arg wav; Buffer.loadCollection(s, wav) };
+    s.sync;
+    x = {
+        var in = SinOsc.ar(100, 0, SinOsc.kr(0.1, 0, 0.5, 0.5));
+        Shaper.ar(b, in ) ++ LeakDC.ar(Shaper.ar(b[1], in))
+    }.scope;
+})
+)
+x.free; b.do(_.free); b = nil;</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*chebyFill_old' href='./../Overviews/Methods.html#chebyFill_old'>chebyFill_old</a> (<span class='argstr'>size</span>, <span class='argstr'>amplitudes</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*newClear' href='./../Overviews/Methods.html#newClear'>newClear</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*readNew' href='./../Overviews/Methods.html#readNew'>readNew</a> (<span class='argstr'>file</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-plot' href='./../Overviews/Methods.html#plot'>plot</a> (<span class='argstr'>name</span>, <span class='argstr'>bounds</span>, <span class='argstr'>minval</span>, <span class='argstr'>maxval</span>, <span class='argstr'>separately: false</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc</a></div>
+<div class='method'>
+<p>Plot the Wavetable in a window. The arguments are not required and if not given defaults will be used.<pre class='code prettyprint lang-sc'>Wavetable.sineFill(512, [0.5]).plot;
+Wavetable.sineFill(512, [1]).plot("Table 1", Rect(50, 50, 150, 450));</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>name<td class='argumentdesc'>
+<p>a String, the name of the window.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>a Rect giving the bounds of the window.<tr><td class='argumentname'>minval<td class='argumentdesc'>
+<p>the minimum value in the plot. Defaults to the highest value in the data.<tr><td class='argumentname'>maxval<td class='argumentdesc'>
+<p>the maximum value in the plot. Defaults to the lowest value in the data.<tr><td class='argumentname'>parent<td class='argumentdesc'>
+<p>a window to place the plot in. If nil, one will be created for you.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asSignal' href='./../Overviews/Methods.html#asSignal'>asSignal</a> </h3>
+<div class='method'>
+<p>Convert the Wavetable into a Signal.<pre class='code prettyprint lang-sc'>Wavetable.sineFill(512, [1]).asSignal.plot;</pre>
+</div><h3><a class='anchor' name='Advanced notes: wavetable format'>Advanced notes: wavetable format</a></h3>
+<pre class='code prettyprint lang-sc'>Signal: [a0, a1, a2...]
+Wavetable: [2*a0-a1, a1-a0, 2*a1-a2, a2-a1, 2*a2-a3, a3-a2...]</pre>
+
+<p>This strange format is not a standard linear interpolation (integer + frac), but for (integer part -1) and (1+frac)) due to some efficient maths for integer to float conversion in the underlying C code.<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-blend' href='./../Overviews/Methods.html#blend'>blend</a> (<span class='argstr'>anotherWavetable</span>, <span class='argstr'>blendFrac: 0.5</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-write' href='./../Overviews/Methods.html#write'>write</a> (<span class='argstr'>path</span>)</h3>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Wavetable.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Wavetable.schelp</a><br>link::Classes/Wavetable::<br>sc version: 3.8dev</div></div></body></html>

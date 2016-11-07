@@ -1,0 +1,98 @@
+<html><head><title>Pattern Guide 06c: Composition of Patterns</title>
+<link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../scdoc.js' type='text/javascript'></script>
+<script src='./../../docmap.js' type='text/javascript'></script>
+<script src='./../../prettify.js' type='text/javascript'></script>
+<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./../..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS/A-PRACTICAL-GUIDE</div>
+<div id='categories'><a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>Streams-Patterns-Events>A-Practical-Guide</a></div>
+<h1>Pattern Guide 06c: Composition of Patterns</h1>
+<div id='summary'>Making multiple event patterns act as one</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns.html">Pattern Guide 06b: Time Based Patterns</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_06d_Parallel_Patterns.html">Pattern Guide 06d: Parallel Patterns</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Adding values to a base event pattern (Or, "Pattern Composition")'>Adding values to a base event pattern (Or, "Pattern Composition")</a></li>
+<ul class='toc'><li class='toc2'><a href='#Pset and cousins'>Pset and cousins</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Adding values to a base event pattern (Or, "Pattern Composition")'>Adding values to a base event pattern (Or, "Pattern Composition")</a></h2>
+
+<p>One way to use patterns is to write everything into the pattern up front. This has the advantage of clarity and ease of understanding. Another way is to modularize the behavior by creating smaller, simpler patterns and combining their results into single events that have keys and values from all the component patterns.
+<p>This is related to the computer science concept of "function composition," in which a complex calculation can be written not as a single large function, but as several smaller functions that are then chained together into a single function. Since Functions are normal objects in SuperCollider, it's easy to do an operation on a function that returns a composite function (which may then be used like any other function). <a href="http://en.wikipedia.org/wiki/Function_composition_(computer_science)">http://en.wikipedia.org/wiki/Function_composition_(computer_science)</a>
+<p>In mathematics, the <code class='code prettyprint lang-sc'>·</code> operator represents function composition.<pre class='code prettyprint lang-sc'>f(x) = x + 1
+g(x) = x * 2
+
+g · f = g(f(x)) = (x + 1) * 2</pre>
+
+<p><code class='code prettyprint lang-sc'>g · f</code> means to evaluate <code class='code prettyprint lang-sc'>f</code> first, then pass its result to <code class='code prettyprint lang-sc'>g</code>. The <code class='code prettyprint lang-sc'>·</code> operator is written as <code class='code prettyprint lang-sc'>&lt;&gt;</code> in SuperCollider.<pre class='code prettyprint lang-sc'>f = { |x| x + 1 };
+g = { |x| x * 2 };
+
+h = (g &lt;&gt; f);
+--&gt; a Function
+
+h.value(1);
+--&gt; 4    // == (1+1) * 2
+
+(f &lt;&gt; g).value(1)
+--&gt; 3    // == (1*2) + 1
+
+// g · f == g(f(x)) -- f is evaluated first, and its result is passed to g
+g.value(f.value(1));
+--&gt; 4</pre>
+
+<p>Event patterns can be similarly composed.<dl>
+<dt><code class='code prettyprint lang-sc'>Pbindf(pattern, pairs)</code><dd>Adds new key-value pairs onto a pre-existing Pbind-style pattern. <code class='code prettyprint lang-sc'>Pbindf(Pbind(\a, patternA), \b, patternB, \c, patternC)</code> gets the same result as <code class='code prettyprint lang-sc'>Pbind(\a, patternA, \b, patternB, \c, patternC)</code> .<dt><code class='code prettyprint lang-sc'>Pchain(patterns)</code><dd>Chains separate Pbind-style patterns together, so that all their key-value pairs go into the same event. For example, if one part of your code creates a Pbind instance <code class='code prettyprint lang-sc'>a = Pbind(\a, patternA)</code> and another part creates <code class='code prettyprint lang-sc'>b = Pbind(\b, patternB, \c, patternC)</code>, you could append <code class='code prettyprint lang-sc'>\b</code> and <code class='code prettyprint lang-sc'>\c</code> into the <code class='code prettyprint lang-sc'>\a</code> result using <code class='code prettyprint lang-sc'>Pchain(b, a)</code> . The subpatterns evaluate in reverse order, in keeping with function composition notation.
+<p>For musical purposes, you could have one part of your code create a pattern defining rhythm and another part defining pitch material, then combine them with <a href="./../../Classes/Pchain.html">Pchain</a>.<pre class='code prettyprint lang-sc'>~rhythm = Pbind(
+    \dur, Pwrand(#[0.125, 0.25, 0.5], #[0.3, 0.5, 0.2], inf),
+    \legato, Pwrand(#[0.1, 0.6, 1.01], #[0.1, 0.3, 0.6], inf)
+);
+~melody = Pbind(
+    \degree, Pwhite(-4, 11, inf)
+);
+
+p = Pchain(~melody, ~rhythm).play;
+p.stop;</pre>
+
+<p>That in itself has some good potential for algorithmic composition. Introducing <a href="./../../Classes/EventPatternProxy.html">EventPatternProxy</a> into the mix makes it possible to swap different melody and rhythm components in and out on the fly, with no interruption. We can even change the type of pattern ( <a href="./../../Classes/Pbind.html">Pbind</a>, <a href="./../../Classes/Pmono.html">Pmono</a>, <a href="./../../Classes/PmonoArtic.html">PmonoArtic</a> ) with no ill effect.<pre class='code prettyprint lang-sc'>~rhythm = EventPatternProxy(Pbind(
+    \dur, Pwrand(#[0.125, 0.25, 0.5], #[0.3, 0.5, 0.2], inf),
+    \legato, Pwrand(#[0.1, 0.6, 1.01], #[0.1, 0.3, 0.6], inf)
+));
+
+~melody = EventPatternProxy(Pbind(
+    \degree, Pwhite(-4, 11, inf)
+));
+
+p = Pchain(~melody, ~rhythm).play;
+
+~melody.source = PmonoArtic(\default, \degree, Pseries(4, Prand(#[-1, 1], inf), inf).fold(-4, 11));
+
+~melody.source = Pbind(\degree, Pseries(4, Pwrand(#[-2, -1, 1, 2], #[0.3, 0.2, 0.2, 0.3], inf), inf).fold(-4, 11));
+
+p.stop;</pre>
+</dl>
+<h3><a class='anchor' name='Pset and cousins'>Pset and cousins</a></h3>
+
+<p>A group of pattern classes allow single event keys to be overwritten, or one addition or multiplication to be performed. <a href="./../../Classes/Pkey.html">Pkey</a>, in combination with the <a href="./../../Classes/Pchain.html">Pchain</a> or <a href="./../../Classes/Pbindf.html">Pbindf</a> "pattern composition" classes, can do everything the following classes can do (though this alternate notation may be more convenient in certain cases).<dl>
+<dt><code class='code prettyprint lang-sc'>Pset(name, value, pattern)</code><dd>Get one event from <code class='code prettyprint lang-sc'>pattern</code>, and then put the next value from the <code class='code prettyprint lang-sc'>value</code> pattern into the <code class='code prettyprint lang-sc'>name</code> key. If the source pattern specifies a value for the same name, the value from the source will be replaced with the new one.<dt><code class='code prettyprint lang-sc'>Padd(name, value, pattern)</code><dd>After getting the next event, replace the <code class='code prettyprint lang-sc'>name</code> value with its existing value <code class='code prettyprint lang-sc'>+</code> the next number from <code class='code prettyprint lang-sc'>value</code>.<dt><code class='code prettyprint lang-sc'>Pmul(name, value, pattern)</code><dd>After getting the next event, replace the <code class='code prettyprint lang-sc'>name</code> value with its existing value <code class='code prettyprint lang-sc'>*</code> the next number from <code class='code prettyprint lang-sc'>value</code>.</dl>
+
+<p>These patterns remain in the library mainly for reasons of backward compatibility, since their behavior can be replicated easily using <a href="./../../Classes/Pbindf.html">Pbindf</a>.<table>
+<tr><td><code class='code prettyprint lang-sc'>Pset(name, value, pattern)</code><td><code class='code prettyprint lang-sc'>Pbindf(pattern, name, value)</code><tr><td><code class='code prettyprint lang-sc'>Padd(name, value, pattern)</code><td><code class='code prettyprint lang-sc'>Pbindf(pattern, name, Pkey(name) + value)</code><tr><td><code class='code prettyprint lang-sc'>Pmul(name, value, pattern)</code><td><code class='code prettyprint lang-sc'>Pbindf(pattern, name, Pkey(name) * value)</code></table>
+
+<p>The patterns <a href="./../../Classes/Psetpre.html">Psetpre</a>, <a href="./../../Classes/Paddpre.html">Paddpre</a>, and <a href="./../../Classes/Pmulpre.html">Pmulpre</a> reverse the order of evaluation. <a href="./../../Classes/Pchain.html">Pchain</a> is able to duplicate this functionality.<dl>
+<dt><code class='code prettyprint lang-sc'>Psetpre(name, value, pattern)</code><dd>Get the next <code class='code prettyprint lang-sc'>value</code> and put it into the event prototype before evaluating <code class='code prettyprint lang-sc'>pattern</code>.</dl>
+<table>
+<tr><td><code class='code prettyprint lang-sc'>Psetpre(name, value, pattern)</code><td><code class='code prettyprint lang-sc'>Pchain(pattern, Pbind(name, value))</code><tr><td><code class='code prettyprint lang-sc'>Paddpre(name, value, pattern)</code><td><code class='code prettyprint lang-sc'>Pchain(pattern, Pbind(name, Pkey(name) + value))</code></table>
+
+<p>Similar for <code class='code prettyprint lang-sc'>Pmulpre</code>.
+<p>A third group -- <a href="./../../Classes/Psetp.html">Psetp</a>, <a href="./../../Classes/Paddp.html">Paddp</a>, <a href="./../../Classes/Pmulp.html">Pmulp</a> -- behave slightly differently, nesting pattern evaluation.
+<p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns.html">Pattern Guide 06b: Time Based Patterns</a>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_06d_Parallel_Patterns.html">Pattern Guide 06d: Parallel Patterns</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06c_Composition_of_Patterns.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06c_Composition_of_Patterns.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_06c_Composition_of_Patterns::<br>sc version: 3.8dev</div></div></body></html>

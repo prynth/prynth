@@ -1,0 +1,221 @@
+<html><head><title>Pproto</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events>Patterns>Server Control'>Streams-Patterns-Events>Patterns>Server Control</a></div>
+<h1>Pproto</h1>
+<div id='summary'>provide a proto event for an event stream</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Pproto.sc'>Pproto.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Pattern.html">Pattern</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-cleanupFunc'>cleanupFunc</a> </li>
+<li class='toc3'><a href='#-embedInStream'>embedInStream</a> </li>
+<li class='toc3'><a href='#-makeFunction'>makeFunction</a> </li>
+<li class='toc3'><a href='#-pattern'>pattern</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#Example 1, loading and granulating a sound file.'>Example 1, loading and granulating a sound file.</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Example 2, loading a waveform buffer and modifying it in performance.'>Example 2, loading a waveform buffer and modifying it in performance.</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Example 3, loading a waveshaper buffer and modifying it in performance.'>Example 3, loading a waveshaper buffer and modifying it in performance.</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Example 4, using an effect with parallel control.'>Example 4, using an effect with parallel control.</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Pproto uses the <strong>makeFunction</strong> to allocate resources (buffers, buses, groups) and create a protoEvent that makes those resources available to a pattern. It is fully compatible with non-realtime synthesis using <strong>render</strong>.
+<p>The <strong>makeFunction</strong> "makes" the protoEvent (i.e. protoEvent is <code class='code prettyprint lang-sc'>currentEnvironment</code>). Typically, it defines and yields a sequence of events that create the needed resources using the following <a href="./../Overviews/Event_types.html">Event types</a>:<dl>
+<dt>\allocRead<dd>load a file from ~path, starting at ~firstFileFrame, reading ~numFrames sample frames<dt>\cue<dd>cue a file for DiskIn, with ~bufferSize frames<dt>\table<dd>load ~amps directly into a buffer<dt>\sine1<dd>generate a buffer from ~amps<dt>\sine2<dd>generate a buffer from ~freqs, ~amps<dt>\sine3<dd>generate a buffer from ~freqs, ~amps, ~phases<dt>\cheby<dd>generate a waveshape buffer from ~amps<dt>\audioBus<dd>allocate ~channels consecutive audio buses<dt>\controlBus<dd>allocate ~channels consecutive control buses<dt>\on<dd>create a synth</dl>
+<div class='note'><span class='notelabel'>NOTE:</span> These eventTypes will allocate their own buffers and buses unless they are specified. To support this, the key <code class='code prettyprint lang-sc'>\bufNum</code> is used rather than <code class='code prettyprint lang-sc'>\bufnum</code> which has a default value assigned.</div>
+<p>When Pproto ends, these eventTypes will respond to the <strong>cleanup</strong> call by <strong>deallocating any resources they have allocated</strong>. Do not assume your buffers, buses etc. will exist after Pproto stops!
+<p>The function yields each event. That event is then performed with possible modifications by enclosing patterns and the player (either an <a href="./../Classes/EventStreamPlayer.html">EventStreamPlayer</a> or a <a href="./../Classes/ScoreStreamPlayer.html">ScoreStreamPlayer</a>). The resultant event is returned to the function where it can be assigned to a key within the protoEvent.
+<p>The patternarray is played using Pfpar, a variant of Ppar that ends when any of its subpatterns end. In this way, you can use Pproto to create effects that can be controlled by a pattern that runs in parallel with the note generating pattern and ends together with that note generating pattern (see example 0 below).
+<p>A <strong>cleanupFunction</strong> that deallocates resources when the pattern ends or is stopped is automatically created. It can be replaced with a user defined cleanup if needed. This function receives two arguments: <strong>proto</strong>, the prototype event, and <strong>flag</strong>, which is set false if all nodes have been freed already by <a href="./../Classes/CmdPeriod.html">CmdPeriod</a>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>makeFunction</span>, <span class='argstr'>pattern</span>, <span class='argstr'>cleanupFunc</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cleanupFunc' href='./../Overviews/Methods.html#cleanupFunc'>cleanupFunc</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cleanupFunc' href='./../Overviews/Methods.html#cleanupFunc'>cleanupFunc</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-embedInStream' href='./../Overviews/Methods.html#embedInStream'>embedInStream</a> (<span class='argstr'>event</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeFunction' href='./../Overviews/Methods.html#makeFunction'>makeFunction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeFunction' href='./../Overviews/Methods.html#makeFunction'>makeFunction</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pattern' href='./../Overviews/Methods.html#pattern'>pattern</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pattern' href='./../Overviews/Methods.html#pattern'>pattern</a> = value</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<div class='note'><span class='notelabel'>NOTE:</span> The syntax used for patterns like Pbind and Pmono is a little bit different for making the code more readable. The difference has nothing to do with Pproto. This is the same: <code class='code prettyprint lang-sc'>Pbind(\freq, 700, \amp, 0.1)</code> and <code class='code prettyprint lang-sc'>Pbind(*[freq: 700, amp: 0.1])</code></div><h3><a class='anchor' name='Example 1, loading and granulating a sound file.'>Example 1, loading and granulating a sound file.</a></h3>
+<pre class='code prettyprint lang-sc'>(
+SynthDef(\help_playbuf, { | out=0, bufnum = 0, rate = 1, startPos = 0, amp = 0.1, sustain = 1, pan = 0, loop = 1|
+    var audio;
+    rate = rate * BufRateScale.kr(bufnum);
+    startPos = startPos * BufFrames.kr(bufnum);
+
+    audio = BufRd.ar(1, bufnum, Phasor.ar(0, rate, startPos, BufFrames.ir(bufnum)), 1, 1);
+    audio = EnvGen.ar(Env.sine, 1, timeScale: sustain, doneAction: 2) * audio;
+    audio = Pan2.ar(audio, pan, amp);
+    OffsetOut.ar(out, audio);
+}).add;
+
+a = Pproto({
+    ~newgroup = (type: \group).yield;
+    ~sf1 = (type: \allocRead, path: Platform.resourceDir +/+ "sounds/a11wlk01-44_1.aiff").yield;
+},
+    Pbind(*[
+        instrument:    \help_playbuf,
+        dur:        Pseg([0,0,0.25,0.5, 0.75, 1],10).linexp(0,1,0.01,2),
+        legato:        4,
+        startPos:    Pn(Pseg([0,1], 20), inf),
+        rate:        Pwhite(1, 1).midiratio,
+        loop:        0,
+        group:        Pkey(\newgroup),
+        bufnum:        Pkey(\sf1)
+    ])
+);
+a.play;
+)
+
+//a.render("sounds/test.aif", 40)
+//SoundFile.openRead("sounds/test.aif").play</pre>
+<h3><a class='anchor' name='Example 2, loading a waveform buffer and modifying it in performance.'>Example 2, loading a waveform buffer and modifying it in performance.</a></h3>
+<pre class='code prettyprint lang-sc'>(
+SynthDef(\osc,{ arg out=0, bufnum=0, numbufs = 8, sustain = 1, freq = 500, amp = 0.1, pan = 0;
+    var audio;
+    audio = Osc.ar(bufnum, freq);
+    audio = EnvGen.ar(Env.linen(0.01, 0.90,0.9), 1, timeScale: sustain, doneAction: 2) * audio;
+    audio = Pan2.ar(audio, pan, amp);
+    OffsetOut.ar(out, audio);
+}).add;
+
+b = Pproto({
+    ~bufnum = (type: \sine1, amps: 1.0/[1,2,3,4,5,6] ).yield;
+    },
+    Ppar([
+        Pbind(*[
+            instrument:     \osc,
+            freq:        Pwhite(1, 16) * 100,
+            detune:        Pfunc { Array.fill(3.rand + 1, {3.0.rand}) },
+            dur:        Prand([2,2,2.5,1],10),
+            db:        Pn(Pstep([-10, -20, -20, -15, -20, -20, -20], 0.5) ),
+            legato:        Pwhite(0.0,1).linexp(0,1,0.1, 3)
+        ]),
+        Pbind(*[
+            type:        \sine1,
+            amps:        Pseg(Pfunc{ | ev | Array.fill(10, {1.0.rand}) }, 1),
+            numOvertones:    Pseg(Pwhite(0, 9), 10).asInteger,
+            amps:        Pfunc{ | ev | ev[\amps].copyRange(0, ev[\numOvertones]) },
+            dur:         0.05,
+            bufNum:        Pkey(\bufnum)
+        ])
+    ])
+);
+b.play
+)
+
+//b.render("sounds/test.aif", 40)
+//SoundFile.openRead("sounds/test.aif").play</pre>
+<h3><a class='anchor' name='Example 3, loading a waveshaper buffer and modifying it in performance.'>Example 3, loading a waveshaper buffer and modifying it in performance.</a></h3>
+<pre class='code prettyprint lang-sc'>(
+SynthDef(\shaper,{ arg out=0, bufnum=0, numbufs = 8, sustain = 1, freq = 500, amp = 0.1, pan = 0;
+    var audio;
+    audio = SinOsc.ar(freq);
+    audio = EnvGen.ar(Env.linen(0.4, 0.50,0.9), 1, timeScale: sustain, doneAction: 2) * audio;
+    audio = Shaper.ar(bufnum, audio);
+    audio = Pan2.ar(audio, pan, amp);
+    OffsetOut.ar(out, LeakDC.ar(audio));
+}).add;
+
+c = Pproto({
+    ~bufnum = (type: \cheby, amps: 1.0/[1,2,3,4,5,6] ).yield;
+    },
+    Ppar([
+        Pbind(*[
+            instrument:     \shaper,
+            freq:        Pwhite(1, 16) * 100,
+            detune:        Pfunc { Array.fill(3.rand + 1, {3.0.rand}) },
+            dur:        Prand([2,2,2.5,1],inf),
+            db:        Pn(Pstep([-10, -20, -20, -15, -20, -20, -20], 0.5) ),
+            legato:        Pwhite(0.0,1).linexp(0,1,1.1, 5)
+        ]),
+        Pbind(*[
+            type:        \cheby,
+            amps:        Pseg(Pfunc{ | ev | Array.fill(10, {1.0.rand}) }, 4),
+            dur:         0.05
+        ])
+    ])
+);
+c.play
+)
+//c.render("sounds/test.aif", 40)
+//SoundFile("sounds/test.aif").play
+//</pre>
+<h3><a class='anchor' name='Example 4, using an effect with parallel control.'>Example 4, using an effect with parallel control.</a></h3>
+<pre class='code prettyprint lang-sc'>(
+SynthDef(\echo, { arg out=0, maxdtime=0.2, dtime=0.2, decay=2, gate=1;
+    var env, in;
+    env = Linen.kr(gate, 0.05, 1, 5, 2);
+    in = In.ar(out, 2);
+    XOut.ar(out, env, CombL.ar(in * env, maxdtime, Lag.kr(dtime, 4), decay, 1, in));
+}, [\ir, \ir, 0.1, 0.1, 0]).add;
+
+SynthDef(\fm, { arg out=0, freq, index, decay=2, gate=1;
+    var env, in;
+    env = Linen.kr(gate, 0.05, 1, 5, 2);
+    in = In.ar(out, 2);
+    XOut.ar(out, env, SinOsc.ar(freq, in * index));
+}).add;
+
+Pproto({
+    // start two effect synths (just switching them on) and store the parameters in the environment
+    ~fsynth = (type: \on, instrument: \fm, freq: 4, index: 1, addAction: 1, db: -30).yield;
+    ~fControl = [\set, ~fsynth[\id], ~fsynth[\msgFunc] ];
+
+    ~synth = (type: \on, instrument: \echo, addAction: 1).yield;
+    ~sControl = [\set, ~synth[\id], ~synth[\msgFunc] ];
+
+    }, [
+    Pbind(*[
+        #[type, id, msgFunc],    Pkey(\fControl), // fetch the parameters from the environment
+
+        freq:    Pseg([0,1], 10).linexp(0,1, 0.1, 1000),
+        index:    Pseg([0,1], 10).linexp(0,1, 0.1, 100),
+        dur:    0.1
+    ]),
+    Pbind(*[
+        #[type, id, msgFunc],    Pkey(\sControl), // fetch the parameters from the environment
+
+        dtime:    Pwhite(0,0.2),
+        decay:    Pwhite(0.1,2),
+        dur:    1
+    ]),
+    Pbind(*[
+        instrument: \default,
+        freq: Pwhite(1,16) * 100,
+        dur: 0.2,
+        db:    0
+    ])
+    ]
+).play
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Pproto.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Pproto.schelp</a><br>link::Classes/Pproto::<br>sc version: 3.8dev</div></div></body></html>

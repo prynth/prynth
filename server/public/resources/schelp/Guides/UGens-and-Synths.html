@@ -1,0 +1,62 @@
+<html><head><title>Unit Generators and Synths</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider GUIDES</div>
+<div id='categories'><a href='./../Browse.html#Server>Nodes'>Server>Nodes</a></div>
+<h1>Unit Generators and Synths</h1>
+<div id='summary'>Introduction to some fundamental concepts</div>
+</div>
+<div class='subheader'>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Instantiation. Audio Rate, Control Rate'>Instantiation. Audio Rate, Control Rate</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#SynthDefs and Synths'>SynthDefs and Synths</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Building Patches'>Building Patches</a></li>
+<ul class='toc'></ul></ul></div>
+<p>A unit generator is an object that processes or generates sound. There are many classes of unit generators, all of which derive from the class <a href="./../Classes/UGen.html">UGen</a>.
+<p>Unit generators in SuperCollider can have many inputs, but always have a single output. Unit generator classes which would naturally have several outputs such as a panner, return an array of unit generators when instantiated. The convention of having only a single output per unit generator allows the implementation of multiple channels by using arrays of unit generators. (See <a href="./../Guides/Multichannel-Expansion.html">Multichannel Expansion</a> for more details.)<h2><a class='anchor' name='Instantiation. Audio Rate, Control Rate'>Instantiation. Audio Rate, Control Rate</a></h2>
+
+<p>A unit generator is created by sending the 'ar' or 'kr' message to the unit generator's class object. The 'ar' message creates a unit generator that runs at audio rate. The 'kr' message creates a unit generator that runs at control rate. Control rate unit generators are used for low frequency or slowly changing control signals. Control rate unit generators produce only a single sample per control cycle and therefore use less processing power than audio rate unit generators.
+<p>The input parameters for a unit generator are given in the documentation for that class.<pre class='code prettyprint lang-sc'>FSinOsc.ar(800, 0.0, 0.2); // create a sine oscillator at 800 Hz, phase 0.0, amplitude 0.2</pre>
+
+<p>A unit generator's signal inputs can be other unit generators, scalars, or arrays of unit generators and scalars.<h2><a class='anchor' name='SynthDefs and Synths'>SynthDefs and Synths</a></h2>
+
+<p>In order to play a unit generator one needs to compile it in a <a href="./../Classes/SynthDef.html">SynthDef</a> and play it on the server in a <a href="./../Classes/Synth.html">Synth</a>. A synth node is a container for one or more unit generators that execute together. A SynthDef is like a kind of pattern for creating synth nodes on the server.<pre class='code prettyprint lang-sc'>s.boot; // boot the server
+
+// compile and send this def
+SynthDef.new("FSinOsc-test", { Out.ar(0, FSinOsc.ar(800, 0, 0.2)) }).send(s); // out channel 0
+
+// now create a Synth object which represents a synth node on the server
+x = Synth.new("FSinOsc-test");
+
+// free the synth
+x.free;</pre>
+
+<p>The synth node created above could also be created using 'messaging style', thus saving the overhead of a clientside Synth object:<pre class='code prettyprint lang-sc'>n = s.nextNodeID;
+s.sendMsg("/s_new", "FSinOsc-test", n);
+s.sendMsg("/n_free", n);</pre>
+
+<p>Because any expression returns its value, we can nest the first two lines above for convenience. (See <a href="./../Reference/Expression-Sequence.html">Expression Sequence</a> for more detail.)<pre class='code prettyprint lang-sc'>s.sendMsg("/s_new", "FSinOsc-test", n = s.nextNodeID;);
+s.sendMsg("/n_free", n);</pre>
+
+<p>It is VERY important and useful to understand the messaging structure which underlies the clientside Synth, Group, Buffer, and Bus objects. See <a href="./../Guides/NodeMessaging.html">Node Messaging</a>, <a href="./../Tutorials/Tutorial.html">SuperCollider 3 Server Tutorial</a>, and <a href="./../Guides/ClientVsServer.html">Client vs Server</a> for more detail.
+<p>As a convenience the 'play' method of class <a href="./../Classes/Function.html">Function</a> will compile a SynthDef and create and play a synth using the function for you. With this method an <a href="./../Classes/Out.html">Out</a> ugen will be created for you if you do not do so explicitly.<pre class='code prettyprint lang-sc'>{ FSinOsc.ar(800, 0, 0.2) }.play; // create and play a sine oscillator at 800 Hz</pre>
+<h2><a class='anchor' name='Building Patches'>Building Patches</a></h2>
+
+<p>You can do math operations on unit generators and the result will be another unit generator. Doing math on unit generators is not doing any signal calculation itself - it is building the network of unit generators that will execute once they are played in a Synth. This is the essential thing to understand: Synthesis networks, or in other words signal flow graphs are created by executing expressions of unit generators. The following expression creates a flow graph whose root is an instance of <a href="./../Classes/BinaryOpUGen.html">BinaryOpUGen</a> which performs the '+' operation. Its inputs are the <a href="./../Classes/FSinOsc.html">FSinOsc</a> and <a href="./../Classes/BrownNoise.html">BrownNoise</a> unit generators.<pre class='code prettyprint lang-sc'>FSinOsc.ar(800, 0.0, 0.2) + BrownNoise.ar(0.2); // press enter and look at the post window
+
+{FSinOsc.ar(800, 0.0, 0.2) + BrownNoise.ar(0.2)}.play; // play it</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/UGens-and-Synths.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/UGens-and-Synths.schelp</a><br>link::Guides/UGens-and-Synths::<br>sc version: 3.8dev</div></div></body></html>

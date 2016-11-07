@@ -1,0 +1,92 @@
+<html><head><title>StreamClutch</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a></div>
+<h1>StreamClutch</h1>
+<div id='summary'>buffers a streamed value</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Stream.sc'>Stream.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Stream.html">Stream</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Routine.html">Routine</a>, <a href="./../Classes/FuncStream.html">FuncStream</a>, <a href="./../Classes/EventStreamPlayer.html">EventStreamPlayer</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-connected'>connected</a> </li>
+<li class='toc3'><a href='#-lastValue'>lastValue</a> </li>
+<li class='toc3'><a href='#-next'>next</a> </li>
+<li class='toc3'><a href='#-reset'>reset</a> </li>
+<li class='toc3'><a href='#-step'>step</a> </li>
+<li class='toc3'><a href='#-stream'>stream</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>pattern</span>, <span class='argstr'>connected: true</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>pattern<td class='argumentdesc'>
+<p>a pattern or stream to be buffered.<tr><td class='argumentname'>connected<td class='argumentdesc'>
+<p>if true it will call the next stream value for each time next is called. if false it returns the last value.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-connected' href='./../Overviews/Methods.html#connected'>connected</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-connected' href='./../Overviews/Methods.html#connected'>connected</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lastValue' href='./../Overviews/Methods.html#lastValue'>lastValue</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-next' href='./../Overviews/Methods.html#next'>next</a> (<span class='argstr'>inval</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-reset' href='./../Overviews/Methods.html#reset'>reset</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-reset' href='./../Overviews/Methods.html#reset'>reset</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-step' href='./../Overviews/Methods.html#step'>step</a> (<span class='argstr'>inval</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-stream' href='./../Overviews/Methods.html#stream'>stream</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-stream' href='./../Overviews/Methods.html#stream'>stream</a> = value</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>a = Pseq([1, 2, 3], inf);
+b = StreamClutch(a);
+
+6.do({ b.next.postln });
+b.connected = false;
+6.do({ b.next.postln });
+
+
+//statistical clutch
+a = Pseq([1, 2, 3], inf);
+b = StreamClutch(a, { 0.5.coin });
+12.do({ b.next.postln });</pre>
+<pre class='code prettyprint lang-sc'>s.boot;
+//sound example:
+(
+var clutch, pat, decicion;
+decicion = Pseq([Pn(true,10), Prand([true, false], 10)], inf).asStream;
+pat = Pbind(\freq, Pseq([200, [300, 302], 400, 450], inf), \dur, 0.3);
+clutch = StreamClutch(pat, decicion);
+clutch.asEventStreamPlayer.play;
+)</pre>
+<pre class='code prettyprint lang-sc'>// independant stepping
+(
+var clutch, pat, decicion;
+pat = Pbind(\freq, Pseq([200, [300, 302], 400, 450], inf), \dur, 0.3);
+b = StreamClutch(pat);
+b.connected = false;
+b.asEventStreamPlayer.play;
+)
+
+b.step;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/StreamClutch.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/StreamClutch.schelp</a><br>link::Classes/StreamClutch::<br>sc version: 3.8dev</div></div></body></html>

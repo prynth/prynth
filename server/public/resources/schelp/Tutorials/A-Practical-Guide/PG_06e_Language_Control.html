@@ -1,0 +1,64 @@
+<html><head><title>Pattern Guide 06e: Language Control</title>
+<link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../scdoc.js' type='text/javascript'></script>
+<script src='./../../docmap.js' type='text/javascript'></script>
+<script src='./../../prettify.js' type='text/javascript'></script>
+<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./../..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS/A-PRACTICAL-GUIDE</div>
+<div id='categories'><a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>Streams-Patterns-Events>A-Practical-Guide</a></div>
+<h1>Pattern Guide 06e: Language Control</h1>
+<div id='summary'>Patterns that mimic some language-side control structures</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_06d_Parallel_Patterns.html">Pattern Guide 06d: Parallel Patterns</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_06f_Server_Control.html">Pattern Guide 06f: Server Control</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Language control methods'>Language control methods</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Language control methods'>Language control methods</a></h2>
+
+<p>Some patterns mimic language-style control methods: conditionals ( <a href="./../../Classes/Pif.html">Pif</a> ), loops ( <a href="./../../Classes/Pwhile.html">Pwhile</a> ) and error cleanup ( <a href="./../../Classes/Pprotect.html">Pprotect</a> ).<dl>
+<dt><code class='code prettyprint lang-sc'>Pif(condition, iftrue, iffalse, default)</code><dd>Evaluates a pattern <code class='code prettyprint lang-sc'>condition</code> that returns true or false. Then, one value is taken from the true or false branch before going back to evaluate the condition again. The <code class='code prettyprint lang-sc'>default</code> value or pattern comes into play when the true or false branch stops producing values (returns nil). If the <code class='code prettyprint lang-sc'>default</code> is not given, Pif returns control to the parent upon nil from either branch.<pre class='code prettyprint lang-sc'>p = Pbind(
+    \degree, Pwhite(0, 11, inf),
+        // odd numbered scale degrees get a shorter rhythmic value
+    \dur, Pif(Pkey(\degree).odd, 0.25, 0.5)
+).play;
+
+p.stop;</pre>
+<dt><code class='code prettyprint lang-sc'>Pseed(randSeed, pattern)</code><dd>Random number generators depend on seed values; setting a specific seed produces a repeatable stream of pseudorandom numbers. <a href="./../../Classes/Pseed.html">Pseed</a> sets the random seed before embedding <code class='code prettyprint lang-sc'>pattern</code>, effectively restarting the random number generator at the start of the pattern.<pre class='code prettyprint lang-sc'>p = Pbind(
+        // the random seed is generated once, when creating the Pattern object
+        // so the same random seed is used every time whenever this pattern object plays
+    \degree, Pseed(0x7FFFFFFF.rand, Pseries({ rrand(-7, 0) }, Pwhite(1, 3, inf), { rrand(4, 10) })),
+    \dur, 0.25
+);
+
+q = p.play;    // uses one seed
+q.stop;
+
+r = p.play;    // uses the same seed
+r.stop;
+
+// reexecute the p = Pbind... and the seed will be different</pre>
+<dt><code class='code prettyprint lang-sc'>Pprotect(pattern, func)</code><dd>Like the <code class='code prettyprint lang-sc'>protect</code> error handling method, if an error occurs while getting the next value from the pattern, the function will be evaluated before the error interrupts execution.<dt><code class='code prettyprint lang-sc'>Ptrace(pattern, key, printStream, prefix)</code><dd>For debugging, Ptrace prints every return value. Is your pattern really doing what you think? This will tell you. A Ptrace is created automatically by the <code class='code prettyprint lang-sc'>trace</code> message: <code class='code prettyprint lang-sc'>aPattern.trace(key, printStream, prefix) --&gt; Ptrace(aPattern, key, printStream, prefix)</code> .<dt><code class='code prettyprint lang-sc'>Pwhile(func, pattern)</code><dd>Like while: as long as the function evaluates to true, the pattern is embedded. The function is checked once at the beginning and thereafter when the pattern comes to an end. If it's applied to an infinite pattern, there's no looping because the pattern never gives control back.<pre class='code prettyprint lang-sc'>// Pwhile and Ptrace
+(
+~go = true;
+p = Pwhile({ ~go }, Pbind(
+    \degree, Pseries({ rrand(-7, 0) }, Pwhite(1, 3, inf), { rrand(4, 10) })
+        .trace(prefix: "degree: "),
+    \dur, 0.25
+)).play;
+)
+
+~go = false;    // will stop the whole pattern when the Pbind comes to an end</pre>
+</dl>
+
+<p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_06d_Parallel_Patterns.html">Pattern Guide 06d: Parallel Patterns</a>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_06f_Server_Control.html">Pattern Guide 06f: Server Control</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06e_Language_Control.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06e_Language_Control.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_06e_Language_Control::<br>sc version: 3.8dev</div></div></body></html>

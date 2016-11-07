@@ -1,0 +1,238 @@
+<html><head><title>FlowLayout</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Layout'>GUI>Layout</a></div>
+<h1>FlowLayout</h1>
+<div id='summary'>A view decorator which autowraps the view contents</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/FlowLayout.sc'>FlowLayout.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Decorator.html">Decorator</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/FlowViewLayout.html">FlowViewLayout</a></div>
+<div id='related'>See also: <a href="./../Classes/SCContainerView.html">SCContainerView</a>, <a href="./../Classes/CompositeView.html">CompositeView</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Accessing Instance Variables'>Accessing Instance Variables</a></li>
+<ul class='toc'><li class='toc3'><a href='#-nextLine'>nextLine</a> </li>
+<li class='toc3'><a href='#-indentedRemaining'>indentedRemaining</a> </li>
+<li class='toc3'><a href='#-bounds'>bounds</a> </li>
+<li class='toc3'><a href='#-innerBounds'>innerBounds</a> </li>
+<li class='toc3'><a href='#-gap'>gap</a> </li>
+<li class='toc3'><a href='#-margin'>margin</a> </li>
+</ul><li class='toc2'><a href='#Subclassing and Internal Methods'>Subclassing and Internal Methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-left'>left</a> </li>
+<li class='toc3'><a href='#-top'>top</a> </li>
+<li class='toc3'><a href='#-shift'>shift</a> </li>
+<li class='toc3'><a href='#-maxHeight'>maxHeight</a> </li>
+<li class='toc3'><a href='#-maxRight'>maxRight</a> </li>
+<li class='toc3'><a href='#-currentBounds'>currentBounds</a> </li>
+<li class='toc3'><a href='#-used'>used</a> </li>
+<li class='toc3'><a href='#-reset'>reset</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-clear'>clear</a> </li>
+<li class='toc3'><a href='#-owner'>owner</a> </li>
+<li class='toc3'><a href='#-place'>place</a> </li>
+<li class='toc3'><a href='#-remove'>remove</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>FlowLayout is a decorator which automatically arranges views inside a container view in a row, and starts a new row if there is not enough space left for the next view. <a href="./../Classes/Window.html">Window</a> and <a href="./../Classes/CompositeView.html">CompositeView</a> both have <code class='code prettyprint lang-sc'>addFlowLayout</code> methods which assign FlowLayout to their view decorators and return the decorator.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>bounds</span>, <span class='argstr'>margin</span>, <span class='argstr'>gap</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Rect.html">Rect</a>. Normally set to the <code class='code prettyprint lang-sc'>parent.bounds</code>.<tr><td class='argumentname'>margin<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a>. The horizontal and vertical inner margins, within which the parent's subviews are placed.<tr><td class='argumentname'>gap<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a>. The horizontal and vertical layout gap between the subviews.</table><h4>Discussion:</h4>
+
+<p>Example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+//change the gaps and margins to see how they work
+w.view.decorator = FlowLayout( w.view.bounds, 10@10, 20@5 );
+16.do{ Slider2D( w.view,80@80 ).background_( Color.rand ) };
+)</pre>
+
+<p>You can also write:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.addFlowLayout( 10@10, 20@5 ); // a shortcut method, see SCContainerView
+16.do{ Slider2D( w.view,80@80 ).background_( Color.rand ) };
+)</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Accessing Instance Variables'>Accessing Instance Variables</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nextLine' href='./../Overviews/Methods.html#nextLine'>nextLine</a> </h3>
+<div class='method'>
+<p>Forces the decorator to start a new line:<pre class='code prettyprint lang-sc'>(
+w = Window.new;
+q = w.addFlowLayout( 10@10, 20@5 );
+Slider2D( w.view,140@140 ).background_( Color.rand );
+q.nextLine;
+Slider2D( w.view,140@140 ).background_( Color.rand );
+w.front;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-indentedRemaining' href='./../Overviews/Methods.html#indentedRemaining'>indentedRemaining</a> </h3>
+<div class='method'>
+<p>Returns and instance of <a href="./../Classes/Rect.html">Rect</a>. This is a very useful method which tells you how much space is left in a row, before the next row starts. The height of <code class='code prettyprint lang-sc'>indentedRemaining</code>, is the full height remaining in the FlowLayout.<pre class='code prettyprint lang-sc'>(
+//normally you will only use the width of indentedRemaining
+w = Window.new;
+w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
+Slider2D( w.view,150@150 ).background_( Color.rand );
+Slider2D( w.view,150@150 ).background_( Color.rand );
+Slider( w.view, d.indentedRemaining.width@150) //fits this view perfectly to the right innerBounds
+    .background_( Color.rand );
+w.front;
+)</pre>
+
+<p>Compare this with:<pre class='code prettyprint lang-sc'>( //here the third view is fit to both the right and bottom innerBounds
+w = Window.new;
+w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
+Slider2D( w.view,140@140 ).background_( Color.rand );
+Slider2D( w.view,140@140 ).background_( Color.rand );
+d.nextLine;
+Slider2D( w.view, d.indentedRemaining ).background_( Color.rand );
+w.front;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a> = <span class='argstr'>b</span></h3>
+<div class='method'>
+<p>The outer bounds in which the decorator places the subviews in the parent view.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>b<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Rect.html">Rect</a>.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-innerBounds' href='./../Overviews/Methods.html#innerBounds'>innerBounds</a> </h3>
+<div class='method'>
+<p>Returns the bounds inset by margin.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-gap' href='./../Overviews/Methods.html#gap'>gap</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gap' href='./../Overviews/Methods.html#gap'>gap</a> = value</h3>
+<div class='method'>
+<p>The horizontal and vertical layout gap between the subviews.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a>.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-margin' href='./../Overviews/Methods.html#margin'>margin</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-margin' href='./../Overviews/Methods.html#margin'>margin</a> = value</h3>
+<div class='method'>
+<p>The horizontal and vertical inner margins, within which the parent's subviews are placed.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a>.</table></div><h3><a class='anchor' name='Subclassing and Internal Methods'>Subclassing and Internal Methods</a></h3>
+
+<p>The following methods are usually not used directly or are called by a primitive. Programmers can still call or override these as needed.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-left' href='./../Overviews/Methods.html#left'>left</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-left' href='./../Overviews/Methods.html#left'>left</a> = value</h3>
+<div class='method'>
+<p>Get the current left indentation or manually set it.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
+<p>A number.</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(
+w = Window.new;
+w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
+Slider2D( w.view,150@150 ).background_( Color.rand );
+d.left_(220); //manually set the new indentation
+Slider2D( w.view,150@150 ).background_( Color.rand );
+w.front;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-top' href='./../Overviews/Methods.html#top'>top</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-top' href='./../Overviews/Methods.html#top'>top</a> = value</h3>
+<div class='method'>
+<p>Get the current top indentation or manually set it.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
+<p>A number.</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(
+w = Window.new;
+w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
+Slider2D( w.view,150@150 ).background_( Color.rand );
+d.top_(50); //manually set the new indentation
+Slider2D( w.view,150@150 ).background_( Color.rand );
+Slider2D( w.view,150@150 ).background_( Color.rand );
+w.front;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-shift' href='./../Overviews/Methods.html#shift'>shift</a> (<span class='argstr'>x: 0</span>, <span class='argstr'>y: 0</span>)</h3>
+<div class='method'>
+<p>Set the current left and top indentation (see above).</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxHeight' href='./../Overviews/Methods.html#maxHeight'>maxHeight</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxHeight' href='./../Overviews/Methods.html#maxHeight'>maxHeight</a> = value</h3>
+<div class='method'>
+<p>Get/set maximium height of the subviews in the current position.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
+<p>A number.</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(
+w = Window.new;
+w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
+Slider2D( w.view,100@160 ).background_( Color.rand );
+Slider2D( w.view,150@150 ).background_( Color.rand );
+"first row maxHeight: " ++ d.maxHeight.postln;
+Slider2D( w.view,150@150 ).background_( Color.rand );
+"second row maxHeight: " ++ d.maxHeight.postln;
+w.front;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxRight' href='./../Overviews/Methods.html#maxRight'>maxRight</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxRight' href='./../Overviews/Methods.html#maxRight'>maxRight</a> = value</h3>
+<div class='method'>
+<p>Get/set maximium right of the subviews in the current position.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
+<p>A number.</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(
+w = Window.new;
+w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
+Slider2D( w.view,100@160 ).background_( Color.rand );
+"first row maxRight: " ++ d.maxRight.postln;
+Slider2D( w.view,150@150 ).background_( Color.rand );
+Slider2D( w.view,150@150 ).background_( Color.rand );
+"second row maxRight: " ++ d.maxRight.postln;
+w.front;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-currentBounds' href='./../Overviews/Methods.html#currentBounds'>currentBounds</a> </h3>
+<div class='method'>
+<p>Gets a <a href="./../Classes/Rect.html">Rect</a> with <code class='code prettyprint lang-sc'>bounds.width</code> and <code class='code prettyprint lang-sc'>height = top + maxHeight</code>.<h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(
+w = Window.new;
+w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 10@5 );
+Slider2D( w.view,100@160 ).background_( Color.rand );
+d.currentBounds.postln;
+Slider2D( w.view,150@150 ).background_( Color.rand );
+d.currentBounds.postln;
+Slider2D( w.view,150@150 ).background_( Color.rand );
+d.currentBounds.postln;
+w.front;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-used' href='./../Overviews/Methods.html#used'>used</a> </h3>
+<div class='method'>
+<p>Gets a <a href="./../Classes/Rect.html">Rect</a> with the space actually used.<h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(
+w = Window.new;
+w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
+Slider2D( w.view,100@160 ).background_( Color.rand );
+d.used.postln;
+Slider2D( w.view,150@150 ).background_( Color.rand );
+d.used.postln;
+Slider2D( w.view,150@150 ).background_( Color.rand );
+d.used.postln;
+w.front;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-reset' href='./../Overviews/Methods.html#reset'>reset</a> </h3>
+<div class='method'>
+<p>Resets the layout mechanism to 0,0.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-clear' href='./../Overviews/Methods.html#clear'>clear</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-owner' href='./../Overviews/Methods.html#owner'>owner</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-owner' href='./../Overviews/Methods.html#owner'>owner</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-place' href='./../Overviews/Methods.html#place'>place</a> (<span class='argstr'>view</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-remove' href='./../Overviews/Methods.html#remove'>remove</a> </h3>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/FlowLayout.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/FlowLayout.schelp</a><br>link::Classes/FlowLayout::<br>sc version: 3.8dev</div></div></body></html>

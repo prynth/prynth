@@ -1,0 +1,109 @@
+<html><head><title>Dbufwr</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Buffer'>UGens>Buffer</a>, <a href='./../Browse.html#UGens>Demand'>UGens>Demand</a></div>
+<h1>Dbufwr</h1>
+<div id='summary'>Buffer write demand ugen</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Demand.sc'>Demand.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/DUGen.html">DUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Dbufrd.html">Dbufrd</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>input: 0</span>, <span class='argstr'>bufnum: 0</span>, <span class='argstr'>phase: 0</span>, <span class='argstr'>loop: 1</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>input<td class='argumentdesc'>
+<p>single channel input<tr><td class='argumentname'>bufnum<td class='argumentdesc'>
+<p>buffer number to write to (single channel buffer)<tr><td class='argumentname'>phase<td class='argumentdesc'>
+<p>index into the buffer<tr><td class='argumentname'>loop<td class='argumentdesc'>
+<p>when phase exceeds number of frames in buffer, loops when set to 1 (default :1)</table><h4>Discussion:</h4>
+
+<p>all inputs can be either demand ugen or any other ugen.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// alloc a single channel buffer
+b = Buffer.alloc(s, 24, 1);
+b.setn(0, { 210 } ! b.numFrames);
+
+// post some info:
+fork { loop { 0.5.wait; b.getn(0, b.numFrames, {|x| x.postln }) } };
+
+// write demand sequence into a buffer
+(
+{
+var read, write, readpos, writepos, writetrig;
+
+    writetrig = Dust.kr(1);
+    readpos = Dseries(0, 1, inf);
+    writepos = Dseq([Dseries(0, 3, 30), Dseries(0, 1, 30)], inf);
+
+    read = Dbufrd(b, readpos);
+    write = Dbufwr(Dseq([Dseries(1, 1, 16), Dwhite(1, 16, 8)], inf) * 60, b, writepos);
+
+    Demand.kr(writetrig, 0, write); // write on trigger
+
+    SinOsc.ar(
+        Demand.kr(Impulse.kr(16), 0, read).lag(0.01) * [1, 1.01]
+    ) * 0.1
+
+}.play;
+)
+
+// write into buffer with mouse clicks
+(
+{
+    var val = MouseY.kr(1000, 200, 1); // cursor y pos controls frequency
+    var pos = MouseX.kr(0, BufFrames.kr(b) - 1); // cursor x position controls buffer pos
+    var write = MouseButton.kr; // button controls write action
+    Demand.kr(write, 0, Dbufwr(val, b, pos, 1));
+    SinOsc.ar(
+        Duty.kr(Dseq([0.5, 0.75, 0.5, 1.0], inf) * 0.2, 0, Dbufrd(b, Dseries(0, 1, inf)))
+    ) * 0.1
+}.play;
+)
+
+// write demand sequence into a buffer
+b.free; b = Buffer.alloc(s, 2, 1);
+fork { loop { 0.5.wait; b.getn(0, b.numFrames, {|x| x.postln }) } };
+b.setn(0, [1, 0]);
+
+(
+{
+var read, write, readpos, writepos, writetrig;
+
+    writetrig = Impulse.kr(2);
+    readpos = Dbufrd(b, 1); // first buffer val is position
+    writepos = Dbufrd(b, 0); // second buffer val is position
+    read = Dbufrd(b, readpos);
+
+    write = Dbufwr(read, b, writepos);
+
+    Demand.kr(writetrig, 0, write); // write on trigger
+}.play;
+)
+
+// free buffer:
+b.free;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Dbufwr.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Dbufwr.schelp</a><br>link::Classes/Dbufwr::<br>sc version: 3.8dev</div></div></body></html>

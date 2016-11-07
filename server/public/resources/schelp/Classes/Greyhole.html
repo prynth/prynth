@@ -1,0 +1,134 @@
+<html><head><title>Greyhole</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Delays'>UGens>Delays</a></div>
+<h1>Greyhole</h1>
+<div id='summary'>A complex echo-like effect</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/DEINDUGens/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/DEINDUGens/Greyhole.sc'>Greyhole.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Overviews/DEIND.html">DEIND</a>, <a href="./../Classes/JPverb.html">JPverb</a>, <a href="./../Classes/GreyholeRaw.html">GreyholeRaw</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<div class='image'><img src='Greyhole-logo-small.png'/></div>
+
+<p>A complex echo-like effect, inspired by the classic Eventide effect of a similar name. The effect consists of a diffuser (like a mini-reverb) connected in a feedback system with a long modulated delay-line. Excels at producing spacey washes of sound.
+<p>Developed as part of the <a href="./../Overviews/DEIND.html">DEIND</a> project.<div class='note'><span class='notelabel'>NOTE:</span> Please increase server realtime memory for this to work properly</div>
+<p><pre class='code prettyprint lang-sc'>s.options.memSize_(65536 * 4);
+s.reboot;</pre>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>in</span>, <span class='argstr'>delayTime: 2</span>, <span class='argstr'>damp: 0</span>, <span class='argstr'>size: 1</span>, <span class='argstr'>diff: 0.707</span>, <span class='argstr'>feedback: 0.9</span>, <span class='argstr'>modDepth: 0.1</span>, <span class='argstr'>modFreq: 2</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>either an array of two audio signals, or one audiosignal.<tr><td class='argumentname'>delayTime<td class='argumentdesc'>
+<p>approximate delay time in seconds. (0.1..60)<tr><td class='argumentname'>damp<td class='argumentdesc'>
+<p>damping of high-frequencies as the delay decays. 0 is no damping, 1 is very strong damping (0..1)<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p>scales size of delay-lines within the diffusion unit, producing the impression of a larger or smaller space. Values below 1 can sound metallic. (0.5..5)<tr><td class='argumentname'>diff<td class='argumentdesc'>
+<p>controls pattern of echoes produced by the diffuser. At very low values, the diffuser acts like a delay-line whose length is controlled by the 'size' parameter. Medium values produce a slow build-up of echoes, giving the sound a reversed-like quality. Values of 0.707 or greater than produce smooth exponentially decaying echoes. (0..1)<tr><td class='argumentname'>feedback<td class='argumentdesc'>
+<p>amount of feedback through the system. Sets the number of repeating echoes. A setting of 1.0 produces infinite sustain. (0..1)<tr><td class='argumentname'>modDepth<td class='argumentdesc'>
+<p>depth of delay-line modulation. Use in combination with mFreq to produce chorus and pitch-variations in the echoes. (0..1)<tr><td class='argumentname'>modFreq<td class='argumentdesc'>
+<p>frequency of delay-line modulation. Use in combination with mFreq to produce chorus and pitch-variations in the echoes. (0..10)</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a UGen</div></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+s.options.memSize_(65536 * 4);
+s.reboot;
+
+Spec.add(\damp, [0, 1]);
+Spec.add(\diff, [0, 1]);
+Spec.add(\highband, [1000, 10000, \exp]);
+Spec.add(\highx, [0, 1]);
+Spec.add(\lowband, [100, 6000, \exp]);
+Spec.add(\lowx, [0, 1]);
+Spec.add(\modDepth, [0, 50]);
+Spec.add(\modFreq, [0, 10]);
+Spec.add(\midx, [0, 1]);
+Spec.add(\size, [0.5, 3]);
+Spec.add(\t60, [0.1, 60, \exp]);
+Spec.add(\wet, [0, 1]);
+Spec.add(\shelfslope, [1, 10]);
+Spec.add(\shelfFreq, \freq);
+Spec.add(\fb, [0, 1]);
+Spec.add(\dtime, [0, 2]);
+)
+
+(
+Ndef(\src, {
+    //SoundIn.ar([0, 1])
+    Splay.ar(Impulse.ar([1, 3, 5, 7, 9]).scramble);
+
+});
+Ndef(\hole, {
+    var src, delay, amp;
+
+    src = LeakDC.ar(Ndef(\src).ar);
+    src = src * \amp.kr(1);
+    // var src = Impulse.ar(0.5);
+
+    delay = Greyhole.ar(
+        src,
+        \dtime.kr(0.1),
+        \damp.kr(0.1),
+        \size.kr(1),
+        \diff.kr(0.707),
+        \fb.kr(0.1),
+        \modDepth.kr(0.01),
+        \modFreq.kr(2)
+    );
+    delay
+});
+)
+
+
+Ndef(\src).play;
+Ndef(\hole).play;
+
+Ndef(\hole).edit;
+Ndef(\src).edit;</pre>
+
+<p>For the Greyball piece ( see <a href="http://tai-studio.org/index.php/jpverb-greyhole/">http://tai-studio.org/index.php/jpverb-greyhole/</a> ), the following source was used:<pre class='code prettyprint lang-sc'>Ndef(\src).fadeTime = 4;
+Ndef(\src).quant = 2;
+Ndef(\src, {
+    var src = 10.collect{
+        Pan2.ar([HPF, LPF, ComplexRes].choose.performKeyValuePairs(\ar,[
+            \in, [Impulse, LFPulse].choose.ar(
+                [4, 2, 1, 1/2, 1/3, 1/4, 1/6].choose,
+                iphase: [0, 1/4, 1/8, 1/2, 1/3].choose,
+                phase: [0, 1/4, 1/8, 1/2, 1/3].choose,
+                width:  [0.001, 0.0001, 0.01, 0.1, 0.2].choose,
+                mul:    [1, 2, 3, 4].choose.reciprocal * [1, -1].choose
+            ),
+            \freq, [10000, 2000, 1000, 500, 250, 125, 125/2].choose,
+            \decay, [0.1, 0.2, 0.4, 1].choose,
+        ]
+        ), Rand(-1, 1));
+    }.sum;
+    HighShelf.ar(src, \shelfFreq.kr(1000), \shelfslope.kr(1));
+})</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/DEINDUGens/HelpSource/Classes/Greyhole.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/DEINDUGens/HelpSource/Classes/Greyhole.schelp</a><br>link::Classes/Greyhole::<br>sc version: 3.8dev</div></div></body></html>

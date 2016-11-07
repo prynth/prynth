@@ -1,0 +1,204 @@
+<html><head><title>13. Buffers</title>
+<link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../scdoc.js' type='text/javascript'></script>
+<script src='./../../docmap.js' type='text/javascript'></script>
+<script src='./../../prettify.js' type='text/javascript'></script>
+<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./../..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS/GETTING-STARTED</div>
+<div id='categories'><a href='./../../Browse.html#Tutorials>Getting-Started'>Tutorials>Getting-Started</a></div>
+<h1>13. Buffers</h1>
+<div id='summary'>Getting Started With SuperCollider</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Making a Buffer Object and Allocating Memory'>Making a Buffer Object and Allocating Memory</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Using Buffers with Sound Files'>Using Buffers with Sound Files</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Streaming a File in From Disk'>Streaming a File in From Disk</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#More on Instance Variables and Action Functions'>More on Instance Variables and Action Functions</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Recording into Buffers'>Recording into Buffers</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Accessing Data'>Accessing Data</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Plotting and Playing'>Plotting and Playing</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Other Uses For Buffers'>Other Uses For Buffers</a></li>
+<ul class='toc'></ul></ul></div>
+<p>Buffers represent server buffers, which are ordered arrays of floats on the server. 'float' is short for floating point number, which means a number with a decimal point, like 1.3. This is in contrast to integers, which are positive or negative whole numbers (or zero), and are written without decimal points. So 1 is an integer, but 1.0 is a float.
+<p>Server buffers can be single or multichannel, and are the usual way of storing data server-side. Their most common use is to hold soundfiles in memory, but any sort of data that can be represented by floats can be stored in a buffer.
+<p>Like busses, the number of buffers is set before you boot a server (using <a href="./../../Classes/ServerOptions.html">ServerOptions</a>), but before buffers can be used, you need to allocate memory to them, which is an asynchronous step. Also like busses, buffers are numbered, starting from 0. Using Buffer takes care of allocating numbers, and avoids conflicts.
+<p>You can think of buffers as the server-side equivalent of an Array, but without all the elegant OOP functionality. Luckily with Buffer, and the ability to manipulate data in the client app when needed, you can do almost anything you want with buffer data. A server's buffers are global, which is to say that they can be accessed by any synth, and by more than one at a time. They can be written to or even changed in size, <em>while</em> they are being read from.
+<p>Many of Buffer's methods have numerous arguments. Needless to say, for full information see the <a href="./../../Classes/Buffer.html">Buffer</a> help file.<h2><a class='anchor' name='Making a Buffer Object and Allocating Memory'>Making a Buffer Object and Allocating Memory</a></h2>
+
+<p>Making a Buffer object and allocating the necessary memory in the server app is quite easy. You can do it all in one step with Buffer's alloc method:<pre class='code prettyprint lang-sc'>s.boot;
+b = Buffer.alloc(s, 100, 2);    // allocate 2 channels, and 100 frames
+b.free;                // free the memory (when you're finished using it)</pre>
+
+<p>The example above allocates a 2 channel buffer with 100 frames. The actual number of values stored is numChannels * numFrames, so in this case there will be 200 floats. So each frame is in this case a pair of values.
+<p>If you'd like to allocate in terms of seconds, rather than frames, you can do so like this:<pre class='code prettyprint lang-sc'>b = Buffer.alloc(s, s.sampleRate * 8.0, 2); // an 8 second stereo buffer
+b.free;</pre>
+
+<p>Buffer's 'free' method frees the memory on the server, and returns the Buffer's number for reallocation. You should not use a Buffer object after doing this.<h2><a class='anchor' name='Using Buffers with Sound Files'>Using Buffers with Sound Files</a></h2>
+
+<p>Buffer has another class method called 'read', which reads a sound file into memory, and returns a Buffer object. Using the UGen PlayBuf, we can play the file.<pre class='code prettyprint lang-sc'>// read a soundfile
+b = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+
+// now play it
+(
+x = SynthDef("tutorial-PlayBuf",{ arg out = 0, bufnum;
+    Out.ar( out,
+        PlayBuf.ar(1, bufnum, BufRateScale.kr(bufnum))
+    )
+}).play(s,[\bufnum, b]);
+)
+x.free; b.free;</pre>
+
+<p>PlayBuf.ar has a number of arguments which allow you to control various aspects of how it works. Take a look at the <a href="./../../Classes/PlayBuf.html">PlayBuf</a> helpfile for details of them all, but for now lets just concern ourselves with the first three, used in the example above.<pre class='code prettyprint lang-sc'>PlayBuf.ar(
+    1,                // number of channels
+    bufnum,             // number of buffer to play
+    BufRateScale.kr(bufnum)        // rate of playback
+    )</pre>
+
+<p>Number of channels: When working with PlayBuf you must let it know how many channels any buffer it will read in will have. <em>You cannot make this an argument in the SynthDef and change it later.</em> Why? Remember that SynthDefs must have a fixed number of output channels. So a one channel PlayBuf is always a one channel PlayBuf. If you need versions that can play varying numbers of channels then make multiple SynthDefs or use Function-play.
+<p>Buffer Number: As noted above, Buffers are numbered, starting from zero. You can get a Buffer's number using its <strong>bufnum</strong> method, but you will not normally need to do this, since Buffer objects can be passed directly as UGen inputs or Synth args.
+<p>Rate of Playback: A rate of 1 would be normal speed, 2 twice as fast, etc. But here we see a UGen called BufRateScale. What this does is check the samplerate of the the buffer (this is set to correspond to that of the soundfile when it is loaded) and outputs the rate which would correspond to normal speed. This is useful because the soundfile we loaded (a11wlk01.wav) actually has a samplerate of 11025 Hz. With a rate of 1, PlayBuf would play it back using the sampling rate of the server, which is usually 44100 Hz, or four times as fast! BufRateScale thus brings things back to normal.<h2><a class='anchor' name='Streaming a File in From Disk'>Streaming a File in From Disk</a></h2>
+
+<p>In some cases, for instance when working with very large files, you might not want to load a sound completely into memory. Instead, you can stream it in from disk a bit at a time, using the UGen DiskIn, and Buffer's 'cueSoundFile' method:<pre class='code prettyprint lang-sc'>(
+SynthDef("tutorial-Buffer-cue",{ arg out=0,bufnum;
+    Out.ar(out,
+        DiskIn.ar( 1, bufnum )
+    )
+}).add;
+)
+
+b = Buffer.cueSoundFile(s,Platform.resourceDir +/+ "sounds/a11wlk01-44_1.aiff", 0, 1);
+y = Synth.new("tutorial-Buffer-cue", [\bufnum,b], s);
+
+b.free; y.free;</pre>
+
+<p>This is not as flexible as PlayBuf (no rate control), but can save memory.<a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> <h2><a class='anchor' name='More on Instance Variables and Action Functions'>More on Instance Variables and Action Functions</a></h2>
+
+<p>Now a little more OOP. Remember that individual Objects store data in <em>instance variables</em>. Some instance variables have what are called getter or setter methods, which allow you to get or set their values. We've already seen this in action with Buffer's 'bufnum' method, which is a getter for its buffer number instance variable.
+<p>Buffer has a number of other instance variables with getters which can provide helpful information. The ones we're interested in at the moment are numChannels, numFrames, and sampleRate. These can be particularly useful when working with sound files, as we may not have all this information at our fingertips before loading the file.<pre class='code prettyprint lang-sc'>// watch the post window
+b = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+b.bufnum;
+b.numFrames;
+b.numChannels;
+b.sampleRate;
+b.free;</pre>
+
+<p>Now (like with the example using an action function in our Bus-get example; see <a href="./../../Tutorials/Getting-Started/11-Busses.html">11. Busses</a>) because of the small messaging latency between client and server, instance variables will not be immediately updated when you do something like read a file into a buffer. For this reason, many methods in Buffer take action functions as arguments. Remember that an action function is just a Function that will be evaluated after the client has received a reply, and has updated the Buffer's vars. It is passed the Buffer object as an argument.<pre class='code prettyprint lang-sc'>// with an action function
+// note that the vars are not immediately up-to-date
+(
+b = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav", action: { arg buffer;
+    ("numFrames after update:" + buffer.numFrames).postln;
+    x = { PlayBuf.ar(1, buffer, BufRateScale.kr(buffer)) }.play;
+});
+
+// Note that the next line will execute BEFORE the action function
+("numFrames before update:" + b.numFrames).postln;
+)
+x.free; b.free;</pre>
+
+<p>In the example above, the client sends the read command to the server app, along with a request for the necessary information to update the Buffer's instance variables. It then cues the action function to be executed when it receives the reply, and continues executing the block of code. That's why the 'Before update...' line executes first.<h2><a class='anchor' name='Recording into Buffers'>Recording into Buffers</a></h2>
+
+<p>In addition to PlayBuf, there's a UGen called RecordBuf, which lets you record into a buffer.<pre class='code prettyprint lang-sc'>b = Buffer.alloc(s, s.sampleRate * 5, 1); // a 5 second 1 channel Buffer
+
+// record for four seconds
+(
+x = SynthDef("tutorial-RecordBuf",{ arg out=0,bufnum=0;
+    var noise;
+    noise = PinkNoise.ar(0.3);    // record some PinkNoise
+    RecordBuf.ar(noise, bufnum);     // by default this loops
+}).play(s,[\out, 0, \bufnum, b]);
+)
+
+// free the record synth after a few seconds
+x.free;
+
+// play it back
+(
+SynthDef("tutorial-playback",{ arg out=0,bufnum=0;
+    var playbuf;
+    playbuf = PlayBuf.ar(1,bufnum);
+    FreeSelfWhenDone.kr(playbuf); // frees the synth when the PlayBuf has played through once
+    Out.ar(out, playbuf);
+}).play(s,[\out, 0, \bufnum, b]);
+)
+b.free;</pre>
+
+<p>See the <a href="./../../Classes/RecordBuf.html">RecordBuf</a> help file for details on all of its options.<h2><a class='anchor' name='Accessing Data'>Accessing Data</a></h2>
+
+<p>Buffer has a number of methods to allow you to get or set values in a buffer. Buffer-get and Buffer-set are straightforward to use and take an index as an argument. Multichannel buffers interleave their data, so for a two channel buffer index 0 = frame1-chan1, index 1 = frame1-chan2, index 2 = frame2-chan1, and so on. 'get' takes an action function.<pre class='code prettyprint lang-sc'>b = Buffer.alloc(s, 8, 1);
+b.set(7, 0.5);             // set the value at 7 to 0.5
+b.get(7, {|msg| msg.postln});    // get the value at 7 and post it when the reply is received
+b.free;</pre>
+
+<p>The methods 'getn' and 'setn' allow you to get and set ranges of adjacent values. 'setn' takes a starting index and an array of values to set, 'getn' takes a starting index, the number of values to get, and an action function.<pre class='code prettyprint lang-sc'>b = Buffer.alloc(s,16);
+b.setn(0, [1, 2, 3]);                // set the first 3 values
+b.getn(0, 3, {|msg| msg.postln});        // get them
+b.setn(0, Array.fill(b.numFrames, {1.0.rand}));    // fill the buffer with random values
+b.getn(0, b.numFrames, {|msg| msg.postln});    // get them
+b.free;</pre>
+
+<p>There is an upper limit on the number of values you can get or set at a time (usually 1633 when using UDP, the default). This is because of a limit on network packet size. To overcome this Buffer has two methods, 'loadCollection' and 'loadToFloatArray' which allow you to set or get large amounts of data by writing it to disk and then loading to client or server as appropriate.<pre class='code prettyprint lang-sc'>(
+// make some white noise
+v = FloatArray.fill(44100, {1.0.rand2});
+b = Buffer.alloc(s, 44100);
+)
+(
+// load the FloatArray into b, then play it
+b.loadCollection(v, action: {|buf|
+    x = { PlayBuf.ar(buf.numChannels, buf, BufRateScale.kr(buf), loop: 1)
+        * 0.2 }.play;
+});
+)
+x.free;
+
+// now get the FloatArray back, and compare it to v; this posts 'true'
+// the args 0, -1 mean start from the beginning and load the whole buffer
+b.loadToFloatArray(0, -1, {|floatArray| (floatArray == v).postln });
+b.free;</pre>
+
+<p>A FloatArray is just a subclass of Array which can only contain floats.<h2><a class='anchor' name='Plotting and Playing'>Plotting and Playing</a></h2>
+
+<p>Buffer has two useful convenience methods: 'plot' and 'play'.<pre class='code prettyprint lang-sc'>// see the waveform
+b = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+b.plot;
+
+// play the contents
+// this takes one arg: loop. If false (the default) the resulting synth is
+// freed automatically
+b.play;             // frees itself
+x = b.play(true);        // loops so doesn't free
+x.free; b.free;</pre>
+<h2><a class='anchor' name='Other Uses For Buffers'>Other Uses For Buffers</a></h2>
+
+<p>In addition to being used for loading in sound files, buffers are also useful for any situation in which you need large and/or globally accessible data sets on the server. One example of another use for them is as a lookup table for waveshaping.<pre class='code prettyprint lang-sc'>b = Buffer.alloc(s, 512, 1);
+b.cheby([1,0,1,1,0,1]);
+(
+x = play({
+    Shaper.ar(
+        b,
+        SinOsc.ar(300, 0, Line.kr(0,1,6)),
+        0.5
+    )
+});
+)
+x.free; b.free;</pre>
+
+<p>The Shaper UGen performs waveshaping on an input source. The method 'cheby' fills the buffer with a series of chebyshev polynomials, which are needed for this. (Don't worry if you don't understand all this.) Buffer has many similar methods for filling a buffer with different waveforms.
+<p>There are numerous other uses to which buffers can be put. You'll encounter them throughout the documentation.
+<p>For more information see:
+<p><a href="./../../Classes/Buffer.html">Buffer</a>, <a href="./../../Classes/PlayBuf.html">PlayBuf</a>, <a href="./../../Classes/RecordBuf.html">RecordBuf</a>, <a href="./../../Classes/SynthDef.html">SynthDef</a>, <a href="./../../Classes/BufRateScale.html">BufRateScale</a>, <a href="./../../Classes/Shaper.html">Shaper</a>
+<p>____________________
+<p>This document is part of the tutorial <strong>Getting Started With SuperCollider</strong>.
+<p>Click here to return to the table of Contents: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a><div class='footnotes'>
+<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - For variable playback rate while streaming from disk, look at the <a href="./../../Classes/VDiskIn.html">VDiskIn</a> UGen.</div></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/13-Buffers.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/13-Buffers.schelp</a><br>link::Tutorials/Getting-Started/13-Buffers::<br>sc version: 3.8dev</div></div></body></html>

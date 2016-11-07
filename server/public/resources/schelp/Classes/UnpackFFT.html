@@ -1,0 +1,98 @@
+<html><head><title>UnpackFFT</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>FFT'>UGens>FFT</a></div>
+<h1>UnpackFFT</h1>
+<div id='summary'>Unpack an FFT chain into separate demand-rate FFT bin streams</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/FFTUnpacking.sc'>FFTUnpacking.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/PackFFT.html">PackFFT</a>, <a href="./../Classes/Unpack1FFT.html">Unpack1FFT</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Takes an FFT chain and separates the magnitude and phase data into separate demand-rate streams, for arithmetic manipulation etc.
+<p>This is technically a demand-rate UGen. The actual "demand" is usually created by PackFFT later on in the graph, which requests the values in order to re-pack the data. This allows for processing to occur imbetween...
+<p>See also pvcollect, pvcalc and pvcalc2 methods ( in <a href="./../Classes/PV_ChainUGen.html">PV_ChainUGen</a> ) which provide convenient ways to process audio in the frequency domain. The help for pvcollect includes notes on efficiency considerations.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>chain</span>, <span class='argstr'>bufsize</span>, <span class='argstr'>frombin: 0</span>, <span class='argstr'>tobin</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>chain<td class='argumentdesc'>
+<p>FFT chain<tr><td class='argumentname'>bufsize<td class='argumentdesc'>
+<p>FFT buffer size<tr><td class='argumentname'>frombin<td class='argumentdesc'>
+<p>limiting analysis to the bins of interest<tr><td class='argumentname'>tobin<td class='argumentdesc'>
+<p>limiting analysis to the bins of interest</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A list from DC up to Nyquist of <code class='code prettyprint lang-sc'>[mag[0], phase[0], mag[1], phase[1], ... mag[nyquist], phase[nyquist]].</code></div><h4>Discussion:</h4>
+
+<p>Note that you do have to decide your FFT buffer size in advance, since this determines how many values the UGen will output.<pre class='code prettyprint lang-sc'>#magsphases = UnpackFFT(chain, bufsize)</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+s.waitForBoot({
+    var fftsize = 1024;
+    b = Buffer.alloc(s, fftsize, 1);
+    c = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+})
+)
+
+// This one just drags out various the values and posts them - a little bit pointless!
+(
+x = {
+    var sig, chain, unp;
+    sig = SinOsc.ar;
+    sig = PlayBuf.ar(1, c, BufRateScale.kr(c), loop: 1);
+    chain = FFT(b, sig);
+
+    // Using the frombin &amp; tobin args makes it much more efficient, limiting analysis to the bins of interest
+    unp = UnpackFFT(chain, b.numFrames, frombin: 0, tobin: 4);
+
+    // Demand some data from the unpacker.
+    // NOTE: At present, Demand.kr is unable to handle more than 32 inputs,
+    // so using frombin &amp; tobin to limit the number of bins is compulsory.
+    Demand.kr(chain&gt;=0, 0, unp).collect{|anunp, index|
+        anunp.poll(chain&gt;=0, if(index % 2 == 0,  "Magnitude", "Phase")+(index/2).floor);
+    };
+
+    (sig*0.1).dup;
+}.play(s);
+)
+x.free;
+
+// Now a simple frequency-domain manipulation, square-rooting the magnitudes AND phases.
+(
+x = {
+    var in, chain, magsphases;
+    in = PlayBuf.ar(1, c, BufRateScale.kr(c), loop: 1);
+    chain = FFT(b, in);
+    magsphases = UnpackFFT(chain, b.numFrames);
+    magsphases = magsphases.collect(_.sqrt);
+    PackFFT(chain, b.numFrames, magsphases);
+    Out.ar(0, 0.25 * IFFT(chain).dup);
+}.play(s);
+)
+x.free;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/UnpackFFT.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/UnpackFFT.schelp</a><br>link::Classes/UnpackFFT::<br>sc version: 3.8dev</div></div></body></html>

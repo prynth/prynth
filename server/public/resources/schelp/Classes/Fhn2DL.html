@@ -1,0 +1,78 @@
+<html><head><title>Fhn2DL</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Generators>Stochastic'>UGens>Generators>Stochastic</a></div>
+<h1>Fhn2DL</h1>
+<div id='summary'>FitzHughNagumo Neuron Firing Oscillator</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/BhobUGens/classes/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/BhobUGens/classes/bhobChaos.sc'>bhobChaos.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Fhn2DN.html">Fhn2DN</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Fhn2DN.html">Fhn2DN</a>, <a href="./../Classes/Fhn2DC.html">Fhn2DC</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<pre class='code prettyprint lang-sc'>du/dt= rateu*(u-0.3333*u^3 - w)
+dw/dt= ratew*(b0+b1*u - w)</pre>
+<div class='note'><span class='notelabel'>NOTE:</span> All inputs can have .kr rate UGens plugged in.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>minfreq: 11025</span>, <span class='argstr'>maxfreq: 22050</span>, <span class='argstr'>urate: 0.1</span>, <span class='argstr'>wrate: 0.1</span>, <span class='argstr'>b0: 0.6</span>, <span class='argstr'>b1: 0.8</span>, <span class='argstr'>i: 0</span>, <span class='argstr'>u0: 0</span>, <span class='argstr'>w0: 0</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Fhn2DN.html'>Fhn2DN</a></div>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>minfreq: 40</span>, <span class='argstr'>maxfreq: 100</span>, <span class='argstr'>urate: 0.1</span>, <span class='argstr'>wrate: 0.1</span>, <span class='argstr'>b0: 0.6</span>, <span class='argstr'>b1: 0.8</span>, <span class='argstr'>i: 0</span>, <span class='argstr'>u0: 0</span>, <span class='argstr'>w0: 0</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Fhn2DN.html'>Fhn2DN</a></div>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>minfreq, maxfreq<td class='argumentdesc'>
+<p>freq iteration<tr><td class='argumentname'>rateu<td class='argumentdesc'>
+<p>update rate for u<tr><td class='argumentname'>ratew<td class='argumentdesc'>
+<p>update rate for w<tr><td class='argumentname'>b0<td class='argumentdesc'>
+<p>equation constant<tr><td class='argumentname'>b1<td class='argumentdesc'>
+<p>equation constant<tr><td class='argumentname'>i<td class='argumentdesc'>
+<p>arbitrary external impulse; i.e. pulse wave, trigger, lfnoise, or nothing.<tr><td class='argumentname'>initu<td class='argumentdesc'>
+<p>reset value for u<tr><td class='argumentname'>initw<td class='argumentdesc'>
+<p>reset value for w</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>{ Out.ar(0,Pan2.ar(0.5*Fhn2DL.ar(220,800,0.3,0.3,0.6,0.8,LFPulse.kr(MouseX.kr(1, 10, 1), 0, 0.1)),0.0)) }.play
+
+(
+SynthDef(\fhn, {|out=0, pan=0, amp=0.1|
+    var sig;
+    sig=Fhn2DL.ar(110, 22050, TExpRand.kr(0.001, 0.2, Dust.kr(8)), TExpRand.kr(0.001, 0.2, Dust.kr(13)), TRand.kr(0.1, 0.4, Dust.kr(5)),TRand.kr(0.1, 1.9, Dust.kr(3)), mul:amp);
+    Out.ar(0,Pan2.ar(sig, pan))
+}).play
+)
+
+(
+SynthDef(\fhn, {|out=0, pan=0, amp=0.1|
+    var sig, trig1, trig2, b0, b1;
+    trig1=FhnTrig.kr(5, 8, 0.3, 0.3, 1, 1);
+    trig2=FhnTrig.kr(8, 13, 0.27, 0.27, 0.6, 0.8);
+    b0=Fhn2DN.kr(3, 5, 0.29, 0.29, 0.5, 1.1, mul:0.23, add:0.25);
+    b1=Fhn2DN.kr(2, 3, 0.25, 0.25, 0.2, 1.5, mul:0.48, add:0.5);
+    sig=Fhn2DL.ar(110, 22050, TExpRand.kr(0.001, 0.3, trig1), TExpRand.kr(0.001, 0.3, trig2), b0, b1, mul:amp);
+    Out.ar(0,Pan2.ar(sig, pan))
+}).play
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/BhobUGens/HelpSource/Classes/Fhn2DL.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/BhobUGens/HelpSource/Classes/Fhn2DL.schelp</a><br>link::Classes/Fhn2DL::<br>sc version: 3.8dev</div></div></body></html>

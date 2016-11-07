@@ -1,0 +1,154 @@
+<html><head><title>GridLayout</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Layout'>GUI>Layout</a></div>
+<h1>GridLayout</h1>
+<div id='summary'>A layout that organizes views in a grid</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QLayout.sc'>QLayout.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Layout.html">Layout</a> : <a href="../Classes/QObject.html">QObject</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/QGridLayout.html">QGridLayout</a></div>
+<div id='related'>See also: <a href="./../Classes/HLayout.html">HLayout</a>, <a href="./../Classes/VLayout.html">VLayout</a>, <a href="./../Classes/StackLayout.html">StackLayout</a>, <a href="./../Guides/GUI-Layout-Management.html">Layout Management</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Fine tuning'>Fine tuning</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Leaving empty space'>Leaving empty space</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*rows'>rows</a> </li>
+<li class='toc3'><a href='#*columns'>columns</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*parse'>parse</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-add'>add</a> </li>
+<li class='toc3'><a href='#-addSpanning'>addSpanning</a> </li>
+<li class='toc3'><a href='#-hSpacing'>hSpacing</a> </li>
+<li class='toc3'><a href='#-vSpacing'>vSpacing</a> </li>
+<li class='toc3'><a href='#-setRowStretch'>setRowStretch</a> </li>
+<li class='toc3'><a href='#-setColumnStretch'>setColumnStretch</a> </li>
+<li class='toc3'><a href='#-setAlignment'>setAlignment</a> </li>
+<li class='toc3'><a href='#-minRowHeight'>minRowHeight</a> </li>
+<li class='toc3'><a href='#-setMinRowHeight'>setMinRowHeight</a> </li>
+<li class='toc3'><a href='#-minColumnWidth'>minColumnWidth</a> </li>
+<li class='toc3'><a href='#-setMinColumnWidth'>setMinColumnWidth</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>GridLayout distributes its space into a <strong>grid of rows and columns</strong>, where each item can occupy <strong>one or more cells</strong>.
+<p>You can construct the layout in two ways using <a href="#*rows">*rows</a> and <a href="#*columns">*columns</a>. In the former constructor you pass arrays of items by rows, and in the latter by columns. Items can also be added later using <a href="#-add">-add</a> and <a href="#-addSpanning">-addSpanning</a>. To remove an item, simply use <a href="./../Classes/View.html#-remove">View: -remove</a> for views, or <a href="./../Classes/QObject.html#-destroy">QObject: -destroy</a> for views or layouts.
+<p>It is possible to add more than one view into the same cell. The last added view will be the top-most. However, it is most probably more convenient to use a <a href="./../Classes/StackLayout.html">StackLayout</a> for that purpose.
+<p>The layout manages the grid size automatically: you can add an item at any row and cell number. When items are added or removed, the grid will re-adjust according to the last occupied row and column.<h3><a class='anchor' name='Fine tuning'>Fine tuning</a></h3>
+
+<p>Each item can be assigned an <strong>alignment</strong> either at layout <a href="#*rows">construction</a> or later using <a href="#-setAlignment">-setAlignment</a>. An item will then get at most its default size, if available (see: <a href="./../Classes/View.html#-sizeHint">View: -sizeHint</a>), and will be aligned within its cell according to the specified alignment.
+<p>Each row or column can be assigned a <strong>stretch factor</strong> using <a href="#-setRowStretch">-setRowStretch</a> and <a href="#-setColumnStretch">-setColumnStretch</a>. Rows or columns that would otherwise get equal space are then distributed according to the relative proportions of their stretch factors.
+<p>Each row or column can also be assigned a <strong>minimum</strong> size using <a href="#-setMinRowHeight">-setMinRowHeight</a> and <a href="#-setMinColumnWidth">-setMinColumnWidth</a>, to override the size contraints imposed by the contained views.
+<p>In addition to adjusting the spacing between cells using <a href="./../Classes/Layout.html#-spacing">Layout: -spacing</a> you can control the spacing between rows and between columns separately using <a href="#-hSpacing">-hSpacing</a> and <a href="#-vSpacing">-vSpacing</a>.<h3><a class='anchor' name='Leaving empty space'>Leaving empty space</a></h3>
+
+<p>You can leave any cell empty by not placing any item into it, or at <a href="#*rows">construction</a> using <code class='code prettyprint lang-sc'>nil</code> instead of a view or another layout. Note though that the empty cells will always be regarded as freely stretchable and will not impose any constraints on space distribution.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*rows' href='./../Overviews/Methods.html#rows'>rows</a> ( <span class='argstr'>... rows</span>)</h3>
+<div class='method'>
+<p> Creates a GridLayout and fills each row with an array of items given as arguments.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>... rows<td class='argumentdesc'>
+<p> Each argument is an Array of items to form a consecutive row. An item can be a <strong>view</strong>, another <strong>layout</strong>, or <strong>nil</strong> for an empty cell.</table><h4>Discussion:</h4>
+
+<p>You can make an item span more than one cell by wrapping it into an Array, followed by pairs of (\rows, number) and/or (\columns, number). You can also assign an alignment to an item by following it with a pair of (\align, alignment). \rows, \columns, and \align can be abbreviated with \r, \c, and \a, respectively. For possible alignment values see <a href="./../Reference/gui_alignments.html">Alignment</a>.
+<p> The simplified syntax for placing key-value pairs into an array comes handy (see <a href="./../Reference/Syntax-Shortcuts.html#Creating Arrays with key-value pairs">Syntax Shortcuts: Creating Arrays with key-value pairs</a>, and the example below).
+<p> Example:<pre class='code prettyprint lang-sc'>(
+w=Window().layout_( GridLayout.rows(
+    [Slider2D(), Slider2D(), [Slider(), rows:2]],
+    [Slider2D(), Slider2D()],
+    [[Slider().orientation_(\horizontal), columns:2]]
+)).front;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*columns' href='./../Overviews/Methods.html#columns'>columns</a> ( <span class='argstr'>... cols</span>)</h3>
+<div class='method'>
+<p> Creates a GridLayout and fills each column with an array of items given as arguments.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>... cols<td class='argumentdesc'>
+<p> Each argument is an Array of items to form a consecutive column. An item can be a <strong>view</strong>, another <strong>layout</strong>, or <strong>nil</strong> for an empty cell.</table><h4>Discussion:</h4>
+
+<p>To make an item span several cells, or assign an alignment to it, the same instructions as for <a href="#*rows">*rows</a> apply.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*parse' href='./../Overviews/Methods.html#parse'>parse</a> (<span class='argstr'>in</span>, <span class='argstr'>row</span>, <span class='argstr'>col</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-add' href='./../Overviews/Methods.html#add'>add</a> (<span class='argstr'>item</span>, <span class='argstr'>row</span>, <span class='argstr'>column</span>, <span class='argstr'>align</span>)</h3>
+<div class='method'>
+<p> Adds an item into the cell at specified row and column.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>item<td class='argumentdesc'>
+<p> The item can be a <strong>view</strong> or another <strong>layout</strong>.<tr><td class='argumentname'>row<td class='argumentdesc'>
+<p> The row index.<tr><td class='argumentname'>column<td class='argumentdesc'>
+<p> The column index.<tr><td class='argumentname'>align<td class='argumentdesc'>
+<p> A symbol denoting the alignment, or nil. See <a href="./../Reference/gui_alignments.html">Alignment</a> for possible values.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addSpanning' href='./../Overviews/Methods.html#addSpanning'>addSpanning</a> (<span class='argstr'>item</span>, <span class='argstr'>row</span>, <span class='argstr'>column</span>, <span class='argstr'>rowSpan: 1</span>, <span class='argstr'>columnSpan: 1</span>, <span class='argstr'>align</span>)</h3>
+<div class='method'>
+<p> Adds an item into the grid so as to occupy several cells.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>item<td class='argumentdesc'>
+<p> The item can be a <strong>view</strong> or another <strong>layout</strong>.<tr><td class='argumentname'>row<td class='argumentdesc'>
+<p> The row index.<tr><td class='argumentname'>column<td class='argumentdesc'>
+<p> The column index.<tr><td class='argumentname'>rowSpan<td class='argumentdesc'>
+<p> The amount of cells to occupy in vertical direction.<tr><td class='argumentname'>columnSpan<td class='argumentdesc'>
+<p> The amount of cells to occpy in horizontal direction.<tr><td class='argumentname'>align<td class='argumentdesc'>
+<p> A symbol denoting the alignment, or nil. See <a href="./../Reference/gui_alignments.html">Alignment</a> for possible values.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hSpacing' href='./../Overviews/Methods.html#hSpacing'>hSpacing</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hSpacing' href='./../Overviews/Methods.html#hSpacing'>hSpacing</a> = <span class='argstr'>spacing</span></h3>
+<div class='method'>
+<p> The spacing between columns, in Integer amount of pixels.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-vSpacing' href='./../Overviews/Methods.html#vSpacing'>vSpacing</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-vSpacing' href='./../Overviews/Methods.html#vSpacing'>vSpacing</a> = <span class='argstr'>spacing</span></h3>
+<div class='method'>
+<p> The spacing between rows, in Integer amount of pixels.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setRowStretch' href='./../Overviews/Methods.html#setRowStretch'>setRowStretch</a> (<span class='argstr'>row</span>, <span class='argstr'>factor</span>)</h3>
+<div class='method'>
+<p> Sets the stretch factor of a row. By default rows have a stretch factor of 0. If a larger factor is assigned to a row, rows will get their space redistributed according to the relative proportions of their factors.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>row<td class='argumentdesc'>
+<p> The index of a row.<tr><td class='argumentname'>factor<td class='argumentdesc'>
+<p> An Integer.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setColumnStretch' href='./../Overviews/Methods.html#setColumnStretch'>setColumnStretch</a> (<span class='argstr'>column</span>, <span class='argstr'>factor</span>)</h3>
+<div class='method'>
+<p> Sets the stretch factor of a column. By default columns have a stretch factor of 0. If a larger factor is assigned to a column, columns will get their space redistributed according to the relative proportions of their factors.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>column<td class='argumentdesc'>
+<p> The index of a column.<tr><td class='argumentname'>factor<td class='argumentdesc'>
+<p> An Integer.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setAlignment' href='./../Overviews/Methods.html#setAlignment'>setAlignment</a> (<span class='argstr'>item</span>, <span class='argstr'>align</span>)</h3>
+<div class='method'>
+<p> Sets the alignment of an item managed by the layout.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>item<td class='argumentdesc'>
+<p> A view or a layout managed by this layout, or a Point of which x denotes the column index and y the row index of an item.<tr><td class='argumentname'>align<td class='argumentdesc'>
+<p> A symbol denoting the alignment. See <a href="./../Reference/gui_alignments.html">Alignment</a> for possible values.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minRowHeight' href='./../Overviews/Methods.html#minRowHeight'>minRowHeight</a> (<span class='argstr'>row</span>)</h3>
+<div class='method'>
+<p> Gets the minimum height assigned to a row.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>row<td class='argumentdesc'>
+<p> The index of a row.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setMinRowHeight' href='./../Overviews/Methods.html#setMinRowHeight'>setMinRowHeight</a> (<span class='argstr'>row</span>, <span class='argstr'>height</span>)</h3>
+<div class='method'>
+<p> Sets the minimum height of row.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>row<td class='argumentdesc'>
+<p> The index of a row.<tr><td class='argumentname'>height<td class='argumentdesc'>
+<p> An Integer amount of pixels.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minColumnWidth' href='./../Overviews/Methods.html#minColumnWidth'>minColumnWidth</a> (<span class='argstr'>column</span>)</h3>
+<div class='method'>
+<p> Gets the minimum width assigned to a column.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>column<td class='argumentdesc'>
+<p> The index of a column.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setMinColumnWidth' href='./../Overviews/Methods.html#setMinColumnWidth'>setMinColumnWidth</a> (<span class='argstr'>column</span>, <span class='argstr'>width</span>)</h3>
+<div class='method'>
+<p> Sets the minimum width of a column.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>column<td class='argumentdesc'>
+<p> The index of a column.<tr><td class='argumentname'>width<td class='argumentdesc'>
+<p> An Integer amount of pixels.</table></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/GridLayout.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/GridLayout.schelp</a><br>link::Classes/GridLayout::<br>sc version: 3.8dev</div></div></body></html>

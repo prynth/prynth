@@ -1,0 +1,110 @@
+<html><head><title>PingPong</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Delays>Buffer'>UGens>Delays>Buffer</a></div>
+<h1>PingPong</h1>
+<div id='summary'>Stereo ping-pong delay.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/DelayWr.sc'>DelayWr.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/SinOsc.html">SinOsc</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Bounces sound between two outputs… Like a ping-pong ball. PingPong is actually a compound built upon <a href="./../Classes/RecordBuf.html">RecordBuf</a> and <a href="./../Classes/PlayBuf.html">PlayBuf</a> .<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>bufnum: 0</span>, <span class='argstr'>inputs</span>, <span class='argstr'>delayTime</span>, <span class='argstr'>feedback: 0.7</span>, <span class='argstr'>rotate: 1</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bufnum<td class='argumentdesc'>
+<p>First index of a multi channel buffer.<tr><td class='argumentname'>inputs<td class='argumentdesc'>
+<p>An array of audio inputs, the same size as your buffer.<tr><td class='argumentname'>delayTime<td class='argumentdesc'>
+<p>Delay time in seconds.<tr><td class='argumentname'>feedback<td class='argumentdesc'>
+<p>Feedback coefficient.<tr><td class='argumentname'>rotate<td class='argumentdesc'>
+<p>Which rotates the inputArray by one step. (left → right, right → left). Rotation of 0 (or 2) would result in no rotation to the inputArray.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+s = Server.local;
+s.waitForBoot({
+
+b = Buffer.alloc(s,44100 * 2, 2);
+
+SynthDef("help-PingPong",{ arg out=0,bufnum=0,feedback=0.5,delayTime=0.2;
+    var left, right;
+    left = Decay2.ar(Impulse.ar(0.7, 0.25), 0.01, 0.25,
+        SinOsc.ar(SinOsc.kr(3.7,0,200,500)));
+    right = Decay2.ar(Impulse.ar(0.5, 0.25), 0.01, 0.25,
+        Resonz.ar(PinkNoise.ar(4), SinOsc.kr(2.7,0,1000,2500), 0.2));
+
+    Out.ar(0,
+        PingPong.ar(bufnum, [left,right], delayTime, feedback, 1)
+    )
+}).play(s,[\out, 0, \bufnum, b.bufnum,\feedback,0.5,\delayTime,0.1]);
+});
+)
+
+
+(
+s = Server.local;
+s.waitForBoot({
+
+b = Buffer.alloc(s,44100 * 2, 2);
+
+SynthDef("help-PingPong",{ arg out=0,bufnum=0;
+    var left, right;
+    left = Decay2.ar(Impulse.ar(0.7, 0.25), 0.01, 0.25,
+        SinOsc.ar(SinOsc.kr(3.7,0,200,500)));
+    right = Decay2.ar(Impulse.ar(0.5, 0.25), 0.01, 0.25,
+        Resonz.ar(PinkNoise.ar(4), SinOsc.kr(2.7,0,1000,2500),
+0.2));
+
+    Out.ar(0,
+        PingPong.ar(bufnum, [left,right] *  EnvGen.kr(Env([1, 1, 0], [2, 0.1])),
+            0.1, 0.8, 1)
+    )
+}).play(s,[\out, 0, \bufnum, b.bufnum]);
+});
+)
+
+
+
+
+
+(
+
+Patch({ arg buffer,feedback=0.5,delayTime=0.2;
+    var left, right;
+    left = Decay2.ar(Impulse.ar(0.7, 0.25), 0.01, 0.25,
+        SinOsc.ar(SinOsc.kr(3.7,0,200,500)));
+    right = Decay2.ar(Impulse.ar(0.5, 0.25), 0.01, 0.25,
+        Resonz.ar(PinkNoise.ar(4), SinOsc.kr(2.7,0,1000,2500), 0.2));
+
+    PingPong.ar(buffer.bufnumIr, [left,right], delayTime, feedback, 1)
+
+}).gui
+
+)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/PingPong.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/PingPong.schelp</a><br>link::Classes/PingPong::<br>sc version: 3.8dev</div></div></body></html>

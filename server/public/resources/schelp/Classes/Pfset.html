@@ -1,0 +1,88 @@
+<html><head><title>Pfset</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events>Patterns>Data Sharing'>Streams-Patterns-Events>Patterns>Data Sharing</a></div>
+<h1>Pfset</h1>
+<div id='summary'>Insert an environment into the event prototype before evaluating the supplied pattern</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/FilterPatterns.sc'>FilterPatterns.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/FuncFilterPattern.html">FuncFilterPattern</a> : <a href="../Classes/FilterPattern.html">FilterPattern</a> : <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Pset.html">Pset</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-cleanupFunc'>cleanupFunc</a> </li>
+<li class='toc3'><a href='#-embedInStream'>embedInStream</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Good for setting default values or loading server objects.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>func</span>, <span class='argstr'>pattern</span>, <span class='argstr'>cleanupFunc</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>Use environment variable syntax (e.g., <code class='code prettyprint lang-sc'>~x = 0</code>) to store values in the internal environment. These values are copied into the event prototype before running the supplied pattern. <tr><td class='argumentname'>pattern<td class='argumentdesc'>
+<p>An event pattern (such as <a href="./../Classes/Pbind.html">Pbind</a>). <tr><td class='argumentname'>cleanupFunc<td class='argumentdesc'>
+<p>Optional. A function to evaluate when the pattern is stopped, or when the supplied pattern runs out of values. For example, if you loaded a <a href="./../Classes/Buffer.html">Buffer</a> in the initializer function, you could free it in the <code class='code prettyprint lang-sc'>cleanupFunc</code>.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cleanupFunc' href='./../Overviews/Methods.html#cleanupFunc'>cleanupFunc</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cleanupFunc' href='./../Overviews/Methods.html#cleanupFunc'>cleanupFunc</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-embedInStream' href='./../Overviews/Methods.html#embedInStream'>embedInStream</a> (<span class='argstr'>inevent</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+var a, b;
+a = Pfset({
+    ~legato = 0.3;
+    ~detune = rrand(0, 30);
+}, Pbind(\dur, 0.5));
+x = a.asStream;
+9.do({ x.next(Event.new).postln; });
+)</pre>
+
+<p>Pfset does not override values placed into the event by the inner pattern:<pre class='code prettyprint lang-sc'>(
+var a, b;
+a = Pfset({
+    ~dur = 0.3;
+}, Pbind(\dur, 0.5));
+x = a.asStream;
+9.do({ x.next(Event.new).postln; });
+)</pre>
+
+<p>Sound example<pre class='code prettyprint lang-sc'>(
+SynthDef(\sinegrain,
+    { arg out = 0, freq = 440, sustain = 0.02;
+        var env;
+        env = EnvGen.kr(Env.perc(0.001, sustain), 1, doneAction:2);
+        Out.ar(out, SinOsc.ar(freq, 0, env * 0.1))
+    }).add;
+)
+
+(
+a = Pbind(\dur, 0.5, \instrument, \sinegrain, \x, Pfunc { rrand(500, 600) });
+a = Pfset({ ~freq = { ~x.postln * 2 }; ~legato = 3; },  a);
+a.play;
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Pfset.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Pfset.schelp</a><br>link::Classes/Pfset::<br>sc version: 3.8dev</div></div></body></html>

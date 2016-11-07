@@ -1,0 +1,194 @@
+<html><head><title>GUI</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Kits'>GUI>Kits</a></div>
+<h1>GUI</h1>
+<div id='summary'>Factory abstraction for all GUI related core classes</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/GUI.sc'>GUI.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Overviews/GUI-Classes.html">List of GUI classes</a>, <a href="./../Guides/GUI-Introduction.html">Introduction to GUI</a>, <a href="./../Classes/ViewRedirect.html">ViewRedirect</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Switching and Referring to GUI Kits'>Switching and Referring to GUI Kits</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Extending GUI Kits'>Extending GUI Kits</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Methods and Variables for GUI'>Methods and Variables for GUI</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*makeGUI'>makeGUI</a> </li>
+<li class='toc3'><a href='#*initClass'>initClass</a> </li>
+<li class='toc3'><a href='#*cocoa'>cocoa</a> </li>
+<li class='toc3'><a href='#*swing'>swing</a> </li>
+<li class='toc3'><a href='#*fromID'>fromID</a> </li>
+<li class='toc3'><a href='#*current'>current</a> </li>
+<li class='toc3'><a href='#*get'>get</a> </li>
+<li class='toc3'><a href='#*set'>set</a> </li>
+<li class='toc3'><a href='#*use'>use</a> </li>
+<li class='toc3'><a href='#*useID'>useID</a> </li>
+<li class='toc3'><a href='#*add'>add</a> </li>
+<li class='toc3'><a href='#*doesNotUnderstand'>doesNotUnderstand</a> </li>
+<li class='toc3'><a href='#*setSkin'>setSkin</a> </li>
+<li class='toc3'><a href='#*scheme'>scheme</a> </li>
+<li class='toc3'><a href='#*schemes'>schemes</a> </li>
+<li class='toc3'><a href='#*skin'>skin</a> </li>
+<li class='toc3'><a href='#*skins'>skins</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*qt'>qt</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>SuperCollider currently supports three operating system platforms: Macintosh OSX, UNIX (Linux and FreeBSD) and Windows (with some limitations).<div class='warning'><span class='warninglabel'>WARNING:</span> The redirect system has been deprecated, please use the view classes directly.</div>
+<p>Graphical User Interface (GUI) code, for the most part, does not need to worry about which platform is executing the code because of the <strong>view redirect</strong> system. At any time, one and only one <strong>GUI kit</strong> is active. This determines which GUI classes will be used for rendering. These classes, the active views, have prefixes for the GUI kit that created the view object: SCWindow vs. JSCWindow vs. QWindow.<table>
+<tr><td><strong>GUI kit</strong><td><strong>Code to activate</strong><td><strong>Supported platform(s)</strong><td><strong>Framework</strong><td><strong>Prefix</strong><tr><td>Cocoa<td><code class='code prettyprint lang-sc'>GUI.cocoa</code><td>Mac OSX only<td>Cocoa<td>SC-<tr><td>SwingOSC<td><code class='code prettyprint lang-sc'>GUI.swing</code><td>All<td>Java + Swing<td>JSC-<tr><td>Qt<td><code class='code prettyprint lang-sc'>GUI.qt</code><td>All<td>Qt<td>Q-</table>
+
+<p>In general, users should not concern themselves with the prefixes. Instead, work with the <em>redirect</em> classes, which have no prefix: Window, Button, Slider, etc. The redirect class will ask the currently-selected kit which <em>implementation class</em> should be used.
+<p>The GUI kit (CocoaGUI, QtGUI, SwingGUI) maps the generic view names to the implementing classes: <code class='code prettyprint lang-sc'>Window --&gt; SCWindow, QWindow or JSCWindow</code>. These schemes are in turn used by <a href="./../Classes/ViewRedirect.html">ViewRedirect</a> to provide a simple cross-platform gui syntax. The GUI class provides utilities for switching kits and other cross platform tasks.
+<p>You can get your available schemes (depending on what you installed) with:<pre class='code prettyprint lang-sc'>GUI.schemes;</pre>
+
+<p>For a complete list of gui classes and redirects, see <a href="./../Overviews/GUI-Classes.html">List of GUI classes</a>.<h3><a class='anchor' name='Switching and Referring to GUI Kits'>Switching and Referring to GUI Kits</a></h3>
+
+<p>As of this writing, three GUI kits are available through the GUI class: <a href="./../Classes/QtGUI.html">QtGUI</a> (Qt framework), <a href="./../Classes/CocoaGUI">CocoaGUI</a> (Mac OS X native) and <a href="./../Classes/SwingGUI">SwingGUI</a> (Java). Note that <a href="./../Classes/SwingOSC">SwingOSC</a> is not part of every SuperCollider distribution, so you may have to install it separately.
+<p>You can switch the GUI kit by calling one of the following class methods:<pre class='code prettyprint lang-sc'>GUI.qt;        // use Qt in subsequent GUI creation procedures
+GUI.cocoa;    // use cocoa in subsequent GUI creation procedures
+GUI.swing;    // use swing in subsequent GUI creation procedures
+        // NOTE: If you do not have SwingOSC installed, you get
+        // a warning only, and do not switch; so you cannot
+        // accidentally disable your gui system.</pre>
+
+<p>These methods return the new GUI kit implementation. The current implementation can be queried by calling<pre class='code prettyprint lang-sc'>GUI.current;    // returns the current GUI kit implementation</pre>
+
+<p>If you want to make a GUI kit specific switch (e.g. in a class), then you should use the following instead, as on non-OSX systems the class CocoaGUI is not in the class library path, and you cannot check for an undefined class:<pre class='code prettyprint lang-sc'>GUI.id;    // returns the current GUI kit implementation id; this is currently either \cocoa or \swing</pre>
+
+<p>For persistency, you can store the identifier of the kit implementation and recall the kit through the class method <code class='code prettyprint lang-sc'>fromID</code>:<pre class='code prettyprint lang-sc'>x = GUI.cocoa;
+y = x.id;        // store the identifier of a kit implementation
+y.postln;        // the id could be stored in a preferences file for example
+GUI.swing;
+// now switch back to the kit implementation with identifier y
+GUI.fromID( y );
+GUI.current.id.postln;    // --&gt; cocoa</pre>
+
+<p>The <code class='code prettyprint lang-sc'>*use</code> and <code class='code prettyprint lang-sc'>*useID</code> methods allow you to temporarily switch the kit, so as to use it only for a dedicated block of statements:<pre class='code prettyprint lang-sc'>GUI.cocoa;
+GUI.useID(\swing, { Array.rand( 1000, 0.0, 1.0 ).plot });
+GUI.current.id.postln;    // --&gt; still cocoa</pre>
+
+<p>You can get a particular kit using the <code class='code prettyprint lang-sc'>*get</code> method. You can switch to a particular kit using the <code class='code prettyprint lang-sc'>*set</code> method:<pre class='code prettyprint lang-sc'>x = GUI.get( \swing );    // note: unlike *swing and *cocoa, this does not _switch_ the current kit!
+GUI.current.id.postln;    // --&gt; still cocoa
+GUI.set( x );            // now we make SwingOSC the current kit
+GUI.window.viewPalette;</pre>
+<h3><a class='anchor' name='Extending GUI Kits'>Extending GUI Kits</a></h3>
+
+<p>GUI Kits can be extended with custom classes by using their respective <code class='code prettyprint lang-sc'>put</code> methods:<pre class='code prettyprint lang-sc'>GUI.get( \cocoa ).put( \myText, SCStaticText );
+GUI.get( \swing ).put( \myText, JSCStaticText );
+
+GUI.cocoa;
+GUI.swing;
+(
+    w = GUI.window.new;
+    GUI.myText.new( w, w.view.bounds.insetBy( 20, 20 )).string_( "schoko" ).background_( Color.red );
+    w.front;
+)</pre>
+
+<p>If you intend to add extensions from within your own classes upon class library initialization time, the preferred way is to do this in the startup process:<pre class='code prettyprint lang-sc'>MyGUIExtension {
+    *initClass {
+        StartUp.add({
+            var scheme;
+
+            scheme = GUI.get( \cocoa );
+            if( scheme.notNil, {scheme.put( \myText, SCStaticText )});
+            scheme = GUI.get( \swing );
+            if( scheme.notNil, {scheme.put( \myText, JSCStaticText )});
+        });
+    }
+}</pre>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Methods and Variables for GUI'>Methods and Variables for GUI</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*makeGUI' href='./../Overviews/Methods.html#makeGUI'>makeGUI</a> (<span class='argstr'>key</span>, <span class='argstr'>args</span>, <span class='argstr'>properties</span>)</h3>
+<div class='method'>
+<p></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*initClass' href='./../Overviews/Methods.html#initClass'>initClass</a> </h3>
+<div class='method'>
+<p>Sets the <code class='code prettyprint lang-sc'>skin</code> to default values on compile.<pre class='code prettyprint lang-sc'>fontSpecs: ["Helvetica", 10],
+fontColor: Color.black,
+background: Color(0.8, 0.85, 0.7, 0.5),
+foreground: Color.grey(0.95),
+onColor: Color(0.5, 1, 0.5),
+offColor: Color.clear,
+gap: 0@0,
+margin: 2@2,
+buttonHeight: 16</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*cocoa' href='./../Overviews/Methods.html#cocoa'>cocoa</a>: METHOD NOT FOUND!</h3>
+<div class='method'>
+<p>Makes Cocoa (Mac OS X GUI) the current scheme and returns it. Subsequent GUI object calls to GUI are delegated to cocoa. Returns the current (cocoa) scheme.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*swing' href='./../Overviews/Methods.html#swing'>swing</a> </h3>
+<div class='method'>
+<p>Makes Swing (Java GUI) the current scheme and returns it. Subsequent GUI object calls to GUI are delegated to swing. Returns the current (swing) scheme.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fromID' href='./../Overviews/Methods.html#fromID'>fromID</a> (<span class='argstr'>id</span>)</h3>
+<div class='method'>
+<p>Changes the current scheme and returns the new scheme.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>id<td class='argumentdesc'>
+<p>A <a href="./../Classes/Symbol.html">Symbol</a>. The identifier of the scheme to use.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*current' href='./../Overviews/Methods.html#current'>current</a> </h3>
+<div class='method'>
+<p>Returns the current scheme. This is useful for objects that, upon instantiation, wish to store the then-current scheme, so as to be able to consistently use the same scheme in future method calls.<div class='note'><span class='notelabel'>NOTE:</span> the caller shouldn't make any assumptions about the nature (the class) of the returned object, so that the actual implementation (an Event) may change in the future.</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*get' href='./../Overviews/Methods.html#get'>get</a> (<span class='argstr'>id</span>)</h3>
+<div class='method'>
+<p>Returns the scheme for a given identifier. Does not switch the current scheme.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>id<td class='argumentdesc'>
+<p>A <a href="./../Classes/Symbol.html">Symbol</a>. The identifier of the scheme to retrieve, such as returned by calling <code class='code prettyprint lang-sc'>aScheme.id</code>.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*set' href='./../Overviews/Methods.html#set'>set</a> (<span class='argstr'>aScheme</span>)</h3>
+<div class='method'>
+<p>Changes the current scheme.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aScheme<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Symbol.html">Symbol</a>. The scheme to use as current scheme.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*use' href='./../Overviews/Methods.html#use'>use</a> (<span class='argstr'>aScheme</span>, <span class='argstr'>func</span>)</h3>
+<div class='method'>
+<p>Executes a function body, temporarily setting the current GUI scheme. This is usefull inside view's action functions in order to make this function use the GUI scheme that was originally used for the view of the action, even if the scheme has been switched meanwhile.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aScheme<td class='argumentdesc'>
+<p>The scheme to use during the function execution.<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>An Instance of <a href="./../Classes/Function.html">Function</a>.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*useID' href='./../Overviews/Methods.html#useID'>useID</a> (<span class='argstr'>id</span>, <span class='argstr'>func</span>)</h3>
+<div class='method'>
+<p>Same as <code class='code prettyprint lang-sc'>use</code> but using a scheme's id as first argument.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>id<td class='argumentdesc'>
+<p>The id of the scheme to use during the function execution.<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A body to execute.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*add' href='./../Overviews/Methods.html#add'>add</a> (<span class='argstr'>aScheme</span>)</h3>
+<div class='method'>
+<p>Registers a new scheme. This is typically called by external libraries in their startup procedure. If a scheme with the same identifier (<code class='code prettyprint lang-sc'>scheme.id</code>) exists, it is overwritten.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aScheme<td class='argumentdesc'>
+<p>The scheme to add.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doesNotUnderstand' href='./../Overviews/Methods.html#doesNotUnderstand'>doesNotUnderstand</a> (<span class='argstr'>selector</span> <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>All method calls are mapped to the current scheme, so that for example <code class='code prettyprint lang-sc'>GUI.button</code> can be used and is delegated to the button association of the current scheme.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>selector<td class='argumentdesc'><tr><td class='argumentname'>... args<td class='argumentdesc'></table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*setSkin' href='./../Overviews/Methods.html#setSkin'>setSkin</a> (<span class='argstr'>skinName</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>skinName<td class='argumentdesc'></table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*scheme' href='./../Overviews/Methods.html#scheme'>scheme</a> </h3>
+<div class='method'>
+<p>A class variable. Returns the current scheme.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*schemes' href='./../Overviews/Methods.html#schemes'>schemes</a> </h3>
+<div class='method'>
+<p>A class variable. Returns an <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> of registered schemes.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*skin' href='./../Overviews/Methods.html#skin'>skin</a> </h3>
+<div class='method'>
+<p>A class variable. Returns the current skin.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*skins' href='./../Overviews/Methods.html#skins'>skins</a> </h3>
+<div class='method'>
+<p>A class variable. Returns an <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> of registered skins.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*qt' href='./../Overviews/Methods.html#qt'>qt</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/GUI.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/GUI.schelp</a><br>link::Classes/GUI::<br>sc version: 3.8dev</div></div></body></html>

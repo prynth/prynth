@@ -1,0 +1,90 @@
+<html><head><title>the_lazy_proxy</title>
+<link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../scdoc.js' type='text/javascript'></script>
+<script src='./../../docmap.js' type='text/javascript'></script>
+<script src='./../../prettify.js' type='text/javascript'></script>
+<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./../..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS/JITLIB</div>
+<div id='categories'><a href='./../../Browse.html#Libraries>JITLib>Tutorials'>Libraries>JITLib>Tutorials</a></div>
+<h1>the_lazy_proxy</h1>
+<div id='summary'>the lazy proxy</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../Overviews/JITLib.html">JITLib</a>, <a href="./../../Classes/NodeProxy.html">NodeProxy</a>, <a href="./../../Classes/ProxySpace.html">ProxySpace</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'></ul></div>
+<p>The class <a href="./../../Classes/NodeProxy.html">NodeProxy</a> (and <a href="./../../Classes/BusPlug.html">BusPlug</a>) uses a lazy evaluation scheme to derive its appropriate rate and numChannels from the first meaningful input that is assigned to it. see <a href="./../../Classes/NodeProxy.html">NodeProxy</a> and <a href="./../../Classes/ProxySpace.html">ProxySpace</a> helpfiles for basic info. So as long as the source is not set, the proxy is <strong>neutral</strong> :<pre class='code prettyprint lang-sc'>p = ProxySpace.push;
+~x.isNeutral;</pre>
+
+<p>as soon as the first time the source is set, it derives its bus arguments from that input<pre class='code prettyprint lang-sc'>~x = { Array.fill(14, { SinOsc.kr(1.0.rand, 0, 100) }) }; //~x is now 14 channels control rate
+~x;</pre>
+
+<p>in order to reset these properties, clear is used:<pre class='code prettyprint lang-sc'>~x.clear;
+//note that no other proxy should be reading from ~x when this is done:
+//for simplicity nodeproxy currently does not care for its children, only for its parents.</pre>
+
+<p>for a quick initialisation, also <code class='code prettyprint lang-sc'>defineBus</code> can be used:<pre class='code prettyprint lang-sc'>~x.defineBus(\control, 5);
+// or in another way:
+~x.kr(5)</pre>
+
+<p>the properties are also set when some other proxy reads from it:<pre class='code prettyprint lang-sc'>~x = { LFPulse.kr * ~b.kr(7) }; //the first arg to kr / ar is the default number of channels</pre>
+
+<p>if no number of channels is passed in, the default value is used:<pre class='code prettyprint lang-sc'>~test.ar; // 2
+~krtest.kr; // 1</pre>
+
+<p>the default can be set in the class NodeProxy:<pre class='code prettyprint lang-sc'>NodeProxy.defaultNumAudio = 3;
+NodeProxy.defaultNumControl = 13;
+
+~test3.ar; // 3
+~krtest3.kr; // 13
+
+// set them back:
+NodeProxy.defaultNumAudio = 2;
+NodeProxy.defaultNumControl = 1;</pre>
+
+<p>also if a proxy is used as a map source, control rate is assumed:<pre class='code prettyprint lang-sc'>~u;
+~x.map(\zzz, ~u);
+~u;</pre>
+
+<p>when unary or binary operations are performed, the highest rate / numChannels is used to initialize all uninitialized proxies:<pre class='code prettyprint lang-sc'>~x.clear;
+~x.defineBus(\control, 5);
+~x = ~e + ~f;
+
+~x.clear; ~e.clear; ~f.clear;
+~e.defineBus(\audio, 1);
+~x = ~e + ~f.squared + ~r;
+~x;
+
+~x.clear; ~e.clear; ~f.clear;
+~e.defineBus(\audio, 3);
+~x = ~e;</pre>
+
+<p>if a rate-1 proxy is used as rate-2 input, the rate is converted and the channels are expanded in the ususal multichannel expansion pattern:<pre class='code prettyprint lang-sc'>~f.defineBus(\control);
+~f.ar(2);
+
+~f.defineBus(\audio);
+~f.kr(2);
+
+// if the number of channels passed in is less, it only uses the first n channels
+~f.defineBus(\audio, 8);
+~f.ar(2);</pre>
+
+<p>an offset can be passed in as second argument to ar/kr<pre class='code prettyprint lang-sc'>//modulate offset:
+p = ProxySpace.push(s.boot);
+
+~out.play;
+~src = { SinOsc.ar(Array.rand(5, 400, 500.0), SinOsc.ar(Array.exprand(5, 2.1, 500.0)), 0.1) };
+~out = { ~src.ar(1, MouseX.kr(0, 5)) };
+~out = { Mix(~src.ar(3, MouseX.kr(0, 5))) }; //the wrapping offset is moved accordingly</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/JITLib/the_lazy_proxy.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/JITLib/the_lazy_proxy.schelp</a><br>link::Tutorials/JITLib/the_lazy_proxy::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,71 @@
+<html><head><title>Done</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Synth control'>UGens>Synth control</a></div>
+<h1>Done</h1>
+<div id='summary'>Monitors another UGen to see when it is finished</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/EnvGen.sc'>EnvGen.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/FreeSelfWhenDone.html">FreeSelfWhenDone</a>, <a href="./../Classes/PauseSelfWhenDone.html">PauseSelfWhenDone</a>, <a href="./../Reference/UGen-doneActions.html">UGen done-actions</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Some UGens set a 'done' flag when they are finished playing. This UGen echoes that flag when it is set to track a particular UGen.
+<p>The UGens trackable by Done are:<ul>
+<li><a href="./../Classes/PlayBuf.html">PlayBuf</a><li><a href="./../Classes/RecordBuf.html">RecordBuf</a><li><a href="./../Classes/Line.html">Line</a><li><a href="./../Classes/XLine.html">XLine</a><li><a href="./../Classes/EnvGen.html">EnvGen</a><li><a href="./../Classes/Linen.html">Linen</a><li><a href="./../Classes/BufRd.html">BufRd</a><li><a href="./../Classes/BufWr.html">BufWr</a><li><a href="./../Classes/Dbufrd.html">Dbufrd</a><li><a href="./../Classes/Dbufwr.html">Dbufwr</a><li><a href="./../Classes/DiskIn.html">DiskIn</a><li><a href="./../Classes/VDiskIn.html">VDiskIn</a><li><a href="./../Classes/Demand.html">Demand</a></ul>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>src</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>src<td class='argumentdesc'>
+<p>UGen to monitor</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>The 'done' flag can be used to trigger other things in the same synth:<pre class='code prettyprint lang-sc'>(
+SynthDef("Done-help", { arg out, t_trig;
+    var line, a, b;
+
+    line= Line.kr(1,0,1);
+
+    a= SinOsc.ar(440,0,0.1*line); //sound fading out
+    b= WhiteNoise.ar(Done.kr(line)*0.1); //noise starts at end of line
+
+    Out.ar(out, Pan2.ar(a+b));
+}).send(s);
+)
+
+Synth("Done-help"); //note that this synth doesn't have it's own doneAction, so you'll need to manually deallocate it</pre>
+
+<p>The 'done' flag can be used to trigger a delayed freeing of the current synth, which is not possible by using <a href="./../Reference/UGen-doneActions.html">UGen done-actions</a> :<pre class='code prettyprint lang-sc'>play {
+    var env = Line.kr(1,0,2);
+    var sig = PinkNoise.ar(env);
+    FreeSelf.kr(TDelay.kr(Done.kr(env),3));
+    GVerb.ar(sig,70,7);
+}</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Done.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Done.schelp</a><br>link::Classes/Done::<br>sc version: 3.8dev</div></div></body></html>

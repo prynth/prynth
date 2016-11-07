@@ -1,0 +1,101 @@
+<html><head><title>RecordBuf</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Buffer'>UGens>Buffer</a></div>
+<h1>RecordBuf</h1>
+<div id='summary'>Record or overdub into a Buffer.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/BufIO.sc'>BufIO.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/PlayBuf.html">PlayBuf</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Records input into a <a href="./../Classes/Buffer.html">Buffer</a>.
+<p>If recLevel is 1.0 and preLevel is 0.0 then the new input overwrites the old data. If they are both 1.0 then the new data is added to the existing data. (Any other settings are also valid.)<div class='note'><span class='notelabel'>NOTE:</span> The number of channels must be fixed for the SynthDef, it cannot vary depending on which buffer you use.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>inputArray</span>, <span class='argstr'>bufnum: 0</span>, <span class='argstr'>offset: 0</span>, <span class='argstr'>recLevel: 1</span>, <span class='argstr'>preLevel: 0</span>, <span class='argstr'>run: 1</span>, <span class='argstr'>loop: 1</span>, <span class='argstr'>trigger: 1</span>, <span class='argstr'>doneAction: 0</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>inputArray</span>, <span class='argstr'>bufnum: 0</span>, <span class='argstr'>offset: 0</span>, <span class='argstr'>recLevel: 1</span>, <span class='argstr'>preLevel: 0</span>, <span class='argstr'>run: 1</span>, <span class='argstr'>loop: 1</span>, <span class='argstr'>trigger: 1</span>, <span class='argstr'>doneAction: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>inputArray<td class='argumentdesc'>
+<p>An Array of input channels.<tr><td class='argumentname'>bufnum<td class='argumentdesc'>
+<p>The index of the buffer to use.<tr><td class='argumentname'>offset<td class='argumentdesc'>
+<p>An offset into the buffer in samples.<tr><td class='argumentname'>recLevel<td class='argumentdesc'>
+<p>Value to multiply by input before mixing with existing data.<tr><td class='argumentname'>preLevel<td class='argumentdesc'>
+<p>Value to multiply to existing data in buffer before mixing with input.<tr><td class='argumentname'>run<td class='argumentdesc'>
+<p>If zero, then recording stops, otherwise recording proceeds.<tr><td class='argumentname'>loop<td class='argumentdesc'>
+<p>If zero then don't loop, otherwise do. This is modulatable.<tr><td class='argumentname'>trigger<td class='argumentdesc'>
+<p>a trigger causes a jump to the start of the Buffer. A trigger occurs when a signal changes from negative value to positive value.<tr><td class='argumentname'>doneAction<td class='argumentdesc'>
+<p>an integer representing an action to be executed when the buffer is finished recording. This can be used to free the enclosing synth, etc. See <a href="./../Reference/UGen-doneActions.html">UGen done-actions</a> for more detail. <code class='code prettyprint lang-sc'>doneAction</code> is only evaluated if loop is 0.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// Execute the following in order
+(
+// allocate a Buffer
+s = Server.local;
+b = Buffer.alloc(s, 44100 * 4.0, 1); // a four second 1 channel Buffer
+)
+
+// record for four seconds
+(
+SynthDef(\help_RecordBuf, { arg out = 0, bufnum = 0;
+    var formant;
+    formant = Formant.ar(XLine.kr(400,1000, 4), 2000, 800, 0.125);
+    RecordBuf.ar(formant, bufnum, doneAction: 2, loop: 0);
+}).play(s,[\out, 0, \bufnum, b]);
+)
+
+// play it back
+(
+SynthDef(\help_RecordBuf_overdub, { arg out = 0, bufnum = 0;
+    var playbuf;
+    playbuf = PlayBuf.ar(1,bufnum);
+    FreeSelfWhenDone.kr(playbuf); // frees the synth when the PlayBuf is finished
+    Out.ar(out, playbuf);
+}).play(s, [\out, 0, \bufnum, b]);
+)
+
+// overdub
+(
+SynthDef(\help_RecordBuf_overdub, { arg out=0, bufnum=0;
+    var formant;
+    formant = Formant.ar(XLine.kr(200, 1000, 4), 2000, 800, 0.125);
+    // mixes equally with existing data
+    RecordBuf.ar(formant, bufnum, 0, 0.5, 0.5, doneAction: 2, loop: 0);
+}).play(s, [\out, 0, \bufnum, b]);
+)
+
+// play back the overdubbed version
+Synth.new(\help_RecordBuf_overdub, [\out, 0, \bufnum, b], s);
+
+// write the contents of the buffer to a file (see Buffer for more options)
+(
+b.write(sampleFormat: 'int16');
+thisProcess.platform.recordingsDir +/+ "SC_" ++ Date.localtime.stamp ++ ".aiff"; // generated path
+)
+
+b.close; b.free; // cleanup</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/RecordBuf.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/RecordBuf.schelp</a><br>link::Classes/RecordBuf::<br>sc version: 3.8dev</div></div></body></html>

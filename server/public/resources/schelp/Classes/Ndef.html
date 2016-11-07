@@ -1,0 +1,232 @@
+<html><head><title>Ndef</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Libraries>JITLib>NodeProxy'>Libraries>JITLib>NodeProxy</a>, <a href='./../Browse.html#Live Coding'>Live Coding</a></div>
+<h1>Ndef</h1>
+<div id='summary'>node proxy definition</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/NodeProxy.sc'>NodeProxy.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/NodeProxy.html">NodeProxy</a> : <a href="../Classes/BusPlug.html">BusPlug</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/ProxySpace.html">ProxySpace</a>, <a href="./../Classes/Tdef.html">Tdef</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#First Example'>First Example</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Creation'>Creation</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc3'><a href='#*clear'>clear</a> </li>
+<li class='toc3'><a href='#*defaultServer'>defaultServer</a> </li>
+<li class='toc3'><a href='#*all'>all</a> </li>
+<li class='toc3'><a href='#*dictFor'>dictFor</a> </li>
+</ul><li class='toc2'><a href='#Setting default parameters'>Setting default parameters</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*gui'>gui</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-copy'>copy</a> </li>
+<li class='toc3'><a href='#-key'>key</a> </li>
+<li class='toc3'><a href='#-proxyspace'>proxyspace</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#using Ndef inside other Ndefs'>using Ndef inside other Ndefs</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#setting and mapping parameters'>setting and mapping parameters</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Simple audio routing with the <<> operator'>Simple audio routing with the &lt;&lt;&gt; operator</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Making Copies'>Making Copies</a></li>
+<ul class='toc'><li class='toc3'><a href='#.copy'>copy</a> </li>
+</ul><li class='toc2'><a href='#Recursion'>Recursion</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Using different servers'>Using different servers</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#GUI'>GUI</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Using Associations'>Using Associations</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Reference to a proxy, forms an alternative to <a href="./../Classes/ProxySpace.html">ProxySpace</a>. All methods are inherited from <a href="./../Classes/NodeProxy.html">NodeProxy</a>.<pre class='code prettyprint lang-sc'>Ndef(key)    //returns the instance
+Ndef(key, obj)    //stores the object and returns the instance, like Tdef and Pdef.</pre>
+
+<p>Graphical editor overviewing all current Ndefs: <a href="./../Classes/NdefMixer.html">NdefMixer</a>. A general overview: <a href="./../Overviews/JITLib.html">JITLib</a>.<h3><a class='anchor' name='First Example'>First Example</a></h3>
+<pre class='code prettyprint lang-sc'>s.boot;
+
+Ndef(\a).play; // play to hardware output.
+Ndef(\a).fadeTime = 2; // fadeTime specifies crossfade
+// set the source
+Ndef(\a, { SinOsc.ar([350, 351.3], 0, 0.2) });
+Ndef(\a, { Pulse.ar([350, 351.3] / 4, 0.4, 0.2) });
+Ndef(\a, Pbind(\dur, 0.03, \freq, Pbrown(0, 1, 0.1, inf).linexp(0, 1, 200, 350)));
+
+Ndef(\a, { Ringz.ar(Ndef.ar(\b), [350, 351.3] * 2, 0.4) });
+Ndef(\b, { Impulse.ar([5, 7]/2, [0, 0.5], 0.15) });
+
+Ndef.clear(3); // clear all after 3 seconds</pre>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Creation'>Creation</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>key</span>, <span class='argstr'>object</span>)</h3>
+<div class='method'>
+<p>Return a new node proxy and store it in a global ProxySpace under the key. If there is already an Ndef there, replace its object with the new one. The object can be any supported class, see <a href="./../Classes/NodeProxy.html#Supported sources">NodeProxy: Supported sources</a> help.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>key<td class='argumentdesc'>
+<p>the name of the proxy (usually a symbol). If only the key is given and no object, it returns the proxy object:<pre class='code prettyprint lang-sc'>Ndef(\x) // get the proxy</pre>
+
+<p>If key is an association, it is interpreted as <strong>key -&gt; server name</strong>. (order changed in SC3.3 !). If no name is given, it uses the default server that was default when Ndef was first called. (to change it, see <a href="#*defaultServer">*defaultServer</a>).<tr><td class='argumentname'>object<td class='argumentdesc'>
+<p>an object<pre class='code prettyprint lang-sc'>Ndef(\x, { Dust.ar }); // returns the proxy and set the source object.</pre>
+</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>key</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>offset: 0</span>)</h3>
+<div class='method'>
+<p>equivalent to <code class='code prettyprint lang-sc'>*new(key).ar(numChannels, offset)</code> (see <a href="./../Classes/BusPlug.html#ar">BusPlug: ar</a>)</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>key</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>offset: 0</span>)</h3>
+<div class='method'>
+<p>equivalent to <code class='code prettyprint lang-sc'>*new(key).kr(numChannels, offset)</code> (see <a href="./../Classes/BusPlug.html#kr">BusPlug: kr</a>)</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*clear' href='./../Overviews/Methods.html#clear'>clear</a> (<span class='argstr'>fadeTime</span>)</h3>
+<div class='method'>
+<p>clear all proxies</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*defaultServer' href='./../Overviews/Methods.html#defaultServer'>defaultServer</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*defaultServer' href='./../Overviews/Methods.html#defaultServer'>defaultServer</a> = value</h3>
+<div class='method'>
+<p>set the default server (default: <code class='code prettyprint lang-sc'>Server.default</code>)</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*all' href='./../Overviews/Methods.html#all'>all</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*all' href='./../Overviews/Methods.html#all'>all</a> = value</h3>
+<div class='method'>
+<p>Return the dictionary of all servers, pointing to proxyspaces with Ndefs for each.<pre class='code prettyprint lang-sc'>Ndef.all;</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*dictFor' href='./../Overviews/Methods.html#dictFor'>dictFor</a> (<span class='argstr'>server</span>)</h3>
+<div class='method'>
+<p>Return the proxyspace for a given server.<pre class='code prettyprint lang-sc'>Ndef.dictFor(s);</pre>
+</div><h3><a class='anchor' name='Setting default parameters'>Setting default parameters</a></h3>
+
+<p>Behind every Ndef there is one single instance of <a href="./../Classes/ProxySpace.html">ProxySpace</a> per server used (usually just the one for the default server). This ProxySpace keeps default values for the proxies that can be set. This can be done by:<pre class='code prettyprint lang-sc'>// set default quant
+Ndef(\x).proxyspace.quant = 1.0;</pre>
+
+<p>The other values that can be set in such a way are: <code class='code prettyprint lang-sc'>clock, fadeTime, quant, reshaping, awake</code>.<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*gui' href='./../Overviews/Methods.html#gui'>gui</a> (<span class='argstr'>server</span>, <span class='argstr'>numItems</span>, <span class='argstr'>bounds</span>, <span class='argstr'>preset</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extJITgui.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extJITgui.sc</a></div>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-copy' href='./../Overviews/Methods.html#copy'>copy</a> (<span class='argstr'>toKey</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-key' href='./../Overviews/Methods.html#key'>key</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-key' href='./../Overviews/Methods.html#key'>key</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-proxyspace' href='./../Overviews/Methods.html#proxyspace'>proxyspace</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>s.boot;
+
+Ndef(\sound).play;
+Ndef(\sound).fadeTime = 1;
+Ndef(\sound, { SinOsc.ar([600, 635], 0, SinOsc.kr(2).max(0) * 0.2) });
+Ndef(\sound, { SinOsc.ar([600, 635] * 3, 0, SinOsc.kr(2 * 3).max(0) * 0.2) });
+Ndef(\sound, { SinOsc.ar([600, 635] * 2, 0, SinOsc.kr(2 * 3).max(0) * 0.2) });
+Ndef(\sound, Pbind(\dur, 0.17, \freq, Pfunc({ rrand(300, 700) })) );
+
+Ndef(\lfo, { LFNoise1.kr(3, 400, 800) });
+Ndef(\sound).map(\freq, Ndef(\lfo));
+Ndef(\sound, { arg freq; SinOsc.ar([600, 635] + freq, 0, SinOsc.kr(2 * 3).max(0) * 0.2) });
+Ndef(\lfo, { LFNoise1.kr(300, 400, 800) });
+
+Ndef.clear; //clear all Ndefs</pre>
+<h3><a class='anchor' name='using Ndef inside other Ndefs'>using Ndef inside other Ndefs</a></h3>
+<pre class='code prettyprint lang-sc'>Ndef(\lfo2, { LFNoise1.kr(LFNoise1.kr(0.1).exprange(1, 300) ! 2, 400, 800) });
+Ndef(\sound, { Blip.ar(Ndef.kr(\lfo2), 30) * 0.2 }).play;
+
+Ndef(\lfo2, { [MouseX.kr(10, 300, 1), MouseY.kr(10, 300, 1)] });</pre>
+<h3><a class='anchor' name='setting and mapping parameters'>setting and mapping parameters</a></h3>
+<pre class='code prettyprint lang-sc'>Ndef(\sound, { |freq = 56, numHarm = 10| Blip.ar(freq, numHarm, 30) * 0.2 }).play;
+Ndef(\sound).set(\freq, 15);
+Ndef(\sound).set(\freq, 15, \numHarm, 100);
+
+Ndef(\lfo, { LFNoise2.kr(2).exprange(10, 200) });
+Ndef(\sound).map(\numHarm, Ndef(\lfo));
+Ndef(\sound).set(\numHarm, nil); // unmap.
+Ndef(\sound).stop;</pre>
+<h3><a class='anchor' name='Simple audio routing with the <<> operator'>Simple audio routing with the &lt;&lt;&gt; operator</a></h3>
+<pre class='code prettyprint lang-sc'>(
+Ndef(\sound, {
+    RHPF.ar(
+        \in1.ar([0, 0]) * \in2.ar([0, 0]),
+        \freq.kr(6000, 2),
+        \rq.kr(0.2)
+    ) * 7
+}).play;
+Ndef(\sound).fadeTime = 0.2;    // avoid harsh clicks
+)
+
+Ndef(\a, { SinOsc.ar(MouseX.kr(300, 1000, 1) * [1, 1.2], \phase.ar([0, 0]) * 0.2) });
+Ndef(\b, { LFDNoise3.ar(MouseY.kr(3, 1000, 1) * [1, 1.2]) });
+Ndef(\c, { LFTri.ar(MouseY.kr(3, 10, 1) * [1, 1.2]).max(0) });
+Ndef(\a).fadeTime = 0.2;    // avoid harsh clicks again
+
+Ndef(\sound) &lt;&lt;&gt;.in1 Ndef(\a);
+Ndef(\sound) &lt;&lt;&gt;.in2 Ndef(\b);
+Ndef(\sound) &lt;&lt;&gt;.in2 Ndef(\c);
+Ndef(\a) &lt;&lt;&gt;.phase Ndef(\sound);
+Ndef(\a) &lt;&lt;&gt;.phase nil;    // unmap
+Ndef.clear(3);        // fade out and clear all Ndefs</pre>
+<h3><a class='anchor' name='Making Copies'>Making Copies</a></h3>
+<h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.copy' href='./../Overviews/Methods.html#copy'>copy</a> </h3>
+<div class='method'>
+<p>Because an Ndef is a unique instance for a given key, it can be copied only by supplying a new key. See also: <a href="./../Classes/NodeProxy.html#-copy">NodeProxy: -copy</a>.<pre class='code prettyprint lang-sc'>Ndef(\x, { SinOsc.ar(Rand(500, 900)) * 0.1 }).play;
+Ndef(\x).copy(\y);
+Ndef(\y).play;</pre>
+<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>newKey<td class='argumentdesc'>
+<p>A valid new key, usually a <a href="./../Classes/Symbol.html">Symbol</a></table></div><h3><a class='anchor' name='Recursion'>Recursion</a></h3>
+
+<p>Ndefs can be used recursively. A structure like the following works:<pre class='code prettyprint lang-sc'>Ndef(\sound, { SinOsc.ar([600, 635], Ndef.ar(\sound), LFNoise1.kr(2).max(0) * 0.2) });
+Ndef(\sound).play;
+Ndef.clear;</pre>
+
+<p>This is because there is a feedback delay (the server's <strong>block size</strong>), usually 64 samples, so that calculation can reiterate over its own outputs. For single sample feedback, see:<pre class='code prettyprint lang-sc'>(Platform.resourceDir +/+ "examples/demonstrations/single_sample_feedback.scd").openDocument;</pre>
+<h3><a class='anchor' name='Using different servers'>Using different servers</a></h3>
+<pre class='code prettyprint lang-sc'>// create a new server
+a = Server(\foo, NetAddr("127.0.0.1", 57123)).boot.makeWindow;
+Ndef(\sound, { SinOsc.ar([600, 635]) * SinOsc.kr(2).max(0) * 0.2 }).play; // play on default
+Ndef(\sound -&gt; \foo, { SinOsc.ar([700, 745]) * SinOsc.kr(2).max(0) * 0.2 }).play;// play on foo
+
+// clear definitions
+Ndef(\sound -&gt; \foo).clear(3);
+Ndef(\sound).clear(3);
+
+a.dump;    // display settings of new server
+a.quit;    // terminate new server</pre>
+
+<p><h3><a class='anchor' name='GUI'>GUI</a></h3>
+<pre class='code prettyprint lang-sc'>// create a window for a given Ndef
+Ndef(\sound).edit
+(
+Ndef(\sound, { |freq = 440, rate = 2|
+    SinOsc.ar(freq * [1, 1.625]) * SinOsc.kr(rate).max(0) * 0.2
+}).play;
+)
+
+// set lags for controls:
+Ndef(\sound).lag(\freq, 0.2, \rate, 0.5);
+Ndef(\sound).clear(1);
+
+// create a mixer for all Ndefs:
+NdefMixer(s);</pre>
+<h3><a class='anchor' name='Using Associations'>Using Associations</a></h3>
+
+<p>For a complete list, see <a href="./../Classes/NodeProxy.html">NodeProxy</a>, and <a href="./../Reference/NodeProxy_roles.html">NodeProxy roles</a><pre class='code prettyprint lang-sc'>// setsrc
+(
+Ndef(\x,
+    \setsrc -&gt; Pbind(\source,
+        Pseq([
+            { LFTri.ar(280 * Line.kr(1.1, 0.4, rrand(2, 3)) + [0,1]) * 0.1 },
+            { Pulse.ar(40 + [0,1]) * 0.1 },
+            { LFTri.ar(LFTri.kr(1).round(1.0.rand) + 1 * 180 + [0,1], 0.04) * 0.3 },
+        ], inf),
+        \dur, Prand([3, 2, 4], inf)
+    )
+).play;
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Ndef.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Ndef.schelp</a><br>link::Classes/Ndef::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,96 @@
+<html><head><title>Pevent</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events>Patterns'>Streams-Patterns-Events>Patterns</a></div>
+<h1>Pevent</h1>
+<div id='summary'>Provide an inval for an event stream.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Patterns.sc'>Patterns.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Pkey.html">Pkey</a>, <a href="./../Classes/Pchain.html">Pchain</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-embedInStream'>embedInStream</a> </li>
+<li class='toc3'><a href='#-event'>event</a> </li>
+<li class='toc3'><a href='#-pattern'>pattern</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div>
+<p>This pattern is mainly used in two cases:<dl>
+<dt>using an event pattern as a stream directly<dd><pre class='code prettyprint lang-sc'>a = Pbind(\note, Prand([1, 2, 3], inf)).asStream;
+a.next; // returns nil
+a = Pevent(Pbind(\note, Prand([1, 2, 3], inf))).asStream;
+a.next; // returns an event</pre>
+<dt>setting some default values before they are processed by the pattern<dd><pre class='code prettyprint lang-sc'>Pevent(Pbind(\harmonic, Pseq([24, 25, 29, 30], inf)), (octave: 3, dur: 0.2)).trace.play;</pre>
+</dl>
+Pevent is a simpler form of <a href="./../Classes/Pchain.html">Pchain</a>, so that these are equivalent:<pre class='code prettyprint lang-sc'>Pevent(pattern, event)
+Pchain(pattern, event)
+pattern &lt;&gt; event</pre>
+
+<p>By contrast to Pchain, Pevent uses an <a href="./../Classes/Event.html#*default">Event: *default</a> if nothing is provided.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>pattern</span>, <span class='argstr'>event</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>pattern<td class='argumentdesc'>
+<p>pattern or stream that returns or modifies events.<tr><td class='argumentname'>event<td class='argumentdesc'>
+<p>an event with objects to embed. If none is provided, it uses <a href="./../Classes/Event.html#*default">Event: *default</a>.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-embedInStream' href='./../Overviews/Methods.html#embedInStream'>embedInStream</a> (<span class='argstr'>inval</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-event' href='./../Overviews/Methods.html#event'>event</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-event' href='./../Overviews/Methods.html#event'>event</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pattern' href='./../Overviews/Methods.html#pattern'>pattern</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pattern' href='./../Overviews/Methods.html#pattern'>pattern</a> = value</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+SynthDef(\help_sinegrain,
+        { arg out=0, freq=440, sustain=0.05;
+                var env;
+                env = EnvGen.kr(Env.perc(0.01, sustain, 0.2), doneAction:2);
+                Out.ar(out, SinOsc.ar(freq, 0, env))
+    }).add;
+
+a = Pn(
+    Plazy({
+        Pbind(
+            \instrument, \help_sinegrain,
+            \freq, Pgeom(rrand(200, 600), rrand(1.001, 1.01), rrand(10, 100)).wrap(100, 15000),
+            \dur, Pgeom(rrand(0.2, 0.3), rrand(0.99, 0.92))
+        )
+    })
+);
+
+
+Tdef(\x, {
+    var str = Pevent(a).asStream, event;
+    loop {
+        event = str.next;
+        if(event[\freq] % 50 &lt; 20) { event[\freq] = event[\freq] * [1, 1.2, 1.5] };
+        event.play;
+        event[\dur].wait;
+    }
+
+}).play;
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Pevent.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Pevent.schelp</a><br>link::Classes/Pevent::<br>sc version: 3.8dev</div></div></body></html>

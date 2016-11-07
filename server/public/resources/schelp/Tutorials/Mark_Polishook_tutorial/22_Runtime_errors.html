@@ -1,0 +1,242 @@
+<html><head><title>22_Runtime_errors</title>
+<link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../scdoc.js' type='text/javascript'></script>
+<script src='./../../docmap.js' type='text/javascript'></script>
+<script src='./../../prettify.js' type='text/javascript'></script>
+<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./../..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS/MARK_POLISHOOK_TUTORIAL</div>
+<div id='categories'><a href='./../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Tutorials>Mark_Polishook_tutorial</a></div>
+<h1>22_Runtime_errors</h1>
+<div id='summary'>Mark Polishook tutorial</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Runtime errors'>Runtime errors</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Common errors'>Common errors</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Object doesn't understand'>Object doesn't understand</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Unitialized variable (binary operation fails)'>Unitialized variable (binary operation fails)</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#True, false, or other'>True, false, or other</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Primitive fails'>Primitive fails</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Runtime errors'>Runtime errors</a></h2>
+
+<p>Runtime errors occur while a program is executing.<h2><a class='anchor' name='Common errors'>Common errors</a></h2>
+<ol>
+<li>an object receives a message which it doesn't understand<li>a binary operation (addition, subtraction, multiplication, etc.) can't be performed<li>a value other than true or false appears in a conditional (boolean) test<li>a file can't be opened (a primitive fails)</ol>
+<h2><a class='anchor' name='Object doesn't understand'>Object doesn't understand</a></h2>
+
+<p>In the case of<pre class='code prettyprint lang-sc'>3.createRuntimeError</pre>
+
+<p>SuperCollider prints a four-part error notification to the post window. The parts of the notification are ERROR, RECEIVER, ARGS, and CALL STACK, as in<pre class='code prettyprint lang-sc'>ERROR: Message 'createRuntimeError' not understood.
+RECEIVER:
+   Integer 3
+ARGS:
+Instance of Array {    (057E7560, gc=01, fmt=01, flg=11, set=00)
+  indexed slots [0]
+}
+CALL STACK:
+    DoesNotUnderstandError-reportError
+        arg this = &lt;instance of DoesNotUnderstandError&gt;
+    Nil-handleError
+        arg this = nil
+        arg error = &lt;instance of DoesNotUnderstandError&gt;
+    Object-throw
+        arg this = &lt;instance of DoesNotUnderstandError&gt;
+    Object-doesNotUnderstand
+        arg this = 3
+        arg selector = 'createRuntimeError'
+        arg args = [*0]
+    &lt; closed FunctionDef &gt;  (no arguments or variables)
+    Interpreter-interpretPrintCmdLine
+        arg this = &lt;instance of Interpreter&gt;
+        var res = nil
+        var func = &lt;instance of Function&gt;
+    Process-interpretPrintCmdLine
+        arg this = &lt;instance of Main&gt;</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>The ERROR section explains what went wrong. The RECEIVER section names the the class of the object to which the message was sent. The ARGS section says how many arguments were included in the message. Read the CALL STACK from the bottom to the top to see where the error happened. Reading from bottom to top means going from<pre class='code prettyprint lang-sc'>Process-interpretPrintCmdLine</pre>
+
+<p>to<pre class='code prettyprint lang-sc'>Interpreter-interpretPrintCmdLine</pre>
+
+<p>to<pre class='code prettyprint lang-sc'>Object-doesNotUnderstand</pre>
+
+<p>to<pre class='code prettyprint lang-sc'>Object-throw</pre>
+
+<p>to<pre class='code prettyprint lang-sc'>Nil-handleError</pre>
+
+<p>to<pre class='code prettyprint lang-sc'>DoesNotUnderstandError-reportError</pre>
+
+<p>which is the first line in the stack.
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<pre class='code prettyprint lang-sc'>DoesNotUnderstandError-reportError</pre>
+
+<p>is the mechanism that prints the error notification to the post window. Select it and press cmd-j to see how it works (how it prints the notification).
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>Execute<pre class='code prettyprint lang-sc'>$a * $b</pre>
+
+<p>to create another runtime error message.
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>The ERROR, RECEIVER, ARGS, and CALL STACK headers in the post window explain the problem: Instances of class Char have no knowledge of multiplication.<pre class='code prettyprint lang-sc'>ERROR: Message '*' not understood.
+RECEIVER:
+   Character 97 'a'
+ARGS:
+Instance of Array {    (067F5470, gc=C4, fmt=01, flg=00, set=01)
+  indexed slots [1]
+      0 : Character 98 'b'
+}
+CALL STACK:
+    DoesNotUnderstandError-reportError
+        arg this = &lt;instance of DoesNotUnderstandError&gt;
+    Nil-handleError
+        arg this = nil
+        arg error = &lt;instance of DoesNotUnderstandError&gt;
+    Object-throw
+        arg this = &lt;instance of DoesNotUnderstandError&gt;
+    Object-doesNotUnderstand
+        arg this = $a
+        arg selector = '*'
+        arg args = [*1]
+    &lt; closed FunctionDef &gt;  (no arguments or variables)
+    Interpreter-interpretPrintCmdLine
+        arg this = &lt;instance of Interpreter&gt;
+        var res = nil
+        var func = &lt;instance of Function&gt;
+    Process-interpretPrintCmdLine
+        arg this = &lt;instance of Main&gt;</pre>
+<h2><a class='anchor' name='Unitialized variable (binary operation fails)'>Unitialized variable (binary operation fails)</a></h2>
+
+<p>Here, the variable a is initialized to an integer and the variable b isn't initialized. Multiplying a (the integer 10) by b (nil, the value that SuperCollider uses for unitialized data) will create a runtime error.<pre class='code prettyprint lang-sc'>(
+var a = 10;    // a is declared and initialized
+var b;        // b declared but not initialized, so it defaults to nil
+
+t = Task({
+
+    4.do({ arg item, i;
+
+        if(i != 3)
+            { i.postln }         // print the value of i if it doesn't equal 3
+            { (a * b).postln };    // when i equals 3, do a * b
+                        // ... which is a problem if b is nil
+        1.wait;
+
+    })
+
+});
+t.start;
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>The printout shows the code ran successfully until the index, i, reached 3, which is when a * b happened. The ERROR, RECEIVER, ARGS, and CALL STACK headers describe the problem.
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<pre class='code prettyprint lang-sc'>a Task
+0
+1
+2
+ERROR: binary operator '*' failed.
+RECEIVER:
+   nil
+ARGS:
+Instance of Array {    (067D92B0, gc=CC, fmt=01, flg=00, set=01)
+  indexed slots [2]
+      0 : Integer 10
+      1 : nil
+}
+CALL STACK:
+    DoesNotUnderstandError-reportError
+        arg this = &lt;instance of BinaryOpFailureError&gt;
+    Nil-handleError
+        arg this = nil
+        arg error = &lt;instance of BinaryOpFailureError&gt;
+    Object-throw
+        arg this = &lt;instance of BinaryOpFailureError&gt;
+    Object-performBinaryOpOnSomething
+        arg this = nil
+        arg aSelector = '*'
+        arg thing = 10
+        arg adverb = nil
+    Integer-*
+        arg this = 10
+        arg aNumber = nil
+        arg adverb = nil
+    &lt; FunctionDef in closed FunctionDef &gt;
+        arg item = 3
+        arg i = 3
+    Integer-do
+        arg this = 4
+        arg function = &lt;instance of Function&gt;
+        var i = 3
+    &lt; FunctionDef in closed FunctionDef &gt;  (no arguments or variables)
+    Routine-prStart
+        arg this = &lt;instance of Routine&gt;
+        arg inval = 758.000000</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='True, false, or other'>True, false, or other</a></h2>
+
+<p>A value other than true or false in a boolean test, as in<pre class='code prettyprint lang-sc'>if(x=4) { "this is ok"};</pre>
+
+<p>produces<pre class='code prettyprint lang-sc'>ERROR: Non Boolean in test.
+RECEIVER:
+   Integer 4
+CALL STACK:
+    MethodError-reportError
+        arg this = &lt;instance of MustBeBooleanError&gt;
+    Nil-handleError
+        arg this = nil
+        arg error = &lt;instance of MustBeBooleanError&gt;
+    Object-throw
+        arg this = &lt;instance of MustBeBooleanError&gt;
+    Object-mustBeBoolean
+        arg this = 4
+    &lt; closed FunctionDef &gt;  (no arguments or variables)
+    Interpreter-interpretPrintCmdLine
+        arg this = &lt;instance of Interpreter&gt;
+        var res = nil
+        var func = &lt;instance of Function&gt;
+    Process-interpretPrintCmdLine
+        arg this = &lt;instance of Main&gt;</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>Correcting the test clause fixes the problem.<pre class='code prettyprint lang-sc'>if(x==4) { "this is ok"};</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='Primitive fails'>Primitive fails</a></h2>
+
+<p>Asking for the length of a non-existent file creates a runtime error. The notification shows what went wrong (a C code primitive failed).<pre class='code prettyprint lang-sc'>f = File("i_don't_exist", "r");
+f.length;
+
+ERROR: Primitive '_FileLength' failed.
+Failed.
+RECEIVER:
+Instance of File {    (067D9970, gc=C4, fmt=00, flg=00, set=01)
+  instance variables [1]
+    fileptr : nil
+}
+CALL STACK:
+    MethodError-reportError
+        arg this = &lt;instance of PrimitiveFailedError&gt;
+    Nil-handleError
+        arg this = nil
+        arg error = &lt;instance of PrimitiveFailedError&gt;
+    Object-throw
+        arg this = &lt;instance of PrimitiveFailedError&gt;
+    Object-primitiveFailed
+        arg this = &lt;instance of File&gt;
+    File-length
+        arg this = &lt;instance of File&gt;
+    &lt; closed FunctionDef &gt;  (no arguments or variables)
+    Interpreter-interpretPrintCmdLine
+        arg this = &lt;instance of Interpreter&gt;
+        var res = nil
+        var func = &lt;instance of Function&gt;
+    Process-interpretPrintCmdLine
+        arg this = &lt;instance of Main&gt;</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/22_Runtime_errors.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/22_Runtime_errors.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/22_Runtime_errors::<br>sc version: 3.8dev</div></div></body></html>

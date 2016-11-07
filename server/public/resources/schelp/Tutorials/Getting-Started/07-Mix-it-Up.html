@@ -1,0 +1,73 @@
+<html><head><title>07. Mix it Up</title>
+<link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../scdoc.js' type='text/javascript'></script>
+<script src='./../../docmap.js' type='text/javascript'></script>
+<script src='./../../prettify.js' type='text/javascript'></script>
+<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./../..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS/GETTING-STARTED</div>
+<div id='categories'><a href='./../../Browse.html#Tutorials>Getting-Started'>Tutorials>Getting-Started</a></div>
+<h1>07. Mix it Up</h1>
+<div id='summary'>Getting Started With SuperCollider</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Suggested Exercise'>Suggested Exercise</a></li>
+<ul class='toc'></ul></ul></div>
+<p>We've already seen that multiplication changes the level of something, but what about mixing UGens together? This turns out to be equally simple. All we need is addition:<pre class='code prettyprint lang-sc'>{ PinkNoise.ar(0.2) + SinOsc.ar(440, 0, 0.2) + Saw.ar(660, 0.2) }.play;</pre>
+
+<p>Saw is another type of oscillator, with a waveform that looks like a sawtooth. Note that we use a low value for mul, thus ensuring that the final output will be between -1 and 1, and not clip.
+<p>There's another handy class called Mix, which will mix an array of channels down to a single channel or an array of arrays of channels down to a single array of channels. Watch the post window to see Mix's results.<pre class='code prettyprint lang-sc'>// one channel
+{ Mix.new([SinOsc.ar(440, 0, 0.2), Saw.ar(660, 0.2)]).postln }.play;
+
+// combine two stereo arrays
+(
+{
+    var a, b;
+    a = [SinOsc.ar(440, 0, 0.2), Saw.ar(662, 0.2)];
+    b = [SinOsc.ar(442, 0, 0.2), Saw.ar(660, 0.2)];
+    Mix([a, b]).postln;
+}.play;
+)</pre>
+
+<p>In the first case we get a 'BinaryOpUGen' (in this case this means the two UGens added together), and in the second we get an Array of two BinaryOpUGens.
+<p>Note that in the first example we use Mix.new(...), but in the second we use Mix(...). The latter is a shorthand for the former. 'new' is the most common class method for creating a new object. In some cases objects have more than one class method for creating objects, such as the 'ar' and 'kr' methods of UGens. (Mix, however, is actually just a 'convenience' class, and doesn't actually create Mix objects, it just returns the results of its summing, either a BinaryOpUGen or an Array of them.)
+<p>Mix also has another class method called fill, which takes two arguments. The first is a number, which determines how many times the second argument, a Function, will be evaluated. The results of the evaluations will be summed. Confusing? Take a look at the following example:<pre class='code prettyprint lang-sc'>(
+    var n = 8;
+    { Mix.fill(n, { SinOsc.ar(500 + 500.0.rand, 0, 1 / n) }) }.play;
+)</pre>
+
+<p>The Function will be evaluated n times, each time creating a SinOsc with a random frequency from 500 to 1000 Hz (500 plus a random number between 0 and 500). The mul arg of each SinOsc is set to 1 / n, thus ensuring that the total amplitude will not go outside -1 and 1. By simply changing the value of n, you can have vastly different numbers of SinOscs! (Try it!) This sort of approach makes this code extremely flexible and reusable.
+<p>Each time the Function is evaluated it is passed the number of times evaluated so far as an argument. So if 'n' is 8 the Function will be passed values from 0 to 7, in sequence, counting up. By declaring an argument within our Function we can use this value.<pre class='code prettyprint lang-sc'>// Look at the post window for frequencies and indices
+(
+    var n = 8;
+    {
+        Mix.fill(n, { arg index;
+            var freq;
+            index.postln;
+            freq = 440 + index;
+            freq.postln;
+            SinOsc.ar(freq , 0, 1 / n)
+        })
+    }.play;
+)</pre>
+
+<p>By combining addition and multiplication (or indeed almost any mathematical procedure you could imagine!) with the use of classes like Mix, we have the tools we need to combine multichannel sources of sound into complex mixes and submixes.
+<p>For more information see:
+<p><a href="./../../Classes/Mix.html">Mix</a>, <a href="./../../Classes/BinaryOpUGen.html">BinaryOpUGen</a>, <a href="./../../Overviews/Operators.html">Operators</a>, <a href="./../../Reference/Syntax-Shortcuts.html">Syntax Shortcuts</a><h2><a class='anchor' name='Suggested Exercise'>Suggested Exercise</a></h2>
+
+<p>Experiment with altering the Functions in the text above. For instance try changing the frequencies of the SinOsc, or making multi-channel versions of things.
+<p>____________________
+<p>This document is part of the tutorial <strong>Getting Started With SuperCollider</strong>.
+<p>Click here to go on to the next section: <a href="./../../Tutorials/Getting-Started/08-Scoping-and-Plotting.html">08. Scoping and Plotting</a>
+<p>Click here to return to the table of Contents: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/07-Mix-it-Up.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/07-Mix-it-Up.schelp</a><br>link::Tutorials/Getting-Started/07-Mix-it-Up::<br>sc version: 3.8dev</div></div></body></html>

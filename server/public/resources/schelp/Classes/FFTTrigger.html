@@ -1,0 +1,68 @@
+<html><head><title>FFTTrigger</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>FFT'>UGens>FFT</a></div>
+<h1>FFTTrigger</h1>
+<div id='summary'>Outputs the necessary signal for FFT chains, without doing an FFT on a signal</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/FFT.sc'>FFT.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/PV_ChainUGen.html">PV_ChainUGen</a> : <a href="../Classes/WidthFirstUGen.html">WidthFirstUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>buffer</span>, <span class='argstr'>hop: 0.5</span>, <span class='argstr'>polar: 0</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>buffer<td class='argumentdesc'>
+<p>a buffer to condition for FFT use<tr><td class='argumentname'>hop<td class='argumentdesc'>
+<p>the hop size for timing triggers (defaults to 0.5)<tr><td class='argumentname'>polar<td class='argumentdesc'>
+<p>a flag. If 0.0, the buffer will be prepared for complex data, if &gt; 0.0, polar data is set up.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+s.waitForBoot({
+    b = Buffer.alloc(s, 512);
+});
+)
+// Reminder: This isn't the intended typical usage! It's OK to do this though.
+(
+x = {
+    var mags, phases, chain, sig;
+    // Create simple undulating magnitudes
+    mags = {FSinOsc.kr(ExpRand(0.1, 1)).range(0, 1)}.dup(100);
+    // Then give them a "rolloff" to make the sound less unpleasant
+    mags = mags  * ((1, 0.99 .. 0.01).squared);
+    // Let's turn the bins on and off at different rates, I'm *sure* that'll sound interesting
+    mags = mags * {LFPulse.kr(2 ** IRand(-3, 5)).range(0, 1)}.dup(100);
+    // Let's ignore phase for now
+    phases = 0.dup(100);
+    chain = FFTTrigger(b, 0.5);
+    // Now we can do the packing
+    chain = PackFFT(chain, 512, [mags, phases].flop.flatten, 0, 99, 1);
+    sig = IFFT(chain);
+    Out.ar(0, sig.dup);
+}.play(s);
+)
+x.free;
+b.free;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/FFTTrigger.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/FFTTrigger.schelp</a><br>link::Classes/FFTTrigger::<br>sc version: 3.8dev</div></div></body></html>

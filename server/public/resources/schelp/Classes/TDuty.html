@@ -1,0 +1,155 @@
+<html><head><title>TDuty</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Demand'>UGens>Demand</a></div>
+<h1>TDuty</h1>
+<div id='summary'>Demand results as trigger from demand rate UGens.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Demand.sc'>Demand.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Duty.html">Duty</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Demand.html">Demand</a>, <a href="./../Classes/Duty.html">Duty</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A value is demanded each UGen in the list and output as a trigger according to a stream of duration values. The unit generators in the list should be 'demand' rate.
+<p>When there is a trigger at the reset input, the demand rate UGens in the list and the duration are reset. The reset input may also be a demand UGen, providing a stream of reset times.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>dur: 1</span>, <span class='argstr'>reset: 0</span>, <span class='argstr'>level: 1</span>, <span class='argstr'>doneAction: 0</span>, <span class='argstr'>gapFirst: 0</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>dur: 1</span>, <span class='argstr'>reset: 0</span>, <span class='argstr'>level: 1</span>, <span class='argstr'>doneAction: 0</span>, <span class='argstr'>gapFirst: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>dur<td class='argumentdesc'>
+<p>Time values. Can be a demand UGen or any signal. The next trigger value is acquired after duration.<tr><td class='argumentname'>reset<td class='argumentdesc'>
+<p>Trigger or reset time values. Resets the list of UGens and the duration UGen when triggered. The reset input may also be a demand UGen, providing a stream of reset times.<tr><td class='argumentname'>level<td class='argumentdesc'>
+<p>Demand UGen providing the output values.<tr><td class='argumentname'>doneAction<td class='argumentdesc'>
+<p>A doneAction that is evaluated when the duration stream ends. See
+<p><a href="./../Reference/UGen-doneActions.html">UGen done-actions</a> for more detail.<tr><td class='argumentname'>gapFirst<td class='argumentdesc'>
+<p>when 0 (default), the UGen does the first level poll immediately and then waits for the first durational value. When this is 1, the UGen initially polls the first durational value, waits for that duration, and then polls the first level (along with polling the next durational value). So gapFirst &gt; 0 makes TDuty behave like <a href="./../Classes/TDuty_old.html">TDuty_old</a>.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// examples
+
+s.boot;
+
+
+// play a little rhythm
+
+{ TDuty.ar(Dseq([0.1, 0.2, 0.4, 0.3], inf)) }.play; // demand ugen as durations
+
+
+
+// amplitude changes
+(
+    {
+        var trig;
+        trig = TDuty.ar(
+                Dseq([0.1, 0.2, 0.4, 0.3], inf), // demand ugen as durations
+                0,
+                Dseq([0.1, 0.4, 0.01, 0.5, 1.0], inf) // demand ugen as amplitude
+            );
+        Ringz.ar(trig, 1000, 0.1)
+
+    }.play;
+)
+
+(
+    {
+        var trig;
+        trig = TDuty.ar(
+                MouseX.kr(0.001, 2, 1), // control rate ugen as durations
+                0,
+                Dseq([0.1, 0.4, 0.01, 0.5, 1.0], inf)
+            );
+        Ringz.ar(trig, 1000, 0.1)
+
+    }.play;
+)
+
+
+
+
+// demand ugen as audio oscillator
+
+(
+    {
+        var a, trig, n=5, m=64;
+        a = {
+            var x;
+            x = { 0.2.rand2 } ! m;
+            x = x ++ ({  Drand({ 0.2.rand2 } ! n) } ! m.rand);
+            Dseq(x.scramble, inf)
+        } ! n;
+        trig = TDuty.ar(
+                MouseX.kr(1, 2048, 1) * SampleDur.ir * [1, 1.02],
+                0,
+                Dswitch1(a, MouseY.kr(0, n-1))
+            );
+        Ringz.ar(trig, 1000, 0.01)
+
+    }.play;
+)
+
+
+// single impulses
+
+(
+SynthDef("delta_demand", { arg amp=0.5, out;
+    OffsetOut.ar(out,
+        TDuty.ar(Dseq([0]), 0, amp, 2)
+    )
+}).send(s);
+)
+
+fork { 10.do { s.sendBundle(0.2, ["/s_new", "delta_demand", -1]); 1.0.rand.wait } };
+
+
+// chain of impulses
+(
+SynthDef("delta_demand2", {
+    OffsetOut.ar(0,
+        TDuty.ar(Dgeom(0.05, 0.9, 20), 0, 0.5, 2)
+    )
+}).send(s);
+)
+
+fork { 10.do { s.sendBundle(0.2, ["/s_new", "delta_demand2", -1]); 1.0.rand.wait } };
+
+
+
+// multichannel expansion
+
+(
+    {
+        var t;
+        t = TDuty.ar(
+                Drand([Dgeom(0.1, 0.8, 20), 1, 2], inf) ! 2,
+                0,
+                [Drand({ 1.0.rand } ! 8, inf), Dseq({ 1.0.rand } ! 8, inf)] * 2
+            );
+        x = Ringz.ar(t, [400, 700], 0.1) * 0.1;
+
+    }.play;
+)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/TDuty.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/TDuty.schelp</a><br>link::Classes/TDuty::<br>sc version: 3.8dev</div></div></body></html>

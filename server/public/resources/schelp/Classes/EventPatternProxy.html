@@ -1,0 +1,299 @@
+<html><head><title>EventPatternProxy</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Libraries>JITLib>Patterns'>Libraries>JITLib>Patterns</a>, <a href='./../Browse.html#Live Coding'>Live Coding</a></div>
+<h1>EventPatternProxy</h1>
+<div id='summary'>event stream reference</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/JITLib/Patterns/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/Patterns/Pdef.sc'>Pdef.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/TaskProxy.html">TaskProxy</a> : <a href="../Classes/PatternProxy.html">PatternProxy</a> : <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/Pdef.html">Pdef</a></div>
+<div id='related'>See also: <a href="./../Classes/Pdef.html">Pdef</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*default'>default</a> </li>
+<li class='toc3'><a href='#*defaultQuant'>defaultQuant</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*defaultValue'>defaultValue</a> </li>
+<li class='toc3'><a href='#*parallelise'>parallelise</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-source'>source</a> </li>
+<li class='toc3'><a href='#-clear'>clear</a> </li>
+<li class='toc3'><a href='#-quant'>quant</a> </li>
+<li class='toc3'><a href='#-fadeTime'>fadeTime</a> </li>
+<li class='toc3'><a href='#-envir'>envir</a> </li>
+<li class='toc3'><a href='#-set'>set</a> </li>
+<li class='toc2'><a href='#a) using as stream reference'>a) using as stream reference</a></li>
+<ul class='toc'><li class='toc3'><a href='#-embedInStream'>embedInStream</a> </li>
+</ul><li class='toc2'><a href='#b) using as EventStreamPlayer'>b) using as EventStreamPlayer</a></li>
+<ul class='toc'><li class='toc3'><a href='#-play'>play</a> </li>
+<li class='toc3'><a href='#-stop'>stop</a> </li>
+<li class='toc3'><a href='#-player'>player</a> </li>
+<li class='toc3'><a href='#-pause'>pause</a>  <a href='#-resume'>resume</a>  <a href='#-reset'>reset</a> </li>
+<li class='toc3'><a href='#-isPlaying'>isPlaying</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-buildForProxy'>buildForProxy</a> </li>
+<li class='toc3'><a href='#-constrainStream'>constrainStream</a> </li>
+<li class='toc3'><a href='#-fork'>fork</a> </li>
+<li class='toc3'><a href='#-outset'>outset</a> </li>
+<li class='toc3'><a href='#-playOnce'>playOnce</a> </li>
+<li class='toc3'><a href='#-proxyControlClass'>proxyControlClass</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#a) embedding EventPatternProxy in streams'>a) embedding EventPatternProxy in streams</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#b) playing EventPatternProxy'>b) playing EventPatternProxy</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Keeps a reference to a stream that can be replaced while in use.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>source</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
+<div class='method'>
+<p>create a new instance with a pattern (the source). The pattern should be an <em>event pattern</em> (see <a href="./../Classes/Pdef.html">Pdef</a>)</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*default' href='./../Overviews/Methods.html#default'>default</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/TaskProxy.html'>TaskProxy</a></div>
+<div class='method'>
+<p>a default source, if none is given. the default is a Pbind with resting notes of 1.0 beat duration.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*defaultQuant' href='./../Overviews/Methods.html#defaultQuant'>defaultQuant</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*defaultQuant' href='./../Overviews/Methods.html#defaultQuant'>defaultQuant</a> = value</h3>
+<div class='method'>
+<p>set the default quantization value for the class.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*defaultValue' href='./../Overviews/Methods.html#defaultValue'>defaultValue</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*parallelise' href='./../Overviews/Methods.html#parallelise'>parallelise</a> (<span class='argstr'>list</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-source' href='./../Overviews/Methods.html#source'>source</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-source' href='./../Overviews/Methods.html#source'>source</a> = <span class='argstr'>obj</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
+<div class='method'>
+<p>set the source (a pattern). If a quantization is given, schedule this change to the next beat ( <strong>pattern_</strong>(..) is equivalent)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clear' href='./../Overviews/Methods.html#clear'>clear</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
+<div class='method'>
+<p>set the source to nil and stop playing</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-quant' href='./../Overviews/Methods.html#quant'>quant</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-quant' href='./../Overviews/Methods.html#quant'>quant</a> = <span class='argstr'>val</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
+<div class='method'>
+<p>get or set the quantization value. can be an array [quant, phase, offset, outset]</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fadeTime' href='./../Overviews/Methods.html#fadeTime'>fadeTime</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fadeTime' href='./../Overviews/Methods.html#fadeTime'>fadeTime</a> = value</h3>
+<div class='method'>
+<p>when the synthdefs that are used contain an <code class='code prettyprint lang-sc'>\amp</code> control, the patterns are replaced by crossfading the previous with the new over this time (in beats)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-envir' href='./../Overviews/Methods.html#envir'>envir</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-envir' href='./../Overviews/Methods.html#envir'>envir</a> = <span class='argstr'>dict</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
+<div class='method'>
+<p>provide a default event for the Pdef. It is used to filter the incoming stream before it is passed to the source pattern. This is similar to <a href="./../Classes/NodeProxy.html#-nodeMap">NodeProxy: -nodeMap</a>. When set for the first time, the pattern is rebuilt.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-set' href='./../Overviews/Methods.html#set'>set</a> ( <span class='argstr'>... args</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
+<div class='method'>
+<p>set arguments in the default event. If there is none, it is created and the pattern is rebuilt.</div><h3><a class='anchor' name='a) using as stream reference'>a) using as stream reference</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-embedInStream' href='./../Overviews/Methods.html#embedInStream'>embedInStream</a> (<span class='argstr'>inval</span>, <span class='argstr'>embed: true</span>, <span class='argstr'>default</span>)</h3>
+<div class='method'>
+<p>Given a <a href="./../Classes/Stream.html">Stream</a> like e.g. <a href="./../Classes/Routine.html">Routine</a>, yield all values from the pattern in the proxy before continuing. One pattern proxy can be used to produce values for any number of independent streams.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>inval<td class='argumentdesc'>
+<p>The inval is an <a href="./../Classes/Event.html">Event</a> and is passed into all substreams. It can be used to control how they behave from the outside.<tr><td class='argumentname'>embed<td class='argumentdesc'>
+<p>See <a href="./../Classes/Object.html#-streamArg">Object: -streamArg</a> for explanation.<tr><td class='argumentname'>default<td class='argumentdesc'>
+<p>Replacement for <code class='code prettyprint lang-sc'>nil</code> outputs of the source pattern. One use case is <a href="#-endless">-endless</a>.<pre class='code prettyprint lang-sc'>a = EventPatternProxy.new;
+a.source = Pbind(\freq, Pgeom(100, Pwhite(1.01, 1.2), 4));
+r = Routine { |inval| loop { a.embedInStream(inval) }; };
+r.nextN(12, ()); // the next 12 values from r
+a.source = Pbind(\freq, Pgeom([100, 200], Pwhite(1.01, 1.2), 4));// replace the source
+r.nextN(12, ()); // the next 12 values from r</pre>
+</table></div><h3><a class='anchor' name='b) using as EventStreamPlayer'>b) using as EventStreamPlayer</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-play' href='./../Overviews/Methods.html#play'>play</a> (<span class='argstr'>argClock</span>, <span class='argstr'>protoEvent</span>, <span class='argstr'>quant</span>, <span class='argstr'>doReset: false</span>)</h3>
+<div class='method'>
+<p>starts the EventPatternProxy and creates a player. if you want to play multiple instances, use <a href="#-fork">-fork</a>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>argClock<td class='argumentdesc'>
+<p>play on a certain clock, e.g. a <a href="./../Classes/TempoClock.html">TempoClock</a>.<tr><td class='argumentname'>protoEvent<td class='argumentdesc'>
+<p>an event to be used as a first input to the chain<tr><td class='argumentname'>quant<td class='argumentdesc'>
+<p>can be an array of [quant, phase, offset, outset], or an instance of <a href="./../Classes/Quant.html">Quant</a>.<tr><td class='argumentname'>doReset<td class='argumentdesc'>
+<p>if set to true, play will restart the stream if already running (a <a href="./../Classes/Boolean.html">Boolean</a>).<pre class='code prettyprint lang-sc'>// using a protoEvent
+Pdef(\x, Pbind(\dur, 0.1));
+Pdef(\x).trace.play(protoEvent: (freq: 1000));</pre>
+<pre class='code prettyprint lang-sc'>// using a different clock: here a Scheduler
+Pdef(\x, Pbind(\dur, Pwhite(0.1, 0.2, inf), \count, Pseries()));
+a = Scheduler(TempoClock.default);
+Pdef(\x).trace.play(a);
+a.advance(0.2);</pre>
+</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-stop' href='./../Overviews/Methods.html#stop'>stop</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/TaskProxy.html'>TaskProxy</a></div>
+<div class='method'>
+<p>stops the player</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-player' href='./../Overviews/Methods.html#player'>player</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/TaskProxy.html'>TaskProxy</a></div>
+<div class='method'>
+<p>the current player (if the Pdef is simply used in other streams this is <code class='code prettyprint lang-sc'>nil</code>)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pause' href='./../Overviews/Methods.html#pause'>pause</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/TaskProxy.html'>TaskProxy</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-resume' href='./../Overviews/Methods.html#resume'>resume</a> (<span class='argstr'>clock</span>, <span class='argstr'>quant</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/TaskProxy.html'>TaskProxy</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-reset' href='./../Overviews/Methods.html#reset'>reset</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
+<div class='method'>
+<p>perform player method</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-isPlaying' href='./../Overviews/Methods.html#isPlaying'>isPlaying</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/TaskProxy.html'>TaskProxy</a></div>
+<div class='method'>
+<p>returns true if Pdef is running. if a Pdef is playing and its stream ends, it will schedule a stream for playing as soon as a new one is assigned to it.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-buildForProxy' href='./../Overviews/Methods.html#buildForProxy'>buildForProxy</a> (<span class='argstr'>proxy</span>, <span class='argstr'>channelOffset: 0</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-constrainStream' href='./../Overviews/Methods.html#constrainStream'>constrainStream</a> (<span class='argstr'>stream</span>, <span class='argstr'>newStream</span>, <span class='argstr'>inval</span>, <span class='argstr'>cleanup</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fork' href='./../Overviews/Methods.html#fork'>fork</a> (<span class='argstr'>argClock</span>, <span class='argstr'>quant</span>, <span class='argstr'>protoEvent</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-outset' href='./../Overviews/Methods.html#outset'>outset</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-outset' href='./../Overviews/Methods.html#outset'>outset</a> = <span class='argstr'>val</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-playOnce' href='./../Overviews/Methods.html#playOnce'>playOnce</a> (<span class='argstr'>argClock</span>, <span class='argstr'>protoEvent</span>, <span class='argstr'>quant</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-proxyControlClass' href='./../Overviews/Methods.html#proxyControlClass'>proxyControlClass</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<h3><a class='anchor' name='a) embedding EventPatternProxy in streams'>a) embedding EventPatternProxy in streams</a></h3>
+<pre class='code prettyprint lang-sc'>(
+SynthDef("Pdefhelp", { arg out, freq, sustain=1, amp=1, pan;
+    var env, u=1;
+    env = EnvGen.kr(Env.perc(0.03, sustain), 1, doneAction:2);
+    5.do { var d; d = exprand(0.01, 1); u = SinOsc.ar(d * 300, u, rrand(0.1,1.2) * d, 1) };
+    Out.ar(out, Pan2.ar(SinOsc.ar(u + 1 * freq, 0, amp * env), pan));
+
+}).add;
+)
+s.boot;
+
+#a, b, c, m = { EventPatternProxy.new } ! 4;
+
+m.play;
+m.source = Pbind(\instrument, \Pdefhelp, \dur, 1, \degree, 16, \legato, 0.1);
+
+a.source = Pbind(\instrument, \Pdefhelp, \dur, 0.25, \degree, Pseq(#[0, 5, 4, 3]));
+b.source = Pbind(\instrument, \Pdefhelp, \dur, 0.125, \degree, Pseq(#[7, 8, 7, 8]));
+c.source = Pbind(\instrument, \Pdefhelp, \dur, 0.25, \degree, Pseq(#[0, 1, 2], 2));
+
+x = Pseq([a, b, c], inf).play;
+
+
+c.source = Pbind(\instrument, \Pdefhelp, \dur, 0.25, \degree, Pseq(#[4, 3, 1, 2]*3));
+
+
+// infinite loops are scheduled (to ths clock's next beat by default) and released:
+
+a.source = Pbind(\instrument, \Pdefhelp, \dur, 0.753, \degree, Pseq(#[0, 5, 4, 3, 2], inf));
+a.source = Pbind(\instrument, \Pdefhelp, \dur, 0.125, \degree, Pseq(#[0, 5, 4, 3] + 1, 1));
+a.source = Pbind(\instrument, \Pdefhelp, \dur, 0.25, \degree, Pseq(#[0, 5, 4, 3] - 1, 1));
+
+a.source = Pbind(\instrument, \Pdefhelp, \dur, 0.125, \degree, Pseq(#[0, 5] - 1, 1));
+a.source = Pbind(\instrument, \Pdefhelp, \dur, 0.753, \degree, Pshuf(#[0, 5, 4, 3, 2], inf));
+
+x.stop;
+m.stop;
+
+// EventPatternProxy can be used in multiple patterns
+
+(
+x = Ppar([
+    Pbindf(Pn(a, inf),
+        \gtranspose, Pstutter(8, Pseq(#[0, 2, 0, 3],inf))
+    ),
+    Pbindf(Pn(a, inf),
+        \gtranspose, Pstutter(8, Pseq(#[7, 4, 0, 3],inf)),
+        \dur, 0.6
+    ),
+    Pbindf(Pn(a, inf),
+        \degree, Pseq(#[0, 5, 4, 3, 2, 3, 2], 1)
+    )
+]).play;
+)
+
+a.source = Pbind(\instrument, \Pdefhelp, \dur, 0.1, \degree, Pseq(#[0, 1, 0, 1, 2], inf));
+
+a.source = Pbind(\instrument, \Pdefhelp, \dur, 0.2, \degree, Pseq([0, 4], inf));
+
+a.source = Pbind(\instrument, \Pdefhelp, \dur, 0.2, \degree, Pseq([0, 4, Prand([6, 8b],2)], inf));
+
+a.source = Pbind(\instrument, \Pdefhelp, \dur, 0.1, \degree, Pseq(#[0, 1b, 1, 2b, 2, 3, 4b, 4, 5], inf));
+
+a.set(\detune, -50); // set environment
+a.set(\detune, 0);
+
+x.stop;</pre>
+<h3><a class='anchor' name='b) playing EventPatternProxy'>b) playing EventPatternProxy</a></h3>
+<pre class='code prettyprint lang-sc'>(
+// load a synthdef
+s.boot;
+SynthDef("gpdef",
+    { arg out=0, freq=440, sustain=0.05, amp=0.1, pan;
+        var env;
+        env = EnvGen.kr(Env.perc(0.01, sustain), doneAction:2) * amp;
+        Out.ar(out, Pan2.ar(SinOsc.ar(freq, 0, env), pan))
+    }).add;
+)
+
+
+#x, y = {EventPatternProxy.new} ! 2;
+
+x.play; // play them. A silent resting pattern is used.
+y.play;
+
+
+// assign various patterns to it:
+
+x.source = Pbind(\dur, 0.25, \instrument, \gpdef);
+x.source = Pbind(\dur, 0.25, \degree, Pseq([3, 4, 5b, 6], inf), \instrument, \gpdef);
+x.source = Pbind(\dur, 0.25, \degree, Pseq([3, 4, 5b, 6]+1, inf), \instrument, \gpdef);
+y.source = Pbind(\dur, 0.25, \degree, Pseq([3, 4, 5b, 6]-1, inf), \instrument, \gpdef);
+y.source = Pbind(\dur, 0.25, \degree, Pseq([3, 4, 5b]-2, inf), \instrument, \gpdef);
+
+// using fadeTime:
+
+y.fadeTime = 8.0;
+y.source = Pbind(\dur, 0.125, \degree, Pseq([3, 4, 5b, 6]+4.rand, inf), \instrument, \gpdef);
+y.source = Pbind(\dur, 0.25, \degree, Pseq([3, 4, 5b, 6]-2, inf), \instrument, \gpdef);
+
+(
+x.source = Pbind(
+        \dur, 1 / 6,
+        \degree, Pseq([3, 4, Prand([8, 2, 3, 9, 10],1) - 5, 6]+1, inf),
+        \instrument, \gpdef
+        )
+    );
+)
+(
+x.source = Pbind(
+        \dur, 0.25,
+        \degree, Pseq([3, 4, Prand([8, 2, 3, 9, 10],1), 6], inf),
+        \instrument, \gpdef)
+    );
+)
+x.stop;
+
+
+
+// tempo change
+TempoClock.default.tempo = 1.3;
+y.source = Pbind(\dur, 0.25, \degree, Pseq([3, 4, 5, 6]+1, inf), \instrument, \gpdef);
+
+// drop in ending patterns
+
+x.play;
+x.fadeTime = nil;
+
+x.source = Pbind(\dur, 0.25, \degree, Pseq([3, [7,4], 5, 6]-2), \instrument, \gpdef);
+x.source = Pbind(\dur, 0.125, \degree, Pseq([3, [7,4], 5, 4]-3), \instrument, \gpdef);
+x.source = Pbind(\dur, 0.35, \degree, Pseq([3, [7,4], 5, 4, 3]-3), \instrument, \gpdef);
+x.source = Pbind(\dur, 0.25, \degree, Pshuf([3, [7,4], 5, 6]-2), \instrument, \gpdef);
+
+
+
+TempoClock.default.tempo = 1.0;
+x.stop;
+y.stop;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/EventPatternProxy.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/EventPatternProxy.schelp</a><br>link::Classes/EventPatternProxy::<br>sc version: 3.8dev</div></div></body></html>

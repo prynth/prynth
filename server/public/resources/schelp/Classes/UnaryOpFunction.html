@@ -1,0 +1,74 @@
+<html><head><title>UnaryOpFunction</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Core'>Core</a></div>
+<h1>UnaryOpFunction</h1>
+<div id='summary'>represent a unary oparation on a function</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Core/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Core/AbstractFunction.sc'>AbstractFunction.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/UnaryOpFunctionProxy.html">UnaryOpFunctionProxy</a></div>
+<div id='related'>See also: <a href="./../Classes/UnaryOpStream.html">UnaryOpStream</a>, <a href="./../Classes/Punop.html">Punop</a>, <a href="./../Classes/BinaryOpFunction.html">BinaryOpFunction</a>, <a href="./../Classes/NAryOpFunction.html">NAryOpFunction</a>, <a href="./../Overviews/Operators.html">Operators</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-functionPerformList'>functionPerformList</a> </li>
+<li class='toc3'><a href='#-value'>value</a> </li>
+<li class='toc3'><a href='#-valueArray'>valueArray</a> </li>
+<li class='toc3'><a href='#-valueArrayEnvir'>valueArrayEnvir</a> </li>
+<li class='toc3'><a href='#-valueEnvir'>valueEnvir</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Operating on functions instead of numbers, what results is not a result of the calculation, but a structure that represents that calculation.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>selector</span>, <span class='argstr'>a</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-functionPerformList' href='./../Overviews/Methods.html#functionPerformList'>functionPerformList</a> (<span class='argstr'>selector</span>, <span class='argstr'>arglist</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-value' href='./../Overviews/Methods.html#value'>value</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-valueArray' href='./../Overviews/Methods.html#valueArray'>valueArray</a> (<span class='argstr'>args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-valueArrayEnvir' href='./../Overviews/Methods.html#valueArrayEnvir'>valueArrayEnvir</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-valueEnvir' href='./../Overviews/Methods.html#valueEnvir'>valueEnvir</a> ( <span class='argstr'>... args</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>a = 2.sqrt; // result is square root of two (approximate floating point).
+a = { b }.sqrt; // result is  a UnaryOpFunction
+b = 2;
+a.value; // now it is evaluated, and the result is calculated
+b = 9;
+a.value; // again, with a different value.</pre>
+<pre class='code prettyprint lang-sc'>// sound example
+(
+var a = { 19.rand };
+var b = a.sqrt;
+fork {
+    15.do {
+        (instrument: \default, note: [a.value, b.value]).play;
+        0.3.wait;
+    }
+}
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/UnaryOpFunction.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/UnaryOpFunction.schelp</a><br>link::Classes/UnaryOpFunction::<br>sc version: 3.8dev</div></div></body></html>

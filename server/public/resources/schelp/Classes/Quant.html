@@ -1,0 +1,115 @@
+<html><head><title>Quant</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Scheduling'>Scheduling</a></div>
+<h1>Quant</h1>
+<div id='summary'>encapsulate quantization issues associated with EventStreamPlayer and TempoClock</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Quant.sc'>Quant.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*default'>default</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-quant'>quant</a> </li>
+<li class='toc3'><a href='#-phase'>phase</a> </li>
+<li class='toc3'><a href='#-timingOffset'>timingOffset</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-asQuant'>asQuant</a> </li>
+<li class='toc3'><a href='#-nextTimeOnGrid'>nextTimeOnGrid</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#Automatic instantiation'>Automatic instantiation</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Timing offset in Patterns'>Timing offset in Patterns</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Extensibility: adding custom scheduling models'>Extensibility: adding custom scheduling models</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Represents the standard scheduling model for Routines, Tasks and Patterns. A Quant object stores the parameters needed to calculate the precise time when a Routine/Task/Pattern will start playing on a specified TempoClock.
+<p>The standard scheduling model uses quant and phase to locate the starting time. They are evaluated with reference to the TempoClock's baseBarBeat, which is normally zero but is updated when you change the clock's meter using the clock's setMeterAtBeat method. Thus scheduling still makes sense even after a meter change. See the <a href="./../Classes/TempoClock.html">TempoClock</a> help file for details on its representation of time.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>quant: 0</span>, <span class='argstr'>phase</span>, <span class='argstr'>timingOffset</span>)</h3>
+<div class='method'>
+<p>Explicitly create an instance of Quant, which may be used and reused. Phase and offset may be nil, in which case they are treated as 0. If quant is nil, it will schedule for the current time exactly.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*default' href='./../Overviews/Methods.html#default'>default</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*default' href='./../Overviews/Methods.html#default'>default</a> = <span class='argstr'>quant</span></h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-quant' href='./../Overviews/Methods.html#quant'>quant</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-quant' href='./../Overviews/Methods.html#quant'>quant</a> = value</h3>
+<div class='method'>
+<p>Quantization granularity. The routine will begin on the next integer multiple of this number after the baseBarBeat. If negative, it indicates the number of bars in the future to schedule (where the bar length is taken from the clock's beatsPerBar variable).</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-phase' href='./../Overviews/Methods.html#phase'>phase</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-phase' href='./../Overviews/Methods.html#phase'>phase</a> = value</h3>
+<div class='method'>
+<p>An offset to push the scheduling time into the middle of the bar. +1 is one beat later, -1 is one beat earlier. A negative phase is legal, but it might result in a scheduling time that is later than the current time, in which case scheduling will be incorrect. It's your responsibility to take this into account.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-timingOffset' href='./../Overviews/Methods.html#timingOffset'>timingOffset</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-timingOffset' href='./../Overviews/Methods.html#timingOffset'>timingOffset</a> = value</h3>
+<div class='method'>
+<p>For use with patterns only -- this enables patterns to run slightly ahead of their sounding time on the clock, giving you control over the order in which threads execute.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asQuant' href='./../Overviews/Methods.html#asQuant'>asQuant</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nextTimeOnGrid' href='./../Overviews/Methods.html#nextTimeOnGrid'>nextTimeOnGrid</a> (<span class='argstr'>clock</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<dl>
+<dt>quant = 1<dd>schedule for the next whole beat<dt>quant = 4, phase = -1<dd>a one beat pick-up to the next 4/4 barline</dl>
+
+<p>Suppose the clock's meter was 3/4 for 3 bars (starting at 0). Then:<dl>
+<dt>quant = 3, phase = 1<dd>would schedule for 1, 4, or 7 beats</dl>
+
+<p>During this time, clock.setMeterAtBeat(4, 9) is executed. Then:<dl>
+<dt>quant = 4, phase = 0<dd>would schedule for 9, 13, 17, 21 etc. beats</dl>
+
+<p>Every point in time can be precisely identified this way, and it can be related back easily to the Western concept of meter or time signature.<h3><a class='anchor' name='Automatic instantiation'>Automatic instantiation</a></h3>
+
+<p>Certain objects convert themselves into Quant objects when used with <a href="./../Classes/Routine.html#-play">Routine: -play</a>, <a href="./../Classes/Task.html#-play">Task: -play</a> or <a href="./../Classes/Pattern.html#-play">Pattern: -play</a>.<dl>
+<dt><a href="./../Classes/SimpleNumber.html">SimpleNumber</a><dd><code class='code prettyprint lang-sc'>4.0 --&gt; Quant(4.0, nil, nil)</code><dt><a href="./../Classes/Array.html">Array</a><dd><code class='code prettyprint lang-sc'>[4.0, 1.0] --&gt; Quant(4.0, 1.0, nil)</code>
+<p><code class='code prettyprint lang-sc'>[4.0, 1.0, 0.1] --&gt; Quant(4.0, 1.0, 0.1)</code><dt><a href="./../Classes/Nil.html">Nil</a><dd><code class='code prettyprint lang-sc'>nil --&gt; Quant(nil, nil, nil)</code></dl>
+
+<p>This simplifies the syntax:<pre class='code prettyprint lang-sc'>Routine({ ... }).play(quant: 4.0):: vs. code::Routine({ ... }).play(quant: Quant(4.0))</pre>
+<h3><a class='anchor' name='Timing offset in Patterns'>Timing offset in Patterns</a></h3>
+
+<p>In some cases, you might want two patterns that are sounding at the same time to evaluate in a specific order -- for instance, the second pattern might depend upon data calculated by the first. If they are scheduled on the clock for exactly the same time, you have no control over the order of execution: the second pattern might evaluate first, in which case it would be using stale data for the pattern that should have run first.
+<p>The timing offset is a positive number, usually small, that pushes the scheduling time slightly earlier, guaranteeing that patterns with larger timing offsets will execute earlier than others. The timing offset value is saved in the event prototype, which then delays its messages to the server by exactly that number of beats.
+<p>Two patterns, scheduled for the same quant and phase but with different timing offsets, should sound exactly together.<pre class='code prettyprint lang-sc'>(
+// timing offset = 0
+p = Pbind(\freq, 440, \pan, -1, \delta, 1.0, \sustain, 0.1).play(quant: [2, 0, 0]);
+// timing offest = 0.1
+q = Pbind(\freq, 880, \pan, 1, \delta, 0.5, \sustain, 0.1).play(quant: [2, 0, 0.1]);
+)
+
+// p's nextBeat is x.0 - q's is x.4 or x.9 (e.g., halves of a beat minus 0.1)
+[p.nextBeat, q.nextBeat]
+
+p.stop; q.stop;</pre>
+<h3><a class='anchor' name='Extensibility: adding custom scheduling models'>Extensibility: adding custom scheduling models</a></h3>
+
+<p>While the standard scheduling model should be sufficient for most uses, the point of using an object to encapsulate scheduling details is that you can use a different object to schedule Routines or Patterns differently. (Users are not forced to use the standard scheduling model in every case.)
+<p>If it's a kind of scheduling you expect to use often, you can create a subclass of Quant that implements the following methods:
+<p>*new(...): create a new instance, with whatever arguments you need
+<p>nextTimeOnGrid(clock): calculate the exact beat number on the clock
+<p>Your class should also have methods asQuant, offset and offset_. If your class is a subclass of Quant, it will inherit those methods automatically.
+<p>You can also use an Event for one shot scheduling. It should at least have an entry for nextTimeOnGrid, which will usually be a function taking the arguments "self" and "clock" that returns the absolute scheduling time. Any other values needed for that calculation should also be present in the Event.<pre class='code prettyprint lang-sc'>// schedule for a random number of beats after the next integer
+Pfuncn({ thisThread.clock.beats.debug("scheduled for"); nil }, 1)
+    .play(quant: (
+        nextTimeOnGrid: { |self, clock|
+            clock.beats.roundUp(1).debug("clock beats") + rrand(self.lo, self.hi).debug("rand")
+        },
+        lo: 0, hi: 4
+    ));</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Quant.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Quant.schelp</a><br>link::Classes/Quant::<br>sc version: 3.8dev</div></div></body></html>

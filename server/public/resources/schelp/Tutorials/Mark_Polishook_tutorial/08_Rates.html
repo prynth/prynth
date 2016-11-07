@@ -1,0 +1,54 @@
+<html><head><title>08_Rates</title>
+<link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../scdoc.js' type='text/javascript'></script>
+<script src='./../../docmap.js' type='text/javascript'></script>
+<script src='./../../prettify.js' type='text/javascript'></script>
+<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./../..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS/MARK_POLISHOOK_TUTORIAL</div>
+<div id='categories'><a href='./../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Tutorials>Mark_Polishook_tutorial</a></div>
+<h1>08_Rates</h1>
+<div id='summary'>Mark Polishook tutorial</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Audio rate'>Audio rate</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Control rate'>Control rate</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Audio rate'>Audio rate</a></h2>
+
+<p>Ugens to which an .ar message is sent run at the audio rate, by default, at 44,100 samples per second. Send the .ar message to unit generators when they're part of the audio chain that will be heard.<pre class='code prettyprint lang-sc'>SinOsc.ar(440, 0, 1);</pre>
+<h2><a class='anchor' name='Control rate'>Control rate</a></h2>
+
+<p>Ugens to which a .kr message is appended run at the control rate.<pre class='code prettyprint lang-sc'>SinOsc.kr(440, 0, 1);</pre>
+
+<p>By default, control rate ugens generate one sample value for every sixty-four sample values made by an audio rate ugen. Control rate ugens thus use fewer resources and are less computationally expensive than their audio rate counterparts.
+<p>Use control rate ugens as modulators, that is, as signals that shape an audio signal.
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>Here, a control rate SinOsc modulates the frequency of the audio rate Pulse wave.<pre class='code prettyprint lang-sc'>(
+SynthDef("anExample", {
+    Out.ar(
+        0,
+        Pulse.ar(
+            [220, 221.5] + SinOsc.kr([7, 8], 0, 7), // the control rate conserves CPU cycles
+            0.35,
+            0.02
+        )
+    )
+}).add;
+)
+
+Synth("anExample")</pre>
+
+<p>Type command-period (cmd-.) to stop synthesis.
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>Go to <a href="./../../Tutorials/Mark_Polishook_tutorial/09_Buses.html">09_Buses</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/08_Rates.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/08_Rates.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/08_Rates::<br>sc version: 3.8dev</div></div></body></html>

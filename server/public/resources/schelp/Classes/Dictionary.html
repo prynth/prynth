@@ -1,0 +1,381 @@
+<html><head><title>Dictionary</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Collections>Unordered'>Collections>Unordered</a></div>
+<h1>Dictionary</h1>
+<div id='summary'>associative collection mapping keys to values</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/Dictionary.sc'>Dictionary.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Set.html">Set</a> : <a href="../Classes/Collection.html">Collection</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/IdentityDictionary.html">IdentityDictionary</a></div>
+<div id='related'>See also: <a href="./../Classes/Environment.html">Environment</a>, <a href="./../Classes/Event.html">Event</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*newFrom'>newFrom</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Adding and Removing'>Adding and Removing</a></li>
+<ul class='toc'><li class='toc3'><a href='#-add'>add</a> </li>
+<li class='toc3'><a href='#-put'>put</a> </li>
+<li class='toc3'><a href='#-removeAt'>removeAt</a> </li>
+<li class='toc3'><a href='#-putAll'>putAll</a> </li>
+<li class='toc3'><a href='#-putPairs'>putPairs</a> </li>
+</ul><li class='toc2'><a href='#Accessing'>Accessing</a></li>
+<ul class='toc'><li class='toc3'><a href='#-at'>at</a> </li>
+<li class='toc3'><a href='#-atFail'>atFail</a> </li>
+<li class='toc3'><a href='#-keys'>keys</a> </li>
+<li class='toc3'><a href='#-values'>values</a> </li>
+<li class='toc3'><a href='#-atAll'>atAll</a> </li>
+<li class='toc3'><a href='#-getPairs'>getPairs</a> </li>
+<li class='toc3'><a href='#-associationAt'>associationAt</a> </li>
+<li class='toc3'><a href='#-findKeyForValue'>findKeyForValue</a> </li>
+<li class='toc3'><a href='#-matchAt'>matchAt</a> </li>
+<li class='toc3'><a href='#-trueAt'>trueAt</a> </li>
+<li class='toc3'><a href='#-falseAt'>falseAt</a> </li>
+</ul><li class='toc2'><a href='#Iteration/Enumeration'>Iteration/Enumeration</a></li>
+<ul class='toc'><li class='toc3'><a href='#-do'>do</a>  <a href='#-collect'>collect</a>  <a href='#-reject'>reject</a>  <a href='#-select'>select</a> </li>
+<li class='toc3'><a href='#-keysValuesDo'>keysValuesDo</a> </li>
+<li class='toc3'><a href='#-keysValuesChange'>keysValuesChange</a> </li>
+<li class='toc3'><a href='#-keysDo'>keysDo</a> </li>
+<li class='toc3'><a href='#-associationsDo'>associationsDo</a> </li>
+<li class='toc3'><a href='#-pairsDo'>pairsDo</a> </li>
+<li class='toc3'><a href='#-invert'>invert</a> </li>
+</ul><li class='toc2'><a href='#Other instance methods'>Other instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-order'>order</a> </li>
+<li class='toc3'><a href='#-powerset'>powerset</a> </li>
+<li class='toc3'><a href='#-merge'>merge</a> </li>
+<li class='toc3'><a href='#-blend'>blend</a> </li>
+<li class='toc3'><a href='#-asSortedArray'>asSortedArray</a> </li>
+<li class='toc3'><a href='#-asKeyValuePairs'>asKeyValuePairs</a> </li>
+<li class='toc3'><a href='#-embedInStream'>embedInStream</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-++'>++</a> </li>
+<li class='toc3'><a href='#-asDict'>asDict</a> </li>
+<li class='toc3'><a href='#-asPairs'>asPairs</a> </li>
+<li class='toc3'><a href='#-associationAtFail'>associationAtFail</a> </li>
+<li class='toc3'><a href='#-choose'>choose</a> </li>
+<li class='toc3'><a href='#-fixCollisionsFrom'>fixCollisionsFrom</a> </li>
+<li class='toc3'><a href='#-grow'>grow</a> </li>
+<li class='toc3'><a href='#-gui'>gui</a> </li>
+<li class='toc3'><a href='#-includes'>includes</a> </li>
+<li class='toc3'><a href='#-includesKey'>includesKey</a> </li>
+<li class='toc3'><a href='#-isAssociationArray'>isAssociationArray</a> </li>
+<li class='toc3'><a href='#-keysValuesArrayDo'>keysValuesArrayDo</a> </li>
+<li class='toc3'><a href='#-mergeItem'>mergeItem</a> </li>
+<li class='toc3'><a href='#-printItemsOn'>printItemsOn</a> </li>
+<li class='toc3'><a href='#-remove'>remove</a> </li>
+<li class='toc3'><a href='#-removeAtFail'>removeAtFail</a> </li>
+<li class='toc3'><a href='#-removeFail'>removeFail</a> </li>
+<li class='toc3'><a href='#-scanFor'>scanFor</a> </li>
+<li class='toc3'><a href='#-softPut'>softPut</a> </li>
+<li class='toc3'><a href='#-softSet'>softSet</a> </li>
+<li class='toc3'><a href='#-sortedKeysValuesDo'>sortedKeysValuesDo</a> </li>
+<li class='toc3'><a href='#-storeItemsOn'>storeItemsOn</a> </li>
+<li class='toc3'><a href='#-transformEvent'>transformEvent</a> </li>
+</ul></ul><li class='toc1'><a href='#Overview'>Overview</a></li>
+<ul class='toc'><li class='toc2'><a href='#The Difference between Dictionary, IdentityDictionary, Environment, and Event'>The Difference between Dictionary, IdentityDictionary, Environment, and Event</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A Dictionary is an associative collection mapping keys to values. Two keys match if they are <strong>equal</strong>. (i.e. == returns true.)
+<p>The contents of a Dictionary are <strong>unordered</strong>. You must not depend on the order of items in a Dictionary. You must only rely on equality for the keys (e.g. symbols are ok, strings not). For identity matching see: <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>n: 8</span>)</h3>
+<div class='method'>
+<p>Creates a Dictionary with an initial capacity for <strong>n</strong> key value mappings.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*newFrom' href='./../Overviews/Methods.html#newFrom'>newFrom</a> (<span class='argstr'>aCollection</span>)</h3>
+<div class='method'>
+<p>Creates a new Dictionary from another collection.<pre class='code prettyprint lang-sc'>d= Dictionary.newFrom(List[\a, 1, \b, 2, \c, 4]);</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aCollection<td class='argumentdesc'>
+<p>any Object that responds to keysValuesDo (usually a List or an Array).</table><h4>Discussion:</h4>
+
+<p>A new Dictionary can also be created from an array of <a href="./../Classes/Association.html">Association</a>s:<pre class='code prettyprint lang-sc'>Dictionary.with(*[\a-&gt;1,\b-&gt;2,\c-&gt;3])</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Adding and Removing'>Adding and Removing</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-add' href='./../Overviews/Methods.html#add'>add</a> (<span class='argstr'>anAssociation</span>)</h3>
+<div class='method'>
+<p>Add <strong>anAssociation</strong> to the Dictionary. If the key value pair already exists in the Dictionary, the key's value will be replaced.<pre class='code prettyprint lang-sc'>(
+d = Dictionary.new;
+d.add(\monkey -&gt; 0).postln;
+d.add(\robot -&gt; 1).postln;    // Add robot as a key with a value of 1
+d.add(\monkey -&gt; 2).postln;    // Replaces the value for the key monkey with 2
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-put' href='./../Overviews/Methods.html#put'>put</a> (<span class='argstr'>key</span>, <span class='argstr'>value</span>)</h3>
+<div class='method'>
+<p>Associate two objects and add them to the Dictionary.<pre class='code prettyprint lang-sc'>d = Dictionary.new;
+d.put("abc", 10);
+
+// using an event:
+d = ();
+d.put("abc", 10);</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>key<td class='argumentdesc'>
+<p>key to associate with object. This can be any objects, but is often a <a href="./../Classes/Symbol.html">Symbol</a>.<tr><td class='argumentname'>value<td class='argumentdesc'>
+<p>an object</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeAt' href='./../Overviews/Methods.html#removeAt'>removeAt</a> (<span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p>Remove the key and the value associated with it from the Dictionary.<pre class='code prettyprint lang-sc'>d = (monkey: 99);
+d.removeAt(\monkey);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-putAll' href='./../Overviews/Methods.html#putAll'>putAll</a> ( <span class='argstr'>... dictionaries</span>)</h3>
+<div class='method'>
+<p>Add all items of each argument to the dictionary.<pre class='code prettyprint lang-sc'>d = ();
+d.putAll(Dictionary[\hello -&gt; 9, \whello -&gt; "world"], Dictionary["abd" -&gt; 6]);</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>... dictionaries<td class='argumentdesc'>
+<p>any Object that responds to keysValuesDo (usually a Dictionary).</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-putPairs' href='./../Overviews/Methods.html#putPairs'>putPairs</a> (<span class='argstr'>args</span>)</h3>
+<div class='method'>
+<p>Add all items to the dictionary, using them as key and value pairwise.<pre class='code prettyprint lang-sc'>d = ();
+d.putPairs([\hello, 10, \whello, "lord", "abc", 7]);</pre>
+</div><h3><a class='anchor' name='Accessing'>Accessing</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-at' href='./../Overviews/Methods.html#at'>at</a> (<span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p>Access the value associated with the key.<pre class='code prettyprint lang-sc'>d = (robot: 99);
+d.at(\robot);    // Get the value associated with key
+d[\robot];    // different syntax, same behaviour
+d.at(\monkey);    // Key doesn't exist: return Nil</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-atFail' href='./../Overviews/Methods.html#atFail'>atFail</a> (<span class='argstr'>key</span>, <span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Access the value associated with the key. If the key does not exist, return the result of <code>function</code>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keys' href='./../Overviews/Methods.html#keys'>keys</a> (<span class='argstr'>species</span>)</h3>
+<div class='method'>
+<p>Return a <a href="./../Classes/Set.html">Set</a> of all keys.<pre class='code prettyprint lang-sc'>d = (hello: 9, whello: "world");
+d.keys;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-values' href='./../Overviews/Methods.html#values'>values</a> </h3>
+<div class='method'>
+<p>Return a <a href="./../Classes/List.html">List</a> of all values.<pre class='code prettyprint lang-sc'>d = (hello: 9, whello: "world");
+d.values;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-atAll' href='./../Overviews/Methods.html#atAll'>atAll</a> (<span class='argstr'>keys</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
+<div class='method'>
+<p>Return an <a href="./../Classes/Array.html">Array</a> of all values for the given keys.<pre class='code prettyprint lang-sc'>d = (hello: 9, whello: "world", z: 99, c: 0.33);
+d.atAll([\hello, \z, \hello, \c, \whello]);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-getPairs' href='./../Overviews/Methods.html#getPairs'>getPairs</a> (<span class='argstr'>args</span>)</h3>
+<div class='method'>
+<p>Return an <a href="./../Classes/Array.html">Array</a> with all keys and values pairwise.<pre class='code prettyprint lang-sc'>d = (hello: 9, whello: 77, z: 99);
+d.getPairs;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-associationAt' href='./../Overviews/Methods.html#associationAt'>associationAt</a> (<span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p>Access the <a href="./../Classes/Association.html">Association</a> that has the given key.<pre class='code prettyprint lang-sc'>d = (robot: 99);
+d.associationAt(\robot);    // Get the value associated with key</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-findKeyForValue' href='./../Overviews/Methods.html#findKeyForValue'>findKeyForValue</a> (<span class='argstr'>argValue</span>)</h3>
+<div class='method'>
+<p>Try to find a given value and return its key.<pre class='code prettyprint lang-sc'>d = (hello: 1, whello: 1976);
+d.findKeyForValue(1);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-matchAt' href='./../Overviews/Methods.html#matchAt'>matchAt</a> (<span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p>The dictionary's keys are used as conditions against which the arbitrary item is matched. See: <a href="./../Reference/matchItem.html">matchItem</a><div class='note'><span class='notelabel'>NOTE:</span> if an item matches multiple criteria, the value returned is arbitrary. This is because a dictionary is an unordered collection. It's the user's responsibility to make sure that criteria are mutually exclusive.</div>
+<p><ul>
+<li>If the key is an object, the item will be matched by identity (if key === item, the value will be returned).<li>If the key is a collection, the item is matched if it's contained in the collection.<li>If the key is a function, the function is evaluated with the item as an argument and the item is matched if the function returns true.</ul>
+
+<p><pre class='code prettyprint lang-sc'>(
+d = (
+    0: \zero,
+    \abc: \alpha,
+    [1, 2, 3, 5, 8, 13, 21]: \fibonacci,
+    { |x| try { x.even } }: \even // try is needed because argument might not be a number
+    );
+);
+
+d.matchAt(0)
+d.matchAt(1)
+d.matchAt(2)    // matches both 'fibonacci' and 'even', either may be returned
+d.matchAt(4)
+d.matchAt(\abc)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-trueAt' href='./../Overviews/Methods.html#trueAt'>trueAt</a> (<span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p>Returns <a href="./../Classes/True.html">True</a> if the item at the key is true, otherwise false. This method is also valid in <a href="./../Classes/Object.html">Object</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-falseAt' href='./../Overviews/Methods.html#falseAt'>falseAt</a> (<span class='argstr'>key</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'>
+<p>Returns <a href="./../Classes/False.html">False</a> if the item at the key is not true, otherwise true. This method is inherited from <a href="./../Classes/Object.html">Object</a>.</div><h3><a class='anchor' name='Iteration/Enumeration'>Iteration/Enumeration</a></h3>
+
+<p>Most methods for iteration work analogously to Dictionary's superclasses, see e.g. <a href="./../Classes/Collection.html">Collection</a>.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-do' href='./../Overviews/Methods.html#do'>do</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-collect' href='./../Overviews/Methods.html#collect'>collect</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-reject' href='./../Overviews/Methods.html#reject'>reject</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-select' href='./../Overviews/Methods.html#select'>select</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'><pre class='code prettyprint lang-sc'>// do, collect, reject, select
+d = Dictionary[\a -&gt; "hello", \b -&gt; "robot", \c -&gt; [1, 2, 3]];
+d = (a: "hello", b: "robot", c: [1, 2, 3]); // equivalent
+d.do { |item, i| [item, i].postln };
+d.collect { |item| item + 100 };
+d.reject { |item| item.size &gt; 4 };
+d.select { |item| item.size &gt; 4 };</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keysValuesDo' href='./../Overviews/Methods.html#keysValuesDo'>keysValuesDo</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Iterate over the associations, and evaluate the function for each, passing key and value as argument.<pre class='code prettyprint lang-sc'>d = (a: "hello", b: "robot", c: [1, 2, 3]);
+d.keysValuesDo { |key, value| postln("the key: " ++ key ++ " the value: " ++ value) };</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keysValuesChange' href='./../Overviews/Methods.html#keysValuesChange'>keysValuesChange</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Iterate over the associations, and evaluate the function for each, passing key and value as argument. Replace the value with the return value from the function (similar to <a href="#-collect">-collect</a>, but modifies the dictionary <strong>in place</strong>).<pre class='code prettyprint lang-sc'>d = (a: "hello", b: "robot", c: [1, 2, 3]);
+d.keysValuesChange { |key, value| "the key: " ++ key ++ " the value: " ++ value };
+d;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keysDo' href='./../Overviews/Methods.html#keysDo'>keysDo</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Iterate over the associations, and evaluate the function for each, passing key as argument.<pre class='code prettyprint lang-sc'>d = (a: "hello", b: "robot", c: [1, 2, 3]);
+d.keysDo { |key| postln("the key: " ++ key) };</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-associationsDo' href='./../Overviews/Methods.html#associationsDo'>associationsDo</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Iterate over the associations, and evaluate the function for each.<pre class='code prettyprint lang-sc'>d = (a: "hello", b: "robot", c: [1, 2, 3]);
+d.associationsDo { |assoc| postln("the association: " ++ assoc) };</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pairsDo' href='./../Overviews/Methods.html#pairsDo'>pairsDo</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Iterate over the associations, and evaluate the function for each, passing key and value as argument. Identical to <a href="#-keysValuesDo">-keysValuesDo</a></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-invert' href='./../Overviews/Methods.html#invert'>invert</a> </h3>
+<div class='method'>
+<p>Return a new dictionary with all the values as keys and vice versa.<pre class='code prettyprint lang-sc'>d = (a: "hello", b: "robot", c: [1, 2, 3]);
+d.invert;</pre>
+</div><h3><a class='anchor' name='Other instance methods'>Other instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-order' href='./../Overviews/Methods.html#order'>order</a> (<span class='argstr'>func</span>)</h3>
+<div class='method'>
+<p>Return an array of keys which corresponds to the order of the values of the dictionary.<pre class='code prettyprint lang-sc'>d = (a: 5, b: 7, c: 1, d: 0);
+d.order;
+d.atAll(d.order);    // returns items in order</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-powerset' href='./../Overviews/Methods.html#powerset'>powerset</a> </h3>
+<div class='method'>
+<p>Return the set of all subsets: here an array of all sub-dictionaries.<pre class='code prettyprint lang-sc'>d = (a: 5, b: 7, c: 1, d: 0);
+d.powerset;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-merge' href='./../Overviews/Methods.html#merge'>merge</a> (<span class='argstr'>that</span>, <span class='argstr'>func</span>, <span class='argstr'>fill: true</span>)</h3>
+<div class='method'>
+<p>Combine two dictionaries into a new one by applying a function to each value. If <strong>fill</strong> is true (default: true), values missing from one of them are kept as they are.<pre class='code prettyprint lang-sc'>d = (a: 5, b: 7, d: 0);
+e = (a: 3, b: -3, c: 1);
+merge(d, e, { |a, b| a + b });
+merge(d, e, { |a, b| a + b }, false);</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>that<td class='argumentdesc'>
+<p>another dictionary.<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>a <a href="./../Classes/Function.html">Function</a>.<tr><td class='argumentname'>fill<td class='argumentdesc'>
+<p>a <a href="./../Classes/Boolean.html">Boolean</a>.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-blend' href='./../Overviews/Methods.html#blend'>blend</a> (<span class='argstr'>that</span>, <span class='argstr'>blend: 0.5</span>, <span class='argstr'>fill: true</span>, <span class='argstr'>specs</span>)</h3>
+<div class='method'>
+<p>Blend two dictionaries into a new one by interpolating each value. If <strong>fill</strong> is true (default: true), values missing from one of them are kept as they are.<pre class='code prettyprint lang-sc'>d = (a: 5, b: 7, d: 0);
+e = (a: 3, b: -3, c: 1);
+blend(d, e, 0.3);
+blend(d, e, 0.3, false);
+
+d = (a: 500, b: 0.001);
+e = (a: 300, b: 0.1);
+blend(d, e, 0.3, specs: (a: \freq, b: \rq));</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>that<td class='argumentdesc'>
+<p>another dictionary.<tr><td class='argumentname'>blend<td class='argumentdesc'>
+<p>the blend ratio as a <a href="./../Classes/Float.html">Float</a> between 0.0 and 1.0.<tr><td class='argumentname'>fill<td class='argumentdesc'>
+<p>a <a href="./../Classes/Boolean.html">Boolean</a>.<tr><td class='argumentname'>specs<td class='argumentdesc'>
+<p>a dictionary of <a href="./../Classes/Spec.html">Spec</a>s that are applied to each before blending.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asSortedArray' href='./../Overviews/Methods.html#asSortedArray'>asSortedArray</a> </h3>
+<div class='method'>
+<p>Return the values in a sorted array of key value pairs.<pre class='code prettyprint lang-sc'>d = (a: 5, b: 7, c: 1, d: 0);
+d.asSortedArray;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asKeyValuePairs' href='./../Overviews/Methods.html#asKeyValuePairs'>asKeyValuePairs</a> </h3>
+<div class='method'>
+<p>Return the values in an array of alternating key value pairs.<pre class='code prettyprint lang-sc'>d = (a: 5, b: 7, c: 1, d: 0);
+d.asKeyValuePairs;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-embedInStream' href='./../Overviews/Methods.html#embedInStream'>embedInStream</a> (<span class='argstr'>event</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>event<td class='argumentdesc'>
+<p>The inval, usually in an event stream. See also <a href="./../Classes/Event.html">Event</a>.
+<p>If the event is not nil, yields a copy, adding all the elements of the receiver event (this leaves the receiver unchanged). If it is nil, return the receiver.<pre class='code prettyprint lang-sc'>a = (note: 2);
+b = (note: [3, 5]);
+Pseq([a, b]).play;</pre>
+
+<p>If a key "embedInStream" is given, use this function instead. The behaviour of the event can be configured easily this way.
+<p>The arguments event (the reciever) and inevent (the inevent) are passed to the function.<div class='note'><span class='notelabel'>NOTE:</span> In infinite patterns, you <strong>must</strong> call yield or embedInStream in the function, otherwise it will loop forever.</div><pre class='code prettyprint lang-sc'>(
+a = (
+    pattern: Pbind(\note, Pgeom(1, 1.1, { 20.rand }), \dur, 0.05),
+    embedInStream: { |event, inevent| event[\pattern].embedInStream(inevent) }
+);
+b = (note: [3, 5]);
+c = (freq: 402, dur: 0.3);
+Prand([a, b, c], inf).trace.play;
+)
+
+// change the events while playing
+c[\freq] = [900, 1002, 1102];
+c[\freq] = [200, 101, 1102];</pre>
+
+<p>A generator for dictionaries:<pre class='code prettyprint lang-sc'>(
+d = (
+    a: 5, b: 7, c: 1,
+    rout: Routine { |inval|
+        inf.do { |i|
+            var event = d.copy.put(\count, i);
+            inval = event.embedInStream(inval);
+        }
+    }
+);
+)
+
+// draw new values
+d.rout.((z:999));
+d.rout.((z:1, a:0));
+d.rout.(());</pre>
+</table></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-++' href='./../Overviews/Methods.html#++'>++</a> (<span class='argstr'>dict</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asDict' href='./../Overviews/Methods.html#asDict'>asDict</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asPairs' href='./../Overviews/Methods.html#asPairs'>asPairs</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-associationAtFail' href='./../Overviews/Methods.html#associationAtFail'>associationAtFail</a> (<span class='argstr'>argKey</span>, <span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-choose' href='./../Overviews/Methods.html#choose'>choose</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fixCollisionsFrom' href='./../Overviews/Methods.html#fixCollisionsFrom'>fixCollisionsFrom</a> (<span class='argstr'>index</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-grow' href='./../Overviews/Methods.html#grow'>grow</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gui' href='./../Overviews/Methods.html#gui'>gui</a> ( <span class='argstr'>... args</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extJITgui.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extJITgui.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-includes' href='./../Overviews/Methods.html#includes'>includes</a> (<span class='argstr'>item1</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-includesKey' href='./../Overviews/Methods.html#includesKey'>includesKey</a> (<span class='argstr'>key</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isAssociationArray' href='./../Overviews/Methods.html#isAssociationArray'>isAssociationArray</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keysValuesArrayDo' href='./../Overviews/Methods.html#keysValuesArrayDo'>keysValuesArrayDo</a> (<span class='argstr'>argArray</span>, <span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mergeItem' href='./../Overviews/Methods.html#mergeItem'>mergeItem</a> (<span class='argstr'>key</span>, <span class='argstr'>val</span>, <span class='argstr'>func</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-printItemsOn' href='./../Overviews/Methods.html#printItemsOn'>printItemsOn</a> (<span class='argstr'>stream</span>, <span class='argstr'>itemsPerLine: 5</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-remove' href='./../Overviews/Methods.html#remove'>remove</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeAtFail' href='./../Overviews/Methods.html#removeAtFail'>removeAtFail</a> (<span class='argstr'>key</span>, <span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeFail' href='./../Overviews/Methods.html#removeFail'>removeFail</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-scanFor' href='./../Overviews/Methods.html#scanFor'>scanFor</a> (<span class='argstr'>argKey</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-softPut' href='./../Overviews/Methods.html#softPut'>softPut</a> (<span class='argstr'>param</span>, <span class='argstr'>val</span>, <span class='argstr'>within: 0.025</span>, <span class='argstr'>mapped: true</span>, <span class='argstr'>lastVal</span>, <span class='argstr'>spec</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extSoftSet.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extSoftSet.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-softSet' href='./../Overviews/Methods.html#softSet'>softSet</a> (<span class='argstr'>param</span>, <span class='argstr'>val</span>, <span class='argstr'>within: 0.025</span>, <span class='argstr'>mapped: true</span>, <span class='argstr'>lastVal</span>, <span class='argstr'>spec</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extSoftSet.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extSoftSet.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sortedKeysValuesDo' href='./../Overviews/Methods.html#sortedKeysValuesDo'>sortedKeysValuesDo</a> (<span class='argstr'>function</span>, <span class='argstr'>sortFunc</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-storeItemsOn' href='./../Overviews/Methods.html#storeItemsOn'>storeItemsOn</a> (<span class='argstr'>stream</span>, <span class='argstr'>itemsPerLine: 5</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-transformEvent' href='./../Overviews/Methods.html#transformEvent'>transformEvent</a> (<span class='argstr'>event</span>)</h3>
+<h2><a class='anchor' name='Overview'>Overview</a></h2>
+<h3><a class='anchor' name='The Difference between Dictionary, IdentityDictionary, Environment, and Event'>The Difference between Dictionary, IdentityDictionary, Environment, and Event</a></h3>
+
+<p>Often, the subclass <a href="./../Classes/Event.html">Event</a> is used as an IdentityDictionary, because there is a syntactical shortcut:<pre class='code prettyprint lang-sc'>a = (foo: 7);    // return a new Event.
+a.put(\foo, 2.718);
+a.at(\foo);
+a[\foo] = 3.5;    // different syntax for put</pre>
+
+<p>Event, Environment and IdentityDictionary differ mainly insofar from Dictionary as the <strong>keys</strong> are taken to be identical (===) objects (see IdentityDictionary), instead of equal (==) objects. By consequence, the subclasses are also faster for indexing. Apart from this, the subclasses add specific functionality only. Because of its very common usage, the examples often use the shortcut for the subclass Event.<pre class='code prettyprint lang-sc'>// preliminary identity and equality of strings and symbols
+"hello" == "hello";    // true, but
+"hello" === "hello";    // false. However:
+\hello === \hello;    // true
+
+// compare
+Dictionary["hello" -&gt; 0, "hello" -&gt; 1]; // Dictionary[ (hello -&gt; 1) ]
+("hello": 0, "hello": 1); // ( "hello": 1, "hello": 0 )
+
+// for symbols as keys, the behaviour is identical:
+Dictionary[\hello -&gt; 1, \hello -&gt; 0];
+( \hello: 1, \hello: 0 );</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Dictionary.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Dictionary.schelp</a><br>link::Classes/Dictionary::<br>sc version: 3.8dev</div></div></body></html>

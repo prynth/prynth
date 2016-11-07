@@ -1,0 +1,133 @@
+<html><head><title>Functions</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider REFERENCE</div>
+<div id='categories'><a href='./../Browse.html#Language'>Language</a></div>
+<h1>Functions</h1>
+<div id='summary'>lambda expressions</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Classes/Function.html">Function</a>, <a href="./../Classes/AbstractFunction.html">AbstractFunction</a>, <a href="./../Classes/FunctionDef.html">FunctionDef</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Arguments'>Arguments</a></li>
+<ul class='toc'><li class='toc2'><a href='#[1] Literal argument defaults'>[1] Literal argument defaults</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#[2] Expression argument defaults'>[2] Expression argument defaults</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Variables'>Variables</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Introduction'>Introduction</a></h2>
+
+<p>A <a href="./../Classes/Function.html">Function</a> is an expression which defines operations to be performed when it is sent the <code class='code prettyprint lang-sc'>value</code> message. In functional languages, a function would be known as a lambda expression. Function definitions are enclosed in curly brackets <code class='code prettyprint lang-sc'>{}</code>. Argument declarations, if any, follow the open bracket. Variable declarations follow argument declarations. An expression follows the declarations.<pre class='code prettyprint lang-sc'>{ arg a, b, c;  var d;   d = a * b; c + d }</pre>
+
+<p>Functions are not evaluated immediately when they occur in code, but are passed as values just like integers or strings.
+<p>A function may be evaluated by passing it the <code class='code prettyprint lang-sc'>value</code> message and a list of arguments.
+<p>When evaluated, the function returns the value of its expression.<pre class='code prettyprint lang-sc'>f = { arg a, b; a + b };
+f.value(4, 5).postln;
+f.value(10, 200).postln;</pre>
+
+<p>An empty function returns the value nil when evaluated.<pre class='code prettyprint lang-sc'>{}.value.postln;</pre>
+
+<p>A function can be thought as a machine able to perform a task on demand, e.g. a calculator. The calculator can receive input (args) and can output a value, the result of the performed operations. The function definition can then be thought as the building of the calculator: once built, the calculator does nothing until it is requested to work (by passing the value method to a function). The following figure depicts an empty function, input without output, output without input, and the general case with input and output.<div class='image'><img src='functions.png'/><br><b>Functions</b></div>
+<h2><a class='anchor' name='Arguments'>Arguments</a></h2>
+
+<p>An argument list immediately follows the open curly bracket of a function definition. An argument list either begins with the reserved word <code class='code prettyprint lang-sc'>arg</code>, or is contained between two vertical bars. If a function takes no arguments, then the argument list may be omitted.
+<p>Names of arguments in the list may be initialized to a default value using the following syntax forms. Arguments which are not explicitly initialized will be set to nil if no value is passed for them.
+<p>"arg" style, default value is a literal: <code class='code prettyprint lang-sc'>{ arg x = 1; .... }</code> <a href="#[1]">[1]</a>
+<p>"arg" style, default value is an expression: <code class='code prettyprint lang-sc'>{ arg x = 10.rand; ... }</code> <a href="#[2]">[2]</a>
+<p>"arg" style, default value is a literal but you want to treat it like an expression: <code class='code prettyprint lang-sc'>{ arg x = (2); ... }</code> <a href="#[2]">[2]</a>
+<p>Pipe style, default value is a literal: <code class='code prettyprint lang-sc'>{ |x = 1| ... }</code> <a href="#[1]">[1]</a>
+<p>Pipe style, default value is an expression: <code class='code prettyprint lang-sc'>{ |x = (10.rand)| ... }</code> <a href="#[2]">[2]</a>
+<p>If the last argument in the list is preceeded by three dots (an ellipsis), then all the remaining arguments that were passed will be assigned to that variable as an <a href="./../Classes/Array.html">Array</a>. Arguments must be separated by commas.
+<p>examples:<pre class='code prettyprint lang-sc'>{ arg a, b, c=3; } // is equivalent to:
+
+{ |a, b, c=3| }
+
+{ arg x='stop', y, z=0; } // these args are initialised
+
+{ arg a, b, c ... d; } // any arguments after the first 3 will be assigned to d as an Array</pre>
+
+<p>If you want all the arguments put in an Array<pre class='code prettyprint lang-sc'>arg ... z;</pre>
+
+<p>In general arguments may be initialized to literals or expressions, but in the case of Function:play or SynthDef:play, they may only be initialized to literals.<pre class='code prettyprint lang-sc'>// this is okay:
+
+{ arg a = Array.geom(4, 100, 3); a * 4 }.value;
+
+// this is not:
+
+{ arg freq = Array.geom(4, 100, 3); Mix(SinOsc.ar(freq, 0, 0.1)) }.play; // silence
+
+// but this is:
+{ arg freq =  #[ 100, 300, 900, 2700 ]; Mix(SinOsc.ar(freq, 0, 0.1)) }.play; // silence</pre>
+
+<p>See <a href="./../Reference/Literals.html">Literals</a> for more information.
+<p><a class='anchor' name='[1]'>&nbsp;</a><h3><a class='anchor' name='[1] Literal argument defaults'>[1] Literal argument defaults</a></h3>
+
+<p>Argument defaults that are literals are stored as part of the <a href="./../Classes/FunctionDef.html">FunctionDef</a>. Arguments passed at runtime -- including nil -- always override the defaults:<pre class='code prettyprint lang-sc'>f = { arg x = 1; x };
+f.value(2);  // prints 2
+
+f.value;   // prints 1
+
+f.value(nil);  // prints nil</pre>
+
+<p><a class='anchor' name='[2]'>&nbsp;</a><h3><a class='anchor' name='[2] Expression argument defaults'>[2] Expression argument defaults</a></h3>
+
+<p>Since expressions are evaluated when the function is called, they cannot be stored in the <a href="./../Classes/FunctionDef.html">FunctionDef</a>. They are executed only if the passed-in value is nil.<pre class='code prettyprint lang-sc'>f = { arg x = 10.rand; x };
+f.value(100);  // prints 100
+
+f.value;   // prints a number 0-9
+
+f.value(nil);   // prints a number 0-9!</pre>
+
+<p>This means you can use expression-style to define a default that cannot be overridden by nil.<pre class='code prettyprint lang-sc'>f = { arg x = (3); x };
+f.value(nil);   // prints 3</pre>
+
+<p>Note: Parentheses are required when initializing an argument to an expression, if the argument list is written inside <code class='code prettyprint lang-sc'>||</code> pipes.<pre class='code prettyprint lang-sc'>(
+var abc = 2;
+{ arg x = abc+1; x }   // OK
+)
+
+(
+var abc = 2;
+{ |x = abc+1| x }
+)
+ERROR: Parse error
+   in file 'selected text'
+   line 1 char 10:
+  { |x = abc•+1| x }
+-----------------------------------
+ERROR: Command line parse failed
+
+(
+var abc = 2;
+{ |x = (abc+1)| x }   // OK
+)
+
+(
+var abc = 2;
+{ |x (abc+1)| x }   // In ||, the = may be omitted if () are there
+)</pre>
+
+<p>This is because the pipe character also serves as a binary operator. Without parentheses, expressions such as the following are ambiguous:<pre class='code prettyprint lang-sc'>{ |a, b, c = a | b | c }</pre>
+
+<p>The following produce identical function definitions. Expression-style defaults are simply a shortcut syntax for the latter.<pre class='code prettyprint lang-sc'>{ arg x = 10.rand; x };
+
+{    arg x;
+    x ?? { x = 10.rand };
+    x
+};</pre>
+<h2><a class='anchor' name='Variables'>Variables</a></h2>
+
+<p>Following the argument declarations are the variable declarations. These may be declared in any order. Variable lists are preceeded by the reserved word <code class='code prettyprint lang-sc'>var</code>. There can be multiple var declaration lists if necessary. Variables may be initialized to default values in the same way as arguments. Variable declarations lists may not contain an ellipsis.<pre class='code prettyprint lang-sc'>var level=0, slope=1, curve=1;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/Functions.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/Functions.schelp</a><br>link::Reference/Functions::<br>sc version: 3.8dev</div></div></body></html>

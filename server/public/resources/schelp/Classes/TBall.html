@@ -1,0 +1,133 @@
+<html><head><title>TBall</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Filters>Nonlinear'>UGens>Filters>Nonlinear</a>, <a href='./../Browse.html#UGens>Generators>PhysicalModels'>UGens>Generators>PhysicalModels</a></div>
+<h1>TBall</h1>
+<div id='summary'>physical model of bouncing object</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/PhysicalModel.sc'>PhysicalModel.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Ball.html">Ball</a>, <a href="./../Classes/Spring.html">Spring</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>models the impacts of a bouncing object that is reflected by a vibrating surface<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>in: 0</span>, <span class='argstr'>g: 10</span>, <span class='argstr'>damp: 0</span>, <span class='argstr'>friction: 0.01</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>in: 0</span>, <span class='argstr'>g: 10</span>, <span class='argstr'>damp: 0</span>, <span class='argstr'>friction: 0.01</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>modulated surface level<tr><td class='argumentname'>g<td class='argumentdesc'>
+<p>gravity<tr><td class='argumentname'>damp<td class='argumentdesc'>
+<p>damping on impact<tr><td class='argumentname'>friction<td class='argumentdesc'>
+<p>proximity from which on attraction to surface starts</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// mouse x controls switch of level
+// mouse y controls gravity
+(
+{
+    var t, sf;
+    sf = K2A.ar(MouseX.kr &gt; 0.5) &gt; 0;
+    t = TBall.ar(sf, MouseY.kr(0.01, 1.0, 1), 0.01);
+    Pan2.ar(Ringz.ar(t * 10, 1200, 0.1), MouseX.kr(-1,1));
+}.play;
+)
+
+
+// mouse x controls step noise modulation rate
+// mouse y controls gravity
+(
+{
+    var t, sf, g;
+    sf = LFNoise0.ar(MouseX.kr(0.5, 100, 1));
+    g = MouseY.kr(0.01, 10, 1);
+    t = TBall.ar(sf, g, 0.01, 0.002);
+    Ringz.ar(t * 4, [600, 645], 0.3);
+}.play;
+)
+
+// mouse x controls sine modulation rate
+// mouse y controls friction
+// gravity changes slowly
+(
+{
+    var f, g, h, fr;
+    fr = MouseX.kr(1, 1000, 1);
+    h = MouseY.kr(0.0001, 0.001, 1);
+    g = LFNoise1.kr(0.1, 3, 5);
+    f = TBall.ar(SinOsc.ar(fr), g, 0.1, h);
+    Pan2.ar(Ringz.ar(f, 1400, 0.04),0,5)
+}.play;
+)
+
+// sine frequency rate is modulated with a slow sine
+// mouse y controls friction
+// mouse x controls gravity
+(
+{
+    var f, g, h, fr;
+    fr = LinExp.kr(SinOsc.kr(0.1), -1, 1, 1, 600);
+    h = MouseY.kr(0.0001, 0.001, 1);
+    g = MouseX.kr(1, 10);
+    f = TBall.ar(SinOsc.ar(fr), g, 0.1, h);
+    Pan2.ar(Ringz.ar(f, 1400, 0.04),0,5)
+}.play;
+)
+
+// this is no mbira: vibrations of a bank of resonators that are
+// triggered by some bouncing things that bounce one on each resonator
+
+// mouse y controls friction
+// mouse x controls gravity
+(
+    {
+    var sc, g, d, z, lfo, rate;
+    g = MouseX.kr(0.01, 100, 1);
+    d = MouseY.kr(0.00001, 0.2);
+    sc = #[451, 495.5, 595, 676, 734.5]; //azande harp tuning by B. Guinahui
+    lfo = LFNoise1.kr(1, 0.005, 1);
+    rate = 2.4;
+    rate = rate * sc.size.reciprocal;
+    z = sc.collect { |u,i|
+        var f, in;
+        in = Decay.ar(
+                Mix(Impulse.ar(rate, [1.0, LFNoise0.kr(rate / 12)].rand, 0.1)),                     0.001
+            );
+        in = Ringz.ar(in,
+                    Array.fill(4, { |i| (i+1) + 0.1.rand2 }) / 2
+                    * Decay.ar(in,0.02,rand(0.5,1), lfo)                        * u,
+                    Array.exprand(4, 0.2, 1).sort
+                    );
+        in = Mix(in);
+        f = TBall.ar(in * 10, g, d, 0.001);
+
+        in + Mix(Ringz.ar(f, u * Array.fill(4, { |i| (i+1) + 0.3.rand2 }) * 2, 0.1))
+    };
+    Splay.ar(z) * 0.8
+    }.play;
+)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/TBall.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/TBall.schelp</a><br>link::Classes/TBall::<br>sc version: 3.8dev</div></div></body></html>

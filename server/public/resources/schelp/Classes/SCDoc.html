@@ -1,0 +1,240 @@
+<html><head><title>SCDoc</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#HelpSystem'>HelpSystem</a></div>
+<h1>SCDoc</h1>
+<div id='summary'>Help system main class</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/SCDoc/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/SCDoc/SCDoc.sc'>SCDoc.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Reference/SCDocSyntax.html">SCDoc Syntax</a>, <a href="./../Guides/WritingHelp.html">Writing Help</a>, <a href="./../Classes/SCDocHTMLRenderer.html">SCDocHTMLRenderer</a>, <a href="./../Classes/SCDocNode.html">SCDocNode</a>, <a href="./../Classes/SCDocEntry.html">SCDocEntry</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Document index'>Document index</a></li>
+<ul class='toc'><li class='toc3'><a href='#*indexAllDocuments'>indexAllDocuments</a> </li>
+<li class='toc3'><a href='#*documents'>documents</a> </li>
+<li class='toc3'><a href='#*didIndexDocuments'>didIndexDocuments</a> </li>
+<li class='toc3'><a href='#*helpSourceDir'>helpSourceDir</a> </li>
+<li class='toc3'><a href='#*helpSourceDirs'>helpSourceDirs</a> </li>
+<li class='toc3'><a href='#*findHelpFile'>findHelpFile</a> </li>
+<li class='toc3'><a href='#*verbosity'>verbosity</a> </li>
+</ul><li class='toc2'><a href='#Parsing and Rendering'>Parsing and Rendering</a></li>
+<ul class='toc'><li class='toc3'><a href='#*renderer'>renderer</a> </li>
+<li class='toc3'><a href='#*helpTargetDir'>helpTargetDir</a> </li>
+<li class='toc3'><a href='#*parseFileFull'>parseFileFull</a> </li>
+<li class='toc3'><a href='#*parseFileMetaData'>parseFileMetaData</a> </li>
+<li class='toc3'><a href='#*parseFilePartial'>parseFilePartial</a> </li>
+<li class='toc3'><a href='#*parseDoc'>parseDoc</a> </li>
+<li class='toc3'><a href='#*parseAndRender'>parseAndRender</a> </li>
+<li class='toc3'><a href='#*renderAll'>renderAll</a> </li>
+<li class='toc3'><a href='#*prepareHelpForURL'>prepareHelpForURL</a> </li>
+</ul><li class='toc2'><a href='#Utilities'>Utilities</a></li>
+<ul class='toc'><li class='toc3'><a href='#*getMethodDoc'>getMethodDoc</a> </li>
+<li class='toc3'><a href='#*makeClassTemplate'>makeClassTemplate</a> </li>
+<li class='toc3'><a href='#*classHasArKrIr'>classHasArKrIr</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*getOldWrapUrl'>getOldWrapUrl</a> </li>
+<li class='toc3'><a href='#*helpTargetUrl'>helpTargetUrl</a> </li>
+<li class='toc3'><a href='#*indexOldHelp'>indexOldHelp</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#Parser node tree output'>Parser node tree output</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>SCDoc manages the SuperCollider documentation system.
+<p>It uses parses help files written in <a href="./../Reference/SCDocSyntax.html">SCDoc markup language</a> and renders them as human-readable documents.
+<p>A guide to writing help can be found here: <a href="./../Guides/WritingHelp.html">Writing Help</a>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Document index'>Document index</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*indexAllDocuments' href='./../Overviews/Methods.html#indexAllDocuments'>indexAllDocuments</a> (<span class='argstr'>clearCache: false</span>)</h3>
+<div class='method'>
+<p>Index all documents and undocumented classes on the system, putting them in the <code class='code prettyprint lang-sc'>SCDoc.documents</code> dictionary. If run inside a Routine, this method will yield occasionally.
+<p>Run this method if you added a new document and want to see the changes without restarting SuperCollider.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>clearCache<td class='argumentdesc'>
+<p>If true, force re-render of files even if the schelp source file is not newer than the destination.</table><h4>Discussion:</h4>
+
+<p>This will take a couple of seconds, and will be done automatically once before any help can be viewed. You might consider putting this in your startup.scd file to avoid getting this delay later when you decide to view a helpfile.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*documents' href='./../Overviews/Methods.html#documents'>documents</a> </h3>
+<div class='method'>
+<p>The dictionary of indexed documents. They keys are the path relative to the Help folder and without extension, like <code>Classes/SinOsc</code> or <code>Reference/SCDocSyntax</code>. The values are instances of <a href="./../Classes/SCDocEntry.html">SCDocEntry</a></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*didIndexDocuments' href='./../Overviews/Methods.html#didIndexDocuments'>didIndexDocuments</a> </h3>
+<div class='method'>
+<p>A Boolean indicating if <code class='code prettyprint lang-sc'>SCDoc.indexAllDocuments</code> was called in this session yet.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*helpSourceDir' href='./../Overviews/Methods.html#helpSourceDir'>helpSourceDir</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*helpSourceDir' href='./../Overviews/Methods.html#helpSourceDir'>helpSourceDir</a> = <span class='argstr'>path</span></h3>
+<div class='method'>
+<p>get/set the system-wide directory of help sourcefiles. Defaults to <code class='code prettyprint lang-sc'>Platform.classLibraryDir.dirname +/+ "HelpSource"</code> and should typically not be changed by the user.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*helpSourceDirs' href='./../Overviews/Methods.html#helpSourceDirs'>helpSourceDirs</a> </h3>
+<div class='method'>
+<p>get the list of HelpSource folders, including extensions and quarks.<h4>Discussion:</h4>
+
+<p>This searches recursively for all folders named "HelpSource" under <code class='code prettyprint lang-sc'>Platform.userExtensionDir</code> and <code class='code prettyprint lang-sc'>Platform.systemExtensionDir</code> as well as including the system-wide <code class='code prettyprint lang-sc'>helpSourceDir</code></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*findHelpFile' href='./../Overviews/Methods.html#findHelpFile'>findHelpFile</a> (<span class='argstr'>str</span>)</h3>
+<div class='method'>
+<p>Find help for a given string. Tries to be smart.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the URL for help on given string</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*verbosity' href='./../Overviews/Methods.html#verbosity'>verbosity</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*verbosity' href='./../Overviews/Methods.html#verbosity'>verbosity</a> = value</h3>
+<div class='method'>
+<p>Verbosity level. 0 is silent.</div><h3><a class='anchor' name='Parsing and Rendering'>Parsing and Rendering</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*renderer' href='./../Overviews/Methods.html#renderer'>renderer</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*renderer' href='./../Overviews/Methods.html#renderer'>renderer</a> = value</h3>
+<div class='method'>
+<p>The default renderer, defaults to <a href="./../Classes/SCDocHTMLRenderer.html">SCDocHTMLRenderer</a></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*helpTargetDir' href='./../Overviews/Methods.html#helpTargetDir'>helpTargetDir</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*helpTargetDir' href='./../Overviews/Methods.html#helpTargetDir'>helpTargetDir</a> = <span class='argstr'>path</span></h3>
+<div class='method'>
+<p>get/set the user help target directory. Defaults to <code class='code prettyprint lang-sc'>Platform.userAppSupportDir +/+ "Help"</code> and should typically not be changed by the user.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*parseFileFull' href='./../Overviews/Methods.html#parseFileFull'>parseFileFull</a> (<span class='argstr'>path</span>)</h3>
+<div class='method'>
+<p>Parse file.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>path<td class='argumentdesc'>
+<p>Full path to .schelp file</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>An <a href="./../Classes/SCDocNode.html">SCDocNode</a> tree</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*parseFileMetaData' href='./../Overviews/Methods.html#parseFileMetaData'>parseFileMetaData</a> (<span class='argstr'>dir</span>, <span class='argstr'>path</span>)</h3>
+<div class='method'>
+<p>Parse only the stuff needed for metadata.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>dir<td class='argumentdesc'>
+<p>Base HelpSource directory.<tr><td class='argumentname'>path<td class='argumentdesc'>
+<p>Path relative above dir.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>An <a href="./../Classes/SCDocNode.html">SCDocNode</a> tree</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*parseFilePartial' href='./../Overviews/Methods.html#parseFilePartial'>parseFilePartial</a> (<span class='argstr'>path</span>)</h3>
+<div class='method'>
+<p>Parse a file without header, for merging of document additions<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>path<td class='argumentdesc'>
+<p>Full path to .ext.schelp file</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>An <a href="./../Classes/SCDocNode.html">SCDocNode</a> tree</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*parseDoc' href='./../Overviews/Methods.html#parseDoc'>parseDoc</a> (<span class='argstr'>doc</span>)</h3>
+<div class='method'>
+<p>Parse the files associated with an <a href="./../Classes/SCDocEntry.html">SCDocEntry</a>, including any document additions (<code>*.ext.schelp</code>)<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>doc<td class='argumentdesc'>
+<p>The <a href="./../Classes/SCDocEntry.html">SCDocEntry</a> to parse.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>An <a href="./../Classes/SCDocNode.html">SCDocNode</a> tree</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*parseAndRender' href='./../Overviews/Methods.html#parseAndRender'>parseAndRender</a> (<span class='argstr'>doc</span>)</h3>
+<div class='method'>
+<p>Parse and render a specific document.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>doc<td class='argumentdesc'>
+<p>The <a href="./../Classes/SCDocEntry.html">SCDocEntry</a> to parse and render.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*renderAll' href='./../Overviews/Methods.html#renderAll'>renderAll</a> (<span class='argstr'>includeExtensions: true</span>)</h3>
+<div class='method'>
+<p>Render all help-files. Useful mainly if you want to render all help to put online or similar.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>includeExtensions<td class='argumentdesc'>
+<p>If false, skip quarks, plugins and other extensions.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*prepareHelpForURL' href='./../Overviews/Methods.html#prepareHelpForURL'>prepareHelpForURL</a> (<span class='argstr'>url</span>)</h3>
+<div class='method'>
+<p>Prepare help for the given URL by checking if the file needs rendering from schelp source, or some other action needs to be done. Used as a wrapper to get on-the-fly rendering and processing of help files.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>url<td class='argumentdesc'>
+<p>The url to prepare. If this is not a local file inside <a href="#*helpTargetDir">*helpTargetDir</a> then it will just pass through the url directly.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the URL or nil if file not found.</div></div><h3><a class='anchor' name='Utilities'>Utilities</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*getMethodDoc' href='./../Overviews/Methods.html#getMethodDoc'>getMethodDoc</a> (<span class='argstr'>classname</span>, <span class='argstr'>methodname</span>)</h3>
+<div class='method'>
+<p>Extract the <a href="./../Classes/SCDocNode.html">SCDocNode</a> tree for the specified method documentation.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>classname<td class='argumentdesc'>
+<p>Name of class<tr><td class='argumentname'>methodname<td class='argumentdesc'>
+<p>Name of method, prefixed with <code>*</code> for classmethods and <code>-</code> for instancemethods.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>An <a href="./../Classes/SCDocNode.html">SCDocNode</a> tree</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*makeClassTemplate' href='./../Overviews/Methods.html#makeClassTemplate'>makeClassTemplate</a> (<span class='argstr'>doc</span>)</h3>
+<div class='method'>
+<p>Create a schelp template for specified class.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>doc<td class='argumentdesc'>
+<p>The <a href="./../Classes/SCDocEntry.html">SCDocEntry</a> for the undocumented class.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>Returns the template string.</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*classHasArKrIr' href='./../Overviews/Methods.html#classHasArKrIr'>classHasArKrIr</a> (<span class='argstr'>c</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>c<td class='argumentdesc'>
+<p>The <a href="./../Classes/Class.html">Class</a> to check.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p><code class='code prettyprint lang-sc'>true</code> if the class responds to ar, kr or ir classmethods.</div></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*getOldWrapUrl' href='./../Overviews/Methods.html#getOldWrapUrl'>getOldWrapUrl</a> (<span class='argstr'>url</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*helpTargetUrl' href='./../Overviews/Methods.html#helpTargetUrl'>helpTargetUrl</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*indexOldHelp' href='./../Overviews/Methods.html#indexOldHelp'>indexOldHelp</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='Parser node tree output'>Parser node tree output</a></h2>
+
+<p>The SCDoc parser outputs a tree of <a href="./../Classes/SCDocNode.html">SCDocNode</a>s
+<p>The nodes reflects the tags in the input, but it's not a one-to-one correspondation. A more detailed structure is added in the node tree, for easier rendering.
+<p>Example:
+<p>DOCUMENT<ul class='tree'>
+<li>HEADER<ul class='tree'>
+<li>TITLE <code>"SinOsc"</code><li>SUMMARY <code>"Interpolating sine wavetable oscillator"</code><li>RELATED<ul class='tree'>
+<li>STRING <code>"Classes/FSinOsc"</code><li>STRING <code>"Classes/SinOscFB"</code></ul>
+
+<p><li>CATEGORIES<ul class='tree'>
+<li>STRING <code>"UGens&gt;Generators&gt;Deterministic"</code><li>STRING <code>"UGens&gt;Oscillators"</code></ul>
+</ul>
+
+<p><li>BODY<ul class='tree'>
+<li>DESCRIPTION<ul class='tree'>
+<li>PROSE<ul class='tree'>
+<li>TEXT <code>"A paragraph with "</code><li>LINK <code>"Classes/Osc##a link"</code><li>TEXT <code>" to another document."</code></ul>
+
+<p><li>PROSE<ul class='tree'>
+<li>TEXT <code>"Another paragraph with "</code><li>STRONG <code>"strong words"</code><li>TEXT <code>" in it."</code></ul>
+</ul>
+
+<p><li>CLASSMETHODS<ul class='tree'>
+<li>PROSE<ul class='tree'>
+<li>TEXT <code>"Some text..."</code></ul>
+
+<p><li>CMETHOD<ul class='tree'>
+<li>METHODNAMES<ul class='tree'>
+<li>STRING <code>"ar"</code><li>STRING <code>"kr"</code></ul>
+
+<p><li>METHODBODY<ul class='tree'>
+<li>PROSE<ul class='tree'>
+<li>TEXT <code>"Some text..."</code></ul>
+
+<p><li>ARGUMENTS<ul class='tree'>
+<li>ARGUMENT <code>"freq"</code><ul class='tree'>
+<li>PROSE<ul class='tree'>
+<li>TEXT <code>"Frequency in hertz"</code></ul>
+</ul>
+
+<p><li>ARGUMENT <code>"phase"</code><ul class='tree'>
+<li>PROSE<ul class='tree'>
+<li>TEXT <code>"Phase modulation"</code></ul>
+</ul>
+</ul>
+</ul>
+</ul>
+</ul>
+
+<p><li>EXAMPLES<ul class='tree'>
+<li>PROSE<ul class='tree'>
+<li>TEXT <code>"Here are some examples:"</code></ul>
+
+<p><li>CODEBLOCK<pre>"{ SinOsc.ar(200, 0, 0.5) }.play;
+// modulate freq
+{ SinOsc.ar(XLine.kr(2000, 200), 0, 0.5) }.play;
+// modulate freq
+{ SinOsc.ar(SinOsc.ar(XLine.kr(1, 1000, 9), 0, 200, 800), 0, 0.25) }.play;
+// modulate phase
+{ SinOsc.ar(800, SinOsc.ar(XLine.kr(1, 1000, 9), 0, 2pi), 0.25) }.play;"</pre></ul>
+
+<p><li>SECTION <code>"Another section"</code><ul class='tree'>
+<li>PROSE<ul class='tree'>
+<li>TEXT <code>"Some text..."</code></ul>
+</ul>
+</ul>
+</ul>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/SCDoc.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/SCDoc.schelp</a><br>link::Classes/SCDoc::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,125 @@
+<html><head><title>Order</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Collections>Ordered'>Collections>Ordered</a></div>
+<h1>Order</h1>
+<div id='summary'>an order of elements with a numerical index</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/SparseArray.sc'>SparseArray.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/SequenceableCollection.html">SequenceableCollection</a> : <a href="../Classes/Collection.html">Collection</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/SparseArray.html">SparseArray</a></div>
+<div id='related'>See also: <a href="./../Classes/SparseArray.html">SparseArray</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*newFromIndices'>newFromIndices</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-doRange'>doRange</a> </li>
+<li class='toc3'><a href='#-pos'>pos</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-add'>add</a> </li>
+<li class='toc3'><a href='#-array'>array</a> </li>
+<li class='toc3'><a href='#-asArray'>asArray</a> </li>
+<li class='toc3'><a href='#-at'>at</a> </li>
+<li class='toc3'><a href='#-choose'>choose</a> </li>
+<li class='toc3'><a href='#-clear'>clear</a> </li>
+<li class='toc3'><a href='#-collect'>collect</a> </li>
+<li class='toc3'><a href='#-copy'>copy</a> </li>
+<li class='toc3'><a href='#-do'>do</a> </li>
+<li class='toc3'><a href='#-indices'>indices</a> </li>
+<li class='toc3'><a href='#-indicesDo'>indicesDo</a> </li>
+<li class='toc3'><a href='#-keysValuesDo'>keysValuesDo</a> </li>
+<li class='toc3'><a href='#-lastIndex'>lastIndex</a> </li>
+<li class='toc3'><a href='#-makeEmpty'>makeEmpty</a> </li>
+<li class='toc3'><a href='#-pop'>pop</a> </li>
+<li class='toc3'><a href='#-put'>put</a> </li>
+<li class='toc3'><a href='#-reject'>reject</a> </li>
+<li class='toc3'><a href='#-rejectInPlace'>rejectInPlace</a> </li>
+<li class='toc3'><a href='#-removeAllSuchThat'>removeAllSuchThat</a> </li>
+<li class='toc3'><a href='#-removeAt'>removeAt</a> </li>
+<li class='toc3'><a href='#-removeAtSlot'>removeAtSlot</a> </li>
+<li class='toc3'><a href='#-select'>select</a> </li>
+<li class='toc3'><a href='#-selectInPlace'>selectInPlace</a> </li>
+<li class='toc3'><a href='#-size'>size</a> </li>
+<li class='toc3'><a href='#-species'>species</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Keeps elements in an order and allows to put them at arbitrary slots without having to allocate a large array.<div class='note'><span class='notelabel'>NOTE:</span> <a href="#-put">-put</a> and <a href="#-at">-at</a> are slower than in <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> / <a href="./../Classes/PriorityQueue.html">PriorityQueue</a>, <a href="#-do">-do</a> is faster.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>size: 8</span>)</h3>
+<div class='method'>
+<p>Create a new order.<pre class='code prettyprint lang-sc'>g = Order.new;
+g.put(7, 100); // put a value (100) at index 7
+g.clear; // empty</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*newFromIndices' href='./../Overviews/Methods.html#newFromIndices'>newFromIndices</a> (<span class='argstr'>array</span>, <span class='argstr'>indices</span>)</h3>
+<div class='method'>
+<p>Create a new order from given items and indices.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-doRange' href='./../Overviews/Methods.html#doRange'>doRange</a> (<span class='argstr'>function</span>, <span class='argstr'>from: 0</span>, <span class='argstr'>to</span>)</h3>
+<div class='method'>
+<p>Iterate over a range of the order's items.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pos' href='./../Overviews/Methods.html#pos'>pos</a> </h3>
+<div class='method'>
+<p>Return the current write position.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-add' href='./../Overviews/Methods.html#add'>add</a> (<span class='argstr'>obj</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-array' href='./../Overviews/Methods.html#array'>array</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-array' href='./../Overviews/Methods.html#array'>array</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asArray' href='./../Overviews/Methods.html#asArray'>asArray</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-at' href='./../Overviews/Methods.html#at'>at</a> (<span class='argstr'>index</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-choose' href='./../Overviews/Methods.html#choose'>choose</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-clear' href='./../Overviews/Methods.html#clear'>clear</a> (<span class='argstr'>size</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-collect' href='./../Overviews/Methods.html#collect'>collect</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-copy' href='./../Overviews/Methods.html#copy'>copy</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-do' href='./../Overviews/Methods.html#do'>do</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-indices' href='./../Overviews/Methods.html#indices'>indices</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-indices' href='./../Overviews/Methods.html#indices'>indices</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-indicesDo' href='./../Overviews/Methods.html#indicesDo'>indicesDo</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keysValuesDo' href='./../Overviews/Methods.html#keysValuesDo'>keysValuesDo</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lastIndex' href='./../Overviews/Methods.html#lastIndex'>lastIndex</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeEmpty' href='./../Overviews/Methods.html#makeEmpty'>makeEmpty</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pop' href='./../Overviews/Methods.html#pop'>pop</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-put' href='./../Overviews/Methods.html#put'>put</a> (<span class='argstr'>index</span>, <span class='argstr'>obj</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-reject' href='./../Overviews/Methods.html#reject'>reject</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rejectInPlace' href='./../Overviews/Methods.html#rejectInPlace'>rejectInPlace</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeAllSuchThat' href='./../Overviews/Methods.html#removeAllSuchThat'>removeAllSuchThat</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeAt' href='./../Overviews/Methods.html#removeAt'>removeAt</a> (<span class='argstr'>index</span>, <span class='argstr'>obj</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeAtSlot' href='./../Overviews/Methods.html#removeAtSlot'>removeAtSlot</a> (<span class='argstr'>slot</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-select' href='./../Overviews/Methods.html#select'>select</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-selectInPlace' href='./../Overviews/Methods.html#selectInPlace'>selectInPlace</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-size' href='./../Overviews/Methods.html#size'>size</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-species' href='./../Overviews/Methods.html#species'>species</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>a = Order.new;
+
+a[0] = \z;
+a[0] = \y;
+a[5] = \five;
+a[4] = \four;
+
+a[0] = \z;
+a[5] = \five;
+a[4] = \four;
+
+a.indices;
+
+a[9] = 100;
+a.indices;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Order.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Order.schelp</a><br>link::Classes/Order::<br>sc version: 3.8dev</div></div></body></html>

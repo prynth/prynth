@@ -1,0 +1,77 @@
+<html><head><title>Dpoll</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Demand'>UGens>Demand</a>, <a href='./../Browse.html#UGens>Info'>UGens>Info</a></div>
+<h1>Dpoll</h1>
+<div id='summary'>Print the current output value of a demand rate UGen</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Demand.sc'>Demand.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/DUGen.html">DUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Print the current output value of a demand rate UGen.<div class='warning'><span class='warninglabel'>WARNING:</span> Printing values from the Server in intensive for the CPU. Poll should be used for debugging purposes.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>in</span>, <span class='argstr'>label</span>, <span class='argstr'>run: 1</span>, <span class='argstr'>trigid: -1</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>ugen to poll vaues from<tr><td class='argumentname'>label<td class='argumentdesc'>
+<p>a label string<tr><td class='argumentname'>run<td class='argumentdesc'>
+<p>active if 1, inactive if 0. can be a demand ugen (default: 1)<tr><td class='argumentname'>trigid<td class='argumentdesc'></table><h4>Discussion:</h4>
+
+<p>the print-out is in the form: <code class='code prettyprint lang-sc'>label: value block offset: offset.</code>
+<p>structurally related: <a href="./../Classes/Poll.html">Poll</a></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>{ Duty.kr(0.5, 0, Dpoll(Dseries(0, 1, inf) * 2)); 0.0 }.play;
+
+// posts only when cursor is in right half of the screen
+{ Duty.kr(0.5, 0, Dpoll(Dseries(0, 1, inf) * 2, run: MouseX.kr &gt; 0.5)); 0.0 }.play;
+
+// label
+{ LFPulse.ar(Duty.kr(0.5, 0, Dpoll(Dseries(0, 1, inf) % 10 + 1 * 30, "value"))) * 0.1 }.play;
+
+// block offset:
+{ Duty.ar(0.511, 0, Dpoll(Dseries(0, 1, inf) * 2)); 0.0 }.play;
+
+// multichannel expansion:
+
+(
+    {
+    var x = Duty.kr(0.5, 0,
+        Dpoll([Dseries(0, 1, inf), Dgeom(1, 1.1, inf)], ["first", "second"])
+    );
+    LFPulse.ar(100 + (x * 100)) * 0.1
+    }.play
+)
+
+{ Duty.kr(0.5, 0, Dpoll(( Dseries(0, 1, inf) + _ ).dup, ("value" + _).dup)); 0.0 }.play;
+
+
+// the message dpoll(label, run, trigid) is a shorthand:
+
+{ Duty.kr(0.5, 0, Dseries(0, 1, inf).dpoll); 0.0 }.play;
+{ Duty.ar(0.5, 0, SinOsc.ar(0.1).dpoll); 0.0 }.play;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Dpoll.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Dpoll.schelp</a><br>link::Classes/Dpoll::<br>sc version: 3.8dev</div></div></body></html>

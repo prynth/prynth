@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>Supercollider instrument #1</title>
+    <link rel='stylesheet' href='stylesheets/style.css' />
+
+    <!--Jquery-->
+    <script src="javascripts/jquery/jquery-1.12.3.min.js"></script>
+
+    <!--codemirror-->
+    <script src="javascripts/codemirror/lib/codemirror.js"></script>
+
+    <link rel="stylesheet" href="javascripts/codemirror/lib/codemirror.css">
+    <link rel="stylesheet" href="javascripts/codemirror/theme/mymonokai.css">
+
+    <script src="javascripts/codemirror/mode/javascript/javascript.js"></script>
+    <script src="javascripts/codemirror/addon/edit/matchbrackets.js"></script>
+    <script src="javascripts/codemirror/addon/selection/active-line.js"></script>
+
+    <script src="socket.io/socket.io.js"></script>
+
+
+    <!--<style>-->
+        <!--#chat{height:100px;}-->
+    <!--</style>-->
+</head>
+
+
+<body>
+
+<div style="float: left; width: 800px; padding-left: 10px; padding-right: 10px;">
+	<h1>Editor</h1>
+
+	<button type="button" id="runButton">Run</button>
+	<button type="button" id="killButton">Kill</button>
+	<button type="button" id="saveButton">Save</button>
+	<a href="/resources/schelp" target="_blank"><button type="button">Help</button></a>
+
+	<form>
+		<textarea id="codeTextarea"><%=code%></textarea>
+        <br>
+        <textarea id="status" style="height: 160px; width: 800px"></textarea>
+	</form>
+    <button type="button" id="clearStatusButton">Clear</button>
+
+    <!--<div id="chat"></div>-->
+    <!--<form id="send-message">-->
+        <!--<input size="35" id="message">-->
+        <!--<input type="submit">-->
+    <!--</form>-->
+</div>
+
+
+<div style="float: left; width: 250px; padding-left: 10px; padding-right: 10px;">
+
+    <h1>System</h1>
+    <div id="clock">Time:</div>
+	Hostname: <%=hostname%> <br>
+	Ethernet IP: <%=ethernetIP%> <br>
+	Wireless IP: <%=wirelessIP%> <br>
+	CPU Usage: <%=cpu%> % <br>
+	Free Memory: <%=freemem%> Mb of <%=totalmem%> Mb <br>
+
+	<button type="button" id="rebootButton">Reboot</button>
+	<button type="button" id="shutdownButton">Shutdown</button>
+
+	<br>
+
+    <h1>Patches</h1>
+
+    <form method="post" action="/patch" >
+        <% for (var i = 0; i < patches.length; i++) { %>
+        <input type="checkbox" name="patch" value=<%=patches[i]%> > <%=patches[i]%> </input> <br>
+        <% } %>
+        <input type="submit" name="action" value="Load"/>
+        <input type="submit" name="action" value="Delete"/>
+    </form>
+
+    <form method="post" action="/">
+        <button type="button" id="saveNewPatchButton">Save current as:</button>
+        <textarea id="newPatchTextarea"></textarea>
+    </form>
+
+    <br>
+	<h1>Samples</h1>
+
+    <form method="post" action="/sample" >
+	<% for (var i = 0; i < samples.length; i++) { %>
+    [<%=i%>]  <input type="checkbox" name="sample" value=<%=samples[i]%> > <%=samples[i]%> </input> <a onclick="this.firstChild.play()" style="font-size: 12px;"><audio src=sounds/<%=samples[i]%> ></audio>▸</a> <br>
+	<% } %>
+    <input type="submit" name="action" value="Delete"/>
+    </form>
+
+    <form enctype="multipart/form-data" method="post" action="/upload_sample">
+        <label class="myLabel">
+            <input type="file" style="visibility: hidden" name="filename" required/>
+            <span>Choose file</span>
+        </label>
+        <input type="submit" name="action" value="Upload">
+    </form>
+
+</div>
+
+
+<script>
+    //Main javascripting
+
+    var editor = CodeMirror.fromTextArea(document.getElementById("codeTextarea"), {
+        lineNumbers: true,
+        mode: "javascript",
+        matchBrackets: true,
+        autofocus: true,
+        styleActiveLine: true,
+        smartIndent: false,
+        indentWithTabs: true,
+        //lineWrapping: true,
+        theme: "mymonokai"
+    });
+    editor.setSize(800, 600);
+
+    var socket = io.connect();
+
+    $(document).ready(function () {
+
+        var $status = $('#status');
+        var $clearButton= $('#clearStatusButton');
+
+        var $clock = $('#clock');
+
+        var $runButton = $('#runButton');
+        var $killButton = $('#killButton');
+        var $saveButton = $('#saveButton');
+        var $shutdownButton = $('#shutdownButton');
+        var $rebootButton = $('#rebootButton');
+        var $saveNewPatchButton = $('#saveNewPatchButton');
+
+        var $newPatchTextarea = $('#newPatchTextarea');
+
+//        var $messageForm = $('#send-message');
+//        var $messageBox = $('#message');
+//        var $chat = $('#chat');
+
+        //status feedback
+        socket.on('stdout', function (data) {
+            console.log(data);
+            $status.append(data + '\n');
+        });
+
+
+        //buttons (had callbacks, were substituted by socket comm)
+        $runButton.click(function () {$.ajax({method: "POST", url: '/start_sc', data: {code: editor.getValue()}});});
+        $killButton.click(function () {$.ajax({method: "POST", url: '/stop_sc'});});
+        $saveButton.click(function () {
+            $.ajax({
+                method: "POST",
+                url: '/save_code',
+                data: {code: editor.getValue()}
+//                left has an example of an ajax post callback (receives res.send('something') from route)
+//                , success: function (data) {
+//                    $status.html(data);
+//                }
+            });
+        });
+        $shutdownButton.click(function () {$.ajax({method: "POST", url: '/shutdown'});});
+        $rebootButton.click(function () {$.ajax({method: "POST", url: '/reboot'});});
+        $clearButton.click(function () {$status.html('');});
+        $saveNewPatchButton.click(function () {
+                $.ajax({method: "POST",
+                url: '/new_patch',
+                data: {name: $newPatchTextarea.val(), code: editor.getValue()},
+                    success:function (data) {
+                        $newPatchTextarea.val('');
+                        if (typeof data.redirect == 'string'){
+                            window.location = data.redirect;
+                        }
+
+                    }
+                });
+        }
+
+        )
+
+        //clock display that responds to tick from server
+        socket.on('tick from server', function (data) {
+            $clock.html(data);
+        });
+
+        //request action from server (chat example)
+//        $messageForm.submit(function (e) {
+//            e.preventDefault();
+//            socket.emit('request', $messageBox.val());
+//            $messageBox.val('');
+//        });
+
+        //get response info from server (chat example)
+//        socket.on('response', function (data) {
+//            $chat.append(data + '<br>');
+//        });
+//
+        $(window).on('beforeunload', function(){
+            socket.close();
+        });
+
+    });
+
+
+</script>
+
+<footer>
+	<% include footer %>
+</footer>
+
+</body>
+</html>
+
+

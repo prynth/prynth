@@ -1,0 +1,142 @@
+<html><head><title>LPCAnalyzer</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Analysis'>UGens>Analysis</a></div>
+<h1>LPCAnalyzer</h1>
+<div id='summary'>Live Linear Predictive Coding Analysis and Resynthesis</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/NCAnalysisUGens/classes/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/NCAnalysisUGens/classes/LPCAnalyzer.sc'>LPCAnalyzer.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Linear predictive coding analysis on any arbitrary input signal. The spectrum of the input signal is modeled, and used to filter the source. This works most successfully if the source is spectrally flat to begin with, ie, an impulse train ( <a href="./../Classes/Impulse.html">Impulse</a> UGen ) or white noise ( <a href="./../Classes/WhiteNoise.html">WhiteNoise</a> UGen ).
+<p>The two big hits to CPU costs here are large n, causing peaky calculation hits once per window as autocorrelation coefficients are calculated, and p as determining the order of the filter which is fitted, and thus the per sample output calculation cost.
+<p>(For more technicalities see John Makhoul (1975) <em>"Linear Prediction: A Tutorial Review"</em>. Proceedings of the IEEE 63(4).)<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>input: 0</span>, <span class='argstr'>source: 0.01</span>, <span class='argstr'>n: 256</span>, <span class='argstr'>p: 10</span>, <span class='argstr'>testE: 0</span>, <span class='argstr'>delta: 0.999</span>, <span class='argstr'>windowtype: 0</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>input<td class='argumentdesc'>
+<p>Original signal to analyse with the LPC model<tr><td class='argumentname'>source<td class='argumentdesc'>
+<p>Excitation to run through LPC derived filter<tr><td class='argumentname'>n<td class='argumentdesc'>
+<p>Windowsize for analysis in samples; limits of 1&lt;=n&lt;=1024<tr><td class='argumentname'>p<td class='argumentdesc'>
+<p>Number of poles used to model spectrum of input within one window<tr><td class='argumentname'>testE<td class='argumentdesc'>
+<p>Whether to test for meeting of error condition, for variable number of poles solution up to p<tr><td class='argumentname'>delta<td class='argumentdesc'>
+<p>Test value, close to but just below 1.<tr><td class='argumentname'>windowtype<td class='argumentdesc'>
+<p>Windowing. 0 is rectangular window, abrupt swap of filter coefficients after every n samples. 1 is triangular window, and runs two LPCAnalyzers crossfading, for a smoother ride, at expense of double CPU cost.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>{LPCAnalyzer.ar(SoundIn.ar,Impulse.ar(440,0,0.2), 256, 50)}.play
+
+{LPCAnalyzer.ar(SoundIn.ar,Impulse.ar(440,0,0.2), 256, 50, windowtype:1)}.play
+
+{LPCAnalyzer.ar(SoundIn.ar,Impulse.ar(440,0,0.2), 128,  MouseX.kr(1,128))}.play
+
+{LPCAnalyzer.ar(SoundIn.ar,Impulse.ar(440,0,0.2), 1024,  MouseX.kr(1,128), windowtype:1)}.play
+
+
+{LPCAnalyzer.ar(SoundIn.ar,0.1*WhiteNoise.ar, 256, MouseX.kr(1,256))}.play
+
+//keep number of poles lower if pushing harder with bigger windows
+{LPCAnalyzer.ar(SoundIn.ar,Impulse.ar(MouseY.kr(100,1000),0,0.2), 1024,  MouseX.kr(1,128),1,0.9999, 1)}.play
+
+
+(
+{
+var source,amplitude, freq, hasFreq;
+
+source= SoundIn.ar;
+
+//no need, fitted filter tracks amplitudes, essentially
+//amplitude= Amplitude.kr(source);
+
+#freq,hasFreq= Pitch.kr(source);
+
+LPCAnalyzer.ar(source,if(hasFreq,Impulse.ar(freq),0.25*WhiteNoise.ar), 256,MouseX.kr(1,256), windowtype:1)
+
+}.play
+)
+
+
+//singing with myself after three seconds
+(
+{
+var source,amplitude, freq, hasFreq;
+
+source= SoundIn.ar;
+
+amplitude= Amplitude.kr(source);
+
+LPCAnalyzer.ar(source,CombC.ar(source,3.0,3.0,10.0), 256,MouseX.kr(1,256)).dup(2)
+
+}.play
+)
+
+(
+{
+var input,source;
+
+input= Resonz.ar(Saw.ar(SinOsc.kr([0.1,0.11],500,600)),LFNoise1.kr(LFNoise1.kr(4,3.5,7),700,2500),LFNoise2.kr(0.5,0.3,0.4));
+
+source= SoundIn.ar;
+
+LPCAnalyzer.ar(input,source, 64,MouseX.kr(1,64), windowtype:1)
+
+}.play
+)
+
+
+//test variable order
+{LPCAnalyzer.ar(SoundIn.ar,Impulse.ar(MouseX.kr(10,1000,'exponential'),0,0.2), 256, 256,1,0.999)}.play
+
+{LPCAnalyzer.ar(SoundIn.ar,Impulse.ar(MouseX.kr(10,1000,'exponential'),0,0.2), 256, 256,1,MouseY.kr(0.9,1.0).sqrt)}.play
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////
+
+//residual test assumes windowtype 0)
+(
+{
+var input,source;
+var delaytime= 1024.0/SampleRate.ir;
+
+input= SoundIn.ar;
+
+source= Impulse.ar(delaytime.reciprocal);
+
+(DelayN.ar(input,delaytime, delaytime)- LPCAnalyzer.ar(input,source,1024,MouseX.kr(1,256))).poll(10000)
+
+}.play
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/NCAnalysisUGens/HelpSource/Classes/LPCAnalyzer.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/NCAnalysisUGens/HelpSource/Classes/LPCAnalyzer.schelp</a><br>link::Classes/LPCAnalyzer::<br>sc version: 3.8dev</div></div></body></html>

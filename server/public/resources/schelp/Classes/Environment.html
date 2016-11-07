@@ -1,0 +1,261 @@
+<html><head><title>Environment</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Collections>Unordered'>Collections>Unordered</a></div>
+<h1>Environment</h1>
+<div id='summary'>A dictionary which can serve as a 'name space' for functions</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/Environment.sc'>Environment.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/IdentityDictionary.html">IdentityDictionary</a> : <a href="../Classes/Dictionary.html">Dictionary</a> : <a href="../Classes/Set.html">Set</a> : <a href="../Classes/Collection.html">Collection</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/Event.html">Event</a></div>
+<div id='related'>See also: <a href="./../Classes/Event.html">Event</a>, <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*stack'>stack</a> </li>
+<li class='toc3'><a href='#*make'>make</a> </li>
+<li class='toc3'><a href='#*use'>use</a> </li>
+<li class='toc3'><a href='#*push'>push</a> </li>
+<li class='toc3'><a href='#*pop'>pop</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-make'>make</a> </li>
+<li class='toc3'><a href='#-use'>use</a> </li>
+<li class='toc3'><a href='#-push'>push</a> </li>
+<li class='toc3'><a href='#-pop'>pop</a> </li>
+<li class='toc3'><a href='#-linkDoc'>linkDoc</a> </li>
+<li class='toc3'><a href='#-unlinkDoc'>unlinkDoc</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-composeEvents'>composeEvents</a> </li>
+<li class='toc3'><a href='#-eventAt'>eventAt</a> </li>
+</ul></ul><li class='toc1'><a href='#PseudoVariables (global variables)'>PseudoVariables (global variables)</a></li>
+<ul class='toc'><li class='toc3'><a href='#.currentEnvironment'>currentEnvironment</a> </li>
+<li class='toc3'><a href='#.topEnvironment'>topEnvironment</a> </li>
+</ul><li class='toc1'><a href='#Related Messages'>Related Messages</a></li>
+<ul class='toc'><li class='toc3'><a href='#.valueEnvir'>valueEnvir</a> </li>
+<li class='toc3'><a href='#.valueArrayEnvir'>valueArrayEnvir</a> </li>
+</ul><li class='toc1'><a href='#Overview'>Overview</a></li>
+<ul class='toc'><li class='toc2'><a href='#topEnvironment, currentEnvironment, make and use'>topEnvironment, currentEnvironment, make and use</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#valueEnvir and valueArrayEnvir'>valueEnvir and valueArrayEnvir</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Environments and asynchronous functions'>Environments and asynchronous functions</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Using Environments as object prototypes'>Using Environments as object prototypes</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>An Environment is an IdentityDictionary with additional features that allow it to serve as a 'name space' within which functions can be defined and/or evaluated.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*stack' href='./../Overviews/Methods.html#stack'>stack</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*stack' href='./../Overviews/Methods.html#stack'>stack</a> = value</h3>
+<div class='method'>
+<p>Maintains a stack of Environments accessed by <a href="#*push">*push</a> and <a href="#*pop">*pop</a>.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*make' href='./../Overviews/Methods.html#make'>make</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Creates a new Environment and sends make message.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*use' href='./../Overviews/Methods.html#use'>use</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Creates a new Environment and sends use message.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*push' href='./../Overviews/Methods.html#push'>push</a> (<span class='argstr'>envir</span>)</h3>
+<div class='method'>
+<p>Saves <a href="#.currentEnvironment">.currentEnvironment</a> on the stack.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*pop' href='./../Overviews/Methods.html#pop'>pop</a> </h3>
+<div class='method'>
+<p>Restores <a href="#.currentEnvironment">.currentEnvironment</a> from the stack.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-make' href='./../Overviews/Methods.html#make'>make</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Evaluates the function within the environment, returns the environment.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-use' href='./../Overviews/Methods.html#use'>use</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Evaluates the function within the environment, returns the return value of the function.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-push' href='./../Overviews/Methods.html#push'>push</a> </h3>
+<div class='method'>
+<p>Saves the receiver on the stack.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pop' href='./../Overviews/Methods.html#pop'>pop</a> </h3>
+<div class='method'>
+<p>Restores <a href="#.currentEnvironment">.currentEnvironment</a> from the stack.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-linkDoc' href='./../Overviews/Methods.html#linkDoc'>linkDoc</a> (<span class='argstr'>doc</span>)</h3>
+<div class='method'>
+<p>Links the environment to the current document, so that it is the currentEnvironment only when one document is in focus. See:<a href="./../Classes/Document.html#envir">Document: envir</a><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>doc<td class='argumentdesc'>
+<p>The document to link to, defaults to the current document (<a href="./../Classes/Document.html#current">Document: current</a>). If the document has focus or no document is given, the environment is pushed immediately.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-unlinkDoc' href='./../Overviews/Methods.html#unlinkDoc'>unlinkDoc</a> (<span class='argstr'>doc</span>)</h3>
+<div class='method'>
+<p>Uninks the environment to the current document, so that it is the currentEnvironment only when one document is in focus. See:<a href="./../Classes/Document.html#envir">Document: envir</a><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>doc<td class='argumentdesc'>
+<p>The document to unlink from, defaults to the current document (<a href="./../Classes/Document.html#current">Document: current</a>). If the document has focus or no document is given, the environment is popped immediately.</table></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-composeEvents' href='./../Overviews/Methods.html#composeEvents'>composeEvents</a> (<span class='argstr'>event</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-eventAt' href='./../Overviews/Methods.html#eventAt'>eventAt</a> (<span class='argstr'>key</span>)</h3>
+<h2><a class='anchor' name='PseudoVariables (global variables)'>PseudoVariables (global variables)</a></h2>
+
+<p>These are not methods, but global variables.<div class='warning'><span class='warninglabel'>WARNING:</span> In general, you should not manipulate these variables directly. Instead, use the <a href="#-use">-use</a>, <a href="#-push">-push</a> and <a href="#*pop">*pop</a> methods.</div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.currentEnvironment' href='./../Overviews/Methods.html#currentEnvironment'>currentEnvironment</a> </h3>
+<div class='method'>
+<p>determines environment used by "~" syntax, <a href="#.valueEnvir">.valueEnvir</a>, and <a href="#.valueArrayEnvir">.valueArrayEnvir</a></div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.topEnvironment' href='./../Overviews/Methods.html#topEnvironment'>topEnvironment</a> </h3>
+<div class='method'>
+<p>initial value of <a href="#.currentEnvironment">.currentEnvironment</a>. <code class='code prettyprint lang-sc'>~environmentVariables</code> placed here can be used as "global variables," as long as the topEnvironment remains the currentEnvironment.<pre class='code prettyprint lang-sc'>~abc = 10;  // Environment variable (acting like a global var)
+
+currentEnvironment;  // abc is there
+topEnvironment;  // and here, because...
+
+// they are the exact same environment
+currentEnvironment === topEnvironment;
+
+// a separate environment
+e = Environment.make { ~def = 20 };
+
+e.push;  // make 'e' the currentEnvironment
+
+~abc  // is now nil, because...
+
+currentEnvironment;  // this is 'e' and contains only ~def
+topEnvironment;  // still has ~abc
+
+e.pop;  // return to the previous currentEnvironment
+
+~abc  // it's back!</pre>
+
+<p>Thus, ~abc is not truly a global variable because it is inaccessible if its environment is not current.</div><h2><a class='anchor' name='Related Messages'>Related Messages</a></h2>
+<h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.valueEnvir' href='./../Overviews/Methods.html#valueEnvir'>valueEnvir</a> (arg1, arg2...)</h3>
+<div class='method'>
+<p>evaluates a function, looking up unspecified arguments in <a href="#.currentEnvironment">.currentEnvironment</a></div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.valueArrayEnvir' href='./../Overviews/Methods.html#valueArrayEnvir'>valueArrayEnvir</a> (argArray)</h3>
+<div class='method'>
+<p>same as <a href="#.valueEnvir">.valueEnvir</a>, but with arguments in an array</div><h2><a class='anchor' name='Overview'>Overview</a></h2>
+<h3><a class='anchor' name='topEnvironment, currentEnvironment, make and use'>topEnvironment, currentEnvironment, make and use</a></h3>
+
+<p>When SuperCollider starts, it creates an Environment that it stores in the pseudovariables <a href="#.topEnvironment">.topEnvironment</a> and <a href="#.currentEnvironment">.currentEnvironment</a>. The <a href="#.topEnvironment">.topEnvironment</a> provides a universally accessible collection of named values similar to the <a href="./../Classes/Interpreter.html">Interpreter</a> variables a, b, c, ....
+<p>The compiler provides a shortcut syntax where ~ is a placeholder for <a href="#.currentEnvironment">.currentEnvironment</a>. This makes the expression <code class='code prettyprint lang-sc'>~myvariable;</code> equivalent to <code class='code prettyprint lang-sc'>currentEnvironment.at(\myvariable);</code> and the expression <code class='code prettyprint lang-sc'>~myvariable = 888;</code> equivalent to <code class='code prettyprint lang-sc'>currentEnvironment.put(\myvariable, 888);</code>
+<p>The messages <a href="#*make">*make</a>(function) and <a href="#*use">*use</a>(function) replace <a href="#.currentEnvironment">.currentEnvironment</a> with the receiver. The message <a href="#*make">*make</a> is intended to be used when initializing an Environment, so it returns the Environment. The message <a href="#*use">*use</a> is for evaluating a functions within an Environment, so it returns the return value of the function.
+<p>For example<pre class='code prettyprint lang-sc'>(
+a = Environment.make({
+    ~a = 100;
+    ~b = 200;
+    ~c = 300;
+});
+a.postln;
+)</pre>
+
+<p>creates an environment, while<pre class='code prettyprint lang-sc'>a.use({
+    ~a + ~b + ~c
+}).postln;</pre>
+
+<p>evaluates the function within that environment.<h3><a class='anchor' name='valueEnvir and valueArrayEnvir'>valueEnvir and valueArrayEnvir</a></h3>
+
+<p>When Functions are evaluated with <a href="#.valueEnvir">.valueEnvir</a> and <a href="#.valueArrayEnvir">.valueArrayEnvir</a> unspecified arguments are looked up in the current Environment. If the argument is not found in the Environment its default value is used.<pre class='code prettyprint lang-sc'>(
+var f;
+
+// define a function
+f = { arg x, y, z; [x, y, z].postln; };
+
+Environment.use({
+    ~x = 7;
+    ~y = 8;
+    ~z = 9;
+
+    f.valueEnvir(1, 2, 3);    // all values supplied
+    f.valueEnvir(1, 2);    // z is looked up in the current Environment
+    f.valueEnvir(1);    // y and z are looked up in the current Environment
+    f.valueEnvir;        // all arguments are looked up in the current Environment
+    f.valueEnvir(z: 1);    // x and y are looked up in the current Environment
+});
+)</pre>
+
+<p>Now here is how this can be used with an instrument function. Environments allow you to define instruments without having to worry about argument ordering conflicts. Even though the three functions below have the freq, amp and pan args declared in different orders it does not matter, because <a href="#.valueEnvir">.valueEnvir</a> looks them up in the environment.<pre class='code prettyprint lang-sc'>s.boot;
+
+(
+var orc;
+orc = Environment.make {
+    ~a = { arg freq, amp, pan;
+        Pan2.ar(SinOsc.ar(freq), pan, amp);
+    };
+    ~b = { arg amp, pan, freq;
+        Pan2.ar(RLPF.ar(Saw.ar(freq), freq * 6, 0.1), pan, amp);
+    };
+    ~c = { arg pan, freq, amp;
+        Pan2.ar(Resonz.ar(GrayNoise.ar, freq * 2, 0.1), pan, amp * 2);
+    };
+    ~orc = [~a, ~b, ~c];
+};
+// 'reverb'
+{ var in; in = In.ar(0, 2); CombN.ar(in, 0.2, 0.2, 3, 1, in); }.play(addAction: \addToTail);
+
+{ loop({
+    orc.use({
+            // set values in the environment
+        ~freq = exprand(80, 600);
+        ~amp = 0.1;
+        ~pan = 1.0.rand2;
+
+            // call a randomly chosen instrument function
+            // with values from the environment
+
+         x = { ~orc.choose.valueEnvir; }.play(fadeTime: 0.2, addAction: \addToHead);
+         0.2.wait;
+         x.release(0.2);
+    });
+}) }.fork;
+
+)</pre>
+<h3><a class='anchor' name='Environments and asynchronous functions'>Environments and asynchronous functions</a></h3>
+
+<p>Local variables declared in functions, and class and instance variables, use lexical scope. That is, the context in which they are understood depends on where the declaration is read during compilation. Asynchronous functions -- any function that will execute outside (later than) the current execution flow -- carry their lexically scoped variables with them.<pre class='code prettyprint lang-sc'>f = { var a = "got it"; { a.postln }.defer(0.5) };
+f.value;</pre>
+
+<p>Asynchronous functions include any scheduled function, responder function associated with OSCFunc, MIDIFunc, HID or GUI action functions, or actions used in server messaging (such as Buffer.read, Buffer or Bus .get, and so on).
+<p>Environment variables have dynamic scope; they are read from whichever environment is current, whether or not it was the current environment when the function was declared. For instance, the following fails because e is no longer the current environment when the deferred function wakes up.<pre class='code prettyprint lang-sc'>e = (a: "got it", f: { { ~a.postln }.defer(0.5) });
+e.use { e.f };</pre>
+
+<p><a href="./../Classes/Function.html#inEnvir">Function's inEnvir</a> method attaches a function to a specific environment. If no environment is given, the current environment at the time of executing inEnvir is the default.<pre class='code prettyprint lang-sc'>e = (a: "got it", f: { { ~a.postln }.inEnvir.defer(0.5) });
+e.use { e.f };</pre>
+<h3><a class='anchor' name='Using Environments as object prototypes'>Using Environments as object prototypes</a></h3>
+
+<p>Environment's <strong>know</strong> variable holds a <a href="./../Classes/Boolean.html">Boolean</a> value controlling whether the Environment may be used as an object prototype or not. If <strong>know</strong> is true, any messages sent to the Environment that it does not already understand will be relayed into items in the Environment. (If false, not-understood messages will produce a standard "does not understand" error message.)
+<p>The default for know is false for Environment, and true for <a href="./../Classes/Event.html">Event</a>.<pre class='code prettyprint lang-sc'>e = Environment[
+    'someVariable' -&gt; 5,
+    'printMe' -&gt; { |self, string| string.postln }
+];
+
+e.know = true;</pre>
+
+<p>More typically, Events are used to define such prototypes because the syntax is simpler.<pre class='code prettyprint lang-sc'>e = (someVariable: 5, printMe: { |self, string| string.postln });</pre>
+
+<p>An object prototype looks up the method selector in the Environment to decide what to do.
+<p>Most objects are simply returned -- the method call behaves like a getter for any other object.<pre class='code prettyprint lang-sc'>e.someVariable;
+// same as
+e.at('someVariable');
+e['someVariable'];</pre>
+
+<p>If the selector is a setter, e.g. <strong>someVariable_(value)</strong> or <strong>someVariable = value</strong>, the new value is put into the Environment.<pre class='code prettyprint lang-sc'>e.someVariable = 10;
+// same as
+e.put('someVariable', 10);</pre>
+
+<p>If the Environment item is a function, it is evaluated as if it were a method definition. The first argument passed into the function is the Environment that holds the function; arguments to the method call follow as the second, third etc. arguments passed into the function.<pre class='code prettyprint lang-sc'>e.printMe("Oh hai wrldz");
+// same as
+e['printMe'].value(e, "Oh hai wrldz");</pre>
+
+<p>The function may access objects in the Environment using the first function argument.<pre class='code prettyprint lang-sc'>e.mul2 = { |z| z.someVariable * 2 };
+e.mul2;</pre>
+
+<p>Environment variables inside a function will refer to the currently active environment -- not to the Environment being addressed. This is to allow the object prototype to interact with the <a href="#.currentEnvironment">.currentEnvironment</a>.<pre class='code prettyprint lang-sc'>e.mul2 = { |z| ~someVariable * 2 };
+// this will throw an error because ~someVariable is nil in the currentEnvironment
+e.mul2;</pre>
+
+<p>If you wish to access objects in the environment using environment variable syntax, 'use' the environment within the function.<pre class='code prettyprint lang-sc'>e.mul2 = { |z| z.use { ~someVariable * 2 } };
+e.mul2;</pre>
+<div class='note'><span class='notelabel'>NOTE:</span> Be careful to avoid method names that are defined in any of the superclasses of environment (or event). Object prototyping works by trapping method selectors that are not already defined as class library methods. Using a generic method selector such as 'stop' or 'reset' will cause the corresponding class library method to respond, and the items in the environment will never be checked.
+<p>Assigning a value into an environment using a setter -- <strong>name_()</strong> or <strong>.name = ...</strong> -- posts a warning message if the name is already defined in the class library.<pre class='code prettyprint lang-sc'>e.reset = { "My reset function".postln };
+
+// prints:
+WARNING:
+'reset' exists a method name, so you can't use it as pseudo-method.
+
+// this does NOT execute the reset function above
+// because Object:reset responds
+e.reset;</pre>
+</div>
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Environment.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Environment.schelp</a><br>link::Classes/Environment::<br>sc version: 3.8dev</div></div></body></html>

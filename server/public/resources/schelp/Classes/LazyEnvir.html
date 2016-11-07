@@ -1,0 +1,114 @@
+<html><head><title>LazyEnvir</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Libraries>JITLib>Environments'>Libraries>JITLib>Environments</a>, <a href='./../Browse.html#Live Coding'>Live Coding</a>, <a href='./../Browse.html#Collections>Unordered'>Collections>Unordered</a></div>
+<h1>LazyEnvir</h1>
+<div id='summary'>lazy environment</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/EnvironmentRedirect.sc'>EnvironmentRedirect.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/EnvironmentRedirect.html">EnvironmentRedirect</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/ProxySpace.html">ProxySpace</a></div>
+<div id='related'>See also: <a href="./../Classes/Maybe.html">Maybe</a>, <a href="./../Classes/Fdef.html">Fdef</a>, <a href="./../Classes/Environment.html">Environment</a>, <a href="./../Classes/ProxySpace.html">ProxySpace</a>, <a href="./../Overviews/JITLib.html">JITLib</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-put'>put</a> </li>
+<li class='toc3'><a href='#-at'>at</a> </li>
+<li class='toc3'><a href='#-copy'>copy</a> </li>
+<li class='toc3'><a href='#-localPut'>localPut</a> </li>
+<li class='toc3'><a href='#-proxyClass'>proxyClass</a> </li>
+<li class='toc3'><a href='#-removeAt'>removeAt</a> </li>
+<li class='toc3'><a href='#-makeProxy'>makeProxy</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Environment with deferred evaluation and default values.
+<p>Consequently, calculations can be done with nonexisting objects which can then be assigned later. Per default, a LazyEnvir returns instances of <a href="./../Classes/Maybe.html">Maybe</a>. See also <a href="./../Classes/Fdef.html">Fdef</a>.<div class='note'><span class='notelabel'>NOTE:</span> While the method put is treated as transparent and implicitly creates a placeholder, all other methods, like at, collect, do, etc. pass the placeholder. In order to retrieve the object itself, use .source - in order to reduce it to a value, use: value</div><pre class='code prettyprint lang-sc'>e = LazyEnvir.new;
+e.use { ~x = ~y + ~z };
+e.at(\x);
+e.at(\x).source; // the source is a binary operation (addition on the placeholders)
+e.use { ~y = 5; ~z = 7 };
+e.at(\x).value; // the value is 12</pre>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-put' href='./../Overviews/Methods.html#put'>put</a> (<span class='argstr'>key</span>, <span class='argstr'>obj</span>)</h3>
+<div class='method'>
+<p>Sets the value of the reference at key.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-at' href='./../Overviews/Methods.html#at'>at</a> (<span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p>Returns a reference to the object at key.<pre class='code prettyprint lang-sc'>l = LazyEnvir.push;
+
+// default objects are created on access
+~a;
+~a.value; // defaults to nil
+
+// operations on placeholders
+(
+~c = ~a + ~b;
+
+~c.value; // doesn't fail, instead returns nil
+)
+
+// variables can be assigned later
+(
+~a = 800;
+~b = { 1.0.rand };
+
+~c.value;
+)
+
+// variables can be exchanged later
+(
+~b = { 1000.rand };
+~c.value;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-copy' href='./../Overviews/Methods.html#copy'>copy</a> </h3>
+<div class='method'>
+<p>Copies the environment into a new one, with each placeholder being copied as well.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-localPut' href='./../Overviews/Methods.html#localPut'>localPut</a> (<span class='argstr'>key</span>, <span class='argstr'>obj</span>)</h3>
+<div class='method'>
+<p>Sets the value of the key directly. This method is mainly used internally.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-proxyClass' href='./../Overviews/Methods.html#proxyClass'>proxyClass</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-proxyClass' href='./../Overviews/Methods.html#proxyClass'>proxyClass</a> = value</h3>
+<div class='method'>
+<p>Specify what placeholder object the environment uses by supplying a class name (<a href="./../Classes/Symbol.html">Symbol</a>). The default is a <a href="./../Classes/Maybe.html">Maybe</a>. Any object that responds to the methods source, source_ and clear can be a placeholder.<pre class='code prettyprint lang-sc'>// making a pattern space using LazyEnvir
+
+a = LazyEnvir.new;
+a.proxyClass=\PatternProxy;
+
+a.push;
+
+~x = Pseq([1, 2, 30], 1);
+~y = Pseq([~x], inf);
+
+z = ~y.asStream;
+
+z.next;
+z.next;
+z.next;
+~x = Pseq([100, 2, 300], 1);
+z.next;
+z.next;
+z.next;
+
+a.pop;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeAt' href='./../Overviews/Methods.html#removeAt'>removeAt</a> (<span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p>Removes the placeholder from the environment and clears it.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeProxy' href='./../Overviews/Methods.html#makeProxy'>makeProxy</a> </h3>
+<div class='method'>
+<p>Returns a new placeholder object. This is used internally and can be overridden to implement other lazy environments.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/LazyEnvir.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/LazyEnvir.schelp</a><br>link::Classes/LazyEnvir::<br>sc version: 3.8dev</div></div></body></html>

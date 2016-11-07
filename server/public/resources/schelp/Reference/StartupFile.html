@@ -1,0 +1,56 @@
+<html><head><title>Sclang Startup File</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider REFERENCE</div>
+<div id='categories'><a href='./../Browse.html#Language'>Language</a></div>
+<h1>Sclang Startup File</h1>
+<div id='summary'>The sclang startup file</div>
+</div>
+<div class='subheader'>
+</div>
+<div id='toc'>
+<ul class='toc'></ul></div>
+<p>Once the class library is finished compiling the interpreter looks for a file at <code class='code prettyprint lang-sc'>Platform.userConfigDir +/+ "startup.scd"</code> and if such a file exists, executes any code within it (this happens within <a href="./../Classes/Main.html#-startup">Main: -startup</a>). By creating a file in this location you can make user specific customizations.<dl>
+<dt>Linux<dd><code>~/.config/SuperCollider/startup.scd</code>, according to the xdg base directory specification<dt>OSX<dd><code>~/Library/Application Support/SuperCollider/startup.scd</code><dt>Windows<dd><code>C:\\SuperCollider\\startup.scd</code> (or similar, depending on the location of the SuperCollider installation)</dl>
+
+<p>A common example would be to alter the options of the local and internal Servers:<pre class='code prettyprint lang-sc'>// placing the following code in the file will cause these modifications to be made
+// at startup (see also: ServerOptions)
+
+Server.local.options.numOutputBusChannels = 4;    // change number of input and output channels
+Server.local.options.numInputBusChannels = 4;
+Server.internal.options.numOutputBusChannels = 4;
+Server.internal.options.numInputBusChannels = 4;
+
+Server.local.options.device = "Built-in Audio";    // use a specific soundcard
+Server.local.options.device = "MOTU Traveler";
+Server.local.options.device = "TASCAM US-122";
+Server.local.options.device = "Jack Router";
+Server.local.options.device = nil;                // use the system default soundcard
+
+Server.local.options.blockSize = 128; // increase block size (default is 64)
+Server.internal.options.blockSize = 128;
+
+Server.local.options.sampleRate = 96000; // increase sampling rate (if your hardware supports it)
+Server.internal.options.sampleRate = 96000;
+Server.internal.options.sampleRate = nil;    // use the currently selected samplerate of the soundcard
+
+// change the standard archive path to a custom one:
+Archive.archiveDir = "~/scwork".standardizePath;
+
+// hook up jack ports to audio channels
+"SC_JACK_DEFAULT_INPUTS".setenv("system");
+"SC_JACK_DEFAULT_OUTPUTS".setenv("system");</pre>
+
+<p>Naturally the file must contain only valid SC expressions.<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/StartupFile.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/StartupFile.schelp</a><br>link::Reference/StartupFile::<br>sc version: 3.8dev</div></div></body></html>

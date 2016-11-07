@@ -1,0 +1,191 @@
+<html><head><title>Pdfsm</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events>Patterns>List>Indexing'>Streams-Patterns-Events>Patterns>List>Indexing</a></div>
+<h1>Pdfsm</h1>
+<div id='summary'>deterministic finite state machine</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/ListPatterns.sc'>ListPatterns.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/ListPattern.html">ListPattern</a> : <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Pfsm.html">Pfsm</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-embedInStream'>embedInStream</a> </li>
+<li class='toc3'><a href='#-startState'>startState</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Pdfsm is a deterministic finite state machine with signal input (written by by ccos).<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>list</span>, <span class='argstr'>startState: 0</span>, <span class='argstr'>repeats: 1</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>list<td class='argumentdesc'>
+<p>a list consisting of the stream which gives input signals to determine state transitions, and then dictionary entries, one for each state, mapping the destinattion state and yield streams to those input signals.<tr><td class='argumentname'>startState<td class='argumentdesc'>
+<p>an integer index for the state to start with.<tr><td class='argumentname'>repeats<td class='argumentdesc'>
+<p>an integer giving the number of times the pattern should cycle. A cycle ends when the <strong>signal stream</strong> ends or nil is given for the destination state to a signal value, see below.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-embedInStream' href='./../Overviews/Methods.html#embedInStream'>embedInStream</a> (<span class='argstr'>inval</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-startState' href='./../Overviews/Methods.html#startState'>startState</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-startState' href='./../Overviews/Methods.html#startState'>startState</a> = value</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<dl>
+<dt>list structure:<dd>[<dl>
+<dt>signal stream<dd>can be a stream of anything which can serve as a key for an associative collection. integers, symbols, etc... asStream is called on this for each repeat.<dt>states<dd>states should be an instance of <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a>, <a href="./../Classes/Event.html">Event</a> or some other associative collection.</dl>
+
+<p><dt>]<dd><dt>list syntax:<dd>[<dl>
+<dt>signal stream, <dd><dt>( // state 0, <dd><dl>
+<dt>signal value : [destination state, return stream or pattern], <dd><dt>signal value : [destination state, return stream or pattern]<dd></dl>
+<dt>), <dd><dt>... // state 1 ... N<dd></dl>
+<dt>]<dd></dl>
+Any number of states can be given, and are indexed by the order in which they are given.
+<p>If the fsm is in state x and it receives a <strong>signal value</strong> y it looks up y in the state dictionary supplied for x, if there is no y entry, it looks for a \default entry and uses that.
+<p>The next state is then set to <strong>destination state</strong>, and the stream yielded is given by <strong>return stream or pattern</strong>. That is unless the <strong>destination state</strong> is given as nil, or if a <strong>destination state</strong> is given for which you have not supplied a dictionary - in both cases the current cycle ends and any remaining repeats are executed. If there is no <strong>signal value</strong> given for a particular signal, and no \default is supplied then one will get a runtime error.<pre class='code prettyprint lang-sc'>(
+    p = Pdfsm(
+        [
+            Pseq( [\foo,\bar], 2 ), // foobar signals
+            ( // state 0
+                \foo : [ 1, Pseq([ 0, 1 ], 2 ) ]
+            ),
+            ( // state 1
+                \bar : [ 0, 3 ]
+            )
+        ],
+        0,
+        2
+    ).asStream;
+
+    11.do({ p.next.postln });
+)
+
+(
+SynthDef(\help_Pdfsm1,
+    { arg out=0, freq=440, sustain=0.05;
+        var env;
+        env = EnvGen.kr(Env.perc(0.01, sustain, 0.2), doneAction:2);
+        Out.ar(out, SinOsc.ar([freq, freq + 0.1.rand2], 0, env))
+    }).add;
+)
+
+(
+var p;
+p = Pdfsm(
+    [
+        Prand([0,1,2],inf),    // signalStream
+
+        IdentityDictionary[    // state 0
+            0 -&gt; [ 2, Pseq([67,68,69], 2) ],
+            1 -&gt; [ 0, 66 ],
+            2 -&gt; [ 1, 65 ]
+        ],
+        IdentityDictionary[    // state 1
+            1 -&gt; [ 1, Pseq([69,68,67],2) ],
+            \default -&gt; [ 0, 70 ]
+        ],
+        IdentityDictionary[
+            0 -&gt; [ 0, 71 ],
+            1 -&gt; [ 0, 72 ],
+            2 -&gt; [ nil ]    // signalStream is infinitely long,
+                    // so the fsm only ends because of this nil
+                    // 2 -&gt; [nil, nil] is also fine
+        ]
+    ],
+    1,                 // startState
+    1                 // repeats
+).asStream;
+
+Routine({
+    var freq;
+    while({ (freq = p.next.postln).notNil },{
+        Synth(\help_Pdfsm1, [ \freq, freq.midicps ]);
+        0.1.wait;
+    })
+}).play;
+)
+
+(
+SynthDef(\help_Pdfsm2,
+    { arg freq, gate=1;
+        var n=8, env, osc;
+        env = Linen.kr( gate, 0.01, 1, 0.03, 2 );
+        osc = {Mix.fill( n, { arg i;
+            FSinOsc.ar(freq + Rand(-2.0,2.0), Rand(0, 0.05pi)) ring4:
+            FSinOsc.ar(freq * (i+1));
+        })}.dup * FSinOsc.kr(Rand(1.5,4.5),{Rand(-0.1pi,0.1pi)}.dup,0.6,env*0.4);
+        Out.ar(0, env * osc / (n*4) )
+    }).add;
+)
+
+(
+var n=3, base, penult;
+
+base = [3,4,4,0];
+
+for( 1, n, { arg i;
+    penult = Pbind( \degree, Pshuf(base - (i*5), 2), \dur, Pseq([0.2],2) );
+    Pset(
+        \instrument, \help_Pdfsm2,
+        Pdfsm(
+            [
+                Pseq([    // signalStream
+                    Pn(1,22 + i),
+                    Pn(0,4),
+                    Pn(1,8),
+                    Pseq([
+                        Pn(0,3),
+                        Prand([0,1],8),
+                        Pn(1,8)
+                    ], 3 ),
+                    Pn(2,2)
+                ], 1 ),
+                (    // state 0
+                    0 : [ 0, Pbind( \degree, Pseq(base - i, 1), \dur, Pxrand([0.2,0.3],4) ) ],
+                    1 : [ 1, Pbind(
+                            \degree, Pseq(base.reverse - (i*2), 2),
+                            \dur, Pseq([0.2,0.21],1)
+                            )
+                        ],
+                    2 :    [ 2, penult ]
+                ),
+                (    // state 1
+                    0 : [ 0, Pbind( \degree, Pshuf(base * i.neg, 8), \dur, Pseq([0.08],8) ) ],
+                    1 : [ 0, Pbind( \degree, Pseq(base - (i*3),3+i), \dur, Pseq([0.11],3+i) ) ],
+                    2 : [ 2, penult ]
+                ),
+                (    // state 2
+                    \default : [ 2, Pbind(
+                                    \degree, Prand(base - (i*7), 5),
+                                    \dur, Prand([0.6,0.8],5)
+                                )
+                            ]
+                )
+            ],
+            i % 2         // startState
+        )
+    ).play;
+})
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Pdfsm.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Pdfsm.schelp</a><br>link::Classes/Pdfsm::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,78 @@
+<html><head><title>Thunk</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Core>Kernel'>Core>Kernel</a></div>
+<h1>Thunk</h1>
+<div id='summary'>unevaluated value</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Core/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Core/Function.sc'>Function.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/UGenThunk.html">UGenThunk</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-value'>value</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-valueArray'>valueArray</a> </li>
+<li class='toc3'><a href='#-valueArrayEnvir'>valueArrayEnvir</a> </li>
+<li class='toc3'><a href='#-valueEnvir'>valueEnvir</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Thunk, "past tense of think", can be used when a calculation may, or may not have to be performed at a later point in time, and its value is needed several times. This is an example of lazy evaluation, and can be used to avoid unnecessary calculations and to make state immutable.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>function<td class='argumentdesc'>
+<p>some function that returns the desired value</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-value' href='./../Overviews/Methods.html#value'>value</a> </h3>
+<div class='method'>
+<p>return the value. If calculation is done, use previous value, otherwise do calculation.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-valueArray' href='./../Overviews/Methods.html#valueArray'>valueArray</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-valueArrayEnvir' href='./../Overviews/Methods.html#valueArrayEnvir'>valueArrayEnvir</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-valueEnvir' href='./../Overviews/Methods.html#valueEnvir'>valueEnvir</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// so for example, random values will result in a single instance:
+a = Thunk({ \done.postln; rrand(2.0, 8.0) });
+a.value; // posts "done"
+a.value;</pre>
+<pre class='code prettyprint lang-sc'>// it is an AbstractFunction, so one can use it for math operations:
+
+a = Thunk({ rrand(2.0, 8.0) });
+b = a * 5 / (a - 1);
+b.value;</pre>
+<pre class='code prettyprint lang-sc'>// lazy evaluation
+
+a = Thunk({ \done1.postln; Array.fill(10000, { |i| i + 6 % 5 * i / 2 }) }); // some calculation.
+b = Thunk({ \done2.postln;Array.fill(10000, { |i| i + 5 % 6 * i / 3 }) });// some other calculation.
+c = [a, b].choose + 700;
+(c * c * c).value; // caclulation happens here, and only once.
+
+// compare to a function:
+
+a = { \done1.postln; Array.fill(10000, { |i| i + 6 % 5 * i / 2 }) }; // some calculation.
+b = { \done2.postln;Array.fill(10000, { |i| i + 5 % 6 * i / 3 }) };// some other calculation.
+c = [a, b].choose + 700;
+(c * c * c).value; // calculation happens here, but 3 times (for each c)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Thunk.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Thunk.schelp</a><br>link::Classes/Thunk::<br>sc version: 3.8dev</div></div></body></html>

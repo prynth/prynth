@@ -1,0 +1,66 @@
+<html><head><title>Dconst</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Demand'>UGens>Demand</a></div>
+<h1>Dconst</h1>
+<div id='summary'>Constrain a demand-rate stream to a given sum</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Demand.sc'>Demand.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/DUGen.html">DUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A demand-rate analog to <a href="./../Classes/Pconst.html">Pconst</a>. It outputs values from the child demand stream until the sum of those values reaches or exceeds a given total. The last value will be truncated so that the sum of Dconst's output values will match the total exactly.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>sum</span>, <span class='argstr'>in</span>, <span class='argstr'>tolerance: 0.001</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>sum<td class='argumentdesc'>
+<p>The sum to reach. This may be a number, demand UGen or any other UGen. When a Dconst instance resets, one value will be taken for the sum, and it can't be modulated until the next reset.<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>A demand-rate stream, providing the output values.<tr><td class='argumentname'>tolerance<td class='argumentdesc'>
+<p>Because of floating point rounding error, it isn't safe to stop only when the output's running sum is equal to the desired total. <code>tolerance</code> is how close the running sum can get to stop the output: <code class='code prettyprint lang-sc'>abs(runningsum - sum) &lt;= tolerance</code>.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A demand-rate stream.</div></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// fast notes of random duration for 0.5 seconds
+// then a single note for 0.5 seconds
+(
+a = {
+    var freq = Duty.kr(
+        Dseq([
+            Dconst(0.5, Dwhite(0.05, 0.08, inf)),
+            0.5
+        ], inf),
+        0,
+        // workaround for the lack of Dexprand
+        Dwhite(0, 1, inf).linexp(0, 1, 200, 600)
+    );
+    VarSaw.ar(Lag.kr(freq, 0.02), 0, 0.3, 0.1).dup
+}.play;
+)
+
+a.free;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Dconst.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Dconst.schelp</a><br>link::Classes/Dconst::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,113 @@
+<html><head><title>Goertzel</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Filters'>UGens>Filters</a></div>
+<h1>Goertzel</h1>
+<div id='summary'>Calculate a single DFT bin, to detect presence of a frequency</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/MCLDFilterUGens.sc'>MCLDFilterUGens.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>The Goertzel algorithm is a way to calculate the magnitude and phase of a signal's content at a single specified frequency. It's the equivalent of running an FFT, and then only looking at the output corresponding to a single bin. If you're only interested in a small number of bins then it is more efficient; if you're interested in the majority of bins, you typically want to do an FFT instead.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>in: 0</span>, <span class='argstr'>bufsize: 1024</span>, <span class='argstr'>freq</span>, <span class='argstr'>hop: 1</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'><tr><td class='argumentname'>bufsize<td class='argumentdesc'>
+<p>used in the same way as an FFT buffer size - the larger this value, the better the frequency resolution, but the worse the time resolution.<tr><td class='argumentname'>freq<td class='argumentdesc'>
+<p>target frequency. This can not be modulated.<tr><td class='argumentname'>hop<td class='argumentdesc'>
+<p>same meaning as in the FFT UGen. Supply a value between zero and one, for the amount of overlap between Goertzel "frames". The default is a hop of 1 (meaning no overlap between frames). If you specify 0.5 then the analysis value will be produced twice as often; 0.25, four times as often.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>s.boot
+(
+x = {
+var freq, amp, sig, real, imag, mag, bufsize=4096;
+
+// try changing freq to a matching or nonmatching frequency to what we're looking for
+freq = 220; // or try MouseY.kr(110, 440, 1);
+amp = MouseX.kr;
+sig = SinOsc.ar(freq, 0, amp);
+# real, imag = Goertzel.kr(sig, bufsize, 220);
+
+// Calc the magnitude. We also normalise it against buffer size here.
+mag = (real.squared + imag.squared).sqrt * (bufsize / 2).reciprocal;
+
+amp.poll(label: "Input amplitude");
+mag.poll(label: "Measured amplitude");
+(sig * 0.1).dup
+}.play
+)
+
+// This one is similar but on control-rate data:
+(
+x = {
+var freq, amp, sig, real, imag, mag, bufsize=100;
+
+// try changing freq to a matching or nonmatching frequency to what we're looking for
+freq = 22; // or try MouseY.kr(11, 44, 1);
+amp = MouseX.kr;
+sig = SinOsc.kr(freq, 0, amp);
+# real, imag = Goertzel.kr(sig, bufsize, 22);
+
+// Calc the magnitude. We also normalise it against buffer size here.
+mag = (real.squared + imag.squared).sqrt * (bufsize / 2).reciprocal;
+
+amp.poll(label: "Input amplitude");
+mag.poll(label: "Measured amplitude");
+(sig * 0.1).dup
+}.play
+)
+
+
+// OK, now let's do a kind of spectrogram, but focused on a specific frequency region of interest
+(
+~binfreqs = (300, 310 .. 400);
+w = Window.new.front;
+m = MultiSliderView(w,Rect(10,10,~binfreqs.size*13+2,100)); //default thumbWidth is 13
+~bus = Bus.control(s, ~binfreqs.size);
+x = {
+var sig, mags, bufsize=4096, real, imag;
+sig = SinOsc.ar(MouseX.kr(~binfreqs.first, ~binfreqs.last));
+mags = ~binfreqs.collect{|binfreq|
+# real, imag = Goertzel.kr(sig, bufsize, binfreq);
+(real.squared + imag.squared).sqrt * (bufsize / 2).reciprocal;
+};
+Out.kr(~bus, mags);
+(sig * 0.1).dup
+}.play;
+t = Task{
+loop{
+0.1.wait;
+~bus.getn(~binfreqs.size, {|vals|
+{m.value = vals}.defer;
+})
+}
+}.play;
+w.onClose_{~bus.free; x.free; t.stop; };
+)
+w.close;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/HelpSource/Classes/Goertzel.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/HelpSource/Classes/Goertzel.schelp</a><br>link::Classes/Goertzel::<br>sc version: 3.8dev</div></div></body></html>

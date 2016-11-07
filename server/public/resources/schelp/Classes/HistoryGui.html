@@ -1,0 +1,155 @@
+<html><head><title>HistoryGui</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Interfaces'>GUI>Interfaces</a></div>
+<h1>HistoryGui</h1>
+<div id='summary'>A gui for History objects</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Core/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Core/HistoryGui.sc'>HistoryGui.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/JITGui.html">JITGui</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/History.html">History</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*docHeight'>docHeight</a> </li>
+<li class='toc3'><a href='#*docTitle'>docTitle</a> </li>
+<li class='toc3'><a href='#*new'>new</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-accepts'>accepts</a> </li>
+<li class='toc3'><a href='#-alignDoc'>alignDoc</a> </li>
+<li class='toc3'><a href='#-checkUpdate'>checkUpdate</a> </li>
+<li class='toc3'><a href='#-doc'>doc</a> </li>
+<li class='toc3'><a href='#-docFlag'>docFlag</a> </li>
+<li class='toc3'><a href='#-filTextV'>filTextV</a> </li>
+<li class='toc3'><a href='#-filtBut'>filtBut</a> </li>
+<li class='toc3'><a href='#-filterLines'>filterLines</a> </li>
+<li class='toc3'><a href='#-filterOff'>filterOff</a> </li>
+<li class='toc3'><a href='#-filterOn'>filterOn</a> </li>
+<li class='toc3'><a href='#-filteredIndices'>filteredIndices</a> </li>
+<li class='toc3'><a href='#-filteredShorts'>filteredShorts</a> </li>
+<li class='toc3'><a href='#-filtering'>filtering</a> </li>
+<li class='toc3'><a href='#-filters'>filters</a> </li>
+<li class='toc3'><a href='#-findDoc'>findDoc</a> </li>
+<li class='toc3'><a href='#-getState'>getState</a> </li>
+<li class='toc3'><a href='#-keyPop'>keyPop</a> </li>
+<li class='toc3'><a href='#-makeViews'>makeViews</a> </li>
+<li class='toc3'><a href='#-oldDocs'>oldDocs</a> </li>
+<li class='toc3'><a href='#-postDoc'>postDoc</a> </li>
+<li class='toc3'><a href='#-postInlined'>postInlined</a> </li>
+<li class='toc3'><a href='#-resetViews'>resetViews</a> </li>
+<li class='toc3'><a href='#-rip'>rip</a> </li>
+<li class='toc3'><a href='#-setDefaults'>setDefaults</a> </li>
+<li class='toc3'><a href='#-setDocStr'>setDocStr</a> </li>
+<li class='toc3'><a href='#-setKeyFilter'>setKeyFilter</a> </li>
+<li class='toc3'><a href='#-setStrFilter'>setStrFilter</a> </li>
+<li class='toc3'><a href='#-startBut'>startBut</a> </li>
+<li class='toc3'><a href='#-stickMode'>stickMode</a> </li>
+<li class='toc3'><a href='#-textV'>textV</a> </li>
+<li class='toc3'><a href='#-topBut'>topBut</a> </li>
+<li class='toc3'><a href='#-updateBinVal'>updateBinVal</a> </li>
+<li class='toc3'><a href='#-updateFunc'>updateFunc</a> </li>
+<li class='toc3'><a href='#-updateLines'>updateLines</a> </li>
+<li class='toc3'><a href='#-updateVal'>updateVal</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>HistoryGui allows easy access to History as it happens: one can read recent lines, when they were written and by whom; one can search for text strings and by author names; and one can quickly grab lines of code for rewriting. Apart from documenting just in time programming sessions, all of this can be useful in live coding performances. See e.g. the system developed by powerbooks_unplugged: <a href="./../Republic">Republic</a> 
+<p>The gui elements in detail:<dl>
+<dt>button start/end<dd>starts and ends History <em>if</em> <code class='code prettyprint lang-sc'>gui.history</code> is current.<dt>button all/filt<dd>turns filtering on/off.<dt>popup all/...<dd>selects which name key to search for (useful if networked)<dt>textview<dd>allows for typing in a search string.<dt>button top/keep<dd>sets mode whether listview stays on top line, or keeps sticking to the selected line.<dt>listview<dd>shows either all <code class='code prettyprint lang-sc'>lineShorts</code>, or the filtered <code class='code prettyprint lang-sc'>lineShorts</code>; selecting them in listview makes them come appear in post-doc window.</dl>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*docHeight' href='./../Overviews/Methods.html#docHeight'>docHeight</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*docHeight' href='./../Overviews/Methods.html#docHeight'>docHeight</a> = value</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*docTitle' href='./../Overviews/Methods.html#docTitle'>docTitle</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*docTitle' href='./../Overviews/Methods.html#docTitle'>docTitle</a> = value</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>object</span>, <span class='argstr'>numItems: 8</span>, <span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>makeSkip: true</span>, <span class='argstr'>options: [  ]</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-accepts' href='./../Overviews/Methods.html#accepts'>accepts</a> (<span class='argstr'>obj</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-alignDoc' href='./../Overviews/Methods.html#alignDoc'>alignDoc</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-checkUpdate' href='./../Overviews/Methods.html#checkUpdate'>checkUpdate</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-doc' href='./../Overviews/Methods.html#doc'>doc</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-docFlag' href='./../Overviews/Methods.html#docFlag'>docFlag</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-filTextV' href='./../Overviews/Methods.html#filTextV'>filTextV</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-filtBut' href='./../Overviews/Methods.html#filtBut'>filtBut</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-filterLines' href='./../Overviews/Methods.html#filterLines'>filterLines</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-filterOff' href='./../Overviews/Methods.html#filterOff'>filterOff</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-filterOn' href='./../Overviews/Methods.html#filterOn'>filterOn</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-filteredIndices' href='./../Overviews/Methods.html#filteredIndices'>filteredIndices</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-filteredShorts' href='./../Overviews/Methods.html#filteredShorts'>filteredShorts</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-filtering' href='./../Overviews/Methods.html#filtering'>filtering</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-filtering' href='./../Overviews/Methods.html#filtering'>filtering</a> = <span class='argstr'>flag: true</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-filters' href='./../Overviews/Methods.html#filters'>filters</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-findDoc' href='./../Overviews/Methods.html#findDoc'>findDoc</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getState' href='./../Overviews/Methods.html#getState'>getState</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyPop' href='./../Overviews/Methods.html#keyPop'>keyPop</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeViews' href='./../Overviews/Methods.html#makeViews'>makeViews</a> (<span class='argstr'>options</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-oldDocs' href='./../Overviews/Methods.html#oldDocs'>oldDocs</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-postDoc' href='./../Overviews/Methods.html#postDoc'>postDoc</a> (<span class='argstr'>index</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-postInlined' href='./../Overviews/Methods.html#postInlined'>postInlined</a> (<span class='argstr'>index</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-resetViews' href='./../Overviews/Methods.html#resetViews'>resetViews</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rip' href='./../Overviews/Methods.html#rip'>rip</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setDefaults' href='./../Overviews/Methods.html#setDefaults'>setDefaults</a> (<span class='argstr'>options</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setDocStr' href='./../Overviews/Methods.html#setDocStr'>setDocStr</a> (<span class='argstr'>str</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setKeyFilter' href='./../Overviews/Methods.html#setKeyFilter'>setKeyFilter</a> (<span class='argstr'>key</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setStrFilter' href='./../Overviews/Methods.html#setStrFilter'>setStrFilter</a> (<span class='argstr'>str</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-startBut' href='./../Overviews/Methods.html#startBut'>startBut</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-stickMode' href='./../Overviews/Methods.html#stickMode'>stickMode</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-stickMode' href='./../Overviews/Methods.html#stickMode'>stickMode</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-textV' href='./../Overviews/Methods.html#textV'>textV</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-topBut' href='./../Overviews/Methods.html#topBut'>topBut</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-updateBinVal' href='./../Overviews/Methods.html#updateBinVal'>updateBinVal</a> (<span class='argstr'>newState</span>, <span class='argstr'>key</span>, <span class='argstr'>guiThing</span>, <span class='argstr'>post: false</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-updateFunc' href='./../Overviews/Methods.html#updateFunc'>updateFunc</a> (<span class='argstr'>newState</span>, <span class='argstr'>key</span>, <span class='argstr'>func</span>, <span class='argstr'>post: false</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-updateLines' href='./../Overviews/Methods.html#updateLines'>updateLines</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-updateVal' href='./../Overviews/Methods.html#updateVal'>updateVal</a> (<span class='argstr'>newState</span>, <span class='argstr'>key</span>, <span class='argstr'>guiThing</span>, <span class='argstr'>post: false</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+h = History.new.lines_([
+    [0, \me, "1+2"],
+    [1, \me, "3+5"], [1.234, \you, "q = q ? ();"],
+    [3, \her, "\"Herstory\".speak"]
+]);
+g = h.makeWin;
+g.findDoc;
+g.postDoc(2);
+)
+
+h.document;
+// how filtering works:
+g.filters.postcs;
+g.filterOff;
+g.filterOn;
+g.filtering;
+g.setKeyFilter(\all);
+g.setKeyFilter(\me);
+g.setStrFilter("");
+g.setStrFilter("3");
+
+// internal state cached in gui:
+g.filteredIndices;
+g.filteredShorts;
+
+// to do: execute line on special key in listview;
+// window following?</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/HistoryGui.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/HistoryGui.schelp</a><br>link::Classes/HistoryGui::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,165 @@
+<html><head><title>Concat</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>GranularSynthesis'>UGens>GranularSynthesis</a></div>
+<h1>Concat</h1>
+<div id='summary'>Concatenative Cross-Synthesis on Live Streams</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/ConcatUGens/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/ConcatUGens/Concat.sc'>Concat.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Concat2.html">Concat2</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Implementation of concatenative sound synthesis based on matching four features from a control input to the database generated from a source input. The control determines which frames of the source get played back, and you can change the weighting of features to refine your matching criteria (ie, make rms the most heavily weighted to have amplitude as the most important criteria). You can also modulate the match length, being the amount of source played back for a match, the feature weightings, and freeze the database collection to work with a collected sample from the source.
+<p>Refs- see the publications of Schwarz, Sturm, Casey amongst others.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>control</span>, <span class='argstr'>source</span>, <span class='argstr'>storesize: 1</span>, <span class='argstr'>seektime: 1</span>, <span class='argstr'>seekdur: 1</span>, <span class='argstr'>matchlength: 0.05</span>, <span class='argstr'>freezestore: 0</span>, <span class='argstr'>zcr: 1</span>, <span class='argstr'>lms: 1</span>, <span class='argstr'>sc: 1</span>, <span class='argstr'>st: 0</span>, <span class='argstr'>randscore: 0</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>control<td class='argumentdesc'>
+<p>audio rate input, acts as control<tr><td class='argumentname'>source<td class='argumentdesc'>
+<p>audio rate input, source for cross-synthesis<tr><td class='argumentname'>storesize<td class='argumentdesc'>
+<p>size of source store sample buffer in seconds<tr><td class='argumentname'>seektime<td class='argumentdesc'>
+<p>Time in seconds into the past to start searching for matches<tr><td class='argumentname'>seekdur<td class='argumentdesc'>
+<p>Time in seconds from seektime towards the present to test matches<tr><td class='argumentname'>matchlength<td class='argumentdesc'>
+<p>Match length in seconds (this will be rounded to the nearest FFT frame)<tr><td class='argumentname'>freezestore<td class='argumentdesc'>
+<p>Stop collecting novel source input, keep store (database) fixed<tr><td class='argumentname'>zcr<td class='argumentdesc'>
+<p>Weight for zero crossing rate feature<tr><td class='argumentname'>lms<td class='argumentdesc'>
+<p>Weight for log mean square amplitude feature<tr><td class='argumentname'>sc<td class='argumentdesc'>
+<p>Weight for spectral centroid feature<tr><td class='argumentname'>st<td class='argumentdesc'>
+<p>Weight for spectral tilt feature</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>b = Buffer.read(s,"sounds/a11wlk01.wav");
+
+
+//match only on amplitude from audio in
+(
+SynthDef(\concat1, {arg bufnum, matchlength=0.01, freeze=0;
+var concat, control, input;
+
+control= SoundIn.ar;
+
+input=PlayBuf.ar(1,bufnum,BufRateScale.kr(bufnum), loop:1);
+
+concat= Concat.ar(control,input,1.0,1.0,1.0,matchlength,freeze,0.0,1.0,0.0,0.0);
+
+Out.ar(0,Pan2.ar(concat,0.0))}).add;
+)
+
+a=Synth(\concat1,[\bufnum, b.bufnum]);
+
+a.set(\freeze, 0);
+
+a.set(\matchlength, 0.01);
+
+
+
+
+
+
+
+//synthesis controls audio in- beat box, then the synth drives bits of audio rhythmically
+(
+{
+var concat, control, input;
+
+control= SinOsc.ar(0.5)*Saw.ar(SinOsc.kr(LFNoise0.kr(MouseY.kr(0.01,1),3,4.5),0,50,MouseY.kr(120,500)));
+
+input=SoundIn.ar;
+
+concat= Concat.ar(control,input,4.0,4.0,4.0,MouseX.kr(0.0,0.5),0,0.5,1.0,0.5,0.0);
+
+Out.ar(0,Pan2.ar(concat,0.0))}.play
+)
+
+
+
+//audio in controls synthesis, low latency, match by ZCR and spec centroid
+(
+{
+var concat, control, input, amp;
+
+input= SinOsc.ar(2)*
+Mix(Gendy3.ar(3,5,1.0,1.0,(Array.fill(5,{LFNoise0.kr(1.3.rand,1,2)})*MouseY.kr(100,3780,'exponential')),MouseY.kr(0.01,0.05),MouseY.kr(0.001,0.016),5,mul:0.1));
+
+control=SoundIn.ar;
+
+amp=Amplitude.ar(control);
+
+concat= Concat.ar(control,input,1.0,1.0,1.0,MouseX.kr(0.0,0.1),0,1.0,0.0,1.0,1.0);
+
+Out.ar(0,Pan2.ar(10*concat*amp,0.0))}.play
+)
+
+
+
+//granulator
+(
+{
+var concat, control, input;
+
+control= Saw.ar(SinOsc.kr(LFNoise0.kr(MouseY.kr(0.01,1),3,4.5),0,10,MouseY.kr(12,100)));
+
+input=PlayBuf.ar(1,b.bufnum,BufRateScale.kr(b.bufnum), loop:1);
+
+concat= Concat.ar(control,input,2.0,2.0,2.0,MouseX.kr(0.01,0.1),0,MouseY.kr(0.0,1.0),1.0,0.5);
+
+Out.ar(0,Pan2.ar(concat,0.0))}.play
+)
+
+
+
+
+
+b = Buffer.read(s,"sounds/break2");
+
+
+//beat resynthesis match by ZCR and spec centroid
+(
+SynthDef(\concatexample2, {arg bufnum, freeze=0;
+var concat, control, input, amp;
+
+input= SoundIn.ar;
+
+control=PlayBuf.ar(1,bufnum,BufRateScale.kr(bufnum), loop:1);
+
+amp=Amplitude.ar(control);
+
+concat= Concat.ar(control,input,5.0,5.0,5.0,MouseX.kr(0.0,0.1),freeze,MouseY.kr(0.0,1.0),0.0,1.0);
+
+Out.ar(0,Pan2.ar(10*concat*amp,0.0))
+}).add;
+)
+
+
+a=Synth(\concatexample2,[\bufnum, b.bufnum]);
+
+a.set(\freeze, 1); //set this on or off to stay with a set of collected sounds
+
+a.set(\freeze, 0); //set this on or off to stay with a set of collected sounds</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/ConcatUGens/HelpSource/Classes/Concat.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/ConcatUGens/HelpSource/Classes/Concat.schelp</a><br>link::Classes/Concat::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,230 @@
+<html><head><title>FreqScopeView</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Views'>GUI>Views</a></div>
+<h1>FreqScopeView</h1>
+<div id='summary'>Frequency analysis view</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/FreqScope.sc'>FreqScope.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/PlusFreqScope.html">PlusFreqScope</a>, <a href="../Classes/PlusFreqScopeView.html">PlusFreqScopeView</a></div>
+<div id='related'>See also: <a href="./../Classes/FreqScope.html">FreqScope</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*response'>response</a> </li>
+<li class='toc2'><a href='#Subclassing and Internal Methods'>Subclassing and Internal Methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*initClass'>initClass</a> </li>
+<li class='toc3'><a href='#*server'>server</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*initSynthDefs'>initSynthDefs</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-kill'>kill</a> </li>
+<li class='toc3'><a href='#-active'>active</a> </li>
+<li class='toc3'><a href='#-freqMode'>freqMode</a> </li>
+<li class='toc3'><a href='#-inBus'>inBus</a> </li>
+<li class='toc3'><a href='#-dbRange'>dbRange</a> </li>
+<li class='toc3'><a href='#-special'>special</a> </li>
+<li class='toc2'><a href='#Subclassing and Internal Methods'>Subclassing and Internal Methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-start'>start</a> </li>
+<li class='toc3'><a href='#-eventSeq'>eventSeq</a> </li>
+<li class='toc3'><a href='#-cmdPeriod'>cmdPeriod</a> </li>
+<li class='toc3'><a href='#-initFreqScope'>initFreqScope</a> </li>
+<li class='toc3'><a href='#-sendSynthDefs'>sendSynthDefs</a> </li>
+<li class='toc3'><a href='#-allocBuffers'>allocBuffers</a> </li>
+<li class='toc3'><a href='#-freeBuffers'>freeBuffers</a> </li>
+<li class='toc3'><a href='#-node'>node</a> </li>
+<li class='toc3'><a href='#-scopebuf'>scopebuf</a> </li>
+<li class='toc3'><a href='#-fftbuf'>fftbuf</a> </li>
+<li class='toc3'><a href='#-bufSize'>bufSize</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-doOnServerQuit'>doOnServerQuit</a> </li>
+<li class='toc3'><a href='#-doOnServerTree'>doOnServerTree</a> </li>
+<li class='toc3'><a href='#-doesNotUnderstand'>doesNotUnderstand</a> </li>
+<li class='toc3'><a href='#-scope'>scope</a> </li>
+<li class='toc3'><a href='#-server'>server</a> </li>
+<li class='toc3'><a href='#-shmScopeAvailable'>shmScopeAvailable</a> </li>
+<li class='toc3'><a href='#-specialSynthArgs'>specialSynthArgs</a> </li>
+<li class='toc3'><a href='#-specialSynthDef'>specialSynthDef</a> </li>
+<li class='toc3'><a href='#-synth'>synth</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>FreqScopeView shows the frequency spectrum of a specified audio bus.<div class='note'><span class='notelabel'>NOTE:</span> The scope will remain active after a command-period. To turn it off you must use the 'active' method. Very important: You must run <code class='code prettyprint lang-sc'>kill()</code> when the parent window is closed to avoid problems. It also frees the buffers that the scope allocated and stops the FFT analysis synth. So:<pre class='code prettyprint lang-sc'>(
+w = Window("My Analyzer", Rect(0, 0, 511, 300));
+f = FreqScopeView(w, w.view.bounds);
+w.onClose_({ f.kill }); // YOU MUST HAVE THIS
+w.front;
+)</pre>
+</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>server</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>parent<td class='argumentdesc'>
+<p>The parent view.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Rect.html">Rect</a>, or a <a href="./../Classes/Point.html">Point</a> indicating <code class='code prettyprint lang-sc'>width@height</code>.</table><h4>Discussion:</h4>
+
+<p>Example:<pre class='code prettyprint lang-sc'>// Start server
+s.boot;
+
+// Create analyzer in a window
+(
+w = Window("My Analyzer", Rect(0, 0, 511, 300)); // width should be 511
+f = FreqScopeView(w, w.view.bounds);
+f.active_(true); // turn it on the first time;
+
+w.onClose_({ f.kill }); // you must have this
+w.front;
+{ SinOsc.ar([500, 1000], 0, 0.25).mean.dup }.play(s); // start two sine waves
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*response' href='./../Overviews/Methods.html#response'>response</a> (<span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>bus1</span>, <span class='argstr'>bus2</span>, <span class='argstr'>freqMode: 1</span>)</h3>
+<div class='method'>
+<p>Create a scope in a special frequency-response mode. This uses FFT-based spectral division to estimate the frequency response of some effect, on the assumption that the signal to bus1 is transformed to the signal at bus2 by some linear time-invariant process.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>parent<td class='argumentdesc'>
+<p>The parent view.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Rect.html">Rect</a>, or a <a href="./../Classes/Point.html">Point</a> indicating <code class='code prettyprint lang-sc'>width@height</code>.<tr><td class='argumentname'>bus1<td class='argumentdesc'>
+<p>The bus on which the "pre" signal is found.<tr><td class='argumentname'>bus2<td class='argumentdesc'>
+<p>The bus on which the "post" signal is found.<tr><td class='argumentname'>freqMode<td class='argumentdesc'>
+<p>Linear (0) or log(1) frequency mode. Defaults to 1.</table><h4>Discussion:</h4>
+
+<p>Example:<pre class='code prettyprint lang-sc'>s.boot
+
+// basic usage. try these. Each one will open a new window
+// move the mouse left and right to test response in different ranges
+LPF.scopeResponse
+HPF.scopeResponse
+MoogFF.scopeResponse
+BBandPass.scopeResponse
+BLowShelf.scopeResponse // by default BLowShelf doesn't mangle much
+Resonz.scopeResponse
+BRF.scopeResponse
+Integrator.scopeResponse
+Median.scopeResponse // nonlinear, and therefore interesting
+
+// customize the parameters for more informative scoping
+{|in| MoogFF.ar(in, freq: MouseX.kr(10, 10000, 1),
+gain:MouseY.kr(4, 0))}.scopeResponse</pre>
+</div><h3><a class='anchor' name='Subclassing and Internal Methods'>Subclassing and Internal Methods</a></h3>
+
+<p>The following methods are usually not used directly or are called by a primitive. Programmers can still call or override these as needed.<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*initClass' href='./../Overviews/Methods.html#initClass'>initClass</a> </h3>
+<div class='method'>
+<p>Sets the classvar, <code class='code prettyprint lang-sc'>server = Server.default</code>.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*server' href='./../Overviews/Methods.html#server'>server</a>: METHOD NOT FOUND!</h3>
+<div class='method'>
+<p>A classvar.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*initSynthDefs' href='./../Overviews/Methods.html#initSynthDefs'>initSynthDefs</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-kill' href='./../Overviews/Methods.html#kill'>kill</a> </h3>
+<div class='method'>
+<p>Very important. This must be run when the parent window is closed to avoid problems. It also frees the buffers that the scope allocated and stops the FFT analysis synth.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-active' href='./../Overviews/Methods.html#active'>active</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-active' href='./../Overviews/Methods.html#active'>active</a> = <span class='argstr'>activate</span></h3>
+<div class='method'>
+<p>Turn the scope on or off.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bool<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Boolean.html">Boolean</a>.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-freqMode' href='./../Overviews/Methods.html#freqMode'>freqMode</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-freqMode' href='./../Overviews/Methods.html#freqMode'>freqMode</a> = <span class='argstr'>mode</span></h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>mode<td class='argumentdesc'>
+<p>0 = linear, 1 = logarithmic.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-inBus' href='./../Overviews/Methods.html#inBus'>inBus</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-inBus' href='./../Overviews/Methods.html#inBus'>inBus</a> = <span class='argstr'>num</span></h3>
+<div class='method'>
+<p>The bus to listen on.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>num<td class='argumentdesc'>
+<p>An audio <a href="./../Classes/Bus.html">Bus</a> number.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-dbRange' href='./../Overviews/Methods.html#dbRange'>dbRange</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dbRange' href='./../Overviews/Methods.html#dbRange'>dbRange</a> = <span class='argstr'>db</span></h3>
+<div class='method'>
+<p>Get/set the amplitude range.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>db<td class='argumentdesc'>
+<p>A <a href="./../Classes/Number.html">Number</a>.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-special' href='./../Overviews/Methods.html#special'>special</a> (<span class='argstr'>defname</span>, <span class='argstr'>extraargs</span>)</h3>
+<div class='method'>
+<p>Put the scope into a special mode using a user-specified <a href="./../Classes/SynthDef.html">SynthDef</a>. Note that only very particular SynthDefs should be used, namely ones that are derived from the <code class='code prettyprint lang-sc'>\freqScope0</code> or <code class='code prettyprint lang-sc'>\freqScope1</code> SynthDefs. Most users will not need to use this method directly, but it can be used to provide a customised analysis shown in the scope.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>defname<td class='argumentdesc'>
+<p>Name of the <a href="./../Classes/SynthDef.html">SynthDef</a> you wish to use.<tr><td class='argumentname'>extraArgs<td class='argumentdesc'>
+<p>Extra arguments that you may wish to pass to the synth.</table></div><h3><a class='anchor' name='Subclassing and Internal Methods'>Subclassing and Internal Methods</a></h3>
+
+<p>The following methods are usually not used directly or are called by a primitive. Programmers can still call or override these as needed.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-start' href='./../Overviews/Methods.html#start'>start</a> </h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-eventSeq' href='./../Overviews/Methods.html#eventSeq'>eventSeq</a>: METHOD NOT FOUND!</h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-cmdPeriod' href='./../Overviews/Methods.html#cmdPeriod'>cmdPeriod</a>: METHOD NOT FOUND!</h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-initFreqScope' href='./../Overviews/Methods.html#initFreqScope'>initFreqScope</a> (<span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>argServer</span>)</h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sendSynthDefs' href='./../Overviews/Methods.html#sendSynthDefs'>sendSynthDefs</a>: METHOD NOT FOUND!</h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-allocBuffers' href='./../Overviews/Methods.html#allocBuffers'>allocBuffers</a> </h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-freeBuffers' href='./../Overviews/Methods.html#freeBuffers'>freeBuffers</a> </h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-node' href='./../Overviews/Methods.html#node'>node</a>: METHOD NOT FOUND!</h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-scopebuf' href='./../Overviews/Methods.html#scopebuf'>scopebuf</a> </h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fftbuf' href='./../Overviews/Methods.html#fftbuf'>fftbuf</a>: METHOD NOT FOUND!</h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-bufSize' href='./../Overviews/Methods.html#bufSize'>bufSize</a> </h3>
+<div class='method'>
+<p></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-doOnServerQuit' href='./../Overviews/Methods.html#doOnServerQuit'>doOnServerQuit</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-doOnServerTree' href='./../Overviews/Methods.html#doOnServerTree'>doOnServerTree</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-doesNotUnderstand' href='./../Overviews/Methods.html#doesNotUnderstand'>doesNotUnderstand</a> (<span class='argstr'>selector</span> <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-scope' href='./../Overviews/Methods.html#scope'>scope</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-server' href='./../Overviews/Methods.html#server'>server</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-shmScopeAvailable' href='./../Overviews/Methods.html#shmScopeAvailable'>shmScopeAvailable</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-specialSynthArgs' href='./../Overviews/Methods.html#specialSynthArgs'>specialSynthArgs</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-specialSynthArgs' href='./../Overviews/Methods.html#specialSynthArgs'>specialSynthArgs</a> = <span class='argstr'>args</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-specialSynthDef' href='./../Overviews/Methods.html#specialSynthDef'>specialSynthDef</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-specialSynthDef' href='./../Overviews/Methods.html#specialSynthDef'>specialSynthDef</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-synth' href='./../Overviews/Methods.html#synth'>synth</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// Start server
+s.boot;
+
+// Create analyzer in a window
+(
+w = Window("My Analyzer", Rect(0, 0, 511, 300)); // width should be 511
+f = FreqScopeView(w, w.view.bounds);
+f.active_(true); // turn it on the first time;
+
+w.onClose_({ f.kill }); // you must have this
+w.front;
+{ SinOsc.ar([500, 1000], 0, 0.25).mean.dup }.play(s); // start two sine waves
+)
+
+f.freqMode_(1); // change to log scale so we can see them
+f.inBus_(1); // look at bus 1
+f.dbRange_(200); // expand amplitude range
+f.active_(false); // turn scope off (watch CPU)
+f.active_(true); // turn it back on
+
+// Now press command-period. The scope is still running.
+
+{ Mix.ar(SinOsc.ar([500, 1200, 3000, 9000, 12000], 0, [0.2, 0.1, 0.05, 0.03, 0.01])) }.play(s); // restart some sines
+
+// Close window and scope is killed.</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/FreqScopeView.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/FreqScopeView.schelp</a><br>link::Classes/FreqScopeView::<br>sc version: 3.8dev</div></div></body></html>

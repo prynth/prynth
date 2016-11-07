@@ -1,0 +1,220 @@
+<html><head><title>LocalBuf</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Buffer'>UGens>Buffer</a></div>
+<h1>LocalBuf</h1>
+<div id='summary'>Allocate a buffer local to the synth</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/BufIO.sc'>BufIO.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/WidthFirstUGen.html">WidthFirstUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Buffer.html">Buffer</a>, <a href="./../Classes/SetBuf.html">SetBuf</a>, <a href="./../Classes/ClearBuf.html">ClearBuf</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*newFrom'>newFrom</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-set'>set</a> </li>
+<li class='toc3'><a href='#-clear'>clear</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-numChannels'>numChannels</a> </li>
+<li class='toc3'><a href='#-numFrames'>numFrames</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>numFrames: 1</span>, <span class='argstr'>numChannels: 1</span>)</h3>
+<div class='method'>
+<p>Allocate a local buffer<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>numFrames<td class='argumentdesc'>
+<p>number of frames (default: 1)<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>number of channels for multiple channel buffers (default: 1)</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a new buffer – the ugen outputs its buffer number and can thus be used in any other ugen that requires a buffer number input.</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*newFrom' href='./../Overviews/Methods.html#newFrom'>newFrom</a> (<span class='argstr'>list</span>)</h3>
+<div class='method'>
+<p>Allocates a new buffer from a given list of values<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>list<td class='argumentdesc'>
+<p>The list may be two-dimensional for numChannels &gt; 1. It is then reshaped into the buffer's current format by flattening.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a new buffer</div><h4>Discussion:</h4>
+
+<p>Since newFrom is called by the as message, one may thus convert an array to a LocalBuf:<pre class='code prettyprint lang-sc'>[1, 2, 3].as(LocalBuf)</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-set' href='./../Overviews/Methods.html#set'>set</a> (<span class='argstr'>values</span>, <span class='argstr'>offset: 0</span>)</h3>
+<div class='method'>
+<p>set the buffer slots with a list of values.<h4>Discussion:</h4>
+
+<p>If list is smaller than numFrames, it will only set part of the buffer. The list may be two-dimensional for numChannels &gt; 1. offset is the starting index (default: 0)<div class='warning'><span class='warninglabel'>WARNING:</span> SynthDef permits a maximum of 65536 (2**16) unique constant values in one definition. A very large array of distinct values can corrupt the SynthDef's binary format. If you need a large buffer to be pre-initialized with signal data, it is strongly recommended to use <a href="./../Classes/Buffer.html">Buffer</a> instead.</div>
+<p>If the buffer is large but holds a smaller number of unique values, e.g. <code class='code prettyprint lang-sc'>Array.fill(88200, { #[0, 0.25, 0.5, 0.75, 1.0].choose })</code>, this is no problem. SynthDef compacts the large array for the list of constants.<pre class='code prettyprint lang-sc'>SynthDef(\bigLocalBuf, {
+    LocalBuf(88200).set(Array.fill(88200, { #[0, 0.25, 0.5, 0.75, 1.0].choose }))
+}).add;
+
+SynthDescLib.at(\bigLocalBuf).constants;
+// prints: FloatArray[ 1, 88200, 0, 0.75, 0.5, 0.25 ]</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clear' href='./../Overviews/Methods.html#clear'>clear</a> </h3>
+<div class='method'>
+<p>set the buffer slot to zero.<h4>Discussion:</h4>
+
+<p>This is important when randomly acessing buffer slots (e.g. with a BufRd) or not overwriting them. Clear is not an efficient real time operation for larger buffers, so it should be only used when really needed - but then it is essential: a LocalBuf is "created" in each new synth, and it may reuse old space. So if an older synth has already ended, this part of memory may be the same as the new synth's.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-numChannels' href='./../Overviews/Methods.html#numChannels'>numChannels</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-numFrames' href='./../Overviews/Methods.html#numFrames'>numFrames</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// example: FFT
+
+(
+{
+var in, chain;
+    in = WhiteNoise.ar(0.1.dup);
+    chain = FFT({LocalBuf(2048, 1)}.dup, in);
+    chain = PV_BrickWall(chain, SinOsc.kr([0.1, 0.11]));
+    IFFT(chain) // inverse FFT
+}.play;
+)
+
+// spawn some FFT based synths:
+(
+SynthDef(\fftgrain, { |out, sustain = 1, rate = 0.2|
+    var in, chain;
+    in = WhiteNoise.ar(0.1).dup;
+    chain = FFT({LocalBuf(128, 1)}.dup, in);
+    chain = PV_BrickWall(chain,
+        SinOsc.kr(rate * XLine.kr(1, 15 * [1, 1.6], sustain), Rand(0, pi))
+    );
+    Out.ar(out, IFFT(chain) * XLine.kr(1, 0.001, sustain, doneAction: 2)) // inverse FFT
+}).add;
+)
+
+(
+Pbind(
+    \instrument, \fftgrain,
+    \rate, Pwhite().linexp(0, 1, 0.01, 300),
+    \legato, Pwhite(1, 3.0, inf),
+    \dur, Prand([0.2, 1, 1.2], inf)
+).play
+)
+
+// IndexL
+(
+{
+    var buf = LocalBuf.newFrom((0..5).scramble);
+    var freq = IndexL.kr(buf, MouseX.kr(0, BufFrames.kr(buf))).poll * 100 + 40;
+    Saw.ar(freq * [1, 1.1]) * 0.1
+}.play;
+)
+
+// DetectIndex
+(
+{
+    var buf1 = LocalBuf.newFrom((0..5).scramble);
+    var buf2 = LocalBuf.newFrom((0..5).scramble - 1);
+    var buf3 = LocalBuf.newFrom((0..5).scramble + 1);
+    var index = DetectIndex.kr([buf1, buf2], SinOsc.kr([0.85, 0.8], 0, 6).trunc).poll;
+    var freq = IndexL.kr([buf2, buf3], index).poll * 40 + 40;
+    Saw.ar(freq) * 0.1
+}.play;
+)
+
+
+// DegreeToKey
+// modal space
+// mouse x controls discrete pitch in dorian mode
+(
+play({
+    var mix;
+
+    mix =
+
+    // lead tone
+    SinOsc.ar(
+        (
+            DegreeToKey.kr(
+                [0, 2, 3.2, 5, 7, 9, 10].as(LocalBuf),
+                MouseX.kr(0, 15),        // mouse indexes into scale
+                12,                    // 12 notes per octave
+                1,                    // mul = 1
+                72                    // offset by 72 notes
+            ).poll
+            + LFNoise1.kr([3,3], 0.04)    // add some low freq stereo detuning
+        ).midicps,                        // convert midi notes to hertz
+        0,
+        0.1)
+
+    // drone 5ths
+    + RLPF.ar(LFPulse.ar([48,55].midicps, 0.15),
+        SinOsc.kr(0.1, 0, 10, 72).midicps, 0.1, 0.1);
+
+    // add some 70's euro-space-rock echo
+    CombN.ar(mix, 0.31, 0.31, 2, 1, mix)
+})
+)
+
+// Osc
+(
+{
+    var buf;
+    var list = Wavetable.sineFill(512, 1.0 / [1, 10, 3, 10, 5, 6, 10]);
+    // list.plot;
+    buf = LocalBuf.newFrom(list);
+    Osc.ar(buf,
+        XLine.kr(2000, 200 + {30.0.rand}.dup, 10) + SinOsc.ar(Line.kr(2, 300, 10),
+        0, 100)
+    ) * 0.1;
+}.play;
+)
+
+// see how not clearing the buffer accesses old data:
+// slowly overwrite data with noise
+(
+{
+    var buf = LocalBuf(2048, 2);
+    BufWr.ar(WhiteNoise.ar(1.dup), buf, LFNoise0.ar(530).range(0, BufFrames.kr(buf)));
+    PlayBuf.ar(2, buf, MouseX.kr(1, 2), loop: 1) * 0.1
+}.play
+)
+
+// avoid this (unless you like the glitch) by clearing buffer first:
+(
+{
+    var buf = LocalBuf(2048, 2).clear;
+    BufWr.ar(WhiteNoise.ar(1.dup), buf, LFNoise0.ar(530).range(0, BufFrames.kr(buf)));
+    PlayBuf.ar(2, buf, MouseX.kr(1, 2), loop: 1) * 0.1
+}.play
+)
+
+
+// BufCombC stereo (needs no clearing, because delay is filled by ugen)
+(
+{
+var z = Decay.ar(Dust.ar(1.dup, 0.1), 0.3, WhiteNoise.ar);
+BufCombC.ar(LocalBuf(SampleRate.ir, 2), z, XLine.kr(0.0001, 0.01, 20), 0.2);
+}.play
+)
+
+// multichannel test
+(
+{
+var in, chain, n = 4;
+    in = WhiteNoise.ar(0.1.dup(n));
+    chain = FFT({LocalBuf(2048, 1)}.dup(n), in);
+    chain = PV_BrickWall(chain, LFNoise2.kr(2.dup(n)));
+    Splay.ar(IFFT(chain)) // inverse FFT
+}.play;
+)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/LocalBuf.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/LocalBuf.schelp</a><br>link::Classes/LocalBuf::<br>sc version: 3.8dev</div></div></body></html>

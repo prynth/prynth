@@ -1,0 +1,1020 @@
+<html><head><title>Color</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Accessories'>GUI>Accessories</a></div>
+<h1>Color</h1>
+<div id='summary'>An object which stores color values</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Core/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Core/Color.sc'>Color.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*new255'>new255</a> </li>
+<li class='toc3'><a href='#*fromArray'>fromArray</a> </li>
+<li class='toc3'><a href='#*fromHexString'>fromHexString</a> </li>
+<li class='toc3'><a href='#*black'>black</a> </li>
+<li class='toc3'><a href='#*white'>white</a> </li>
+<li class='toc3'><a href='#*clear'>clear</a> </li>
+<li class='toc3'><a href='#*gray'>gray</a> </li>
+<li class='toc3'><a href='#*grey'>grey</a> </li>
+<li class='toc3'><a href='#*red'>red</a>  <a href='#*green'>green</a>  <a href='#*blue'>blue</a>  <a href='#*cyan'>cyan</a>  <a href='#*magenta'>magenta</a>  <a href='#*yellow'>yellow</a> </li>
+<li class='toc3'><a href='#*rand'>rand</a> </li>
+<li class='toc3'><a href='#*hsv'>hsv</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-red'>red</a>  <a href='#-green'>green</a>  <a href='#-blue'>blue</a>  <a href='#-alpha'>alpha</a> </li>
+<li class='toc3'><a href='#-hexString'>hexString</a> </li>
+<li class='toc3'><a href='#-=='>==</a> </li>
+<li class='toc3'><a href='#-scaleByAlpha'>scaleByAlpha</a> </li>
+<li class='toc3'><a href='#-blend'>blend</a> </li>
+<li class='toc3'><a href='#-vary'>vary</a> </li>
+<li class='toc3'><a href='#-complementary'>complementary</a> </li>
+<li class='toc3'><a href='#-multiply'>multiply</a> </li>
+<li class='toc3'><a href='#-divide'>divide</a> </li>
+<li class='toc3'><a href='#-subtract'>subtract</a> </li>
+<li class='toc3'><a href='#-add'>add</a> </li>
+<li class='toc3'><a href='#-symmetricDifference'>symmetricDifference</a> </li>
+<li class='toc3'><a href='#-screen'>screen</a> </li>
+<li class='toc3'><a href='#-lighten'>lighten</a> </li>
+<li class='toc3'><a href='#-darken'>darken</a> </li>
+<li class='toc3'><a href='#-hueBlend'>hueBlend</a> </li>
+<li class='toc3'><a href='#-saturationBlend'>saturationBlend</a> </li>
+<li class='toc3'><a href='#-valueBlend'>valueBlend</a> </li>
+<li class='toc3'><a href='#-asHSV'>asHSV</a> </li>
+<li class='toc3'><a href='#-asArray'>asArray</a> </li>
+<li class='toc3'><a href='#-storeArgs'>storeArgs</a> </li>
+<li class='toc3'><a href='#-setStroke'>setStroke</a> </li>
+<li class='toc3'><a href='#-setFill'>setFill</a> </li>
+<li class='toc3'><a href='#-set'>set</a> </li>
+<li class='toc3'><a href='#-round'>round</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#X-windows colors'>X-windows colors</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>An object which stores red, green, blue, and alpha values in instance variables, and provides numerous class and instance methods for creating and manipulating these values.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>red: 0</span>, <span class='argstr'>green: 0</span>, <span class='argstr'>blue: 0</span>, <span class='argstr'>alpha: 1</span>)</h3>
+<div class='method'>
+<p>Create a new instance with float values.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>red<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Float.html">Float</a> between 0 and 1.<tr><td class='argumentname'>green<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Float.html">Float</a> between 0 and 1.<tr><td class='argumentname'>blue<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Float.html">Float</a> between 0 and 1.<tr><td class='argumentname'>alpha<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Float.html">Float</a> between 0 and 1.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new255' href='./../Overviews/Methods.html#new255'>new255</a> (<span class='argstr'>red: 0</span>, <span class='argstr'>green: 0</span>, <span class='argstr'>blue: 0</span>, <span class='argstr'>alpha: 255</span>)</h3>
+<div class='method'>
+<p>Create a new instance from 8-bit integer values between 0 and 255.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>red<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Integer.html">Integer</a> between 0 and 255.<tr><td class='argumentname'>green<td class='argumentdesc'>
+<p>An <a href="./../Classes/Integer.html">Integer</a> between 0 and 255.<tr><td class='argumentname'>blue<td class='argumentdesc'>
+<p>An <a href="./../Classes/Integer.html">Integer</a> between 0 and 255.<tr><td class='argumentname'>alpha<td class='argumentdesc'>
+<p>An <a href="./../Classes/Integer.html">Integer</a> between 0 and 255.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fromArray' href='./../Overviews/Methods.html#fromArray'>fromArray</a> (<span class='argstr'>array</span>)</h3>
+<div class='method'>
+<p>Same as <code class='code prettyprint lang-sc'>Color.new(*array)</code>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>array<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Array.html">Array</a>. 1-4 values between 0 and 1. See <a href="#*new">*new</a>.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fromHexString' href='./../Overviews/Methods.html#fromHexString'>fromHexString</a> (<span class='argstr'>string</span>)</h3>
+<div class='method'>
+<p>Creates a new instance from a hex color string.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>string<td class='argumentdesc'>
+<p>A <a href="./../Classes/String.html">String</a>.</table><h4>Discussion:</h4>
+
+<p>The string should be a 6 character web color, or a 3 character CSS style color. A preceding # is optional.<pre class='code prettyprint lang-sc'>Color.fromHexString("#FF6600");</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*black' href='./../Overviews/Methods.html#black'>black</a> </h3>
+<div class='method'>
+<p>Nothing is darker.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*white' href='./../Overviews/Methods.html#white'>white</a> </h3>
+<div class='method'>
+<p>Nothing is lighter.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*clear' href='./../Overviews/Methods.html#clear'>clear</a> </h3>
+<div class='method'>
+<p>Nothing is more clear.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*gray' href='./../Overviews/Methods.html#gray'>gray</a> (<span class='argstr'>gray: 0.5</span>, <span class='argstr'>alpha: 1</span>)</h3>
+<div class='method'>
+<p>American shades of grey.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>gray<td class='argumentdesc'>
+<p>Shades between 0 (black) and 1 (white) as <a href="./../Classes/Float.html">Float</a>.<tr><td class='argumentname'>alpha<td class='argumentdesc'>
+<p>Transparency of gray between 0 and 1 as <a href="./../Classes/Float.html">Float</a>.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*grey' href='./../Overviews/Methods.html#grey'>grey</a> (<span class='argstr'>grey: 0.5</span>, <span class='argstr'>alpha: 1</span>)</h3>
+<div class='method'>
+<p>British shades of grey.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>grey<td class='argumentdesc'>
+<p>Shades between 0 (black) and 1 (white) as <a href="./../Classes/Float.html">Float</a>.<tr><td class='argumentname'>alpha<td class='argumentdesc'>
+<p>Transparency of grey between 0 and 1 as <a href="./../Classes/Float.html">Float</a>.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*red' href='./../Overviews/Methods.html#red'>red</a> (<span class='argstr'>val: 1</span>, <span class='argstr'>alpha: 1</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*green' href='./../Overviews/Methods.html#green'>green</a> (<span class='argstr'>val: 1</span>, <span class='argstr'>alpha: 1</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*blue' href='./../Overviews/Methods.html#blue'>blue</a> (<span class='argstr'>val: 1</span>, <span class='argstr'>alpha: 1</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*cyan' href='./../Overviews/Methods.html#cyan'>cyan</a> (<span class='argstr'>val: 1</span>, <span class='argstr'>alpha: 1</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*magenta' href='./../Overviews/Methods.html#magenta'>magenta</a> (<span class='argstr'>val: 1</span>, <span class='argstr'>alpha: 1</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*yellow' href='./../Overviews/Methods.html#yellow'>yellow</a> (<span class='argstr'>val: 1</span>, <span class='argstr'>alpha: 1</span>)</h3>
+<div class='method'>
+<p>Create a new red, green, blue, cyan, magenta or yellow Color.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>val<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Float.html">Float</a> between 0 and 1, where 1 is the bright, fully saturated color, and 0 is black.<tr><td class='argumentname'>alpha<td class='argumentdesc'>
+<p>Transparency between 0 and 1 as <a href="./../Classes/Float.html">Float</a>.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*rand' href='./../Overviews/Methods.html#rand'>rand</a> (<span class='argstr'>lo: 0.3</span>, <span class='argstr'>hi: 0.9</span>)</h3>
+<div class='method'>
+<p>A random RGB Color where the colors are randomly chosen between <code class='code prettyprint lang-sc'>lo</code> and <code class='code prettyprint lang-sc'>hi</code>. See <a href="./../Classes/Color.html#new">Color: new</a>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>lo<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Float.html">Float</a> between 0 and 1.<tr><td class='argumentname'>hi<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Float.html">Float</a> between 0 and 1.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*hsv' href='./../Overviews/Methods.html#hsv'>hsv</a> (<span class='argstr'>hue</span>, <span class='argstr'>sat</span>, <span class='argstr'>val</span>, <span class='argstr'>alpha: 1</span>)</h3>
+<div class='method'>
+<p>Maps hsv and alpha values to rgb between 0 and 1.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>hue<td class='argumentdesc'>
+<p><a href="./../Classes/Float.html">Float</a> between 0 and 0.999.<tr><td class='argumentname'>sat<td class='argumentdesc'>
+<p><a href="./../Classes/Float.html">Float</a> between 0 and 1.<tr><td class='argumentname'>val<td class='argumentdesc'>
+<p><a href="./../Classes/Float.html">Float</a> between 0 and 1.<tr><td class='argumentname'>alpha<td class='argumentdesc'>
+<p><a href="./../Classes/Float.html">Float</a> between 0 and 1.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-red' href='./../Overviews/Methods.html#red'>red</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-red' href='./../Overviews/Methods.html#red'>red</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-green' href='./../Overviews/Methods.html#green'>green</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-green' href='./../Overviews/Methods.html#green'>green</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-blue' href='./../Overviews/Methods.html#blue'>blue</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-blue' href='./../Overviews/Methods.html#blue'>blue</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-alpha' href='./../Overviews/Methods.html#alpha'>alpha</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-alpha' href='./../Overviews/Methods.html#alpha'>alpha</a> = value</h3>
+<div class='method'>
+<p>Get/set one of the instance variables, <code class='code prettyprint lang-sc'>red</code>, <code class='code prettyprint lang-sc'>green</code>, <code class='code prettyprint lang-sc'>blue</code>, or <code class='code prettyprint lang-sc'>alpha</code>.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>An instance of <a href="./../Classes/Float.html">Float</a> between 0 and 1.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hexString' href='./../Overviews/Methods.html#hexString'>hexString</a> </h3>
+<div class='method'>
+<p>Returns a <a href="./../Classes/String.html">String</a> containing a 6 character web color code, preceded by a #.<pre class='code prettyprint lang-sc'>Color(1.0, 0.4).hexString;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-==' href='./../Overviews/Methods.html#=='>==</a> (<span class='argstr'>that</span>)</h3>
+<div class='method'>
+<p>Binary operator.<pre class='code prettyprint lang-sc'>// returns true
+Color.new255(0, 0, 255, 255) == Color.new(0, 0, 1, 1)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-scaleByAlpha' href='./../Overviews/Methods.html#scaleByAlpha'>scaleByAlpha</a> </h3>
+<div class='method'>
+<p>Returns a Color, where <code class='code prettyprint lang-sc'>red</code>, <code class='code prettyprint lang-sc'>green</code>, and <code class='code prettyprint lang-sc'>blue</code> are scaled by the <code class='code prettyprint lang-sc'>alpha</code> value, and alpha is set to 1.<pre class='code prettyprint lang-sc'>// returns true:
+Color(1, 0.5, 1, 0.5).scaleByAlpha == Color(0.5, 0.25, 0.5, 1)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-blend' href='./../Overviews/Methods.html#blend'>blend</a> (<span class='argstr'>that</span>, <span class='argstr'>blend: 0.5</span>)</h3>
+<div class='method'>
+<p>Interpolates the <code class='code prettyprint lang-sc'>red</code>, <code class='code prettyprint lang-sc'>green</code>, <code class='code prettyprint lang-sc'>blue</code>, and <code class='code prettyprint lang-sc'>alpha</code> values of two Colors, linearly weighting between the first and the second.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>that<td class='argumentdesc'>
+<p>A second Color.<tr><td class='argumentname'>blend<td class='argumentdesc'>
+<p>0 means only this, while 1 means only that.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-vary' href='./../Overviews/Methods.html#vary'>vary</a> (<span class='argstr'>val: 0.1</span>, <span class='argstr'>lo: 0.3</span>, <span class='argstr'>hi: 0.9</span>, <span class='argstr'>alphaVal: 0</span>)</h3>
+<div class='method'>
+<p>Returns a random variation of a Color.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>val<td class='argumentdesc'>
+<p>Varies the RGB values +- this amount.<tr><td class='argumentname'>lo<td class='argumentdesc'>
+<p>Low-clips the RGB variation here.<tr><td class='argumentname'>hi<td class='argumentdesc'>
+<p>High-clips the RGB variation here.<tr><td class='argumentname'>alphaVal<td class='argumentdesc'>
+<p>Varies the alpha value +/- this amount, and clips it between 0 and 1.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-complementary' href='./../Overviews/Methods.html#complementary'>complementary</a> </h3>
+<div class='method'>
+<p>Returns the complementary color.<pre class='code prettyprint lang-sc'>// returns true:
+Color(1, 0.5, 1, 0.5).complementary == Color(0.0, 0.5, 0.0, 0.5)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-multiply' href='./../Overviews/Methods.html#multiply'>multiply</a> (<span class='argstr'>aColor</span>, <span class='argstr'>opacity: 1</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColor<td class='argumentdesc'>
+<p>An instance of Color.<tr><td class='argumentname'>opacity<td class='argumentdesc'>
+<p>A value between 0 and 1. Default value is 1.0.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-divide' href='./../Overviews/Methods.html#divide'>divide</a> (<span class='argstr'>aColor</span>, <span class='argstr'>opacity: 1</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColor<td class='argumentdesc'>
+<p>An instance of Color.<tr><td class='argumentname'>opacity<td class='argumentdesc'>
+<p>A value between 0 and 1. Default value is 1.0.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-subtract' href='./../Overviews/Methods.html#subtract'>subtract</a> (<span class='argstr'>aColor</span>, <span class='argstr'>opacity: 1</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColor<td class='argumentdesc'>
+<p>An instance of Color.<tr><td class='argumentname'>opacity<td class='argumentdesc'>
+<p>A value between 0 and 1. Default value is 1.0.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-add' href='./../Overviews/Methods.html#add'>add</a> (<span class='argstr'>aColor</span>, <span class='argstr'>opacity: 1</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColor<td class='argumentdesc'>
+<p>An instance of Color.<tr><td class='argumentname'>opacity<td class='argumentdesc'>
+<p>A value between 0 and 1. Default value is 1.0.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-symmetricDifference' href='./../Overviews/Methods.html#symmetricDifference'>symmetricDifference</a> (<span class='argstr'>aColor</span>, <span class='argstr'>opacity: 1</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColor<td class='argumentdesc'>
+<p>An instance of Color.<tr><td class='argumentname'>opacity<td class='argumentdesc'>
+<p>A value between 0 and 1. Default value is 1.0.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-screen' href='./../Overviews/Methods.html#screen'>screen</a> (<span class='argstr'>aColor</span>, <span class='argstr'>opacity: 1</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColor<td class='argumentdesc'>
+<p>An instance of Color.<tr><td class='argumentname'>opacity<td class='argumentdesc'>
+<p>A value between 0 and 1. Default value is 1.0.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-lighten' href='./../Overviews/Methods.html#lighten'>lighten</a> (<span class='argstr'>aColor</span>, <span class='argstr'>opacity: 1</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColor<td class='argumentdesc'>
+<p>An instance of Color.<tr><td class='argumentname'>opacity<td class='argumentdesc'>
+<p>A value between 0 and 1. Default value is 1.0.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-darken' href='./../Overviews/Methods.html#darken'>darken</a> (<span class='argstr'>aColor</span>, <span class='argstr'>opacity: 1</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColor<td class='argumentdesc'>
+<p>An instance of Color.<tr><td class='argumentname'>opacity<td class='argumentdesc'>
+<p>A value between 0 and 1. Default value is 1.0.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hueBlend' href='./../Overviews/Methods.html#hueBlend'>hueBlend</a> (<span class='argstr'>aColor</span>, <span class='argstr'>blend: 0</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColor<td class='argumentdesc'>
+<p>An instance of Color.<tr><td class='argumentname'>blend<td class='argumentdesc'>
+<p>A value between 0 and 1. Default value is 0.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-saturationBlend' href='./../Overviews/Methods.html#saturationBlend'>saturationBlend</a> (<span class='argstr'>aColor</span>, <span class='argstr'>blend: 0</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColor<td class='argumentdesc'>
+<p>An instance of Color.<tr><td class='argumentname'>blend<td class='argumentdesc'>
+<p>A value between 0 and 1. Default value is 0.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-valueBlend' href='./../Overviews/Methods.html#valueBlend'>valueBlend</a> (<span class='argstr'>aColor</span>, <span class='argstr'>blend: 0</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColor<td class='argumentdesc'>
+<p>An instance of Color.<tr><td class='argumentname'>blend<td class='argumentdesc'>
+<p>A value between 0 and 1. Default value is 0.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asHSV' href='./../Overviews/Methods.html#asHSV'>asHSV</a> </h3>
+<div class='method'>
+<p>Returns an array with <code class='code prettyprint lang-sc'>[hue, saturation, value, alpha]</code>, as values between 0 and 1.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asArray' href='./../Overviews/Methods.html#asArray'>asArray</a> </h3>
+<div class='method'>
+<p>Returns an array with <code class='code prettyprint lang-sc'>[red, green, blue, alpha]</code>, as values between 0 and 1.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-storeArgs' href='./../Overviews/Methods.html#storeArgs'>storeArgs</a> </h3>
+<div class='method'>
+<p>Returns an array with <code class='code prettyprint lang-sc'>[red, green, blue, alpha]</code>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setStroke' href='./../Overviews/Methods.html#setStroke'>setStroke</a> </h3>
+<div class='method'>
+<p>For use with <a href="./../Classes/Pen.html">Pen</a>. Sets the <code class='code prettyprint lang-sc'>stroke</code> of <a href="./../Classes/Pen.html">Pen</a> to this.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setFill' href='./../Overviews/Methods.html#setFill'>setFill</a> </h3>
+<div class='method'>
+<p>For use with <a href="./../Classes/Pen.html">Pen</a>. Sets the <code class='code prettyprint lang-sc'>fill</code> of <a href="./../Classes/Pen.html">Pen</a> to this.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-set' href='./../Overviews/Methods.html#set'>set</a> </h3>
+<div class='method'>
+<p>For use with <a href="./../Classes/Pen.html">Pen</a>. Sets the <code class='code prettyprint lang-sc'>stroke</code> and <code class='code prettyprint lang-sc'>fill</code> of <a href="./../Classes/Pen.html">Pen</a> to this.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-round' href='./../Overviews/Methods.html#round'>round</a> (<span class='argstr'>val: 0.01</span>)</h3>
+<div class='method'>
+<p>Round the color.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    // set the Color
+    Pen.translate(200, 200);
+    30.do{
+        Pen.width = 3.0.rand;
+        Color.blue(rrand(0.0, 1), rrand(0.0, 0.5)).setStroke;
+        Color.red(rrand(0.0, 1), rrand(0.0, 0.5)).setFill;
+        Pen.addAnnularWedge(
+            0@0,
+            rrand(10, 50),
+            rrand(51, 100),
+            2pi.rand,
+            2pi.rand
+        );
+        Pen.perform([\stroke, \fill].choose);
+    }
+};
+w.refresh;
+)</pre>
+<h2><a class='anchor' name='X-windows colors'>X-windows colors</a></h2>
+<pre class='code prettyprint lang-sc'>'alice blue' -&gt; Color.new255(240, 248, 255),
+'AliceBlue' -&gt; Color.new255(240, 248, 255),
+'antique white' -&gt; Color.new255(250, 235, 215),
+'AntiqueWhite' -&gt; Color.new255(250, 235, 215),
+'AntiqueWhite1' -&gt; Color.new255(255, 239, 219),
+'AntiqueWhite2' -&gt; Color.new255(238, 223, 204),
+'AntiqueWhite3' -&gt; Color.new255(205, 192, 176),
+'AntiqueWhite4' -&gt; Color.new255(139, 131, 120),
+'aquamarine' -&gt; Color.new255(127, 255, 212),
+'aquamarine1' -&gt; Color.new255(127, 255, 212),
+'aquamarine2' -&gt; Color.new255(118, 238, 198),
+'aquamarine3' -&gt; Color.new255(102, 205, 170),
+'aquamarine4' -&gt; Color.new255(69, 139, 116),
+'azure' -&gt; Color.new255(240, 255, 255),
+'azure1' -&gt; Color.new255(240, 255, 255),
+'azure2' -&gt; Color.new255(224, 238, 238),
+'azure3' -&gt; Color.new255(193, 205, 205),
+'azure4' -&gt; Color.new255(131, 139, 139),
+'beige' -&gt; Color.new255(245, 245, 220),
+'bisque' -&gt; Color.new255(255, 228, 196),
+'bisque1' -&gt; Color.new255(255, 228, 196),
+'bisque2' -&gt; Color.new255(238, 213, 183),
+'bisque3' -&gt; Color.new255(205, 183, 158),
+'bisque4' -&gt; Color.new255(139, 125, 107),
+'black' -&gt; Color.new255(0, 0, 0),
+'blanched almond' -&gt; Color.new255(255, 235, 205),
+'BlanchedAlmond' -&gt; Color.new255(255, 235, 205),
+'blue' -&gt; Color.new255(0, 0, 255),
+'blue violet' -&gt; Color.new255(138, 43, 226),
+'blue1' -&gt; Color.new255(0, 0, 255),
+'blue2' -&gt; Color.new255(0, 0, 238),
+'blue3' -&gt; Color.new255(0, 0, 205),
+'blue4' -&gt; Color.new255(0, 0, 139),
+'BlueViolet' -&gt; Color.new255(138, 43, 226),
+'brown' -&gt; Color.new255(165, 42, 42),
+'brown1' -&gt; Color.new255(255, 64, 64),
+'brown2' -&gt; Color.new255(238, 59, 59),
+'brown3' -&gt; Color.new255(205, 51, 51),
+'brown4' -&gt; Color.new255(139, 35, 35),
+'burlywood' -&gt; Color.new255(222, 184, 135),
+'burlywood1' -&gt; Color.new255(255, 211, 155),
+'burlywood2' -&gt; Color.new255(238, 197, 145),
+'burlywood3' -&gt; Color.new255(205, 170, 125),
+'burlywood4' -&gt; Color.new255(139, 115, 85),
+'cadet blue' -&gt; Color.new255(95, 158, 160),
+'CadetBlue' -&gt; Color.new255(95, 158, 160),
+'CadetBlue1' -&gt; Color.new255(152, 245, 255),
+'CadetBlue2' -&gt; Color.new255(142, 229, 238),
+'CadetBlue3' -&gt; Color.new255(122, 197, 205),
+'CadetBlue4' -&gt; Color.new255(83, 134, 139),
+'chartreuse' -&gt; Color.new255(127, 255, 0),
+'chartreuse1' -&gt; Color.new255(127, 255, 0),
+'chartreuse2' -&gt; Color.new255(118, 238, 0),
+'chartreuse3' -&gt; Color.new255(102, 205, 0),
+'chartreuse4' -&gt; Color.new255(69, 139, 0),
+'chocolate' -&gt; Color.new255(210, 105, 30),
+'chocolate1' -&gt; Color.new255(255, 127, 36),
+'chocolate2' -&gt; Color.new255(238, 118, 33),
+'chocolate3' -&gt; Color.new255(205, 102, 29),
+'chocolate4' -&gt; Color.new255(139, 69, 19),
+'coral' -&gt; Color.new255(255, 127, 80),
+'coral1' -&gt; Color.new255(255, 114, 86),
+'coral2' -&gt; Color.new255(238, 106, 80),
+'coral3' -&gt; Color.new255(205, 91, 69),
+'coral4' -&gt; Color.new255(139, 62, 47),
+'cornflower blue' -&gt; Color.new255(100, 149, 237),
+'CornflowerBlue' -&gt; Color.new255(100, 149, 237),
+'cornsilk' -&gt; Color.new255(255, 248, 220),
+'cornsilk1' -&gt; Color.new255(255, 248, 220),
+'cornsilk2' -&gt; Color.new255(238, 232, 205),
+'cornsilk3' -&gt; Color.new255(205, 200, 177),
+'cornsilk4' -&gt; Color.new255(139, 136, 120),
+'cyan' -&gt; Color.new255(0, 255, 255),
+'cyan1' -&gt; Color.new255(0, 255, 255),
+'cyan2' -&gt; Color.new255(0, 238, 238),
+'cyan3' -&gt; Color.new255(0, 205, 205),
+'cyan4' -&gt; Color.new255(0, 139, 139),
+'dark goldenrod' -&gt; Color.new255(184, 134, 11),
+'dark green' -&gt; Color.new255(0, 100, 0),
+'dark khaki' -&gt; Color.new255(189, 183, 107),
+'dark olive green' -&gt; Color.new255(85, 107, 47),
+'dark orange' -&gt; Color.new255(255, 140, 0),
+'dark orchid' -&gt; Color.new255(153, 50, 204),
+'dark salmon' -&gt; Color.new255(233, 150, 122),
+'dark sea green' -&gt; Color.new255(143, 188, 143),
+'dark slate blue' -&gt; Color.new255(72, 61, 139),
+'dark slate gray' -&gt; Color.new255(47, 79, 79),
+'dark slate grey' -&gt; Color.new255(47, 79, 79),
+'dark turquoise' -&gt; Color.new255(0, 206, 209),
+'dark violet' -&gt; Color.new255(148, 0, 211),
+'DarkGoldenrod' -&gt; Color.new255(184, 134, 11),
+'DarkGoldenrod1' -&gt; Color.new255(255, 185, 15),
+'DarkGoldenrod2' -&gt; Color.new255(238, 173, 14),
+'DarkGoldenrod3' -&gt; Color.new255(205, 149, 12),
+'DarkGoldenrod4' -&gt; Color.new255(139, 101, 8),
+'DarkGreen' -&gt; Color.new255(0, 100, 0),
+'DarkKhaki' -&gt; Color.new255(189, 183, 107),
+'DarkOliveGreen' -&gt; Color.new255(85, 107, 47),
+'DarkOliveGreen1' -&gt; Color.new255(202, 255, 112),
+'DarkOliveGreen2' -&gt; Color.new255(188, 238, 104),
+'DarkOliveGreen3' -&gt; Color.new255(162, 205, 90),
+'DarkOliveGreen4' -&gt; Color.new255(110, 139, 61),
+'DarkOrange' -&gt; Color.new255(255, 140, 0),
+'DarkOrange1' -&gt; Color.new255(255, 127, 0),
+'DarkOrange2' -&gt; Color.new255(238, 118, 0),
+'DarkOrange3' -&gt; Color.new255(205, 102, 0),
+'DarkOrange4' -&gt; Color.new255(139, 69, 0),
+'DarkOrchid' -&gt; Color.new255(153, 50, 204),
+'DarkOrchid1' -&gt; Color.new255(191, 62, 255),
+'DarkOrchid2' -&gt; Color.new255(178, 58, 238),
+'DarkOrchid3' -&gt; Color.new255(154, 50, 205),
+'DarkOrchid4' -&gt; Color.new255(104, 34, 139),
+'DarkSalmon' -&gt; Color.new255(233, 150, 122),
+'DarkSeaGreen' -&gt; Color.new255(143, 188, 143),
+'DarkSeaGreen1' -&gt; Color.new255(193, 255, 193),
+'DarkSeaGreen2' -&gt; Color.new255(180, 238, 180),
+'DarkSeaGreen3' -&gt; Color.new255(155, 205, 155),
+'DarkSeaGreen4' -&gt; Color.new255(105, 139, 105),
+'DarkSlateBlue' -&gt; Color.new255(72, 61, 139),
+'DarkSlateGray' -&gt; Color.new255(47, 79, 79),
+'DarkSlateGray1' -&gt; Color.new255(151, 255, 255),
+'DarkSlateGray2' -&gt; Color.new255(141, 238, 238),
+'DarkSlateGray3' -&gt; Color.new255(121, 205, 205),
+'DarkSlateGray4' -&gt; Color.new255(82, 139, 139),
+'DarkSlateGrey' -&gt; Color.new255(47, 79, 79),
+'DarkTurquoise' -&gt; Color.new255(0, 206, 209),
+'DarkViolet' -&gt; Color.new255(148, 0, 211),
+'deep pink' -&gt; Color.new255(255, 20, 147),
+'deep sky blue' -&gt; Color.new255(0, 191, 255),
+'DeepPink' -&gt; Color.new255(255, 20, 147),
+'DeepPink1' -&gt; Color.new255(255, 20, 147),
+'DeepPink2' -&gt; Color.new255(238, 18, 137),
+'DeepPink3' -&gt; Color.new255(205, 16, 118),
+'DeepPink4' -&gt; Color.new255(139, 10, 80),
+'DeepSkyBlue' -&gt; Color.new255(0, 191, 255),
+'DeepSkyBlue1' -&gt; Color.new255(0, 191, 255),
+'DeepSkyBlue2' -&gt; Color.new255(0, 178, 238),
+'DeepSkyBlue3' -&gt; Color.new255(0, 154, 205),
+'DeepSkyBlue4' -&gt; Color.new255(0, 104, 139),
+'dim gray' -&gt; Color.new255(105, 105, 105),
+'dim grey' -&gt; Color.new255(105, 105, 105),
+'DimGray' -&gt; Color.new255(105, 105, 105),
+'DimGrey' -&gt; Color.new255(105, 105, 105),
+'dodger blue' -&gt; Color.new255(30, 144, 255),
+'DodgerBlue' -&gt; Color.new255(30, 144, 255),
+'DodgerBlue1' -&gt; Color.new255(30, 144, 255),
+'DodgerBlue2' -&gt; Color.new255(28, 134, 238),
+'DodgerBlue3' -&gt; Color.new255(24, 116, 205),
+'DodgerBlue4' -&gt; Color.new255(16, 78, 139),
+'firebrick' -&gt; Color.new255(178, 34, 34),
+'firebrick1' -&gt; Color.new255(255, 48, 48),
+'firebrick2' -&gt; Color.new255(238, 44, 44),
+'firebrick3' -&gt; Color.new255(205, 38, 38),
+'firebrick4' -&gt; Color.new255(139, 26, 26),
+'floral white' -&gt; Color.new255(255, 250, 240),
+'FloralWhite' -&gt; Color.new255(255, 250, 240),
+'forest green' -&gt; Color.new255(34, 139, 34),
+'ForestGreen' -&gt; Color.new255(34, 139, 34),
+'gainsboro' -&gt; Color.new255(220, 220, 220),
+'ghost white' -&gt; Color.new255(248, 248, 255),
+'GhostWhite' -&gt; Color.new255(248, 248, 255),
+'gold' -&gt; Color.new255(255, 215, 0),
+'gold1' -&gt; Color.new255(255, 215, 0),
+'gold2' -&gt; Color.new255(238, 201, 0),
+'gold3' -&gt; Color.new255(205, 173, 0),
+'gold4' -&gt; Color.new255(139, 117, 0),
+'goldenrod' -&gt; Color.new255(218, 165, 32),
+'goldenrod1' -&gt; Color.new255(255, 193, 37),
+'goldenrod2' -&gt; Color.new255(238, 180, 34),
+'goldenrod3' -&gt; Color.new255(205, 155, 29),
+'goldenrod4' -&gt; Color.new255(139, 105, 20),
+'gray' -&gt; Color.new255(190, 190, 190),
+'gray0' -&gt; Color.new255(0, 0, 0),
+'gray1' -&gt; Color.new255(3, 3, 3),
+'gray10' -&gt; Color.new255(26, 26, 26),
+'gray100' -&gt; Color.new255(255, 255, 255),
+'gray11' -&gt; Color.new255(28, 28, 28),
+'gray12' -&gt; Color.new255(31, 31, 31),
+'gray13' -&gt; Color.new255(33, 33, 33),
+'gray14' -&gt; Color.new255(36, 36, 36),
+'gray15' -&gt; Color.new255(38, 38, 38),
+'gray16' -&gt; Color.new255(41, 41, 41),
+'gray17' -&gt; Color.new255(43, 43, 43),
+'gray18' -&gt; Color.new255(46, 46, 46),
+'gray19' -&gt; Color.new255(48, 48, 48),
+'gray2' -&gt; Color.new255(5, 5, 5),
+'gray20' -&gt; Color.new255(51, 51, 51),
+'gray21' -&gt; Color.new255(54, 54, 54),
+'gray22' -&gt; Color.new255(56, 56, 56),
+'gray23' -&gt; Color.new255(59, 59, 59),
+'gray24' -&gt; Color.new255(61, 61, 61),
+'gray25' -&gt; Color.new255(64, 64, 64),
+'gray26' -&gt; Color.new255(66, 66, 66),
+'gray27' -&gt; Color.new255(69, 69, 69),
+'gray28' -&gt; Color.new255(71, 71, 71),
+'gray29' -&gt; Color.new255(74, 74, 74),
+'gray3' -&gt; Color.new255(8, 8, 8),
+'gray30' -&gt; Color.new255(77, 77, 77),
+'gray31' -&gt; Color.new255(79, 79, 79),
+'gray32' -&gt; Color.new255(82, 82, 82),
+'gray33' -&gt; Color.new255(84, 84, 84),
+'gray34' -&gt; Color.new255(87, 87, 87),
+'gray35' -&gt; Color.new255(89, 89, 89),
+'gray36' -&gt; Color.new255(92, 92, 92),
+'gray37' -&gt; Color.new255(94, 94, 94),
+'gray38' -&gt; Color.new255(97, 97, 97),
+'gray39' -&gt; Color.new255(99, 99, 99),
+'gray4' -&gt; Color.new255(10, 10, 10),
+'gray40' -&gt; Color.new255(102, 102, 102),
+'gray41' -&gt; Color.new255(105, 105, 105),
+'gray42' -&gt; Color.new255(107, 107, 107),
+'gray43' -&gt; Color.new255(110, 110, 110),
+'gray44' -&gt; Color.new255(112, 112, 112),
+'gray45' -&gt; Color.new255(115, 115, 115),
+'gray46' -&gt; Color.new255(117, 117, 117),
+'gray47' -&gt; Color.new255(120, 120, 120),
+'gray48' -&gt; Color.new255(122, 122, 122),
+'gray49' -&gt; Color.new255(125, 125, 125),
+'gray5' -&gt; Color.new255(13, 13, 13),
+'gray50' -&gt; Color.new255(127, 127, 127),
+'gray51' -&gt; Color.new255(130, 130, 130),
+'gray52' -&gt; Color.new255(133, 133, 133),
+'gray53' -&gt; Color.new255(135, 135, 135),
+'gray54' -&gt; Color.new255(138, 138, 138),
+'gray55' -&gt; Color.new255(140, 140, 140),
+'gray56' -&gt; Color.new255(143, 143, 143),
+'gray57' -&gt; Color.new255(145, 145, 145),
+'gray58' -&gt; Color.new255(148, 148, 148),
+'gray59' -&gt; Color.new255(150, 150, 150),
+'gray6' -&gt; Color.new255(15, 15, 15),
+'gray60' -&gt; Color.new255(153, 153, 153),
+'gray61' -&gt; Color.new255(156, 156, 156),
+'gray62' -&gt; Color.new255(158, 158, 158),
+'gray63' -&gt; Color.new255(161, 161, 161),
+'gray64' -&gt; Color.new255(163, 163, 163),
+'gray65' -&gt; Color.new255(166, 166, 166),
+'gray66' -&gt; Color.new255(168, 168, 168),
+'gray67' -&gt; Color.new255(171, 171, 171),
+'gray68' -&gt; Color.new255(173, 173, 173),
+'gray69' -&gt; Color.new255(176, 176, 176),
+'gray7' -&gt; Color.new255(18, 18, 18),
+'gray70' -&gt; Color.new255(179, 179, 179),
+'gray71' -&gt; Color.new255(181, 181, 181),
+'gray72' -&gt; Color.new255(184, 184, 184),
+'gray73' -&gt; Color.new255(186, 186, 186),
+'gray74' -&gt; Color.new255(189, 189, 189),
+'gray75' -&gt; Color.new255(191, 191, 191),
+'gray76' -&gt; Color.new255(194, 194, 194),
+'gray77' -&gt; Color.new255(196, 196, 196),
+'gray78' -&gt; Color.new255(199, 199, 199),
+'gray79' -&gt; Color.new255(201, 201, 201),
+'gray8' -&gt; Color.new255(20, 20, 20),
+'gray80' -&gt; Color.new255(204, 204, 204),
+'gray81' -&gt; Color.new255(207, 207, 207),
+'gray82' -&gt; Color.new255(209, 209, 209),
+'gray83' -&gt; Color.new255(212, 212, 212),
+'gray84' -&gt; Color.new255(214, 214, 214),
+'gray85' -&gt; Color.new255(217, 217, 217),
+'gray86' -&gt; Color.new255(219, 219, 219),
+'gray87' -&gt; Color.new255(222, 222, 222),
+'gray88' -&gt; Color.new255(224, 224, 224),
+'gray89' -&gt; Color.new255(227, 227, 227),
+'gray9' -&gt; Color.new255(23, 23, 23),
+'gray90' -&gt; Color.new255(229, 229, 229),
+'gray91' -&gt; Color.new255(232, 232, 232),
+'gray92' -&gt; Color.new255(235, 235, 235),
+'gray93' -&gt; Color.new255(237, 237, 237),
+'gray94' -&gt; Color.new255(240, 240, 240),
+'gray95' -&gt; Color.new255(242, 242, 242),
+'gray96' -&gt; Color.new255(245, 245, 245),
+'gray97' -&gt; Color.new255(247, 247, 247),
+'gray98' -&gt; Color.new255(250, 250, 250),
+'gray99' -&gt; Color.new255(252, 252, 252),
+'green' -&gt; Color.new255(0, 255, 0),
+'green yellow' -&gt; Color.new255(173, 255, 47),
+'green1' -&gt; Color.new255(0, 255, 0),
+'green2' -&gt; Color.new255(0, 238, 0),
+'green3' -&gt; Color.new255(0, 205, 0),
+'green4' -&gt; Color.new255(0, 139, 0),
+'GreenYellow' -&gt; Color.new255(173, 255, 47),
+'grey' -&gt; Color.new255(190, 190, 190),
+'grey0' -&gt; Color.new255(0, 0, 0),
+'grey1' -&gt; Color.new255(3, 3, 3),
+'grey10' -&gt; Color.new255(26, 26, 26),
+'grey100' -&gt; Color.new255(255, 255, 255),
+'grey11' -&gt; Color.new255(28, 28, 28),
+'grey12' -&gt; Color.new255(31, 31, 31),
+'grey13' -&gt; Color.new255(33, 33, 33),
+'grey14' -&gt; Color.new255(36, 36, 36),
+'grey15' -&gt; Color.new255(38, 38, 38),
+'grey16' -&gt; Color.new255(41, 41, 41),
+'grey17' -&gt; Color.new255(43, 43, 43),
+'grey18' -&gt; Color.new255(46, 46, 46),
+'grey19' -&gt; Color.new255(48, 48, 48),
+'grey2' -&gt; Color.new255(5, 5, 5),
+'grey20' -&gt; Color.new255(51, 51, 51),
+'grey21' -&gt; Color.new255(54, 54, 54),
+'grey22' -&gt; Color.new255(56, 56, 56),
+'grey23' -&gt; Color.new255(59, 59, 59),
+'grey24' -&gt; Color.new255(61, 61, 61),
+'grey25' -&gt; Color.new255(64, 64, 64),
+'grey26' -&gt; Color.new255(66, 66, 66),
+'grey27' -&gt; Color.new255(69, 69, 69),
+'grey28' -&gt; Color.new255(71, 71, 71),
+'grey29' -&gt; Color.new255(74, 74, 74),
+'grey3' -&gt; Color.new255(8, 8, 8),
+'grey30' -&gt; Color.new255(77, 77, 77),
+'grey31' -&gt; Color.new255(79, 79, 79),
+'grey32' -&gt; Color.new255(82, 82, 82),
+'grey33' -&gt; Color.new255(84, 84, 84),
+'grey34' -&gt; Color.new255(87, 87, 87),
+'grey35' -&gt; Color.new255(89, 89, 89),
+'grey36' -&gt; Color.new255(92, 92, 92),
+'grey37' -&gt; Color.new255(94, 94, 94),
+'grey38' -&gt; Color.new255(97, 97, 97),
+'grey39' -&gt; Color.new255(99, 99, 99),
+'grey4' -&gt; Color.new255(10, 10, 10),
+'grey40' -&gt; Color.new255(102, 102, 102),
+'grey41' -&gt; Color.new255(105, 105, 105),
+'grey42' -&gt; Color.new255(107, 107, 107),
+'grey43' -&gt; Color.new255(110, 110, 110),
+'grey44' -&gt; Color.new255(112, 112, 112),
+'grey45' -&gt; Color.new255(115, 115, 115),
+'grey46' -&gt; Color.new255(117, 117, 117),
+'grey47' -&gt; Color.new255(120, 120, 120),
+'grey48' -&gt; Color.new255(122, 122, 122),
+'grey49' -&gt; Color.new255(125, 125, 125),
+'grey5' -&gt; Color.new255(13, 13, 13),
+'grey50' -&gt; Color.new255(127, 127, 127),
+'grey51' -&gt; Color.new255(130, 130, 130),
+'grey52' -&gt; Color.new255(133, 133, 133),
+'grey53' -&gt; Color.new255(135, 135, 135),
+'grey54' -&gt; Color.new255(138, 138, 138),
+'grey55' -&gt; Color.new255(140, 140, 140),
+'grey56' -&gt; Color.new255(143, 143, 143),
+'grey57' -&gt; Color.new255(145, 145, 145),
+'grey58' -&gt; Color.new255(148, 148, 148),
+'grey59' -&gt; Color.new255(150, 150, 150),
+'grey6' -&gt; Color.new255(15, 15, 15),
+'grey60' -&gt; Color.new255(153, 153, 153),
+'grey61' -&gt; Color.new255(156, 156, 156),
+'grey62' -&gt; Color.new255(158, 158, 158),
+'grey63' -&gt; Color.new255(161, 161, 161),
+'grey64' -&gt; Color.new255(163, 163, 163),
+'grey65' -&gt; Color.new255(166, 166, 166),
+'grey66' -&gt; Color.new255(168, 168, 168),
+'grey67' -&gt; Color.new255(171, 171, 171),
+'grey68' -&gt; Color.new255(173, 173, 173),
+'grey69' -&gt; Color.new255(176, 176, 176),
+'grey7' -&gt; Color.new255(18, 18, 18),
+'grey70' -&gt; Color.new255(179, 179, 179),
+'grey71' -&gt; Color.new255(181, 181, 181),
+'grey72' -&gt; Color.new255(184, 184, 184),
+'grey73' -&gt; Color.new255(186, 186, 186),
+'grey74' -&gt; Color.new255(189, 189, 189),
+'grey75' -&gt; Color.new255(191, 191, 191),
+'grey76' -&gt; Color.new255(194, 194, 194),
+'grey77' -&gt; Color.new255(196, 196, 196),
+'grey78' -&gt; Color.new255(199, 199, 199),
+'grey79' -&gt; Color.new255(201, 201, 201),
+'grey8' -&gt; Color.new255(20, 20, 20),
+'grey80' -&gt; Color.new255(204, 204, 204),
+'grey81' -&gt; Color.new255(207, 207, 207),
+'grey82' -&gt; Color.new255(209, 209, 209),
+'grey83' -&gt; Color.new255(212, 212, 212),
+'grey84' -&gt; Color.new255(214, 214, 214),
+'grey85' -&gt; Color.new255(217, 217, 217),
+'grey86' -&gt; Color.new255(219, 219, 219),
+'grey87' -&gt; Color.new255(222, 222, 222),
+'grey88' -&gt; Color.new255(224, 224, 224),
+'grey89' -&gt; Color.new255(227, 227, 227),
+'grey9' -&gt; Color.new255(23, 23, 23),
+'grey90' -&gt; Color.new255(229, 229, 229),
+'grey91' -&gt; Color.new255(232, 232, 232),
+'grey92' -&gt; Color.new255(235, 235, 235),
+'grey93' -&gt; Color.new255(237, 237, 237),
+'grey94' -&gt; Color.new255(240, 240, 240),
+'grey95' -&gt; Color.new255(242, 242, 242),
+'grey96' -&gt; Color.new255(245, 245, 245),
+'grey97' -&gt; Color.new255(247, 247, 247),
+'grey98' -&gt; Color.new255(250, 250, 250),
+'grey99' -&gt; Color.new255(252, 252, 252),
+'honeydew' -&gt; Color.new255(240, 255, 240),
+'honeydew1' -&gt; Color.new255(240, 255, 240),
+'honeydew2' -&gt; Color.new255(224, 238, 224),
+'honeydew3' -&gt; Color.new255(193, 205, 193),
+'honeydew4' -&gt; Color.new255(131, 139, 131),
+'hot pink' -&gt; Color.new255(255, 105, 180),
+'HotPink' -&gt; Color.new255(255, 105, 180),
+'HotPink1' -&gt; Color.new255(255, 110, 180),
+'HotPink2' -&gt; Color.new255(238, 106, 167),
+'HotPink3' -&gt; Color.new255(205, 96, 144),
+'HotPink4' -&gt; Color.new255(139, 58, 98),
+'indian red' -&gt; Color.new255(205, 92, 92),
+'IndianRed' -&gt; Color.new255(205, 92, 92),
+'IndianRed1' -&gt; Color.new255(255, 106, 106),
+'IndianRed2' -&gt; Color.new255(238, 99, 99),
+'IndianRed3' -&gt; Color.new255(205, 85, 85),
+'IndianRed4' -&gt; Color.new255(139, 58, 58),
+'ivory' -&gt; Color.new255(255, 255, 240),
+'ivory1' -&gt; Color.new255(255, 255, 240),
+'ivory2' -&gt; Color.new255(238, 238, 224),
+'ivory3' -&gt; Color.new255(205, 205, 193),
+'ivory4' -&gt; Color.new255(139, 139, 131),
+'khaki' -&gt; Color.new255(240, 230, 140),
+'khaki1' -&gt; Color.new255(255, 246, 143),
+'khaki2' -&gt; Color.new255(238, 230, 133),
+'khaki3' -&gt; Color.new255(205, 198, 115),
+'khaki4' -&gt; Color.new255(139, 134, 78),
+'lavender' -&gt; Color.new255(230, 230, 250),
+'lavender blush' -&gt; Color.new255(255, 240, 245),
+'LavenderBlush' -&gt; Color.new255(255, 240, 245),
+'LavenderBlush1' -&gt; Color.new255(255, 240, 245),
+'LavenderBlush2' -&gt; Color.new255(238, 224, 229),
+'LavenderBlush3' -&gt; Color.new255(205, 193, 197),
+'LavenderBlush4' -&gt; Color.new255(139, 131, 134),
+'lawn green' -&gt; Color.new255(124, 252, 0),
+'LawnGreen' -&gt; Color.new255(124, 252, 0),
+'lemon chiffon' -&gt; Color.new255(255, 250, 205),
+'LemonChiffon' -&gt; Color.new255(255, 250, 205),
+'LemonChiffon1' -&gt; Color.new255(255, 250, 205),
+'LemonChiffon2' -&gt; Color.new255(238, 233, 191),
+'LemonChiffon3' -&gt; Color.new255(205, 201, 165),
+'LemonChiffon4' -&gt; Color.new255(139, 137, 112),
+'light blue' -&gt; Color.new255(173, 216, 230),
+'light coral' -&gt; Color.new255(240, 128, 128),
+'light cyan' -&gt; Color.new255(224, 255, 255),
+'light goldenrod' -&gt; Color.new255(238, 221, 130),
+'light goldenrod yellow' -&gt; Color.new255(250, 250, 210),
+'light gray' -&gt; Color.new255(211, 211, 211),
+'light grey' -&gt; Color.new255(211, 211, 211),
+'light pink' -&gt; Color.new255(255, 182, 193),
+'light salmon' -&gt; Color.new255(255, 160, 122),
+'light sea green' -&gt; Color.new255(32, 178, 170),
+'light sky blue' -&gt; Color.new255(135, 206, 250),
+'light slate blue' -&gt; Color.new255(132, 112, 255),
+'light slate gray' -&gt; Color.new255(119, 136, 153),
+'light slate grey' -&gt; Color.new255(119, 136, 153),
+'light steel blue' -&gt; Color.new255(176, 196, 222),
+'light yellow' -&gt; Color.new255(255, 255, 224),
+'LightBlue' -&gt; Color.new255(173, 216, 230),
+'LightBlue1' -&gt; Color.new255(191, 239, 255),
+'LightBlue2' -&gt; Color.new255(178, 223, 238),
+'LightBlue3' -&gt; Color.new255(154, 192, 205),
+'LightBlue4' -&gt; Color.new255(104, 131, 139),
+'LightCoral' -&gt; Color.new255(240, 128, 128),
+'LightCyan' -&gt; Color.new255(224, 255, 255),
+'LightCyan1' -&gt; Color.new255(224, 255, 255),
+'LightCyan2' -&gt; Color.new255(209, 238, 238),
+'LightCyan3' -&gt; Color.new255(180, 205, 205),
+'LightCyan4' -&gt; Color.new255(122, 139, 139),
+'LightGoldenrod' -&gt; Color.new255(238, 221, 130),
+'LightGoldenrod1' -&gt; Color.new255(255, 236, 139),
+'LightGoldenrod2' -&gt; Color.new255(238, 220, 130),
+'LightGoldenrod3' -&gt; Color.new255(205, 190, 112),
+'LightGoldenrod4' -&gt; Color.new255(139, 129, 76),
+'LightGoldenrodYellow' -&gt; Color.new255(250, 250, 210),
+'LightGray' -&gt; Color.new255(211, 211, 211),
+'LightGrey' -&gt; Color.new255(211, 211, 211),
+'LightPink' -&gt; Color.new255(255, 182, 193),
+'LightPink1' -&gt; Color.new255(255, 174, 185),
+'LightPink2' -&gt; Color.new255(238, 162, 173),
+'LightPink3' -&gt; Color.new255(205, 140, 149),
+'LightPink4' -&gt; Color.new255(139, 95, 101),
+'LightSalmon' -&gt; Color.new255(255, 160, 122),
+'LightSalmon1' -&gt; Color.new255(255, 160, 122),
+'LightSalmon2' -&gt; Color.new255(238, 149, 114),
+'LightSalmon3' -&gt; Color.new255(205, 129, 98),
+'LightSalmon4' -&gt; Color.new255(139, 87, 66),
+'LightSeaGreen' -&gt; Color.new255(32, 178, 170),
+'LightSkyBlue' -&gt; Color.new255(135, 206, 250),
+'LightSkyBlue1' -&gt; Color.new255(176, 226, 255),
+'LightSkyBlue2' -&gt; Color.new255(164, 211, 238),
+'LightSkyBlue3' -&gt; Color.new255(141, 182, 205),
+'LightSkyBlue4' -&gt; Color.new255(96, 123, 139),
+'LightSlateBlue' -&gt; Color.new255(132, 112, 255),
+'LightSlateGray' -&gt; Color.new255(119, 136, 153),
+'LightSlateGrey' -&gt; Color.new255(119, 136, 153),
+'LightSteelBlue' -&gt; Color.new255(176, 196, 222),
+'LightSteelBlue1' -&gt; Color.new255(202, 225, 255),
+'LightSteelBlue2' -&gt; Color.new255(188, 210, 238),
+'LightSteelBlue3' -&gt; Color.new255(162, 181, 205),
+'LightSteelBlue4' -&gt; Color.new255(110, 123, 139),
+'LightYellow' -&gt; Color.new255(255, 255, 224),
+'LightYellow1' -&gt; Color.new255(255, 255, 224),
+'LightYellow2' -&gt; Color.new255(238, 238, 209),
+'LightYellow3' -&gt; Color.new255(205, 205, 180),
+'LightYellow4' -&gt; Color.new255(139, 139, 122),
+'lime green' -&gt; Color.new255(50, 205, 50),
+'LimeGreen' -&gt; Color.new255(50, 205, 50),
+'linen' -&gt; Color.new255(250, 240, 230),
+'magenta' -&gt; Color.new255(255, 0, 255),
+'magenta1' -&gt; Color.new255(255, 0, 255),
+'magenta2' -&gt; Color.new255(238, 0, 238),
+'magenta3' -&gt; Color.new255(205, 0, 205),
+'magenta4' -&gt; Color.new255(139, 0, 139),
+'maroon' -&gt; Color.new255(176, 48, 96),
+'maroon1' -&gt; Color.new255(255, 52, 179),
+'maroon2' -&gt; Color.new255(238, 48, 167),
+'maroon3' -&gt; Color.new255(205, 41, 144),
+'maroon4' -&gt; Color.new255(139, 28, 98),
+'medium aquamarine' -&gt; Color.new255(102, 205, 170),
+'medium blue' -&gt; Color.new255(0, 0, 205),
+'medium orchid' -&gt; Color.new255(186, 85, 211),
+'medium purple' -&gt; Color.new255(147, 112, 219),
+'medium sea green' -&gt; Color.new255(60, 179, 113),
+'medium slate blue' -&gt; Color.new255(123, 104, 238),
+'medium spring green' -&gt; Color.new255(0, 250, 154),
+'medium turquoise' -&gt; Color.new255(72, 209, 204),
+'medium violet red' -&gt; Color.new255(199, 21, 133),
+'MediumAquamarine' -&gt; Color.new255(102, 205, 170),
+'MediumBlue' -&gt; Color.new255(0, 0, 205),
+'MediumOrchid' -&gt; Color.new255(186, 85, 211),
+'MediumOrchid1' -&gt; Color.new255(224, 102, 255),
+'MediumOrchid2' -&gt; Color.new255(209, 95, 238),
+'MediumOrchid3' -&gt; Color.new255(180, 82, 205),
+'MediumOrchid4' -&gt; Color.new255(122, 55, 139),
+'MediumPurple' -&gt; Color.new255(147, 112, 219),
+'MediumPurple1' -&gt; Color.new255(171, 130, 255),
+'MediumPurple2' -&gt; Color.new255(159, 121, 238),
+'MediumPurple3' -&gt; Color.new255(137, 104, 205),
+'MediumPurple4' -&gt; Color.new255(93, 71, 139),
+'MediumSeaGreen' -&gt; Color.new255(60, 179, 113),
+'MediumSlateBlue' -&gt; Color.new255(123, 104, 238),
+'MediumSpringGreen' -&gt; Color.new255(0, 250, 154),
+'MediumTurquoise' -&gt; Color.new255(72, 209, 204),
+'MediumVioletRed' -&gt; Color.new255(199, 21, 133),
+'midnight blue' -&gt; Color.new255(25, 25, 112),
+'MidnightBlue' -&gt; Color.new255(25, 25, 112),
+'mint cream' -&gt; Color.new255(245, 255, 250),
+'MintCream' -&gt; Color.new255(245, 255, 250),
+'misty rose' -&gt; Color.new255(255, 228, 225),
+'MistyRose' -&gt; Color.new255(255, 228, 225),
+'MistyRose1' -&gt; Color.new255(255, 228, 225),
+'MistyRose2' -&gt; Color.new255(238, 213, 210),
+'MistyRose3' -&gt; Color.new255(205, 183, 181),
+'MistyRose4' -&gt; Color.new255(139, 125, 123),
+'moccasin' -&gt; Color.new255(255, 228, 181),
+'navajo white' -&gt; Color.new255(255, 222, 173),
+'NavajoWhite' -&gt; Color.new255(255, 222, 173),
+'NavajoWhite1' -&gt; Color.new255(255, 222, 173),
+'NavajoWhite2' -&gt; Color.new255(238, 207, 161),
+'NavajoWhite3' -&gt; Color.new255(205, 179, 139),
+'NavajoWhite4' -&gt; Color.new255(139, 121, 94),
+'navy' -&gt; Color.new255(0, 0, 128),
+'navy blue' -&gt; Color.new255(0, 0, 128),
+'NavyBlue' -&gt; Color.new255(0, 0, 128),
+'old lace' -&gt; Color.new255(253, 245, 230),
+'OldLace' -&gt; Color.new255(253, 245, 230),
+'olive drab' -&gt; Color.new255(107, 142, 35),
+'OliveDrab' -&gt; Color.new255(107, 142, 35),
+'OliveDrab1' -&gt; Color.new255(192, 255, 62),
+'OliveDrab2' -&gt; Color.new255(179, 238, 58),
+'OliveDrab3' -&gt; Color.new255(154, 205, 50),
+'OliveDrab4' -&gt; Color.new255(105, 139, 34),
+'orange' -&gt; Color.new255(255, 165, 0),
+'orange red' -&gt; Color.new255(255, 69, 0),
+'orange1' -&gt; Color.new255(255, 165, 0),
+'orange2' -&gt; Color.new255(238, 154, 0),
+'orange3' -&gt; Color.new255(205, 133, 0),
+'orange4' -&gt; Color.new255(139, 90, 0),
+'OrangeRed' -&gt; Color.new255(255, 69, 0),
+'OrangeRed1' -&gt; Color.new255(255, 69, 0),
+'OrangeRed2' -&gt; Color.new255(238, 64, 0),
+'OrangeRed3' -&gt; Color.new255(205, 55, 0),
+'OrangeRed4' -&gt; Color.new255(139, 37, 0),
+'orchid' -&gt; Color.new255(218, 112, 214),
+'orchid1' -&gt; Color.new255(255, 131, 250),
+'orchid2' -&gt; Color.new255(238, 122, 233),
+'orchid3' -&gt; Color.new255(205, 105, 201),
+'orchid4' -&gt; Color.new255(139, 71, 137),
+'pale goldenrod' -&gt; Color.new255(238, 232, 170),
+'pale green' -&gt; Color.new255(152, 251, 152),
+'pale turquoise' -&gt; Color.new255(175, 238, 238),
+'pale violet red' -&gt; Color.new255(219, 112, 147),
+'PaleGoldenrod' -&gt; Color.new255(238, 232, 170),
+'PaleGreen' -&gt; Color.new255(152, 251, 152),
+'PaleGreen1' -&gt; Color.new255(154, 255, 154),
+'PaleGreen2' -&gt; Color.new255(144, 238, 144),
+'PaleGreen3' -&gt; Color.new255(124, 205, 124),
+'PaleGreen4' -&gt; Color.new255(84, 139, 84),
+'PaleTurquoise' -&gt; Color.new255(175, 238, 238),
+'PaleTurquoise1' -&gt; Color.new255(187, 255, 255),
+'PaleTurquoise2' -&gt; Color.new255(174, 238, 238),
+'PaleTurquoise3' -&gt; Color.new255(150, 205, 205),
+'PaleTurquoise4' -&gt; Color.new255(102, 139, 139),
+'PaleVioletRed' -&gt; Color.new255(219, 112, 147),
+'PaleVioletRed1' -&gt; Color.new255(255, 130, 171),
+'PaleVioletRed2' -&gt; Color.new255(238, 121, 159),
+'PaleVioletRed3' -&gt; Color.new255(205, 104, 137),
+'PaleVioletRed4' -&gt; Color.new255(139, 71, 93),
+'papaya whip' -&gt; Color.new255(255, 239, 213),
+'PapayaWhip' -&gt; Color.new255(255, 239, 213),
+'peach puff' -&gt; Color.new255(255, 218, 185),
+'PeachPuff' -&gt; Color.new255(255, 218, 185),
+'PeachPuff1' -&gt; Color.new255(255, 218, 185),
+'PeachPuff2' -&gt; Color.new255(238, 203, 173),
+'PeachPuff3' -&gt; Color.new255(205, 175, 149),
+'PeachPuff4' -&gt; Color.new255(139, 119, 101),
+'peru' -&gt; Color.new255(205, 133, 63),
+'pink' -&gt; Color.new255(255, 192, 203),
+'pink1' -&gt; Color.new255(255, 181, 197),
+'pink2' -&gt; Color.new255(238, 169, 184),
+'pink3' -&gt; Color.new255(205, 145, 158),
+'pink4' -&gt; Color.new255(139, 99, 108),
+'plum' -&gt; Color.new255(221, 160, 221),
+'plum1' -&gt; Color.new255(255, 187, 255),
+'plum2' -&gt; Color.new255(238, 174, 238),
+'plum3' -&gt; Color.new255(205, 150, 205),
+'plum4' -&gt; Color.new255(139, 102, 139),
+'powder blue' -&gt; Color.new255(176, 224, 230),
+'PowderBlue' -&gt; Color.new255(176, 224, 230),
+'purple' -&gt; Color.new255(160, 32, 240),
+'purple1' -&gt; Color.new255(155, 48, 255),
+'purple2' -&gt; Color.new255(145, 44, 238),
+'purple3' -&gt; Color.new255(125, 38, 205),
+'purple4' -&gt; Color.new255(85, 26, 139),
+'red' -&gt; Color.new255(255, 0, 0),
+'red1' -&gt; Color.new255(255, 0, 0),
+'red2' -&gt; Color.new255(238, 0, 0),
+'red3' -&gt; Color.new255(205, 0, 0),
+'red4' -&gt; Color.new255(139, 0, 0),
+'rosy brown' -&gt; Color.new255(188, 143, 143),
+'RosyBrown' -&gt; Color.new255(188, 143, 143),
+'RosyBrown1' -&gt; Color.new255(255, 193, 193),
+'RosyBrown2' -&gt; Color.new255(238, 180, 180),
+'RosyBrown3' -&gt; Color.new255(205, 155, 155),
+'RosyBrown4' -&gt; Color.new255(139, 105, 105),
+'royal blue' -&gt; Color.new255(65, 105, 225),
+'RoyalBlue' -&gt; Color.new255(65, 105, 225),
+'RoyalBlue1' -&gt; Color.new255(72, 118, 255),
+'RoyalBlue2' -&gt; Color.new255(67, 110, 238),
+'RoyalBlue3' -&gt; Color.new255(58, 95, 205),
+'RoyalBlue4' -&gt; Color.new255(39, 64, 139),
+'saddle brown' -&gt; Color.new255(139, 69, 19),
+'SaddleBrown' -&gt; Color.new255(139, 69, 19),
+'salmon' -&gt; Color.new255(250, 128, 114),
+'salmon1' -&gt; Color.new255(255, 140, 105),
+'salmon2' -&gt; Color.new255(238, 130, 98),
+'salmon3' -&gt; Color.new255(205, 112, 84),
+'salmon4' -&gt; Color.new255(139, 76, 57),
+'sandy brown' -&gt; Color.new255(244, 164, 96),
+'SandyBrown' -&gt; Color.new255(244, 164, 96),
+'sea green' -&gt; Color.new255(46, 139, 87),
+'SeaGreen' -&gt; Color.new255(46, 139, 87),
+'SeaGreen1' -&gt; Color.new255(84, 255, 159),
+'SeaGreen2' -&gt; Color.new255(78, 238, 148),
+'SeaGreen3' -&gt; Color.new255(67, 205, 128),
+'SeaGreen4' -&gt; Color.new255(46, 139, 87),
+'seashell' -&gt; Color.new255(255, 245, 238),
+'seashell1' -&gt; Color.new255(255, 245, 238),
+'seashell2' -&gt; Color.new255(238, 229, 222),
+'seashell3' -&gt; Color.new255(205, 197, 191),
+'seashell4' -&gt; Color.new255(139, 134, 130),
+'sienna' -&gt; Color.new255(160, 82, 45),
+'sienna1' -&gt; Color.new255(255, 130, 71),
+'sienna2' -&gt; Color.new255(238, 121, 66),
+'sienna3' -&gt; Color.new255(205, 104, 57),
+'sienna4' -&gt; Color.new255(139, 71, 38),
+'sky blue' -&gt; Color.new255(135, 206, 235),
+'SkyBlue' -&gt; Color.new255(135, 206, 235),
+'SkyBlue1' -&gt; Color.new255(135, 206, 255),
+'SkyBlue2' -&gt; Color.new255(126, 192, 238),
+'SkyBlue3' -&gt; Color.new255(108, 166, 205),
+'SkyBlue4' -&gt; Color.new255(74, 112, 139),
+'slate blue' -&gt; Color.new255(106, 90, 205),
+'slate gray' -&gt; Color.new255(112, 128, 144),
+'slate grey' -&gt; Color.new255(112, 128, 144),
+'SlateBlue' -&gt; Color.new255(106, 90, 205),
+'SlateBlue1' -&gt; Color.new255(131, 111, 255),
+'SlateBlue2' -&gt; Color.new255(122, 103, 238),
+'SlateBlue3' -&gt; Color.new255(105, 89, 205),
+'SlateBlue4' -&gt; Color.new255(71, 60, 139),
+'SlateGray' -&gt; Color.new255(112, 128, 144),
+'SlateGray1' -&gt; Color.new255(198, 226, 255),
+'SlateGray2' -&gt; Color.new255(185, 211, 238),
+'SlateGray3' -&gt; Color.new255(159, 182, 205),
+'SlateGray4' -&gt; Color.new255(108, 123, 139),
+'SlateGrey' -&gt; Color.new255(112, 128, 144),
+'snow' -&gt; Color.new255(255, 250, 250),
+'snow1' -&gt; Color.new255(255, 250, 250),
+'snow2' -&gt; Color.new255(238, 233, 233),
+'snow3' -&gt; Color.new255(205, 201, 201),
+'snow4' -&gt; Color.new255(139, 137, 137),
+'spring green' -&gt; Color.new255(0, 255, 127),
+'SpringGreen' -&gt; Color.new255(0, 255, 127),
+'SpringGreen1' -&gt; Color.new255(0, 255, 127),
+'SpringGreen2' -&gt; Color.new255(0, 238, 118),
+'SpringGreen3' -&gt; Color.new255(0, 205, 102),
+'SpringGreen4' -&gt; Color.new255(0, 139, 69),
+'steel blue' -&gt; Color.new255(70, 130, 180),
+'SteelBlue' -&gt; Color.new255(70, 130, 180),
+'SteelBlue1' -&gt; Color.new255(99, 184, 255),
+'SteelBlue2' -&gt; Color.new255(92, 172, 238),
+'SteelBlue3' -&gt; Color.new255(79, 148, 205),
+'SteelBlue4' -&gt; Color.new255(54, 100, 139),
+'tan' -&gt; Color.new255(210, 180, 140),
+'tan1' -&gt; Color.new255(255, 165, 79),
+'tan2' -&gt; Color.new255(238, 154, 73),
+'tan3' -&gt; Color.new255(205, 133, 63),
+'tan4' -&gt; Color.new255(139, 90, 43),
+'thistle' -&gt; Color.new255(216, 191, 216),
+'thistle1' -&gt; Color.new255(255, 225, 255),
+'thistle2' -&gt; Color.new255(238, 210, 238),
+'thistle3' -&gt; Color.new255(205, 181, 205),
+'thistle4' -&gt; Color.new255(139, 123, 139),
+'tomato' -&gt; Color.new255(255, 99, 71),
+'tomato1' -&gt; Color.new255(255, 99, 71),
+'tomato2' -&gt; Color.new255(238, 92, 66),
+'tomato3' -&gt; Color.new255(205, 79, 57),
+'tomato4' -&gt; Color.new255(139, 54, 38),
+'turquoise' -&gt; Color.new255(64, 224, 208),
+'turquoise1' -&gt; Color.new255(0, 245, 255),
+'turquoise2' -&gt; Color.new255(0, 229, 238),
+'turquoise3' -&gt; Color.new255(0, 197, 205),
+'turquoise4' -&gt; Color.new255(0, 134, 139),
+'violet' -&gt; Color.new255(238, 130, 238),
+'violet red' -&gt; Color.new255(208, 32, 144),
+'VioletRed' -&gt; Color.new255(208, 32, 144),
+'VioletRed1' -&gt; Color.new255(255, 62, 150),
+'VioletRed2' -&gt; Color.new255(238, 58, 140),
+'VioletRed3' -&gt; Color.new255(205, 50, 120),
+'VioletRed4' -&gt; Color.new255(139, 34, 82),
+'wheat' -&gt; Color.new255(245, 222, 179),
+'wheat1' -&gt; Color.new255(255, 231, 186),
+'wheat2' -&gt; Color.new255(238, 216, 174),
+'wheat3' -&gt; Color.new255(205, 186, 150),
+'wheat4' -&gt; Color.new255(139, 126, 102),
+'white' -&gt; Color.new255(255, 255, 255),
+'white smoke' -&gt; Color.new255(245, 245, 245),
+'WhiteSmoke' -&gt; Color.new255(245, 245, 245),
+'yellow' -&gt; Color.new255(255, 255, 0),
+'yellow green' -&gt; Color.new255(154, 205, 50),
+'yellow1' -&gt; Color.new255(255, 255, 0),
+'yellow2' -&gt; Color.new255(238, 238, 0),
+'yellow3' -&gt; Color.new255(205, 205, 0),
+'yellow4' -&gt; Color.new255(139, 139, 0),
+'YellowGreen' -&gt; Color.new255(154, 205, 50)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Color.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Color.schelp</a><br>link::Classes/Color::<br>sc version: 3.8dev</div></div></body></html>

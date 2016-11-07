@@ -1,0 +1,270 @@
+<html><head><title>RangeSlider</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Views'>GUI>Views</a></div>
+<h1>RangeSlider</h1>
+<div id='summary'>A view consisting of a sliding extendable handle</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QRangeSlider.sc'>QRangeSlider.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/QAbstractStepValue.html">QAbstractStepValue</a> : <a href="../Classes/AbstractStepValue.html">AbstractStepValue</a> : <a href="../Classes/View.html">View</a> : <a href="../Classes/QObject.html">QObject</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/QRangeSlider.html">QRangeSlider</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*qtClass'>qtClass</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Data'>Data</a></li>
+<ul class='toc'><li class='toc3'><a href='#-lo'>lo</a> </li>
+<li class='toc3'><a href='#-hi'>hi</a> </li>
+<li class='toc3'><a href='#-activeLo'>activeLo</a> </li>
+<li class='toc3'><a href='#-activeHi'>activeHi</a> </li>
+<li class='toc3'><a href='#-range'>range</a> </li>
+<li class='toc3'><a href='#-activeRange'>activeRange</a> </li>
+<li class='toc3'><a href='#-setSpan'>setSpan</a> </li>
+<li class='toc3'><a href='#-setSpanActive'>setSpanActive</a> </li>
+<li class='toc3'><a href='#-setDeviation'>setDeviation</a> </li>
+<li class='toc3'><a href='#-increment'>increment</a> </li>
+<li class='toc3'><a href='#-decrement'>decrement</a> </li>
+</ul><li class='toc2'><a href='#Appearance'>Appearance</a></li>
+<ul class='toc'><li class='toc3'><a href='#-orientation'>orientation</a> </li>
+<li class='toc3'><a href='#-knobColor'>knobColor</a> </li>
+</ul><li class='toc2'><a href='#Interaction'>Interaction</a></li>
+<ul class='toc'><li class='toc3'><a href='#-step'>step</a> </li>
+<li class='toc3'><a href='#-pixelStep'>pixelStep</a> </li>
+<li class='toc3'><a href='#-shift_scale'>shift_scale</a> </li>
+<li class='toc3'><a href='#-ctrl_scale'>ctrl_scale</a> </li>
+<li class='toc3'><a href='#-alt_scale'>alt_scale</a> </li>
+</ul><li class='toc2'><a href='#Actions'>Actions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-action'>action</a> </li>
+<li class='toc3'><a href='#-defaultKeyDownAction'>defaultKeyDownAction</a> </li>
+</ul><li class='toc2'><a href='#Drag and drop'>Drag and drop</a></li>
+<ul class='toc'><li class='toc3'><a href='#-defaultGetDrag'>defaultGetDrag</a> </li>
+<li class='toc3'><a href='#-defaultCanReceiveDrag'>defaultCanReceiveDrag</a> </li>
+<li class='toc3'><a href='#-defaultReceiveDrag'>defaultReceiveDrag</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-background'>background</a> </li>
+<li class='toc3'><a href='#-initQRangeSlider'>initQRangeSlider</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#Basic examples'>Basic examples</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Use of setDeviation'>Use of setDeviation</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Sound example'>Sound example</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A view that allows setting two numerical values between 0 and 1, represented by the two ends of a movable and extendable handle. It can have horizontal or vertical orientation, meaning the direction in which the handle moves and extends.
+<p>Clicking and moving the mouse pointer within the view will define the two ends of the range. Doing the same while holding down the Ctrl key will move the whole range without changing its size.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>parent</span>, <span class='argstr'>bounds</span>)</h3>
+<div class='method'>
+<p> When a new RangeSlider is created, its <a href="#-orientation">-orientation</a> is determined by the initial size: if it is wider than high, the orientation will be horizontal, otherwise it will be vertical.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*qtClass' href='./../Overviews/Methods.html#qtClass'>qtClass</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Data'>Data</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lo' href='./../Overviews/Methods.html#lo'>lo</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lo' href='./../Overviews/Methods.html#lo'>lo</a> = <span class='argstr'>aFloat</span></h3>
+<div class='method'>
+<p> The low end of the range.
+<p> If you attempt to set it higher then the current <a href="#-hi">-hi</a>, -hi will be set instead, and -lo will become the old -hi.
+<p> When setting -lo the value will always be clipped to the range between 0 and 1.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float between 0 and 1.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hi' href='./../Overviews/Methods.html#hi'>hi</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hi' href='./../Overviews/Methods.html#hi'>hi</a> = <span class='argstr'>aFloat</span></h3>
+<div class='method'>
+<p> The high end of the range. If you attempt to set it lower then the current <a href="#-lo">-lo</a>, -lo will be set instead, and -hi will become the old -lo.
+<p> When setting -hi the value will always be clipped to the range between 0 and 1.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float between 0 and 1.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-activeLo' href='./../Overviews/Methods.html#activeLo'>activeLo</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-activeLo' href='./../Overviews/Methods.html#activeLo'>activeLo</a> = <span class='argstr'>aFloat</span></h3>
+<div class='method'>
+<p> Sets <a href="#-lo">-lo</a> to the argument and triggers <a href="#-action">-action</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-activeHi' href='./../Overviews/Methods.html#activeHi'>activeHi</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-activeHi' href='./../Overviews/Methods.html#activeHi'>activeHi</a> = <span class='argstr'>aFloat</span></h3>
+<div class='method'>
+<p> Sets <a href="#-hi">-hi</a> to the argument and triggers <a href="#-action">-action</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-range' href='./../Overviews/Methods.html#range'>range</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-range' href='./../Overviews/Methods.html#range'>range</a> = <span class='argstr'>aFloat</span></h3>
+<div class='method'>
+<p> The difference between <a href="#-hi">-hi</a> and <a href="#-lo">-lo</a>. Setting -range will set -hi to -lo + -range.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-activeRange' href='./../Overviews/Methods.html#activeRange'>activeRange</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-activeRange' href='./../Overviews/Methods.html#activeRange'>activeRange</a> = <span class='argstr'>aFloat</span></h3>
+<div class='method'>
+<p> Sets <a href="#-range">-range</a> to the argument and triggers <a href="#-action">-action</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setSpan' href='./../Overviews/Methods.html#setSpan'>setSpan</a> (<span class='argstr'>lo</span>, <span class='argstr'>hi</span>)</h3>
+<div class='method'>
+<p> Sets <a href="#-lo">-lo</a> and <a href="#-hi">-hi</a> to each of the arguments, respectively.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setSpanActive' href='./../Overviews/Methods.html#setSpanActive'>setSpanActive</a> (<span class='argstr'>lo</span>, <span class='argstr'>hi</span>)</h3>
+<div class='method'>
+<p> Calls <a href="#-setSpan">-setSpan</a>, forwarding the arguments, and triggers <a href="#-action">-action</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setDeviation' href='./../Overviews/Methods.html#setDeviation'>setDeviation</a> (<span class='argstr'>deviation</span>, <span class='argstr'>average</span>)</h3>
+<div class='method'>
+<p> Sets <a href="#-lo">-lo</a> and <a href="#-hi">-hi</a> according to their deviation and their average instead of their absolute values.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>deviation<td class='argumentdesc'>
+<p> A Float determining the absolute deviation of -lo and -hi from their average.<tr><td class='argumentname'>average<td class='argumentdesc'>
+<p> A Float determining the average of -lo and -hi.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-increment' href='./../Overviews/Methods.html#increment'>increment</a> (<span class='argstr'>factor: 1</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractStepValue.html'>AbstractStepValue</a></div>
+<div class='method'>
+<p> Increments both <a href="#-lo">-lo</a> and <a href="#-hi">-hi</a> by <a href="#-step">-step</a> multiplied by 'factor'.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>factor<td class='argumentdesc'>
+<p> A Float.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-decrement' href='./../Overviews/Methods.html#decrement'>decrement</a> (<span class='argstr'>factor: 1</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractStepValue.html'>AbstractStepValue</a></div>
+<div class='method'>
+<p> Decrements both <a href="#-lo">-lo</a> and <a href="#-hi">-hi</a> by <a href="#-step">-step</a> multiplied by 'factor'.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>factor<td class='argumentdesc'>
+<p> A Float.</table></div><h3><a class='anchor' name='Appearance'>Appearance</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-orientation' href='./../Overviews/Methods.html#orientation'>orientation</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-orientation' href='./../Overviews/Methods.html#orientation'>orientation</a> = <span class='argstr'>aSymbol</span></h3>
+<div class='method'>
+<p> The orientation of the RangeSlider - the direction in which the handle moves and is extendable. The default value depends on the size of the view when created.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aSymbol<td class='argumentdesc'>
+<p> One of the two Symbols: \horizontal or \vertical.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-knobColor' href='./../Overviews/Methods.html#knobColor'>knobColor</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-knobColor' href='./../Overviews/Methods.html#knobColor'>knobColor</a> = <span class='argstr'>color</span></h3>
+<div class='method'>
+<p> The color of the handle.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>color<td class='argumentdesc'>
+<p> A Color.</table></div><h3><a class='anchor' name='Interaction'>Interaction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-step' href='./../Overviews/Methods.html#step'>step</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-step' href='./../Overviews/Methods.html#step'>step</a> = <span class='argstr'>aFloat</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractStepValue.html'>AbstractStepValue</a></div>
+<div class='method'>
+<p> The amount by which the range will change when <a href="#-increment">-increment</a> or <a href="#-decrement">-decrement</a> is called, or when related keys are pressed.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pixelStep' href='./../Overviews/Methods.html#pixelStep'>pixelStep</a> </h3>
+<div class='method'>
+<p> The absolute amount by which the range would change if the handle moved by one pixel.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Float.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-shift_scale' href='./../Overviews/Methods.html#shift_scale'>shift_scale</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-shift_scale' href='./../Overviews/Methods.html#shift_scale'>shift_scale</a> = <span class='argstr'>aFloat</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractStepValue.html'>AbstractStepValue</a></div>
+<div class='method'>
+<p> The factor by which <a href="#-step">-step</a> is multiplied when incrementing or decrementing the range by keyboard while the Shift key is pressed.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ctrl_scale' href='./../Overviews/Methods.html#ctrl_scale'>ctrl_scale</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ctrl_scale' href='./../Overviews/Methods.html#ctrl_scale'>ctrl_scale</a> = <span class='argstr'>aFloat</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractStepValue.html'>AbstractStepValue</a></div>
+<div class='method'>
+<p> The factor by which <a href="#-step">-step</a> is multiplied when incrementing or decrementing the range by keyboard while the Ctrl key is pressed.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-alt_scale' href='./../Overviews/Methods.html#alt_scale'>alt_scale</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-alt_scale' href='./../Overviews/Methods.html#alt_scale'>alt_scale</a> = <span class='argstr'>aFloat</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractStepValue.html'>AbstractStepValue</a></div>
+<div class='method'>
+<p> The factor by which <a href="#-step">-step</a> is multiplied when incrementing or decrementing the range by keyboard while the Alt key is pressed.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float.</table></div><h3><a class='anchor' name='Actions'>Actions</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-action' href='./../Overviews/Methods.html#action'>action</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-action' href='./../Overviews/Methods.html#action'>action</a> = <span class='argstr'>func</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/View.html'>View</a></div>
+<div class='method'>
+<p> The action object evaluated whenever the user changes the position or size of the handle.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultKeyDownAction' href='./../Overviews/Methods.html#defaultKeyDownAction'>defaultKeyDownAction</a> (<span class='argstr'>char</span>, <span class='argstr'>modifiers</span>, <span class='argstr'>unicode</span>, <span class='argstr'>keycode</span>, <span class='argstr'>key</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/View.html'>View</a></div>
+<div class='method'>
+<p> Implements the default effects of key presses as follows:<table>
+<tr><td><strong>Key</strong><td><strong>Effect</strong><tr><td>a<td>lo_(0), hi_(1), and triggers action<tr><td>n<td>lo_(0), hi_(0), and triggers action<tr><td>x<td>lo_(1), hi_(1), and triggers action<tr><td>c<td>lo_(0.5), hi_(0.5), and triggers action<tr><td>up arrow<td>increment<tr><td>down arrow<td>decrement<tr><td>right arrow<td>increment<tr><td>left arrow<td>decrement</table>
+</div><h3><a class='anchor' name='Drag and drop'>Drag and drop</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultGetDrag' href='./../Overviews/Methods.html#defaultGetDrag'>defaultGetDrag</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Point of which the x and y coordinates are set to <a href="#-lo">-lo</a> and <a href="#-hi">-hi</a>, respectively.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultCanReceiveDrag' href='./../Overviews/Methods.html#defaultCanReceiveDrag'>defaultCanReceiveDrag</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>True if the current drag data is a Point.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultReceiveDrag' href='./../Overviews/Methods.html#defaultReceiveDrag'>defaultReceiveDrag</a> </h3>
+<div class='method'>
+<p> Sets <a href="#-lo">-lo</a> and <a href="#-hi">-hi</a> to the two coordinates of the Point stored as the current drag data, respectively, and triggers the <a href="#-action">-action</a>.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-background' href='./../Overviews/Methods.html#background'>background</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-background' href='./../Overviews/Methods.html#background'>background</a> = <span class='argstr'>color</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-initQRangeSlider' href='./../Overviews/Methods.html#initQRangeSlider'>initQRangeSlider</a> (<span class='argstr'>bounds</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<h3><a class='anchor' name='Basic examples'>Basic examples</a></h3>
+<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+a = RangeSlider(w, Rect(20, 80, 120, 30))
+    .lo_(0.2)
+    .range_(0.4)
+    .action_({ |slider|
+        [\sliderLOW, slider.lo, \sliderHI, slider.hi].postln;
+    });
+)</pre>
+<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+a = RangeSlider(w, Rect(20, 80, 120, 30))
+    .lo_(0.2)
+    .hi_(0.8)
+    .action_({ |slider|
+        b.activeLo_(slider.lo); // this will trigger the action of b (and set it's value)
+        b.hi_(slider.hi);
+    });
+b = RangeSlider(w, Rect(220, 80, 20, 130))
+    .lo_(0.2)
+    .hi_(0.8)
+    .knobColor_(HiliteGradient(Color.grey, Color.white,\h))
+    .action_({ |slider|
+        [\sliderLOW, slider.lo, \sliderHI, slider.hi].postln;
+    });
+
+)</pre>
+<h3><a class='anchor' name='Use of setDeviation'>Use of setDeviation</a></h3>
+<pre class='code prettyprint lang-sc'>(
+
+w = Window("setDeviation", Rect(300, 300, 300, 150));
+a = RangeSlider(w, Rect(10, 10, 200, 30))
+    .lo_(0)
+    .hi_(1);
+b = Slider(w, Rect(10, 50, 200, 30))
+    .action_(
+        {   arg me;
+            a.setDeviation(c.value, b.value);
+        });
+c = Slider(w, Rect(10, 100, 200, 30))
+    .action_(
+        {   arg me;
+            a.setDeviation(c.value, b.value);
+        }
+    );
+c.valueAction = 0.2;
+w.front;
+)</pre>
+<h3><a class='anchor' name='Sound example'>Sound example</a></h3>
+
+<p>Shape a bandpass filter.
+<p>In Cocoa GUI, hold down the Ctrl key to move the whole range; in other GUI kits you can simply click within the range and drag it.<pre class='code prettyprint lang-sc'>(
+s.waitForBoot({
+    a={arg freq=1800, bw=0.2;
+            var r;
+            BBandPass.ar(WhiteNoise.ar(0.3), freq, bw);
+
+            }.play;
+
+    w = Window("2DSlider", Rect(100,Window.screenBounds.height-400, 400 ,50));
+    t = RangeSlider(w, Rect(10, 10, 380, 30))
+            .lo_(0.4)
+            .hi_(0.6)
+            .action_({|sl|
+                a.set(\freq,1800*(sl.lo+sl.lo)+10,\bw, (sl.hi-sl.lo).abs+0.01);
+            });
+    t.doAction;
+
+    w.front;
+    CmdPeriod.doOnce({w.close});
+})
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/RangeSlider.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/RangeSlider.schelp</a><br>link::Classes/RangeSlider::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,95 @@
+<html><head><title>GravityGrid</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Generators>Chaotic'>UGens>Generators>Chaotic</a></div>
+<h1>GravityGrid</h1>
+<div id='summary'>dynamical system simulation (Newtonian gravitational force)</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/SLUGens/classes/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/SLUGens/classes/SLUGens.sc'>SLUGens.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/GravityGrid2.html">GravityGrid2</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div>
+<p>//SLUGens released under the GNU GPL as extensions for SuperCollider 3, by Nick Collins, <a href="http://composerprogrammer.com/index.html">http://composerprogrammer.com/index.html</a><a class='anchor' name='kw_SLUGens'>&nbsp;</a><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Eight fixed masses around a boundary apply Newtonian gravitational force dynamics to a central moving mass which cannot escape the [-1, 1] grid in x or y. The position of the moving mass is sonified as an oscillator by its distance from the centre. 
+<p>This is a relatively expensive oscillator to run. 
+<p>Note: This original GravityGrid contains an erroneous folding function, and gravity which is more attractive as the distance increases! Which however, adds interesting distortions to the sound. See GravityGrid2 for a cleaned up version. This one is retained for backwards compatibility. <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>reset: 0</span>, <span class='argstr'>rate: 0.1</span>, <span class='argstr'>newx: 0</span>, <span class='argstr'>newy: 0</span>, <span class='argstr'>bufnum</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>reset<td class='argumentdesc'>
+<p>Restart the moving mass at a random position within the square (k-rate input)<tr><td class='argumentname'>rate<td class='argumentdesc'>
+<p>amount of position update per sample (k-rate)<tr><td class='argumentname'>newx<td class='argumentdesc'>
+<p>kr input to be sampled for new x positions for the moving mass on reset<tr><td class='argumentname'>newy<td class='argumentdesc'>
+<p>kr input to be sampled for new y positions for the moving mass on reset<tr><td class='argumentname'>bufnum<td class='argumentdesc'>
+<p>Bufnum for a buffer containing weights for the different outer masses indexed as 0-3 and 5-8 and central moving mass 4. Passing -1 means that the weights are not used (are flat). </table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>//GravityGrid comes out with some interesting noisy sounds- WARNING, loud, aliasing! You'll probably want to filter the outputs, maybe with RLPF, Slew et al.
+
+
+{Pan2.ar(0.05*GravityGrid.ar(Impulse.kr(2),MouseX.kr(0.1,10,'exponential'),LFNoise0.kr(2,0.8),LFNoise0.kr(2,0.8)),0.0)}.play
+
+
+{Pan2.ar(0.5*GravityGrid.ar(Impulse.kr(1),SinOsc.kr(0.5,0.0,0.8,1.0),LFSaw.kr(50),LFNoise0.kr(10,0.8)),0.0)}.play
+
+//rhythmic violence
+{0.1*GravityGrid.ar(Impulse.kr(LFNoise0.kr([0.25,0.231],90,100)),[100.2,10.5], LFNoise0.kr(10,0.8),LFNoise0.kr(10,0.8))}.play
+
+
+//noisy
+{Pan2.ar(Resonz.ar(GravityGrid.ar(Impulse.kr(50),0.01,LFNoise0.kr(1,4),LFNoise0.kr(1,4)),1000,0.1),0.0)}.play
+
+//48k spectrum looping
+{Pan2.ar(Resonz.ar(GravityGrid.ar(Impulse.kr(5),0.01,LFNoise0.kr(1,4),LFNoise0.kr(1,4)),1000,0.1),0.0)}.play
+
+
+b = Buffer.alloc(s, 9, 1); //weights buffer
+
+b.setn(0,Array.rand(9,0.1,0.9)); //set weights
+
+{Pan2.ar(0.1*GravityGrid.ar(Impulse.kr(1),MouseX.kr(0.1,1,'exponential'),LFNoise0.kr(1,0.8),LFNoise0.kr(1,0.8), b.bufnum),0.0)}.play
+
+b.setn(0,Array.rand(9,0.1,0.9)); //change weights to new random values
+
+b.setn(0,[0.1,1,0.1,2,0.1,3,0.1,4,0.1]); //change weights to new specific values
+
+
+{0.1*Resonz.ar(GravityGrid.ar(Impulse.kr(LFNoise0.kr([0.2,0.3],70,80)),[11.2,12.5], LFNoise0.kr(5.4,0.4),LFNoise0.kr(10,0.8), b.bufnum),SinOsc.ar(0.03,0,300,500),SinOsc.ar(0.03,0,0.3,0.4))}.play
+
+b.setn(0,[0.1,0,0.3,4,0.1,4,0.3,0,0.1]); 
+
+b.setn(0,[4.1,0,6.3,4,0.1,4,0.3,0,7.1]); 
+
+
+{0.05*GravityGrid.ar(Impulse.kr([2,4.1]),1, SinOsc.kr(1,pi,0.9), SinOsc.kr(1.9,0,0.9),b.bufnum)}.play
+
+
+//violent
+{Pan2.ar(0.1*GravityGrid.ar(Impulse.ar(0),MouseX.kr(0.01,10,'exponential')))}.play</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/SLUGens/HelpSource/Classes/GravityGrid.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/SLUGens/HelpSource/Classes/GravityGrid.schelp</a><br>link::Classes/GravityGrid::<br>sc version: 3.8dev</div></div></body></html>

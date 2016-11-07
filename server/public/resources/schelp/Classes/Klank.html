@@ -1,0 +1,270 @@
+<html><head><title>Klank</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Generators>Deterministic'>UGens>Generators>Deterministic</a>, <a href='./../Browse.html#UGens>Filters>Linear'>UGens>Filters>Linear</a></div>
+<h1>Klank</h1>
+<div id='summary'>Bank of resonators</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/FSinOsc.sc'>FSinOsc.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/DynKlank.html">DynKlank</a>, <a href="./../Classes/Klang.html">Klang</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Klank is a bank of fixed frequency resonators which can be used to simulate the resonant modes of an object. Each mode is given a ring time, which is the time for the mode to decay by 60 dB.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>specificationsArrayRef</span>, <span class='argstr'>input</span>, <span class='argstr'>freqscale: 1</span>, <span class='argstr'>freqoffset: 0</span>, <span class='argstr'>decayscale: 1</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>specificationsArrayRef<td class='argumentdesc'>
+<p>A <a href="./../Classes/Ref.html">Ref</a> to an <a href="./../Classes/Array.html">Array</a> of three Arrays:<dl>
+<dt>frequencies:<dd>An Array of filter frequencies.<dt>amplitudes:<dd>an Array of filter amplitudes, or nil. If nil, then amplitudes default to 1.0.<dt>ring times:<dd>an Array of 60 dB decay times for the filters.</dl>
+
+<p>All subarrays, if not nil, should have the same length.<tr><td class='argumentname'>input<td class='argumentdesc'>
+<p>The excitation input to the resonant filter bank.<tr><td class='argumentname'>freqscale<td class='argumentdesc'>
+<p>A scale factor multiplied by all frequencies at initialization time.<tr><td class='argumentname'>freqoffset<td class='argumentdesc'>
+<p>An offset added to all frequencies at initialization time.<tr><td class='argumentname'>decayscale<td class='argumentdesc'>
+<p>A scale factor multiplied by all ring times at initialization time.</table><h4>Discussion:</h4>
+
+<p>The parameters in <code class='code prettyprint lang-sc'>specificationsArrayRef</code> can't be changed after it has been started. For a modulatable but less efficient version, see <a href="./../Classes/DynKlank.html">DynKlank</a>.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>{ Klank.ar(`[[800, 1071, 1153, 1723], nil, [1, 1, 1, 1]], Impulse.ar(2, 0, 0.1)) }.play;
+
+{ Klank.ar(`[[800, 1071, 1353, 1723], nil, [1, 1, 1, 1]], Dust.ar(8, 0.1)) }.play;
+
+{ Klank.ar(`[[800, 1071, 1353, 1723], nil, [1, 1, 1, 1]], PinkNoise.ar(0.007)) }.play;
+
+{ Klank.ar(`[[200, 671, 1153, 1723], nil, [1, 1, 1, 1]], PinkNoise.ar([0.007, 0.007])) }.play;
+
+(
+play({
+    Klank.ar(`[
+        Array.rand(12, 800.0, 4000.0),         // frequencies
+        nil,                             // amplitudes (default to 1.0)
+        Array.rand(12, 0.1, 2)                // ring times
+        ], Decay.ar(Impulse.ar(4), 0.03, ClipNoise.ar(0.01)))
+})
+)
+
+// multi channel expansion:
+// an array of specs
+(
+{
+Klank.ar([
+    `[[500, 1078, 1201.5, 1723], nil, [1, 1, 0.5, 0.3]],
+    `[[700, 1071, 1053, 1723], nil, [1, 1, 1, 1]]
+    ], Impulse.ar([2, 2.5], 0, 0.1))
+}.play
+);
+
+// expanding specs
+{ Klank.ar(`[[[800, 6000], 1071, [1153, 8000], 1723], nil, [1, 1, 1, 1]], Impulse.ar([2, 3], 0, 0.1)) }.play;
+
+
+
+// a synth def that has 4 partials
+(
+
+SynthDef(\help_Klank, { arg out=0, i_freq;
+    var klank, n, harm, amp, ring;
+
+    // harmonics
+    harm = \harm.ir(Array.series(4, 1, 1).postln);
+    // amplitudes
+    amp = \amp.ir(Array.fill(4, 0.05));
+    // ring times
+    ring = \ring.ir(Array.fill(4, 1));
+
+    klank = Klank.ar(`[harm, amp, ring], {ClipNoise.ar(0.003)}.dup, i_freq);
+
+    Out.ar(out, klank);
+}).add;
+)
+
+// nothing special yet, just using the default set of harmonics.
+a = Synth(\help_Klank, [\i_freq, 300]);
+b = Synth(\help_Klank, [\i_freq, 400]);
+c = Synth(\help_Klank, [\i_freq, 533.33]);
+d = Synth(\help_Klank, [\i_freq, 711.11]);
+
+a.free;
+b.free;
+c.free;
+d.free;
+
+a = Synth(\help_Klank, [\i_freq, 500, \harm, [4, 1, 3, 5, 7]]);
+a.free;
+
+// set geometric series harmonics
+a = Synth(\help_Klank, [\i_freq, 500, \harm,Array.geom(4, 1, 1.61)]);
+a.free;
+
+// set harmonics, ring times and amplitudes
+(
+a = Synth(\help_Klank, [
+    \i_freq, 500,
+    \harm, [4, 1, 3, 5, 7],
+    \ring, Array.fill(4, 0.1), // set shorter ring time
+    \amp, Array.fill(4, 0.2) // set louder amps
+])
+);
+
+
+
+
+// -- overlap texture
+(
+SynthDef("help-KlankOverlapTexture",
+{|out = 0, freqs = #[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], rings = #[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], atk = 5, sus = 8, rel = 5, pan = 0|
+    var e = EnvGen.kr(Env.linen(atk, sus, rel, 1, 4), doneAction:2);
+    var i = Decay.ar(Impulse.ar(Rand(0.8, 2.2)), 0.03, ClipNoise.ar(0.01));
+    var z = Klank.ar(
+        `[freqs, nil, rings],     // specs
+        i                    // input
+    );
+    Out.ar(out, Pan2.ar(z*e, pan));
+}).add;
+
+r = Routine{
+    var sustain = 8, transition = 3, overlap = 4;
+    var period = transition * 2 + sustain / overlap;
+    0.5.wait;            // wait for the synthdef to be sent to the server
+    inf.do{
+        Synth("help-KlankOverlapTexture", [
+            \atk, transition,
+            \sus, sustain,
+            \rel, transition,
+            \pan, 1.0.rand2,
+            \freqs, {200.0.rrand(4000)}.dup(12),
+            \rings, {0.1.rrand(2)}.dup(12)
+        ]);
+        period.wait;
+    }
+};
+r.play;
+)
+
+r.stop;    // stop spawning new synths
+
+
+
+// -- frequency and decay scaling
+(
+SynthDef("help-KlankScaling", {|out = 0, freq = 0, rings = #[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], pan = 0|
+    var e = EnvGen.kr(Env(#[1, 1, 0], #[0.4, 0.01]), doneAction:2);
+    var i = Decay.ar(Impulse.ar(0), 0.03, ClipNoise.ar(0.01));
+    var z = Klank.ar(
+        `[(1..12), nil, rings],                 // specs (partials, amplitudes, ringtimes)
+        i,                             // input
+        freq,                             // scale to this frequency
+        0,                             // frequency offset
+        MouseX.kr(0.2, 3)                // scale decay times
+    );
+    Out.ar(out, Pan2.ar(z*e, pan));
+}).add;
+
+r = Routine{
+    var sustain = 8, transition = 3;
+    var mode = #[0, 2, 4, 5, 7, 9, 11, 12, 14, 16, 17, 19, 21, 23, 24];
+    0.5.wait;            // wait for the synthdef to be sent to the server
+    inf.do{|i|
+        Synth("help-KlankScaling", [
+            \freq, (72 + (mode @@ i)).midicps,
+            \rings, {0.1.rrand(2)}.dup(12)
+        ]);
+        0.2.wait;
+    }
+};
+r.play;
+)
+
+r.stop;
+
+
+// -- overlap texture 2
+(
+SynthDef("help-KlankOverlapTexture2",
+{|out = 0, freqs = #[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], rings = #[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], atk = 5, sus = 8, rel = 5, pan = 0|
+    var e = EnvGen.kr(Env.linen(atk, sus, rel, 1, 4), doneAction:2);
+    var i = BrownNoise.ar(0.0012);
+    var z = Klank.ar(
+        `[freqs, nil, rings],     // specs
+        i                    // input
+    );
+    Out.ar(out, Pan2.ar(z*e, pan));
+}).add;
+
+r = Routine{
+    var sustain = 6, transition = 4, overlap = 5;
+    var period = transition*2+sustain/overlap;
+    0.5.wait;            // wait for the synthdef to be sent to the server
+    inf.do {
+        Synth("help-KlankOverlapTexture2", [
+            \atk, transition,
+            \sus, sustain,
+            \rel, transition,
+            \pan, 1.0.rand2,
+            \freqs, {6000.0.linrand+80}.dup(12),
+            \rings, {0.1.rrand(3)}.dup(12)
+        ]);
+        period.wait;
+    }
+};
+r.play;
+)
+
+r.stop;
+
+
+// -- overlap texture 3
+(
+SynthDef("help-KlankOverlapTexture3",
+{|out = 0, freqs = #[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], rings = #[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], pan = 0|
+    var e = EnvGen.kr(Env(#[1, 1, 0], #[18, 3]), doneAction:2);
+    var i = Decay.ar(Impulse.ar(Rand(0.2, 0.6)), 0.8, ClipNoise.ar(0.001));
+    var z = Klank.ar(
+        `[freqs, 2, rings],     // specs
+        i                    // input
+    );
+    Out.ar(out, Pan2.ar(z*e, pan));
+}).add;
+
+r = Routine{
+    0.5.wait;            // wait for the synthdef to be sent to the server
+    inf.do {
+        Synth("help-KlankOverlapTexture3", [
+            \pan, 1.0.rand2,
+            \freqs, {12000.0.linrand+80}.dup(12),
+            \rings, {3.rrand(10)}.dup(12)
+        ]);
+        3.wait;
+    }
+};
+r.play;
+)
+
+r.stop;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Klank.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Klank.schelp</a><br>link::Classes/Klank::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,61 @@
+<html><head><title>Modifier Keys</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider REFERENCE</div>
+<div id='categories'><a href='./../Browse.html#GUI'>GUI</a>, <a href='./../Browse.html#Platform>OSX'>Platform>OSX</a></div>
+<h1>Modifier Keys</h1>
+<div id='summary'>OSX Modifier key reference</div>
+</div>
+<div class='subheader'>
+</div>
+<div id='toc'>
+<ul class='toc'></ul></div><div class='note'><span class='notelabel'>NOTE:</span> This document might be outdated..</div>
+<p>An integer bit field indicating the modifier keys in effect. You can examine individual flag settings using the C bitwise AND operator.<table>
+<tr><td>65536 NSAlphaShiftKeyMask<td>Set if Caps Lock key is pressed.<tr><td>131072 NSShiftKeyMask<td>Set if Shift key is pressed.<tr><td>262144 NSControlKeyMask<td>Set if Control key is pressed.<tr><td>524288 NSAlternateKeyMask<td>Set if Option or Alternate key is pressed.<tr><td>1048576 NSCommandKeyMask<td>Set if Command key is pressed.<tr><td>2097152 NSNumericPadKeyMask<td>Set if any key in the numeric keypad is pressed. The numeric keypad is generally on the right side of the keyboard.<tr><td>4194304 NSHelpKeyMask<td>Set if the Help key is pressed.<tr><td>8388608 NSFunctionKeyMask<td>Set if any function key is pressed. The function keys include the F keys at the top of most keyboards (F1, F2, and so on) and the navigation keys in the center of most keyboards (Help, Forward Delete, Home, End, Page Up, Page Down, and the arrow keys).<tr><td>Arrow keys<td>Arrow keys have an extra modifier value of 10485760 so for a shift arrow key do a bitwise 'or' with the shift mask: <code class='code prettyprint lang-sc'>10485760 | 131072 = 10616832 // this is the mask for shift arrow key</code></table>
+
+<p>Three usage examples, direct and with helper methods <code class='code prettyprint lang-sc'>isCaps</code>, <code class='code prettyprint lang-sc'>isShift</code>, <code class='code prettyprint lang-sc'>isCtrl</code>, <code class='code prettyprint lang-sc'>isAlt</code>, <code class='code prettyprint lang-sc'>isCmd</code>, <code class='code prettyprint lang-sc'>isNumPad</code>, <code class='code prettyprint lang-sc'>isHelp</code>, <code class='code prettyprint lang-sc'>isFun</code>:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front; w.addFlowLayout;
+
+    // direct, using bit field
+Button(w, Rect(0,0,390,50)).states_([["hold shift/alt keys and click"]])
+    .action_ { |but, mod|
+        if (mod &amp; 131072 == 131072) { "shift key was pressed.".postln; };
+        if (mod &amp; 524288 == 524288) { "alt key was pressed.".postln; };
+    };
+
+    // using helper methods
+Button(w, Rect(0,0,390,50)).states_([["hold any mod keys and click"]])
+    .action_ { |but, mod|
+        if(mod.isCaps) { "mod pressed: Caps.".postln };
+        if(mod.isShift) { "mod pressed: Shift.".postln };
+        if(mod.isCtrl) { "mod pressed: Ctrl.".postln };
+        if(mod.isAlt) { "mod pressed: Alt.".postln };
+        if(mod.isNumPad) { "mod pressed: NumPad.".postln };
+        if(mod.isHelp) { "mod pressed: Help.".postln };
+        if(mod.isFun) { "mod pressed: Fun.".postln };
+    };
+
+    // collecting all modifiers
+Button(w, Rect(0,0,390,50)).states_([["hold any mod keys and click"]])
+    .action_ { |but, mod|
+        var pressed;
+        #[\isCaps, \isShift, \isCtrl, \isAlt, \isCmd, \isNumPad, \isHelp, \isFun].do { |x|
+            if(mod.perform(x)) { pressed = pressed.add(x) }
+        };
+        pressed.postln;
+    };
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/Modifiers.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/Modifiers.schelp</a><br>link::Reference/Modifiers::<br>sc version: 3.8dev</div></div></body></html>

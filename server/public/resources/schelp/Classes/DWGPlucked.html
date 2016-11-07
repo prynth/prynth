@@ -1,0 +1,83 @@
+<html><head><title>DWGPlucked</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>PhysicalModels'>UGens>PhysicalModels</a></div>
+<h1>DWGPlucked</h1>
+<div id='summary'>Plucked physical model.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/DWGUGens/classes/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/DWGUGens/classes/DWGPlucked.sc'>DWGPlucked.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Digital wave guide physical model of a plucked instrument.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>freq: 440</span>, <span class='argstr'>amp: 0.5</span>, <span class='argstr'>gate: 1</span>, <span class='argstr'>pos: 0.14</span>, <span class='argstr'>c1: 1</span>, <span class='argstr'>c3: 30</span>, <span class='argstr'>inp: 0</span>, <span class='argstr'>release: 0.1</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>freq<td class='argumentdesc'>
+<p>Sound frequency.<tr><td class='argumentname'>amp<td class='argumentdesc'>
+<p>Key pulsation strenght. Betwen 0 and 1.<tr><td class='argumentname'>gate<td class='argumentdesc'>
+<p>Releases synth when value changes from &gt;0 to 0.<tr><td class='argumentname'>pos<td class='argumentdesc'>
+<p>Relative pluck position from 0 to 1.<tr><td class='argumentname'>c1<td class='argumentdesc'>
+<p>Inverse of DC decay time.<tr><td class='argumentname'>c3<td class='argumentdesc'>
+<p>Hight frequency loss factor.<tr><td class='argumentname'>inp<td class='argumentdesc'>
+<p>Plucking signal. Could be first part of plucked sample for doing conmuted synthesis.<tr><td class='argumentname'>release<td class='argumentdesc'>
+<p>Release time in seconds.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>//Define pluck synthdef
+(
+SynthDef(\help_dwgplucked, { |out=0, freq=440, amp=0.5, gate=1, c3=20, pan=0|
+    var env = Env.new([0,1, 1, 0],[0.001,0.006, 0.0005],[5,-5, -8]);
+    var inp = amp * LFClipNoise.ar(2000) * EnvGen.ar(env,gate);
+    var son = DWGPlucked.ar(freq, amp, gate,0.1,1,c3,inp);
+    DetectSilence.ar(son, 0.001, doneAction:2);
+    Out.ar(out, Pan2.ar(son * 0.1, pan));
+}).add;
+)
+
+//Use it.
+(
+a = Scale.new(
+    #[0, 1, 3, 5, 7, 8, 10],
+    12,
+    Tuning.new([0, 0.75, 2, 3.5, 4, 5, 6, 7, 8, 9, 10, 11]),
+    "Custom"
+);
+
+Pbind(
+    \instrument, \help_dwgplucked,
+    \scale ,a,
+    \delta , Pseq([1,0.5,0.5,0.5,0.5,0.5,0.5,1,0.5,0.5,1,1]*0.25,inf),
+    \dur , 2,
+    \degree, Pseq([1,8,8,8,8,8,8,-6,Prand([9,10,11],1),1,7,8]-8, inf),
+    \amp , Pwhite(0.2,0.8),
+    \c3 , Pseq([Pseq([1400],24),Pseq([300],24)],inf),
+    \pan , Pwhite(-1,1),
+).play;
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/DWGUGens/HelpSource/Classes/DWGPlucked.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/DWGUGens/HelpSource/Classes/DWGPlucked.schelp</a><br>link::Classes/DWGPlucked::<br>sc version: 3.8dev</div></div></body></html>

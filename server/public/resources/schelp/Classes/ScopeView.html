@@ -1,0 +1,253 @@
+<html><head><title>ScopeView</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Views'>GUI>Views</a></div>
+<h1>ScopeView</h1>
+<div id='summary'>A buffer plotting view.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/ScopeView.sc'>ScopeView.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/View.html">View</a> : <a href="../Classes/QObject.html">QObject</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/QScope2.html">QScope2</a>, <a href="../Classes/Scope2.html">Scope2</a></div>
+<div id='related'>See also: <a href="./../Classes/Stethoscope.html">Stethoscope</a>, <a href="./../Classes/FreqScopeView.html">FreqScopeView</a>, <a href="./../Classes/FreqScope.html">FreqScope</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*qtClass'>qtClass</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-bufnum'>bufnum</a> </li>
+<li class='toc3'><a href='#-style'>style</a> </li>
+<li class='toc3'><a href='#-xZoom'>xZoom</a> </li>
+<li class='toc3'><a href='#-yZoom'>yZoom</a> </li>
+<li class='toc3'><a href='#-x'>x</a> </li>
+<li class='toc3'><a href='#-y'>y</a> </li>
+<li class='toc3'><a href='#-fill'>fill</a> </li>
+<li class='toc3'><a href='#-waveColors'>waveColors</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-server'>server</a> </li>
+<li class='toc3'><a href='#-start'>start</a> </li>
+<li class='toc3'><a href='#-stop'>stop</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#A step-by-step example'>A step-by-step example</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#An interactive example with sound'>An interactive example with sound</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>ScopeView is mainly intended to support the implementation of <a href="./../Classes/Stethoscope.html">Stethoscope</a> (an oscilloscope), <a href="./../Classes/FreqScopeView.html">FreqScopeView</a> (a basic frequency spectrum plotting view) and <a href="./../Classes/FreqScope.html">FreqScope</a> (a frequency spectrum analyzer tool).
+<p>It is optimized to efficiently perform frequent plotting of the contents of a <a href="./../Classes/Buffer.html">Buffer</a> into which a <a href="./../Classes/ScopeOut.html">ScopeOut</a> UGen is writing. It will periodically poll the buffer for data and update the plot, as long as the ScopeOut UGen is writing into it; the buffer will not be plotted otherwise.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*qtClass' href='./../Overviews/Methods.html#qtClass'>qtClass</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bufnum' href='./../Overviews/Methods.html#bufnum'>bufnum</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bufnum' href='./../Overviews/Methods.html#bufnum'>bufnum</a> = <span class='argstr'>buf</span></h3>
+<div class='method'>
+<p> The number of the Buffer to plot.
+<p> As soon as a valid buffer number is set and a <a href="./../Classes/ScopeOut.html">ScopeOut</a> UGen is writing into it, the view starts periodically plotting the buffer. If the ScopeOut UGen stops writing, or an invalid buffer number is set, the plotting will pause.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>buf<td class='argumentdesc'>
+<p> An integer.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-style' href='./../Overviews/Methods.html#style'>style</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-style' href='./../Overviews/Methods.html#style'>style</a> = <span class='argstr'>value</span></h3>
+<div class='method'>
+<p> The plotting style:<ul>
+<li>0 = the channels are vertically spaced<li>1 = the channels are overlayed<li>2 = lissajou; the first two channels are used for 2D plotting (as streams of x and y coordinates).</ul>
+<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>value<td class='argumentdesc'>
+<p> One of the above Integers.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-xZoom' href='./../Overviews/Methods.html#xZoom'>xZoom</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-xZoom' href='./../Overviews/Methods.html#xZoom'>xZoom</a> = <span class='argstr'>aFloat</span></h3>
+<div class='method'>
+<p> The scaling factor on the horizontal axis.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-yZoom' href='./../Overviews/Methods.html#yZoom'>yZoom</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-yZoom' href='./../Overviews/Methods.html#yZoom'>yZoom</a> = <span class='argstr'>aFloat</span></h3>
+<div class='method'>
+<p> The scaling factor on the vertical axis.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-x' href='./../Overviews/Methods.html#x'>x</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-x' href='./../Overviews/Methods.html#x'>x</a> = <span class='argstr'>aFloat</span></h3>
+<div class='method'>
+<p> The horizontal offset.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-y' href='./../Overviews/Methods.html#y'>y</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-y' href='./../Overviews/Methods.html#y'>y</a> = <span class='argstr'>aFloat</span></h3>
+<div class='method'>
+<p> The vertical offset.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFloat<td class='argumentdesc'>
+<p> A Float.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fill' href='./../Overviews/Methods.html#fill'>fill</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fill' href='./../Overviews/Methods.html#fill'>fill</a> = <span class='argstr'>aFill</span></h3>
+<div class='method'>
+<p> Fill area under scope.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFill<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-waveColors' href='./../Overviews/Methods.html#waveColors'>waveColors</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-waveColors' href='./../Overviews/Methods.html#waveColors'>waveColors</a> = <span class='argstr'>aColorArray</span></h3>
+<div class='method'>
+<p> The colors used to plot each of the channels.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColorArray<td class='argumentdesc'>
+<p> An Array of Colors, one per channel.</table></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-server' href='./../Overviews/Methods.html#server'>server</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-server' href='./../Overviews/Methods.html#server'>server</a> = <span class='argstr'>server</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-start' href='./../Overviews/Methods.html#start'>start</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-stop' href='./../Overviews/Methods.html#stop'>stop</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<h3><a class='anchor' name='A step-by-step example'>A step-by-step example</a></h3>
+<pre class='code prettyprint lang-sc'>// execute these in succession
+(
+s.boot;
+)
+(
+f = Buffer.alloc(s,1024,2);
+b = Bus.audio(s,1);
+
+w=Window.new.front;
+c = ScopeView(w.view,w.view.bounds.insetAll(10,10,10,10));
+c.bufnum = f.bufnum;
+)
+(
+// listening to the bus, using ScopeOut to write it to the buffer
+a=SynthDef("monoscope", { arg bus, bufnum;
+                var z;
+                z = In.ar(bus,2);
+                // ScopeOut writes the audio to the buffer
+                ScopeOut.ar(z, bufnum);
+            }).play(
+                RootNode(s),
+                [\bus,b.index, \bufnum, f.bufnum] ,
+                \addToTail // make sure it goes after what you are scoping
+            );
+
+// making noise onto the buffer
+d=SynthDef("noise", { arg bus;
+                var z;
+                z = LFSaw.ar(SinOsc.kr(0.1).range(300,1000),[0,1]*pi) * 0.1;
+                Out.ar(bus, z);
+            }).play(
+                s,
+                [\bus,b.index]
+            );
+)
+
+c.style = 0 // vertically spaced
+c.style = 1 // overlapped
+c.style = 2 // x/y
+
+(
+//remember to free your stuff when finished
+a.free;
+d.free;
+f.free;
+b.free;
+w.close;
+)</pre>
+<h3><a class='anchor' name='An interactive example with sound'>An interactive example with sound</a></h3>
+
+<p>This explains all the options:<pre class='code prettyprint lang-sc'>(
+s.waitForBoot(
+{
+
+    var func, sdef1, sdef2, syn1, syn2,startButton ;
+    f = Buffer.alloc(s,1024,2);
+    b = Bus.audio(s,1);
+
+    w=Window("Scope", Rect(150, Window.screenBounds.height-500,790,400)).front;
+    c = ScopeView(w,Rect(10,10,380,380)); // this is SCScope
+    c.bufnum = f.bufnum;
+
+    // IMPORTANT
+    c.server_(s);
+
+    v=CompositeView(w,Rect(400,10,380,380)).background_(Color.rand(0.7));
+    v.decorator = n = FlowLayout(v.bounds, margin: 0@0, gap: 5@5);
+
+    a = StaticText(v, Rect(20, 70, 90, 20)).string_(" xZoom = 1").background_(Color.rand);
+    m = Slider(v, Rect(20, 60, 285, 20)).background_(a.background).action_({func.value}).value_(0.5);
+    d = StaticText(v, Rect(20, 70, 90, 20)).string_(" yZoom = 1").background_(Color.rand);
+    g = Slider(v, Rect(20, 60, 285, 20)).background_(d.background).action_({func.value}).value_(0.5);
+
+    h = StaticText(v, Rect(20, 70, 90, 20)).string_(" x = 0").background_(Color.rand);
+    i = Slider(v, Rect(20, 60, 285, 20)).background_(h.background).action_({func.value}).value_(0.5);
+
+    Button(v, Rect(0,0,380, 20))
+        .states_([["waveColors = [ Color.rand, ... ]",Color.black,Color.rand]])
+        .action_({c.waveColors = [Color.rand,Color.rand]});
+
+    Button(v, Rect(0,0,380, 20))
+        .states_([[" background = Color.rand(0.1,0.3) ",Color.black,Color.rand]])
+        .action_({c.background = Color.rand(0.1,0.3) });
+
+    t= Button(v, Rect(0,0,380, 20))
+        .states_([["Current style is 0",Color.black,Color.rand],
+            ["Current style is 1",Color.black,Color.rand],
+            ["Current style is 2",Color.black,Color.rand]])
+        .action_({func.value});
+
+    func={
+        c.xZoom = ([0.25, 10, \exp, 1/8, 1].asSpec.map(m.value)); a.string = " xZoom = %".format(c.xZoom);
+        c.yZoom = ([0.25, 10, \exp, 1/8, 1].asSpec.map(g.value)); d.string = " yZoom = %".format(c.yZoom);
+        c.x = ([ -1024,1024, \linear, 1/8, 1].asSpec.map(i.value)); h.string = " x = %".format(c.x);
+        c.style=t.value
+        };
+
+    startButton = Button.new(v, Rect(0,0,380, 50))
+        .states_([["Start Sound",Color.black,Color.green],["Stop Sound",Color.black,Color.red]]).action_({});
+
+
+    startButton.action_{
+        (startButton.value==1).if{
+    syn1=SynthDef("test1", { arg bus, bufnum;
+                    var z;
+                    z = In.ar(bus,2);
+                    // ScopeOut writes the audio to the buffer
+                //                     ScopeOut.ar(z, bufnum);
+                // IMPORTANT - ScopeOut2, not ScopeOut
+                    ScopeOut2.ar(z, bufnum);
+                    Out.ar(0,z);
+                }).play(
+                    RootNode(s),
+                    [\bus,b.index, \bufnum, f.bufnum] ,
+                    \addToTail // make sure it goes after what you are scoping
+                );
+
+    // making noise onto the buffer
+    syn2=SynthDef("test2", { arg bus;
+                    var z;
+                    z = PMOsc.ar([300,250],*SinOsc.ar([0.027,0.017])*pi) * 0.1;
+                    Out.ar(bus, z);
+                }).play(s,[\bus,b.index]);
+
+
+
+        }{syn1.free; syn2.free};
+
+    };
+
+    // IMPORTANT
+    c.start;
+
+    w.onClose={syn1.free; syn2.free; b.free; f.free};
+    CmdPeriod.doOnce({w.close});
+})
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/ScopeView.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/ScopeView.schelp</a><br>link::Classes/ScopeView::<br>sc version: 3.8dev</div></div></body></html>

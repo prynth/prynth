@@ -1,0 +1,112 @@
+<html><head><title>LineLayout</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Layout'>GUI>Layout</a></div>
+<h1>LineLayout</h1>
+<div id='summary'>Superclass of layouts that distribute views in a line</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QLayout.sc'>QLayout.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Layout.html">Layout</a> : <a href="../Classes/QObject.html">QObject</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/HLayout.html">HLayout</a>, <a href="../Classes/QLineLayout.html">QLineLayout</a>, <a href="../Classes/VLayout.html">VLayout</a></div>
+<div id='related'>See also: <a href="./../Classes/HLayout.html">HLayout</a>, <a href="./../Classes/VLayout.html">VLayout</a>, <a href="./../Classes/GridLayout.html">GridLayout</a>, <a href="./../Classes/StackLayout.html">StackLayout</a>, <a href="./../Guides/GUI-Layout-Management.html">Layout Management</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Fine tuning'>Fine tuning</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Leaving empty space'>Leaving empty space</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-add'>add</a> </li>
+<li class='toc3'><a href='#-insert'>insert</a> </li>
+<li class='toc3'><a href='#-setStretch'>setStretch</a> </li>
+<li class='toc3'><a href='#-setAlignment'>setAlignment</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>This is an abstract superclass of <a href="./../Classes/HLayout.html">HLayout</a> and <a href="./../Classes/VLayout.html">VLayout</a> which distribute views in a horizontal or vertical line, respectively.<h3><a class='anchor' name='Fine tuning'>Fine tuning</a></h3>
+
+<p>Each item can be assigned a <strong>stretch factor</strong> and an <strong>alignment</strong> flag to fine tune how its size and position are managed. This can be done at layout <a href="#*new">construction</a>, when an item is <a href="#-add">added</a> or <a href="#-insert">inserted</a> or for an already present item with <a href="#-setStretch">-setStretch</a> and <a href="#-setAlignment">-setAlignment</a> methods.
+<p>The <strong>stretch factor</strong> only affects distribution in the direction of the layout (vertical or horizontal). All items have a stretch factor of 0 by default, so only their own preferences will determine space distribution. As soon as an item is assigned a stretch factor higher than 0, the space will be redistributed according to proportions of stretch factors.<h3><a class='anchor' name='Leaving empty space'>Leaving empty space</a></h3>
+
+<p>An empty space with an arbitrary stretch factor may be inserted using nil in place of an item in combination with the stretch factor. Similarily, an empty space of fixed size may be inserted using an integer in place of an item. See <a href="#*new">constructor</a> and <a href="#-add">-add</a> for details.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> ( <span class='argstr'>... items</span>)</h3>
+<div class='method'>
+<p>Create a <a href="./../Classes/HLayout.html">HLayout</a> or a <a href="./../Classes/VLayout.html">VLayout</a> and immediately fill it with items given as arguments. (Note that LineLayout is an abstract class and can not be instantiated, but HLayout and VLayout inherit this constructor).<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>... items<td class='argumentdesc'>
+<p>Each item can be a <strong>view</strong>, a <strong>layout</strong>, <strong>nil</strong> (for stretchable empty space) or an <strong>Integer</strong> (for fixed-size empty space).</table><h4>Discussion:</h4>
+
+<p>You can assign a <strong>stretch factor</strong> and/or <strong>alignment</strong> to an item by wrapping it into an array, followed by pairs of ('stretch', factor) and/or ('align', alignment). 'stretch' and 'align' may be abbreviated with 's' and 'a'. Simplified syntax for placing key-value pairs into an array comes handy (see <a href="./../Reference/Syntax-Shortcuts.html#Creating arrays with key-value pairs">Syntax Shortcuts: Creating arrays with key-value pairs</a>, and the example below). For possible alignment values see <a href="./../Reference/gui_alignments.html">Alignment</a>.
+<p>If the item is a stretchable empty space (nil) alignment will have no effect; if the item is a fixed-size empty space (an Integer), it is unaffected by both the stretch factor and alignment.
+<p>Example:<pre class='code prettyprint lang-sc'>w = Window.new;
+w.layout = VLayout(
+    [Button().states_([["Foo"]]), stretch:1, align:\bottomLeft],
+    20,
+    [TextView().string_("Bar\nBar\nBar\n"), s:3],
+    [nil, s:1]
+);
+w.front;</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-add' href='./../Overviews/Methods.html#add'>add</a> (<span class='argstr'>item</span>, <span class='argstr'>stretch: 0</span>, <span class='argstr'>align</span>)</h3>
+<div class='method'>
+<p>Add an item to the right or the bottom end of the line, for HLayout and VLayout respectively.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>item<td class='argumentdesc'>
+<p>The item can be a <strong>view</strong>, a <strong>layout</strong>, an <strong>Integer</strong> (specifying amount in pixels of empty space) or <strong>nil</strong> (for stretchable empty space).<tr><td class='argumentname'>stretch<td class='argumentdesc'>
+<p>An integer stretch factor.<tr><td class='argumentname'>align<td class='argumentdesc'>
+<p>A symbol expressing the alignment. See <a href="./../Reference/gui_alignments.html">Alignment</a> for possible values.</table><h4>Discussion:</h4>
+
+<p>If the item is a stretchable empty space (nil) the align argument will have no effect; if the item is a fixed-size empty space (an Integer) both stretch and align arguments will have no effect.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-insert' href='./../Overviews/Methods.html#insert'>insert</a> (<span class='argstr'>item</span>, <span class='argstr'>index: 0</span>, <span class='argstr'>stretch: 0</span>, <span class='argstr'>align</span>)</h3>
+<div class='method'>
+<p>Insert an item at a specific position.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>item<td class='argumentdesc'>
+<p>The item can be a <strong>view</strong>, a <strong>layout</strong>, an <strong>Integer</strong> (specifying amount in pixels of empty space) or <strong>nil</strong> (for stretchable empty space).<tr><td class='argumentname'>index<td class='argumentdesc'>
+<p>The integer position among current items at which to insert the new item. If index is smaller than 0 or larger than the current amount of items, the new item will always be added to the end of the line.<tr><td class='argumentname'>stretch<td class='argumentdesc'>
+<p>An integer stretch factor.<tr><td class='argumentname'>align<td class='argumentdesc'>
+<p>A symbol expressing the alignment. See <a href="./../Reference/gui_alignments.html">Alignment</a> for possible values.</table><h4>Discussion:</h4>
+
+<p>If the item is a stretchable empty space (nil) the align argument will have no effect; if the item is a fixed-size empty space (an Integer) both stretch and align arguments will have no effect.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setStretch' href='./../Overviews/Methods.html#setStretch'>setStretch</a> (<span class='argstr'>item</span>, <span class='argstr'>stretch</span>)</h3>
+<div class='method'>
+<p>Set stretch factor of an item contained in the layout.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>item<td class='argumentdesc'>
+<p>A view or layout managed by this layout, or an Integer index of an item.<tr><td class='argumentname'>stretch<td class='argumentdesc'>
+<p>An integer stretch factor.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setAlignment' href='./../Overviews/Methods.html#setAlignment'>setAlignment</a> (<span class='argstr'>item</span>, <span class='argstr'>align</span>)</h3>
+<div class='method'>
+<p>Set alignment of an item contained in the layout.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>item<td class='argumentdesc'>
+<p>A view or a layout managed by this layout, or an Integer index of an item.<tr><td class='argumentname'>align<td class='argumentdesc'>
+<p>A symbol expressing the alignment. See <a href="./../Reference/gui_alignments.html">Alignment</a> for possible values.</table></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>Try resizing the window created by the following code.<pre class='code prettyprint lang-sc'>w = Window.new;
+w.layout = VLayout(
+    TextView().string_("Foo\nBar\nFoo\nBar\nFoo"),
+    HLayout(
+        Button().states_([["Foo"]]),
+        [TextField().string_("Bar"), stretch:1],
+        [TextField().string_("BarBarBar"), stretch:4]
+    )
+);
+w.front;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/LineLayout.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/LineLayout.schelp</a><br>link::Classes/LineLayout::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,80 @@
+<html><head><title>Adverbs for Binary Operators</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider REFERENCE</div>
+<div id='categories'><a href='./../Browse.html#Language'>Language</a>, <a href='./../Browse.html#Collections'>Collections</a></div>
+<h1>Adverbs for Binary Operators</h1>
+<div id='summary'>modify behaviour of binary operators</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Classes/SequenceableCollection.html">SequenceableCollection</a>, <a href="./../Classes/Stream.html">Stream</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Adverbs and SequenceableCollections'>Adverbs and SequenceableCollections</a></li>
+<ul class='toc'><li class='toc2'><a href='#adverb 's''>adverb 's'</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#adverb 'f''>adverb 'f'</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#adverb 't''>adverb 't'</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#adverb 'x''>adverb 'x'</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Adverbs and Streams'>Adverbs and Streams</a></li>
+<ul class='toc'></ul></ul></div>
+<p>Adverbs are a third argument passed to binary operators that modifies how they iterate over <a href="./../Classes/SequenceableCollection.html">SequenceableCollection</a>s or <a href="./../Classes/Stream.html">Stream</a>s. The idea for adverbs is taken from the J programming language which is a successor of APL.<h2><a class='anchor' name='Adverbs and SequenceableCollections'>Adverbs and SequenceableCollections</a></h2>
+
+<p>Normally when you add two arrays like this:<pre class='code prettyprint lang-sc'>[10, 20, 30, 40, 50] + [1, 2, 3]</pre>
+
+<p>You get this result:<pre class='code prettyprint lang-sc'>[ 11, 22, 33, 41, 52 ]</pre>
+
+<p>A new array is created which is the length of the longer array and items from each array are added together by wrapped indexing.
+<p>Using adverbs can change this behavior. Adverbs are symbols and they follow a '.' (dot) after the binary operator. Adverbs can be applied to all binary operators.<h3><a class='anchor' name='adverb 's''>adverb 's'</a></h3>
+
+<p>The first adverb is 's' which means 'short'. The add operation now returns the shorter of the two arrays.<pre class='code prettyprint lang-sc'>[10, 20, 30, 40, 50] +.s [1, 2, 3]</pre>
+
+<p>returns:<pre class='code prettyprint lang-sc'>[ 11, 22, 33 ]</pre>
+<h3><a class='anchor' name='adverb 'f''>adverb 'f'</a></h3>
+
+<p>Another adverb is 'f' which uses folded indexing instead of wrapped:<pre class='code prettyprint lang-sc'>[10, 20, 30, 40, 50] +.f [1, 2, 3]</pre>
+
+<p>returns:<pre class='code prettyprint lang-sc'>[ 11, 22, 33, 42, 51 ]</pre>
+<h3><a class='anchor' name='adverb 't''>adverb 't'</a></h3>
+
+<p>The table adverb 't' makes an array of arrays where each item in the first array is added to the whole second array and the resulting arrays are collected.<pre class='code prettyprint lang-sc'>[10, 20, 30, 40, 50] +.t [1, 2, 3]</pre>
+
+<p>returns:<pre class='code prettyprint lang-sc'>[ [ 11, 12, 13 ], [ 21, 22, 23 ], [ 31, 32, 33 ], [ 41, 42, 43 ], [ 51, 52, 53 ] ]</pre>
+<h3><a class='anchor' name='adverb 'x''>adverb 'x'</a></h3>
+
+<p>The cross adverb 'x' is like table, except that the result is a flat array:<pre class='code prettyprint lang-sc'>[10, 20, 30, 40, 50] +.x [1, 2, 3]</pre>
+
+<p>returns:<pre class='code prettyprint lang-sc'>[ 11, 12, 13, 21, 22, 23, 31, 32, 33, 41, 42, 43, 51, 52, 53 ]</pre>
+<h2><a class='anchor' name='Adverbs and Streams'>Adverbs and Streams</a></h2>
+
+<p>There is currently one adverb defined for streams. This is the cross adverb, 'x'.
+<p>Normally when you add two streams like this:<pre class='code prettyprint lang-sc'>p = (Pseq([10, 20]) + Pseq([1, 2, 3])).asStream;
+Array.fill(3, { p.next });</pre>
+
+<p>you get this:<pre class='code prettyprint lang-sc'>[ 11, 22, nil ]</pre>
+
+<p>The items are paired sequentially and the stream ends when the earliest stream ends.
+<p>The cross adverb allows you to pair each item in the first stream with every item in the second stream.<pre class='code prettyprint lang-sc'>p = (Pseq([10, 20]) +.x Pseq([1, 2, 3])).asStream;
+Array.fill(7, { p.next });</pre>
+
+<p>the result is:<pre class='code prettyprint lang-sc'>[ 11, 12, 13, 21, 22, 23, nil ]</pre>
+
+<p>You can string these together. Every item in the left stream operand is "ornamented" by the right stream operand.<pre class='code prettyprint lang-sc'>p = (Pseq([100, 200]) +.x Pseq([10, 20, 30]) +.x Pseq([1, 2, 3, 4])).asStream;
+Array.fill(25, { p.next });
+
+[ 111, 112, 113, 114, 121, 122, 123, 124, 131, 132, 133, 134,
+  211, 212, 213, 214, 221, 222, 223, 224, 231, 232, 233, 234, nil ]</pre>
+
+<p>Sound example:<pre class='code prettyprint lang-sc'>Pbind(\dur, 0.17, \degree, Pwhite(0, 6) +.x Pseq([[0, 2, 4], 1, [0, 2], 3])).trace.play</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/Adverbs.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/Adverbs.schelp</a><br>link::Reference/Adverbs::<br>sc version: 3.8dev</div></div></body></html>

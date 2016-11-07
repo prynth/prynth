@@ -1,0 +1,83 @@
+<html><head><title>Pitch</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Analysis>Pitch'>UGens>Analysis>Pitch</a></div>
+<h1>Pitch</h1>
+<div id='summary'>Autocorrelation pitch follower</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Trig.sc'>Trig.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>This is a better pitch follower than <a href="./../Classes/ZeroCrossing.html">ZeroCrossing</a>, but more costly of CPU. For most purposes the default settings can be used and only <code class='code prettyprint lang-sc'>in</code> needs to be supplied. Pitch returns two values (via an <a href="./../Classes/Array.html">Array</a> of OutputProxys, see the <a href="./../Classes/OutputProxy.html">OutputProxy</a> help file), a <code class='code prettyprint lang-sc'>freq</code> which is the pitch estimate and <code class='code prettyprint lang-sc'>hasFreq</code>, which tells whether a pitch was found. Some vowels are still problematic, for instance a wide open mouth sound somewhere between a low pitched short 'a' sound as in 'sat', and long 'i' sound as in 'fire', contains enough overtone energy to confuse the algorithm.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>in: 0</span>, <span class='argstr'>initFreq: 440</span>, <span class='argstr'>minFreq: 60</span>, <span class='argstr'>maxFreq: 4000</span>, <span class='argstr'>execFreq: 100</span>, <span class='argstr'>maxBinsPerOctave: 16</span>, <span class='argstr'>median: 1</span>, <span class='argstr'>ampThreshold: 0.01</span>, <span class='argstr'>peakThreshold: 0.5</span>, <span class='argstr'>downSample: 1</span>, <span class='argstr'>clar: 0</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'><tr><td class='argumentname'>initFreq<td class='argumentdesc'><tr><td class='argumentname'>minFreq<td class='argumentdesc'><tr><td class='argumentname'>maxFreq<td class='argumentdesc'><tr><td class='argumentname'>execFreq<td class='argumentdesc'><tr><td class='argumentname'>maxBinsPerOctave<td class='argumentdesc'><tr><td class='argumentname'>median<td class='argumentdesc'><tr><td class='argumentname'>ampThreshold<td class='argumentdesc'><tr><td class='argumentname'>peakThreshold<td class='argumentdesc'><tr><td class='argumentname'>downSample<td class='argumentdesc'><tr><td class='argumentname'>clar<td class='argumentdesc'></table><h4>Discussion:</h4>
+
+<p>The pitch follower executes periodically at the rate specified by <code class='code prettyprint lang-sc'>execFreq</code> in cps. <code class='code prettyprint lang-sc'>execFreq</code> is clipped to be between <code class='code prettyprint lang-sc'>minFreq</code> and <code class='code prettyprint lang-sc'>maxFreq</code>. First it detects whether the input peak to peak amplitude is above the <code class='code prettyprint lang-sc'>ampThreshold</code>. If it is not then no pitch estimation is performed, <code class='code prettyprint lang-sc'>hasFreq</code> is set to zero and <code class='code prettyprint lang-sc'>freq</code> is held at its previous value. It performs an autocorrelation on the input and looks for the first peak after the peak around the lag of zero that is above <code class='code prettyprint lang-sc'>peakThreshold</code> times the amplitude of the peak at lag zero.
+<p>If the <code class='code prettyprint lang-sc'>clar</code> argument is greater than zero (it is zero by default) then <code class='code prettyprint lang-sc'>hasFreq</code> is given additional detail. Rather than simply being 1 when a pitch is detected, it is a "clarity" measure in the range between zero and one. (Technically, it's the height of the autocorrelation peak normalised by the height of the zero-lag peak.) It therefore gives a kind of measure of "purity" of the pitched signal.
+<p>Using a <code class='code prettyprint lang-sc'>peakThreshold</code> of one half does a pretty good job of eliminating overtones, and finding the first peak above that threshold rather than the absolute maximum peak does a good job of eliminating estimates that are actually multiple periods of the wave.
+<p>The autocorrelation is done coarsely at first using a maximum of <code class='code prettyprint lang-sc'>maxBinsPerOctave</code> lags until the peak is located. Then a fine resolution search is performed until the peak is found. (Note that maxBinsPerOctave does NOT affect the final pitch resolution; a fine resolution search is always performed. Setting maxBinsPerOctave larger will cause the coarse search to take longer, and setting it smaller will cause the fine search to take longer.)
+<p>The three values around the peak are used to find a fractional lag value for the pitch. If the pitch frequency is higher than <code class='code prettyprint lang-sc'>maxFreq</code>, or if no peak is found above <code class='code prettyprint lang-sc'>minFreq</code>, then <code class='code prettyprint lang-sc'>hasFreq</code> is set to zero and <code class='code prettyprint lang-sc'>freq</code> is held at its previous value.
+<p>It is possible to put a median filter of length <code class='code prettyprint lang-sc'>median</code> on the output estimation so that outliers and jitter can be eliminated. This will however add latency to the pitch estimation for new pitches, because the median filter will have to become half filled with new values before the new one becomes the median value. If median is set to one then that is equivalent to no filter, which is the default.
+<p>When an in range peak is found, it is inserted into the median filter, a new pitch is read out of the median filter and output as <code class='code prettyprint lang-sc'>freq</code>, and <code class='code prettyprint lang-sc'>hasFreq</code> is set to one.
+<p>It is possible to down sample the input signal by an integer factor <code class='code prettyprint lang-sc'>downSample</code> in order to reduce CPU overhead. This will also reduce the pitch resolution.
+<p>Until Pitch finds a pitch for the first time, it will output <code class='code prettyprint lang-sc'>initFreq</code>.
+<p>None of these settings are time variable.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>(use headphones!)<pre class='code prettyprint lang-sc'>s = Server.local;
+
+(
+SynthDef("pitchFollow1",{
+    var in, amp, freq, hasFreq, out;
+    in = Mix.new(SoundIn.ar([0,1]));
+    amp = Amplitude.kr(in, 0.05, 0.05);
+    # freq, hasFreq = Pitch.kr(in, ampThreshold: 0.02, median: 7);
+    //freq = Lag.kr(freq.cpsmidi.round(1).midicps, 0.05);
+    out = Mix.new(VarSaw.ar(freq * [0.5,1,2], 0, LFNoise1.kr(0.3,0.1,0.1), amp));
+    6.do({
+        out = AllpassN.ar(out, 0.040, [0.040.rand,0.040.rand], 2)
+    });
+    Out.ar(0,out)
+}).play(s);
+)</pre>
+<pre class='code prettyprint lang-sc'>(
+SynthDef("pitchFollow2",{
+    var in, amp, freq, hasFreq, out;
+    in = Mix.new(SoundIn.ar([0,1]));
+    amp = Amplitude.kr(in, 0.05, 0.05);
+    # freq, hasFreq = Pitch.kr(in, ampThreshold: 0.02, median: 7);
+    out = CombC.ar(LPF.ar(in, 1000), 0.1, (2 * freq).reciprocal, -6).distort * 0.05;
+    6.do({
+        out = AllpassN.ar(out, 0.040, [0.040.rand,0.040.rand], 2)
+    });
+    Out.ar(0,out);
+}).play(s);
+)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Pitch.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Pitch.schelp</a><br>link::Classes/Pitch::<br>sc version: 3.8dev</div></div></body></html>

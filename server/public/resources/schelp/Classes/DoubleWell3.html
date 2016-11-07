@@ -1,0 +1,74 @@
+<html><head><title>DoubleWell3</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Generators>Chaotic'>UGens>Generators>Chaotic</a></div>
+<h1>DoubleWell3</h1>
+<div id='summary'>Forced DoubleWell Oscillator</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/SLUGens/classes/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/SLUGens/classes/SLUGens.sc'>SLUGens.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/DoubleWell.html">DoubleWell</a>, <a href="./../Classes/DoubleWell2.html">DoubleWell2</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div>
+<p>//SLUGens released under the GNU GPL as extensions for SuperCollider 3, by Nick Collins, <a href="http://composerprogrammer.com/index.html">http://composerprogrammer.com/index.html</a><a class='anchor' name='kw_SLUGens'>&nbsp;</a><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Runge-Kutta ODE solver implementation of the chaotic Forced Double Well Oscillator (see Strogatz, Steven H. (1994) Nonlinear Dynamics and Chaos. Addison-Wesley, Reading, MA. pp441-7). 
+<p>D2x +delta*Dx-x+x^3 = F
+<p>y = Dx
+<p>All inputs can have .kr rate UGens plugged in. F is itself an arbitrary audio rate UGen input forcing term<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>reset: 0</span>, <span class='argstr'>rate: 0.01</span>, <span class='argstr'>f: 0</span>, <span class='argstr'>delta: 0.25</span>, <span class='argstr'>initx: 0</span>, <span class='argstr'>inity: 0</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>reset<td class='argumentdesc'>
+<p>restart with new initial conditions sampled from initx, inity<tr><td class='argumentname'>rate<td class='argumentdesc'>
+<p>update rate for x and y<tr><td class='argumentname'>f<td class='argumentdesc'>
+<p>forcing term, an arbitrary audio rate input<tr><td class='argumentname'>delta<td class='argumentdesc'>
+<p>equation constant<tr><td class='argumentname'>initx<td class='argumentdesc'>
+<p>reset value for x<tr><td class='argumentname'>inity<td class='argumentdesc'>
+<p>reset value for y</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>//bass synth
+{Out.ar(0,Pan2.ar(DoubleWell3.ar(f:SinOsc.ar(MouseX.kr(0,200),0,MouseY.kr(0.5,4.0))),0.0))}.play
+
+//plotting check of first samples
+{DoubleWell3.ar}.plot(0.05, minval:-1, maxval:1)
+
+//gradually changing 
+{Pan2.ar(DoubleWell3.ar(0,0.05,LFSaw.ar(Line.kr(10,1000,10)),Line.kr(0.0,0.3,20)),0.0)}.play
+
+//controlled - midscreen amplitude jump
+{Pan2.ar(DoubleWell3.ar(0,0.05,LFSaw.ar(MouseX.kr(10,1000)),MouseY.kr(0.0,0.5)),0.0)}.play
+
+
+
+//triggering
+{DoubleWell3.ar(Impulse.kr(MouseY.kr(0.01,100, 'exponential')),0.1,LFCub.ar(MouseX.kr(10,1000, 'exponential')),MouseY.kr(0.0,1.0),LFNoise0.kr(2.3,0.2,0.8),LFNoise1.kr(2.37,0.2,0.8))}.play
+
+
+//AudioIn as forcing
+{Pan2.ar(DoubleWell3.ar(0,0.05,LPF.ar(AudioIn.ar(1),100,MouseX.kr(0,1000)),MouseY.kr(0.0,0.5)),0.0)}.play</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/SLUGens/HelpSource/Classes/DoubleWell3.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/SLUGens/HelpSource/Classes/DoubleWell3.schelp</a><br>link::Classes/DoubleWell3::<br>sc version: 3.8dev</div></div></body></html>

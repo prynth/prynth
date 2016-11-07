@@ -1,0 +1,167 @@
+<html><head><title>Understanding Streams, Patterns and Events - Part 7</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS</div>
+<div id='categories'><a href='./../Browse.html#Tutorials>Streams-Patterns-Events'>Tutorials>Streams-Patterns-Events</a></div>
+<h1>Understanding Streams, Patterns and Events - Part 7</h1>
+<div id='summary'>Practical Considerations</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Tutorials/Streams-Patterns-Events1.html">Understanding Streams, Patterns and Events - Part 1</a>, <a href="./../Tutorials/Streams-Patterns-Events2.html">Understanding Streams, Patterns and Events - Part 2</a>, <a href="./../Tutorials/Streams-Patterns-Events3.html">Understanding Streams, Patterns and Events - Part 3</a>, <a href="./../Tutorials/Streams-Patterns-Events4.html">Understanding Streams, Patterns and Events - Part 4</a>, <a href="./../Tutorials/Streams-Patterns-Events5.html">Understanding Streams, Patterns and Events - Part 5</a>, <a href="./../Tutorials/Streams-Patterns-Events6.html">Understanding Streams, Patterns and Events - Part 6</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Practical Considerations'>Practical Considerations</a></li>
+<ul class='toc'><li class='toc2'><a href='#Using your own ~instrument'>Using your own ~instrument</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Defining your own message bindings'>Defining your own message bindings</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Manipulating an EventStreamPlayer in Realtime'>Manipulating an EventStreamPlayer in Realtime</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Practical Considerations'>Practical Considerations</a></h2>
+<h3><a class='anchor' name='Using your own ~instrument'>Using your own ~instrument</a></h3>
+<pre class='code prettyprint lang-sc'>(
+SynthDef(\help_SPE7_BerlinB, { arg i_out=0, freq = 80, amp = 0.2, pan=0;
+    var out, a, b;
+    amp = Decay2.kr(Impulse.kr(0), 0.05, 8, amp);
+    out = RLPF.ar(
+        LFPulse.ar(freq, 0, SinOsc.kr(0.12,[0,0.5pi],0.48,0.5), amp),
+        freq * SinOsc.kr(0.21,0,4,8),
+        0.07
+    );
+    #a, b = out;
+    DetectSilence.ar(a, 0.0001, doneAction: 2);
+    Out.ar(i_out, Mix.ar(PanAz.ar(4, [a, b], [pan, pan+1])));
+}).add;
+
+SynthDef(\help_SPE7_CFString1, { arg i_out, freq = 360, gate = 1, pan, amp=0.1;
+    var out, eg, fc, osc, a, b, w;
+    fc = LinExp.kr(LFNoise1.kr(Rand(0.25,0.4)), -1,1,500,2000);
+    osc = Mix.fill(8, { LFSaw.ar(freq * [Rand(0.99,1.01),Rand(0.99,1.01)], 0, amp) }).distort * 0.2;
+    eg = EnvGen.kr(Env.asr(1,1,1), gate, doneAction:2);
+    out = eg * RLPF.ar(osc, fc, 0.1);
+    #a, b = out;
+    Out.ar(i_out, Mix.ar(PanAz.ar(4, [a, b], [pan, pan+0.3])));
+}).add;
+)</pre>
+
+<p><a href="./../Classes/Pattern.html#-play">Pattern: -play</a> creates an <a href="./../Classes/EventStreamPlayer.html">EventStreamPlayer</a> for you and also supplies a default protoEvent. If you were using your own event model you would just pass in your own protoEvent to the play method.<pre class='code prettyprint lang-sc'>(
+Pbind(
+    \instrument, Prand([\help_SPE7_BerlinB, \help_SPE7_CFString1],inf),
+    \degree, Pseq([0,1,2,4,6,3,4,8],inf),
+    \dur, 0.8,
+    \octave, 3,
+    \amp, 0.03
+).play; // this returns an EventStreamPlayer
+)</pre>
+<h3><a class='anchor' name='Defining your own message bindings'>Defining your own message bindings</a></h3>
+
+<p>The default event prototype uses a <code class='code prettyprint lang-sc'>msgFunc</code> to determine which bindings to pass to the server. Synthdefs that have been stored in a <a href="./../Classes/SynthDescLib.html">SynthDescLib</a> ("synth description library") construct the <code class='code prettyprint lang-sc'>msgFunc</code> automatically. The default event looks up the instrument name in a SynthDescLib of your choosing (using the <code class='code prettyprint lang-sc'>\synthLib</code> key). Normally only the global SynthDescLib is used; if <code class='code prettyprint lang-sc'>\synthLib</code> is empty, the global library is the default.
+<p>You should not send or load synthdefs that you plan to use with patterns. Instead, store them in a SynthDescLib.<pre class='code prettyprint lang-sc'>// saves .scsyndef file on disk (like .load), and adds description to the global library
+SynthDef(...).store;
+
+// adds description to the global library; no file is saved (like .send)
+SynthDef(...).add;</pre>
+
+<p>If you don't do this, nondefault bindings will be ignored. In that case, you can provide a custom <code class='code prettyprint lang-sc'>msgFunc</code> manually. Here's an example:<pre class='code prettyprint lang-sc'>(
+SynthDef(\help_SPE4_CFString2, { arg i_out, freq = 360, gate = 1, pan, amp=0.1, dorkarg=1;
+    var out, eg, fc, osc, a, b, w;
+    fc = LinExp.kr(LFNoise1.kr(Rand(0.25,0.4)), -1,1,500,2000);
+    osc = Mix.fill(8, { LFSaw.ar(freq * [Rand(0.99,1.01),Rand(0.99,1.01)], 0, amp * dorkarg ) }).distort * 0.2;
+    eg = EnvGen.kr(Env.asr(1,1,1), gate, doneAction:2);
+    out = eg * RLPF.ar(osc, fc, 0.1);
+    #a, b = out;
+    Out.ar(i_out, Mix.ar(PanAz.ar(4, [a, b], [pan, pan+0.3])));
+}).send(s);    // change .send(s) to .add
+)</pre>
+
+<p>As you can see I have added <code class='code prettyprint lang-sc'>dorkarg</code> to the arglist of the SynthDef from earlier.<pre class='code prettyprint lang-sc'>(
+Pbind(
+    \instrument, \help_SPE4_CFString2,
+    \degree, Pseq([0,1,2,4,6,3,4,8],inf),
+    \dur, 0.4,
+    \octave, 3,
+    \amp, 0.03,
+    \dorkarg, Pseq([1,0,1],inf) // silence every second note - doesn't work
+).play;
+)</pre>
+
+<p><code class='code prettyprint lang-sc'>dorkarg</code> is ignored because the SynthDef was not properly <code class='code prettyprint lang-sc'>.add</code>'d and consequently, the event prototype doesn't know that <code class='code prettyprint lang-sc'>dorkarg</code> is important.
+<p>You could also supply a <code class='code prettyprint lang-sc'>\msgFunc</code> that includes <code class='code prettyprint lang-sc'>dorkarg</code> :<pre class='code prettyprint lang-sc'>(
+Pbind(
+    \instrument, \help_SPE4_CFString2,
+    \degree, Pseq([0,1,2,4,6,3,4,8],inf),
+    \dur, 0.4,
+    \octave, 3,
+    \amp, 0.03,
+    \dorkarg, Pseq([1,0,1],inf), // silence every second note - now works
+    \msgFunc, { arg out = 0, freq = 440, amp = 0.1, pan = 0, vol = 1,
+            dorkarg = 1;
+        [\out, out, \freq, freq, \amp, amp, \pan, pan, \vol, vol,
+            \dorkarg, dorkarg];
+    }
+).play;
+)</pre>
+
+<p>But this is quite clumsy. It is strongly recommended to get into the habit of using <code class='code prettyprint lang-sc'>.add</code> for all SynthDefs intended for use with Patterns.
+<p>The other option you have if you will be using unspecified bindings, is of course to define an event with the appropriate <code class='code prettyprint lang-sc'>msgFunc</code> as default. Have a look at Event's source, it's easy, and it's cleaner than passing in the <code class='code prettyprint lang-sc'>msgFunc</code> every time.<h3><a class='anchor' name='Manipulating an EventStreamPlayer in Realtime'>Manipulating an EventStreamPlayer in Realtime</a></h3>
+<pre class='code prettyprint lang-sc'>(
+p = Pbind(
+    \degree, Pwhite(0,12),
+    \dur, 0.2,
+    \instrument, \help_SPE4_CFString2
+);
+// e is an EventStreamPlayer
+e = p.play;
+)
+
+(
+// you can change the stream at any point in time
+e.stream = Pbind(
+    \degree, Pseq([0,1,2,4,6,3,4,8],inf),
+    \dur, Prand([0.2,0.4,0.8],inf),
+    \amp, 0.05,
+    \octave, 5,
+    \instrument, \help_SPE7_BerlinB, // you can also use a symbol
+    \ctranspose, 0
+).asStream;
+)
+
+(
+e.stream = Pbind(
+    [\degree, \dur], Pseq(
+        [
+            Pseq([[0,0.1],[2,0.1],[3,0.1],[4,0.1],[5,0.8]],2),
+            Ptuple([Pxrand([6,7,8,9],4), 0.4]),
+            Ptuple([Pseq([9,8,7,6,5,4,3,2]), 0.2])
+        ], inf
+    ),
+    \amp, 0.05,
+    \octave, 5,
+    \instrument, \Help_SPE7_CFString1
+).asStream;
+)</pre>
+
+<p>The following methods are possible because an <a href="./../Classes/EventStreamPlayer.html">EventStreamPlayer</a> is a <a href="./../Classes/PauseStream.html">PauseStream</a> :<pre class='code prettyprint lang-sc'>e.mute;        // keeps playing, but replaces notes with rests
+
+e.unmute;
+
+e.reset;    // reset the stream.
+
+e.pause;    // will resume where paused.
+
+e.resume;
+
+e.stop;        // will reset before resume.
+
+e.resume;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events7.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events7.schelp</a><br>link::Tutorials/Streams-Patterns-Events7::<br>sc version: 3.8dev</div></div></body></html>

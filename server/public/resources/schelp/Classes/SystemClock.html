@@ -1,0 +1,89 @@
+<html><head><title>SystemClock</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Scheduling>Clocks'>Scheduling>Clocks</a></div>
+<h1>SystemClock</h1>
+<div id='summary'>Clock running on separate accurately timed thread</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Core/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Core/Clock.sc'>Clock.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Clock.html">Clock</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/AppClock.html">AppClock</a>, <a href="./../Classes/TempoClock.html">TempoClock</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*sched'>sched</a> </li>
+<li class='toc3'><a href='#*clear'>clear</a> </li>
+<li class='toc3'><a href='#*schedAbs'>schedAbs</a> </li>
+<li class='toc3'><a href='#*play'>play</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>SystemClock is more accurate than AppClock, but cannot call GUI primitives.
+<p>See <a href="./../Classes/Clock.html">Clock</a> for general explanation of how clocks operate.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*sched' href='./../Overviews/Methods.html#sched'>sched</a> (<span class='argstr'>delta</span>, <span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>The float you return specifies the delta to resched the function for. Returning nil will stop the task from being rescheduled.<pre class='code prettyprint lang-sc'>(
+SystemClock.sched(0.0,{ arg time;
+    time.postln;
+    rrand(0.1,0.9);
+});
+)</pre>
+
+<p><pre class='code prettyprint lang-sc'>(
+SystemClock.sched(2.0,{
+    "2.0 seconds later".postln;
+    nil;
+});
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*clear' href='./../Overviews/Methods.html#clear'>clear</a> </h3>
+<div class='method'>
+<p>Clear the SystemClock's scheduler to stop it.<pre class='code prettyprint lang-sc'>SystemClock.clear;</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*schedAbs' href='./../Overviews/Methods.html#schedAbs'>schedAbs</a> (<span class='argstr'>time</span>, <span class='argstr'>item</span>)</h3>
+<div class='method'><pre class='code prettyprint lang-sc'>(
+SystemClock.schedAbs( (thisThread.seconds + 4.0).round(1.0),{ arg time;
+    ("the time is exactly " ++ time.asString
+        ++ " seconds since starting SuperCollider").postln;
+});
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*play' href='./../Overviews/Methods.html#play'>play</a> (<span class='argstr'>task</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Clock.html'>Clock</a></div>
+<div class='method'>
+<p>Calls to the GUI may not be made directly from actions triggered by SystemClock or incoming socket messages (OSCFunc).
+<p>To get around this, use <code class='code prettyprint lang-sc'>{ }.defer</code>. This will execute the function using the AppClock and is equivalent to <code class='code prettyprint lang-sc'>AppClock.sched(0, function)</code><pre class='code prettyprint lang-sc'>(
+var w, r;
+w = Window.new("trem", Rect(512, 256, 360, 130));
+w.front;
+r = Routine({ arg time;
+    60.do({ arg i;
+        0.05.yield;
+        {
+            w.bounds = w.bounds.moveBy(10.rand2, 10.rand2);
+            w.alpha = cos(i*0.1pi)*0.5+0.5;
+        }.defer;
+    });
+    1.yield;
+    w.close;
+});
+SystemClock.play(r);
+)</pre>
+
+<p>This example is only to show how to make calls to Cocoa/GUI when scheduling with the SystemClock. If you only wish to control the GUI, use AppClock.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/SystemClock.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/SystemClock.schelp</a><br>link::Classes/SystemClock::<br>sc version: 3.8dev</div></div></body></html>

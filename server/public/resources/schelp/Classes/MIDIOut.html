@@ -1,0 +1,196 @@
+<html><head><title>MIDIOut</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#External Control>MIDI'>External Control>MIDI</a></div>
+<h1>MIDIOut</h1>
+<div id='summary'>send MIDI messages</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/MIDIOut.sc'>MIDIOut.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/MIDIClient.html">MIDIClient</a>, <a href="./../Classes/MIDIIn.html">MIDIIn</a>, <a href="./../Guides/MIDI.html">MIDI</a>, <a href="./../Guides/UsingMIDI.html">Using MIDI</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*newByName'>newByName</a> </li>
+<li class='toc3'><a href='#*findPort'>findPort</a> </li>
+<li class='toc3'><a href='#*connect'>connect</a>  <a href='#*disconnect'>disconnect</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-latency'>latency</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-allNotesOff'>allNotesOff</a> </li>
+<li class='toc3'><a href='#-bend'>bend</a> </li>
+<li class='toc3'><a href='#-connect'>connect</a> </li>
+<li class='toc3'><a href='#-continue'>continue</a> </li>
+<li class='toc3'><a href='#-control'>control</a> </li>
+<li class='toc3'><a href='#-disconnect'>disconnect</a> </li>
+<li class='toc3'><a href='#-midiClock'>midiClock</a> </li>
+<li class='toc3'><a href='#-noteOff'>noteOff</a> </li>
+<li class='toc3'><a href='#-noteOn'>noteOn</a> </li>
+<li class='toc3'><a href='#-polyTouch'>polyTouch</a> </li>
+<li class='toc3'><a href='#-port'>port</a> </li>
+<li class='toc3'><a href='#-program'>program</a> </li>
+<li class='toc3'><a href='#-reset'>reset</a> </li>
+<li class='toc3'><a href='#-smpte'>smpte</a> </li>
+<li class='toc3'><a href='#-songPtr'>songPtr</a> </li>
+<li class='toc3'><a href='#-songSelect'>songSelect</a> </li>
+<li class='toc3'><a href='#-start'>start</a> </li>
+<li class='toc3'><a href='#-stop'>stop</a> </li>
+<li class='toc3'><a href='#-sysex'>sysex</a> </li>
+<li class='toc3'><a href='#-touch'>touch</a> </li>
+<li class='toc3'><a href='#-uid'>uid</a> </li>
+<li class='toc3'><a href='#-write'>write</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#Using patterns for sending MIDI events'>Using patterns for sending MIDI events</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Linux specific: Connecting and disconnecting ports'>Linux specific: Connecting and disconnecting ports</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#OS X specific: Sending MIDI to other applications'>OS X specific: Sending MIDI to other applications</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Sysex example'>Sysex example</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>a MIDIOut is bound to a specific <a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a> as defined by the operating system.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>port</span>, <span class='argstr'>uid</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>port<td class='argumentdesc'>
+<p>the index of the MIDIEndPoint in the <code class='code prettyprint lang-sc'>MIDIClient.destinations</code> array.<tr><td class='argumentname'>uid<td class='argumentdesc'><dl>
+<dt>Mac OSX / Windows<dd>uid is optional; if specified, it should be the uid of that port ie. MIDIClient.destinations[port].uid. If you don't provide a uid, the correct uid will be filled in for you (easier).<dt>Linux<dd>using the uid is optional as described below.</dl>
+</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*newByName' href='./../Overviews/Methods.html#newByName'>newByName</a> (<span class='argstr'>deviceName</span>, <span class='argstr'>portName</span>, <span class='argstr'>dieIfNotFound: true</span>)</h3>
+<div class='method'>
+<p>Searches for the device by name. This is safer then depending on the index which will change if your studio setup changes.<pre class='code prettyprint lang-sc'>//list connected out ports with names:
+MIDIClient.init;
+MIDIClient.destinations;</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*findPort' href='./../Overviews/Methods.html#findPort'>findPort</a> (<span class='argstr'>deviceName</span>, <span class='argstr'>portName</span>)</h3>
+<div class='method'>
+<p>Searches for a connected MIDIEndPoint by name.<pre class='code prettyprint lang-sc'>//list connected out ports with names:
+MIDIClient.init;
+MIDIClient.destinations;</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*connect' href='./../Overviews/Methods.html#connect'>connect</a> (<span class='argstr'>outport: 0</span>, <span class='argstr'>device: 0</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Platform/linux/extMIDIOut.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Platform/linux/extMIDIOut.sc</a></div>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*disconnect' href='./../Overviews/Methods.html#disconnect'>disconnect</a> (<span class='argstr'>outport: 0</span>, <span class='argstr'>device: 0</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Platform/linux/extMIDIOut.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Platform/linux/extMIDIOut.sc</a></div>
+<div class='method'>
+<p>Linux only. OS X does not need to connect. On Linux it is an optional feature (see below).</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-latency' href='./../Overviews/Methods.html#latency'>latency</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-latency' href='./../Overviews/Methods.html#latency'>latency</a> = value</h3>
+<div class='method'>
+<p>This sets the latency with which a midi event is sent out. Per default this is set to 0.2, in order to be equal to the Server.latency.<div class='note'><span class='notelabel'>NOTE:</span> On Linux there seems to be an ALSA or kernel bug if the latency is larger than 0, for some Linux kernels. If MIDIOut does not seem to work, set the latency to 0.</div></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-allNotesOff' href='./../Overviews/Methods.html#allNotesOff'>allNotesOff</a> (<span class='argstr'>chan</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bend' href='./../Overviews/Methods.html#bend'>bend</a> (<span class='argstr'>chan</span>, <span class='argstr'>val: 8192</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-connect' href='./../Overviews/Methods.html#connect'>connect</a> (<span class='argstr'>device: 0</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Platform/linux/extMIDIOut.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Platform/linux/extMIDIOut.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-continue' href='./../Overviews/Methods.html#continue'>continue</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-control' href='./../Overviews/Methods.html#control'>control</a> (<span class='argstr'>chan</span>, <span class='argstr'>ctlNum: 7</span>, <span class='argstr'>val: 64</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-disconnect' href='./../Overviews/Methods.html#disconnect'>disconnect</a> (<span class='argstr'>cuid</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Platform/linux/extMIDIOut.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Platform/linux/extMIDIOut.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-midiClock' href='./../Overviews/Methods.html#midiClock'>midiClock</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-noteOff' href='./../Overviews/Methods.html#noteOff'>noteOff</a> (<span class='argstr'>chan</span>, <span class='argstr'>note: 60</span>, <span class='argstr'>veloc: 64</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-noteOn' href='./../Overviews/Methods.html#noteOn'>noteOn</a> (<span class='argstr'>chan</span>, <span class='argstr'>note: 60</span>, <span class='argstr'>veloc: 64</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-polyTouch' href='./../Overviews/Methods.html#polyTouch'>polyTouch</a> (<span class='argstr'>chan</span>, <span class='argstr'>note: 60</span>, <span class='argstr'>val: 64</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-port' href='./../Overviews/Methods.html#port'>port</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-port' href='./../Overviews/Methods.html#port'>port</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-program' href='./../Overviews/Methods.html#program'>program</a> (<span class='argstr'>chan</span>, <span class='argstr'>num: 1</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-reset' href='./../Overviews/Methods.html#reset'>reset</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-smpte' href='./../Overviews/Methods.html#smpte'>smpte</a> (<span class='argstr'>frames: 0</span>, <span class='argstr'>seconds: 0</span>, <span class='argstr'>minutes: 0</span>, <span class='argstr'>hours: 0</span>, <span class='argstr'>frameRate: 3</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-songPtr' href='./../Overviews/Methods.html#songPtr'>songPtr</a> (<span class='argstr'>songPtr</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-songSelect' href='./../Overviews/Methods.html#songSelect'>songSelect</a> (<span class='argstr'>song</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-start' href='./../Overviews/Methods.html#start'>start</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-stop' href='./../Overviews/Methods.html#stop'>stop</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sysex' href='./../Overviews/Methods.html#sysex'>sysex</a> (<span class='argstr'>packet</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-touch' href='./../Overviews/Methods.html#touch'>touch</a> (<span class='argstr'>chan</span>, <span class='argstr'>val: 64</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-uid' href='./../Overviews/Methods.html#uid'>uid</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-uid' href='./../Overviews/Methods.html#uid'>uid</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-write' href='./../Overviews/Methods.html#write'>write</a> (<span class='argstr'>len</span>, <span class='argstr'>hiStatus</span>, <span class='argstr'>loStatus</span>, <span class='argstr'>a: 0</span>, <span class='argstr'>b: 0</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>MIDIClient.init;
+
+m = MIDIOut(0);
+m.noteOn(16, 60, 60);
+m.noteOn(16, 61, 60);
+m.noteOff(16, 61, 60);
+m.allNotesOff(16);
+
+
+MIDIIn.connect; // 1 port midi interface
+MIDIIn.sysex = { arg uid, packet; [uid,packet].postln };
+MIDIIn.sysrt = { arg src, chan, val;  [src, chan, val].postln; };
+MIDIIn.smpte = { arg src, chan, val;  [src, chan, val].postln; };
+
+m.sysex(Int8Array[ 16rf0, 0, 0, 27, 11, 0,16rf7])
+
+m.smpte(24, 16)
+m.midiClock
+m.start
+m.continue
+m.stop</pre>
+<h3><a class='anchor' name='Using patterns for sending MIDI events'>Using patterns for sending MIDI events</a></h3>
+<pre class='code prettyprint lang-sc'>MIDIClient.init;
+m = MIDIOut(0);
+
+a = Pbind(\degree, Prand([1, 2, 3, [0, 5]], inf), \bend, Pwhite(0, 76, inf));
+
+
+// chain a midi event into the pattern and play it (see Pchain)
+
+(a &lt;&gt; (type: \midi, midiout: m)).play;</pre>
+
+<p>See <a href="./../Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.html#MIDI output">Pattern Guide 08: Event Types and Parameters: MIDI output</a> for a list of midi commands supported by the 'midi' event type.<h3><a class='anchor' name='Linux specific: Connecting and disconnecting ports'>Linux specific: Connecting and disconnecting ports</a></h3>
+
+<p>On Linux, a MIDIOut can be created without setting the destination:<pre class='code prettyprint lang-sc'>m = MIDIOut(0);</pre>
+
+<p>In this case each message will be sent to all ports connected to SuperCollider's first MIDI output.
+<p>A connection can be made through:<pre class='code prettyprint lang-sc'>m.connect( 2 );</pre>
+
+<p>Note that by connecting in this way, you can connect more than one destination to the MIDI output. You can also use other tools to connect to a MIDIOut port of SC, e.g. through aconnect or QJackCtl (on the ALSA tab).
+<p>If you set the uid in MIDIOut, a direct connection is established and data will only be sent to that MIDI input port, and not to any other connections made to SC's MIDI output port (through the connect message or external tools).<h3><a class='anchor' name='OS X specific: Sending MIDI to other applications'>OS X specific: Sending MIDI to other applications</a></h3>
+
+<p>Open the Audio MIDI Setup application. Double-click on IAC Driver and check "device is online".
+<p>reinitialize:
+<p>MIDIClient.init(numIns,numOuts)
+<p>The IAC Bus will now appear in MIDIClient.destinations. It will appear first, which means that any code that you have written that addresses the first physical bus as 0 will now have to be changed.
+<p>For this reason it is always safer to find the port by name :<pre class='code prettyprint lang-sc'>MIDIOut.newByName("RemoteSL IN","Port 1");</pre>
+
+<p>The IAC Bus will now also appear to other applications.
+<p>MIDIMonitor (freeware) can be very useful for troubleshooting:
+<p><a href="http://www.snoize.com/MIDIMonitor/">http://www.snoize.com/MIDIMonitor/</a><h3><a class='anchor' name='Sysex example'>Sysex example</a></h3>
+
+<p>a machinedrum manual say sysex commands should be formatted like this...<pre class='code prettyprint lang-sc'>$f0,$00,$20,$3c,$02,$00,command,...,$f7</pre>
+
+<p>and to set the tempo the machinedrum expects this command...<pre class='code prettyprint lang-sc'>$61 | Set tempo ID
+%0aaaaaaa | Upper bits
+%0bbbbbbb | Lower bits
+$f7 | SYSEX end
+Note: Tempo = %aaaaaaabbbbbbb / 24, max 300 BPM, min 30 BPM</pre>
+
+<p>so to create and send a valid set tempo sysex command from SuperCollider to this machinedrum do...<pre class='code prettyprint lang-sc'>MIDIClient.init;
+m = MIDIOut(0);
+m.sysex(Int8Array[0xf0, 0x00, 0x20, 0x3c, 0x02, 0x00, 0x61, 21, 54, 0xf7]);</pre>
+
+<p>This will set the tempo to 114.23 bpm. One can calculate the upper and lower 7bit values like this...<pre class='code prettyprint lang-sc'>(
+var bpm, val, upper, lower;
+bpm = 114.23;
+val = (bpm*24).round.asInteger;
+upper = val&amp;2r11111110000000&gt;&gt;7;
+lower = val&amp;2r00000001111111;
+[upper, lower].postln;
+)</pre>
+
+<p>where the resulting 21 and 54 are the same as 2r0010101 and 2r0110110 in binary notation.<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/MIDIOut.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/MIDIOut.schelp</a><br>link::Classes/MIDIOut::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,85 @@
+<html><head><title>DegreeToKey</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Conversion'>UGens>Conversion</a></div>
+<h1>DegreeToKey</h1>
+<div id='summary'>Convert signal to modal pitch.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Osc.sc'>Osc.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/PureUGen.html">PureUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>The input signal value is truncated to an integer value and used as an index into an octave repeating table of note values. Indices wrap around the table and shift octaves as they do.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>bufnum</span>, <span class='argstr'>in: 0</span>, <span class='argstr'>octave: 12</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>bufnum</span>, <span class='argstr'>in: 0</span>, <span class='argstr'>octave: 12</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bufnum<td class='argumentdesc'>
+<p>Index of the buffer which contains the steps for each scale degree.<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>The input signal.<tr><td class='argumentname'>octave<td class='argumentdesc'>
+<p>The number of steps per octave in the scale.<tr><td class='argumentname'>mul<td class='argumentdesc'>
+<p>Output will be multiplied by this value.<tr><td class='argumentname'>add<td class='argumentdesc'>
+<p>This value will be added to the output.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+// modal space
+// mouse x controls discrete pitch in dorian mode
+var scale, buffer;
+scale = FloatArray[0, 2, 3.2, 5, 7, 9, 10]; // dorian scale
+buffer = Buffer.alloc(s, scale.size,1, {|b| b.setnMsg(0, scale) });
+
+play({
+    var mix;
+
+    mix =
+
+    // lead tone
+    SinOsc.ar(
+        (
+            DegreeToKey.kr(
+                buffer.bufnum,
+                MouseX.kr(0,15),        // mouse indexes into scale
+                12,                    // 12 notes per octave
+                1,                    // mul = 1
+                72                    // offset by 72 notes
+            )
+            + LFNoise1.kr([3,3], 0.04)    // add some low freq stereo detuning
+        ).midicps,                        // convert midi notes to hertz
+        0,
+        0.1)
+
+    // drone 5ths
+    + RLPF.ar(LFPulse.ar([48,55].midicps, 0.15),
+        SinOsc.kr(0.1, 0, 10, 72).midicps, 0.1, 0.1);
+
+    // add some 70's euro-space-rock echo
+    CombN.ar(mix, 0.31, 0.31, 2, 1, mix)
+})
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/DegreeToKey.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/DegreeToKey.schelp</a><br>link::Classes/DegreeToKey::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,166 @@
+<html><head><title>Semaphore</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Scheduling'>Scheduling</a></div>
+<h1>Semaphore</h1>
+<div id='summary'>control parallel execution of threads</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Core/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Core/Semaphore.sc'>Semaphore.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-count'>count</a> </li>
+<li class='toc3'><a href='#-clear'>clear</a> </li>
+<li class='toc3'><a href='#-wait'>wait</a> </li>
+<li class='toc3'><a href='#-signal'>signal</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>count: 1</span>)</h3>
+<div class='method'>
+<p>Create a new instance, set the maximum number of running threads (default: 1).</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-count' href='./../Overviews/Methods.html#count'>count</a> </h3>
+<div class='method'>
+<p>Determines the number of running threads.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clear' href='./../Overviews/Methods.html#clear'>clear</a> </h3>
+<div class='method'>
+<p>Remove any reference to threads, but do not reschedule any pending ones.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-wait' href='./../Overviews/Methods.html#wait'>wait</a> </h3>
+<div class='method'>
+<p>Stop current thread if already too many are running, otherwise continue.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-signal' href='./../Overviews/Methods.html#signal'>signal</a> </h3>
+<div class='method'>
+<p>Unblock the semaphore, reschedule next pending thread.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// allow only one thread
+(
+c = Semaphore(1);
+fork {
+    c.wait;
+    "thread 1&gt; now I am doing something for 10 seconds. Block the semaphore meanwhile.".postln;
+    10.wait;
+    c.signal;
+    "thread 1&gt; ok, done. Release the semaphore.".postln;
+};
+fork {
+    3.0.rand.wait;
+    "thread 2&gt; I would like to go on, if I may.".postln;
+    c.wait; // may I?
+    "thread 2&gt; this took until the other thread has released the semaphore. "
+        "Blocking for 4 seconds.".postln;
+    4.wait;
+    "thread 2&gt; ok, done. Releasing the semaphore".postln;
+    c.signal;
+};
+fork {
+    4.wait;
+    "thread 3&gt; I, too, would like to go on, if I may.".postln;
+    c.wait; // may I?
+    "thread 3&gt; this took until both other threads had released the semaphore.".postln;
+    c.signal;
+};
+)</pre>
+<pre class='code prettyprint lang-sc'>// allow two threads at a time.
+(
+c = Semaphore(2);
+fork {
+    c.wait;
+    "thread 1&gt; now I am doing something for 20 seconds. Block the semaphore.".postln;
+    10.wait;
+    "thread 1&gt; ok, done. Releasing the semaphore".postln;
+    c.signal;
+};
+fork {
+    rrand(3.0, 5.0).wait;
+    "thread 2&gt; I would like to go on, if I may.".postln;
+    if(c.count &lt;= 0) { "thread 3&gt; ok, then I wait ...".postln };
+    c.wait; // may I?
+    "thread 1&gt; ok, going ahead.".postln;
+    17.wait;
+    "thread 2&gt; ok, done. Releasing the semaphore".postln;
+    c.signal;
+};
+fork {
+    6.wait;
+    "thread 3&gt; I, too, would like to go on, if I may.".postln;
+    if(c.count &lt;= 0) { "thread 3&gt; ok, then I wait ...".postln };
+    c.wait; // may I?
+    "thread 3&gt; ok, this took until the first thread had released the semaphore. "
+        "Ok, doing something for 4 seconds. Block the semaphore".postln;
+        4.wait;
+    "Releasing the semaphore.".postln;
+    c.signal;
+};
+fork {
+    7.wait;
+    "thread 4&gt; Me, the fourth one, would like to go on, if I may.".postln;
+    if(c.count &lt;= 0) { "thread 4&gt; ok, then I wait ...".postln };
+    c.wait; // may I?
+    "thread 4&gt; ok, this took until the third thread had released the semaphore. "
+        "Ok, doing something for 3 seconds. Block the semaphore".postln;
+        3.wait;
+    "Releasing the semaphore.".postln;
+    c.signal;
+};
+)</pre>
+<pre class='code prettyprint lang-sc'>// grant exclusive access to data to only one thread
+// there should never be mixed values in the data array
+(
+var data, useAndModify;
+
+data = [1, 2, 3];
+c = Semaphore(1);
+// c = Semaphore(2); use this to test how it would behave without exclusive access.
+useAndModify = { |newData, who|
+    postln(who + "trying to get blocking access.");
+    if(c.count &lt;= 0) { who + "ok, then I wait ...".postln };
+    c.wait; // may I access? if not, I wait. if yes, disallow others.
+    "\n".post;
+    (who + "continuing...").postln;
+    data.do({ |x|
+            0.1.wait;
+            postln(who + x);
+        });
+    "\n".post;
+    newData.do { |x, i| data[i] = x };
+    postln(who + "rewriting data to:" + newData);
+    postln(who + "releasing");
+    c.signal; // allow others access again
+};
+
+// e.g. set the values to integers
+u = Routine {
+    inf.do { |i|
+        useAndModify.value([100, 200, 300], "thread 1&gt;");
+        rrand(1, 3).wait;
+    }
+};
+
+// e.g. set the values to floats
+k =  Routine {
+    0.5.wait;
+    inf.do { |i|
+        useAndModify.value([pi, 0.5pi, 2pi], "thread 2&gt;");
+        rrand(1, 5).wait;
+    }
+};
+u.play;
+k.play;
+);</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Semaphore.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Semaphore.schelp</a><br>link::Classes/Semaphore::<br>sc version: 3.8dev</div></div></body></html>

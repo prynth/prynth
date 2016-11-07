@@ -1,0 +1,261 @@
+<html><head><title>Writing Classes</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider GUIDES</div>
+<div id='categories'><a href='./../Browse.html#Language>OOP'>Language>OOP</a></div>
+<h1>Writing Classes</h1>
+<div id='summary'>Writing SuperCollider Classes</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Reference/Classes.html">Classes</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Inheriting'>Inheriting</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Methods'>Methods</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#New Instance creation'>New Instance creation</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Overriding Methods (Overloading)'>Overriding Methods (Overloading)</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Getter Setter'>Getter Setter</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#External Method Files'>External Method Files</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Slotted classes'>Slotted classes</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Printing custom messages to post window'>Printing custom messages to post window</a></li>
+<ul class='toc'><li class='toc2'><a href='#Defining custom asCompileString behaviour'>Defining custom asCompileString behaviour</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Catching methods that are not explicitly defined'>Catching methods that are not explicitly defined</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Tricks and Traps'>Tricks and Traps</a></li>
+<ul class='toc'></ul></ul></div>
+<p>For a basic tutorial on how standard object-orientated classes are composed, look elsewhere <a href="http://www.google.com/search?q=oop+class+tutorial">http://www.google.com/search?q=oop+class+tutorial</a><div class='note'><span class='notelabel'>NOTE:</span> Class definitions are statically compiled when you launch supercollider or "recompile the library." This means that class definitions must be saved into a file with the extension .sc, in a disk location where supercollider looks for classes. Saving into the main class library (SCClassLibrary) is generally not recommended. It's preferable to use either the user or system extension directories.<pre class='code prettyprint lang-sc'>Platform.userExtensionDir;   // Extensions available only to your user account
+Platform.systemExtensionDir; // Extensions available to all users on the machine</pre>
+
+<p>It is not possible to enter a class definition into an interpreter window and execute it.</div><h2><a class='anchor' name='Inheriting'>Inheriting</a></h2>
+<pre class='code prettyprint lang-sc'>MyClass : SomeSuperclass {
+
+}</pre>
+
+<p>Without specifying a superclass, <a href="./../Classes/Object.html">Object</a> is assumed as the default superclass.<pre class='code prettyprint lang-sc'>MyClass { // :Object is implied
+
+}</pre>
+<h2><a class='anchor' name='Methods'>Methods</a></h2>
+
+<p>class methods are specified with the asterix within the class method, the keyword <code class='code prettyprint lang-sc'>this</code> refers to the class. A class in SuperCollider is itself an object. It is an instance of <a href="./../Classes/Class.html">Class</a>. Instance methods are specified within the instance method, the keyword <code class='code prettyprint lang-sc'>this</code> refers to the instance.<pre class='code prettyprint lang-sc'>MyClass {
+    *classMethod { arg argument;
+
+    }
+
+    instanceMethod { arg argument;
+
+    }
+}</pre>
+
+<p>To return from the method use <code>^</code> (caret). Multiple exit points also possible. If no <code>^</code> is specified, the method will return the instance (and in the case of Class methods, will return the class). There is no such thing as returning void in SuperCollider.<pre class='code prettyprint lang-sc'>MyClass {
+    someMethod {
+        ^returnObject
+    }
+
+    someOtherMethod { arg aBoolean;
+        if(aBoolean,{
+            ^someObject
+        },{
+            ^someOtherObject
+        })
+    }
+
+}</pre>
+<h2><a class='anchor' name='New Instance creation'>New Instance creation</a></h2>
+
+<p><code class='code prettyprint lang-sc'>Object.new</code> will return to you a new object. When overriding the class method <code class='code prettyprint lang-sc'>.new</code> you must call the superclass, which in turn calls its superclass, up until <code class='code prettyprint lang-sc'>Object.new</code> is called and an object is actually created and its memory allocated.<pre class='code prettyprint lang-sc'>MyClass {
+    // this example adds no new functionality
+    *new {
+        ^super.new
+    }
+
+    // this is a normal constructor method
+    *new1 { arg arga,argb,argc;
+        ^super.new.init(arga,argb,argc)
+    }
+    init { arg arga,argb,argc;
+        // do initiation here
+    }
+}</pre>
+
+<p>In this case note that <code class='code prettyprint lang-sc'>super.new</code> called the method new on the superclass and returned a new object. Subsequently we are calling the <code class='code prettyprint lang-sc'>.init</code> method on that object, which is an instance method.<div class='warning'><span class='warninglabel'>WARNING:</span> If the superclass also happened to call super.new.init it will have expected to call the .init method defined in that class (the superclass), but instead the message .init will find the implementation of the class that the object actually is, which is our new subclass. So you should use a unique method name like myclassinit if this is likely to be a problem.</div>
+<p>One easy way to copy the arguments passed to the instance variables when creating a class is to use newCopyArgs. This method will copy the arguments to the instance variables in the order that the variables were defined in the class, starting the parent classes and working it's way down to the current class.<pre class='code prettyprint lang-sc'>MyClass {
+    var &lt;a,b,c;
+
+    *new { arg a,b,c;
+        ^super.newCopyArgs(a,b,c)
+    }
+}
+
+MyChildClass : MyClass{
+    var &lt;d;
+
+    *new { arg a,b,c,d;
+        ^super.newCopyArgs(a,b,c,d)
+    }
+}</pre>
+
+<p>Over reliance on inheritance is usually a design flaw. Explore "object composition" rather than trying to obtain all your powers through inheritance. Is your "subclass" really some kind of "superclass" or are you just trying to swipe all of daddy's methods? Do a websearch for Design Patterns.
+<p>Class variables are accessible within class methods and in any instance methods.<pre class='code prettyprint lang-sc'>MyClass {
+    classvar myClassvar;
+    var myInstanceVar;
+}</pre>
+
+<p>For class initialization check <code class='code prettyprint lang-sc'>initClass</code>.<h2><a class='anchor' name='Overriding Methods (Overloading)'>Overriding Methods (Overloading)</a></h2>
+
+<p>In order to change the behaviour of the superclass, often methods are overridden. Note that an object looks always for the method it has defined first and then looks in the superclass. Here <code class='code prettyprint lang-sc'>MyClass.value(2)</code> will return 6, not 4:<pre class='code prettyprint lang-sc'>Superclass {
+    calculate { arg in; in * 2 }
+    value { arg in; ^this.calculate(in) }
+}
+
+MyClass : Superclass {
+    calculate { arg in; in * 3 }
+}</pre>
+
+<p>If the method of the superclass is needed, it can be called by super.<pre class='code prettyprint lang-sc'>Superclass {
+    var x;
+
+    init {
+        x = 5;
+    }
+}
+
+MyClass : Superclass {
+    var y;
+    init {
+        super.init;
+        y = 6;
+    }
+}</pre>
+<h2><a class='anchor' name='Getter Setter'>Getter Setter</a></h2>
+
+<p>SuperCollider demands that variables are not accessible outside of the class or instance. A method must be added to explicitly give access:<pre class='code prettyprint lang-sc'>MyClass : Superclass {
+    var myVariable;
+
+    variable {
+        ^myVariable
+    }
+
+    variable_ { arg newValue;
+        myVariable = newValue;
+    }
+}</pre>
+
+<p>These are referred to as getter and setter methods. SuperCollider allows these methods to be easily added by adding <code>&lt;</code> or <code>&gt;</code>.<pre class='code prettyprint lang-sc'>MyClass {
+    var &lt;getMe, &gt;setMe, &lt;&gt;getMeOrSetMe;
+}</pre>
+
+<p>you now have the methods:<pre class='code prettyprint lang-sc'>someObject.getMe;
+someObject.setMe_(value);</pre>
+
+<p>this also allows us to say:<pre class='code prettyprint lang-sc'>someObject.setMe = value;
+
+someObject.getMeOrSetMe_(5);
+someObject.getMeOrSetMe.postln;</pre>
+
+<p>A getter or setter method created in this fashion may be overridden in a subclass by manually writing the method setter methods should take only one argument to support both ways of expression consistently. eg.<pre class='code prettyprint lang-sc'>MyClass {
+    variable_ { arg newValue;
+        variable = newValue.clip(minval,maxval);
+    }
+}</pre>
+
+<p>A setter method should always return the receiver. This is standard OOP practice (outside of SuperCollider as well). Do not return the new value from your setter.<pre class='code prettyprint lang-sc'>MyClass {
+    variable_ { arg newValue;
+        myVariable = newValue;
+        ^newValue       // DO NOT DO THIS
+    }
+}</pre>
+<h2><a class='anchor' name='External Method Files'>External Method Files</a></h2>
+
+<p>Methods may be added to Classes in separate files. This is equivalent to Categories in Objective-C. By convention, the file name starts with a lower case letter: the name of the method or feature that the methods are supporting.<pre class='code prettyprint lang-sc'>+ Class {
+    newMethod {
+    }
+
+    *newClassMethod {
+    }
+}</pre>
+<h2><a class='anchor' name='Slotted classes'>Slotted classes</a></h2>
+
+<p>Classes defined with [slot] can use the syntax myClass[i] which will call myClass.at(i). This is usefull when defining classes that inherit from a Collection type class.<pre class='code prettyprint lang-sc'>MyClass[slot] {
+    *new {
+         ^super.new
+    }
+
+    at {|i|
+        ("Index "++i).postln
+    }
+}</pre>
+<pre class='code prettyprint lang-sc'>a = MyClass();
+a[3];</pre>
+
+<p>Defining a custom array of Points:<pre class='code prettyprint lang-sc'>MyPointArray[slot] : RawArray {
+    center { ^Point(*this.asArray.flop.collect{ |item| item.sum / item.size } ) }
+    asArray{ ^this.collect{ |elem| elem.asArray } }
+}</pre>
+<h2><a class='anchor' name='Printing custom messages to post window'>Printing custom messages to post window</a></h2>
+
+<p>By default when postln is called on an class instance the name of the class is printed in a post window. When <code class='code prettyprint lang-sc'>postln</code> or <code class='code prettyprint lang-sc'>asString</code> is called on a class instance, the class then calls <code class='code prettyprint lang-sc'>printOn</code> which can be overridden to obtain more useful information.<pre class='code prettyprint lang-sc'>MyTestPoint {
+    var &lt;x, &lt;y;
+
+    *new{ |x,y| ^super.newCopyArgs(x,y) }
+
+    printOn { arg stream;
+        stream &lt;&lt; "MyTestPoint( " &lt;&lt; x &lt;&lt; ", " &lt;&lt; y &lt;&lt; " )";
+    }
+}</pre>
+<pre class='code prettyprint lang-sc'>a = MyTestPoint(2,3);</pre>
+<h3><a class='anchor' name='Defining custom asCompileString behaviour'>Defining custom asCompileString behaviour</a></h3>
+
+<p>A call to <code class='code prettyprint lang-sc'>asCompileString</code> should return a string which when evaluated creates the exact same instance of the class. To define a custom behaviour one should either override <code class='code prettyprint lang-sc'>storeOn</code> or <code class='code prettyprint lang-sc'>storeArgs</code>. The method <code class='code prettyprint lang-sc'>storeOn</code> should return the string that evaluated creates the instance of the current object. The method <code class='code prettyprint lang-sc'>storeArgs</code> should return an array with the arguments to be passed to <code class='code prettyprint lang-sc'>TheClass.new</code>. In most cases this method can be used instead of <code class='code prettyprint lang-sc'>storeOn</code>.<pre class='code prettyprint lang-sc'>// either
+MyTestPoint {
+    var &lt;x, &lt;y;
+
+    *new{ |x,y| ^super.newCopyArgs(x,y) }
+
+    storeOn { arg stream;
+        stream &lt;&lt; "MyTestPoint.new(" &lt;&lt; x &lt;&lt; ", " &lt;&lt; y &lt;&lt; ")";
+    }
+}
+
+// or
+MyTestPoint {
+    var &lt;x, &lt;y;
+
+    *new{ |x,y| ^super.newCopyArgs(x,y) }
+
+    storeArgs { arg stream;
+        ^[x,y]
+    }
+}</pre>
+<pre class='code prettyprint lang-sc'>MyTestPoint(2,3).asCompileString;</pre>
+<h2><a class='anchor' name='Catching methods that are not explicitly defined'>Catching methods that are not explicitly defined</a></h2>
+
+<p>It is possible to catch calls to methods that are not explicitly defined in a Class by overriding <code class='code prettyprint lang-sc'>doesNotUnderstand</code>.<pre class='code prettyprint lang-sc'>MyClass {
+    *new { ^super.new }
+
+    doesNotUnderstand { arg selector...args;
+        (this.class++" does not understand method "++selector);
+
+        If(UGen.findRespondingMethodFor(selector).notNil){
+            "But UGen understands this method".postln
+        };
+    }
+}</pre>
+<pre class='code prettyprint lang-sc'>a = MyClass();
+a.someMethodThatDoesNotExist</pre>
+<h2><a class='anchor' name='Tricks and Traps'>Tricks and Traps</a></h2>
+<dl>
+<dt>"Superclass not found..."<dd>In one given code file, you can only put classes that inherit from each Object, each other, and one external class. In other words, you can't inherit from two separate classes that are defined in separate files.
+<p>If you should happen to declare a variable in a subclass and use the same name as a variable declared in a superclass, you will find that both variables exist, but only the one in the object's actual class is accessible. You should not do that. This will at some point become an error worthy of compilation failure.</dl>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/WritingClasses.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/WritingClasses.schelp</a><br>link::Guides/WritingClasses::<br>sc version: 3.8dev</div></div></body></html>

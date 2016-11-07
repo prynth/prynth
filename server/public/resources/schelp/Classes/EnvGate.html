@@ -1,0 +1,67 @@
+<html><head><title>EnvGate</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Libraries>JITLib>NodeProxy'>Libraries>JITLib>NodeProxy</a></div>
+<h1>EnvGate</h1>
+<div id='summary'>singleton fade envelope</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/GraphBuilder.sc'>GraphBuilder.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/EnvGen.html">EnvGen</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Convenience class for an envelope generator combining fadeTime and gate arguments.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>i_level: 1</span>, <span class='argstr'>gate</span>, <span class='argstr'>fadeTime</span>, <span class='argstr'>doneAction: 2</span>, <span class='argstr'>curve: 'sin'</span>)</h3>
+<div class='method'>
+<p>Returns an <a href="./../Classes/EnvGen.html">EnvGen</a>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>i_level<td class='argumentdesc'>
+<p>initial level of envelope (if set to 1, it starts open)<tr><td class='argumentname'>gate<td class='argumentdesc'>
+<p>a gate input. if nil, EnvGate creates a <a href="./../Classes/NamedControl.html">NamedControl</a> named 'gate'<tr><td class='argumentname'>fadeTime<td class='argumentdesc'>
+<p>an input for both attack and decay time. if nil, EnvGate creates a <a href="./../Classes/NamedControl.html">NamedControl</a> named 'fadeTime' (default time: 0.02)<tr><td class='argumentname'>doneAction<td class='argumentdesc'>
+<p>doneAction of the <a href="./../Classes/EnvGen.html">EnvGen</a><tr><td class='argumentname'>curve<td class='argumentdesc'>
+<p>envelope curve</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>a = { LPF.ar(Saw.ar(200), 600) * EnvGate.new }.play;
+a.set(\fadeTime, 2);
+a.release;
+
+// the same as:
+a.set(\gate, 0);
+
+// several env gates can coexist in one synth def.
+(
+a = {
+    var sound1 = LPF.ar(Saw.ar(80), 600) * EnvGate.new;
+    var sound2 = RLPF.ar(Saw.ar(200) * 0.5, 6000 * EnvGate.new + 60, 0.1) * EnvGate.new;
+    sound1 + sound2
+}.play;
+)
+a.set(\fadeTime, 5);
+a.release;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/EnvGate.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/EnvGate.schelp</a><br>link::Classes/EnvGate::<br>sc version: 3.8dev</div></div></body></html>

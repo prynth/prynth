@@ -1,0 +1,164 @@
+<html><head><title>NamedControl</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Synth control'>UGens>Synth control</a></div>
+<h1>NamedControl</h1>
+<div id='summary'>Named reference to a control</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/GraphBuilder.sc'>GraphBuilder.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/ControlName.html">ControlName</a>, <a href="./../Classes/Control.html">Control</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc3'><a href='#*ir'>ir</a> </li>
+<li class='toc3'><a href='#*tr'>tr</a> </li>
+<li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*initDict'>initDict</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-control'>control</a> </li>
+<li class='toc3'><a href='#-fixedLag'>fixedLag</a> </li>
+<li class='toc3'><a href='#-lags'>lags</a> </li>
+<li class='toc3'><a href='#-name'>name</a> </li>
+<li class='toc3'><a href='#-rate'>rate</a> </li>
+<li class='toc3'><a href='#-values'>values</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#Comparison with direct use of Controls'>Comparison with direct use of Controls</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Using dictionary with functions to build SynthDefs'>Using dictionary with functions to build SynthDefs</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A NamedControl directly combines a ControlName and a Control UGen conveniently. Also this makes it safe even if several identical controls exist (see example below).
+<p>There are syntax shortcuts that generate NamedControls from the name:<pre class='code prettyprint lang-sc'>\name.ar(values, lags)
+\name.kr(values, lags, fixedLag)
+\name.ir(values, lags)
+\name.tr(values, lags)</pre>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>lags</span>)</h3>
+<div class='method'>
+<p>add a new instance of <a href="./../Classes/AudioControl.html">AudioControl</a> with given name and default values. If lags are given, apply a Lag UGen to it.<h4>Discussion:</h4>
+
+<p><code class='code prettyprint lang-sc'>\symbol.ar(values, lags)</code> is a synonym.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>lags</span>, <span class='argstr'>fixedLag: false</span>)</h3>
+<div class='method'>
+<p>add a new instance of <a href="./../Classes/Control.html">Control</a> (kr) with given name and default values. If lags are given, apply a <a href="./../Classes/Lag.html">Lag</a> UGen to it. If fixedLag is set to true, create a <a href="./../Classes/LagControl.html">LagControl</a>(lags cannot be modulated then, but fewer UGens are required).<h4>Discussion:</h4>
+
+<p><code class='code prettyprint lang-sc'>\symbol.kr(values, lags, fixedLag)</code> is a synonym.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ir' href='./../Overviews/Methods.html#ir'>ir</a> (<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>lags</span>)</h3>
+<div class='method'>
+<p>add a new instance of <a href="./../Classes/Control.html">Control</a> (ir) with given name and default values. If lags are given, apply a <a href="./../Classes/Lag.html">Lag</a> UGen to it.<h4>Discussion:</h4>
+
+<p><code class='code prettyprint lang-sc'>\symbol.ir(values, lags)</code> is a synonym.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*tr' href='./../Overviews/Methods.html#tr'>tr</a> (<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>lags</span>)</h3>
+<div class='method'>
+<p>add a new instance of <a href="./../Classes/TrigControl.html">TrigControl</a> with given name and default values. If lags are given, apply a <a href="./../Classes/Lag.html">Lag</a> UGen to it.<h4>Discussion:</h4>
+
+<p><code class='code prettyprint lang-sc'>\symbol.tr(values, lags)</code> is a synonym.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>rate</span>, <span class='argstr'>lags</span>, <span class='argstr'>fixedLag: false</span>)</h3>
+<div class='method'>
+<p>add a new instance with the given rate, name and default values. If lags are given, apply a <a href="./../Classes/Lag.html">Lag</a> UGen to it. If fixedLag is set to true, create a <a href="./../Classes/LagControl.html">LagControl</a>(lags cannot be modulated then, but fewer UGens are required).</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*initDict' href='./../Overviews/Methods.html#initDict'>initDict</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-control' href='./../Overviews/Methods.html#control'>control</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fixedLag' href='./../Overviews/Methods.html#fixedLag'>fixedLag</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lags' href='./../Overviews/Methods.html#lags'>lags</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rate' href='./../Overviews/Methods.html#rate'>rate</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-values' href='./../Overviews/Methods.html#values'>values</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// use NamedControl to create a number of multichannel controls:
+
+a = { SinOsc.ar(NamedControl.kr(\freq, [300, 330, 370], [1, 0.3, 0.02])).sum * 0.1 }.play;
+a.setn(\freq, [700, 705, 890]);
+a.setn(\freq, [0, 2, 5].midiratio * 400);
+
+// synonymous:
+a = { SinOsc.ar(\freq.kr([300, 330, 370], [1, 0.3, 0.02])).sum * 0.1 }.play;
+
+// multiple usage of the same name:
+a = { SinOsc.ar(\freq.kr(440, 3.5)) + Saw.ar(\freq.kr(440, 0.05) * 0.5) * 0.1 }.play;
+
+
+a.set(\freq, 1220)
+a.set(\freq, 120)</pre>
+<h3><a class='anchor' name='Comparison with direct use of Controls'>Comparison with direct use of Controls</a></h3>
+
+<p>In the situation when functions are used to combine UGens to more complex SynthDefs, it may not be known which ControlNames are already taken by others. NamedControl allows to reuse existing control names.<pre class='code prettyprint lang-sc'>// compare:
+(
+a = {
+    var x, y;
+    x = NamedControl.kr(\freq, 440, 3.5);
+    y = NamedControl.kr(\freq, 440, 1);
+    SinOsc.ar([x, y] * [2, 1.2]) * 0.1
+}.play;
+)
+
+a.set(\freq, 1220)
+a.set(\freq, 120)
+
+(
+a = {
+    var x, y;
+    x = Control.names([\freq]).kr(440).lag(3.5);
+    y = Control.names([\freq]).kr(440).lag(1);
+    SinOsc.ar([x, y] * [2, 1.2]) * 0.1
+}.play;
+)
+
+a.set(\freq, 1220)
+a.set(\freq, 120)</pre>
+<h3><a class='anchor' name='Using dictionary with functions to build SynthDefs'>Using dictionary with functions to build SynthDefs</a></h3>
+
+<p>Here is a basic example using a dictionary with functions that can be combined to build SynthDefs.<pre class='code prettyprint lang-sc'>(
+q = ();
+q.makeEnv = { |q, env, doneAction = 0| EnvGen.kr(env, NamedControl.kr(\gate, 1), doneAction: doneAction) };
+q.chooseNoise = { [ {PinkNoise.ar}, {WhiteNoise.ar}, {LFNoise2.ar(Rand(100, 1000))}].choose.value};
+q.filterInput = { |q, in| [
+    { BPF.ar(in * 15, NamedControl.kr(\freq, 800), 0.2) },
+    { RHPF.ar(in, NamedControl.kr(\freq, 800, 0.2), 0.2) }
+    ].choose.value
+};
+)
+
+// test the envelope:
+a = { SinOsc.ar(440) * q.makeEnv(Env.asr, 2) * 0.1 }.play;
+a.set(\gate, -3); // release in 3 seconds
+
+// single channel:
+a = { q.chooseNoise * q.makeEnv(Env.asr, 2) }.play;
+a.set(\gate, -3); // release in 3 seconds
+
+a = { q.filterInput(q.chooseNoise) * q.makeEnv(Env.asr, 2) }.play;
+a.set(\freq, 1000); // set filter frequency
+a.set(\gate, -3); // release in 3 seconds
+
+(
+a = {
+    var channels = Array.fill(8, {
+        q.filterInput(q.chooseNoise) * q.makeEnv(Env.asr, 2)
+    });
+    Splay.ar(channels);
+
+}.play;
+)
+a.set(\freq, 6000); // set filter frequency
+a.set(\gate, -3); // release in 3 seconds</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/NamedControl.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/NamedControl.schelp</a><br>link::Classes/NamedControl::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,119 @@
+<html><head><title>Synth Definition File Format</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider REFERENCE</div>
+<div id='categories'><a href='./../Browse.html#Server>Architecture'>Server>Architecture</a></div>
+<h1>Synth Definition File Format</h1>
+<div id='summary'>Description of Synth Definition file format used by SC synth server</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Classes/SynthDef.html">SynthDef</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Basic types'>Basic types</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#File Format'>File Format</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#File Format as Tree'>File Format as Tree</a></li>
+<ul class='toc'><li class='toc2'><a href='#synth-definition-file'>synth-definition-file</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Original SynthDef format'>Original SynthDef format</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Glossary'>Glossary</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Notes'>Notes</a></li>
+<ul class='toc'><li class='toc2'><a href='#For greatest efficiency:'>For greatest efficiency:</a></li>
+<ul class='toc'></ul></ul></ul></div>
+<p>Synth definition files are read by the synth server and define collections of unit generators and their connections. These files are currently written by the SuperCollider language application, but theoretically could be written by any program. Such a program would need knowledge of the SC unit generators and their characteristics, such as number of inputs and outputs and available calculation rates. The code to write these files is open and available in the SuperCollider language app.
+<p>In the current SuperCollider 3.6 development version, there are two versions of SynthDef:<ul>
+<li><strong>SynthDef</strong> - The original SynthDef file format, backward compatible with .scsyndef files saved using earlier versions of SuperCollider.<li><strong>SynthDef2</strong> - A revised version that extends SynthDef's capacity.</ul>
+
+<p>This document describes SynthDef2's format. See <a href="#Original SynthDef format">Original SynthDef format</a> for the differences between SynthDef and SynthDef2.<h2><a class='anchor' name='Basic types'>Basic types</a></h2>
+
+<p>All data is stored big endian. All data is packed, not padded or aligned.<dl>
+<dt>int32<dd>a 32 bit integer.<dt>int16<dd>a 16 bit integer.<dt>int8<dd>an 8 bit integer.<dt>float32<dd>a 32 bit IEEE floating point number.<dt>pstring<dd>a pascal format string: a byte giving the length followed by that many bytes.</dl>
+<h2><a class='anchor' name='File Format'>File Format</a></h2>
+
+<p>a <strong>synth-definition-file</strong> is :<ul>
+<li>int32 - four byte file type id containing the ASCII characters: "SCgf"<li>int32 - file version, currently 2.<li>int16 - number of synth definitions in this file (D).<li>[ <strong>synth-definition</strong> ] * D</ul>
+
+<p>a <strong>synth-definition</strong> is :<ul>
+<li>pstring - the name of the synth definition<li>int32 - number of constants (K)<li>[float32] * K - constant values<li>int32 - number of parameters (P)<li>[float32] * P - initial parameter values<li>int32 - number of parameter names (N)<li>[ <strong>param-name</strong> ] * N<li>int32 - number of unit generators (U)<li>[ <strong>ugen-spec</strong> ] * U<li>int16 - number of variants (V)<li>[ <strong>variant-spec</strong> ] * V</ul>
+
+<p>a <strong>param-name</strong> is :<ul>
+<li>pstring - the name of the parameter<li>int32 - its index in the parameter array</ul>
+
+<p>a <strong>ugen-spec</strong> is :<ul>
+<li>pstring - the name of the SC unit generator class<li>int8 - calculation rate<li>int32 - number of inputs (I)<li>int32 - number of outputs (O)<li>int16 - special index<li>[ <strong>input-spec</strong> ] * I<li>[ <strong>output-spec</strong> ] * O</ul>
+
+<p>an <strong>input-spec</strong> is :<ul>
+<li>int32 - index of unit generator or -1 for a constant<li>if (unit generator index == -1) :<ul>
+<li>int32 - index of constant</ul>
+
+<p><li>else :<ul>
+<li>int32 - index of unit generator output</ul>
+</ul>
+
+<p>an <strong>output-spec</strong> is :<ul>
+<li>int8 - calculation rate</ul>
+
+<p>a <strong>variant-spec</strong> is :<ul>
+<li>pstring - the name of the variant<li>[float32] * P - variant initial parameter values</ul>
+<h2><a class='anchor' name='File Format as Tree'>File Format as Tree</a></h2>
+
+<p><span class='soft'>added by Jonatan Liljedahl</span><h3><a class='anchor' name='synth-definition-file'>synth-definition-file</a></h3>
+<ul class='tree'>
+<li>int32 - four byte file type id containing the ASCII characters: "SCgf"<li>int32 - file version, currently 2.<li>int16 - number of synth definitions in this file (D).<li>[ <strong>synth-definition</strong> ] * D<ul class='tree'>
+<li>pstring - the name of the synth definition<li>int32 - number of constants (K)<li>[float32] * K - constant values<li>int32 - number of parameters (P)<li>[float32] * P - initial parameter values<li>int32 - number of parameter names (N)<li>[ <strong>param-name</strong> ] * N<ul class='tree'>
+<li>pstring - the name of the parameter<li>int32 - its index in the parameter array</ul>
+
+<p><li>int32 - number of unit generators (U)<li>[ <strong>ugen-spec</strong> ] * U<ul class='tree'>
+<li>pstring - the name of the SC unit generator class<li>int8 - calculation rate<li>int32 - number of inputs (I)<li>int32 - number of outputs (O)<li>int16 - special index<li>[ <strong>input-spec</strong> ] * I<ul class='tree'>
+<li>int32 - index of unit generator or -1 for a constant<li>if (unit generator index == -1)<ul class='tree'>
+<li>int32 - index of constant</ul>
+
+<p><li>else<ul class='tree'>
+<li>int32 - index of unit generator output</ul>
+</ul>
+
+<p><li>[ <strong>output-spec</strong> ] * O<ul class='tree'>
+<li>int8 - calculation rate</ul>
+</ul>
+
+<p><li>int16 - number of variants (V)<li>[ <strong>variant-spec</strong> ] * V<ul class='tree'>
+<li>pstring - the name of the variant<li>[float32] * P - variant initial parameter values</ul>
+</ul>
+</ul>
+<h2><a class='anchor' name='Original SynthDef format'>Original SynthDef format</a></h2>
+
+<p>The original SynthDef format differs in that the following items are <code>int16</code> instead of <code>int32</code>.<div class='note'><span class='notelabel'>NOTE:</span> The following list describes what has changed between SynthDef and SynthDef2. It is not a complete description of the the original SynthDef file format.</div><ul>
+<li>int32 - file version, currently 1. (This is <em>2</em> for the new format.)<li>a <strong>synth-definition</strong> is :<ul>
+<li>int16 - number of constants (K)<li>int16 - number of parameters (P)<li>int16 - number of parameter names (N)<li>int16 - number of unit generators (U)</ul>
+
+<p><li>a <strong>param-name</strong> is :<ul>
+<li>int16 - its index in the parameter array</ul>
+<li>a <strong>ugen-spec</strong> is :<ul>
+<li>int16 - number of inputs (I)<li>int16 - number of outputs (O)</ul>
+<li>an <strong>input-spec</strong> is :<ul>
+<li>int16 - index of unit generator or -1 for a constant<li>int16 - index of constant<li>int16 - index of unit generator output</ul>
+</ul>
+<h2><a class='anchor' name='Glossary'>Glossary</a></h2>
+<dl>
+<dt>calculation rate<dd>the rate that a computation is done. There are three rates numbered 0, 1, 2 as follows:<dl>
+<dt>0 = scalar rate<dd>one sample is computed at initialization time only.<dt>1 = control rate<dd>one sample is computed each control period.<dt>2 = audio rate<dd>one sample is computed for each sample of audio output.</dl>
+
+<p>Outputs have their own calculation rate. This allows MultiOutUGens to have outputs at different rates. A one output unit generator's calculation rate should match that of its output.<dt>constant<dd>a single floating point value that is used as a unit generator input.<dt>parameter<dd>a value that can be externally controlled using server commands /s.new, /n.set, /n.setn, /n.fill, /n.map .<dt>parameter name<dd>a string naming an index in the the parameter array. This allows one to refer to the same semantic value such as 'freq' or 'pan' in different synths even though they exist at different offsets in their respective parameter arrays.<dt>special index<dd>this value is used by some unit generators for a special purpose. For example, UnaryOpUGen and BinaryOpUGen use it to indicate which operator to perform. If not used it should be set to zero.<dt>synth<dd>a collection of unit generators that execute together. A synth is a type of node.<dt>synth definition<dd>a specification for creating synths.<dt>unit generator<dd>a basic signal processing module with inputs and outputs. unit generators are connected together to form synths.</dl>
+<h2><a class='anchor' name='Notes'>Notes</a></h2>
+
+<p>Unit generators are listed in the order they will be executed. Inputs must refer to constants or previous unit generators. No feedback loops are allowed. Feedback must be accomplished via delay lines or through buses.<h3><a class='anchor' name='For greatest efficiency:'>For greatest efficiency:</a></h3>
+
+<p>Unit generators should be listed in an order that permits efficient reuse of connection buffers, which means that a depth first topological sort of the graph is preferable to breadth first.
+<p>There should be no duplicate values in the constants table.
+<p>copyright © 2002 James McCartney - converted to new help system 2010 by Jonatan Liljedahl, updated for version 2 by Scott Wilson 2011<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/Synth-Definition-File-Format.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/Synth-Definition-File-Format.schelp</a><br>link::Reference/Synth-Definition-File-Format::<br>sc version: 3.8dev</div></div></body></html>

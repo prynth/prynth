@@ -1,0 +1,187 @@
+<html><head><title>KeyTrack</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Analysis>Pitch'>UGens>Analysis>Pitch</a></div>
+<h1>KeyTrack</h1>
+<div id='summary'>Key tracker</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/MachineListening.sc'>MachineListening.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/BeatTrack.html">BeatTrack</a>, <a href="./../Classes/Loudness.html">Loudness</a>, <a href="./../Classes/MFCC.html">MFCC</a>, <a href="./../Classes/Onsets.html">Onsets</a>, <a href="./../Classes/Pitch.html">Pitch</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A (12TET major/minor) key tracker based on a pitch class profile of energy across FFT bins and matching this to templates for major and minor scales in all transpositions. It assumes a 440 Hz concert A reference. Output is 0-11 C major to B major, 12-23 C minor to B minor.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>chain</span>, <span class='argstr'>keydecay: 2</span>, <span class='argstr'>chromaleak: 0.5</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>chain<td class='argumentdesc'>
+<p>[fft] Audio input to track. This must have been pre-analysed by a 4096 size FFT. No other FFT sizes are valid except as noted below.<pre class='code prettyprint lang-sc'>// With standard hop of half FFT size = 2048 samples
+b = Buffer.alloc(s,4096,1); // for sampling rates 44100 and 48000
+//b = Buffer.alloc(s,8192,1); // for sampling rates 88200 and 96000</pre>
+<tr><td class='argumentname'>keydecay<td class='argumentdesc'>
+<p>[sk] Number of seconds for the influence of a window on the final key decision to decay by 40dB (to 0.01 its original value).<tr><td class='argumentname'>chromaleak<td class='argumentdesc'>
+<p>[sk] Each frame, the chroma values are set to the previous value multiplied by the chromadecay. 0.0 will start each frame afresh with no memory.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// The following files are test materials on my machine; you will subsitute your own filenames here
+// A major
+d = Buffer.read(s,"/Volumes/data/stevebeattrack/samples/100.wav");
+// F major; hard to track!
+d = Buffer.read(s,"/Volumes/data/stevebeattrack/samples/115.wav");
+
+// straight forward since no transients; training set from MIREX2006
+// 01 = A major
+// 57 = b minor
+// 78 e minor
+// 08 Bb major
+d = Buffer.read(s, "/Users/nickcollins/Desktop/ML/training_wav/78.wav")
+
+b = Buffer.alloc(s, 4096, 1); // for sampling rates 44100 and 48000
+
+(
+{
+var in, fft, resample;
+var key, transientdetection;
+
+in = PlayBuf.ar(1, d, BufRateScale.kr(d), 1, 0, 1);
+
+fft = FFT(b, in);
+
+key=KeyTrack.kr(fft, 2.0, 0.5);
+
+key.poll;
+
+Out.ar(0,Pan2.ar(in));
+}.play
+)</pre>
+<pre class='code prettyprint lang-sc'>// alternating major and minor chords as a test
+(
+{
+var in, fft, resample;
+var key, transientdetection;
+
+in = Mix(SinOsc.ar((60 + [0, MouseX.kr(3, 4).round(1), 7]).midicps, 0, 0.1));
+
+// major dom 7 and minor 7; major keys preferred here
+//in = Mix(SinOsc.ar((60 + (MouseY.kr(0, 11).round(1.0)) + [0, MouseX.kr(3, 4).round(1), 7, 10]).midicps, 0, 0.1));
+
+fft = FFT(b, in);
+
+key = KeyTrack.kr(fft);
+
+key.poll;
+
+Out.ar(0,Pan2.ar(in));
+}.play
+)</pre>
+<pre class='code prettyprint lang-sc'>// Nice to hear what KeyTrack thinks:
+
+d = Buffer.read(s, "/Users/nickcollins/Desktop/ML/training_wav/78.wav")
+b = Buffer.alloc(s, 4096, 1); // for sampling rates 44100 and 48000
+
+(
+{
+var in, fft, resample, chord, rootnote, sympath;
+var key, transientdetection;
+
+in = PlayBuf.ar(1, d, BufRateScale.kr(d), 1, 0, 1);
+
+fft = FFT(b, in);
+
+key = KeyTrack.kr(fft, 2.0, 0.5);
+key.poll;
+key = Median.kr(101, key); // Remove outlier wibbles
+
+chord = if(key&lt;12, #[0, 4, 7], #[0, 3, 7]);
+rootnote = if(key&lt;12, key, key-12) + 60;
+
+sympath = SinOsc.ar((rootnote + chord).midicps, 0, 0.4).mean;
+
+Out.ar(0,Pan2.ar(in, -0.5) + Pan2.ar(sympath, 0.5));
+}.play
+)</pre>
+<pre class='code prettyprint lang-sc'>// Research Notes:
+// See the MIREX2006 audio key tracking competition and Emilia Gomez's PhD thesis, Tonal Description of Music Audio Signals
+
+// The following code was used to create the datasets for the UGen, and would be the basis of extensions
+
+// Need one set of bin data for 44100 and one for 48000
+
+// KeyTrack calculations, need to make arrays of FFT bins and weights for each chromatic tone.
+// greater resolution, 4096 FFT, avoid lower octaves, too messy there
+// 60*6*2 output arrays
+
+(
+var fftN, fftBins, binsize;
+var midinotes;
+var sr;
+var wtlist, binlist;
+
+sr = 48000; //44100;
+
+fftN = 4096;
+fftBins = fftN.div(2);
+binsize = sr / fftN;
+
+midinotes = (33..92); // 60 notes, 55 Hz up to 1661.2187903198 Hz
+
+wtlist = List[];
+binlist = List[];
+
+// for each note have six harmonic locations
+midinotes.do{ |note|
+    var freq, whichbin, lowerbin, prop;
+
+    freq = note.midicps;
+
+    6.do{|j|
+        var partialfreq, partialamp;
+
+        partialamp = 1.0 / (j + 1);
+        partialfreq = freq * (j + 1);
+
+        whichbin = partialfreq / binsize;
+        lowerbin = whichbin.asInteger;
+        prop = 1.0 - (whichbin - lowerbin);
+
+        binlist.add(lowerbin).add(lowerbin + 1);
+        wtlist.add(prop * partialamp).add((1.0 - prop) * partialamp);
+
+    };
+
+};
+
+
+Post &lt;&lt; (binlist) &lt;&lt; nl&lt;&lt; nl;
+
+Post &lt;&lt; (wtlist) &lt;&lt; nl&lt;&lt; nl;
+
+binlist.size.postln;
+wtlist.size.postln;
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/KeyTrack.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/KeyTrack.schelp</a><br>link::Classes/KeyTrack::<br>sc version: 3.8dev</div></div></body></html>

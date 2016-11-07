@@ -1,0 +1,488 @@
+<html><head><title>ArrayedCollection</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Collections>Ordered'>Collections>Ordered</a></div>
+<h1>ArrayedCollection</h1>
+<div id='summary'>Abstract superclass of Collections of fixed maximum size</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/ArrayedCollection.sc'>ArrayedCollection.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/SequenceableCollection.html">SequenceableCollection</a> : <a href="../Classes/Collection.html">Collection</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/Array.html">Array</a>, <a href="../Classes/RawArray.html">RawArray</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*newClear'>newClear</a> </li>
+<li class='toc3'><a href='#*with'>with</a> </li>
+<li class='toc3'><a href='#*series'>series</a> </li>
+<li class='toc3'><a href='#*geom'>geom</a> </li>
+<li class='toc3'><a href='#*iota'>iota</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-size'>size</a> </li>
+<li class='toc3'><a href='#-maxSize'>maxSize</a> </li>
+<li class='toc3'><a href='#-at'>at</a> </li>
+<li class='toc3'><a href='#-clipAt'>clipAt</a> </li>
+<li class='toc3'><a href='#-wrapAt'>wrapAt</a> </li>
+<li class='toc3'><a href='#-foldAt'>foldAt</a> </li>
+<li class='toc3'><a href='#-plot'>plot</a> </li>
+<li class='toc3'><a href='#-swap'>swap</a> </li>
+<li class='toc3'><a href='#-put'>put</a> </li>
+<li class='toc3'><a href='#-clipPut'>clipPut</a> </li>
+<li class='toc3'><a href='#-wrapPut'>wrapPut</a> </li>
+<li class='toc3'><a href='#-foldPut'>foldPut</a> </li>
+<li class='toc3'><a href='#-putEach'>putEach</a> </li>
+<li class='toc3'><a href='#-indexOf'>indexOf</a> </li>
+<li class='toc3'><a href='#-includes'>includes</a> </li>
+<li class='toc3'><a href='#-indexOfGreaterThan'>indexOfGreaterThan</a> </li>
+<li class='toc3'><a href='#-removeAt'>removeAt</a> </li>
+<li class='toc3'><a href='#-takeAt'>takeAt</a> </li>
+<li class='toc3'><a href='#-takeThese'>takeThese</a> </li>
+<li class='toc3'><a href='#-add'>add</a> </li>
+<li class='toc3'><a href='#-addAll'>addAll</a> </li>
+<li class='toc3'><a href='#-extend'>extend</a> </li>
+<li class='toc3'><a href='#-fill'>fill</a> </li>
+<li class='toc3'><a href='#-insert'>insert</a> </li>
+<li class='toc3'><a href='#-move'>move</a> </li>
+<li class='toc3'><a href='#-addFirst'>addFirst</a> </li>
+<li class='toc3'><a href='#-pop'>pop</a> </li>
+<li class='toc3'><a href='#-grow'>grow</a> </li>
+<li class='toc3'><a href='#-growClear'>growClear</a> </li>
+<li class='toc3'><a href='#-copyRange'>copyRange</a> </li>
+<li class='toc3'><a href='#-copySeries'>copySeries</a> </li>
+<li class='toc3'><a href='#-seriesFill'>seriesFill</a> </li>
+<li class='toc3'><a href='#-putSeries'>putSeries</a> </li>
+<li class='toc3'><a href='#-++'>++</a> </li>
+<li class='toc3'><a href='#-reverse'>reverse</a> </li>
+<li class='toc3'><a href='#-do'>do</a> </li>
+<li class='toc3'><a href='#-reverseDo'>reverseDo</a> </li>
+<li class='toc3'><a href='#-collect'>collect</a> </li>
+<li class='toc3'><a href='#-deepCollect'>deepCollect</a> </li>
+<li class='toc3'><a href='#-windex'>windex</a> </li>
+<li class='toc3'><a href='#-normalizeSum'>normalizeSum</a> </li>
+<li class='toc3'><a href='#-normalize'>normalize</a> </li>
+<li class='toc3'><a href='#-perfectShuffle'>perfectShuffle</a> </li>
+<li class='toc3'><a href='#-performInPlace'>performInPlace</a> </li>
+<li class='toc3'><a href='#-rank'>rank</a> </li>
+<li class='toc3'><a href='#-shape'>shape</a> </li>
+<li class='toc3'><a href='#-reshape'>reshape</a> </li>
+<li class='toc3'><a href='#-find'>find</a> </li>
+<li class='toc3'><a href='#-replace'>replace</a> </li>
+<li class='toc3'><a href='#-asRandomTable'>asRandomTable</a> </li>
+<li class='toc3'><a href='#-tableRand'>tableRand</a> </li>
+<li class='toc3'><a href='#-msgSize'>msgSize</a> </li>
+<li class='toc3'><a href='#-bundleSize'>bundleSize</a> </li>
+<li class='toc3'><a href='#-asciiPlot'>asciiPlot</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-addIfNotNil'>addIfNotNil</a> </li>
+<li class='toc3'><a href='#-asArray'>asArray</a> </li>
+<li class='toc3'><a href='#-atDec'>atDec</a> </li>
+<li class='toc3'><a href='#-atInc'>atInc</a> </li>
+<li class='toc3'><a href='#-atModify'>atModify</a> </li>
+<li class='toc3'><a href='#-bubble'>bubble</a> </li>
+<li class='toc3'><a href='#-clipExtend'>clipExtend</a> </li>
+<li class='toc3'><a href='#-clumpBundles'>clumpBundles</a> </li>
+<li class='toc3'><a href='#-deepDo'>deepDo</a> </li>
+<li class='toc3'><a href='#-getSlots'>getSlots</a> </li>
+<li class='toc3'><a href='#-indexedSize'>indexedSize</a> </li>
+<li class='toc3'><a href='#-isArray'>isArray</a> </li>
+<li class='toc3'><a href='#-lowpass'>lowpass</a> </li>
+<li class='toc3'><a href='#-lowpassCS'>lowpassCS</a> </li>
+<li class='toc3'><a href='#-overWrite'>overWrite</a> </li>
+<li class='toc3'><a href='#-prBundleSize'>prBundleSize</a> </li>
+<li class='toc3'><a href='#-reshapeLike'>reshapeLike</a> </li>
+<li class='toc3'><a href='#-setSlots'>setSlots</a> </li>
+<li class='toc3'><a href='#-slice'>slice</a> </li>
+<li class='toc3'><a href='#-slotAt'>slotAt</a> </li>
+<li class='toc3'><a href='#-slotIndex'>slotIndex</a> </li>
+<li class='toc3'><a href='#-slotKey'>slotKey</a> </li>
+<li class='toc3'><a href='#-slotPut'>slotPut</a> </li>
+<li class='toc3'><a href='#-slotSize'>slotSize</a> </li>
+<li class='toc3'><a href='#-unbubble'>unbubble</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>ArrayedCollection is an abstract class, a subclass of SequenceableCollections whose elements are held in a vector of slots. Instances of ArrayedCollection have a fixed maximum size beyond which they may not grow.
+<p>Its principal subclasses are <a href="./../Classes/Array.html">Array</a> (for holding objects), and <a href="./../Classes/RawArray.html">RawArray</a>, from which <a href="./../Classes/Int8Array.html">Int8Array</a>, <a href="./../Classes/FloatArray.html">FloatArray</a>, <a href="./../Classes/Signal.html">Signal</a> etc. inherit.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*newClear' href='./../Overviews/Methods.html#newClear'>newClear</a> (<span class='argstr'>indexedSize: 0</span>)</h3>
+<div class='method'>
+<p>Creates a new instance with <strong>indexedSize</strong> indexable slots. The slots are filled with <a href="./../Classes/Nil.html">Nil</a>, zero or something else appropriate to the type of indexable slots in the object.<pre class='code prettyprint lang-sc'>Array.newClear(4).postln;</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*with' href='./../Overviews/Methods.html#with'>with</a> ( <span class='argstr'>... args</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
+<div class='method'>
+<p>Create a new ArrayedCollection whose slots are filled with the given arguments.<pre class='code prettyprint lang-sc'>Array.with(7, 'eight',  9).postln;</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*series' href='./../Overviews/Methods.html#series'>series</a> (<span class='argstr'>size</span>, <span class='argstr'>start: 0</span>, <span class='argstr'>step: 1</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/SequenceableCollection.html'>SequenceableCollection</a></div>
+<div class='method'>
+<p>Fill an ArrayedCollection with an arithmetic series.<pre class='code prettyprint lang-sc'>Array.series(5, 10, 2).postln;</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*geom' href='./../Overviews/Methods.html#geom'>geom</a> (<span class='argstr'>size</span>, <span class='argstr'>start</span>, <span class='argstr'>grow</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/SequenceableCollection.html'>SequenceableCollection</a></div>
+<div class='method'>
+<p>Fill an ArrayedCollection with a geometric series.<pre class='code prettyprint lang-sc'>Array.geom(5, 1, 3).postln;</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*iota' href='./../Overviews/Methods.html#iota'>iota</a> ( <span class='argstr'>... sizes</span>)</h3>
+<div class='method'>
+<p>Fills an ArrayedCollection with a counter. See <a href="./../Guides/J-concepts-in-SC.html">J concepts in SC</a> for more examples.<pre class='code prettyprint lang-sc'>Array.iota(2, 3);
+Array.iota(2, 3, 4);</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-size' href='./../Overviews/Methods.html#size'>size</a> </h3>
+<div class='method'>
+<p>Return the number of elements the ArrayedCollection.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxSize' href='./../Overviews/Methods.html#maxSize'>maxSize</a> </h3>
+<div class='method'>
+<p>Return the maximum number of elements the ArrayedCollection can hold. For example, <a href="./../Classes/Array.html">Array</a>s may initialise themselves with a larger capacity than the number of elements added.<pre class='code prettyprint lang-sc'>[4, 5, 6].maxSize; // gosh</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-at' href='./../Overviews/Methods.html#at'>at</a> (<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>Return the item at <strong>index</strong>.
+<p>The index can also be an Array of indices to extract specified elements. Example:<pre class='code prettyprint lang-sc'>x = [10,20,30];
+y = [0,0,2,2,1];
+x[y]; // returns [ 10, 10, 30, 30, 20 ]</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clipAt' href='./../Overviews/Methods.html#clipAt'>clipAt</a> (<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>Same as <a href="#-at">-at</a>, but values for <strong>index</strong> greater than the size of the ArrayedCollection will be clipped to the last index.<pre class='code prettyprint lang-sc'>y = [ 1, 2, 3 ];
+y.clipAt(13).postln;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-wrapAt' href='./../Overviews/Methods.html#wrapAt'>wrapAt</a> (<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>Same as <a href="#-at">-at</a>, but values for <strong>index</strong> greater than the size of the ArrayedCollection will be wrapped around to 0.<pre class='code prettyprint lang-sc'>y = [ 1, 2, 3 ];
+y.wrapAt(3).postln; // this returns the value at index 0
+y.wrapAt(4).postln; // this returns the value at index 1
+y.wrapAt([-2, 1])   // index can also be a collection or negative numbers</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-foldAt' href='./../Overviews/Methods.html#foldAt'>foldAt</a> (<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>Same as <a href="#-at">-at</a>, but values for <strong>index</strong> greater than the size of the ArrayedCollection will be folded back.<pre class='code prettyprint lang-sc'>y = [ 1, 2, 3 ];
+y.foldAt(3).postln; // this returns the value at index 1
+y.foldAt(4).postln; // this returns the value at index 0
+y.foldAt(5).postln; // this returns the value at index 1</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-plot' href='./../Overviews/Methods.html#plot'>plot</a> (<span class='argstr'>name</span>, <span class='argstr'>bounds</span>, <span class='argstr'>discrete: false</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>minval</span>, <span class='argstr'>maxval</span>, <span class='argstr'>separately: true</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc</a></div>
+<div class='method'>
+<p>Plot data in a GUI window. See <a href="./../Reference/plot.html">plot</a> for more details.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-swap' href='./../Overviews/Methods.html#swap'>swap</a> (<span class='argstr'>i</span>, <span class='argstr'>j</span>)</h3>
+<div class='method'>
+<p>Swap the values at indices i and j.<pre class='code prettyprint lang-sc'>[ 1, 2, 3 ].swap(0, 2).postln;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-put' href='./../Overviews/Methods.html#put'>put</a> (<span class='argstr'>index</span>, <span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Put <strong>item</strong> at <strong>index</strong>, replacing what is there.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clipPut' href='./../Overviews/Methods.html#clipPut'>clipPut</a> (<span class='argstr'>index</span>, <span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Same as <a href="#-put">-put</a>, but values for <strong>index</strong> greater than the size of the ArrayedCollection will be clipped to the last index.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-wrapPut' href='./../Overviews/Methods.html#wrapPut'>wrapPut</a> (<span class='argstr'>index</span>, <span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Same as <a href="#-put">-put</a>, but values for <strong>index</strong> greater than the size of the ArrayedCollection will be wrapped around to 0.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-foldPut' href='./../Overviews/Methods.html#foldPut'>foldPut</a> (<span class='argstr'>index</span>, <span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Same as <a href="#-put">-put</a>, but values for <strong>index</strong> greater than the size of the ArrayedCollection will be folded back.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-putEach' href='./../Overviews/Methods.html#putEach'>putEach</a> (<span class='argstr'>keys</span>, <span class='argstr'>values</span>)</h3>
+<div class='method'>
+<p>Put the <strong>values</strong> in the corresponding indices given by <strong>keys</strong>. If one of the two argument arrays is longer then it will wrap.<pre class='code prettyprint lang-sc'>y = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+y.putEach([4, 7], [\smelly, \head]);
+y.putEach([2, 3, 5, 6], \wotsits);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-indexOf' href='./../Overviews/Methods.html#indexOf'>indexOf</a> (<span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Return the first index containing an item which matches <strong>item</strong>.<pre class='code prettyprint lang-sc'>y = [ \the, \symbol, \collection, \contains, \my, \symbol ];
+y.indexOf(\symbol);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-includes' href='./../Overviews/Methods.html#includes'>includes</a> (<span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Return a boolean indicating whether the collection contains anything matching <strong>item</strong>.<pre class='code prettyprint lang-sc'>y = [ \the, \symbol, \collection, \contains, \my, \symbol ];
+y.includes(\symbol);
+y.includes(\solipsism);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-indexOfGreaterThan' href='./../Overviews/Methods.html#indexOfGreaterThan'>indexOfGreaterThan</a> (<span class='argstr'>val</span>)</h3>
+<div class='method'>
+<p>Return the first index containing an item which is greater than <strong>item</strong>.<pre class='code prettyprint lang-sc'>y = [ 10, 5, 77, 55, 12, 123];
+y.indexOfGreaterThan(70);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeAt' href='./../Overviews/Methods.html#removeAt'>removeAt</a> (<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>Remove and return the element at <strong>index</strong>, shrinking the size of the ArrayedCollection.<pre class='code prettyprint lang-sc'>y = [ 1, 2, 3 ];
+y.removeAt(1);
+y.postln;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-takeAt' href='./../Overviews/Methods.html#takeAt'>takeAt</a> (<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>Similar to <a href="#-removeAt">-removeAt</a>, but does not maintain the order of the items following the one that was removed. Instead, the last item is placed into the position of the removed item and the array's size decreases by one.<pre class='code prettyprint lang-sc'>y = [ 1, 2, 3, 4, 5 ];
+y.takeAt(1);
+y.postln;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-takeThese' href='./../Overviews/Methods.html#takeThese'>takeThese</a> (<span class='argstr'>func</span>)</h3>
+<div class='method'>
+<p>Removes all items in the receiver for which the <strong>func</strong> answers true. The function is passed two arguments, the item and an integer index. Note that order is not preserved. See <a href="#-takeAt">-takeAt</a>.<pre class='code prettyprint lang-sc'>y = [ 1, 2, 3, 4 ];
+y.takeThese({ arg item, index; item.odd; });    //remove odd items
+y.postln;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-add' href='./../Overviews/Methods.html#add'>add</a> (<span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Adds an item to an ArrayedCollection if there is space. This method may return a new ArrayedCollection. For this reason, you should always assign the result of add to a variable - never depend on <code class='code prettyprint lang-sc'>add</code> changing the receiver.<pre class='code prettyprint lang-sc'>(
+// z and y are the same object
+var y, z;
+z = [1, 2, 3];
+y = z.add(4);
+z.postln;
+y.postln;
+)
+
+(
+// in this case a new object is returned
+var y, z;
+z = [1, 2, 3, 4];
+y = z.add(5);
+z.postln;
+y.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addAll' href='./../Overviews/Methods.html#addAll'>addAll</a> (<span class='argstr'>aCollection</span>)</h3>
+<div class='method'>
+<p>Adds all the elements of aCollection to the contents of the receiver. This method may return a new ArrayedCollection. For this reason, you should always assign the result of <code class='code prettyprint lang-sc'>addAll</code> to a variable - never depend on add changing the receiver.<pre class='code prettyprint lang-sc'>(
+// in this case a new object is returned
+var y, z;
+z = [1, 2, 3, 4];
+y = z.addAll([7, 8, 9]);
+z.postln;
+y.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-extend' href='./../Overviews/Methods.html#extend'>extend</a> (<span class='argstr'>size</span>, <span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Extends the object to match <strong>size</strong> by adding a number of <strong>item</strong>s. If <strong>size</strong> is less than receiver size then truncate. This method may return a new ArrayedCollection. For this reason, you should always assign the result of <code class='code prettyprint lang-sc'>extend</code> to a variable - never depend on add changing the receiver.<pre class='code prettyprint lang-sc'>(
+var y, z;
+z = [1, 2, 3, 4];
+y = z.extend(10, 9);        //fill up with 9 until the size equals 10
+z.postln;
+y.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fill' href='./../Overviews/Methods.html#fill'>fill</a> (<span class='argstr'>value</span>)</h3>
+<div class='method'>
+<p>Inserts the item into the contents of the receiver.<div class='note'><span class='notelabel'>NOTE:</span> the difference between this and <a href="./../Classes/Collection.html#fill">Collection's *fill</a>.</div>
+<p><pre class='code prettyprint lang-sc'>(
+var z;
+z = [1, 2, 3, 4];
+z.fill(4).postln;
+z.fill([1,2,3,4]).postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-insert' href='./../Overviews/Methods.html#insert'>insert</a> (<span class='argstr'>index</span>, <span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Inserts the item into the contents of the receiver. This method may return a new ArrayedCollection. For this reason, you should always assign the result of <code class='code prettyprint lang-sc'>insert</code> to a variable - never depend on add changing the receiver.<pre class='code prettyprint lang-sc'>(
+// in this case a new object is returned
+var y, z;
+z = [1, 2, 3, 4];
+y = z.insert(1, 999);
+z.postln;
+y.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-move' href='./../Overviews/Methods.html#move'>move</a> (<span class='argstr'>fromIndex</span>, <span class='argstr'>toIndex</span>)</h3>
+<div class='method'>
+<p>Moves an item from one position to another.<pre class='code prettyprint lang-sc'>[10, 20, 1000, 40, 50].move(2, 0) // move 1000 to index 0</pre>
+<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>fromIndex<td class='argumentdesc'>
+<p>The position in the array from which the element is removed.<tr><td class='argumentname'>toIndex<td class='argumentdesc'>
+<p>The position in the array before which the element is inserted again.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addFirst' href='./../Overviews/Methods.html#addFirst'>addFirst</a> (<span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Inserts the item before the contents of the receiver, possibly returning a new collection.<pre class='code prettyprint lang-sc'>(
+// in this case a new object is returned
+var y, z;
+z = [1, 2, 3, 4];
+y = z.addFirst(999);
+z.postln;
+y.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pop' href='./../Overviews/Methods.html#pop'>pop</a> </h3>
+<div class='method'>
+<p>Remove and return the last element of the ArrayedCollection.<pre class='code prettyprint lang-sc'>(
+var z;
+z = [1, 2, 3, 4];
+z.pop.postln;
+z.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-grow' href='./../Overviews/Methods.html#grow'>grow</a> (<span class='argstr'>sizeIncrease</span>)</h3>
+<div class='method'>
+<p>Increase the size of the ArrayedCollection by <strong>sizeIncrease</strong> number of slots, possibly returning a new collection.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-growClear' href='./../Overviews/Methods.html#growClear'>growClear</a> (<span class='argstr'>sizeIncrease</span>)</h3>
+<div class='method'>
+<p>Increase the size of the ArrayedCollection by <strong>sizeIncrease</strong> number of slots, returning a new collection with <a href="./../Classes/Nil.html">Nil</a>s in the added slots.<pre class='code prettyprint lang-sc'>// Compare:
+[4,5,6].grow(5);
+[4,5,6].growClear(5);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-copyRange' href='./../Overviews/Methods.html#copyRange'>copyRange</a> (<span class='argstr'>start</span>, <span class='argstr'>end</span>)</h3>
+<div class='method'>
+<p>Return a new ArrayedCollection which is a copy of the indexed slots of the receiver from <strong>start</strong> to <strong>end</strong>. If <strong>end</strong> &lt; <strong>start</strong>, an empty ArrayedCollection is returned.<pre class='code prettyprint lang-sc'>(
+var y, z;
+z = [1, 2, 3, 4, 5];
+y = z.copyRange(1,3);
+z.postln;
+y.postln;
+)</pre>
+
+<p><div class='warning'><span class='warninglabel'>WARNING:</span> <code class='code prettyprint lang-sc'>x.copyRange(a, b)</code> is <strong>not</strong> equivalent to <code class='code prettyprint lang-sc'>x[a..b]</code>. The latter compiles to <a href="#-copySeries">-copySeries</a>, which has different behavior when <strong>end</strong> &lt; <strong>start</strong>.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-copySeries' href='./../Overviews/Methods.html#copySeries'>copySeries</a> (<span class='argstr'>first</span>, <span class='argstr'>second</span>, <span class='argstr'>last</span>)</h3>
+<div class='method'>
+<p>Return a new ArrayedCollection consisting of the values starting at <strong>first</strong>, then every step of the distance between <strong>first</strong> and <strong>second</strong>, up until <strong>last</strong>. If <strong>second</strong> is <code class='code prettyprint lang-sc'>nil</code>, a step of 1 or -1 is used as appropriate.
+<p><code class='code prettyprint lang-sc'>x.copySeries(a, nil, c)</code> is equivalent to <code class='code prettyprint lang-sc'>x[a..c]</code>, and <code class='code prettyprint lang-sc'>x.copySeries(a, b, c)</code> is equivalent to <code class='code prettyprint lang-sc'>x[a,b..c]</code><pre class='code prettyprint lang-sc'>(
+var y, z;
+z = [1, 2, 3, 4, 5, 6];
+y = z.copySeries(0, 2, 5);
+y.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-seriesFill' href='./../Overviews/Methods.html#seriesFill'>seriesFill</a> (<span class='argstr'>start</span>, <span class='argstr'>step</span>)</h3>
+<div class='method'>
+<p>Fill the receiver with an arithmetic progression. The first element will be <strong>start</strong>, the second <strong>start + step</strong>, the third <strong>start + step + step</strong> ...<pre class='code prettyprint lang-sc'>(
+var y;
+y = Array.newClear(15);
+y.seriesFill(5, 3);
+y.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-putSeries' href='./../Overviews/Methods.html#putSeries'>putSeries</a> (<span class='argstr'>first</span>, <span class='argstr'>second</span>, <span class='argstr'>last</span>, <span class='argstr'>value</span>)</h3>
+<div class='method'>
+<p>Put <strong>value</strong> at every index starting at <strong>first</strong>, then every step of the distance between <strong>first</strong> and <strong>second</strong>, up until <strong>last</strong>. <code class='code prettyprint lang-sc'>x.putSeries(a, b, c, val)</code> can also be written as <code class='code prettyprint lang-sc'>x[a, b..c] = val</code><pre class='code prettyprint lang-sc'>(
+var y, z;
+z = [1, 2, 3, 4, 5, 6];
+y = z.putSeries(0, 2, 5, "foo");
+y.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-++' href='./../Overviews/Methods.html#++'>++</a> (<span class='argstr'>anArray</span>)</h3>
+<div class='method'>
+<p>Concatenate the contents of the two collections into a new ArrayedCollection.<pre class='code prettyprint lang-sc'>(
+var y, z;
+z = [1, 2, 3, 4];
+y = z ++ [7, 8, 9];
+z.postln;
+y.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-reverse' href='./../Overviews/Methods.html#reverse'>reverse</a> </h3>
+<div class='method'>
+<p>Return a new ArrayedCollection whose elements are reversed.<pre class='code prettyprint lang-sc'>(
+var y, z;
+z = [1, 2, 3, 4];
+y = z.reverse;
+z.postln;
+y.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-do' href='./../Overviews/Methods.html#do'>do</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Iterate over the elements in order, calling the function for each element. The function is passed two arguments, the element and an index.<pre class='code prettyprint lang-sc'>['a', 'b', 'c'].do({ arg item, i; [i, item].postln; });</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-reverseDo' href='./../Overviews/Methods.html#reverseDo'>reverseDo</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Iterate over the elements in reverse order, calling the function for each element. The function is passed two arguments, the element and an index.<pre class='code prettyprint lang-sc'>['a', 'b', 'c'].reverseDo({ arg item, i; [i, item].postln; });</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-collect' href='./../Overviews/Methods.html#collect'>collect</a> (<span class='argstr'>function</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
+<div class='method'>
+<p>Answer a new collection which consists of the results of function evaluated for each item in the collection. The function is passed two arguments, the item and an integer index. See <a href="./../Classes/Collection.html">Collection</a> helpfile for examples.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-deepCollect' href='./../Overviews/Methods.html#deepCollect'>deepCollect</a> (<span class='argstr'>depth: 1</span>, <span class='argstr'>function</span>, <span class='argstr'>index: 0</span>, <span class='argstr'>rank: 0</span>)</h3>
+<div class='method'>
+<p>The same as <a href="#-collect">-collect</a>, but can look inside sub-arrays up to the specified <strong>depth</strong>.<pre class='code prettyprint lang-sc'>a = [99, [4,6,5], [[32]]];
+a.deepCollect(1, {|item| item.isArray}).postln;
+a.deepCollect(2, {|item| item.isArray}).postln;
+a.deepCollect(3, {|item| item.isArray}).postln;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-windex' href='./../Overviews/Methods.html#windex'>windex</a> </h3>
+<div class='method'>
+<p>Interprets the array as a list of probabilities which should sum to 1.0 and returns a random index value based on those probabilities.<pre class='code prettyprint lang-sc'>(
+Array.fill(10, {
+    [0.1, 0.6, 0.3].windex;
+}).postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-normalizeSum' href='./../Overviews/Methods.html#normalizeSum'>normalizeSum</a> </h3>
+<div class='method'>
+<p>Returns the Array resulting from :<pre class='code prettyprint lang-sc'>(this / this.sum)</pre>
+
+<p>so that the array will sum to 1.0.
+<p>This is useful for using with windex or wchoose.<pre class='code prettyprint lang-sc'>[1, 2, 3].normalizeSum.postln;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-normalize' href='./../Overviews/Methods.html#normalize'>normalize</a> (<span class='argstr'>min: 0</span>, <span class='argstr'>max: 1</span>)</h3>
+<div class='method'>
+<p>Returns a new Array with the receiver items normalized between <strong>min</strong> and <strong>max</strong>.<pre class='code prettyprint lang-sc'>[1, 2, 3].normalize;            //default min=0, max= 1
+[1, 2, 3].normalize(-20, 10);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-perfectShuffle' href='./../Overviews/Methods.html#perfectShuffle'>perfectShuffle</a> </h3>
+<div class='method'>
+<p>Returns a copy of the receiver with its items split into two equal halves, then reconstructed by interleaving the two halves.<div class='note'><span class='notelabel'>NOTE:</span> use an even number of item pairs in order to not loose any items in the shuffle.</div>
+<p><pre class='code prettyprint lang-sc'>(
+var y, z;
+z = [ 1, 2, 3, 4, 5, 6 ];
+y = z.perfectShuffle;
+z.postln;
+y.postln;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-performInPlace' href='./../Overviews/Methods.html#performInPlace'>performInPlace</a> (<span class='argstr'>selector</span>, <span class='argstr'>from</span>, <span class='argstr'>to</span>, <span class='argstr'>argList</span>)</h3>
+<div class='method'>
+<p>Performs a method in place, within a certain region [from..to], returning the same array.<pre class='code prettyprint lang-sc'>a = (0..10);
+a.performInPlace(\normalizeSum, 3, 6);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-rank' href='./../Overviews/Methods.html#rank'>rank</a> </h3>
+<div class='method'>
+<p>Rank is the number of dimensions in a multidimensional array.<pre class='code prettyprint lang-sc'>a = [4,7,6,8];
+a.rank;
+a = [[4,7],[6,8]];
+a.rank;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-shape' href='./../Overviews/Methods.html#shape'>shape</a> </h3>
+<div class='method'>
+<p>For a multidimensional array, returns the number of elements along each dimension.<pre class='code prettyprint lang-sc'>a = [4,7,6,8];
+a.shape;
+a = [[4,7],[6,8]];
+a.shape;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-reshape' href='./../Overviews/Methods.html#reshape'>reshape</a> ( <span class='argstr'>... shape</span>)</h3>
+<div class='method'>
+<p>For a multidimensional array, rearranges the data using the desired number of elements along each dimension. The data may be extended using wrapExtend if needed.<pre class='code prettyprint lang-sc'>a = [4,7,6,8];
+a.reshape(2,2);
+a.reshape(2,3);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-find' href='./../Overviews/Methods.html#find'>find</a> (<span class='argstr'>sublist</span>, <span class='argstr'>offset: 0</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/SequenceableCollection.html'>SequenceableCollection</a></div>
+<div class='method'>
+<p>Finds the starting index of a number of elements contained in the array.<pre class='code prettyprint lang-sc'>a = (0..10);
+a.find([4, 5, 6]);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-replace' href='./../Overviews/Methods.html#replace'>replace</a> (<span class='argstr'>find</span>, <span class='argstr'>replace</span>)</h3>
+<div class='method'>
+<p>Return a new array in which a number of elements have been replaced by another.<pre class='code prettyprint lang-sc'>a = (0..10) ++ (0..10);
+a.replace([4, 5, 6], 100);
+a.replace([4, 5, 6], [1734, 1985, 1860]);</pre>
+
+<p>this method is inherited by <a href="./../Classes/String.html">String</a> :<pre class='code prettyprint lang-sc'>a = "hello world";
+a.replace("world", "word");</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asRandomTable' href='./../Overviews/Methods.html#asRandomTable'>asRandomTable</a> (<span class='argstr'>size</span>)</h3>
+<div class='method'>
+<p>Return an integral table that can be used to generate random numbers with a specified distribution. (see <a href="./../Guides/Randomness.html">Randomness</a> helpfile for a more detailed example)<pre class='code prettyprint lang-sc'>(
+a = (0..100) ++ (100..50) / 100; // distribution
+a = a.asRandomTable;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-tableRand' href='./../Overviews/Methods.html#tableRand'>tableRand</a> </h3>
+<div class='method'>
+<p>Returns a new random number from a random table.<pre class='code prettyprint lang-sc'>(
+a = (0..100) ++ (100..50) / 100; // distribution
+a = a.asRandomTable;
+20.do { a.tableRand.postln };
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-msgSize' href='./../Overviews/Methods.html#msgSize'>msgSize</a> </h3>
+<div class='method'>
+<p>Return the size of an osc message in bytes<pre class='code prettyprint lang-sc'>a = ["/s_new", "default", -1, "freq", 440];
+a.msgSize;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-bundleSize' href='./../Overviews/Methods.html#bundleSize'>bundleSize</a> </h3>
+<div class='method'>
+<p>Return the size of an osc bundle in bytes<pre class='code prettyprint lang-sc'>a = [["/s_new", "default", -1, "freq", 440], ["/s_new", "default", -1, "freq", 220]];
+a.bundleSize;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asciiPlot' href='./../Overviews/Methods.html#asciiPlot'>asciiPlot</a> </h3>
+<div class='method'>
+<p>For an ArrayedCollection containing numbers (e.g. audio data) this renders a plot in the post window using asterisks and spaces (works best if you use a monospace font in your post window).<pre class='code prettyprint lang-sc'>a = (0, pi/10 .. 5pi).collect{|val| val.sin};
+a.asciiPlot;</pre>
+
+<p></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-addIfNotNil' href='./../Overviews/Methods.html#addIfNotNil'>addIfNotNil</a> (<span class='argstr'>item</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asArray' href='./../Overviews/Methods.html#asArray'>asArray</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-atDec' href='./../Overviews/Methods.html#atDec'>atDec</a> (<span class='argstr'>index</span>, <span class='argstr'>dec: 1</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-atInc' href='./../Overviews/Methods.html#atInc'>atInc</a> (<span class='argstr'>index</span>, <span class='argstr'>inc: 1</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-atModify' href='./../Overviews/Methods.html#atModify'>atModify</a> (<span class='argstr'>index</span>, <span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bubble' href='./../Overviews/Methods.html#bubble'>bubble</a> (<span class='argstr'>depth: 0</span>, <span class='argstr'>levels: 1</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-clipExtend' href='./../Overviews/Methods.html#clipExtend'>clipExtend</a> (<span class='argstr'>length</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-clumpBundles' href='./../Overviews/Methods.html#clumpBundles'>clumpBundles</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-deepDo' href='./../Overviews/Methods.html#deepDo'>deepDo</a> (<span class='argstr'>depth: 1</span>, <span class='argstr'>function</span>, <span class='argstr'>index: 0</span>, <span class='argstr'>rank: 0</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getSlots' href='./../Overviews/Methods.html#getSlots'>getSlots</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-indexedSize' href='./../Overviews/Methods.html#indexedSize'>indexedSize</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isArray' href='./../Overviews/Methods.html#isArray'>isArray</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lowpass' href='./../Overviews/Methods.html#lowpass'>lowpass</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/AnaUtils.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/AnaUtils.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lowpassCS' href='./../Overviews/Methods.html#lowpassCS'>lowpassCS</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/AnaUtils.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/AnaUtils.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-overWrite' href='./../Overviews/Methods.html#overWrite'>overWrite</a> (<span class='argstr'>aCollection</span>, <span class='argstr'>pos: 0</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prBundleSize' href='./../Overviews/Methods.html#prBundleSize'>prBundleSize</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-reshapeLike' href='./../Overviews/Methods.html#reshapeLike'>reshapeLike</a> (<span class='argstr'>another</span>, <span class='argstr'>indexing: 'wrapAt'</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setSlots' href='./../Overviews/Methods.html#setSlots'>setSlots</a> (<span class='argstr'>array</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-slice' href='./../Overviews/Methods.html#slice'>slice</a> ( <span class='argstr'>... cuts</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-slotAt' href='./../Overviews/Methods.html#slotAt'>slotAt</a> (<span class='argstr'>index</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-slotIndex' href='./../Overviews/Methods.html#slotIndex'>slotIndex</a> (<span class='argstr'>key</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-slotKey' href='./../Overviews/Methods.html#slotKey'>slotKey</a> (<span class='argstr'>index</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-slotPut' href='./../Overviews/Methods.html#slotPut'>slotPut</a> (<span class='argstr'>index</span>, <span class='argstr'>value</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-slotSize' href='./../Overviews/Methods.html#slotSize'>slotSize</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-unbubble' href='./../Overviews/Methods.html#unbubble'>unbubble</a> (<span class='argstr'>depth: 0</span>, <span class='argstr'>levels: 1</span>)</h3>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/ArrayedCollection.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/ArrayedCollection.schelp</a><br>link::Classes/ArrayedCollection::<br>sc version: 3.8dev</div></div></body></html>

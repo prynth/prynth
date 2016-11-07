@@ -1,0 +1,70 @@
+<html><head><title>basic_live_coding_techniques</title>
+<link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../scdoc.js' type='text/javascript'></script>
+<script src='./../../docmap.js' type='text/javascript'></script>
+<script src='./../../prettify.js' type='text/javascript'></script>
+<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./../..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS/JITLIB</div>
+<div id='categories'><a href='./../../Browse.html#Libraries>JITLib>Tutorials'>Libraries>JITLib>Tutorials</a>, <a href='./../../Browse.html#Tutorials>JITLib'>Tutorials>JITLib</a></div>
+<h1>basic_live_coding_techniques</h1>
+<div id='summary'>basic live coding techniques</div>
+</div>
+<div class='subheader'>
+</div>
+<div id='toc'>
+<ul class='toc'></ul></div>
+<p>basic live coding techniques ("object style") without the use of JITLib
+<p>more to come..
+<p>using a simple environment. this looks just like ProxySpace, but works differently. for the difference, see <a href="./../../Tutorials/JITLib/jitlib_basic_concepts_01.html">jitlib_basic_concepts_01</a> and <a href="./../../Tutorials/JITLib/jitlib_basic_concepts_02.html">jitlib_basic_concepts_02</a>.<pre class='code prettyprint lang-sc'>d = (); // create a new environment
+d.push; // push it to current
+
+// this synthdef can be changed on the fly, but the synth will
+// not change from this. use expression [1] for replacing a given synth
+(
+SynthDef(\x, { |freq=440|
+    Out.ar(0,
+        Ringz.ar(Dust.ar(40), freq, 0.1)
+    )
+}).send(s);
+)
+
+// send a first synth:
+~s1 = Synth(\x);
+
+// [1]
+// now you can play around with these lines, as well as with the synth def above
+~s1 = Synth.replace(~s1, \x, [\freq, 3000]);
+~s1.set(\freq, 4000);
+
+// add a bus:
+
+~b1 = Bus.control(s);
+~b1.set(350);
+~s1.map(\freq, ~b1);
+
+// set the bus to different values:
+
+~b1.set(100);
+~b1.xline(800, 5);
+
+~s3 = { Out.kr(~b1, MouseX.kr(300, 900, 1)) }; // add some mouse control on the fly
+~s3.free; // remove it again.
+
+
+
+// finish:
+
+~b1.free;
+d.clear;
+d.pop;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/JITLib/basic_live_coding_techniques.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/JITLib/basic_live_coding_techniques.schelp</a><br>link::Tutorials/JITLib/basic_live_coding_techniques::<br>sc version: 3.8dev</div></div></body></html>

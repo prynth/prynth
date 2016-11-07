@@ -1,0 +1,67 @@
+<html><head><title>default_group</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider REFERENCE</div>
+<div id='categories'><a href='./../Browse.html#Server>Nodes'>Server>Nodes</a></div>
+<h1>default_group</h1>
+<div id='summary'>The default Group</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Classes/Group.html">Group</a>, <a href="./../Classes/RootNode.html">RootNode</a>, <a href="./../Classes/Node.html">Node</a>, <a href="./../Guides/NodeMessaging.html">Node Messaging</a>, <a href="./../Guides/Order-of-execution.html">Order of execution</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'></ul></div><ul class='tree'>
+<li>root node (id:0)<ul class='tree'>
+<li>default group (id:1)</ul>
+</ul>
+
+<p>When a Server is booted there is a top level group with an ID of 0 that defines the root of the node tree. (This is represented by a subclass of Group: <a href="./../Classes/RootNode.html">RootNode</a>.) If the Server was booted from within SCLang (as opposed to from the command line) a default group with an ID of 1 will be automatically created.<a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> This is the default target for all Nodes when using object style and is what you will get if you supply a <a href="./../Classes/Server.html">Server</a> as a target. If you don't specify a target or pass in nil, you will get the default group of the default Server.<pre class='code prettyprint lang-sc'>s.boot;
+a = Synth.new(\default); // creates a synth in the default group of the default Server
+a.group; // note the Group ID</pre>
+
+<p>The default group serves an important purpose: It provides a predictable basic Node tree so that methods such as Server-scope, Server-record, etc. can function without running into order of execution problems. In the example below the scoping node will come after the default group.<pre class='code prettyprint lang-sc'>s.boot;
+
+{ SinOsc.ar(mul: 0.2) }.scope(1);
+
+// watch the post window;
+s.queryAllNodes;
+
+// our SinOsc synth is within the default group (ID 1)
+// the scope node comes after the default group, so no problems
+
+s.quit;</pre>
+
+<p>Note that the default group is persistent: It is created in Server's <code class='code prettyprint lang-sc'>initTree</code> method (executed along with any code stored in its tree instance variable; see Server for more detail) and is recreated upon reboot, after pressing Cmd-., and after all nodes are freed. When using osc messages this means that a target node of id 1 can always be used:<pre class='code prettyprint lang-sc'>s.sendMsg("/s_new", "snd", 1832,0,1); // add to head of group 1</pre>
+
+<p>The default group can be specifically freed, but there is generally no reason that one would want to do so.
+<p>In general one should add nodes to the default group rather than the RootNode unless one has a specific reason to do so (i.e. adding some new functionality such as recording and scoping which is dependent upon a predictable basic node order). When using object style the default group is the default target for all new nodes, so nodes will normally not be added to the RootNode unless that is explicitly specified. It is of course possible to do so, but it should only be done with a proper understanding of the issues involved.
+<p>For instance, if one were to place an 'effects' synth after the default group and call Server-record or Server-scope, the resulting recording or scope synths may not be correctly ordered:<ul class='tree'>
+<li>default group<ul class='tree'>
+<li>source synth1<li>source synth2</ul>
+
+<p><li>recording synth<li>effects synth</ul>
+
+<p>In the above example the recording synth might not capture the output of the effects synth since it comes later in the node order.
+<p>A better method in this case is to create a group within the default group and place the effects synth after that.<ul class='tree'>
+<li>default group<ul class='tree'>
+<li>source group<ul class='tree'>
+<li>source synth1<li>source synth2</ul>
+
+<p><li>effects synth</ul>
+
+<p><li>recording synth</ul>
+<div class='footnotes'>
+<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - When booting the server from the command line, you can create the default group manually with:<pre class='code prettyprint lang-sc'>s.initTree;</pre>
+</div></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/default_group.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/default_group.schelp</a><br>link::Reference/default_group::<br>sc version: 3.8dev</div></div></body></html>

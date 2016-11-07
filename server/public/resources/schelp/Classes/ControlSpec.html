@@ -1,0 +1,247 @@
+<html><head><title>ControlSpec</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Control'>Control</a>, <a href='./../Browse.html#Spec'>Spec</a></div>
+<h1>ControlSpec</h1>
+<div id='summary'>numerical input specification</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/ControlModel.sc'>ControlModel.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Spec.html">Spec</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Warp.html">Warp</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*newFrom'>newFrom</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-map'>map</a> </li>
+<li class='toc3'><a href='#-unmap'>unmap</a> </li>
+<li class='toc3'><a href='#-clipLo'>clipLo</a> </li>
+<li class='toc3'><a href='#-clipHi'>clipHi</a> </li>
+<li class='toc3'><a href='#-constrain'>constrain</a> </li>
+<li class='toc3'><a href='#-range'>range</a> </li>
+<li class='toc3'><a href='#-guessNumberStep'>guessNumberStep</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-calcRange'>calcRange</a> </li>
+<li class='toc3'><a href='#-copy'>copy</a> </li>
+<li class='toc3'><a href='#-default'>default</a> </li>
+<li class='toc3'><a href='#-grid'>grid</a> </li>
+<li class='toc3'><a href='#-gridValues'>gridValues</a> </li>
+<li class='toc3'><a href='#-hasZeroCrossing'>hasZeroCrossing</a> </li>
+<li class='toc3'><a href='#-looseRange'>looseRange</a> </li>
+<li class='toc3'><a href='#-maxval'>maxval</a> </li>
+<li class='toc3'><a href='#-minval'>minval</a> </li>
+<li class='toc3'><a href='#-normalize'>normalize</a> </li>
+<li class='toc3'><a href='#-ratio'>ratio</a> </li>
+<li class='toc3'><a href='#-roundRange'>roundRange</a> </li>
+<li class='toc3'><a href='#-shift'>shift</a> </li>
+<li class='toc3'><a href='#-step'>step</a> </li>
+<li class='toc3'><a href='#-units'>units</a> </li>
+<li class='toc3'><a href='#-warp'>warp</a> </li>
+<li class='toc3'><a href='#-zoom'>zoom</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>The original, and most common spec (see <a href="./../Classes/Spec.html">Spec</a>). A ControlSpec is used by GUI sliders and knobs to specify the range and curve of the controls. ControlSpec may be used in many ways to map from linear 0..1 range to your desired range and back.
+<p>The most common way to create a ControlSpec is by<pre class='code prettyprint lang-sc'>anObject.asSpec // the object may be an array or a symbol</pre>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>minval: 0</span>, <span class='argstr'>maxval: 1</span>, <span class='argstr'>warp: 'lin'</span>, <span class='argstr'>step: 0</span>, <span class='argstr'>default</span>, <span class='argstr'>units</span>, <span class='argstr'>grid</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>minval<td class='argumentdesc'>
+<p>The minimum value of the range.<tr><td class='argumentname'>maxval<td class='argumentdesc'>
+<p>The maximium value of the range.<tr><td class='argumentname'>warp<td class='argumentdesc'>
+<p>a <a href="./../Classes/Warp.html">Warp</a>, a symbol (e.g. \lin or \exponential: Default value is \lin), or something else that returns a Warp when sent the message .asWarp. A CurveWarp is defined by a number.<tr><td class='argumentname'>step<td class='argumentdesc'>
+<p>The smallest possible increment.<tr><td class='argumentname'>default<td class='argumentdesc'>
+<p>The default value.<tr><td class='argumentname'>units<td class='argumentdesc'>
+<p>The units, e.g. "hz". Used by some gui's as a unit label.<tr><td class='argumentname'>grid<td class='argumentdesc'></table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*newFrom' href='./../Overviews/Methods.html#newFrom'>newFrom</a> (<span class='argstr'>similar</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-map' href='./../Overviews/Methods.html#map'>map</a> (<span class='argstr'>value</span>)</h3>
+<div class='method'>
+<p>Maps and constrains a <strong>value</strong> between 0 and 1 to the range between minval and maxval.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-unmap' href='./../Overviews/Methods.html#unmap'>unmap</a> (<span class='argstr'>value</span>)</h3>
+<div class='method'>
+<p>Maps and constrains a <strong>value</strong> between minval and maxval to the range between 0 and 1.<pre class='code prettyprint lang-sc'>g = ControlSpec(0.01, 2000, \exp, 0.1, 220, "Hz");
+g.map(0.5); // convert from [0..1] to [0.01..2000]
+g.unmap(1000); // convert from [0.01..2000] to [0..1]
+
+// fore and back translation should be close to identical:
+g.unmap(g.map(0.5));</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clipLo' href='./../Overviews/Methods.html#clipLo'>clipLo</a> </h3>
+<div class='method'>
+<p>The lower of maxval and minval.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clipHi' href='./../Overviews/Methods.html#clipHi'>clipHi</a> </h3>
+<div class='method'>
+<p>The higher of maxval and minval.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-constrain' href='./../Overviews/Methods.html#constrain'>constrain</a> (<span class='argstr'>value</span>)</h3>
+<div class='method'>
+<p>Returns <code class='code prettyprint lang-sc'>value.asFloat.clip(clipLo, clipHi).round(step)</code>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-range' href='./../Overviews/Methods.html#range'>range</a> </h3>
+<div class='method'>
+<p>Returns <code class='code prettyprint lang-sc'>maxval - minval</code>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-guessNumberStep' href='./../Overviews/Methods.html#guessNumberStep'>guessNumberStep</a> </h3>
+<div class='method'>
+<p>Used for EZ GUI classes for guessing a sensible <strong>step</strong> if none is specified.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-calcRange' href='./../Overviews/Methods.html#calcRange'>calcRange</a> (<span class='argstr'>data</span>, <span class='argstr'>defaultRange: 1</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-copy' href='./../Overviews/Methods.html#copy'>copy</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-default' href='./../Overviews/Methods.html#default'>default</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-default' href='./../Overviews/Methods.html#default'>default</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-grid' href='./../Overviews/Methods.html#grid'>grid</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-grid' href='./../Overviews/Methods.html#grid'>grid</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gridValues' href='./../Overviews/Methods.html#gridValues'>gridValues</a> (<span class='argstr'>n: 20</span>, <span class='argstr'>min</span>, <span class='argstr'>max</span>, <span class='argstr'>base: 10</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hasZeroCrossing' href='./../Overviews/Methods.html#hasZeroCrossing'>hasZeroCrossing</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-looseRange' href='./../Overviews/Methods.html#looseRange'>looseRange</a> (<span class='argstr'>data</span>, <span class='argstr'>defaultRange</span>, <span class='argstr'>minval</span>, <span class='argstr'>maxval</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxval' href='./../Overviews/Methods.html#maxval'>maxval</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxval' href='./../Overviews/Methods.html#maxval'>maxval</a> = <span class='argstr'>v</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-minval' href='./../Overviews/Methods.html#minval'>minval</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-minval' href='./../Overviews/Methods.html#minval'>minval</a> = <span class='argstr'>v</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-normalize' href='./../Overviews/Methods.html#normalize'>normalize</a> (<span class='argstr'>min</span>, <span class='argstr'>max</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ratio' href='./../Overviews/Methods.html#ratio'>ratio</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-roundRange' href='./../Overviews/Methods.html#roundRange'>roundRange</a> (<span class='argstr'>base: 10</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-shift' href='./../Overviews/Methods.html#shift'>shift</a> (<span class='argstr'>amount: 1</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-step' href='./../Overviews/Methods.html#step'>step</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-step' href='./../Overviews/Methods.html#step'>step</a> = <span class='argstr'>s</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-units' href='./../Overviews/Methods.html#units'>units</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-units' href='./../Overviews/Methods.html#units'>units</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-warp' href='./../Overviews/Methods.html#warp'>warp</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-warp' href='./../Overviews/Methods.html#warp'>warp</a> = <span class='argstr'>w</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-zoom' href='./../Overviews/Methods.html#zoom'>zoom</a> (<span class='argstr'>ratio: 1</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>g = ControlSpec(0.01, 2000, \exp, 0.1, 220, "Hz");
+
+// or alternatively
+
+[0.001, 2000, \exp, 0.1, 220, "hz"].asSpec;
+
+// or add it to the ControlSpec.specs IdentityDictionary:
+
+ControlSpec.specs[\myFreq] = ControlSpec(0.01, 2000, \exp, 0.01, 440, units: "Hz");</pre>
+<pre class='code prettyprint lang-sc'>// array is used as arguments to ControlSpec.new(minval, maxval, warp, step, default)
+[300,3000,\exponential,100].asSpec.dump
+Instance of ControlSpec {    (0313FC08, gc=00, fmt=00, flg=00, set=03)
+  instance variables [6]
+    minval : Integer 300
+    maxval : Integer 3000
+    warp : Symbol 'exponential'
+    step : Integer 100
+    default : Integer 300
+}
+
+// partially specified ...
+[-48,48].asSpec.dump
+Instance of ControlSpec {    (0313FF18, gc=00, fmt=00, flg=00, set=03)
+  instance variables [6]
+    minval : Integer -48
+    maxval : Integer 48
+    warp : Symbol 'linear'
+    step : Float 0
+    default : Integer -48
+}
+
+// a Symbol
+\freq.asSpec.dump
+Instance of ControlSpec {    (180F4910, gc=3C, fmt=00, flg=00, set=03)
+  instance variables [8]
+    minval : Integer 20
+    maxval : Integer 20000
+    warp : instance of ExponentialWarp (17FEDB30, size=1, set=1)
+    step : Integer 0
+    default : Integer 440
+    units : " Hz"
+    clipLo : Integer 20
+    clipHi : Integer 20000
+}
+
+
+// nil becomes a default ControlSpec
+nil.asSpec.dump
+Instance of ControlSpec {    (0313FF18, gc=00, fmt=00, flg=00, set=03)
+  instance variables [6]
+    minval : Float 0
+    maxval : Float 1
+    warp : Symbol 'linear'
+    step : Float 0
+    default : Float 0
+}</pre>
+<pre class='code prettyprint lang-sc'>// make a frequency spec with an exponential range from 20 to 20000,
+// give it a rounding of 30 (Hz)
+a = \freq.asSpec;
+a.step = 100;
+
+// equivalent:
+a = [20, 20000, 'exp', 100, 440].asSpec;
+a.dump;
+
+a.constrain(800); // make sure it is in range and round it.
+a.constrain(803); // make sure it is in range and round it.
+
+a.map(0.5);
+a.map(0.0); // returns min
+a.map(1.5); // exceeds the area: clip, returns max
+
+a.unmap(4000);
+a.unmap(22.0);</pre>
+<pre class='code prettyprint lang-sc'>// like in envelopes, a CurveWarp is created by a number:
+
+a = [0, 1, -4].asSpec;
+a.map(0.5);
+a.unmap(0.99);
+a.map((0..10).normalize).plot;
+
+// look at different distributions:
+(
+var invals = (0..10).normalize;
+(-4..4).do { |curve|
+    var a = [0, 1, curve].asSpec;
+    a.map(invals).plot;
+}
+);</pre>
+<pre class='code prettyprint lang-sc'>// using spec for sliders:
+(
+var w, c, d;
+w = Window.new("control", Rect(128, 64, 340, 160));
+w.front;
+c = Slider.new(w, Rect(10, 10, 300, 30));
+d = StaticText.new(w, Rect(10, 40, 300, 30));
+c.action = {
+    d.string = "unmapped value"
+    + c.value.round(0.01)
+    + "......"
+    + "mapped value"
+    + a.map(c.value)
+};
+)</pre>
+<pre class='code prettyprint lang-sc'>// ControlSpec-map can also be used to map ugens
+(
+var spec;
+spec = [ 100, 18000, \exp].asSpec;
+{
+    var freq,osc;
+    osc = SinOsc.kr(0.1).range(0,1);
+    freq = spec.map( osc );
+
+    freq.dump;// BinaryOpUGen
+
+    SinOsc.ar(
+        freq.poll
+    )
+}.play
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/ControlSpec.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/ControlSpec.schelp</a><br>link::Classes/ControlSpec::<br>sc version: 3.8dev</div></div></body></html>

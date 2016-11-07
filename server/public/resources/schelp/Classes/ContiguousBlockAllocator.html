@@ -1,0 +1,68 @@
+<html><head><title>ContiguousBlockAllocator</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Control'>Control</a></div>
+<h1>ContiguousBlockAllocator</h1>
+<div id='summary'>for better handling of dynamic allocation</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/Engine.sc'>Engine.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Server.html">Server</a>, <a href="./../Classes/PowerOfTwoAllocator.html">PowerOfTwoAllocator</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-alloc'>alloc</a> </li>
+<li class='toc3'><a href='#-free'>free</a> </li>
+<li class='toc3'><a href='#-reserve'>reserve</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-addToFreed'>addToFreed</a> </li>
+<li class='toc3'><a href='#-blocks'>blocks</a> </li>
+<li class='toc3'><a href='#-debug'>debug</a> </li>
+<li class='toc3'><a href='#-findAvailable'>findAvailable</a> </li>
+<li class='toc3'><a href='#-findNext'>findNext</a> </li>
+<li class='toc3'><a href='#-findPrevious'>findPrevious</a> </li>
+<li class='toc3'><a href='#-removeFromFreed'>removeFromFreed</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A more robust replacement for the default server block allocator, <a href="./../Classes/PowerOfTwoAllocator.html">PowerOfTwoAllocator</a>. May be used in the <a href="./../Classes/Server.html">Server</a> class to allocate audio/control bus numbers and buffer numbers.
+<p>To configure a server to use ContiguousBlockAllocator, execute the following:<pre class='code prettyprint lang-sc'>aServer.options.blockAllocClass = ContiguousBlockAllocator;</pre>
+
+<p>Normally you will not need to address the allocators directly. However, ContiguousBlockAllocator adds one feature not present in PowerOfTwoAllocator, namely the <em>reserve</em> method.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>size</span>, <span class='argstr'>pos: 0</span>)</h3>
+<div class='method'>
+<p>Create a new allocator with <em>size</em> slots. You may block off the first <em>pos</em> slots (the server's audioBusAllocator does this to reserve the hardware input and output buses).</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-alloc' href='./../Overviews/Methods.html#alloc'>alloc</a> (<span class='argstr'>n: 1</span>)</h3>
+<div class='method'>
+<p>Return the starting index of a free block that is <em>n</em> slots wide. The default is 1 slot.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-free' href='./../Overviews/Methods.html#free'>free</a> (<span class='argstr'>address</span>)</h3>
+<div class='method'>
+<p>Free a previously allocated block starting at <em>address</em>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-reserve' href='./../Overviews/Methods.html#reserve'>reserve</a> (<span class='argstr'>address</span>, <span class='argstr'>size: 1</span>, <span class='argstr'>warn: true</span>)</h3>
+<div class='method'>
+<p>Mark a specific range of addresses as used so that the alloc method will not return any addresses within that range.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-addToFreed' href='./../Overviews/Methods.html#addToFreed'>addToFreed</a> (<span class='argstr'>block</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-blocks' href='./../Overviews/Methods.html#blocks'>blocks</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-debug' href='./../Overviews/Methods.html#debug'>debug</a> (<span class='argstr'>text</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-findAvailable' href='./../Overviews/Methods.html#findAvailable'>findAvailable</a> (<span class='argstr'>n</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-findNext' href='./../Overviews/Methods.html#findNext'>findNext</a> (<span class='argstr'>address</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-findPrevious' href='./../Overviews/Methods.html#findPrevious'>findPrevious</a> (<span class='argstr'>address</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeFromFreed' href='./../Overviews/Methods.html#removeFromFreed'>removeFromFreed</a> (<span class='argstr'>block</span>)</h3>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/ContiguousBlockAllocator.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/ContiguousBlockAllocator.schelp</a><br>link::Classes/ContiguousBlockAllocator::<br>sc version: 3.8dev</div></div></body></html>

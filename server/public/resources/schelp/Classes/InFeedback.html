@@ -1,0 +1,113 @@
+<html><head><title>InFeedback</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>InOut'>UGens>InOut</a></div>
+<h1>InFeedback</h1>
+<div id='summary'>Read signal from a bus with a current or one cycle old timestamp.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/InOut.sc'>InOut.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/AbstractIn.html">AbstractIn</a> : <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/In.html">In</a>, <a href="./../Classes/LagIn.html">LagIn</a>, <a href="./../Classes/LocalIn.html">LocalIn</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>When the various output UGens ( <a href="./../Classes/Out.html">Out</a> , <a href="./../Classes/OffsetOut.html">OffsetOut</a> ,  <a href="./../Classes/XOut.html">XOut</a> ) write data to a bus, they mix it with any data from the current cycle, but overwrite any data from the previous cycle. ( <a href="./../Classes/ReplaceOut.html">ReplaceOut</a> overwrites all data regardless.) Thus depending on node order and what synths are writing to the bus, the data on a given bus may be from the current cycle or be one cycle old at the time of reading. In.ar checks the timestamp of any data it reads in and zeros any data from the previous cycle (for use within that node; the data remains on the bus). This is fine for audio data, as it avoids feedback, but for control data it is useful to be able to read data from any place in the node order. For this reason In.kr also reads data that is older than the current cycle.
+<p>In some cases we might also want to read audio from a node later in the current node order. This is the purpose of InFeedback. The delay introduced by this is one block size, which equals about 0.0014 sec at the default block size and sample rate. (See the resonator example below to see the implications of this.)
+<p>The variably mixing and overwriting behaviour of the output UGens can make order of execution crucial. (No pun intended.) For example with a node order like the following the InFeedback UGen in Synth 2 will only receive data from Synth 1 (→ = write out; ← = read in):<ul>
+<li>Synth1 → busA (this synth overwrites the output of Synth3 before it reaches Synth2)<li>Synth2 (with InFeedback) ← busA<li>Synth3 → busA</ul>
+
+<p>If Synth1 were moved after Synth2 then Synth2's InFeedback would receive a mix of the output from Synth1 and Synth3. This would also be true if Synth2 came after Synth1 and Synth3. In both cases data from Synth1 and Synth3 would have the same time stamp (either current or from the previous cycle), so nothing would be overwritten.
+<p>Because of this it is often useful to allocate a separate bus for feedback. With the following arrangement Synth2 will receive data from Synth3 regardless of Synth1's position in the node order:<ul>
+<li>Synth1 → busA<li>Synth2 (with InFeedback) ← busB<li>Synth3 → busB + busA</ul>
+
+<p>The second example below demonstrates this issue.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>bus: 0</span>, <span class='argstr'>numChannels: 1</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bus<td class='argumentdesc'>
+<p>The index of the bus to read in from.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>The number of channels (i.e. adjacent buses) to read in. The default is 1. You cannot modulate this number by assigning it to an argument in a SynthDef.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>audio feedback modulation:<pre class='code prettyprint lang-sc'>(
+SynthDef("help-InFeedback", { arg out=0, in=0;
+    var input, sound;
+        input = InFeedback.ar(in, 1);
+        sound = SinOsc.ar(input * 1300 + 300, 0, 0.4);
+        Out.ar(out, sound);
+
+}).play;
+)</pre>
+
+<p>this shows how a node can read audio from a bus that is being written to by a synth following it:<pre class='code prettyprint lang-sc'>(
+SynthDef("help-InFeedback", { arg out=0, in=0;
+    Out.ar(out,
+        InFeedback.ar(in, 1)
+    );
+}).send(s);
+SynthDef("help-SinOsc", { arg out=0, freq=440;
+    Out.ar(out, SinOsc.ar(freq, 0, 0.1))
+}).send(s);
+)
+
+x = Bus.audio(s, 1);
+
+// read from bus n play to bus 0 (silent)
+a = Synth("help-InFeedback",[\in, x.index, \out, 0]);
+
+// now play a synth after this one, playing to bus x
+b = Synth.after(a, "help-SinOsc", [\out, x.index]);
+
+// add another synth before a which also writes to bus x
+// now you can't hear b, as its data is one cycle old, and is overwritten by c
+c = Synth.before(a, "help-SinOsc", [\out, x.index, \freq, 800]);
+
+// free c and you can hear b again
+c.free;
+x.free;
+
+a.free; b.free;</pre>
+
+<p>The example below implements a resonator. Note that you must subtract the blockSize in order for the tuning to be correct. See <a href="./../Classes/LocalIn.html">LocalIn</a> for an equivalent example.<pre class='code prettyprint lang-sc'>(
+var play, imp, initial;
+SynthDef("testRes", {
+
+play = InFeedback.ar(10, 1); // 10 is feedback channel
+imp = Impulse.ar(1);
+
+// feedback
+OffsetOut.ar(10, DelayC.ar(imp + (play * 0.995), 1,
+    440.reciprocal - ControlRate.ir.reciprocal)); // subtract block size
+
+OffsetOut.ar(0, play);
+
+}).play(s);
+
+// Compare with this for tuning
+{ SinOsc.ar(440, 0, 0.2) }.play(s, 1);
+)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/InFeedback.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/InFeedback.schelp</a><br>link::Classes/InFeedback::<br>sc version: 3.8dev</div></div></body></html>

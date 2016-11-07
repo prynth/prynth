@@ -1,0 +1,409 @@
+<html><head><title>Window</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Views'>GUI>Views</a></div>
+<h1>Window</h1>
+<div id='summary'>Top-level container of views</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QWindow.sc'>QWindow.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/QWindow.html">QWindow</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*allWindows'>allWindows</a> </li>
+<li class='toc3'><a href='#*closeAll'>closeAll</a> </li>
+<li class='toc3'><a href='#*initAction'>initAction</a> </li>
+<li class='toc3'><a href='#*screenBounds'>screenBounds</a> </li>
+<li class='toc3'><a href='#*availableBounds'>availableBounds</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*addWindow'>addWindow</a> </li>
+<li class='toc3'><a href='#*flipY'>flipY</a> </li>
+<li class='toc3'><a href='#*removeWindow'>removeWindow</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#View hierarchy'>View hierarchy</a></li>
+<ul class='toc'><li class='toc3'><a href='#-view'>view</a> </li>
+<li class='toc3'><a href='#-asView'>asView</a> </li>
+<li class='toc3'><a href='#-currentSheet'>currentSheet</a> </li>
+</ul><li class='toc2'><a href='#Visibility'>Visibility</a></li>
+<ul class='toc'><li class='toc3'><a href='#-front'>front</a> </li>
+<li class='toc3'><a href='#-minimize'>minimize</a> </li>
+<li class='toc3'><a href='#-unminimize'>unminimize</a> </li>
+<li class='toc3'><a href='#-fullScreen'>fullScreen</a> </li>
+<li class='toc3'><a href='#-endFullScreen'>endFullScreen</a> </li>
+<li class='toc3'><a href='#-alwaysOnTop'>alwaysOnTop</a> </li>
+<li class='toc3'><a href='#-visible'>visible</a> </li>
+<li class='toc3'><a href='#-close'>close</a> </li>
+<li class='toc3'><a href='#-isClosed'>isClosed</a> </li>
+</ul><li class='toc2'><a href='#Geometry'>Geometry</a></li>
+<ul class='toc'><li class='toc3'><a href='#-bounds'>bounds</a> </li>
+<li class='toc3'><a href='#-setTopLeftBounds'>setTopLeftBounds</a> </li>
+<li class='toc3'><a href='#-setInnerExtent'>setInnerExtent</a> </li>
+<li class='toc3'><a href='#-sizeHint'>sizeHint</a> </li>
+<li class='toc3'><a href='#-minSizeHint'>minSizeHint</a> </li>
+<li class='toc3'><a href='#-addFlowLayout'>addFlowLayout</a> </li>
+<li class='toc3'><a href='#-layout'>layout</a> </li>
+</ul><li class='toc2'><a href='#Appearance'>Appearance</a></li>
+<ul class='toc'><li class='toc3'><a href='#-name'>name</a> </li>
+<li class='toc3'><a href='#-background'>background</a> </li>
+<li class='toc3'><a href='#-alpha'>alpha</a> </li>
+<li class='toc3'><a href='#-refresh'>refresh</a> </li>
+</ul><li class='toc2'><a href='#Interaction'>Interaction</a></li>
+<ul class='toc'><li class='toc3'><a href='#-userCanClose'>userCanClose</a> </li>
+<li class='toc3'><a href='#-acceptsClickThrough'>acceptsClickThrough</a> </li>
+<li class='toc3'><a href='#-acceptsMouseOver'>acceptsMouseOver</a> </li>
+</ul><li class='toc2'><a href='#Actions and hooks'>Actions and hooks</a></li>
+<ul class='toc'><li class='toc3'><a href='#-drawFunc'>drawFunc</a> </li>
+<li class='toc3'><a href='#-toFrontAction'>toFrontAction</a> </li>
+<li class='toc3'><a href='#-endFrontAction'>endFrontAction</a> </li>
+<li class='toc3'><a href='#-onClose'>onClose</a> </li>
+<li class='toc3'><a href='#-addToOnClose'>addToOnClose</a> </li>
+<li class='toc3'><a href='#-removeFromOnClose'>removeFromOnClose</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-asFlowView'>asFlowView</a> </li>
+<li class='toc3'><a href='#-asPageLayout'>asPageLayout</a> </li>
+<li class='toc3'><a href='#-comp'>comp</a> </li>
+<li class='toc3'><a href='#-drawHook'>drawHook</a> </li>
+<li class='toc3'><a href='#-flow'>flow</a> </li>
+<li class='toc3'><a href='#-initWindow'>initWindow</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#Adding Views'>Adding Views</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Using Decorator'>Using Decorator</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Setting Bounds'>Setting Bounds</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Borderless Window'>Borderless Window</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Window with Scrollers'>Window with Scrollers</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#onClose'>onClose</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Using Layouts'>Using Layouts</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Drawing on Window with Pen'>Drawing on Window with Pen</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>The Window is the most fundamental element of the GUI. It occupies a rectangular space on the screen within which other GUI elements (Views) are displayed.
+<p>A child view is added into a window by passing the window to the view's constructor. See <a href="./../Classes/View.html#*new">View: *new</a>.<div class='note'><span class='notelabel'>NOTE:</span> There is no distinction between windows, views, and containers; a View can be displayed directly on screen, and can contain other views. Therefore, visual descriptions of Window and most of the methods that are specific to Window in other GUI kits, also apply to and make part of View in Qt, and are thus shared by all its subclasses.
+<p>The Window class is provided in Qt GUI for compatibility as well as convenience: e.g. unlike View, Window will be created by default in the center of the screen, and various aspects can be conveniently controlled using its constructor arguments.</div>
+<p>The Window is usually drawn with a bar on its top edge that displays the window's title which you can set in the <a href="#*new">constructor</a>, or using <a href="#-name">-name</a>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>name: ""</span>, <span class='argstr'>bounds</span>, <span class='argstr'>resizable: true</span>, <span class='argstr'>border: true</span>, <span class='argstr'>server</span>, <span class='argstr'>scroll: false</span>)</h3>
+<div class='method'>
+<p> Creates a new Window instance. You will need to call <a href="#-front">-front</a> on it to become visible.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>name<td class='argumentdesc'>
+<p> A String for the text that will be displayed in the title bar. The default is 'panel'.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p> A Rect specifying position and size of the window. The size does not include the border and title bar. Position is measured from the bottom-left corner of the screen (this is different than <a href="./../Classes/View.html#-bounds">View: -bounds</a>). The default is size 400x400 at position 128x64, but in Qt the window is centered on the screen by default.<tr><td class='argumentname'>resizable<td class='argumentdesc'>
+<p> A Boolean indicating whether this window is resizable by the user. The default is <code class='code prettyprint lang-sc'>true</code>.<tr><td class='argumentname'>border<td class='argumentdesc'>
+<p> A Boolean indicating whether this window has a border. Borderless windows have no title bar and thus can only be closed in code. The default is <code class='code prettyprint lang-sc'>true</code>.<tr><td class='argumentname'>server<td class='argumentdesc'>
+<p> This is a dummy argument which is here to provide compatibility with SwingOSC and has no effect.<tr><td class='argumentname'>scroll<td class='argumentdesc'>
+<p> A Boolean indicating whether this window will add scrollbars if its contents exceed its bounds. If this is set to <code class='code prettyprint lang-sc'>true</code>, then <a href="./../Classes/View.html#-resize">View: -resize</a> settings will be ignored for contained views. The default is false.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*allWindows' href='./../Overviews/Methods.html#allWindows'>allWindows</a> </h3>
+<div class='method'>
+<p> An array of all existing Window instances.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*closeAll' href='./../Overviews/Methods.html#closeAll'>closeAll</a> </h3>
+<div class='method'>
+<p> Calls <a href="#-close">-close</a> an all existing Window instances.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*initAction' href='./../Overviews/Methods.html#initAction'>initAction</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*initAction' href='./../Overviews/Methods.html#initAction'>initAction</a> = value</h3>
+<div class='method'>
+<p> The default action object to be evaluated whenever a new Window is instantiated.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*screenBounds' href='./../Overviews/Methods.html#screenBounds'>screenBounds</a> </h3>
+<div class='method'>
+<p> Returns a Rect with the size of the screen in pixels</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*availableBounds' href='./../Overviews/Methods.html#availableBounds'>availableBounds</a> </h3>
+<div class='method'>
+<p> Returns a Rect describing the area of the screen that windows can actually occupy (i.e. excluding the Mac dock, the task bar, or similar).</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*addWindow' href='./../Overviews/Methods.html#addWindow'>addWindow</a> (<span class='argstr'>window</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*flipY' href='./../Overviews/Methods.html#flipY'>flipY</a> (<span class='argstr'>aRect</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*removeWindow' href='./../Overviews/Methods.html#removeWindow'>removeWindow</a> (<span class='argstr'>window</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='View hierarchy'>View hierarchy</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-view' href='./../Overviews/Methods.html#view'>view</a> </h3>
+<div class='method'>
+<p> When a Window is created, it creates a container view, accessible using this method, that occupies the whole area of the window, and which will be used as the actual parent of the child widgets.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A View.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asView' href='./../Overviews/Methods.html#asView'>asView</a> </h3>
+<div class='method'>
+<p> Equivalent to <a href="#-view">-view</a></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-currentSheet' href='./../Overviews/Methods.html#currentSheet'>currentSheet</a> </h3>
+<div class='method'><div class='note'><span class='notelabel'>NOTE:</span> Only in Cocoa GUI</div>
+<p> returns:  The current modal sheet attached to this window, if it exists. See <a href="./../Classes/SCModalSheet">SCModalSheet</a>.</div><h3><a class='anchor' name='Visibility'>Visibility</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-front' href='./../Overviews/Methods.html#front'>front</a> </h3>
+<div class='method'>
+<p> Displays the window on the screen (This has the same effect as setting <a href="#-visible">-visible</a> to true).</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minimize' href='./../Overviews/Methods.html#minimize'>minimize</a> </h3>
+<div class='method'>
+<p> Hides the window, only keeping its representation in the dock, taskbar, etc..</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-unminimize' href='./../Overviews/Methods.html#unminimize'>unminimize</a> </h3>
+<div class='method'>
+<p> Restores the window's previous state after being minimized.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fullScreen' href='./../Overviews/Methods.html#fullScreen'>fullScreen</a> </h3>
+<div class='method'>
+<p> Displays the window full-screen.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-endFullScreen' href='./../Overviews/Methods.html#endFullScreen'>endFullScreen</a> </h3>
+<div class='method'>
+<p> Restores the window's previous state after being displayed full-screen.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-alwaysOnTop' href='./../Overviews/Methods.html#alwaysOnTop'>alwaysOnTop</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-alwaysOnTop' href='./../Overviews/Methods.html#alwaysOnTop'>alwaysOnTop</a> = <span class='argstr'>boolean</span></h3>
+<div class='method'>
+<p> Whether the window should always stay on top of other windows, even when it is not the active one.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>boolean<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-visible' href='./../Overviews/Methods.html#visible'>visible</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-visible' href='./../Overviews/Methods.html#visible'>visible</a> = <span class='argstr'>boolean</span></h3>
+<div class='method'>
+<p> Whether the window is visible.
+<p> Setting this to <code class='code prettyprint lang-sc'>true</code> has the same effect as <a href="#-front">-front</a>, and setting it to false closes the window without destroying it.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>boolean<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-close' href='./../Overviews/Methods.html#close'>close</a> </h3>
+<div class='method'>
+<p> Closes and destroys the window.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-isClosed' href='./../Overviews/Methods.html#isClosed'>isClosed</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Boolean stating whether the view has been closed.</div></div><h3><a class='anchor' name='Geometry'>Geometry</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a> = <span class='argstr'>aRect</span></h3>
+<div class='method'>
+<p> The position and size of the window. The position is relative to the bottom-left corner of the screen.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aRect<td class='argumentdesc'>
+<p> A Rect or a Point interpreted <a href="./../Classes/Point.html#-asRect">as Rect</a>.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Rect.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setTopLeftBounds' href='./../Overviews/Methods.html#setTopLeftBounds'>setTopLeftBounds</a> (<span class='argstr'>rect</span>, <span class='argstr'>menuSpacer: 45</span>)</h3>
+<div class='method'>
+<p> A convenience method that, unlike <a href="#-bounds">-bounds</a>, sets the bounds by measuring position from the top-left corner of the screen, and vertically offset by <code class='code prettyprint lang-sc'>menuSpacer</code>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>rect<td class='argumentdesc'>
+<p> A Rect.<tr><td class='argumentname'>menuSpacer<td class='argumentdesc'>
+<p> An Integer amount of pixels.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setInnerExtent' href='./../Overviews/Methods.html#setInnerExtent'>setInnerExtent</a> (<span class='argstr'>w</span>, <span class='argstr'>h</span>)</h3>
+<div class='method'>
+<p> Resizes the window, keeping its position intact.
+<p> This is equivalent to <a href="./../Classes/View.html#-resizeTo">View: -resizeTo</a> called on the <a href="#-view">-view</a>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>w<td class='argumentdesc'>
+<p> An Integer width in pixels.<tr><td class='argumentname'>h<td class='argumentdesc'>
+<p> An Integer height in pixels.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sizeHint' href='./../Overviews/Methods.html#sizeHint'>sizeHint</a> </h3>
+<div class='method'>
+<p> Redirects to <a href="./../Classes/View.html#-sizeHint">View: -sizeHint</a> of the <a href="#-view">-view</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minSizeHint' href='./../Overviews/Methods.html#minSizeHint'>minSizeHint</a> </h3>
+<div class='method'>
+<p> Redirects to <a href="./../Classes/View.html#-minSizeHint">View: -minSizeHint</a> of the <a href="#-view">-view</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addFlowLayout' href='./../Overviews/Methods.html#addFlowLayout'>addFlowLayout</a> (<span class='argstr'>margin</span>, <span class='argstr'>gap</span>)</h3>
+<div class='method'>
+<p> A convenience method which sets <code class='code prettyprint lang-sc'>decorator</code> of the <a href="#-view">-view</a> to a new instance of FlowLayout. See <a href="./../Classes/FlowLayout.html">FlowLayout</a> for examples.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>margin<td class='argumentdesc'>
+<p> A Point describing the <a href="./../Classes/FlowLayout.html#-margin">margin</a> of the FlowLayout.<tr><td class='argumentname'>gap<td class='argumentdesc'>
+<p> A Point describing the <a href="./../Classes/FlowLayout.html#-gap">gap</a> of the FlowLayout.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The new FlowLayout instance.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-layout' href='./../Overviews/Methods.html#layout'>layout</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-layout' href='./../Overviews/Methods.html#layout'>layout</a> = <span class='argstr'>layout</span></h3>
+<div class='method'>
+<p> Redirects to <a href="./../Classes/View.html#-layout">View: -layout</a> of the <a href="#-view">-view</a>.</div><h3><a class='anchor' name='Appearance'>Appearance</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a> = <span class='argstr'>string</span></h3>
+<div class='method'>
+<p> The title of the window.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>string<td class='argumentdesc'>
+<p> A String.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-background' href='./../Overviews/Methods.html#background'>background</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-background' href='./../Overviews/Methods.html#background'>background</a> = <span class='argstr'>aColor</span></h3>
+<div class='method'>
+<p> The background color of the window.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aColor<td class='argumentdesc'>
+<p> A Color.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-alpha' href='./../Overviews/Methods.html#alpha'>alpha</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-alpha' href='./../Overviews/Methods.html#alpha'>alpha</a> = <span class='argstr'>value</span></h3>
+<div class='method'>
+<p> The transparancy of the window.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>value<td class='argumentdesc'>
+<p> A Float between 0.0 (invisible) and 1.0 (opaque).</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-refresh' href='./../Overviews/Methods.html#refresh'>refresh</a> </h3>
+<div class='method'>
+<p> Redraws the window and all its children.</div><h3><a class='anchor' name='Interaction'>Interaction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-userCanClose' href='./../Overviews/Methods.html#userCanClose'>userCanClose</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-userCanClose' href='./../Overviews/Methods.html#userCanClose'>userCanClose</a> = <span class='argstr'>boolean</span></h3>
+<div class='method'>
+<p> Whether the user can close the window. The default is <code class='code prettyprint lang-sc'>true</code>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>boolean<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-acceptsClickThrough' href='./../Overviews/Methods.html#acceptsClickThrough'>acceptsClickThrough</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-acceptsClickThrough' href='./../Overviews/Methods.html#acceptsClickThrough'>acceptsClickThrough</a> = value</h3>
+<div class='method'>
+<p> Whether the window receives clicks when it is not front-most. The default is <code class='code prettyprint lang-sc'>true</code>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-acceptsMouseOver' href='./../Overviews/Methods.html#acceptsMouseOver'>acceptsMouseOver</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-acceptsMouseOver' href='./../Overviews/Methods.html#acceptsMouseOver'>acceptsMouseOver</a> = <span class='argstr'>flag</span></h3>
+<div class='method'>
+<p> Whether the window and all its children receive mouse-over events. The default is <code class='code prettyprint lang-sc'>false</code>.
+<p> See also: <a href="./../Classes/View.html#-acceptsMouseOver">View: -acceptsMouseOver</a> and <a href="./../Classes/View.html#-mouseOverAction">View: -mouseOverAction</a>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>flag<td class='argumentdesc'>
+<p> A Boolean.</table></div><h3><a class='anchor' name='Actions and hooks'>Actions and hooks</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-drawFunc' href='./../Overviews/Methods.html#drawFunc'>drawFunc</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-drawFunc' href='./../Overviews/Methods.html#drawFunc'>drawFunc</a> = <span class='argstr'>aFunction</span></h3>
+<div class='method'>
+<p> Just like the <a href="./../Classes/UserView.html">UserView</a>, the window can be given a Function to evalute whenever it is asked to redraw itself, so you can use the <a href="./../Classes/Pen.html">Pen</a> class to draw on the window. See <a href="./../Classes/UserView.html#-drawFunc">UserView: -drawFunc</a> for explanation.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aFunction<td class='argumentdesc'>
+<p> A Function.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-toFrontAction' href='./../Overviews/Methods.html#toFrontAction'>toFrontAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-toFrontAction' href='./../Overviews/Methods.html#toFrontAction'>toFrontAction</a> = <span class='argstr'>action</span></h3>
+<div class='method'>
+<p> The action object to be evaluated whenever the window becomes the active one.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-endFrontAction' href='./../Overviews/Methods.html#endFrontAction'>endFrontAction</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-endFrontAction' href='./../Overviews/Methods.html#endFrontAction'>endFrontAction</a> = <span class='argstr'>action</span></h3>
+<div class='method'>
+<p> The action object to be evaluated whenever the window ceases to be the active one.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-onClose' href='./../Overviews/Methods.html#onClose'>onClose</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-onClose' href='./../Overviews/Methods.html#onClose'>onClose</a> = <span class='argstr'>func</span></h3>
+<div class='method'>
+<p> The action object to be evaluated when the window is closed.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addToOnClose' href='./../Overviews/Methods.html#addToOnClose'>addToOnClose</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p> Adds an object to <a href="#-onClose">-onClose</a>, wrapping the current value into an Array, if it is not yet.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeFromOnClose' href='./../Overviews/Methods.html#removeFromOnClose'>removeFromOnClose</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p> Removes an object from <a href="#-onClose">-onClose</a>, if the latter is an Array.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asFlowView' href='./../Overviews/Methods.html#asFlowView'>asFlowView</a> (<span class='argstr'>bounds</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asPageLayout' href='./../Overviews/Methods.html#asPageLayout'>asPageLayout</a> (<span class='argstr'>title</span>, <span class='argstr'>bounds</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/flowViewSupportQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/flowViewSupportQt.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-comp' href='./../Overviews/Methods.html#comp'>comp</a> (<span class='argstr'>func</span>, <span class='argstr'>bounds</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-drawHook' href='./../Overviews/Methods.html#drawHook'>drawHook</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-drawHook' href='./../Overviews/Methods.html#drawHook'>drawHook</a> = <span class='argstr'>func</span></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/classNameRedirects.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/classNameRedirects.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-flow' href='./../Overviews/Methods.html#flow'>flow</a> (<span class='argstr'>func</span>, <span class='argstr'>bounds</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/viewExtensionsQt.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-initWindow' href='./../Overviews/Methods.html#initWindow'>initWindow</a> (<span class='argstr'>name</span>, <span class='argstr'>bounds</span>, <span class='argstr'>resize</span>, <span class='argstr'>border</span>, <span class='argstr'>scroll</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<h3><a class='anchor' name='Adding Views'>Adding Views</a></h3>
+<pre class='code prettyprint lang-sc'>(
+var w;
+w = Window("my name is... panel", Rect(128, 64, 340, 360));
+
+32.do({ arg i;
+    b = Button(w, Rect(rrand(20,300),rrand(20,300), 75, 24));
+    b.states = [["Start "++i, Color.black, Color.rand],
+        ["Stop "++i, Color.white, Color.red]];
+});
+w.front;
+)</pre>
+<h3><a class='anchor' name='Using Decorator'>Using Decorator</a></h3>
+<pre class='code prettyprint lang-sc'>(
+var w;
+w = Window("my name is... panel", Rect(128, 64, 340, 360));
+
+w.view.decorator = FlowLayout(w.view.bounds);
+// w.addFlowLayout; // you can als write this instead of the line above
+
+w.view.background = Color(0.6,0.8,0.8);
+32.do({ arg i;
+    b = Button(w, Rect(rrand(20,300),rrand(20,300), 75, 24));
+    b.states = [["Start "++i, Color.black, Color.rand],
+        ["Stop "++i, Color.white, Color.red]];
+});
+
+w.front;
+)</pre>
+<h3><a class='anchor' name='Setting Bounds'>Setting Bounds</a></h3>
+<pre class='code prettyprint lang-sc'>// use screenbounds for precise placement from the top
+(
+x = Window.new("test", Rect(100,Window.screenBounds.height-180,300,100));x.front;
+)
+
+// bounds.top refers to the bottom edge of the window,
+// measured from the bottom of the screen. Different than in View.
+x.bounds_(Rect(100,400,300,300));</pre>
+<h3><a class='anchor' name='Borderless Window'>Borderless Window</a></h3>
+<pre class='code prettyprint lang-sc'>w = Window.new(border:false).front; // can't be manually closed
+w.close; // so close it in code</pre>
+<h3><a class='anchor' name='Window with Scrollers'>Window with Scrollers</a></h3>
+<pre class='code prettyprint lang-sc'>(
+w = Window(scroll: true); // you must set this when the window is created
+c = Slider2D(w, Rect(0, 0, 1500, 300));
+d = Slider(w, Rect(0, 310, 20, 300));
+c.background = Color.grey.alpha = 0.6;
+d.background = Color.grey.alpha = 0.6;
+w.front;
+)</pre>
+<h3><a class='anchor' name='onClose'>onClose</a></h3>
+<pre class='code prettyprint lang-sc'>(
+x = Window.new.front;
+x.alpha = 0.8;
+x.onClose_({ y = Synth.new(\default) }); //close the window and the synth plays
+)
+x.close;
+y.free;</pre>
+<h3><a class='anchor' name='Using Layouts'>Using Layouts</a></h3>
+
+<p>Layouts are used to organize view sizes automatically. See: <a href="./../Guides/GUI-Layout-Management.html">Layout Management</a>.<div class='note'><span class='notelabel'>NOTE:</span> Only in Cocoa GUI</div><pre class='code prettyprint lang-sc'>// make a window and a layout
+(
+w = Window(bounds:Rect(700,200,200,200));
+h = HLayout();
+v = VLayout(h);
+w.layout =  v;
+w.front;
+w.alwaysOnTop = true;
+)
+
+// add views step by step
+
+v.add(k = Slider());
+h.add(Slider());
+h.add(Slider());
+k.orientation = \horizontal;
+
+
+h.add(g = VLayout(), 2, \left);
+g.add(TextView());
+g.add(TextView().string_("sand and hand"));
+
+v.add(Button());
+v.add(Button());
+v.add(Button());
+g.add(Button());
+
+g.margins = [1, 1, 1, 1];
+h.margins = [1, 1, 1, 1] * 23;
+v.margins = [1, 1, 1, 1] * 5;
+
+h.add(g = VLayout(), 1, \left);
+g.add(g = HLayout(), 1, \left);
+5.do { g.add(Slider().orientation_(\vertical)) };</pre>
+<h3><a class='anchor' name='Drawing on Window with Pen'>Drawing on Window with Pen</a></h3>
+<pre class='code prettyprint lang-sc'>(
+var w, much = 0.02, string, synth;
+
+w = Window.new("gui", Rect(100, 100, 300, 500)).front;
+w.view.background_(Color.new255(153, 255, 102).vary);
+
+string = "gui ".dup(24).join;
+
+w.drawFunc = Routine {
+    var i = 0;
+    var size = 40;
+    var func = { |i, j| sin(i * 0.07 + (j * 0.0023) + 1.5pi) * much + 1 };
+    var scale;
+    var font = Font("Helvetica", 40).boldVariant;
+    loop {
+        i = i + 1;
+        Pen.font = font;
+        string.do { |char, j|
+
+            scale = func.value(i, j).dup(6);
+
+            Pen.fillColor = Color.new255(0, 120, 120).vary;
+            Pen.matrix = scale * #[1, 0, 0, 1, 1, 0];
+            Pen.stringAtPoint(char.asString,
+                ((size * (j % 9)) - 10) @ (size * (j div: 9))
+            );
+        };
+        0.yield // stop here, return something unimportant
+    }
+};
+
+{ while { w.isClosed.not } { w.refresh; 0.04.wait; } }.fork(AppClock);
+
+w.front;
+
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Window.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Window.schelp</a><br>link::Classes/Window::<br>sc version: 3.8dev</div></div></body></html>

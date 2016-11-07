@@ -1,0 +1,132 @@
+<html><head><title>DrumTrack</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Analysis'>UGens>Analysis</a></div>
+<h1>DrumTrack</h1>
+<div id='summary'>Crosscorrelation search and drum pattern matching beat tracker</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/BBCut2UGens/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/BBCut2UGens/DrumTrack.sc'>DrumTrack.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Crosscorrelation search and drum pattern matching beat tracker, as described in:
+<p>N Collins. Drum Track: Beat Induction from an Acoustic Drum Kit with Synchronised Scheduling. Proceedings of the International Computer Music Conference (ICMC), Barcelona, Sept 4-9, 2005
+<p>(with special reference to the work of Jean Laroche on cross correlation/dynamic programming and Masataka Goto on drum detection and pattern spotting).
+<p>This beat tracker was devised for concert applications in tracking an acoustic drum kit, but can also be used on polyphonic audio (for pop signals with drums). 
+<p>There are four k-rate outputs, being ticks at quarter, eighth and sixteenth level from the determined beat, and the current detected tempo. 
+<p>Tempi of 90bpm to 190bpm are the allowed options. A tempo weighting prior can be set via a 100 float buffer. The default is a flat profile; the concert allowed for drum and bass speed drumming. <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>in</span>, <span class='argstr'>lock: 0</span>, <span class='argstr'>dynleak: 0</span>, <span class='argstr'>tempowt: 0</span>, <span class='argstr'>phasewt: 0</span>, <span class='argstr'>basswt: 0</span>, <span class='argstr'>patternwt: 1</span>, <span class='argstr'>prior</span>, <span class='argstr'>kicksensitivity: 1</span>, <span class='argstr'>snaresensitivity: 1</span>, <span class='argstr'>debugmode: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>Audio input to track<tr><td class='argumentname'>lock<td class='argumentdesc'>
+<p>If this argument is greater than 0.5, the tracker will lock at its current periodicity and continue from the current phase. Whilst it updates the model's phase and period, this is not reflected in the output until lock goes back below 0.5. 
+<p>You might want to play around with the following parameters, their meaning is explained in the academic paper.<tr><td class='argumentname'>dynleak<td class='argumentdesc'>
+<p>Coefficient of leaky integrator in causal dynamic programming routine<tr><td class='argumentname'>tempowt<td class='argumentdesc'>
+<p>Weighting for tempo transition cost<tr><td class='argumentname'>phasewt<td class='argumentdesc'>
+<p>Weighting for phase transition cost<tr><td class='argumentname'>basswt<td class='argumentdesc'>
+<p>Weighting for low frequency evidence<tr><td class='argumentname'>patternwt<td class='argumentdesc'>
+<p>Weighting for drum pattern evidence<tr><td class='argumentname'>prior<td class='argumentdesc'>
+<p>If a nonnegative integer, denotes a 100 float Buffer where a weighting curve for tempi resides, from 90 bpm to 189 bpm in steps of 1.<tr><td class='argumentname'>kicksensitivity<td class='argumentdesc'>
+<p>Multiplier for the kick drum detector's sensitivity. 1.0 is the default, increase for less senstive, decrease for more.<tr><td class='argumentname'>snaresensitivity<td class='argumentdesc'>
+<p>Multiplier for the snare drum detector's sensitivity. 1.0 is the default, increase for less senstive, decrease for more.<tr><td class='argumentname'>debugmode<td class='argumentdesc'>
+<p>0 for no debug information; 1 prints information on winning drum pattern matches and transitions to new phases/periods. 2 prints whenever a kick or snare is detected to help with fine tuning the kick and snare sensitivity. </table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>//choose some file you want to track off your hard drive (mono)
+b=Buffer.read(s,"/Volumes/data/stevebeattrack/samples/051.wav");
+
+(
+a= SynthDef(\help_drumtrack,{arg vol=1.0, beepvol=1.0, lock=0, kick=1, snare=1;
+var trackb,trackh,trackq,tempo;
+var source, beep;
+
+source= PlayBuf.ar(1,b.bufnum,1.0,1,0,1);
+
+#trackb,trackh,trackq,tempo=DrumTrack.kr(source, lock,kicksensitivity:kick,snaresensitivity:snare,debugmode:2);
+
+beep= SinOsc.ar(1000,0.0,Decay.kr(trackb,0.1));
+
+Out.ar(0,Pan2.ar((vol*source)+(beepvol*beep),0.0));
+
+}).play;
+)
+
+a.set(\vol,0.0);
+
+a.set(\beepvol,1.0);
+
+a.set(\kick,0.2);
+a.set(\snare,0.7);
+
+a.set(\lock,1); //fix it rigidly from current phase/period solution
+
+a.set(\lock,0); //unfix, back to tracking
+
+
+
+
+
+
+
+//track audio in (try clapping a beat or beatboxing, but allow up to 6 seconds for tracking to begin) and spawning stuff at quarters, eighths and sixteenths
+
+//tempo prior
+
+(
+var mean, stddev, constant;
+mean=30;
+stddev=10;
+constant= -0.5/(stddev.squared); //no need for front term on Gaussian since normalizeSum ignores 1/(stddev*(2pi.sqrt));
+
+a = (Array.fill(100,{arg i; exp(((i-mean).squared)*constant)})).normalizeSum; //Gaussian around 120 bpm (=index 30)
+
+Post &lt;&lt; a &lt;&lt; nl;
+b = Buffer.sendCollection(s, a, 1, 0, {arg buf; "finished".postln;});
+)
+        
+(
+SynthDef(\help_drumtrack2,{
+var trackb,trackh,trackq,tempo;
+var source;
+var bsound,hsound,qsound;
+
+source= AudioIn.ar(1);
+
+#trackb,trackh,trackq,tempo=DrumTrack.kr(source,prior:(b.bufnum));
+
+bsound= Pan2.ar(LPF.ar(WhiteNoise.ar*(Decay.kr(trackb,0.05)),1000),0.0);
+
+hsound= Pan2.ar(BPF.ar(WhiteNoise.ar*(Decay.kr(trackh,0.05)),3000,0.66),-0.5);
+
+qsound= Pan2.ar(HPF.ar(WhiteNoise.ar*(Decay.kr(trackq,0.05)),5000),0.5);
+
+Out.ar(0, bsound+hsound+qsound);
+}).play;
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/BBCut2UGens/HelpSource/Classes/DrumTrack.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/BBCut2UGens/HelpSource/Classes/DrumTrack.schelp</a><br>link::Classes/DrumTrack::<br>sc version: 3.8dev</div></div></body></html>

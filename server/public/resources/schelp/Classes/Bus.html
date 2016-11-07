@@ -1,0 +1,365 @@
+<html><head><title>Bus</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Server>Abstractions'>Server>Abstractions</a></div>
+<h1>Bus</h1>
+<div id='summary'>Representation of a bus on the server</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/Bus.sc'>Bus.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Server.html">Server</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*control'>control</a> </li>
+<li class='toc3'><a href='#*audio'>audio</a> </li>
+<li class='toc3'><a href='#*alloc'>alloc</a> </li>
+<li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*newFrom'>newFrom</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-index'>index</a> </li>
+<li class='toc3'><a href='#-free'>free</a> </li>
+<li class='toc3'><a href='#-rate'>rate</a> </li>
+<li class='toc3'><a href='#-numChannels'>numChannels</a> </li>
+<li class='toc3'><a href='#-server'>server</a> </li>
+<li class='toc3'><a href='#-asMap'>asMap</a> </li>
+<li class='toc3'><a href='#-subBus'>subBus</a> </li>
+<li class='toc2'><a href='#Asynchronous Control Bus Methods'>Asynchronous Control Bus Methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-value'>value</a> </li>
+<li class='toc3'><a href='#-set'>set</a> </li>
+<li class='toc3'><a href='#-setn'>setn</a> </li>
+<li class='toc3'><a href='#-get'>get</a> </li>
+<li class='toc3'><a href='#-getn'>getn</a> </li>
+</ul><li class='toc2'><a href='#Synchronous Control Bus Methods'>Synchronous Control Bus Methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-getSynchronous'>getSynchronous</a> </li>
+<li class='toc3'><a href='#-getnSynchronous'>getnSynchronous</a> </li>
+<li class='toc3'><a href='#-setSynchronous'>setSynchronous</a> </li>
+<li class='toc3'><a href='#-setnSynchronous'>setnSynchronous</a> </li>
+</ul><li class='toc2'><a href='#Conveniences for multichannel buses'>Conveniences for multichannel buses</a></li>
+<ul class='toc'><li class='toc3'><a href='#-setAt'>setAt</a> </li>
+<li class='toc3'><a href='#-setnAt'>setnAt</a> </li>
+<li class='toc3'><a href='#-setPairs'>setPairs</a> </li>
+</ul><li class='toc2'><a href='#Using Buses like UGens'>Using Buses like UGens</a></li>
+<ul class='toc'><li class='toc3'><a href='#-kr'>kr</a>  <a href='#-ar'>ar</a> </li>
+</ul><li class='toc2'><a href='#OSC Bundle Methods'>OSC Bundle Methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-getMsg'>getMsg</a> </li>
+<li class='toc3'><a href='#-getnMsg'>getnMsg</a> </li>
+<li class='toc3'><a href='#-setMsg'>setMsg</a> </li>
+<li class='toc3'><a href='#-setnMsg'>setnMsg</a> </li>
+<li class='toc3'><a href='#-fillMsg'>fillMsg</a> </li>
+</ul><li class='toc2'><a href='#Monitoring with an oscilloscope'>Monitoring with an oscilloscope</a></li>
+<ul class='toc'><li class='toc3'><a href='#-scope'>scope</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-=='>==</a> </li>
+<li class='toc3'><a href='#-alloc'>alloc</a> </li>
+<li class='toc3'><a href='#-asBus'>asBus</a> </li>
+<li class='toc3'><a href='#-asControlInput'>asControlInput</a> </li>
+<li class='toc3'><a href='#-asUGenInput'>asUGenInput</a> </li>
+<li class='toc3'><a href='#-fill'>fill</a> </li>
+<li class='toc3'><a href='#-hash'>hash</a> </li>
+<li class='toc3'><a href='#-isAudioOut'>isAudioOut</a> </li>
+<li class='toc3'><a href='#-isSettable'>isSettable</a> </li>
+<li class='toc3'><a href='#-play'>play</a> </li>
+<li class='toc3'><a href='#-plot'>plot</a> </li>
+<li class='toc3'><a href='#-plotAudio'>plotAudio</a> </li>
+<li class='toc3'><a href='#-prepareForProxySynthDef'>prepareForProxySynthDef</a> </li>
+<li class='toc3'><a href='#-realloc'>realloc</a> </li>
+<li class='toc3'><a href='#-setAll'>setAll</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>The clientside representation of an audio or control bus on a server. Encapsulates all the <a href="./../Browse.html#OpenSoundControl">OSC</a> messages a Bus can receive. Manages allocation and deallocation of bus indices so that you don't need to worry about conflicts. The number of control busses, audio busses, and input and output busses is fixed and cannot be changed after the server has been booted.
+<p>For more information see <a href="./../Guides/ClientVsServer.html">Client vs Server</a> and <a href="./../Reference/Server-Architecture.html">Server Architecture</a>.
+<p>Note that using the Bus class to allocate a multichannel bus does not 'create' a multichannel bus, but rather simply reserves a series of adjacent bus indices with the bus' <a href="./../Classes/Server.html">Server</a> object's bus allocators. <code class='code prettyprint lang-sc'>abus.index</code> simply returns the first of those indices. When using a Bus with an <a href="./../Classes/In.html">In</a> or <a href="./../Classes/Out.html">Out</a> ugen there is nothing to stop you from reading to or writing from a larger range, or from hardcoding to a bus that has been allocated. You are responsible for making sure that the number of channels match and that there are no conflicts.
+<p>Bus objects should not be created or modified within a <a href="./../Classes/SynthDef.html">SynthDef</a>.<div class='note'><span class='notelabel'>NOTE:</span> The lowest <code class='code prettyprint lang-sc'>n</code> bus indices are reserved for hardware output and input, where<pre class='code prettyprint lang-sc'>n = server.options.numOutputBusChannels + server.options.numInputBusChannels</pre>
+
+<p><dl>
+<dt>Hardware output buses<dd><code class='code prettyprint lang-sc'>0 .. (numOutputBusChannels - 1)</code><dt>Hardware input buses<dd><code class='code prettyprint lang-sc'>numOutputBusChannels .. (numOutputBusChannels + numInputBusChannels - 1)</code><dt>First private bus index<dd><code class='code prettyprint lang-sc'>numOutputBusChannels + numInputBusChannels</code></dl>
+
+<p>Do not try to use hardware I/O buses as private buses.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*control' href='./../Overviews/Methods.html#control'>control</a> (<span class='argstr'>server</span>, <span class='argstr'>numChannels: 1</span>)</h3>
+<div class='method'>
+<p>Allocate a control bus on the server.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>server<td class='argumentdesc'>
+<p>The <a href="./../Classes/Server.html">Server</a>. Defaults to Server.default.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>Number of channels to allocate</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*audio' href='./../Overviews/Methods.html#audio'>audio</a> (<span class='argstr'>server</span>, <span class='argstr'>numChannels: 1</span>)</h3>
+<div class='method'>
+<p>Allocate an audio bus on the server.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>server<td class='argumentdesc'>
+<p>The <a href="./../Classes/Server.html">Server</a>. Defaults to Server.default.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>Number of channels to allocate</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*alloc' href='./../Overviews/Methods.html#alloc'>alloc</a> (<span class='argstr'>rate</span>, <span class='argstr'>server</span>, <span class='argstr'>numChannels: 1</span>)</h3>
+<div class='method'>
+<p>Allocate a bus of either rate as specified by <code class='code prettyprint lang-sc'>rate</code>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>rate<td class='argumentdesc'>
+<p>Rate symbol: \control or \audio<tr><td class='argumentname'>server<td class='argumentdesc'>
+<p>The <a href="./../Classes/Server.html">Server</a>. Defaults to Server.default.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>Number of channels to allocate</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>rate: 'audio'</span>, <span class='argstr'>index: 0</span>, <span class='argstr'>numChannels: 2</span>, <span class='argstr'>server</span>)</h3>
+<div class='method'>
+<p>This method does not allocate a bus index, but assumes that you already have allocated the appropriate bus index and can supply it yourself.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*newFrom' href='./../Overviews/Methods.html#newFrom'>newFrom</a> (<span class='argstr'>bus</span>, <span class='argstr'>offset</span>, <span class='argstr'>numChannels: 1</span>)</h3>
+<div class='method'>
+<p>This method creates a new Bus that is a subset of the bus. The bus will be at the same rate as the input bus. offset is the index into the given bus. numChannels is the desired number of channels. If the combination of offset and numChannels is outside the input bus' range, an error will be thrown.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-index' href='./../Overviews/Methods.html#index'>index</a> </h3>
+<div class='method'>
+<p>Get the Bus' index. Normally you should not need to do this since instances of Bus can be passed directly as <a href="./../Classes/UGen.html">UGen</a> inputs or <a href="./../Classes/Synth.html">Synth</a> args.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-free' href='./../Overviews/Methods.html#free'>free</a> (<span class='argstr'>clear: false</span>)</h3>
+<div class='method'>
+<p>Return the bus' indices to the server's bus allocator so they can be reallocated.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-rate' href='./../Overviews/Methods.html#rate'>rate</a> </h3>
+<div class='method'>
+<p>Get the Bus' rate. This is a symbol, either \control or \audio.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-numChannels' href='./../Overviews/Methods.html#numChannels'>numChannels</a> </h3>
+<div class='method'>
+<p>Get the Bus' number of channels.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-server' href='./../Overviews/Methods.html#server'>server</a> </h3>
+<div class='method'>
+<p>Get the Bus' server object.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asMap' href='./../Overviews/Methods.html#asMap'>asMap</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a symbol consisting of the letter 'c' or 'a' (for control or audio) followed by the bus's index. This may be used when setting a synth node's control inputs to map the input to the control bus.</div><h4>Discussion:</h4>
+
+<p>See the <a href="./../Classes/Node.html">Node</a> help file for more information on mapping controls to buses.<pre class='code prettyprint lang-sc'>(
+a = Bus.control(s, 1).set(440);
+b = Bus.control(s, 1).set(0.01);
+)
+(
+SynthDef(\rlpf, { |ffreq, rq|
+    Out.ar(0, RLPF.ar(WhiteNoise.ar(0.2), ffreq, rq))
+}).play(s, [\ffreq, a.asMap, \rq, b.asMap]);
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-subBus' href='./../Overviews/Methods.html#subBus'>subBus</a> (<span class='argstr'>offset</span>, <span class='argstr'>numChannels: 1</span>)</h3>
+<div class='method'>
+<p>Get a new Bus that is a subset of this bus (see <code class='code prettyprint lang-sc'>newFrom</code>).</div><h3><a class='anchor' name='Asynchronous Control Bus Methods'>Asynchronous Control Bus Methods</a></h3>
+
+<p>The following commands apply only to control buses and are asynchronous. For synchronous access to control busses please consult <a href="#Synchronous control bus methods">Synchronous control bus methods</a>.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-value' href='./../Overviews/Methods.html#value'>value</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-value' href='./../Overviews/Methods.html#value'>value</a> = <span class='argstr'>value</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'>
+<p>Set all channels to this float value. This command is asynchronous.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-set' href='./../Overviews/Methods.html#set'>set</a> ( <span class='argstr'>... values</span>)</h3>
+<div class='method'>
+<p>A list of values for each channel of the control bus. The list of values supplied should not be greater than the number of channels. This command is asynchronous.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setn' href='./../Overviews/Methods.html#setn'>setn</a> (<span class='argstr'>values</span>)</h3>
+<div class='method'>
+<p>As set but takes an array as an argument.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-get' href='./../Overviews/Methods.html#get'>get</a> (<span class='argstr'>action</span>)</h3>
+<div class='method'>
+<p>Get the current value of this control bus. This command is asynchronous.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>action<td class='argumentdesc'>
+<p>a function that will be evaluated when the server responds, with the current value of the bus passed as an argument. This will be a float for a single channel bus, or an array of floats for a multichannel bus. The default action posts the bus values.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-getn' href='./../Overviews/Methods.html#getn'>getn</a> (<span class='argstr'>count</span>, <span class='argstr'>action</span>)</h3>
+<div class='method'>
+<p>Get the current values of this control bus. This command is asynchronous.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>count<td class='argumentdesc'>
+<p>the number of channels to read, starting from this bus' first channel.<tr><td class='argumentname'>action<td class='argumentdesc'>
+<p>a function that will be evaluated when the server responds, with the current values of the bus in an array passed as an argument.</table></div><h3><a class='anchor' name='Synchronous Control Bus Methods'>Synchronous Control Bus Methods</a></h3>
+
+<p>Synchronous access to control busses only works for servers with a shared memory interface. You can check with <a href="./../Classes/Server.html#-hasShmInterface">hasShmInterface</a> if the server provides these methods.<div class='note'><span class='notelabel'>NOTE:</span> Before 3.5 the the internal server could be controlled via shared control busses and <a href="./../Classes/SharedIn.html">SharedIn</a> and <a href="./../Classes/SharedOut.html">SharedOut</a>. These classes have been deprecated and will be removed.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-getSynchronous' href='./../Overviews/Methods.html#getSynchronous'>getSynchronous</a> </h3>
+<div class='method'>
+<p>Get the current value of this control bus. This command is synchronous.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>Value of the control bus.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-getnSynchronous' href='./../Overviews/Methods.html#getnSynchronous'>getnSynchronous</a> (<span class='argstr'>count</span>)</h3>
+<div class='method'>
+<p>Get the current values of this control bus. This command is synchronous.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>count<td class='argumentdesc'>
+<p>The number of channels to read, starting from this bus' first channel.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>Array of values.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setSynchronous' href='./../Overviews/Methods.html#setSynchronous'>setSynchronous</a> ( <span class='argstr'>... values</span>)</h3>
+<div class='method'>
+<p>A list of values for each channel of the control bus. The list of values supplied should not be greater than the number of channels. This command is synchronous.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setnSynchronous' href='./../Overviews/Methods.html#setnSynchronous'>setnSynchronous</a> (<span class='argstr'>values</span>)</h3>
+<div class='method'>
+<p>As setSynchronous but takes an array as an argument.</div><h3><a class='anchor' name='Conveniences for multichannel buses'>Conveniences for multichannel buses</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setAt' href='./../Overviews/Methods.html#setAt'>setAt</a> (<span class='argstr'>offset</span> <span class='argstr'>... values</span>)</h3>
+<div class='method'>
+<p>set the bus value(s) beginning at offset. asynchronous.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setnAt' href='./../Overviews/Methods.html#setnAt'>setnAt</a> (<span class='argstr'>offset</span>, <span class='argstr'>values</span>)</h3>
+<div class='method'>
+<p>set the bus to the list of values supplied. asynchronous.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setPairs' href='./../Overviews/Methods.html#setPairs'>setPairs</a> ( <span class='argstr'>... pairs</span>)</h3>
+<div class='method'>
+<p>set the bus values by pairs of index, value, ... asynchronous</div><h3><a class='anchor' name='Using Buses like UGens'>Using Buses like UGens</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>numChannels</span>, <span class='argstr'>offset: 0</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>numChannels</span>, <span class='argstr'>offset: 0</span>)</h3>
+<div class='method'>
+<p>use a bus like a UGen. The numChannels and offset arguments can be used to get a subset of the bus.<h4>Discussion:</h4>
+
+<p>By default, all the bus channels are used. E.g. in an 8 channel bus,<ul>
+<li><code class='code prettyprint lang-sc'>b.kr</code> will return an <a href="./../Classes/In.html">In</a> ugen reading from all the 8 channels of the bus;<li><code class='code prettyprint lang-sc'>b.kr(4)</code> will return the first four channels, and<li><code class='code prettyprint lang-sc'>b.kr(2, 5)</code> will return two channels, starting from the bus's channels at index 5 and 6.</ul>
+</div><h3><a class='anchor' name='OSC Bundle Methods'>OSC Bundle Methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getMsg' href='./../Overviews/Methods.html#getMsg'>getMsg</a> </h3>
+<div class='method'>
+<p>Returns a msg of the type /c_get for use in osc bundles.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-getnMsg' href='./../Overviews/Methods.html#getnMsg'>getnMsg</a> (<span class='argstr'>count</span>)</h3>
+<div class='method'>
+<p>Returns a msg of the type /c_getn for use in osc bundles.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>count<td class='argumentdesc'>
+<p>the number of channels to read, starting from this bus' first channel. The default is this bus' numChannels.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setMsg' href='./../Overviews/Methods.html#setMsg'>setMsg</a> ( <span class='argstr'>... values</span>)</h3>
+<div class='method'>
+<p>Returns a msg of the type /c_set for use in osc bundles.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setnMsg' href='./../Overviews/Methods.html#setnMsg'>setnMsg</a> (<span class='argstr'>values</span>)</h3>
+<div class='method'>
+<p>Returns a msg of the type /c_setn for use in osc bundles.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>values<td class='argumentdesc'>
+<p>an array of values to which adjacent channels should be set, starting at this bus' first channel.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fillMsg' href='./../Overviews/Methods.html#fillMsg'>fillMsg</a> (<span class='argstr'>value</span>)</h3>
+<div class='method'>
+<p>Returns a msg of the type /c_fill for use in osc bundles.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>value<td class='argumentdesc'>
+<p>the value to which this bus' channels will be set.</table></div><h3><a class='anchor' name='Monitoring with an oscilloscope'>Monitoring with an oscilloscope</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-scope' href='./../Overviews/Methods.html#scope'>scope</a> (<span class='argstr'>bufsize: 4096</span>, <span class='argstr'>zoom</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc</a></div>
+<div class='method'>
+<p>Displays a bus in a <a href="./../Classes/Stethoscope.html">Stethoscope</a>, using the Bus' <a href="#-numChannels">-numChannels</a>, <a href="#-index">-index</a>, and <a href="#-rate">-rate</a> properties.<pre class='code prettyprint lang-sc'>s.boot
+b=Bus.audio(s, 2);
+a={SinOsc.ar([330,440], 0, 0.4)}.play(s, b) //you won't hear this if you only have two channels
+b.scope
+
+a.free;
+b.free;</pre>
+</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-==' href='./../Overviews/Methods.html#=='>==</a> (<span class='argstr'>aBus</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-alloc' href='./../Overviews/Methods.html#alloc'>alloc</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asBus' href='./../Overviews/Methods.html#asBus'>asBus</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/asBus.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Control/asBus.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asControlInput' href='./../Overviews/Methods.html#asControlInput'>asControlInput</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asUGenInput' href='./../Overviews/Methods.html#asUGenInput'>asUGenInput</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fill' href='./../Overviews/Methods.html#fill'>fill</a> (<span class='argstr'>value</span>, <span class='argstr'>numChans</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hash' href='./../Overviews/Methods.html#hash'>hash</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isAudioOut' href='./../Overviews/Methods.html#isAudioOut'>isAudioOut</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isSettable' href='./../Overviews/Methods.html#isSettable'>isSettable</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-play' href='./../Overviews/Methods.html#play'>play</a> (<span class='argstr'>target: 0</span>, <span class='argstr'>outbus</span>, <span class='argstr'>fadeTime</span>, <span class='argstr'>addAction: 'addToTail'</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-plot' href='./../Overviews/Methods.html#plot'>plot</a> (<span class='argstr'>duration: 0.01</span>, <span class='argstr'>bounds</span>, <span class='argstr'>minval</span>, <span class='argstr'>maxval</span>, <span class='argstr'>separately: false</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-plotAudio' href='./../Overviews/Methods.html#plotAudio'>plotAudio</a> (<span class='argstr'>duration: 0.01</span>, <span class='argstr'>minval: -1</span>, <span class='argstr'>maxval: 1</span>, <span class='argstr'>bounds</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prepareForProxySynthDef' href='./../Overviews/Methods.html#prepareForProxySynthDef'>prepareForProxySynthDef</a> (<span class='argstr'>proxy</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-realloc' href='./../Overviews/Methods.html#realloc'>realloc</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setAll' href='./../Overviews/Methods.html#setAll'>setAll</a> (<span class='argstr'>value</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>s.boot;
+
+(
+// something to play with
+SynthDef(\help_Bus, { arg out=0,ffreq=100;
+    var x;
+    x = RLPF.ar(LFPulse.ar(SinOsc.kr(0.2, 0, 10, 21), [0,0.1], 0.1),
+            ffreq, 0.1)
+            .clip2(0.4);
+    Out.ar(out, x);
+}).add;
+
+)
+
+x = Synth(\help_Bus);
+
+// get a bus
+b = Bus.control(s);
+
+// map the synth's second input (ffreq) to read
+// from the bus' output index
+x.map(1, b);
+
+// By setting the bus' value you send a /c_fill message
+// to each channel of the bus setting it to supplied float value
+b.value = 100;
+b.value = 1000;
+b.value = 30;
+
+// Since this is a single channel bus this has the same effect
+b.set(300);
+b.numChannels.postln;
+
+// multi-channel:  b.set(300,350);
+// Get the current value. This is asynchronous so you can't rely on it happening immediately.
+(
+a = "waiting";
+b.get({arg value; a = value; ("after the server responds a is set to:" + a).postln;});
+("a is now:" + a).postln;
+)
+
+x.free;
+
+    // buses can also be used with kr or ar like UGens:
+(
+
+SynthDef(\help_Bus, {
+    var ffreq = b.kr;
+    Out.ar(0,
+        RLPF.ar(
+            LFPulse.ar(SinOsc.kr(0.2, 0, 10, 21), [0,0.1], 0.1),
+            ffreq, 0.1
+        ).clip2(0.4)
+    );
+}).play;
+)
+
+b.free; // release it so it may be reallocated!
+
+
+// using and setting multichannel buses:
+
+(
+b = Bus.control(s, 4);
+
+x = SynthDef(\helpBusMulti, {
+    var freqs = b.kr;
+    Out.ar(0, Splay.ar(SinOsc.ar(freqs) * Decay2.ar(Dust.ar(10 ! 4), 0.001, 0.1)) * 0.5);
+}).play;
+)
+
+    // set bus beginning at index 0:
+    // none of these methods checks whether the indexes remain
+    // within the bus's range.
+
+b.set(234, 345, 456, 567);
+b.getn;
+b.setn([100, 200, 300, 400]);
+b.getn;
+
+    // get to individual channels
+b.setAt(3, 500);
+b.getn;
+b.setAt(1, 300, 400);
+b.getn;
+b.setnAt(1, [250, 350]);
+b.getn;
+    // set by pairs of index, value ...
+b.setPairs(3, 600, 0, 200);
+b.getn;
+
+b.set(300, 500, 700, 900);
+
+(    // just get the first 2 channels
+x = SynthDef(\helpBusMulti, {
+    Out.ar(0, SinOsc.ar(b.kr(2)) * 0.2);
+}).play;
+)
+b.set(300, 303);
+x.free;
+
+(    // just channels[[2, 3]];
+y = SynthDef(\helpBusMulti, {
+    Out.ar(0, LFNoise2.ar(b.kr(2, 2)) * 0.2);
+}).play;
+)
+b.setAt(2, 1200);
+b.setAt(3, 2400);
+
+y.free;
+b.free;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Bus.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Bus.schelp</a><br>link::Classes/Bus::<br>sc version: 3.8dev</div></div></body></html>

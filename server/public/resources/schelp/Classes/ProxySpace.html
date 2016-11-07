@@ -1,0 +1,292 @@
+<html><head><title>ProxySpace</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Libraries>JITLib>Environments'>Libraries>JITLib>Environments</a>, <a href='./../Browse.html#Live Coding'>Live Coding</a>, <a href='./../Browse.html#Collections>Unordered'>Collections>Unordered</a></div>
+<h1>ProxySpace</h1>
+<div id='summary'>an environment of references on a server</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/ProxySpace.sc'>ProxySpace.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/LazyEnvir.html">LazyEnvir</a> : <a href="../Classes/EnvironmentRedirect.html">EnvironmentRedirect</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/NodeProxy.html">NodeProxy</a>, <a href="./../Classes/ProxyMixer.html">ProxyMixer</a>, <a href="./../Overviews/JITLib.html">JITLib</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#First Example'>First Example</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Creation'>Creation</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*push'>push</a> </li>
+<li class='toc3'><a href='#*pop'>pop</a> </li>
+<li class='toc3'><a href='#*clearAll'>clearAll</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*all'>all</a> </li>
+<li class='toc3'><a href='#*findSpace'>findSpace</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Play back and access'>Play back and access</a></li>
+<ul class='toc'><li class='toc3'><a href='#-play'>play</a> </li>
+<li class='toc3'><a href='#-record'>record</a> </li>
+<li class='toc3'><a href='#-ar'>ar</a>  <a href='#-kr'>kr</a> </li>
+<li class='toc3'><a href='#-wakeUp'>wakeUp</a> </li>
+<li class='toc3'><a href='#-fadeTime'>fadeTime</a> </li>
+<li class='toc3'><a href='#-clock'>clock</a> </li>
+<li class='toc3'><a href='#-quant'>quant</a> </li>
+<li class='toc3'><a href='#-free'>free</a> </li>
+<li class='toc3'><a href='#-release'>release</a> </li>
+<li class='toc3'><a href='#-stop'>stop</a> </li>
+<li class='toc3'><a href='#-end'>end</a> </li>
+<li class='toc3'><a href='#-clear'>clear</a> </li>
+<li class='toc3'><a href='#-add'>add</a> </li>
+<li class='toc3'><a href='#-remove'>remove</a> </li>
+</ul><li class='toc2'><a href='#Setting the sources'>Setting the sources</a></li>
+<ul class='toc'><li class='toc3'><a href='#-put'>put</a> </li>
+<li class='toc3'><a href='#-at'>at</a> </li>
+</ul><li class='toc2'><a href='#garbage collecting'>garbage collecting</a></li>
+<ul class='toc'><li class='toc3'><a href='#-clean'>clean</a> </li>
+<li class='toc3'><a href='#-reduce'>reduce</a> </li>
+</ul><li class='toc2'><a href='#making copies'>making copies</a></li>
+<ul class='toc'><li class='toc3'><a href='#-copy'>copy</a> </li>
+</ul><li class='toc2'><a href='#Writing code'>Writing code</a></li>
+<ul class='toc'><li class='toc3'><a href='#-document'>document</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-activeProxies'>activeProxies</a> </li>
+<li class='toc3'><a href='#-arProxyNames'>arProxyNames</a> </li>
+<li class='toc3'><a href='#-asCode'>asCode</a> </li>
+<li class='toc3'><a href='#-awake'>awake</a> </li>
+<li class='toc3'><a href='#-copyState'>copyState</a> </li>
+<li class='toc3'><a href='#-doFunctionPerform'>doFunctionPerform</a> </li>
+<li class='toc3'><a href='#-doOnServerBoot'>doOnServerBoot</a> </li>
+<li class='toc3'><a href='#-doOnServerQuit'>doOnServerQuit</a> </li>
+<li class='toc3'><a href='#-documentOutput'>documentOutput</a> </li>
+<li class='toc3'><a href='#-existingProxies'>existingProxies</a> </li>
+<li class='toc3'><a href='#-gcList'>gcList</a> </li>
+<li class='toc3'><a href='#-getStructure'>getStructure</a> </li>
+<li class='toc3'><a href='#-group'>group</a> </li>
+<li class='toc3'><a href='#-gui'>gui</a> </li>
+<li class='toc3'><a href='#-includes'>includes</a> </li>
+<li class='toc3'><a href='#-initProxy'>initProxy</a> </li>
+<li class='toc3'><a href='#-krProxyNames'>krProxyNames</a> </li>
+<li class='toc3'><a href='#-makeProxy'>makeProxy</a> </li>
+<li class='toc3'><a href='#-makeTempoClock'>makeTempoClock</a> </li>
+<li class='toc3'><a href='#-monitors'>monitors</a> </li>
+<li class='toc3'><a href='#-name'>name</a> </li>
+<li class='toc3'><a href='#-playingProxies'>playingProxies</a> </li>
+<li class='toc3'><a href='#-postln'>postln</a> </li>
+<li class='toc3'><a href='#-proxyNames'>proxyNames</a> </li>
+<li class='toc3'><a href='#-registerServer'>registerServer</a> </li>
+<li class='toc3'><a href='#-removeNeutral'>removeNeutral</a> </li>
+<li class='toc3'><a href='#-reshaping'>reshaping</a> </li>
+<li class='toc3'><a href='#-server'>server</a> </li>
+<li class='toc3'><a href='#-size'>size</a> </li>
+<li class='toc3'><a href='#-unregisterServer'>unregisterServer</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Generally a <strong>proxy</strong> is a placeholder for something. A node proxy is a placeholder for something <strong>playing on a server</strong> that writes to a limited number of busses (e.g. a synth or an event stream). NodeProxy objects can be replaced and recombined while they play. Also they can be used to build a larger structure which is used and modified later on. Overview: <a href="./../Overviews/JITLib.html">JITLib</a>
+<p>When accessed, ProxySpace returns a <a href="./../Classes/NodeProxy.html">NodeProxy</a>. A similar class without environment: <a href="./../Classes/Ndef.html">Ndef</a>
+<p>For more examples see: <a href="./../Tutorials/JITLib/proxyspace_examples.html">ProxySpace examples</a>, <a href="./../Tutorials/JITLib/jitlib_basic_concepts_01.html">jitlib_basic_concepts_01</a>
+<p>For GUI overview, see <a href="./../Classes/ProxyMixer.html">ProxyMixer</a>. See <a href="./../Classes/NodeProxy.html">NodeProxy</a> for many relevant methods.<h3><a class='anchor' name='First Example'>First Example</a></h3>
+<pre class='code prettyprint lang-sc'>s.boot;
+
+p = ProxySpace.new;
+p.fadeTime = 2; // fadeTime specifies crossfade
+p[\out].play; // monitor an empty placeholder through hardware ouput
+// set its source
+p[\out] = { SinOsc.ar([350, 351.3], 0, 0.2) };
+p[\out] = { Pulse.ar([350, 351.3] / 4, 0.4) * 0.2 };
+p[\out] = Pbind(\dur, 0.03, \freq, Pbrown(0, 1, 0.1, inf).linexp(0, 1, 200, 350));
+
+// route one proxy through another:
+p[\out] = { Ringz.ar(p[\in].ar, [350, 351.3] * 8, 0.2) * 4 };
+p[\in] = { Impulse.ar([5, 7]/2, [0, 0.5]) };
+
+a.clear(3); // clear after 3 seconds
+b.clear(3);</pre>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Creation'>Creation</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>server</span>, <span class='argstr'>name</span>, <span class='argstr'>clock</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>server<td class='argumentdesc'>
+<p>a <a href="./../Classes/Server.html">Server</a> object. Note that on remote computers the clock must be in sync.<tr><td class='argumentname'>name<td class='argumentdesc'>
+<p>a <a href="./../Classes/Symbol.html">Symbol</a>. If a name is given, the proxy space is <strong>stored</strong> in <code class='code prettyprint lang-sc'>ProxySpace.all</code> under this name.<tr><td class='argumentname'>clock<td class='argumentdesc'>
+<p>for event-based or beat-sync playing use a <a href="./../Classes/TempoClock.html">TempoClock</a>.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*push' href='./../Overviews/Methods.html#push'>push</a> (<span class='argstr'>server</span>, <span class='argstr'>name</span>, <span class='argstr'>clock</span>)</h3>
+<div class='method'>
+<p>replace the currentEnvironment with a new ProxySpace and <strong>clear</strong> the current one, if it is a ProxySpace (this is to avoid piling up proxy spaces).
+<p>In order to move to another ProxySpace while keeping the current, use <strong>pop</strong> and then <strong>push</strong> a new one. To have multiple levels of proxy spaces, use <strong>.new.push;</strong></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*pop' href='./../Overviews/Methods.html#pop'>pop</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/EnvironmentRedirect.html'>EnvironmentRedirect</a></div>
+<div class='method'>
+<p>restore the previous currentEnvironment</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*clearAll' href='./../Overviews/Methods.html#clearAll'>clearAll</a> </h3>
+<div class='method'>
+<p>clear all registered spaces</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*all' href='./../Overviews/Methods.html#all'>all</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*all' href='./../Overviews/Methods.html#all'>all</a> = value</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*findSpace' href='./../Overviews/Methods.html#findSpace'>findSpace</a> (<span class='argstr'>proxy</span>, <span class='argstr'>getCode: false</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Play back and access'>Play back and access</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-play' href='./../Overviews/Methods.html#play'>play</a> (<span class='argstr'>key: 'out'</span>, <span class='argstr'>out: 0</span>, <span class='argstr'>numChannels: 2</span>)</h3>
+<div class='method'>
+<p>returns a group that plays the <a href="./../Classes/NodeProxy.html">NodeProxy</a> at that <strong>key</strong>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>key<td class='argumentdesc'>
+<p>a <a href="./../Classes/Symbol.html">Symbol</a><tr><td class='argumentname'>out<td class='argumentdesc'>
+<p>output channel offset<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>play this number of channels.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-record' href='./../Overviews/Methods.html#record'>record</a> (<span class='argstr'>key</span>, <span class='argstr'>path</span>, <span class='argstr'>headerFormat: "aiff"</span>, <span class='argstr'>sampleFormat: "int16"</span>)</h3>
+<div class='method'>
+<p>returns a <a href="./../Classes/RecNodeProxy.html">RecNodeProxy</a> that records the NodeProxy at that key.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>key: 'out'</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>offset: 0</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>key: 'out'</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>offset: 0</span>)</h3>
+<div class='method'>
+<p>returns a NodeProxy output that plays the NodeProxy at that key, to be used within a function used as input to a node proxy</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-wakeUp' href='./../Overviews/Methods.html#wakeUp'>wakeUp</a> </h3>
+<div class='method'>
+<p>when the proxyspace is created without a running server this method can be used. To run it (internally this is done by <a href="#-play">-play</a> as well).</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fadeTime' href='./../Overviews/Methods.html#fadeTime'>fadeTime</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fadeTime' href='./../Overviews/Methods.html#fadeTime'>fadeTime</a> = <span class='argstr'>dt</span></h3>
+<div class='method'>
+<p>set the fadetime of all proxies as well as the default fade time</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clock' href='./../Overviews/Methods.html#clock'>clock</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-clock' href='./../Overviews/Methods.html#clock'>clock</a> = <span class='argstr'>aClock</span></h3>
+<div class='method'>
+<p>set the clock of all proxies as well as the default clock.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-quant' href='./../Overviews/Methods.html#quant'>quant</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-quant' href='./../Overviews/Methods.html#quant'>quant</a> = <span class='argstr'>val</span></h3>
+<div class='method'>
+<p>set the quant of all proxies as well as the default quant.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-free' href='./../Overviews/Methods.html#free'>free</a> (<span class='argstr'>fadeTime</span>)</h3>
+<div class='method'>
+<p>free all proxies (i.e. free also the groups, do not stop the monitors)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-release' href='./../Overviews/Methods.html#release'>release</a> (<span class='argstr'>fadeTime</span>)</h3>
+<div class='method'>
+<p>release all proxies (i.e. keep the groups running)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-stop' href='./../Overviews/Methods.html#stop'>stop</a> (<span class='argstr'>fadeTime</span>)</h3>
+<div class='method'>
+<p>stop all proxies (stop only monitors, do not stop synths)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-end' href='./../Overviews/Methods.html#end'>end</a> (<span class='argstr'>fadeTime</span>)</h3>
+<div class='method'>
+<p>end all proxies (free and stop the monitors)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clear' href='./../Overviews/Methods.html#clear'>clear</a> (<span class='argstr'>fadeTime</span>)</h3>
+<div class='method'>
+<p>clear the node proxy and remove it from the environment. this frees all buses. If a fadeTime is given, first fade out, then clear.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-add' href='./../Overviews/Methods.html#add'>add</a> </h3>
+<div class='method'>
+<p>add the ProxySpace to the repository (name required)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-remove' href='./../Overviews/Methods.html#remove'>remove</a> </h3>
+<div class='method'>
+<p>remove the ProxySpace from the repository</div><h3><a class='anchor' name='Setting the sources'>Setting the sources</a></h3>
+
+<p>The <strong>rate</strong> and <strong>numChannels</strong> of the <a href="./../Classes/NodeProxy.html">NodeProxy</a> determined in a lazy way from the first object put into this environment (see helpfile). Once it is created it can only be set to a function that returns the same rate and a number of channels equal to the intial one or smaller. For details, see <a href="./../Tutorials/JITLib/the_lazy_proxy.html">the_lazy_proxy</a>.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-put' href='./../Overviews/Methods.html#put'>put</a> (<span class='argstr'>key</span>, <span class='argstr'>obj</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/LazyEnvir.html'>LazyEnvir</a></div>
+<div class='method'>
+<p>Gets the NodeProxy at <strong>key</strong> (if none exists, returns a new one) and sets its source to <strong>obj</strong>. For how this works, see also <a href="./../Classes/LazyEnvir.html">LazyEnvir</a> and <a href="./../Classes/NodeProxy.html">NodeProxy</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-at' href='./../Overviews/Methods.html#at'>at</a> (<span class='argstr'>key</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/LazyEnvir.html'>LazyEnvir</a></div>
+<div class='method'>
+<p>Return the proxy source object at that key.</div><h3><a class='anchor' name='garbage collecting'>garbage collecting</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-clean' href='./../Overviews/Methods.html#clean'>clean</a> (<span class='argstr'>excluding</span>)</h3>
+<div class='method'>
+<p>free and remove all proxies that are not needed in order to play the ones passed in with 'exclude'. if none are passed in, all proxies that are monitoring (with the .play message) are kept as well as their parents etc.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-reduce' href='./../Overviews/Methods.html#reduce'>reduce</a> (<span class='argstr'>excluding</span>, <span class='argstr'>method: 'end'</span>)</h3>
+<div class='method'>
+<p>free all proxies that are not needed in order to play the ones passed in with 'to'. if none are passed in, all proxies that are monitored (with the play message) are kept as well as their parents etc.</div><h3><a class='anchor' name='making copies'>making copies</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-copy' href='./../Overviews/Methods.html#copy'>copy</a> </h3>
+<div class='method'>
+<p>Copies the environment into a new one, with each proxy being copied as well (See: <a href="./../Classes/NodeProxy.html#-copy">NodeProxy: -copy</a>). Also the instance variables that determine the ProxySpace behaviour are included, such as server, fadeTime, quant, reshaping (this happens in the <code class='code prettyprint lang-sc'>copyState</code> method).<pre class='code prettyprint lang-sc'>p = ProxySpace.push(s.boot);
+p.reshaping = \elastic;
+~out.play;
+~out = { Blip.ar(~freq, ~numharm) };
+~freq = 70;
+~numharm = { MouseX.kr(2, 100, 1) };
+
+q = p.copy; p.pop; q.push;
+
+q.reshaping.postln; // also elastic
+~out.play;
+~freq = { MouseY.kr(2, 1000, 1) * [1, 1.2] };
+
+p.end; q.end;</pre>
+</div><h3><a class='anchor' name='Writing code'>Writing code</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-document' href='./../Overviews/Methods.html#document'>document</a> (<span class='argstr'>keys</span>, <span class='argstr'>onlyAudibleOutput: false</span>, <span class='argstr'>includeSettings: true</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc</a></div>
+<div class='method'>
+<p>creates a new document with the current proxyspace state. This does not allow open functions as proxy sources. see: <a href="./../Tutorials/JITLib/jitlib_asCompileString.html">jitlib_asCompileString</a>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>keys<td class='argumentdesc'>
+<p>list of keys to document a subset of proxies<tr><td class='argumentname'>onlyAudibleOutput<td class='argumentdesc'>
+<p>a boolean.<tr><td class='argumentname'>includeSettings<td class='argumentdesc'>
+<p>a boolean.</table></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-activeProxies' href='./../Overviews/Methods.html#activeProxies'>activeProxies</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-arProxyNames' href='./../Overviews/Methods.html#arProxyNames'>arProxyNames</a> (<span class='argstr'>func: true</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asCode' href='./../Overviews/Methods.html#asCode'>asCode</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-awake' href='./../Overviews/Methods.html#awake'>awake</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-awake' href='./../Overviews/Methods.html#awake'>awake</a> = <span class='argstr'>flag</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-copyState' href='./../Overviews/Methods.html#copyState'>copyState</a> (<span class='argstr'>proxySpace</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-doFunctionPerform' href='./../Overviews/Methods.html#doFunctionPerform'>doFunctionPerform</a> (<span class='argstr'>selector</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-doOnServerBoot' href='./../Overviews/Methods.html#doOnServerBoot'>doOnServerBoot</a> (<span class='argstr'>server</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-doOnServerQuit' href='./../Overviews/Methods.html#doOnServerQuit'>doOnServerQuit</a> (<span class='argstr'>server</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-documentOutput' href='./../Overviews/Methods.html#documentOutput'>documentOutput</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-existingProxies' href='./../Overviews/Methods.html#existingProxies'>existingProxies</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gcList' href='./../Overviews/Methods.html#gcList'>gcList</a> (<span class='argstr'>excluding</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getStructure' href='./../Overviews/Methods.html#getStructure'>getStructure</a> (<span class='argstr'>keys</span>, <span class='argstr'>excluding</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-group' href='./../Overviews/Methods.html#group'>group</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-group' href='./../Overviews/Methods.html#group'>group</a> = <span class='argstr'>node</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gui' href='./../Overviews/Methods.html#gui'>gui</a> (<span class='argstr'>numItems</span>, <span class='argstr'>bounds</span>, <span class='argstr'>preset</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extJITgui.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extJITgui.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-includes' href='./../Overviews/Methods.html#includes'>includes</a> (<span class='argstr'>proxy</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-initProxy' href='./../Overviews/Methods.html#initProxy'>initProxy</a> (<span class='argstr'>proxy</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-krProxyNames' href='./../Overviews/Methods.html#krProxyNames'>krProxyNames</a> (<span class='argstr'>func: true</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeProxy' href='./../Overviews/Methods.html#makeProxy'>makeProxy</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeTempoClock' href='./../Overviews/Methods.html#makeTempoClock'>makeTempoClock</a> (<span class='argstr'>tempo: 1</span>, <span class='argstr'>beats</span>, <span class='argstr'>seconds</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-monitors' href='./../Overviews/Methods.html#monitors'>monitors</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a> = <span class='argstr'>argName</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-playingProxies' href='./../Overviews/Methods.html#playingProxies'>playingProxies</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-postln' href='./../Overviews/Methods.html#postln'>postln</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-proxyNames' href='./../Overviews/Methods.html#proxyNames'>proxyNames</a> (<span class='argstr'>rate</span>, <span class='argstr'>func: true</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-registerServer' href='./../Overviews/Methods.html#registerServer'>registerServer</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeNeutral' href='./../Overviews/Methods.html#removeNeutral'>removeNeutral</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-reshaping' href='./../Overviews/Methods.html#reshaping'>reshaping</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-reshaping' href='./../Overviews/Methods.html#reshaping'>reshaping</a> = <span class='argstr'>val</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-server' href='./../Overviews/Methods.html#server'>server</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-size' href='./../Overviews/Methods.html#size'>size</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-unregisterServer' href='./../Overviews/Methods.html#unregisterServer'>unregisterServer</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// ProxySpace returns instances of NodeProxy:
+a = NodeProxy(s)     is equivalent to ~a;
+a.source = ...        is equivalent to ~a = ...
+a[3] = ...        is equivalent to ~a[3] = ...
+
+// the two expressions are equivalent:
+~out = something;
+currentEnvironment.put(\out, something);</pre>
+<pre class='code prettyprint lang-sc'>// examples
+
+p = ProxySpace.push(s.boot); // use ProxySpace as current environment.
+
+~out.play;
+
+~out = { SinOsc.ar([400, 407] * 0.9, 0, 0.2) };
+
+~out = { SinOsc.ar([400, 437] * 0.9, 0, 0.2) * LFPulse.kr([1, 1.3]) };
+
+~out = { SinOsc.ar([400, 437] * 0.9, 0, 0.2) * ~x.kr(2) };
+
+~x = { LFPulse.kr([1, 1.3] * MouseX.kr(1, 30, 1)) };
+
+~out = { SinOsc.ar([400, 437] * Lag.kr(0.1 + ~x, 0.3), 0, 0.2) * ~x };
+
+p.fadeTime = 5;
+
+~out = { SinOsc.ar([400, 437] * 1.1, 0, 0.2) * ~x.kr(2) };
+
+p.clear(8); // end and clear all in 8 sec.
+
+
+p.pop; // move out.</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/ProxySpace.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/ProxySpace.schelp</a><br>link::Classes/ProxySpace::<br>sc version: 3.8dev</div></div></body></html>

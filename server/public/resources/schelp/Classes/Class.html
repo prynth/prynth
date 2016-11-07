@@ -1,0 +1,177 @@
+<html><head><title>Class</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Core>Kernel'>Core>Kernel</a>, <a href='./../Browse.html#Language>OOP'>Language>OOP</a></div>
+<h1>Class</h1>
+<div id='summary'>A Class describes the structure and implementation of a set objects which are its instances.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Core/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Core/Kernel.sc'>Kernel.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/Meta_Object.html">Meta_Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*allClasses'>allClasses</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*classesInited'>classesInited</a> </li>
+<li class='toc3'><a href='#*findAllReferences'>findAllReferences</a> </li>
+<li class='toc3'><a href='#*initClassTree'>initClassTree</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-browse'>browse</a> </li>
+<li class='toc3'><a href='#-findMethod'>findMethod</a> </li>
+<li class='toc3'><a href='#-findRespondingMethodFor'>findRespondingMethodFor</a> </li>
+<li class='toc3'><a href='#-dumpAllMethods'>dumpAllMethods</a> </li>
+<li class='toc3'><a href='#-dumpByteCodes'>dumpByteCodes</a> </li>
+<li class='toc3'><a href='#-dumpClassSubtree'>dumpClassSubtree</a> </li>
+<li class='toc3'><a href='#-dumpInterface'>dumpInterface</a> </li>
+<li class='toc3'><a href='#-dumpFullInterface'>dumpFullInterface</a> </li>
+<li class='toc3'><a href='#-help'>help</a> </li>
+<li class='toc3'><a href='#-helpFilePath'>helpFilePath</a> </li>
+<li class='toc3'><a href='#-helpFileForMethod'>helpFileForMethod</a> </li>
+<li class='toc3'><a href='#-asClass'>asClass</a> </li>
+<li class='toc3'><a href='#-asString'>asString</a> </li>
+<li class='toc2'><a href='#Accessing'>Accessing</a></li>
+<ul class='toc'><li class='toc3'><a href='#-name'>name</a> </li>
+<li class='toc3'><a href='#-nextclass'>nextclass</a> </li>
+<li class='toc3'><a href='#-superclass'>superclass</a> </li>
+<li class='toc3'><a href='#-superclasses'>superclasses</a> </li>
+<li class='toc3'><a href='#-subclasses'>subclasses</a> </li>
+<li class='toc3'><a href='#-allSubclasses'>allSubclasses</a> </li>
+<li class='toc3'><a href='#-methods'>methods</a> </li>
+<li class='toc3'><a href='#-instVarNames'>instVarNames</a> </li>
+<li class='toc3'><a href='#-classVarNames'>classVarNames</a> </li>
+<li class='toc3'><a href='#-iprototype'>iprototype</a> </li>
+<li class='toc3'><a href='#-cprototype'>cprototype</a> </li>
+<li class='toc3'><a href='#-filenameSymbol'>filenameSymbol</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-archiveAsCompileString'>archiveAsCompileString</a> </li>
+<li class='toc3'><a href='#-charPos'>charPos</a> </li>
+<li class='toc3'><a href='#-classIndex'>classIndex</a> </li>
+<li class='toc3'><a href='#-classVarIndex'>classVarIndex</a> </li>
+<li class='toc3'><a href='#-classVars'>classVars</a> </li>
+<li class='toc3'><a href='#-collectMethods'>collectMethods</a> </li>
+<li class='toc3'><a href='#-constNames'>constNames</a> </li>
+<li class='toc3'><a href='#-constValues'>constValues</a> </li>
+<li class='toc3'><a href='#-dumpMethodList'>dumpMethodList</a> </li>
+<li class='toc3'><a href='#-dumpSubclassList'>dumpSubclassList</a> </li>
+<li class='toc3'><a href='#-findOverriddenMethod'>findOverriddenMethod</a> </li>
+<li class='toc3'><a href='#-findReferences'>findReferences</a> </li>
+<li class='toc3'><a href='#-hasHelpFile'>hasHelpFile</a> </li>
+<li class='toc3'><a href='#-inspectorClass'>inspectorClass</a> </li>
+<li class='toc3'><a href='#-isMetaClass'>isMetaClass</a> </li>
+<li class='toc3'><a href='#-maxSubclassIndex'>maxSubclassIndex</a> </li>
+<li class='toc3'><a href='#-openCodeFile'>openCodeFile</a> </li>
+<li class='toc3'><a href='#-openHelpFile'>openHelpFile</a> </li>
+<li class='toc3'><a href='#-package'>package</a> </li>
+<li class='toc3'><a href='#-shallowCopy'>shallowCopy</a> </li>
+<li class='toc3'><a href='#-superclassesDo'>superclassesDo</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*allClasses' href='./../Overviews/Methods.html#allClasses'>allClasses</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>an <a href="./../Classes/Array.html">Array</a> of all Classes</div></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*classesInited' href='./../Overviews/Methods.html#classesInited'>classesInited</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*classesInited' href='./../Overviews/Methods.html#classesInited'>classesInited</a> = value</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*findAllReferences' href='./../Overviews/Methods.html#findAllReferences'>findAllReferences</a> (<span class='argstr'>aSymbol</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*initClassTree' href='./../Overviews/Methods.html#initClassTree'>initClassTree</a> (<span class='argstr'>aClass</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-browse' href='./../Overviews/Methods.html#browse'>browse</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Core/KernelPlusGUI.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Core/KernelPlusGUI.sc</a></div>
+<div class='method'>
+<p>Open a graphical browser for this Class. Shows methods, arguments, variables, subclasses, and has buttons for navigating to the superclass, source, helpfile, etc.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-findMethod' href='./../Overviews/Methods.html#findMethod'>findMethod</a> (<span class='argstr'>methodName</span>)</h3>
+<div class='method'>
+<p>Find the Method referred to by name. If not found, return nil.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-findRespondingMethodFor' href='./../Overviews/Methods.html#findRespondingMethodFor'>findRespondingMethodFor</a> (<span class='argstr'>methodName</span>)</h3>
+<div class='method'>
+<p>As above, but climb the class tree to see if the method is inherited from a superclass. If not found, return nil.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-dumpAllMethods' href='./../Overviews/Methods.html#dumpAllMethods'>dumpAllMethods</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/dumpFullInterface.sc'>/usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/dumpFullInterface.sc</a></div>
+<div class='method'>
+<p>Post all instance methods which instances of this class responde too, including inherited ones. <code class='code prettyprint lang-sc'>this.class.dumpAllMethods</code> will post all class methods which this class responds to.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-dumpByteCodes' href='./../Overviews/Methods.html#dumpByteCodes'>dumpByteCodes</a> (<span class='argstr'>methodName</span>)</h3>
+<div class='method'>
+<p>Dump the byte codes of the named method.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-dumpClassSubtree' href='./../Overviews/Methods.html#dumpClassSubtree'>dumpClassSubtree</a> </h3>
+<div class='method'>
+<p>Post the tree of all Classes that inherit from this class.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-dumpInterface' href='./../Overviews/Methods.html#dumpInterface'>dumpInterface</a> </h3>
+<div class='method'>
+<p>Post all the methods defined by this Class and their arguments.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-dumpFullInterface' href='./../Overviews/Methods.html#dumpFullInterface'>dumpFullInterface</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/dumpFullInterface.sc'>/usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/dumpFullInterface.sc</a></div>
+<div class='method'>
+<p>Post all the class and instance methods that this class responds to (i.e. those defined in this class and those inherited by it).</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-help' href='./../Overviews/Methods.html#help'>help</a> </h3>
+<div class='method'>
+<p>Opens the help file for this Class if it exists.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-helpFilePath' href='./../Overviews/Methods.html#helpFilePath'>helpFilePath</a> </h3>
+<div class='method'>
+<p>Returns the path of this Class's helpfile as a String.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-helpFileForMethod' href='./../Overviews/Methods.html#helpFileForMethod'>helpFileForMethod</a> (<span class='argstr'>methodSymbol</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/dumpFullInterface.sc'>/usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/dumpFullInterface.sc</a></div>
+<div class='method'>
+<p>Opens the helpfile for the class in which the responding method is implemented.<pre class='code prettyprint lang-sc'>Array.helpFileForMethod('select'); // This will open the Collection helpfile</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asClass' href='./../Overviews/Methods.html#asClass'>asClass</a> </h3>
+<div class='method'>
+<p>Return this.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asString' href='./../Overviews/Methods.html#asString'>asString</a> </h3>
+<div class='method'>
+<p>Return the name of the class as a String.</div><h3><a class='anchor' name='Accessing'>Accessing</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a> </h3>
+<div class='method'>
+<p>A Symbol that is the name of the class.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-nextclass' href='./../Overviews/Methods.html#nextclass'>nextclass</a> </h3>
+<div class='method'>
+<p>The next class in a linked list of all classes.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-superclass' href='./../Overviews/Methods.html#superclass'>superclass</a> </h3>
+<div class='method'>
+<p>The Class from which this class directly inherits.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-superclasses' href='./../Overviews/Methods.html#superclasses'>superclasses</a> </h3>
+<div class='method'>
+<p>An Array of this class's superclasses, going back to Object.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-subclasses' href='./../Overviews/Methods.html#subclasses'>subclasses</a> </h3>
+<div class='method'>
+<p>An Array of the direct subclasses of this.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-allSubclasses' href='./../Overviews/Methods.html#allSubclasses'>allSubclasses</a> </h3>
+<div class='method'>
+<p>An Array of all subclasses of this.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-methods' href='./../Overviews/Methods.html#methods'>methods</a> </h3>
+<div class='method'>
+<p>An Array of the methods of this class.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-instVarNames' href='./../Overviews/Methods.html#instVarNames'>instVarNames</a> </h3>
+<div class='method'>
+<p>An Array of the names of the instance variables for this class.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-classVarNames' href='./../Overviews/Methods.html#classVarNames'>classVarNames</a> </h3>
+<div class='method'>
+<p>An Array of the names of the class variables for this class.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-iprototype' href='./../Overviews/Methods.html#iprototype'>iprototype</a> </h3>
+<div class='method'>
+<p>An Array of the initial values of instance variables.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-cprototype' href='./../Overviews/Methods.html#cprototype'>cprototype</a> </h3>
+<div class='method'>
+<p>An Array of the initial values of class variables.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-filenameSymbol' href='./../Overviews/Methods.html#filenameSymbol'>filenameSymbol</a> </h3>
+<div class='method'>
+<p>A Symbol which is a path to the file which defines the Class.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-archiveAsCompileString' href='./../Overviews/Methods.html#archiveAsCompileString'>archiveAsCompileString</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-charPos' href='./../Overviews/Methods.html#charPos'>charPos</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-classIndex' href='./../Overviews/Methods.html#classIndex'>classIndex</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-classVarIndex' href='./../Overviews/Methods.html#classVarIndex'>classVarIndex</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-classVars' href='./../Overviews/Methods.html#classVars'>classVars</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-collectMethods' href='./../Overviews/Methods.html#collectMethods'>collectMethods</a> (<span class='argstr'>list</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/dumpFullInterface.sc'>/usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/dumpFullInterface.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-constNames' href='./../Overviews/Methods.html#constNames'>constNames</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-constValues' href='./../Overviews/Methods.html#constValues'>constValues</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dumpMethodList' href='./../Overviews/Methods.html#dumpMethodList'>dumpMethodList</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/dumpFullInterface.sc'>/usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/dumpFullInterface.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dumpSubclassList' href='./../Overviews/Methods.html#dumpSubclassList'>dumpSubclassList</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/dumpFullInterface.sc'>/usr/local/share/SuperCollider/SCClassLibrary/DefaultLibrary/dumpFullInterface.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-findOverriddenMethod' href='./../Overviews/Methods.html#findOverriddenMethod'>findOverriddenMethod</a> (<span class='argstr'>methodName</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-findReferences' href='./../Overviews/Methods.html#findReferences'>findReferences</a> (<span class='argstr'>aSymbol</span>, <span class='argstr'>references</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hasHelpFile' href='./../Overviews/Methods.html#hasHelpFile'>hasHelpFile</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-inspectorClass' href='./../Overviews/Methods.html#inspectorClass'>inspectorClass</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isMetaClass' href='./../Overviews/Methods.html#isMetaClass'>isMetaClass</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxSubclassIndex' href='./../Overviews/Methods.html#maxSubclassIndex'>maxSubclassIndex</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-openCodeFile' href='./../Overviews/Methods.html#openCodeFile'>openCodeFile</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-openHelpFile' href='./../Overviews/Methods.html#openHelpFile'>openHelpFile</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-package' href='./../Overviews/Methods.html#package'>package</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Quarks/packages.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Quarks/packages.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-shallowCopy' href='./../Overviews/Methods.html#shallowCopy'>shallowCopy</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-superclassesDo' href='./../Overviews/Methods.html#superclassesDo'>superclassesDo</a> (<span class='argstr'>function</span>)</h3>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Class.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Class.schelp</a><br>link::Classes/Class::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,481 @@
+<html><head><title>Signal</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Collections>Ordered'>Collections>Ordered</a></div>
+<h1>Signal</h1>
+<div id='summary'>Sampled audio buffer</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Math/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Math/Signal.sc'>Signal.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/FloatArray.html">FloatArray</a> : <a href="../Classes/RawArray.html">RawArray</a> : <a href="../Classes/ArrayedCollection.html">ArrayedCollection</a> : <a href="../Classes/SequenceableCollection.html">SequenceableCollection</a> : <a href="../Classes/Collection.html">Collection</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Wavetable.html">Wavetable</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*sineFill'>sineFill</a> </li>
+<li class='toc3'><a href='#*chebyFill'>chebyFill</a> </li>
+<li class='toc3'><a href='#*hanningWindow'>hanningWindow</a> </li>
+<li class='toc3'><a href='#*hammingWindow'>hammingWindow</a> </li>
+<li class='toc3'><a href='#*welchWindow'>welchWindow</a> </li>
+<li class='toc3'><a href='#*rectWindow'>rectWindow</a> </li>
+<li class='toc3'><a href='#*fftCosTable'>fftCosTable</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*readNew'>readNew</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-plot'>plot</a> </li>
+<li class='toc3'><a href='#-play'>play</a> </li>
+<li class='toc3'><a href='#-waveFill'>waveFill</a> </li>
+<li class='toc3'><a href='#-asWavetable'>asWavetable</a> </li>
+<li class='toc3'><a href='#-fill'>fill</a> </li>
+<li class='toc3'><a href='#-scale'>scale</a> </li>
+<li class='toc3'><a href='#-offset'>offset</a> </li>
+<li class='toc3'><a href='#-peak'>peak</a> </li>
+<li class='toc3'><a href='#-normalize'>normalize</a> </li>
+<li class='toc3'><a href='#-normalizeTransfer'>normalizeTransfer</a> </li>
+<li class='toc3'><a href='#-invert'>invert</a> </li>
+<li class='toc3'><a href='#-reverse'>reverse</a> </li>
+<li class='toc3'><a href='#-fade'>fade</a> </li>
+<li class='toc3'><a href='#-integral'>integral</a> </li>
+<li class='toc3'><a href='#-overDub'>overDub</a> </li>
+<li class='toc3'><a href='#-overWrite'>overWrite</a> </li>
+<li class='toc3'><a href='#-blend'>blend</a> </li>
+<li class='toc2'><a href='#Fourier Transform'>Fourier Transform</a></li>
+<ul class='toc'><li class='toc3'><a href='#-fft'>fft</a> </li>
+<li class='toc3'><a href='#-ifft'>ifft</a> </li>
+</ul><li class='toc2'><a href='#Unary Messages'>Unary Messages</a></li>
+<ul class='toc'><li class='toc3'><a href='#-neg'>neg</a>  <a href='#-abs'>abs</a>  <a href='#-sign'>sign</a>  <a href='#-squared'>squared</a>  <a href='#-cubed'>cubed</a>  <a href='#-sqrt'>sqrt</a>  <a href='#-exp'>exp</a>  <a href='#-log'>log</a>  <a href='#-log2'>log2</a>  <a href='#-log10'>log10</a>  <a href='#-sin'>sin</a>  <a href='#-cos'>cos</a>  <a href='#-tan'>tan</a>  <a href='#-asin'>asin</a>  <a href='#-acos'>acos</a>  <a href='#-atan'>atan</a>  <a href='#-sinh'>sinh</a>  <a href='#-cosh'>cosh</a>  <a href='#-tanh'>tanh</a>  <a href='#-distort'>distort</a>  <a href='#-softclip'>softclip</a>  <a href='#-isPositive'>isPositive</a>  <a href='#-isNegative'>isNegative</a>  <a href='#-isStrictlyPositive'>isStrictlyPositive</a> </li>
+</ul><li class='toc2'><a href='#Binary Messages'>Binary Messages</a></li>
+<ul class='toc'><li class='toc3'><a href='#-+'>+</a>  <a href='#--'>-</a>  <a href='#-*'>*</a>  <a href='#-/'>/</a>  <a href='#-div'>div</a>  <a href='#-%'>%</a>  <a href='#-**'>**</a>  <a href='#-min'>min</a>  <a href='#-max'>max</a>  <a href='#-ring1'>ring1</a>  <a href='#-ring2'>ring2</a>  <a href='#-ring3'>ring3</a>  <a href='#-ring4'>ring4</a>  <a href='#-difsqr'>difsqr</a>  <a href='#-sumsqr'>sumsqr</a>  <a href='#-sqrdif'>sqrdif</a>  <a href='#-absdif'>absdif</a>  <a href='#-amclip'>amclip</a>  <a href='#-scaleneg'>scaleneg</a>  <a href='#-clip2'>clip2</a>  <a href='#-excess'>excess</a>  <a href='#-<!'>&lt;!</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-!='>!=</a> </li>
+<li class='toc3'><a href='#-=='>==</a> </li>
+<li class='toc3'><a href='#-addChebyshev'>addChebyshev</a> </li>
+<li class='toc3'><a href='#-addSine'>addSine</a> </li>
+<li class='toc3'><a href='#-asComplex'>asComplex</a> </li>
+<li class='toc3'><a href='#-asFloat'>asFloat</a> </li>
+<li class='toc3'><a href='#-asInteger'>asInteger</a> </li>
+<li class='toc3'><a href='#-asSignal'>asSignal</a> </li>
+<li class='toc3'><a href='#-asWavetableNoWrap'>asWavetableNoWrap</a> </li>
+<li class='toc3'><a href='#-chebyFill'>chebyFill</a> </li>
+<li class='toc3'><a href='#-chebyFill_old'>chebyFill_old</a> </li>
+<li class='toc3'><a href='#-clip'>clip</a> </li>
+<li class='toc3'><a href='#-fftCosTable'>fftCosTable</a> </li>
+<li class='toc3'><a href='#-firstArg'>firstArg</a> </li>
+<li class='toc3'><a href='#-fold'>fold</a> </li>
+<li class='toc3'><a href='#-fold2'>fold2</a> </li>
+<li class='toc3'><a href='#-hanWindow'>hanWindow</a> </li>
+<li class='toc3'><a href='#-imag'>imag</a> </li>
+<li class='toc3'><a href='#-mod'>mod</a> </li>
+<li class='toc3'><a href='#-pow'>pow</a> </li>
+<li class='toc3'><a href='#-ramp'>ramp</a> </li>
+<li class='toc3'><a href='#-real'>real</a> </li>
+<li class='toc3'><a href='#-rectWindow'>rectWindow</a> </li>
+<li class='toc3'><a href='#-rotate'>rotate</a> </li>
+<li class='toc3'><a href='#-scurve'>scurve</a> </li>
+<li class='toc3'><a href='#-sineFill'>sineFill</a> </li>
+<li class='toc3'><a href='#-sineFill2'>sineFill2</a> </li>
+<li class='toc3'><a href='#-sqrsum'>sqrsum</a> </li>
+<li class='toc3'><a href='#-thresh'>thresh</a> </li>
+<li class='toc3'><a href='#-triWindow'>triWindow</a> </li>
+<li class='toc3'><a href='#-welWindow'>welWindow</a> </li>
+<li class='toc3'><a href='#-wrap'>wrap</a> </li>
+<li class='toc3'><a href='#-wrap2'>wrap2</a> </li>
+<li class='toc3'><a href='#-zeroPad'>zeroPad</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A Signal is a FloatArray that represents a sampled function of time buffer. Signals support math operations.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*sineFill' href='./../Overviews/Methods.html#sineFill'>sineFill</a> (<span class='argstr'>size</span>, <span class='argstr'>amplitudes</span>, <span class='argstr'>phases</span>)</h3>
+<div class='method'>
+<p>Fill a Signal of the given size with a sum of sines at the given amplitudes and phases. The Signal will be normalized.<pre class='code prettyprint lang-sc'>Signal.sineFill(1000, 1.0/[1, 2, 3, 4, 5, 6]).plot;</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p>the number of samples in the Signal.<tr><td class='argumentname'>amplitudes<td class='argumentdesc'>
+<p>an Array of amplitudes for each harmonic beginning with the fundamental.<tr><td class='argumentname'>phases<td class='argumentdesc'>
+<p>an Array of phases in radians for each harmonic beginning with the fundamental.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*chebyFill' href='./../Overviews/Methods.html#chebyFill'>chebyFill</a> (<span class='argstr'>size</span>, <span class='argstr'>amplitudes</span>, <span class='argstr'>normalize: true</span>, <span class='argstr'>zeroOffset: false</span>)</h3>
+<div class='method'>
+<p>Fill a Signal of the given size with a sum of Chebyshev polynomials at the given amplitudes. For eventual use in waveshaping by the Shaper ugen; see <a href="./../Classes/Shaper.html">Shaper</a> helpfile and <a href="./../Classes/Buffer.html#-cheby">Buffer:cheby</a> too.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p>the number of samples in the Signal.<tr><td class='argumentname'>amplitudes<td class='argumentdesc'>
+<p>an <a href="./../Classes/Array.html">Array</a> of amplitudes for each Chebyshev polynomial beginning with order 1.<tr><td class='argumentname'>normalize<td class='argumentdesc'>
+<p>a <a href="./../Classes/Boolean.html">Boolean</a> indicating whether to normalize the resulting Signal. If the zeroOffset argument is true, the normalization is done for use as a transfer function, using <a href="./../Classes/Signal.html#-normalizeTransfer">normalizeTransfer</a>, otherwise it just uses <a href="./../Classes/Signal.html#-normalize">normalize</a> to make the absolute peak value 1. Default is true.<tr><td class='argumentname'>zeroOffset<td class='argumentdesc'>
+<p>a <a href="./../Classes/Boolean.html">Boolean</a> indicating whether to offset the middle of each polynomial to zero. If true, then a zero input will always result in a zero output when used as a <a href="./../Classes/Shaper.html">waveshaper</a>. If false, then the "raw" (unshifted) Chebyshev polynomials are used. Default is false.</table><h4>Discussion:</h4>
+<div class='note'><span class='notelabel'>NOTE:</span> In previous versions, chebyFill always offset the curves to ensure the center value was zero. The zeroOffset argument was added in version 3.7, and the default behavior was changed, so that it no longer offsets.</div>
+<p><pre class='code prettyprint lang-sc'>Signal.chebyFill(1000, [1]).plot;
+
+// shifted to avoid DC offset when waveshaping a zero signal
+Signal.chebyFill(1000, [0, 1], zeroOffset: true).plot;
+
+// normalized sum of (unshifted) Chebyshev polynomials (the default)
+Signal.chebyFill(1000, [0, 1, 0, 0, 0, 1], normalize: true, zeroOffset: false).plot;
+
+Signal.chebyFill(1000, [0, 0, 1]).plot;
+Signal.chebyFill(1000, [0.3, -0.8, 1.1]).plot;
+
+
+// This waveshaping example uses two buffers, one with zero offset and
+// the other not.
+//
+// 1. The offset version gives zero output (DC free) when waveshaping an
+// input signal with amplitude of zero (e.g. DC.ar(0)).
+//
+// 2. The non-offset version makes better use of the full (-1 to 1) range
+// when waveshaping a varying signal with amplitude near 1, but (if even
+// Chebyshev polynomial degrees are used) will have a DC offset when
+// waveshaping a signal with amplitude of zero.
+//
+// 3. Wrapping the non-offset Shaper in a LeakDC (the third signal in the
+// example) cancels out any DC offsets (third version), while making full use
+// of the -1 to 1 range.
+(
+s.waitForBoot({
+    var amplitudes = [0, 1, 1, -2, 1];
+    var sigs = [
+        Signal.chebyFill(256+1, amplitudes, normalize: true, zeroOffset: true),
+        Signal.chebyFill(256+1, amplitudes, normalize: true, zeroOffset: false)
+    ];
+    b = sigs.collect{ arg sig; Buffer.loadCollection(s, sig.asWavetableNoWrap) };
+    s.sync;
+    x = {
+        var in = SinOsc.ar(100, 0, SinOsc.kr(0.1, 0, 0.5, 0.5));
+        Shaper.ar(b, in ) ++ LeakDC.ar(Shaper.ar(b[1], in))
+    }.scope;
+})
+)
+x.free; b.do(_.free); b = nil</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*hanningWindow' href='./../Overviews/Methods.html#hanningWindow'>hanningWindow</a> (<span class='argstr'>size</span>, <span class='argstr'>pad: 0</span>)</h3>
+<div class='method'>
+<p>Fill a Signal of the given size with a Hanning window.<pre class='code prettyprint lang-sc'>Signal.hanningWindow(1024).plot;
+Signal.hanningWindow(1024, 512).plot;</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p>the number of samples in the Signal.<tr><td class='argumentname'>pad<td class='argumentdesc'>
+<p>the number of samples of the size that is zero padding.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*hammingWindow' href='./../Overviews/Methods.html#hammingWindow'>hammingWindow</a> (<span class='argstr'>size</span>, <span class='argstr'>pad: 0</span>)</h3>
+<div class='method'>
+<p>Fill a Signal of the given size with a Hamming window.<pre class='code prettyprint lang-sc'>Signal.hammingWindow(1024).plot;
+Signal.hammingWindow(1024, 512).plot;</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p>the number of samples in the Signal.<tr><td class='argumentname'>pad<td class='argumentdesc'>
+<p>the number of samples of the size that is zero padding.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*welchWindow' href='./../Overviews/Methods.html#welchWindow'>welchWindow</a> (<span class='argstr'>size</span>, <span class='argstr'>pad: 0</span>)</h3>
+<div class='method'>
+<p>Fill a Signal of the given size with a Welch window.<pre class='code prettyprint lang-sc'>Signal.welchWindow(1024).plot;
+Signal.welchWindow(1024, 512).plot;</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p>the number of samples in the Signal.<tr><td class='argumentname'>pad<td class='argumentdesc'>
+<p>the number of samples of the size that is zero padding.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*rectWindow' href='./../Overviews/Methods.html#rectWindow'>rectWindow</a> (<span class='argstr'>size</span>, <span class='argstr'>pad: 0</span>)</h3>
+<div class='method'>
+<p>Fill a Signal of the given size with a rectangular window.<pre class='code prettyprint lang-sc'>Signal.rectWindow(1024).plot;
+Signal.rectWindow(1024, 512).plot;</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p>the number of samples in the Signal.<tr><td class='argumentname'>pad<td class='argumentdesc'>
+<p>the number of samples of the size that is zero padding.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fftCosTable' href='./../Overviews/Methods.html#fftCosTable'>fftCosTable</a> (<span class='argstr'>fftsize</span>)</h3>
+<div class='method'>
+<p>Fourier Transform: Fill a Signal with the cosine table needed by the FFT methods. See also the instance methods <a href="#-fft">-fft</a> and <a href="#-ifft">-ifft</a>.<pre class='code prettyprint lang-sc'>Signal.fftCosTable(512).plot;</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*readNew' href='./../Overviews/Methods.html#readNew'>readNew</a> (<span class='argstr'>file</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-plot' href='./../Overviews/Methods.html#plot'>plot</a> (<span class='argstr'>name</span>, <span class='argstr'>bounds</span>, <span class='argstr'>discrete: false</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>minval</span>, <span class='argstr'>maxval</span>, <span class='argstr'>separately: true</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/ArrayedCollection.html'>ArrayedCollection</a></div>
+<div class='method'>
+<p>Plot the Signal in a window. The arguments are not required and if not given defaults will be used.<pre class='code prettyprint lang-sc'>Signal.sineFill(512, [1]).plot;
+Signal.sineFill(512, [1]).plot("Signal 1", Rect(50, 50, 150, 450));</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>name<td class='argumentdesc'>
+<p>a String, the name of the window.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>a Rect giving the bounds of the window.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-play' href='./../Overviews/Methods.html#play'>play</a> (<span class='argstr'>loop: false</span>, <span class='argstr'>mul: 0.2</span>, <span class='argstr'>numChannels: 1</span>, <span class='argstr'>server</span>)</h3>
+<div class='method'>
+<p>Loads the signal into a buffer on the server and plays it. Returns the buffer so you can free it again.<pre class='code prettyprint lang-sc'>b = Signal.sineFill(512, [1]).play(true, 0.2);
+b.free;    // free the buffer again.</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>loop<td class='argumentdesc'>
+<p>A <a href="./../Classes/Boolean.html">Boolean</a> whether to loop the entire signal or play it once. Default is to loop.<tr><td class='argumentname'>mul<td class='argumentdesc'>
+<p>volume at which to play it, 0.2 by default.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>if the signal is an interleaved multichannel file, number of channels, default is 1.<tr><td class='argumentname'>server<td class='argumentdesc'>
+<p>the server on which to load the signal into a buffer.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-waveFill' href='./../Overviews/Methods.html#waveFill'>waveFill</a> (<span class='argstr'>function</span>, <span class='argstr'>start: 0</span>, <span class='argstr'>end: 1</span>)</h3>
+<div class='method'>
+<p>Fill the Signal with a function evaluated over an interval.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>function<td class='argumentdesc'>
+<p>a function that should calculate the value of a sample.<pre class='code prettyprint lang-sc'>(
+a = Signal.newClear(256);
+a.waveFill({ arg x, old, i; sin(x)}, 0, 3pi);
+a.waveFill({ arg x, old, i; old * sin(11 * x + 0.3) }, 0, 3pi);
+a.waveFill({ arg x, old, i; old * (x % 4) }, 0, 3pi);
+
+a.plot;
+)</pre>
+
+<p>The function is called with three arguments:<dl>
+<dt>x<dd>the value along the interval.<dt>old<dd>the old value (if the signal is overwritten)<dt>i<dd>the sample index.</dl>
+
+<p>As arguments, three values are passed to the function: the current input value (abscissa), the old value (if the signal is overwritten), and the index.<pre class='code prettyprint lang-sc'>(
+a = Signal.newClear(16);
+a.waveFill({ arg x, prev, i; [x, prev, i].postln; sin(x).max(0) }, 0, 3pi);
+a.plot;
+)</pre>
+<tr><td class='argumentname'>start<td class='argumentdesc'>
+<p>the starting value of the interval.<tr><td class='argumentname'>end<td class='argumentdesc'>
+<p>the ending value of the interval.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asWavetable' href='./../Overviews/Methods.html#asWavetable'>asWavetable</a> </h3>
+<div class='method'>
+<p>Convert the Signal into a Wavetable.<pre class='code prettyprint lang-sc'>Signal.sineFill(512, [1]).asWavetable.plot;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fill' href='./../Overviews/Methods.html#fill'>fill</a> (<span class='argstr'>val</span>)</h3>
+<div class='method'>
+<p>Fill the Signal with a value.<pre class='code prettyprint lang-sc'>Signal.newClear(512).fill(0.2).plot;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-scale' href='./../Overviews/Methods.html#scale'>scale</a> (<span class='argstr'>scale</span>)</h3>
+<div class='method'>
+<p>Scale the Signal by a factor <strong>in place</strong>.<pre class='code prettyprint lang-sc'>a = Signal[1, 2, 3, 4];
+a.scale(0.5); a;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-offset' href='./../Overviews/Methods.html#offset'>offset</a> (<span class='argstr'>offset</span>)</h3>
+<div class='method'>
+<p>Offset the Signal by a value <strong>in place</strong>.<pre class='code prettyprint lang-sc'>a = Signal[1, 2, 3, 4];
+a.offset(0.5); a;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-peak' href='./../Overviews/Methods.html#peak'>peak</a> </h3>
+<div class='method'>
+<p>Return the peak absolute value of a Signal.<pre class='code prettyprint lang-sc'>Signal[1, 2, -3, 2.5].peak;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-normalize' href='./../Overviews/Methods.html#normalize'>normalize</a> (<span class='argstr'>beginSamp: 0</span>, <span class='argstr'>endSamp</span>)</h3>
+<div class='method'>
+<p>Normalize the Signal <strong>in place</strong> such that the maximum absolute peak value is 1.<pre class='code prettyprint lang-sc'>Signal[1, 2, -4, 2.5].normalize;
+Signal[1, 2, -4, 2.5].normalize(0, 1);    // normalize only a range</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-normalizeTransfer' href='./../Overviews/Methods.html#normalizeTransfer'>normalizeTransfer</a> </h3>
+<div class='method'>
+<p>Normalizes a transfer function so that the center value of the table is offset to zero and the absolute peak value is 1. Transfer functions are meant to be used in the <a href="./../Classes/Shaper.html">Shaper</a> ugen.<pre class='code prettyprint lang-sc'>Signal[1, 2, 3, 2.5, 1].normalizeTransfer;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-invert' href='./../Overviews/Methods.html#invert'>invert</a> (<span class='argstr'>beginSamp: 0</span>, <span class='argstr'>endSamp</span>)</h3>
+<div class='method'>
+<p>Invert the Signal <strong>in place</strong>.<pre class='code prettyprint lang-sc'>a = Signal[1, 2, 3, 4];
+a.invert(0.5); a;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-reverse' href='./../Overviews/Methods.html#reverse'>reverse</a> (<span class='argstr'>beginSamp: 0</span>, <span class='argstr'>endSamp</span>)</h3>
+<div class='method'>
+<p>Reverse a subrange of the Signal <strong>in place</strong>.<pre class='code prettyprint lang-sc'>a = Signal[1, 2, 3, 4];
+a.reverse(1, 2); a;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fade' href='./../Overviews/Methods.html#fade'>fade</a> (<span class='argstr'>beginSamp: 0</span>, <span class='argstr'>endSamp</span>, <span class='argstr'>beginLevel: 0</span>, <span class='argstr'>endLevel: 1</span>)</h3>
+<div class='method'>
+<p>Fade a subrange of the Signal <strong>in place</strong>.<pre class='code prettyprint lang-sc'>a = Signal.fill(10, 1);
+a.fade(0, 3);        // fade in
+a.fade(6, 9, 1, 0);    // fade out</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-integral' href='./../Overviews/Methods.html#integral'>integral</a> </h3>
+<div class='method'>
+<p>Return the integral of a signal.<pre class='code prettyprint lang-sc'>Signal[1, 2, 3, 4].integral;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-overDub' href='./../Overviews/Methods.html#overDub'>overDub</a> (<span class='argstr'>aSignal</span>, <span class='argstr'>index: 0</span>)</h3>
+<div class='method'>
+<p>Add a signal to myself starting at the index. If the other signal is too long only the first part is overdubbed.<pre class='code prettyprint lang-sc'>a = Signal.fill(10, 100);
+a.overDub(Signal[1, 2, 3, 4], 3);
+
+        // run out of range
+a = Signal.fill(10, 100);
+a.overDub(Signal[1, 2, 3, 4], 8);
+
+a = Signal.fill(10, 100);
+a.overDub(Signal[1, 2, 3, 4], -4);
+
+a = Signal.fill(10, 100);
+a.overDub(Signal[1, 2, 3, 4], -1);
+
+a = Signal.fill(10, 100);
+a.overDub(Signal[1, 2, 3, 4], -2);
+
+a = Signal.fill(4, 100);
+a.overDub(Signal[1, 2, 3, 4, 5, 6, 7, 8], -2);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-overWrite' href='./../Overviews/Methods.html#overWrite'>overWrite</a> (<span class='argstr'>aSignal</span>, <span class='argstr'>index: 0</span>)</h3>
+<div class='method'>
+<p>Write a signal to myself starting at the index. If the other signal is too long only the first part is overdubbed.<pre class='code prettyprint lang-sc'>a = Signal.fill(10, 100);
+a.overWrite(Signal[1, 2, 3, 4], 3);
+
+        // run out of range
+a = Signal.fill(10, 100);
+a.overWrite(Signal[1, 2, 3, 4], 8);
+
+a = Signal.fill(10, 100);
+a.overWrite(Signal[1, 2, 3, 4], -4);
+
+a = Signal.fill(10, 100);
+a.overWrite(Signal[1, 2, 3, 4], -1);
+
+a = Signal.fill(10, 100);
+a.overWrite(Signal[1, 2, 3, 4], -2);
+
+a = Signal.fill(4, 100);
+a.overWrite(Signal[1, 2, 3, 4, 5, 6, 7, 8], -2);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-blend' href='./../Overviews/Methods.html#blend'>blend</a> (<span class='argstr'>that</span>, <span class='argstr'>blendFrac: 0.5</span>)</h3>
+<div class='method'>
+<p>Blend two signals by some proportion.<pre class='code prettyprint lang-sc'>Signal[1, 2, 3, 4].blend(Signal[5, 5, 5, 0], 0);
+Signal[1, 2, 3, 4].blend(Signal[5, 5, 5, 0], 0.2);
+Signal[1, 2, 3, 4].blend(Signal[5, 5, 5, 0], 0.4);
+Signal[1, 2, 3, 4].blend(Signal[5, 5, 5, 0], 1);
+Signal[1, 2, 3, 4].blend(Signal[5, 5, 5, 0], 2);</pre>
+</div><h3><a class='anchor' name='Fourier Transform'>Fourier Transform</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fft' href='./../Overviews/Methods.html#fft'>fft</a> (<span class='argstr'>imag</span>, <span class='argstr'>cosTable</span>)</h3>
+<div class='method'>
+<p>Perform an FFT on a real and imaginary signal in place. See also the class method <a href="#*fftCosTable">*fftCosTable</a>.<pre class='code prettyprint lang-sc'>(
+var size = 512, real, imag, cosTable, complex;
+
+real = Signal.newClear(size);
+        // some harmonics
+real.sineFill2([[8], [13, 0.5], [21, 0.25], [55, 0.125, 0.5pi]]);
+        // add a little noise
+real.overDub(Signal.fill(size, { 0.2.bilinrand }));
+
+imag = Signal.newClear(size);
+cosTable = Signal.fftCosTable(size);
+
+complex = fft(real, imag, cosTable);
+[real, imag, (complex.magnitude) / 100 ].flop.flat
+    .plot("fft", Rect(0, 0, 512 + 8, 500), numChannels: 3);
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ifft' href='./../Overviews/Methods.html#ifft'>ifft</a> (<span class='argstr'>imag</span>, <span class='argstr'>cosTable</span>)</h3>
+<div class='method'>
+<p>Perform an inverse FFT on a real and imaginary signal in place. See also the class method <a href="#*fftCosTable">*fftCosTable</a>.<pre class='code prettyprint lang-sc'>(
+var size = 512, real, imag, cosTable, complex, ifft;
+
+real = Signal.newClear(size);
+        // some harmonics
+real.sineFill2([[8], [13, 0.5], [21, 0.25], [55, 0.125, 0.5pi]]);
+        // add a little noise
+real.overDub(Signal.fill(size, { 0.2.bilinrand }));
+
+imag = Signal.newClear(size);
+cosTable = Signal.fftCosTable(size);
+
+complex = fft(real, imag, cosTable).postln;
+ifft = complex.real.ifft(complex.imag, cosTable);
+
+[real, ifft.real].flop.flat
+    .plot("fft and back", Rect(0, 0, 512 + 8, 500), numChannels: 2);
+)</pre>
+</div><h3><a class='anchor' name='Unary Messages'>Unary Messages</a></h3>
+
+<p>Signal will respond to unary operators by returning a new Signal.<pre class='code prettyprint lang-sc'>x = Signal.sineFill(512, [0, 0, 0, 1]);
+[x, x.neg, x.abs, x.sign, x.squared, x.cubed, x.asin.normalize, x.exp.normalize, x.distort].flop.flat
+    .plot(numChannels: 9);</pre>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-neg' href='./../Overviews/Methods.html#neg'>neg</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-abs' href='./../Overviews/Methods.html#abs'>abs</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sign' href='./../Overviews/Methods.html#sign'>sign</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-squared' href='./../Overviews/Methods.html#squared'>squared</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cubed' href='./../Overviews/Methods.html#cubed'>cubed</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sqrt' href='./../Overviews/Methods.html#sqrt'>sqrt</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-exp' href='./../Overviews/Methods.html#exp'>exp</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-log' href='./../Overviews/Methods.html#log'>log</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-log2' href='./../Overviews/Methods.html#log2'>log2</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-log10' href='./../Overviews/Methods.html#log10'>log10</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sin' href='./../Overviews/Methods.html#sin'>sin</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cos' href='./../Overviews/Methods.html#cos'>cos</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-tan' href='./../Overviews/Methods.html#tan'>tan</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asin' href='./../Overviews/Methods.html#asin'>asin</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-acos' href='./../Overviews/Methods.html#acos'>acos</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-atan' href='./../Overviews/Methods.html#atan'>atan</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sinh' href='./../Overviews/Methods.html#sinh'>sinh</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cosh' href='./../Overviews/Methods.html#cosh'>cosh</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-tanh' href='./../Overviews/Methods.html#tanh'>tanh</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-distort' href='./../Overviews/Methods.html#distort'>distort</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-softclip' href='./../Overviews/Methods.html#softclip'>softclip</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isPositive' href='./../Overviews/Methods.html#isPositive'>isPositive</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/SequenceableCollection.html'>SequenceableCollection</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isNegative' href='./../Overviews/Methods.html#isNegative'>isNegative</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/SequenceableCollection.html'>SequenceableCollection</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isStrictlyPositive' href='./../Overviews/Methods.html#isStrictlyPositive'>isStrictlyPositive</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/SequenceableCollection.html'>SequenceableCollection</a></div>
+<div class='method'>
+<p></div><h3><a class='anchor' name='Binary Messages'>Binary Messages</a></h3>
+
+<p>Signal will respond to binary operators by returning a new Signal.<pre class='code prettyprint lang-sc'>(
+x = Signal.fill(512, { rrand(0.0, 1.0) });
+y = Signal.fill(512, { |i| (i * pi / 64).sin });
+[x, y, (x + y) * 0.5, x * y, min(x, y), max(x, y) ].flop.flat
+    .plot(numChannels: 6);
+)</pre>
+
+<p><h3 class='imethodname'><span class='methprefix'>-</span><a name='-+' href='./../Overviews/Methods.html#+'>+</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='--' href='./../Overviews/Methods.html#-'>-</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-*' href='./../Overviews/Methods.html#*'>*</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-/' href='./../Overviews/Methods.html#/'>/</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-div' href='./../Overviews/Methods.html#div'>div</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-%' href='./../Overviews/Methods.html#%'>%</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-**' href='./../Overviews/Methods.html#**'>**</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-min' href='./../Overviews/Methods.html#min'>min</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-max' href='./../Overviews/Methods.html#max'>max</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ring1' href='./../Overviews/Methods.html#ring1'>ring1</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ring2' href='./../Overviews/Methods.html#ring2'>ring2</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ring3' href='./../Overviews/Methods.html#ring3'>ring3</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ring4' href='./../Overviews/Methods.html#ring4'>ring4</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-difsqr' href='./../Overviews/Methods.html#difsqr'>difsqr</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sumsqr' href='./../Overviews/Methods.html#sumsqr'>sumsqr</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sqrdif' href='./../Overviews/Methods.html#sqrdif'>sqrdif</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-absdif' href='./../Overviews/Methods.html#absdif'>absdif</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-amclip' href='./../Overviews/Methods.html#amclip'>amclip</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-scaleneg' href='./../Overviews/Methods.html#scaleneg'>scaleneg</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-clip2' href='./../Overviews/Methods.html#clip2'>clip2</a> (<span class='argstr'>aNumber: 1</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-excess' href='./../Overviews/Methods.html#excess'>excess</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-<!' href='./../Overviews/Methods.html#&lt;!'>&lt;!</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'>
+<p></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-!=' href='./../Overviews/Methods.html#!='>!=</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-==' href='./../Overviews/Methods.html#=='>==</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-addChebyshev' href='./../Overviews/Methods.html#addChebyshev'>addChebyshev</a> (<span class='argstr'>harmonicNumber: 1</span>, <span class='argstr'>amplitude: 1</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-addSine' href='./../Overviews/Methods.html#addSine'>addSine</a> (<span class='argstr'>harmonicNumber: 1</span>, <span class='argstr'>amplitude: 1</span>, <span class='argstr'>phase: 0</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asComplex' href='./../Overviews/Methods.html#asComplex'>asComplex</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asFloat' href='./../Overviews/Methods.html#asFloat'>asFloat</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asInteger' href='./../Overviews/Methods.html#asInteger'>asInteger</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asSignal' href='./../Overviews/Methods.html#asSignal'>asSignal</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asWavetableNoWrap' href='./../Overviews/Methods.html#asWavetableNoWrap'>asWavetableNoWrap</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-chebyFill' href='./../Overviews/Methods.html#chebyFill'>chebyFill</a> (<span class='argstr'>amplitudes</span>, <span class='argstr'>normalize: true</span>, <span class='argstr'>zeroOffset: false</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-chebyFill_old' href='./../Overviews/Methods.html#chebyFill_old'>chebyFill_old</a> (<span class='argstr'>amplitudes</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-clip' href='./../Overviews/Methods.html#clip'>clip</a> (<span class='argstr'>lo</span>, <span class='argstr'>hi</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fftCosTable' href='./../Overviews/Methods.html#fftCosTable'>fftCosTable</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-firstArg' href='./../Overviews/Methods.html#firstArg'>firstArg</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fold' href='./../Overviews/Methods.html#fold'>fold</a> (<span class='argstr'>lo</span>, <span class='argstr'>hi</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fold2' href='./../Overviews/Methods.html#fold2'>fold2</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hanWindow' href='./../Overviews/Methods.html#hanWindow'>hanWindow</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-imag' href='./../Overviews/Methods.html#imag'>imag</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mod' href='./../Overviews/Methods.html#mod'>mod</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pow' href='./../Overviews/Methods.html#pow'>pow</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ramp' href='./../Overviews/Methods.html#ramp'>ramp</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-real' href='./../Overviews/Methods.html#real'>real</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rectWindow' href='./../Overviews/Methods.html#rectWindow'>rectWindow</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rotate' href='./../Overviews/Methods.html#rotate'>rotate</a> (<span class='argstr'>n: 1</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-scurve' href='./../Overviews/Methods.html#scurve'>scurve</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sineFill' href='./../Overviews/Methods.html#sineFill'>sineFill</a> (<span class='argstr'>amplitudes</span>, <span class='argstr'>phases</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sineFill2' href='./../Overviews/Methods.html#sineFill2'>sineFill2</a> (<span class='argstr'>list</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sqrsum' href='./../Overviews/Methods.html#sqrsum'>sqrsum</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-thresh' href='./../Overviews/Methods.html#thresh'>thresh</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-triWindow' href='./../Overviews/Methods.html#triWindow'>triWindow</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-welWindow' href='./../Overviews/Methods.html#welWindow'>welWindow</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-wrap' href='./../Overviews/Methods.html#wrap'>wrap</a> (<span class='argstr'>lo</span>, <span class='argstr'>hi</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-wrap2' href='./../Overviews/Methods.html#wrap2'>wrap2</a> (<span class='argstr'>aNumber</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-zeroPad' href='./../Overviews/Methods.html#zeroPad'>zeroPad</a> (<span class='argstr'>minSize</span>)</h3>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Signal.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Signal.schelp</a><br>link::Classes/Signal::<br>sc version: 3.8dev</div></div></body></html>

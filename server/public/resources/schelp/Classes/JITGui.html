@@ -1,0 +1,261 @@
+<html><head><title>JITGui</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Libraries>JITLib>GUI'>Libraries>JITLib>GUI</a>, <a href='./../Browse.html#Live Coding'>Live Coding</a></div>
+<h1>JITGui</h1>
+<div id='summary'>a superclass for just in time interfaces</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/JITGui.sc'>JITGui.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/EnvirGui.html">EnvirGui</a>, <a href="../Classes/HistoryGui.html">HistoryGui</a>, <a href="../Classes/MonitorGui.html">MonitorGui</a>, <a href="../Classes/NdefGui.html">NdefGui</a>, <a href="../Classes/PdefnGui.html">PdefnGui</a>, <a href="../Classes/ProxyMixer.html">ProxyMixer</a>, <a href="../Classes/TaskProxyAllGui.html">TaskProxyAllGui</a>, <a href="../Classes/TaskProxyGui.html">TaskProxyGui</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#See also'>See also</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Creation'>Creation</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Accessing Instance Variables'>Accessing Instance Variables</a></li>
+<ul class='toc'><li class='toc3'><a href='#-object'>object</a> </li>
+<li class='toc3'><a href='#-numItems'>numItems</a> </li>
+<li class='toc3'><a href='#-parent'>parent</a> </li>
+<li class='toc3'><a href='#-bounds'>bounds</a> </li>
+<li class='toc3'><a href='#-zone'>zone</a> </li>
+<li class='toc3'><a href='#-minSize'>minSize</a> </li>
+<li class='toc3'><a href='#-defPos'>defPos</a> </li>
+<li class='toc3'><a href='#-skin'>skin</a> </li>
+<li class='toc3'><a href='#-font'>font</a> </li>
+<li class='toc3'><a href='#-nameView'>nameView</a> </li>
+<li class='toc3'><a href='#-csView'>csView</a> </li>
+<li class='toc3'><a href='#-prevState'>prevState</a> </li>
+<li class='toc3'><a href='#-skipjack'>skipjack</a> </li>
+<li class='toc3'><a href='#-scroller'>scroller</a> </li>
+<li class='toc3'><a href='#-hasWindow'>hasWindow</a> </li>
+</ul><li class='toc2'><a href='#Instance Methods'>Instance Methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-object'>object</a> </li>
+<li class='toc3'><a href='#-accepts'>accepts</a> </li>
+<li class='toc3'><a href='#-name'>name</a> </li>
+<li class='toc3'><a href='#-getName'>getName</a> </li>
+<li class='toc3'><a href='#-winName'>winName</a> </li>
+<li class='toc3'><a href='#-moveTo'>moveTo</a> </li>
+<li class='toc3'><a href='#-close'>close</a> </li>
+</ul><li class='toc2'><a href='#How JITGuis work'>How JITGuis work</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#1 - Methods that subclasses should implement'>1 - Methods that subclasses should implement</a></li>
+<ul class='toc'><li class='toc3'><a href='#-setDefaults'>setDefaults</a> </li>
+<li class='toc3'><a href='#-accepts'>accepts</a> </li>
+<li class='toc3'><a href='#-makeViews'>makeViews</a> </li>
+</ul><li class='toc2'><a href='#2 - For updating the JITGui, overwrite these methods'>2 - For updating the JITGui, overwrite these methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-getState'>getState</a> </li>
+<li class='toc3'><a href='#-checkUpdate'>checkUpdate</a> </li>
+</ul><li class='toc2'><a href='#3 - More methods you may want to overwrite if required'>3 - More methods you may want to overwrite if required</a></li>
+<ul class='toc'><li class='toc3'><a href='#-calcBounds'>calcBounds</a> </li>
+<li class='toc3'><a href='#-makeWindow'>makeWindow</a> </li>
+<li class='toc3'><a href='#-makeZone'>makeZone</a> </li>
+<li class='toc3'><a href='#-getName'>getName</a> </li>
+<li class='toc3'><a href='#-winName'>winName</a> </li>
+<li class='toc3'><a href='#-makeScroller'>makeScroller</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-config'>config</a> </li>
+<li class='toc3'><a href='#-hasName'>hasName</a> </li>
+<li class='toc3'><a href='#-makeSkip'>makeSkip</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Proxies for synths, tasks and patterns as implemented in JITLib are extremely flexible. Having guis that represent their changeable states makes it easier to understand what is going on, especially when using multiple proxies together. JITGuis follow a special strategy described below.<h3><a class='anchor' name='See also'>See also</a></h3>
+<ul>
+<li><a href="./../Classes/EnvirGui.html">EnvirGui</a>,<li><a href="./../Classes/TdefGui.html">TdefGui</a>, <a href="./../Classes/TdefAllGui.html">TdefAllGui</a>, ( <a href="./../Classes/TaskProxyGui.html">TaskProxyGui</a> ) // TdefGui replaces obsolete TdefEditor<li><a href="./../Classes/PdefGui.html">PdefGui</a>, <a href="./../Classes/PdefAllGui.html">PdefAllGui</a>, ( <a href="./../Classes/TaskProxyAllGui.html">TaskProxyAllGui</a> ) // PdefGui replaces obsolete PdefEditor<li><a href="./../Classes/NdefGui.html">NdefGui</a>, <a href="./../Classes/MonitorGui.html">MonitorGui</a>, <a href="./../Classes/NdefParamGui.html">NdefParamGui</a> // replace NodeProxyEditor, ProxyMonitorGui<li><a href="./../Classes/ProxyMixer.html">ProxyMixer</a><li><a href="./../Classes/NdefMixer.html">NdefMixer</a></ul>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Creation'>Creation</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>object</span>, <span class='argstr'>numItems: 0</span>, <span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>makeSkip: true</span>, <span class='argstr'>options: [  ]</span>)</h3>
+<div class='method'>
+<p>Create a new JITGui that will be watching an object and displaying its state.<pre class='code prettyprint lang-sc'>g = JITGui.new(nil, 0);        // make a JITGui
+g.object = 123;                // its object gets shown asCompileString
+g.object = (key: \otto);     // if the object understands .key, key gets shown as name
+g.object = Pseq([1, 2, 3], inf);
+g.close;</pre>
+<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>object<td class='argumentdesc'>
+<p>the object to watch<tr><td class='argumentname'>numItems<td class='argumentdesc'>
+<p>the number of display items to use, e.g. how many fields for text display, or how many sliders for single-number parameters.<tr><td class='argumentname'>parent<td class='argumentdesc'>
+<p>a parent view on which to display. If nil, a new window is created; <strong>parent</strong> can also be an existing window or a composite view.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>a desired size and position where to display a JITGui. Can be nil, a <a href="./../Classes/Point.html">Point</a>, or a <a href="./../Classes/Rect.html">Rect</a>. JITGuis know their minimum size ( <strong>minSize</strong> ), and if bounds is nil, minSize is used. if bounds is a point or rect, it will be set to at least minSize. With a rect one can also supply a position where to display. If a point,shown size is the maximum of bounds and minSize.<tr><td class='argumentname'>makeSkip<td class='argumentdesc'>
+<p>A flag whether to make a skipjack. (If the gui is on its own window, it typically uses one, if the JITGui is part of a larger gui, that gui may take care of updating.)<tr><td class='argumentname'>options<td class='argumentdesc'>
+<p>a list of additional information, such as flags about optional buttons. (This is used in some subclasses.)</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Accessing Instance Variables'>Accessing Instance Variables</a></h3>
+<pre class='code prettyprint lang-sc'>g.dump;</pre>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-object' href='./../Overviews/Methods.html#object'>object</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-object' href='./../Overviews/Methods.html#object'>object</a> = <span class='argstr'>obj</span></h3>
+<div class='method'>
+<p>the object to watch</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-numItems' href='./../Overviews/Methods.html#numItems'>numItems</a> </h3>
+<div class='method'>
+<p>the number of display items to use, e.g. how many fields for text display, or how many sliders for single-number parameters.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-parent' href='./../Overviews/Methods.html#parent'>parent</a> </h3>
+<div class='method'>
+<p>a parent view on which the gui is displayed.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a> </h3>
+<div class='method'>
+<p>the size and position of the JITGui</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-zone' href='./../Overviews/Methods.html#zone'>zone</a> </h3>
+<div class='method'>
+<p>a <a href="./../Classes/CompositeView.html">CompositeView</a> inside the parent that holds the JITGui's views.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minSize' href='./../Overviews/Methods.html#minSize'>minSize</a> </h3>
+<div class='method'>
+<p>a JITGuis calculates its own minimum size based on numItems and options.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-defPos' href='./../Overviews/Methods.html#defPos'>defPos</a> </h3>
+<div class='method'>
+<p>the default position where the JITGui is shown if it is in its own window.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-skin' href='./../Overviews/Methods.html#skin'>skin</a> </h3>
+<div class='method'>
+<p>(Appearance)
+<p>the GUI skin to use. By default this is <code class='code prettyprint lang-sc'>GUI.skins.jit</code> .</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-font' href='./../Overviews/Methods.html#font'>font</a> </h3>
+<div class='method'>
+<p>(Appearance)
+<p>the font, also taken from JITGui.skin.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-nameView' href='./../Overviews/Methods.html#nameView'>nameView</a> </h3>
+<div class='method'>
+<p>(specific in the JITGui class)
+<p>displays the object's key or name if available.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-csView' href='./../Overviews/Methods.html#csView'>csView</a> </h3>
+<div class='method'>
+<p>(specific in the JITGui class)
+<p>displays the object's compileString.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-prevState' href='./../Overviews/Methods.html#prevState'>prevState</a> </h3>
+<div class='method'>
+<p>(common to all JITGuis)
+<p>the last observed state which is kept around for comparison.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-skipjack' href='./../Overviews/Methods.html#skipjack'>skipjack</a> </h3>
+<div class='method'>
+<p>(common to all JITGuis)
+<p>the skipjack that watches the object's state so it can be updated.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-scroller' href='./../Overviews/Methods.html#scroller'>scroller</a> </h3>
+<div class='method'>
+<p>(common to all JITGuis)
+<p>an <a href="./../Classes/EZScroller.html">EZScroller</a> used for scrolling which of a list of items is shown. see e.g. <a href="./../Classes/TdefGui.html">TdefGui</a> for usage.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hasWindow' href='./../Overviews/Methods.html#hasWindow'>hasWindow</a> </h3>
+<div class='method'>
+<p>(common to all JITGuis)
+<p>a flag whether the JITGui has made its own window, and thus owns it.</div><h3><a class='anchor' name='Instance Methods'>Instance Methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-object' href='./../Overviews/Methods.html#object'>object</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-object' href='./../Overviews/Methods.html#object'>object</a> = <span class='argstr'>obj</span></h3>
+<div class='method'>
+<p>put an object in the gui - if the gui accepts it.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-accepts' href='./../Overviews/Methods.html#accepts'>accepts</a> (<span class='argstr'>obj</span>)</h3>
+<div class='method'>
+<p>test whether obj is a valid object to show in a JITGui. In <strong>JITGui</strong> itself, all objects are accepted, in the subclasses, <strong>obj</strong> can either be nil or a specific class, such as <a href="./../Classes/Tdef.html">Tdef</a>, <a href="./../Classes/Pdef.html">Pdef</a>, <a href="./../Classes/Ndef.html">Ndef</a></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a> = <span class='argstr'>name</span></h3>
+<div class='method'>
+<p>set the text of the <a href="#-nameView">-nameView</a> and the window (if it <a href="#-hasWindow">-hasWindow</a>)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-getName' href='./../Overviews/Methods.html#getName'>getName</a> </h3>
+<div class='method'>
+<p>ask the object its name, or return <code class='code prettyprint lang-sc'>'_anon_'</code></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-winName' href='./../Overviews/Methods.html#winName'>winName</a> (<span class='argstr'>name</span>)</h3>
+<div class='method'>
+<p>return a suitable name for a window: "JITGui_objname"</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveTo' href='./../Overviews/Methods.html#moveTo'>moveTo</a> (<span class='argstr'>h</span>, <span class='argstr'>v</span>)</h3>
+<div class='method'>
+<p>if it has its own window, one can move it to some specific location.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-close' href='./../Overviews/Methods.html#close'>close</a> </h3>
+<div class='method'>
+<p>close its window.</div><h3><a class='anchor' name='How JITGuis work'>How JITGuis work</a></h3>
+
+<p>A JITGui watches the state of its object by calling its (the gui's) <a href="#-getState">-getState</a> method at appropriate intervals (skipjack.dt). It compares the new state of the object with the previous state stored in <a href="#-prevState">-prevState</a>. When something has changed, only the gui elements concerned are updated.
+<p>Compare this with model-view-controller (MVC):<ul>
+<li>MVC requires objects to make .changed calls in all the places where state may change, so its depandants will be informed; JITGui does not.<li>MVC updates dependants instantly, while JITGui may take longer to update. For guis, very fast changes of settings (e.g. parameter automation) may produce some CPU load; with JITGuis, lazier display limits this worst-case load.<li>Only the JITGui knows about its object, so there is no dependancy administration to take care of.</ul>
+<h3><a class='anchor' name='1 - Methods that subclasses should implement'>1 - Methods that subclasses should implement</a></h3>
+
+<p>You can write your own subclasses to JITGui very efficiently by implementing appropriate variants of the following methods in your class. For examples of these methods, see <a href="./../Classes/TdefGui.html">TdefGui</a>, <a href="./../Classes/EnvirGui.html">EnvirGui</a>, <a href="./../Classes/NdefGui.html">NdefGui</a>.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setDefaults' href='./../Overviews/Methods.html#setDefaults'>setDefaults</a> (<span class='argstr'>options</span>)</h3>
+<div class='method'>
+<p>used to calculate the required onscreen size for the jitGui's zone. Should determine zone size based on <a href="#-numItems">-numItems</a> and options. also, <a href="#-defPos">-defPos</a> (where to show your jitGui by default) can be set here, and possibly modifications to the skin used.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-accepts' href='./../Overviews/Methods.html#accepts'>accepts</a> (<span class='argstr'>obj</span>)</h3>
+<div class='method'>
+<p>a test whether <strong>obj</strong> can be shown in the particular kind of JITGui. Subclasses of JITGui are made for special objects, e.g. Pdefs, so they should test whether obj is the right kind.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeViews' href='./../Overviews/Methods.html#makeViews'>makeViews</a> </h3>
+<div class='method'>
+<p>create all the views of the jitGui inside the zone.</div><h3><a class='anchor' name='2 - For updating the JITGui, overwrite these methods'>2 - For updating the JITGui, overwrite these methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getState' href='./../Overviews/Methods.html#getState'>getState</a> </h3>
+<div class='method'>
+<p>ask the object for all aspects of its current state that will be displayed.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-checkUpdate' href='./../Overviews/Methods.html#checkUpdate'>checkUpdate</a> </h3>
+<div class='method'>
+<p>get the object's current state with <a href="#-prevState">-prevState</a>, compare it with prevState, update all gui elements that need to be changed, and store the new state as prevState. This method is called in the skipJack.</div><h3><a class='anchor' name='3 - More methods you may want to overwrite if required'>3 - More methods you may want to overwrite if required</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-calcBounds' href='./../Overviews/Methods.html#calcBounds'>calcBounds</a> </h3>
+<div class='method'>
+<p>how to calculate the bounds for the zone in which to display</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeWindow' href='./../Overviews/Methods.html#makeWindow'>makeWindow</a> </h3>
+<div class='method'>
+<p>how to make a window when no parent is given</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeZone' href='./../Overviews/Methods.html#makeZone'>makeZone</a> </h3>
+<div class='method'>
+<p>how to initalize the zone within the parent window or view</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-getName' href='./../Overviews/Methods.html#getName'>getName</a> </h3>
+<div class='method'>
+<p>a method for generating a name for the object.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-winName' href='./../Overviews/Methods.html#winName'>winName</a> (<span class='argstr'>name</span>)</h3>
+<div class='method'>
+<p>a method for generating a name for the JITGui's window.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeScroller' href='./../Overviews/Methods.html#makeScroller'>makeScroller</a> </h3>
+<div class='method'>
+<p>Some objects may have more elements to display than the gui has slots, e.g. a <a href="./../Classes/ProxySpace.html">ProxySpace</a> can have more proxies than the mixer has numItems. Then, only <a href="#-numItems">-numItems</a> elements are shown, and the others can be scrolled to with <a href="#-scroller">-scroller</a> - an <a href="./../Classes/EZScroller.html">EZScroller</a> next to the slot elements. The makeScroller method should knows where in the zone to put the scroller.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-config' href='./../Overviews/Methods.html#config'>config</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hasName' href='./../Overviews/Methods.html#hasName'>hasName</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeSkip' href='./../Overviews/Methods.html#makeSkip'>makeSkip</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>    // typically, only subclasses of JITGui are used,
+    // so here are just some basic usage and layout tests
+
+    // make its own window - defPos, minSize is used
+g = JITGui(Ndef(\a));
+
+    // make its own window, specific size
+g = JITGui(Ndef(\a), bounds: 390@20);
+
+    // provide full bounds
+g = JITGui(Ndef(\a), bounds: Rect(200, 500, 390, 24));
+
+    // extent is 0@0: minSize x, y is used
+g = JITGui(Ndef(\a), bounds: Rect(200, 500, 0, 0));
+g = JITGui(Ndef(\a), bounds: Rect(200, 500, 0, 50));
+g = JITGui(Ndef(\a), bounds: Rect(200, 500, 500, 0));
+
+
+(    // put a JITGui in an existing window:
+w = Window().front;
+g = JITGui(Ndef(\a), 0, w, bounds: 300@48);
+)
+
+(    // 5 lines high
+w = Window().front;
+g = JITGui(Ndef(\a), 5, w);
+)
+
+(    // recommended: use a FlowLayout.
+w = Window().front;
+w.addFlowLayout;
+EZSlider(w, 300@100, \test, []);
+g = JITGui(Ndef(\a), 0, w, bounds: 300@40);
+)
+
+// test changing color schemes for JITguis
+// this scheme is admittedly ugly but different
+
+GUI.skins.put(\jit, (
+    fontSpecs:         ["Inconsolata", 12],
+    fontColor:         Color.white,
+    background:     Color(0.2, 0.85, 0.7, 0.5),
+    foreground:        Color.grey(0.1),
+    onColor:        Color(0.5, 0, 0.5),
+    onColor2:       Color(0.0, 0.5, 0.5),
+    offColor:        Color.grey(0.2, 0.5),
+    hiliteColor:    Color.green(1.0, 0.5),
+    gap:            0 @ 0,
+    margin:         2@2,
+    buttonHeight:    18,
+    headHeight:     24)
+);
+
+// make some JITGuis to check
+n = NdefGui(Ndef(\a));
+Ndef(\a, { SinOsc.ar(\freq.kr(250)) });
+Ndef(\a).clear;
+n = NdefMixer(s);
+
+TdefAllGui();
+Tdef(\a).set(\amp, 0.25);
+TdefGui(Tdef(\a), 5);
+
+EnvirGui((a: 123));</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/JITGui.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/JITGui.schelp</a><br>link::Classes/JITGui::<br>sc version: 3.8dev</div></div></body></html>

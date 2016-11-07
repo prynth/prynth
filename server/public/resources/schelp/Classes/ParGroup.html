@@ -1,0 +1,106 @@
+<html><head><title>ParGroup</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Server>Nodes'>Server>Nodes</a>, <a href='./../Browse.html#Server>Abstractions'>Server>Abstractions</a></div>
+<h1>ParGroup</h1>
+<div id='summary'>Client-side representation of a parallel group node on the server</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/Node.sc'>Node.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/AbstractGroup.html">AbstractGroup</a> : <a href="../Classes/Node.html">Node</a> : <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Creation with Immediate Instantiation on the Server'>Creation with Immediate Instantiation on the Server</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+</ul><li class='toc2'><a href='#Convenience methods for add actions'>Convenience methods for add actions</a></li>
+<ul class='toc'><li class='toc3'><a href='#*after'>after</a> </li>
+<li class='toc3'><a href='#*before'>before</a> </li>
+<li class='toc3'><a href='#*head'>head</a> </li>
+<li class='toc3'><a href='#*tail'>tail</a> </li>
+<li class='toc3'><a href='#*replace'>replace</a> </li>
+</ul><li class='toc2'><a href='#Creation without Instantiation on the Server'>Creation without Instantiation on the Server</a></li>
+<ul class='toc'><li class='toc3'><a href='#*basicNew'>basicNew</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Parallel Groups are server-side node containers that work similar to <a href="./../Classes/Group.html">Group</a>s, but without ordering constraints for the contained nodes. This means that on parallel architectures the elements of a Parallel Group can be executed concurrently.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Creation with Immediate Instantiation on the Server'>Creation with Immediate Instantiation on the Server</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>target</span>, <span class='argstr'>addAction: 'addToHead'</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Create and return a Group.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>target<td class='argumentdesc'>
+<p>A target for this Group. If target is not a Group or Synth, it will be converted as follows: If it is a Server, it will be converted to the default_group of that server. If it is nil, to the default_group of the default Server.<tr><td class='argumentname'>addAction<td class='argumentdesc'>
+<p>one of the following Symbols:<table>
+<tr><td>\addToHead<td>(the default) add at the head of the group specified by target<tr><td>\addToTail<td>add at the tail of the group specified by target<tr><td>\addAfter<td>add immediately after target in its server's node order<tr><td>\addBefore<td>add immediately before target in its server's node order<tr><td>\addReplace<td>replace target and take its place in its server's node order</table>
+
+<p>Note: A Synth is not a valid target for \addToHead and \addToTail.</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>s.boot;
+g = Group.new; // add a Group at the head of the default Server's default group
+h = Group.new(g, \addAfter);
+s.queryAllNodes; // note the Group within the default group (ID 1)
+g.free; h.free;</pre>
+</div><h3><a class='anchor' name='Convenience methods for add actions'>Convenience methods for add actions</a></h3>
+
+<p>The following convenience methods correspond to the add actions above:<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*after' href='./../Overviews/Methods.html#after'>after</a> (<span class='argstr'>aNode</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Create and return a Group and add it immediately after aNode.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*before' href='./../Overviews/Methods.html#before'>before</a> (<span class='argstr'>aNode</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Create and return a Group and add it immediately before aNode.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*head' href='./../Overviews/Methods.html#head'>head</a> (<span class='argstr'>aGroup</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Create and return a Group. If aGroup is a Group add it at the head of that group. If it is a Server, add it at the head of the default_group of that server. If it is nil, add it at the head of the default_group of the default Server.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*tail' href='./../Overviews/Methods.html#tail'>tail</a> (<span class='argstr'>aGroup</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Create and return a Group. If aGroup is a Group add it at the tail of that group. If it is a Server, add it at the tail of the default_group of that server. If it is nil, add it at the tail of the default_group of the default Server.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*replace' href='./../Overviews/Methods.html#replace'>replace</a> (<span class='argstr'>nodeToReplace</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Create and return a Group and use it to replace nodeToReplace, taking its place in its server's node order.</div><h3><a class='anchor' name='Creation without Instantiation on the Server'>Creation without Instantiation on the Server</a></h3>
+
+<p>Like with Groups, it is possible to create a a ParGroup object without immediately creating a parallel group in the server.<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*basicNew' href='./../Overviews/Methods.html#basicNew'>basicNew</a> (<span class='argstr'>server</span>, <span class='argstr'>nodeID</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Node.html'>Node</a></div>
+<div class='method'>
+<p>Create and return a ParGroup object without creating a group node on the server. (This method is inherited from Node and is documented here only for convenience.)<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>server<td class='argumentdesc'>
+<p>An optional instance of Server. If nil this will default to the default Server.<tr><td class='argumentname'>nodeID<td class='argumentdesc'>
+<p>An optional node ID number. If not supplied one will be generated by the Server's NodeIDAllocator. Normally you should not need to supply an ID.</table><h4>Discussion:</h4>
+
+<p>For a detailed discussion please refer to <a href="./../Classes/Group.html#*basicNew">Group: *basicNew</a>.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>fork {
+    p = ParGroup.new;
+    loop {
+        (
+            degree: rrand(0.0, 12.0).round(1/4),
+            group: p,
+            db: rrand(-30, -25),
+            pan: rrand(-1.0, 1.0)
+        ).play;
+        0.2.wait;
+    }
+}</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/ParGroup.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/ParGroup.schelp</a><br>link::Classes/ParGroup::<br>sc version: 3.8dev</div></div></body></html>

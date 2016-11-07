@@ -1,0 +1,101 @@
+<html><head><title>Prewrite</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events>Patterns>List>Indexing'>Streams-Patterns-Events>Patterns>List>Indexing</a></div>
+<h1>Prewrite</h1>
+<div id='summary'>rewriting system</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Prewrite.sc'>Prewrite.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/FilterPattern.html">FilterPattern</a> : <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Pfsm.html">Pfsm</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-dict'>dict</a> </li>
+<li class='toc3'><a href='#-embedInStream'>embedInStream</a> </li>
+<li class='toc3'><a href='#-levels'>levels</a> </li>
+<li class='toc3'><a href='#-rewriteList'>rewriteList</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Lindenmayer system pattern for selfsimilar structures. Its <strong>dictionary (or event)</strong> maps one element to an array of child elements. The algorithm replaces iteratively (<strong>levels</strong> deep) elements by arrays of elements starting with the values in the <strong>pattern</strong>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>pattern</span>, <span class='argstr'>dict</span>, <span class='argstr'>levels: 1</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>pattern<td class='argumentdesc'>
+<p>starting value<tr><td class='argumentname'>dict<td class='argumentdesc'>
+<p>a dictionary or an event.<tr><td class='argumentname'>levels<td class='argumentdesc'>
+<p>number of levels<pre class='code prettyprint lang-sc'>IdentityDictionary[
+    elem1 -&gt; [ otherElements ],
+    elem2 -&gt; [ otherElements ],
+    elem2 -&gt; [ otherElements ]
+]</pre>
+</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dict' href='./../Overviews/Methods.html#dict'>dict</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dict' href='./../Overviews/Methods.html#dict'>dict</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-embedInStream' href='./../Overviews/Methods.html#embedInStream'>embedInStream</a> (<span class='argstr'>inval</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-levels' href='./../Overviews/Methods.html#levels'>levels</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-levels' href='./../Overviews/Methods.html#levels'>levels</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rewriteList' href='./../Overviews/Methods.html#rewriteList'>rewriteList</a> (<span class='argstr'>list</span>, <span class='argstr'>inval</span>, <span class='argstr'>level</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>The examples use the <code class='code prettyprint lang-sc'>()</code> shortcut for <a href="./../Classes/Event.html">Event</a>.<pre class='code prettyprint lang-sc'>(
+a = Prewrite(0, // start with 0
+        (    0: #[2,0],
+            1: #[0,0,1],
+            2: #[1,0,1]
+        ), 4);
+x = a.asStream;
+30.do({ x.next.postln });
+)
+
+
+//Prewrite used as a sequence of pitches:
+
+(
+SynthDef(\help_sinegrain,
+    { arg out=0, freq=440, sustain=0.05;
+        var env;
+        env = EnvGen.kr(Env.perc(0.01, sustain, 0.2), doneAction:2);
+        Out.ar(out, SinOsc.ar(freq, 0, env))
+    }).add;
+)
+
+(
+a = Prewrite(0,    (
+    0: #[2,0],
+    1: #[0,0,1],
+    2: #[1,0,1]
+), 4).asStream;
+Routine({
+    loop({
+        Synth(\help_sinegrain, [\freq, (a.next * 5 + 70).midicps]);
+        0.1.wait;
+    })
+}).play;
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Prewrite.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Prewrite.schelp</a><br>link::Classes/Prewrite::<br>sc version: 3.8dev</div></div></body></html>

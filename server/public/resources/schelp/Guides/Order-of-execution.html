@@ -1,0 +1,214 @@
+<html><head><title>Order of execution</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider GUIDES</div>
+<div id='categories'><a href='./../Browse.html#Server>Nodes'>Server>Nodes</a></div>
+<h1>Order of execution</h1>
+<div id='summary'>Understanding order of execution of synths on the server</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Classes/Server.html">Server</a>, <a href="./../Classes/Node.html">Node</a>, <a href="./../Classes/Group.html">Group</a>, <a href="./../Classes/ParGroup.html">ParGroup</a>, <a href="./../Reference/default_group.html">default_group</a>, <a href="./../Classes/Bus.html">Bus</a>, <a href="./../Classes/Out.html">Out</a>, <a href="./../Classes/ReplaceOut.html">ReplaceOut</a>, <a href="./../Classes/XOut.html">XOut</a>, <a href="./../Classes/OffsetOut.html">OffsetOut</a>, <a href="./../Classes/In.html">In</a>, <a href="./../Classes/InFeedback.html">InFeedback</a>, <a href="./../Classes/LocalIn.html">LocalIn</a>, <a href="./../Classes/LocalOut.html">LocalOut</a>, <a href="./../Classes/SharedIn.html">SharedIn</a>, <a href="./../Classes/SharedOut.html">SharedOut</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Some Notes about Servers and Targets'>Some Notes about Servers and Targets</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Controlling order of execution'>Controlling order of execution</a></li>
+<ul class='toc'><li class='toc2'><a href='#Add actions'>Add actions</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Moving nodes'>Moving nodes</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Groups'>Groups</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Parallel Groups'>Parallel Groups</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Using order of execution to your advantage'>Using order of execution to your advantage</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Messaging Style'>Messaging Style</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Feedback'>Feedback</a></li>
+<ul class='toc'></ul></ul></div>
+<p>Order of execution is one of the most critical and seemingly difficult aspects of using SuperCollider, but in reality it only takes a little thought in the early planning stages to make it work for you.<h2><a class='anchor' name='Introduction'>Introduction</a></h2>
+
+<p>Order of execution in this context doesn't mean the order in which statements are executed in the language (the client). It refers to the ordering of synth nodes on the server, which corresponds to the order in which their output is calculated each control cycle (blockSize). Whether or not you specify the order of execution, each synth and each group goes into a specific place in the chain of execution.
+<p>If you have on the server:<pre class='code prettyprint lang-sc'>    synth 1 ---&gt; synth 2</pre>
+
+<p>... all the unit generators associated with synth 1 will execute before those in synth 2 during each control cycle.
+<p>If you don't have any synths that use In.ar, you don't have to worry about order of execution. It only matters when one synth is reading the output of another.
+<p>The rule is simple: if you have a synth on the server (i.e. an "effect") that depends on the output from another synth (the "source"), the effect must appear later in the chain of nodes on the server than the source.<pre class='code prettyprint lang-sc'>    source ---&gt; effect</pre>
+
+<p>If you have:<pre class='code prettyprint lang-sc'>    effect ---&gt; source</pre>
+
+<p>The effect synth will not hear the source synth, and you won't get the results you want.<div class='image'><img src='server.png'/><br><b>A diagram of a typical server configuration</b></div>
+
+<p>On the server external signals can be received by synths from "public" input busses (one in the represented case), while the different synths must be connected to "public" out audio busses (two in the case) in order to output a signal externally to the soundcard (see Bus). Other busses (both control and audio) are internal. In general, busses can be thought as roughly analogous to sends, busses, or submixes on an analog mixer, or as pipes allowing one to route "flowing" signals. If a synth is connected to a bus at a certain point (thus "flowing" into it) a synth taking the signal from the same bus at a subsequent point will take as input the flowing signal (along with anything else previously output to the bus), just as would occur with a water pipe.<h2><a class='anchor' name='Some Notes about Servers and Targets'>Some Notes about Servers and Targets</a></h2>
+
+<p>There is always a default Server, which can be accessed or set through the class method Server.default. At startup this is set to be the local Server, and is also assigned to the interpreter variable s.<pre class='code prettyprint lang-sc'>// execute the following and watch the post window
+s === Server.default;
+s === Server.local;
+Server.default = Server.internal; s === Server.default;
+Server.default = Server.local; // return it to the local server</pre>
+
+<p>When a <a href="./../Classes/Server.html">Server</a> is booted there is a top level group with an ID of 0 that defines the root of the node tree. This is represented by a subclass of Group: <a href="./../Classes/RootNode.html">RootNode</a>. There is also a <a href="./../Reference/default_group.html">default_group</a> with an ID of 1. This group is the default group for all Nodes. This is what you will get if you supply a Server as a target. If you don't specify a target or pass in nil, you will get the default group of the default Server.
+<p>The default group serves an important purpose: It provides a predictable basic Node tree so that methods such as Server:scope and Server:record can function without running into order of execution problems. Thus in general one should create new Nodes within the default group rather than in the RootNode. See <a href="./../Reference/default_group.html">default_group</a> and <a href="./../Classes/RootNode.html">RootNode</a> for more detail.<h2><a class='anchor' name='Controlling order of execution'>Controlling order of execution</a></h2>
+
+<p>There are three ways to control the order of execution: using addAction in your synth creation messages, moving nodes, and placing your synths in groups. Using groups is optional, but they are the most effective in helping you organize the order of execution.<h3><a class='anchor' name='Add actions'>Add actions</a></h3>
+
+<p>By specifying an addAction argument for <code class='code prettyprint lang-sc'>Synth.new</code> (or SynthDef.play, Function.play, etc.) one can specify the node's placement relative to a target. The target might be a group node, another synth node, or a server.
+<p>As noted above, the default target is the default_group (the group with nodeID 1) of the default Server.
+<p>The following Symbols are valid addActions for Synth.new: <code class='code prettyprint lang-sc'>\addToHead, \addToTail, \addBefore, \addAfter, \addReplace</code>.<dl>
+<dt><code class='code prettyprint lang-sc'>Synth.new(defName, args, target, addAction)</code><dd><ul>
+<li>if target is a Synth the \addToHead, and \addToTail methods will apply to that Synths group<li>if target is a Server it will resolve to that Server's default group<li>if target is nil it will resolve to the default group of the default Server</ul>
+</dl>
+
+<p>For each addAction there is also a corresponding convenience method of class Synth:<dl>
+<dt><code class='code prettyprint lang-sc'>Synth.head(aGroup, defName, args)</code><dd>add the new synth to the the head of the group specified by aGroup<ul>
+<li>if aGroup is a synth node, the new synth will be added to the head of that node's group<li>if target is a Server it will resolve to that Server's default group<li>if target is nil it will resolve to the default group of the default Server</ul>
+<dt><code class='code prettyprint lang-sc'>Synth.tail(aGroup, defName, args)</code><dd>add the new synth to the the tail of the group specified by aGroup<ul>
+<li>if aGroup is a synth node, the new synth will be added to the tail of that node's group<li>if target is a Server it will resolve to that Server's default group<li>if target is nil it will resolve to the default group of the default Server</ul>
+<dt><code class='code prettyprint lang-sc'>Synth.before(aNode, defName, args)</code><dd>add the new node just before the node specified by aNode.<dt><code class='code prettyprint lang-sc'>Synth.after(aNode, defName, args)</code><dd>add the new node just after the node specified by aNode.<dt><code class='code prettyprint lang-sc'>Synth.replace(synthToReplace, defName, args)</code><dd>the new node replaces the node specified by synthToReplace. The target node is freed.</dl>
+
+<p>Using Synth.new without an addAction will result in the default addAction. (You can check the default values for the arguments of any method by looking at a class' source code. See Internal-Snooping for more details.) Where order of execution matters, it is important that you specify an addAction, or use one of the convenience methods shown above.<h3><a class='anchor' name='Moving nodes'>Moving nodes</a></h3>
+<pre class='code prettyprint lang-sc'>    .moveBefore
+    .moveAfter
+    .moveToHead
+    .moveToTail</pre>
+
+<p>If you need to change the order of execution after synths and groups have been created, you can do this using move messages.<pre class='code prettyprint lang-sc'>    ~fx = Synth.tail(s, "fx");
+    ~src = Synth.tail(s, "src");  // effect will not be heard b/c it's earlier
+    ~src.moveBefore(~fx);   // place the source before the effect</pre>
+<h3><a class='anchor' name='Groups'>Groups</a></h3>
+
+<p>Groups can be moved in the same way as synths. When you move a group, all the synths in that group move with it. This is why groups are such an important tool for managing order of execution. (See the Group helpfile for details on this and other convenient aspects of Groups.)<pre class='code prettyprint lang-sc'>    Group 1 ---&gt; Group 2</pre>
+
+<p>In the above configuration, all of the synths in group 1 will execute before all of the synths in group 2. This is an easy, easy way to make the order of execution happen the way you want it to.
+<p>Determine your architecture, then make groups to support the architecture.<h3><a class='anchor' name='Parallel Groups'>Parallel Groups</a></h3>
+
+<p>In some cases, server nodes do not depend on each other. On multiprocessor systems, these nodes could be evaluated on different CPUs. This can be achieved by adding those nodes to a parallel group (see <a href="./../Classes/ParGroup.html">ParGroup</a>). Parallel Groups can be considered as Groups, whose contained nodes are not guaranteed to have a specific order of execution.<div class='note'><span class='notelabel'>NOTE:</span> SuperCollider's default server <strong>scsynth</strong> is not able to distribute the synths to different threads. However the alternative server <strong>supernova</strong> is able to distribute the contents of parallel groups to different CPUs.</div><h3><a class='anchor' name='Using order of execution to your advantage'>Using order of execution to your advantage</a></h3>
+
+<p>Before you start coding, plan out what you want and decide where the synths need to go.
+<p>A common configuration is to have a routine playing nodes, all of which need to be processed by a single effect. Plus, you want this effect to be separate from other things running at the same time. To be sure, you should place the synth -&gt; effect chain on a private audio bus, then transfer it to the main output.<pre class='code prettyprint lang-sc'>    [Lots of synths] ----&gt; effect ----&gt; transfer</pre>
+
+<p>This is a perfect place to use a group:<pre class='code prettyprint lang-sc'>    Group ( [lots of synths] ) ----&gt; effect ----&gt; transfer</pre>
+
+<p>To make the structure clearer in the code, one can also make a group for the effect (even if there's only one synth in it):<pre class='code prettyprint lang-sc'>    Group ( [lots of synths] ) ----&gt; Group ( [effect] ) ----&gt; transfer</pre>
+
+<p>I'm going to throw a further wrench into the example by modulating a parameter (note length) using a control rate synth.
+<p>So, at the beginning of your program:<pre class='code prettyprint lang-sc'>s.boot;
+
+(
+l = Bus.control(s, 1);  // get a bus for the LFO--not relevant to order-of-exec
+b = Bus.audio(s, 2);    // assuming stereo--this is to keep the src-&gt;fx chain separate from
+                // other similar chains
+~synthgroup = Group.tail(s);
+~fxgroup = Group.tail(s);
+
+// now you have synthgroup --&gt; fxgroup within the default group of s
+
+// make some synthdefs to play with
+SynthDef("order-of-ex-dist", { arg bus, preGain, postGain;
+    var sig;
+    sig = In.ar(bus, 2);
+    sig = (sig * preGain).distort;
+    ReplaceOut.ar(bus, sig * postGain);
+}).add;
+
+SynthDef("order-of-ex-pulse", { arg freq, bus, ffreq, pan, lfobus;
+    var sig, noteLen;
+    noteLen = In.kr(lfobus, 1);
+    sig = RLPF.ar(Pulse.ar(freq, 0.2, 0.5), ffreq, 0.3);
+    Out.ar(bus, Pan2.ar(sig, pan)
+        * EnvGen.kr(Env.perc(0.1, 1), timeScale: noteLen, doneAction: 2));
+}).add;
+
+SynthDef("LFNoise1", { arg freq, mul, add, bus;
+    Out.kr(bus, LFNoise1.kr(freq, mul:mul, add:add));
+}).add;
+)
+
+// Place LFO:
+
+~lfo = Synth.head(s, "LFNoise1", [\freq, 0.3, \mul, 0.68, \add, 0.7, \bus, l]);
+
+// Then place your effect:
+
+~dist = Synth.tail(~fxgroup, "order-of-ex-dist", [\bus, b, \preGain, 8, \postGain, 0.6]);
+
+// transfer the results to main out, with level scaling
+// play at tail of s's default group (note that Function-play also takes addActions!
+
+~xfer = { Out.ar(0, 0.25 * In.ar(b, 2)) }.play(s, addAction: \addToTail);
+
+// And start your routine:
+
+(
+r = Routine({
+    {
+        Synth.tail(~synthgroup, "order-of-ex-pulse",
+            [\freq, rrand(200, 800), \ffreq, rrand(1000, 15000), \pan, 1.0.rand2,
+            \bus, b, \lfobus, l]);
+        0.07.wait;
+    }.loop;
+}).play(SystemClock);
+)
+
+~dist.run(false);    // proves that the distortion effect is doing something
+~dist.run(true);
+
+// to clean up:
+(
+r.stop;
+[~synthgroup, ~fxgroup, b, l, ~lfo, ~xfer].do({ arg x; x.free });
+currentEnvironment.clear; // clear all environment variables
+)</pre>
+
+<p>Note that in the routine, using a Group for the source synths allows their order to easily be specified relative to each other (they are added with the .tail method), without worrying about their order relative to the effect synth.
+<p>Note that this arrangement prevents errors in order of execution, through the use of a small amount of organizational code. Although straightforward here, this arrangement could easily be scaled to a larger project.<h3><a class='anchor' name='Messaging Style'>Messaging Style</a></h3>
+
+<p>The above examples are in 'object style'. Should you prefer to work in 'messaging style' there are corresponding messages to all of the methods shown above. See NodeMessaging, and Server-Command-Reference for more details.<h2><a class='anchor' name='Feedback'>Feedback</a></h2>
+
+<p>When the various output ugens (Out, OffsetOut, XOut) write data to a bus, they mix it with any data from the current cycle, but overwrite any data from the previous cycle. (ReplaceOut overwrites all data regardless.) Thus depending on node order, the data on a given bus may be from the current cycle or be one cycle old. In the case of input ugens (see In and InFeedback) In.ar checks the timestamp of any data it reads in and zeros any data from the previous cycle (for use within that synth; the data remains on the bus). This is fine for audio data, as it avoids feedback, but for control data it is useful to be able to read data from any place in the node order. For this reason In.kr also reads data that is older than the current cycle.
+<p>In some cases we might also want to read audio from a node later in the current node order. This is the purpose of InFeedback. The delay introduced by this is at maximum one block size, which equals about 0.0014 sec at the default block size and sample rate.
+<p>The variably mixing and overwriting behaviour of the output ugens can make order of execution crucial when using In.kr or InFeedback.ar. (No pun intended.) For example with a node order like the following the InFeedback ugen in Synth 2 will only receive data from Synth 1 (-&gt; = write out; &lt;- = read in):<ol>
+<li>Synth 1 -&gt; busA (this synth overwrites the output of Synth3 before it reaches Synth 2)<li>Synth 2 (with InFeedback) &lt;- busA<li>Synth 3 -&gt; busA</ol>
+
+<p>If Synth 1 were moved after Synth 2 then Synth 2's InFeedback would receive a mix of the output from Synth 1 and Synth 3. This would also be true if Synth 2 came after Synth1 and Synth 3. In both cases data from Synth 1 and Synth 3 would have the same time stamp (either current or from the previous cycle), so nothing would be overwritten.
+<p>(As well, if any In.ar wrote to busA earlier in the node order than Synth 2, it would zero the bus before Synth 3's data reached Synth 2. This is true even it there were no node before Synth 2 writing to busA.)
+<p>Because of this it is often useful to allocate a separate bus for feedback. With the following arrangement Synth 2 will receive data from Synth3 regardless of Synth 1's position in the node order.<ol>
+<li>Synth 1 -&gt; busA<li>Synth 2 (with InFeedback) &lt;- busB<li>Synth 3 -&gt; busB + busA</ol>
+
+<p>The following example demonstrates this issue with In.kr:<pre class='code prettyprint lang-sc'>(
+SynthDef("help-Infreq", { arg bus;
+    Out.ar(0, FSinOsc.ar(In.kr(bus), 0, 0.5));
+}).add;
+
+SynthDef("help-Outfreq", { arg freq = 400, bus;
+    Out.kr(bus, SinOsc.kr(1, 0, freq/40, freq));
+}).add;
+
+b = Bus.control(s,1);
+)
+
+// add the first control Synth at the tail of the default server; no audio yet
+x = Synth.tail(s, "help-Outfreq", [\bus, b]);
+
+// add the sound producing Synth BEFORE it; It receives x's data from the previous cycle
+y = Synth.before(x, "help-Infreq", [\bus, b]);
+
+// add another control Synth before y, at the head of the server
+// It now overwrites x's cycle old data before y receives it
+z = Synth.head(s, "help-Outfreq", [\bus, b, \freq, 800]);
+
+// get another bus
+c = Bus.control(s, 1);
+
+// now y receives x's data even though z is still there
+y.set(\bus, c); x.set(\bus, c);
+
+x.free; y.free; z.free;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/Order-of-execution.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/Order-of-execution.schelp</a><br>link::Guides/Order-of-execution::<br>sc version: 3.8dev</div></div></body></html>

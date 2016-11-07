@@ -1,0 +1,951 @@
+<html><head><title>SimpleNumber</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Math'>Math</a></div>
+<h1>SimpleNumber</h1>
+<div id='summary'>one-dimensional value</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Math/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Math/SimpleNumber.sc'>SimpleNumber.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Number.html">Number</a> : <a href="../Classes/Magnitude.html">Magnitude</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/Float.html">Float</a>, <a href="../Classes/Integer.html">Integer</a></div>
+<div id='related'>See also: <a href="./../Classes/Polar.html">Polar</a>, <a href="./../Classes/Complex.html">Complex</a>, <a href="./../Classes/Float.html">Float</a>, <a href="./../Classes/Integer.html">Integer</a>, <a href="./../Classes/UnaryOpUGen.html">UnaryOpUGen</a>, <a href="./../Classes/BinaryOpUGen.html">BinaryOpUGen</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#math support'>math support</a></li>
+<ul class='toc'><li class='toc3'><a href='#-+'>+</a> </li>
+<li class='toc3'><a href='#--'>-</a> </li>
+<li class='toc3'><a href='#-*'>*</a> </li>
+<li class='toc3'><a href='#-/'>/</a> </li>
+<li class='toc3'><a href='#-%'>%</a> </li>
+<li class='toc3'><a href='#-mod'>mod</a> </li>
+<li class='toc3'><a href='#-div'>div</a> </li>
+<li class='toc3'><a href='#-**'>**</a> </li>
+<li class='toc3'><a href='#-!='>!=</a> </li>
+<li class='toc3'><a href='#->'>&gt;</a> </li>
+<li class='toc3'><a href='#-<'>&lt;</a> </li>
+<li class='toc3'><a href='#->='>&gt;=</a> </li>
+<li class='toc3'><a href='#-<='>&lt;=</a> </li>
+<li class='toc3'><a href='#-lcm'>lcm</a> </li>
+<li class='toc3'><a href='#-gcd'>gcd</a> </li>
+<li class='toc3'><a href='#-round'>round</a> </li>
+<li class='toc3'><a href='#-roundUp'>roundUp</a> </li>
+<li class='toc3'><a href='#-thresh'>thresh</a> </li>
+<li class='toc3'><a href='#-min'>min</a> </li>
+<li class='toc3'><a href='#-max'>max</a> </li>
+<li class='toc3'><a href='#-wrap2'>wrap2</a> </li>
+<li class='toc3'><a href='#-trunc'>trunc</a> </li>
+<li class='toc3'><a href='#-atan2'>atan2</a> </li>
+<li class='toc3'><a href='#-hypot'>hypot</a> </li>
+<li class='toc3'><a href='#-log'>log</a> </li>
+<li class='toc3'><a href='#-log2'>log2</a> </li>
+<li class='toc3'><a href='#-log10'>log10</a> </li>
+<li class='toc3'><a href='#-neg'>neg</a> </li>
+<li class='toc3'><a href='#-abs'>abs</a> </li>
+<li class='toc3'><a href='#-sign'>sign</a> </li>
+<li class='toc3'><a href='#-ceil'>ceil</a> </li>
+<li class='toc3'><a href='#-floor'>floor</a> </li>
+<li class='toc3'><a href='#-sin'>sin</a> </li>
+<li class='toc3'><a href='#-cos'>cos</a> </li>
+<li class='toc3'><a href='#-tan'>tan</a> </li>
+<li class='toc3'><a href='#-asin'>asin</a> </li>
+<li class='toc3'><a href='#-acos'>acos</a> </li>
+<li class='toc3'><a href='#-atan'>atan</a> </li>
+<li class='toc3'><a href='#-sinh'>sinh</a> </li>
+<li class='toc3'><a href='#-cosh'>cosh</a> </li>
+<li class='toc3'><a href='#-tanh'>tanh</a> </li>
+<li class='toc3'><a href='#-frac'>frac</a> </li>
+<li class='toc3'><a href='#-squared'>squared</a> </li>
+<li class='toc3'><a href='#-cubed'>cubed</a> </li>
+<li class='toc3'><a href='#-sqrt'>sqrt</a> </li>
+<li class='toc3'><a href='#-exp'>exp</a> </li>
+<li class='toc3'><a href='#-reciprocal'>reciprocal</a> </li>
+<li class='toc3'><a href='#-pow'>pow</a> </li>
+<li class='toc3'><a href='#-fold2'>fold2</a> </li>
+<li class='toc3'><a href='#-previousPowerOf'>previousPowerOf</a> </li>
+<li class='toc3'><a href='#-nextPowerOf'>nextPowerOf</a> </li>
+<li class='toc3'><a href='#-nextPowerOfTwo'>nextPowerOfTwo</a> </li>
+<li class='toc3'><a href='#-nextPowerOfThree'>nextPowerOfThree</a> </li>
+<li class='toc3'><a href='#-hash'>hash</a> </li>
+<li class='toc3'><a href='#-<!'>&lt;!</a> </li>
+<li class='toc3'><a href='#-&'>&amp;</a> </li>
+<li class='toc3'><a href='#-|'>|</a> </li>
+<li class='toc3'><a href='#-bitXor'>bitXor</a> </li>
+<li class='toc3'><a href='#-bitHammingDistance'>bitHammingDistance</a> </li>
+<li class='toc3'><a href='#-bitTest'>bitTest</a> </li>
+<li class='toc3'><a href='#-bitNot'>bitNot</a> </li>
+<li class='toc3'><a href='#-<<'>&lt;&lt;</a> </li>
+<li class='toc3'><a href='#->>'>&gt;&gt;</a> </li>
+<li class='toc3'><a href='#-+>>'>+&gt;&gt;</a> </li>
+<li class='toc3'><a href='#-rightShift'>rightShift</a> </li>
+<li class='toc3'><a href='#-unsignedRightShift'>unsignedRightShift</a> </li>
+<li class='toc3'><a href='#-leftShift'>leftShift</a> </li>
+<li class='toc3'><a href='#-bitOr'>bitOr</a> </li>
+<li class='toc3'><a href='#-bitAnd'>bitAnd</a> </li>
+<li class='toc3'><a href='#-ring1'>ring1</a> </li>
+<li class='toc3'><a href='#-ring2'>ring2</a> </li>
+<li class='toc3'><a href='#-ring3'>ring3</a> </li>
+<li class='toc3'><a href='#-ring4'>ring4</a> </li>
+<li class='toc3'><a href='#-difsqr'>difsqr</a> </li>
+<li class='toc3'><a href='#-sumsqr'>sumsqr</a> </li>
+<li class='toc3'><a href='#-sqrdif'>sqrdif</a> </li>
+<li class='toc3'><a href='#-sqrsum'>sqrsum</a> </li>
+<li class='toc3'><a href='#-absdif'>absdif</a> </li>
+<li class='toc3'><a href='#-moddif'>moddif</a> </li>
+<li class='toc3'><a href='#-amclip'>amclip</a> </li>
+<li class='toc3'><a href='#-scaleneg'>scaleneg</a> </li>
+<li class='toc3'><a href='#-clip2'>clip2</a> </li>
+<li class='toc3'><a href='#-excess'>excess</a> </li>
+<li class='toc3'><a href='#-madd'>madd</a> </li>
+</ul><li class='toc2'><a href='#testing'>testing</a></li>
+<ul class='toc'><li class='toc3'><a href='#-isPositive'>isPositive</a> </li>
+<li class='toc3'><a href='#-isNegative'>isNegative</a> </li>
+<li class='toc3'><a href='#-isStrictlyPositive'>isStrictlyPositive</a> </li>
+<li class='toc3'><a href='#-booleanValue'>booleanValue</a> </li>
+<li class='toc3'><a href='#-isNaN'>isNaN</a> </li>
+<li class='toc3'><a href='#-=='>==</a> </li>
+</ul><li class='toc2'><a href='#conversion'>conversion</a></li>
+<ul class='toc'><li class='toc3'><a href='#-asFraction'>asFraction</a> </li>
+<li class='toc3'><a href='#-asAudioRateInput'>asAudioRateInput</a> </li>
+<li class='toc3'><a href='#-asTimeString'>asTimeString</a> </li>
+<li class='toc3'><a href='#-asPoint'>asPoint</a> </li>
+<li class='toc3'><a href='#-asComplex'>asComplex</a> </li>
+<li class='toc3'><a href='#-asWarp'>asWarp</a> </li>
+<li class='toc3'><a href='#-asFloat'>asFloat</a> </li>
+<li class='toc3'><a href='#-asRect'>asRect</a> </li>
+<li class='toc3'><a href='#-asBoolean'>asBoolean</a> </li>
+<li class='toc3'><a href='#-asQuant'>asQuant</a> </li>
+<li class='toc3'><a href='#-asInteger'>asInteger</a> </li>
+</ul><li class='toc2'><a href='#timing'>timing</a></li>
+<ul class='toc'><li class='toc3'><a href='#-wait'>wait</a> </li>
+<li class='toc3'><a href='#-waitUntil'>waitUntil</a> </li>
+<li class='toc3'><a href='#-sleep'>sleep</a> </li>
+<li class='toc3'><a href='#-nextTimeOnGrid'>nextTimeOnGrid</a> </li>
+<li class='toc3'><a href='#-schedBundleArrayOnClock'>schedBundleArrayOnClock</a> </li>
+</ul><li class='toc2'><a href='#series and arrays'>series and arrays</a></li>
+<ul class='toc'><li class='toc3'><a href='#-nearestInList'>nearestInList</a> </li>
+<li class='toc3'><a href='#-nearestInScale'>nearestInScale</a> </li>
+<li class='toc3'><a href='#-series'>series</a> </li>
+<li class='toc3'><a href='#-seriesIter'>seriesIter</a> </li>
+</ul><li class='toc2'><a href='#windowing'>windowing</a></li>
+<ul class='toc'><li class='toc3'><a href='#-rectWindow'>rectWindow</a> </li>
+<li class='toc3'><a href='#-hanWindow'>hanWindow</a> </li>
+<li class='toc3'><a href='#-welWindow'>welWindow</a> </li>
+<li class='toc3'><a href='#-triWindow'>triWindow</a> </li>
+</ul><li class='toc2'><a href='#mapping'>mapping</a></li>
+<ul class='toc'><li class='toc3'><a href='#-distort'>distort</a> </li>
+<li class='toc3'><a href='#-softclip'>softclip</a> </li>
+<li class='toc3'><a href='#-scurve'>scurve</a> </li>
+<li class='toc3'><a href='#-ramp'>ramp</a> </li>
+<li class='toc3'><a href='#-magnitude'>magnitude</a> </li>
+<li class='toc3'><a href='#-angle'>angle</a> </li>
+<li class='toc3'><a href='#-degreeToKey'>degreeToKey</a> </li>
+<li class='toc3'><a href='#-keyToDegree'>keyToDegree</a> </li>
+<li class='toc3'><a href='#-gaussCurve'>gaussCurve</a> </li>
+<li class='toc3'><a href='#-equalWithPrecision'>equalWithPrecision</a> </li>
+<li class='toc3'><a href='#-quantize'>quantize</a> </li>
+<li class='toc3'><a href='#-linlin'>linlin</a> </li>
+<li class='toc3'><a href='#-linexp'>linexp</a> </li>
+<li class='toc3'><a href='#-explin'>explin</a> </li>
+<li class='toc3'><a href='#-expexp'>expexp</a> </li>
+<li class='toc3'><a href='#-lincurve'>lincurve</a> </li>
+<li class='toc3'><a href='#-curvelin'>curvelin</a> </li>
+<li class='toc3'><a href='#-bilin'>bilin</a> </li>
+<li class='toc3'><a href='#-biexp'>biexp</a> </li>
+<li class='toc3'><a href='#-lcurve'>lcurve</a> </li>
+<li class='toc3'><a href='#-degrad'>degrad</a> </li>
+<li class='toc3'><a href='#-raddeg'>raddeg</a> </li>
+<li class='toc3'><a href='#-midicps'>midicps</a> </li>
+<li class='toc3'><a href='#-cpsmidi'>cpsmidi</a> </li>
+<li class='toc3'><a href='#-midiratio'>midiratio</a> </li>
+<li class='toc3'><a href='#-ratiomidi'>ratiomidi</a> </li>
+<li class='toc3'><a href='#-ampdb'>ampdb</a> </li>
+<li class='toc3'><a href='#-dbamp'>dbamp</a> </li>
+<li class='toc3'><a href='#-octcps'>octcps</a> </li>
+<li class='toc3'><a href='#-cpsoct'>cpsoct</a> </li>
+</ul><li class='toc2'><a href='#streams'>streams</a></li>
+<ul class='toc'><li class='toc3'><a href='#-storeOn'>storeOn</a> </li>
+<li class='toc3'><a href='#-printOn'>printOn</a> </li>
+</ul><li class='toc2'><a href='#random'>random</a></li>
+<ul class='toc'><li class='toc3'><a href='#-coin'>coin</a> </li>
+<li class='toc3'><a href='#-rand'>rand</a> </li>
+<li class='toc3'><a href='#-rand2'>rand2</a> </li>
+<li class='toc3'><a href='#-rrand'>rrand</a> </li>
+<li class='toc3'><a href='#-linrand'>linrand</a> </li>
+<li class='toc3'><a href='#-bilinrand'>bilinrand</a> </li>
+<li class='toc3'><a href='#-sum3rand'>sum3rand</a> </li>
+<li class='toc3'><a href='#-exprand'>exprand</a> </li>
+<li class='toc3'><a href='#-gauss'>gauss</a> </li>
+<li class='toc3'><a href='#-partition'>partition</a> </li>
+</ul><li class='toc2'><a href='#UGen Compatibility Methods'>UGen Compatibility Methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-lag'>lag</a>  <a href='#-lag2'>lag2</a>  <a href='#-lag3'>lag3</a>  <a href='#-lagud'>lagud</a>  <a href='#-lag2ud'>lag2ud</a>  <a href='#-lag3ud'>lag3ud</a>  <a href='#-slew'>slew</a>  <a href='#-varlag'>varlag</a> </li>
+</ul><li class='toc2'><a href='#misc'>misc</a></li>
+<ul class='toc'><li class='toc3'><a href='#-isValidUGenInput'>isValidUGenInput</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-asBufWithValues'>asBufWithValues</a> </li>
+<li class='toc3'><a href='#-asEvent'>asEvent</a> </li>
+<li class='toc3'><a href='#-asMIDIInPortUID'>asMIDIInPortUID</a> </li>
+<li class='toc3'><a href='#-asSize'>asSize</a> </li>
+<li class='toc3'><a href='#-asTimeStringLJP'>asTimeStringLJP</a> </li>
+<li class='toc3'><a href='#-betarand'>betarand</a> </li>
+<li class='toc3'><a href='#-binaryValue'>binaryValue</a> </li>
+<li class='toc3'><a href='#-buildForProxy'>buildForProxy</a> </li>
+<li class='toc3'><a href='#-calcPVRecSize'>calcPVRecSize</a> </li>
+<li class='toc3'><a href='#-cauchy'>cauchy</a> </li>
+<li class='toc3'><a href='#-delta'>delta</a> </li>
+<li class='toc3'><a href='#-firstArg'>firstArg</a> </li>
+<li class='toc3'><a href='#-gaussian'>gaussian</a> </li>
+<li class='toc3'><a href='#-guiClass'>guiClass</a> </li>
+<li class='toc3'><a href='#-hypotApx'>hypotApx</a> </li>
+<li class='toc3'><a href='#-linrrand'>linrrand</a> </li>
+<li class='toc3'><a href='#-logistic'>logistic</a> </li>
+<li class='toc3'><a href='#-midinote'>midinote</a> </li>
+<li class='toc3'><a href='#-numChannels'>numChannels</a> </li>
+<li class='toc3'><a href='#-pareto'>pareto</a> </li>
+<li class='toc3'><a href='#-performBinaryOpOnComplex'>performBinaryOpOnComplex</a> </li>
+<li class='toc3'><a href='#-performBinaryOpOnSignal'>performBinaryOpOnSignal</a> </li>
+<li class='toc3'><a href='#-performBinaryOpOnSimpleNumber'>performBinaryOpOnSimpleNumber</a> </li>
+<li class='toc3'><a href='#-playAndDelta'>playAndDelta</a> </li>
+<li class='toc3'><a href='#-poisson'>poisson</a> </li>
+<li class='toc3'><a href='#-poll'>poll</a> </li>
+<li class='toc3'><a href='#-proxyControlClass'>proxyControlClass</a> </li>
+<li class='toc3'><a href='#-rate'>rate</a> </li>
+<li class='toc3'><a href='#-weibull'>weibull</a> </li>
+<li class='toc3'><a href='#-writeInputSpec'>writeInputSpec</a> </li>
+<li class='toc3'><a href='#-writeInputSpecOld'>writeInputSpecOld</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Base class for numbers which can be represented by a single one dimensional value.
+<p>Most of the Unary and Binary operations are also implemented by <a href="./../Classes/UnaryOpUGen.html">UnaryOpUGen</a> and <a href="./../Classes/BinaryOpUGen.html">BinaryOpUGen</a>, so you can get more examples by looking at the help for those.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> </h3>
+<div class='method'>
+<p>allocates a new SimpleNumber.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='math support'>math support</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-+' href='./../Overviews/Methods.html#+'>+</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Addition</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='--' href='./../Overviews/Methods.html#-'>-</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Subtraction</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-*' href='./../Overviews/Methods.html#*'>*</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Multiplication</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-/' href='./../Overviews/Methods.html#/'>/</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Division</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-%' href='./../Overviews/Methods.html#%'>%</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'>
+<p>Modulo</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mod' href='./../Overviews/Methods.html#mod'>mod</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Modulo</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-div' href='./../Overviews/Methods.html#div'>div</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Integer Division</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-**' href='./../Overviews/Methods.html#**'>**</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'>
+<p>Exponentiation</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-!=' href='./../Overviews/Methods.html#!='>!=</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Is not</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='->' href='./../Overviews/Methods.html#&gt;'>&gt;</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>greater than</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-<' href='./../Overviews/Methods.html#&lt;'>&lt;</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>greater than</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='->=' href='./../Overviews/Methods.html#&gt;='>&gt;=</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>greater or equal than</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-<=' href='./../Overviews/Methods.html#&lt;='>&lt;=</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>smaller or equal than</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-lcm' href='./../Overviews/Methods.html#lcm'>lcm</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Least common multiple</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-gcd' href='./../Overviews/Methods.html#gcd'>gcd</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Greatest common divisor</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-round' href='./../Overviews/Methods.html#round'>round</a> (<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Round to multiple of aNumber</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-roundUp' href='./../Overviews/Methods.html#roundUp'>roundUp</a> (<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>round up to a multiply of aNumber</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-thresh' href='./../Overviews/Methods.html#thresh'>thresh</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-min' href='./../Overviews/Methods.html#min'>min</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Minimum</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-max' href='./../Overviews/Methods.html#max'>max</a> (<span class='argstr'>aNumber: 0</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Maximum</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-wrap2' href='./../Overviews/Methods.html#wrap2'>wrap2</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-trunc' href='./../Overviews/Methods.html#trunc'>trunc</a> (<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Truncate to multiple of aNumber</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-atan2' href='./../Overviews/Methods.html#atan2'>atan2</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Arctangent of (this/aNumber)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hypot' href='./../Overviews/Methods.html#hypot'>hypot</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Square root of the sum of the squares.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-log' href='./../Overviews/Methods.html#log'>log</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>Base e logarithm.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-log2' href='./../Overviews/Methods.html#log2'>log2</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>Base 2 logarithm.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-log10' href='./../Overviews/Methods.html#log10'>log10</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>Base 10 logarithm.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-neg' href='./../Overviews/Methods.html#neg'>neg</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>negation</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-abs' href='./../Overviews/Methods.html#abs'>abs</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>absolute value.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sign' href='./../Overviews/Methods.html#sign'>sign</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>Answer -1 if negative, +1 if positive or 0 if zero.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ceil' href='./../Overviews/Methods.html#ceil'>ceil</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>next larger integer.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-floor' href='./../Overviews/Methods.html#floor'>floor</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>next smaller integer</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sin' href='./../Overviews/Methods.html#sin'>sin</a> </h3>
+<div class='method'>
+<p>Sine</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-cos' href='./../Overviews/Methods.html#cos'>cos</a> </h3>
+<div class='method'>
+<p>Cosine</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-tan' href='./../Overviews/Methods.html#tan'>tan</a> </h3>
+<div class='method'>
+<p>Tangent</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asin' href='./../Overviews/Methods.html#asin'>asin</a> </h3>
+<div class='method'>
+<p>Arcsine</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-acos' href='./../Overviews/Methods.html#acos'>acos</a> </h3>
+<div class='method'>
+<p>Arccosine</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-atan' href='./../Overviews/Methods.html#atan'>atan</a> </h3>
+<div class='method'>
+<p>Arctangent</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sinh' href='./../Overviews/Methods.html#sinh'>sinh</a> </h3>
+<div class='method'>
+<p>Hyperbolic sine</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-cosh' href='./../Overviews/Methods.html#cosh'>cosh</a> </h3>
+<div class='method'>
+<p>Hyperbolic cosine</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-tanh' href='./../Overviews/Methods.html#tanh'>tanh</a> </h3>
+<div class='method'>
+<p>Hyperbolic tangent</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-frac' href='./../Overviews/Methods.html#frac'>frac</a> </h3>
+<div class='method'>
+<p>fractional part</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-squared' href='./../Overviews/Methods.html#squared'>squared</a> </h3>
+<div class='method'>
+<p>the square of the number</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-cubed' href='./../Overviews/Methods.html#cubed'>cubed</a> </h3>
+<div class='method'>
+<p>the cube of the number</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sqrt' href='./../Overviews/Methods.html#sqrt'>sqrt</a> </h3>
+<div class='method'>
+<p>the square root of the number.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-exp' href='./../Overviews/Methods.html#exp'>exp</a> </h3>
+<div class='method'>
+<p>e to the power of the receiver.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-reciprocal' href='./../Overviews/Methods.html#reciprocal'>reciprocal</a> </h3>
+<div class='method'>
+<p>1 / this</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pow' href='./../Overviews/Methods.html#pow'>pow</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>this to the power of aNumber</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fold2' href='./../Overviews/Methods.html#fold2'>fold2</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>the folded value, a bitwise or with aNumber</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-previousPowerOf' href='./../Overviews/Methods.html#previousPowerOf'>previousPowerOf</a> (<span class='argstr'>base</span>)</h3>
+<div class='method'>
+<p>the number relative to this that is the previous power of aNumber</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-nextPowerOf' href='./../Overviews/Methods.html#nextPowerOf'>nextPowerOf</a> (<span class='argstr'>base</span>)</h3>
+<div class='method'>
+<p>the next power of aNumber</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-nextPowerOfTwo' href='./../Overviews/Methods.html#nextPowerOfTwo'>nextPowerOfTwo</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the number relative to this that is the next power of 2</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-nextPowerOfThree' href='./../Overviews/Methods.html#nextPowerOfThree'>nextPowerOfThree</a> </h3>
+<div class='method'>
+<p>the next power of three</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hash' href='./../Overviews/Methods.html#hash'>hash</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a hash value</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-<!' href='./../Overviews/Methods.html#&lt;!'>&lt;!</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the receiver. aNumber is ignored.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-&' href='./../Overviews/Methods.html#&amp;'>&amp;</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'>
+<p>Bitwise And</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-|' href='./../Overviews/Methods.html#|'>|</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'>
+<p>Bitwise Or</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-bitXor' href='./../Overviews/Methods.html#bitXor'>bitXor</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Bitwise Exclusive Or</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-bitHammingDistance' href='./../Overviews/Methods.html#bitHammingDistance'>bitHammingDistance</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Binary Hamming distance: the count of bits that are not the same in the two numbers</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-bitTest' href='./../Overviews/Methods.html#bitTest'>bitTest</a> (<span class='argstr'>bit</span>)</h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>true if bit at index aNumber is set.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-bitNot' href='./../Overviews/Methods.html#bitNot'>bitNot</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>ones complement</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-<<' href='./../Overviews/Methods.html#&lt;&lt;'>&lt;&lt;</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'>
+<p>Binary shift left.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='->>' href='./../Overviews/Methods.html#&gt;&gt;'>&gt;&gt;</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'>
+<p>Binary shift right.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-+>>' href='./../Overviews/Methods.html#+&gt;&gt;'>+&gt;&gt;</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'>
+<p>Unsigned binary shift right.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-rightShift' href='./../Overviews/Methods.html#rightShift'>rightShift</a> (<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>performs a binary right shift</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-unsignedRightShift' href='./../Overviews/Methods.html#unsignedRightShift'>unsignedRightShift</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>performs an unsigned right shift</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-leftShift' href='./../Overviews/Methods.html#leftShift'>leftShift</a> (<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>performs a binary left shift</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-bitOr' href='./../Overviews/Methods.html#bitOr'>bitOr</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>performs a bitwise or with aNumber</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-bitAnd' href='./../Overviews/Methods.html#bitAnd'>bitAnd</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>performs a bitwise and with aNumber</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ring1' href='./../Overviews/Methods.html#ring1'>ring1</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>(a * b) + a</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ring2' href='./../Overviews/Methods.html#ring2'>ring2</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>((a*b) + a + b)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ring3' href='./../Overviews/Methods.html#ring3'>ring3</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>(a * a *b)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ring4' href='./../Overviews/Methods.html#ring4'>ring4</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>((a*a *b) - (a*b*b))</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-difsqr' href='./../Overviews/Methods.html#difsqr'>difsqr</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>(a*a) - (b*b)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sumsqr' href='./../Overviews/Methods.html#sumsqr'>sumsqr</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>(a*a) + (b*b)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sqrdif' href='./../Overviews/Methods.html#sqrdif'>sqrdif</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>(a - b) ** 2</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sqrsum' href='./../Overviews/Methods.html#sqrsum'>sqrsum</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>(a + b) ** 2</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-absdif' href='./../Overviews/Methods.html#absdif'>absdif</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>(a - b).abs</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-moddif' href='./../Overviews/Methods.html#moddif'>moddif</a> (<span class='argstr'>aNumber: 0</span>, <span class='argstr'>mod: 1</span>)</h3>
+<div class='method'>
+<p>On a circle, there are two distances between two points. This operator returns the smaller value of the two.<pre class='code prettyprint lang-sc'>moddif(0.75, 0, 1)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-amclip' href='./../Overviews/Methods.html#amclip'>amclip</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>0 when b &lt;= 0,  a*b when b &gt; 0</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-scaleneg' href='./../Overviews/Methods.html#scaleneg'>scaleneg</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>a * b when a &lt; 0, otherwise a.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clip2' href='./../Overviews/Methods.html#clip2'>clip2</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>clips receiver to +/- aNumber</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-excess' href='./../Overviews/Methods.html#excess'>excess</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Returns the difference of the receiver and its clipped form.<h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(a - clip2(a,b))</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-madd' href='./../Overviews/Methods.html#madd'>madd</a> (<span class='argstr'>mul</span>, <span class='argstr'>add</span>)</h3>
+<div class='method'><pre class='code prettyprint lang-sc'>this * a + b</pre>
+</div><h3><a class='anchor' name='testing'>testing</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isPositive' href='./../Overviews/Methods.html#isPositive'>isPositive</a> </h3>
+<div class='method'>
+<p>Answer if the number is &gt;= 0.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-isNegative' href='./../Overviews/Methods.html#isNegative'>isNegative</a> </h3>
+<div class='method'>
+<p>Answer if the number is &lt; 0.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-isStrictlyPositive' href='./../Overviews/Methods.html#isStrictlyPositive'>isStrictlyPositive</a> </h3>
+<div class='method'>
+<p>Answer if the number is &gt; 0.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-booleanValue' href='./../Overviews/Methods.html#booleanValue'>booleanValue</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>true, if strictly positive ( &gt; 0), otherwise false (see <a href="./../Classes/Boolean.html">Boolean</a>)</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-isNaN' href='./../Overviews/Methods.html#isNaN'>isNaN</a> </h3>
+<div class='method'></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-==' href='./../Overviews/Methods.html#=='>==</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p></div><h3><a class='anchor' name='conversion'>conversion</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asFraction' href='./../Overviews/Methods.html#asFraction'>asFraction</a> (<span class='argstr'>denominator: 100</span>, <span class='argstr'>fasterBetter: true</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>denominator<td class='argumentdesc'><tr><td class='argumentname'>fasterBetter<td class='argumentdesc'>
+<p>if true, asFraction may find a much closer approximation and do it faster.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>an array of denominator and divisor of the nearest and smallest fraction</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asAudioRateInput' href='./../Overviews/Methods.html#asAudioRateInput'>asAudioRateInput</a> </h3>
+<div class='method'>
+<p>Converts this into an audiorate input.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asTimeString' href='./../Overviews/Methods.html#asTimeString'>asTimeString</a> (<span class='argstr'>precision: 0.001</span>, <span class='argstr'>maxDays: 365</span>, <span class='argstr'>dropDaysIfPossible: true</span>)</h3>
+<div class='method'>
+<p>Compile a time string.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>precision<td class='argumentdesc'>
+<p>how accurate<tr><td class='argumentname'>maxDays<td class='argumentdesc'>
+<p>the maximum number of days<tr><td class='argumentname'>dropDaysIfPossible<td class='argumentdesc'>
+<p>a <a href="./../Classes/Boolean.html">Boolean</a></table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a string corresponding to the hours:minutes:seconds based on the receiver as number of seconds</div><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(
+var start;
+start = Main.elapsedTime;
+{ loop({(Main.elapsedTime - start).asTimeString.postln; 0.05.wait}) }.fork;
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asPoint' href='./../Overviews/Methods.html#asPoint'>asPoint</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>this as <a href="./../Classes/Point.html">Point</a>. x = y = this.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asComplex' href='./../Overviews/Methods.html#asComplex'>asComplex</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>this as <a href="./../Classes/Point.html">Point</a>. x = y = this.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asWarp' href='./../Overviews/Methods.html#asWarp'>asWarp</a> (<span class='argstr'>spec</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>spec<td class='argumentdesc'>
+<p>a <a href="./../Classes/ControlSpec.html">ControlSpec</a></table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>this as <a href="./../Classes/CurveWarp.html">CurveWarp</a> according to spec.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asFloat' href='./../Overviews/Methods.html#asFloat'>asFloat</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>this as <a href="./../Classes/Float.html">Float</a></div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asRect' href='./../Overviews/Methods.html#asRect'>asRect</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a <a href="./../Classes/Rect.html">Rect</a> with x = y = w = h = this.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asBoolean' href='./../Overviews/Methods.html#asBoolean'>asBoolean</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>this as a <a href="./../Classes/Boolean.html">Boolean</a>. this &gt; 0</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asQuant' href='./../Overviews/Methods.html#asQuant'>asQuant</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the values as <a href="./../Classes/Quant.html">Quant</a></div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asInteger' href='./../Overviews/Methods.html#asInteger'>asInteger</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>this as <a href="./../Classes/Integer.html">Integer</a></div></div><h3><a class='anchor' name='timing'>timing</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-wait' href='./../Overviews/Methods.html#wait'>wait</a> </h3>
+<div class='method'>
+<p>within a routine, yield the number so that the clock can wait for this many beats. Outside a Routine, this trows an error (see also Routine for details).<h4>Discussion:</h4>
+
+<p>Create a routine by a function fork<pre class='code prettyprint lang-sc'>(
+fork {
+    1.wait;
+    "I did wait".postln;
+    1.0.rand.wait;
+    "No you didn't".postln;
+    2.wait;
+    (1..).do { |i|
+        "yes I did".postln;
+        i.asFloat.rand.wait;
+        "no you didn't".postln;
+        i.wait
+    }
+}
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-waitUntil' href='./../Overviews/Methods.html#waitUntil'>waitUntil</a> </h3>
+<div class='method'>
+<p>like wait, only specify a time (measured in beats of the current thread's clock). Outside a Routine, this trows an error (see also Routine for details).</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sleep' href='./../Overviews/Methods.html#sleep'>sleep</a> </h3>
+<div class='method'>
+<p>make the current thread sleep, until woken up by re-scheduling. Outside a Routine, this trows an error (see also Routine for details).</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-nextTimeOnGrid' href='./../Overviews/Methods.html#nextTimeOnGrid'>nextTimeOnGrid</a> (<span class='argstr'>clock</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>clock<td class='argumentdesc'></table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the next possible multiple of the clock's beats.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-schedBundleArrayOnClock' href='./../Overviews/Methods.html#schedBundleArrayOnClock'>schedBundleArrayOnClock</a> (<span class='argstr'>clock</span>, <span class='argstr'>bundleArray</span>, <span class='argstr'>lag: 0</span>, <span class='argstr'>server</span>, <span class='argstr'>latency</span>)</h3>
+<div class='method'></div><h3><a class='anchor' name='series and arrays'>series and arrays</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nearestInList' href='./../Overviews/Methods.html#nearestInList'>nearestInList</a> (<span class='argstr'>list</span>)</h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the value in the list closest to this</div><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(
+l = [0, 0.5, 0.9, 1];
+(0, 0.05..1).collect { |i| i.nearestInList(l) }
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-nearestInScale' href='./../Overviews/Methods.html#nearestInScale'>nearestInScale</a> (<span class='argstr'>scale</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>scale<td class='argumentdesc'>
+<p>an array of SimpleNumbers each treated as a step in the octave.<tr><td class='argumentname'>stepsPerOctave<td class='argumentdesc'>
+<p>12 by default</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the value in the collection closest to this, assuming an octave repeating table of note values.</div><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(
+l = [0, 1, 5, 9, 11]; // pentatonic scale
+(60, 61..76).collect { |i| i.nearestInScale(l, 12) }
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-series' href='./../Overviews/Methods.html#series'>series</a> (<span class='argstr'>second</span>, <span class='argstr'>last</span>)</h3>
+<div class='method'>
+<p>return an artithmetic series from this over second to last.<h4>Discussion:</h4>
+
+<p>This is used in the shortcuts:<pre class='code prettyprint lang-sc'>(0..100);
+(1, 3 .. 17)</pre>
+
+<p>If second is nil, it is one magnitude step towards last (1 or -1). Examples:<pre class='code prettyprint lang-sc'>series(5, 7, 10);
+series(5, nil, 10);
+(5, 7 .. 10)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-seriesIter' href='./../Overviews/Methods.html#seriesIter'>seriesIter</a> (<span class='argstr'>second</span>, <span class='argstr'>last</span>)</h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a Routine that iterates over the numbers from this to last.</div><h4>Discussion:</h4>
+
+<p>Since this is a lazy operation, last may be inf, generating an endless series (see also <a href="./../Guides/ListComprehensions.html">List Comprehensions</a>)<pre class='code prettyprint lang-sc'>r = seriesIter(0, 5);
+r.nextN(8);
+r.nextN(8);</pre>
+</div><h3><a class='anchor' name='windowing'>windowing</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rectWindow' href='./../Overviews/Methods.html#rectWindow'>rectWindow</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a value for a rectangular window function between 0 and 1.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hanWindow' href='./../Overviews/Methods.html#hanWindow'>hanWindow</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a value for a hanning window function between 0 and 1.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-welWindow' href='./../Overviews/Methods.html#welWindow'>welWindow</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a value for a welsh window function between 0 and 1.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-triWindow' href='./../Overviews/Methods.html#triWindow'>triWindow</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a value for a triangle window function between 0 and 1.</div></div><h3><a class='anchor' name='mapping'>mapping</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-distort' href='./../Overviews/Methods.html#distort'>distort</a> </h3>
+<div class='method'>
+<p>a nonlinear distortion function.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-softclip' href='./../Overviews/Methods.html#softclip'>softclip</a> </h3>
+<div class='method'>
+<p>Distortion with a perfectly linear region from -0.5 to +0.5</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-scurve' href='./../Overviews/Methods.html#scurve'>scurve</a> </h3>
+<div class='method'>
+<p>Map receiver in the onto an S-curve.<h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>((0..100) / 100 ).collect(_.scurve).plot</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ramp' href='./../Overviews/Methods.html#ramp'>ramp</a> </h3>
+<div class='method'>
+<p>Map receiver onto a ramp starting at 0.<h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>((-100..100) / 100 ).collect(_.ramp).plot</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-magnitude' href='./../Overviews/Methods.html#magnitude'>magnitude</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>abolute value (see <a href="./../Classes/Polar.html">Polar</a>, <a href="./../Classes/Complex.html">Complex</a>)</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-angle' href='./../Overviews/Methods.html#angle'>angle</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>angle of receiver conceived as <a href="./../Classes/Polar.html">Polar</a> or <a href="./../Classes/Complex.html">Complex</a> number.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-degreeToKey' href='./../Overviews/Methods.html#degreeToKey'>degreeToKey</a> (<span class='argstr'>scale</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>scale<td class='argumentdesc'>
+<p>an array of SimpleNumbers each treated as a step in the octave.<tr><td class='argumentname'>stepsPerOctave<td class='argumentdesc'>
+<p>12 is the standard chromatic scale.</table><h4>Discussion:</h4>
+
+<p>the value is truncated to an integer and used as an index into an octave repeating table of note values. Indices wrap around the table and shift octaves as they do.<pre class='code prettyprint lang-sc'>(
+l = [0, 1, 5, 9, 11]; // pentatonic scale
+(1, 2..15).collect{|i|
+    i.degreeToKey(l, 12)
+};
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyToDegree' href='./../Overviews/Methods.html#keyToDegree'>keyToDegree</a> (<span class='argstr'>scale</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
+<div class='method'>
+<p>inverse of degreeToKey.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>scale<td class='argumentdesc'>
+<p>an array of SimpleNumbers each treated as a step in the octave.<tr><td class='argumentname'>stepsPerOctave<td class='argumentdesc'>
+<p>12 is the standard chromatic scale.</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(
+l = [0, 1, 5, 9, 11]; // pentatonic scale
+(60, 61..75).collect { |i| i.keyToDegree(l, 12) }
+)</pre>
+
+<p><pre class='code prettyprint lang-sc'>(
+l = [0, 1, 5, 9, 11]; // pentatonic scale
+(60, 61..75).postln.collect { |i| i.keyToDegree(l, 12).degreeToKey(l) }
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-gaussCurve' href='./../Overviews/Methods.html#gaussCurve'>gaussCurve</a> (<span class='argstr'>a: 1</span>, <span class='argstr'>b: 0</span>, <span class='argstr'>c: 1</span>)</h3>
+<div class='method'>
+<p>map the receiver onto a gauss function.<h4>Discussion:</h4>
+
+<p>Uses the formula:<pre class='code prettyprint lang-sc'>a * (exp(squared(this - b) / (-2.0 * squared(c)))) Defalt values: a = 1; b = 0; c = 1</pre>
+
+<p>Example code<pre class='code prettyprint lang-sc'>(0..1000).normalize(-10, 10).collect { |num| num.gaussCurve }.plot;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-equalWithPrecision' href='./../Overviews/Methods.html#equalWithPrecision'>equalWithPrecision</a> (<span class='argstr'>that</span>, <span class='argstr'>precision: 0.0001</span>, <span class='argstr'>relativePrecision: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>precision<td class='argumentdesc'>
+<p>The absolute precision, independent of the value compared<tr><td class='argumentname'>relativePrecision<td class='argumentdesc'>
+<p>The precision relative to the larger absolute of the values compared.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>true if receiver is closer to that than precision.</div><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>3.1.equalWithPrecision(3.0, 0.05); // false
+3.1.equalWithPrecision(3.0, 0.1); // false
+3.1.equalWithPrecision(3.0, 0.11); // true
+3000.1.equalWithPrecision(3000.0, 0, 0.01); // true
+3.1.equalWithPrecision(3.0, 0, 0.01); // false</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-quantize' href='./../Overviews/Methods.html#quantize'>quantize</a> (<span class='argstr'>quantum: 1</span>, <span class='argstr'>tolerance: 0.05</span>, <span class='argstr'>strength: 1</span>)</h3>
+<div class='method'>
+<p>round the receiver to the quantum.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>quantum<td class='argumentdesc'>
+<p>amount.<tr><td class='argumentname'>tolerance<td class='argumentdesc'>
+<p>allowed tolerance.<tr><td class='argumentname'>strength<td class='argumentdesc'>
+<p>Determines how much the value is allowed to differ in the tolerance range.</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>((0..10) / 10).collect { |num| num.quantize(1, 0.3, 0.5) }.postcs.plot;
+((0..10) / 10).collect { |num| num.quantize(1, 0.6, 0.5) }.postcs.plot;
+((0..10) / 10).collect { |num| num.quantize(1, 1.0, 0.5) }.postcs.plot;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-linlin' href='./../Overviews/Methods.html#linlin'>linlin</a> (<span class='argstr'>inMin</span>, <span class='argstr'>inMax</span>, <span class='argstr'>outMin</span>, <span class='argstr'>outMax</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
+<div class='method'>
+<p>map the receiver from an assumed linear input range to a linear output range. If the input exceeds the assumed input range, the behaviour is specified by the clip argument.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>inMin<td class='argumentdesc'>
+<p>assumed input minimum<tr><td class='argumentname'>inMax<td class='argumentdesc'>
+<p>assumed input maximum<tr><td class='argumentname'>outMin<td class='argumentdesc'>
+<p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
+<p>output maximum<tr><td class='argumentname'>clip<td class='argumentdesc'>
+<p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(0..10).collect { |num| num.linlin(0, 10, -4.3, 100) };
+(0..10).linlin(0, 10, -4.3, 100); // equivalent.</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-linexp' href='./../Overviews/Methods.html#linexp'>linexp</a> (<span class='argstr'>inMin</span>, <span class='argstr'>inMax</span>, <span class='argstr'>outMin</span>, <span class='argstr'>outMax</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
+<div class='method'>
+<p>map the receiver from an assumed linear input range (inMin..inMax) to an exponential output range (outMin..outMax). The output range must not include zero. If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>inMin<td class='argumentdesc'>
+<p>assumed input minimum<tr><td class='argumentname'>inMax<td class='argumentdesc'>
+<p>assumed input maximum<tr><td class='argumentname'>outMin<td class='argumentdesc'>
+<p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
+<p>output maximum<tr><td class='argumentname'>clip<td class='argumentdesc'>
+<p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(0..10).collect { |num| num.linexp(0, 10, 4.3, 100) };
+(0..10).linexp(0, 10, 4.3, 100); // equivalent.</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-explin' href='./../Overviews/Methods.html#explin'>explin</a> (<span class='argstr'>inMin</span>, <span class='argstr'>inMax</span>, <span class='argstr'>outMin</span>, <span class='argstr'>outMax</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
+<div class='method'>
+<p>map the receiver from an assumed exponential input range (inMin..inMax) to a linear output range (outMin..outMax). If the input exceeds the assumed input range. The input range must not include zero. If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>inMin<td class='argumentdesc'>
+<p>assumed input minimum<tr><td class='argumentname'>inMax<td class='argumentdesc'>
+<p>assumed input maximum<tr><td class='argumentname'>outMin<td class='argumentdesc'>
+<p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
+<p>output maximum<tr><td class='argumentname'>clip<td class='argumentdesc'>
+<p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(1..10).collect { |num| num.explin(0.1, 10, -4.3, 100) };
+(1..10).explin(0.1, 10, -4.3, 100); // equivalent.</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-expexp' href='./../Overviews/Methods.html#expexp'>expexp</a> (<span class='argstr'>inMin</span>, <span class='argstr'>inMax</span>, <span class='argstr'>outMin</span>, <span class='argstr'>outMax</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
+<div class='method'>
+<p>map the receiver from an assumed exponential input range (inMin..inMax) to an exponential output range (outMin..outMax). If the input exceeds the assumed input range. Both input range and output range must not include zero. If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>inMin<td class='argumentdesc'>
+<p>assumed input minimum<tr><td class='argumentname'>inMax<td class='argumentdesc'>
+<p>assumed input maximum<tr><td class='argumentname'>outMin<td class='argumentdesc'>
+<p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
+<p>output maximum<tr><td class='argumentname'>clip<td class='argumentdesc'>
+<p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(1..10).collect { |num| num.expexp(0.1, 10, 4.3, 100) };
+(1..10).expexp(0.1, 10, 4.3, 100); // equivalent.</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-lincurve' href='./../Overviews/Methods.html#lincurve'>lincurve</a> (<span class='argstr'>inMin: 0</span>, <span class='argstr'>inMax: 1</span>, <span class='argstr'>outMin: 0</span>, <span class='argstr'>outMax: 1</span>, <span class='argstr'>curve: -4</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
+<div class='method'>
+<p>map the receiver from an assumed linear input range (inMin..inMax) to an exponential curve output range (outMin..outMax). A curve is like the curve parameter in Env. Unlike with linexp, the output range may include zero. If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>inMin<td class='argumentdesc'>
+<p>assumed input minimum<tr><td class='argumentname'>inMax<td class='argumentdesc'>
+<p>assumed input maximum<tr><td class='argumentname'>outMin<td class='argumentdesc'>
+<p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
+<p>output maximum<tr><td class='argumentname'>curve<td class='argumentdesc'>
+<p>0 (linear) &lt;0 (concave, negatively curved) &gt;0 (convex, positively curved)<tr><td class='argumentname'>clip<td class='argumentdesc'>
+<p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(0..10).collect { |num| num.lincurve(0, 10, -4.3, 100, -3) };
+(0..10).lincurve(0, 10, -4.3, 100, -3); // equivalent.</pre>
+
+<p><pre class='code prettyprint lang-sc'>// different curves:
+(-4..4).do { |val|
+    (0..100).collect(_.lincurve(0, 100, 0, 1, val)).plot
+}</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-curvelin' href='./../Overviews/Methods.html#curvelin'>curvelin</a> (<span class='argstr'>inMin: 0</span>, <span class='argstr'>inMax: 1</span>, <span class='argstr'>outMin: 0</span>, <span class='argstr'>outMax: 1</span>, <span class='argstr'>curve: -4</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
+<div class='method'>
+<p>map the receiver from an assumed curve-exponential input range (inMin..inMax) to a linear output range (outMin..outMax). If the input exceeds the assumed input range. A curve is like the curve parameter in Env. Unlike with explin, the input range may include zero. If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>inMin<td class='argumentdesc'>
+<p>assumed input minimum<tr><td class='argumentname'>inMax<td class='argumentdesc'>
+<p>assumed input maximum<tr><td class='argumentname'>outMin<td class='argumentdesc'>
+<p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
+<p>output maximum<tr><td class='argumentname'>curve<td class='argumentdesc'>
+<p>0 (linear) &lt;0 (concave, negatively curved) &gt;0 (convex, positively curved)<tr><td class='argumentname'>clip<td class='argumentdesc'>
+<p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(1..10).collect { |num| num.curvelin(0, 10, -4.3, 100, -3) };
+(1..10).curvelin(0, 10, -4.3, 100, -3); // equivalent.</pre>
+
+<p><pre class='code prettyprint lang-sc'>// different curves:
+(-4..4).do { |val|
+    (0..100).collect(_.curvelin(0, 100, 0, 1, val)).plot
+}</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-bilin' href='./../Overviews/Methods.html#bilin'>bilin</a> (<span class='argstr'>inCenter</span>, <span class='argstr'>inMin</span>, <span class='argstr'>inMax</span>, <span class='argstr'>outCenter</span>, <span class='argstr'>outMin</span>, <span class='argstr'>outMax</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
+<div class='method'>
+<p>map the receiver from two assumed linear input ranges (inMin..inCenter) and (inCenter..inMax) to two linear output ranges (outMin..outCenter) and (outCenter..outMax). If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>inCenter<td class='argumentdesc'><tr><td class='argumentname'>inMin<td class='argumentdesc'>
+<p>assumed input minimum<tr><td class='argumentname'>inMax<td class='argumentdesc'>
+<p>assumed input maximum<tr><td class='argumentname'>outCenter<td class='argumentdesc'><tr><td class='argumentname'>outMin<td class='argumentdesc'>
+<p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
+<p>output maximum<tr><td class='argumentname'>clip<td class='argumentdesc'>
+<p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>var center = 0.5, ctlCenter;
+w = Window("bilin", Rect(100, 100, 200, 100)).front;
+a = Slider(w, Rect(20, 20, 150, 20)).value_(0.5);
+b = Slider(w, Rect(20, 45, 150, 20)).value_(0.5);
+b.action = { center = b.value };
+a.mouseDownAction = { ctlCenter = a.value };
+a.action = {
+    b.value = a.value.bilin(ctlCenter, 0, 1, center, 0, 1);
+};</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-biexp' href='./../Overviews/Methods.html#biexp'>biexp</a> (<span class='argstr'>inCenter</span>, <span class='argstr'>inMin</span>, <span class='argstr'>inMax</span>, <span class='argstr'>outCenter</span>, <span class='argstr'>outMin</span>, <span class='argstr'>outMax</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
+<div class='method'>
+<p>map the receiver from two assumed exponential input ranges (inMin..inCenter) and (inCenter..inMax) to two linear output ranges (outMin..outCenter) and (outCenter..outMax). The input range must not include zero. If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>inCenter<td class='argumentdesc'><tr><td class='argumentname'>inMin<td class='argumentdesc'>
+<p>assumed input minimum<tr><td class='argumentname'>inMax<td class='argumentdesc'>
+<p>assumed input maximum<tr><td class='argumentname'>outCenter<td class='argumentdesc'><tr><td class='argumentname'>outMin<td class='argumentdesc'>
+<p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
+<p>output maximum<tr><td class='argumentname'>clip<td class='argumentdesc'>
+<p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>// doesn't properly work yet.
+(
+var center = 0.5, ctlCenter;
+w = Window("biexp", Rect(100, 100, 200, 100)).front;
+a = Slider(w, Rect(20, 20, 150, 20)).value_(0.5);
+b = Slider(w, Rect(20, 45, 150, 20)).value_(0.5);
+b.action = { center = b.value };
+a.mouseDownAction = { ctlCenter = a.value + 0.05 };
+a.action = {
+    b.value = (a.value + 0.1).biexp(ctlCenter, 0.1, 1.1, center, 0, 1);
+};
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-lcurve' href='./../Overviews/Methods.html#lcurve'>lcurve</a> (<span class='argstr'>a: 1</span>, <span class='argstr'>m: 0</span>, <span class='argstr'>n: 1</span>, <span class='argstr'>tau: 1</span>)</h3>
+<div class='method'>
+<p>map the receiver onto an L-curve.<h4>Discussion:</h4>
+
+<p>Uses the formula<pre class='code prettyprint lang-sc'>a * (m * exp(x) * rTau + 1) / (n * exp(x) * rTau + 1)</pre>
+
+<p>This is used for smoothing values and limiting them to a range.<pre class='code prettyprint lang-sc'>(0..1000).normalize(-10, 10).collect { |num| num.lcurve }.plot;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-degrad' href='./../Overviews/Methods.html#degrad'>degrad</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>converts degree to radian</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-raddeg' href='./../Overviews/Methods.html#raddeg'>raddeg</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>converts radian to degree</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-midicps' href='./../Overviews/Methods.html#midicps'>midicps</a> </h3>
+<div class='method'>
+<p>Convert MIDI note to cycles per second<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>cycles per second</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-cpsmidi' href='./../Overviews/Methods.html#cpsmidi'>cpsmidi</a> </h3>
+<div class='method'>
+<p>Convert cycles per second to MIDI note.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>midi note</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-midiratio' href='./../Overviews/Methods.html#midiratio'>midiratio</a> </h3>
+<div class='method'>
+<p>Convert an interval in semitones to a ratio.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a ratio</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ratiomidi' href='./../Overviews/Methods.html#ratiomidi'>ratiomidi</a> </h3>
+<div class='method'>
+<p>Convert a ratio to an interval in semitones.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>an interval in semitones</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-ampdb' href='./../Overviews/Methods.html#ampdb'>ampdb</a> </h3>
+<div class='method'>
+<p>Convert a linear amplitude to decibels.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-dbamp' href='./../Overviews/Methods.html#dbamp'>dbamp</a> </h3>
+<div class='method'>
+<p>Convert a decibels to a linear amplitude.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-octcps' href='./../Overviews/Methods.html#octcps'>octcps</a> </h3>
+<div class='method'>
+<p>Convert decimal octaves to cycles per second.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-cpsoct' href='./../Overviews/Methods.html#cpsoct'>cpsoct</a> </h3>
+<div class='method'>
+<p>Convert cycles per second to decimal octaves.</div><h3><a class='anchor' name='streams'>streams</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-storeOn' href='./../Overviews/Methods.html#storeOn'>storeOn</a> (<span class='argstr'>stream</span>)</h3>
+<div class='method'>
+<p>stores this on the given stream</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-printOn' href='./../Overviews/Methods.html#printOn'>printOn</a> (<span class='argstr'>stream</span>)</h3>
+<div class='method'>
+<p>printrs this on the given stream</div><h3><a class='anchor' name='random'>random</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-coin' href='./../Overviews/Methods.html#coin'>coin</a> </h3>
+<div class='method'>
+<p>Answers a Boolean which is the result of a random test whose probability of success in a range from zero to one is this.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-rand' href='./../Overviews/Methods.html#rand'>rand</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>Random number from zero up to the receiver, exclusive.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-rand2' href='./../Overviews/Methods.html#rand2'>rand2</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a random number from -this to +this.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-rrand' href='./../Overviews/Methods.html#rrand'>rrand</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aNumber<td class='argumentdesc'>
+<p>the upper limit<tr><td class='argumentname'>adverb<td class='argumentdesc'></table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a random number in the interval ]a, b[.</div><h4>Discussion:</h4>
+
+<p>If both a and b are <a href="./../Classes/Integer.html">Integer</a> then the result will be an <a href="./../Classes/Integer.html">Integer</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-linrand' href='./../Overviews/Methods.html#linrand'>linrand</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a linearly distributed random number from zero to this.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-bilinrand' href='./../Overviews/Methods.html#bilinrand'>bilinrand</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>Bilateral linearly distributed random number from -this to +this.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sum3rand' href='./../Overviews/Methods.html#sum3rand'>sum3rand</a> </h3>
+<div class='method'>
+<p>This was suggested by Larry Polansky as a poor man's gaussian.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A random number from -this to +this that is the result of summing three uniform random generators to yield a bell-like distribution.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-exprand' href='./../Overviews/Methods.html#exprand'>exprand</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>an exponentially distributed random number in the interval ]a, b[. This is always a <a href="./../Classes/Float.html">Float</a>. (Note that the distribution of numbers is not exactly an <em>exponential distribution</em>, since that would be unbounded: we might call it a <em>logarithmic uniform distribution</em>.)<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>aNumber<td class='argumentdesc'>
+<p>the upper limit<tr><td class='argumentname'>adverb<td class='argumentdesc'></table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-gauss' href='./../Overviews/Methods.html#gauss'>gauss</a> (<span class='argstr'>standardDeviation</span>)</h3>
+<div class='method'>
+<p>a gaussian distributed random number.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>standardDeviation<td class='argumentdesc'>
+<p>the upper limit</table><h4>Discussion:</h4>
+
+<p>Always returns a <a href="./../Classes/Float.html">Float</a>.<pre class='code prettyprint lang-sc'>(0..1000).collect { |num| gauss(0.0, num) }.plot;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-partition' href='./../Overviews/Methods.html#partition'>partition</a> (<span class='argstr'>parts: 2</span>, <span class='argstr'>min: 1</span>)</h3>
+<div class='method'>
+<p>randomly partition a number into parts of at least min size.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>parts<td class='argumentdesc'>
+<p>number of parts<tr><td class='argumentname'>min<td class='argumentdesc'>
+<p>the minimum size</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>75.partition(8, 3);
+75.partition(75, 1);</pre>
+</div><h3><a class='anchor' name='UGen Compatibility Methods'>UGen Compatibility Methods</a></h3>
+
+<p>Some methods to ease the development of generic ugen code.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lag' href='./../Overviews/Methods.html#lag'>lag</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lag2' href='./../Overviews/Methods.html#lag2'>lag2</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lag3' href='./../Overviews/Methods.html#lag3'>lag3</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lagud' href='./../Overviews/Methods.html#lagud'>lagud</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lag2ud' href='./../Overviews/Methods.html#lag2ud'>lag2ud</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lag3ud' href='./../Overviews/Methods.html#lag3ud'>lag3ud</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-slew' href='./../Overviews/Methods.html#slew'>slew</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-varlag' href='./../Overviews/Methods.html#varlag'>varlag</a> </h3>
+<div class='method'>
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p><code class='code prettyprint lang-sc'>this</code></div></div><h3><a class='anchor' name='misc'>misc</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isValidUGenInput' href='./../Overviews/Methods.html#isValidUGenInput'>isValidUGenInput</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>false if receiver cannot be used in UGen.</div></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asBufWithValues' href='./../Overviews/Methods.html#asBufWithValues'>asBufWithValues</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asEvent' href='./../Overviews/Methods.html#asEvent'>asEvent</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Rest.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Rest.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asMIDIInPortUID' href='./../Overviews/Methods.html#asMIDIInPortUID'>asMIDIInPortUID</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/asMIDIPort.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Control/asMIDIPort.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asSize' href='./../Overviews/Methods.html#asSize'>asSize</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Geometry/Size.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Geometry/Size.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asTimeStringLJP' href='./../Overviews/Methods.html#asTimeStringLJP'>asTimeStringLJP</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SimpleNumber-asTimeString.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SimpleNumber-asTimeString.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-betarand' href='./../Overviews/Methods.html#betarand'>betarand</a> (<span class='argstr'>val2: 1</span>, <span class='argstr'>prob1: 1</span>, <span class='argstr'>prob2: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-binaryValue' href='./../Overviews/Methods.html#binaryValue'>binaryValue</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-buildForProxy' href='./../Overviews/Methods.html#buildForProxy'>buildForProxy</a> (<span class='argstr'>proxy</span>, <span class='argstr'>channelOffset: 0</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-calcPVRecSize' href='./../Overviews/Methods.html#calcPVRecSize'>calcPVRecSize</a> (<span class='argstr'>frameSize</span>, <span class='argstr'>hop</span>, <span class='argstr'>sampleRate</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/JoshPV.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/JoshPV.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cauchy' href='./../Overviews/Methods.html#cauchy'>cauchy</a> (<span class='argstr'>spread: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-delta' href='./../Overviews/Methods.html#delta'>delta</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Rest.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Rest.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-firstArg' href='./../Overviews/Methods.html#firstArg'>firstArg</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gaussian' href='./../Overviews/Methods.html#gaussian'>gaussian</a> (<span class='argstr'>dev: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-guiClass' href='./../Overviews/Methods.html#guiClass'>guiClass</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/tools/guicrucial/gui.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/tools/guicrucial/gui.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hypotApx' href='./../Overviews/Methods.html#hypotApx'>hypotApx</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-linrrand' href='./../Overviews/Methods.html#linrrand'>linrrand</a> (<span class='argstr'>val2: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-logistic' href='./../Overviews/Methods.html#logistic'>logistic</a> (<span class='argstr'>spread: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-midinote' href='./../Overviews/Methods.html#midinote'>midinote</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/midinote.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/midinote.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-numChannels' href='./../Overviews/Methods.html#numChannels'>numChannels</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pareto' href='./../Overviews/Methods.html#pareto'>pareto</a> (<span class='argstr'>shape: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-performBinaryOpOnComplex' href='./../Overviews/Methods.html#performBinaryOpOnComplex'>performBinaryOpOnComplex</a> (<span class='argstr'>aSelector</span>, <span class='argstr'>aComplex</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-performBinaryOpOnSignal' href='./../Overviews/Methods.html#performBinaryOpOnSignal'>performBinaryOpOnSignal</a> (<span class='argstr'>aSelector</span>, <span class='argstr'>aSignal</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-performBinaryOpOnSimpleNumber' href='./../Overviews/Methods.html#performBinaryOpOnSimpleNumber'>performBinaryOpOnSimpleNumber</a> (<span class='argstr'>aSelector</span>, <span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-playAndDelta' href='./../Overviews/Methods.html#playAndDelta'>playAndDelta</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-poisson' href='./../Overviews/Methods.html#poisson'>poisson</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-poll' href='./../Overviews/Methods.html#poll'>poll</a> (<span class='argstr'>trig: 10</span>, <span class='argstr'>label</span>, <span class='argstr'>trigid: -1</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-proxyControlClass' href='./../Overviews/Methods.html#proxyControlClass'>proxyControlClass</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rate' href='./../Overviews/Methods.html#rate'>rate</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-weibull' href='./../Overviews/Methods.html#weibull'>weibull</a> (<span class='argstr'>spread</span>, <span class='argstr'>shape: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-writeInputSpec' href='./../Overviews/Methods.html#writeInputSpec'>writeInputSpec</a> (<span class='argstr'>file</span>, <span class='argstr'>synth</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-writeInputSpecOld' href='./../Overviews/Methods.html#writeInputSpecOld'>writeInputSpecOld</a> (<span class='argstr'>file</span>, <span class='argstr'>synth</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/SynthDefOld.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/SynthDefOld.sc</a></div>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/SimpleNumber.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/SimpleNumber.schelp</a><br>link::Classes/SimpleNumber::<br>sc version: 3.8dev</div></div></body></html>

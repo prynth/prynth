@@ -1,0 +1,62 @@
+<html><head><title>SendPeakRMS</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Analysis>Amplitude'>UGens>Analysis>Amplitude</a></div>
+<h1>SendPeakRMS</h1>
+<div id='summary'>Track peak and power of a signal for GUI applications.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Trig.sc'>Trig.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Peak.html">Peak</a>, <a href="./../Classes/PeakFollower.html">PeakFollower</a>, <a href="./../Classes/OSCFunc.html">OSCFunc</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>The SendPeakRMS unit generator computes peak and power of a signal and sends the computed values back to the clients. It does not produce any output.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>sig</span>, <span class='argstr'>replyRate: 20</span>, <span class='argstr'>peakLag: 3</span>, <span class='argstr'>cmdName: '/reply'</span>, <span class='argstr'>replyID: -1</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>sig</span>, <span class='argstr'>replyRate: 20</span>, <span class='argstr'>peakLag: 3</span>, <span class='argstr'>cmdName: '/reply'</span>, <span class='argstr'>replyID: -1</span>)</h3>
+<div class='method'>
+<p>Unlike with other unit generators, the <code class='code prettyprint lang-sc'>ar</code> and <code class='code prettyprint lang-sc'>kr</code> methods do not specify the rate of the computation, but the granularity. When the SendPeakRMS ugen is instantiated with <code class='code prettyprint lang-sc'>kr</code>, the reply rate id quantized to control-rate blocks.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>sig<td class='argumentdesc'>
+<p>The input signal.<tr><td class='argumentname'>replyRate<td class='argumentdesc'>
+<p>Float or Integer. Specifies the number of replies that are sent to the clients per second.<tr><td class='argumentname'>peakLag<td class='argumentdesc'>
+<p>Float or Integer. Lag time, which is applied to the peak values. This option is commonly used for GUI VU meters.<tr><td class='argumentname'>cmdName<td class='argumentdesc'>
+<p>Symbol or String. Address pattern for reply message.<tr><td class='argumentname'>replyID<td class='argumentdesc'>
+<p>Integer ID (similar to <a href="./../Classes/SendTrig.html">SendTrig</a>).</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+{
+    SendPeakRMS.kr(Dust.ar(20), 20, 3, "/replyAddress")
+}.play;
+)
+
+(
+o = OSCFunc({ |msg|
+    "peak: %, rms: %".format(msg[3], msg[4]).postln
+}, '/replyAddress');
+)
+o.free;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/SendPeakRMS.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/SendPeakRMS.schelp</a><br>link::Classes/SendPeakRMS::<br>sc version: 3.8dev</div></div></body></html>

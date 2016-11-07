@@ -1,0 +1,92 @@
+<html><head><title>Speech</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Platform>OSX'>Platform>OSX</a></div>
+<h1>Speech</h1>
+<div id='summary'>lets you use the Apple speech synthesizer</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Location: <b>NOT INSTALLED!</b></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<pre class='code prettyprint lang-sc'>"hi i'm talking with the default voice now, i guess".speak;</pre>
+
+<p>Speech consists of an <a href="./../Classes/Array.html">Array</a> of SpeechChannels. By default Speech is initialized with only one channel, but can be set up to use up to 16 by providing an argument to init. Channels may be used through a SpeechChannel object or by setting the channel in Speech's methods (see examples below).
+<p>Speech is a function of the operating system and not the server. By consequence, <strong>it is not possible to use UGens to filter or record the output directly</strong>. You may be able to patch system output to system input (either by hardware of by software) to rout it to the server.<div class='note'><span class='notelabel'>NOTE:</span> Currently only supported on OS X. In SwingOSC there is the equivalent JSpeech.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>Speech.init(2);
+Speech.channels[0].speak("hallo");
+Speech.channels[0].isActive;
+Speech.channels[0].voice_(14);
+Speech.channels[0].speak("hallo");
+Speech.channels[0].pitch_(60);
+Speech.channels[0].speak("hallo");
+Speech.channels[0].volume_(-20.dbamp);
+Speech.channels[0].pitchMod_(50);
+Speech.channels[0].speak("hallo");
+Speech.channels[0].stop(\immediate);
+Speech.channels[0].stop(\endOfWord);
+Speech.channels[0].stop(\endOfSentence);</pre>
+
+<p>Force the voice to speaking something different by setting the second argument of speak to true.<pre class='code prettyprint lang-sc'>Speech.channels[0].speak("Force the voice to speaking something different.");
+Speech.channels[0].speak("Force the voice to speaking something different.".reverse, true);</pre>
+
+<p>First argument is always the voice channel number, second the value.<pre class='code prettyprint lang-sc'>Speech.setSpeechVoice(0,14);
+Speech.setSpeechPitch(0, 40); //pitch in MIDI Num
+Speech.setSpeechRate(0, 10);
+Speech.setSpeechVolume(0,0.1);
+Speech.setSpeechPitchMod(0, 200);
+Speech.stop(0, 1);</pre>
+
+<p>Two actions can be applied:<pre class='code prettyprint lang-sc'>Speech.wordAction = {arg voiceNum;
+    //i.postln;
+    // the currently speaking text may not be changed
+    //Speech.setSpeechPitch(voiceNum,[41,60].choose);
+    //Speech.setSpeechRate(voiceNum,[60,80, 10].choose);
+};
+Speech.doneAction_({arg voiceNum;
+    Speech.setSpeechPitch(voiceNum,[41,48,40,43,30,60].choose);
+});</pre>
+
+<p>Pause the speech while speaking: 1=pause, 0= start<pre class='code prettyprint lang-sc'>Speech.pause(0,1);</pre>
+
+<p>Initialization happens automatically, by default with one voice channel. You may explicitly initalize with more channels, up to 16:<pre class='code prettyprint lang-sc'>(
+Speech.init(16);
+
+Task({
+    16.do ({arg i;
+        [0.1, 0.18, 0.2].choose.wait;
+        Speech.setSpeechRate(i,[90, 30, 60].choose);
+        Speech.setSpeechVolume(i,0.07);
+        "no this is private. float . boolean me. char[8] ".speak(i);
+    });
+}).play;
+)
+
+//jan@sampleAndHold.org 04/2003
+//update 10/2007</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Speech.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Speech.schelp</a><br>link::Classes/Speech::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,120 @@
+<html><head><title>OSCpathResponder</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#External Control>OSC'>External Control>OSC</a></div>
+<h1>OSCpathResponder</h1>
+<div id='summary'>client side network responder</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/OSCpathResponder.sc'>OSCpathResponder.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/OSCresponder.html">OSCresponder</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/OSCFunc.html">OSCFunc</a>, <a href="./../Classes/OSCdef.html">OSCdef</a>, <a href="./../Guides/OSC_communication.html">OSC Communication</a>, <a href="./../Classes/OSCresponderNode.html">OSCresponderNode</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Command paths'>Command paths</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Path defaults'>Path defaults</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-=='>==</a> </li>
+<li class='toc3'><a href='#-add'>add</a> </li>
+<li class='toc3'><a href='#-dispatcher'>dispatcher</a> </li>
+<li class='toc3'><a href='#-findDispatcher'>findDispatcher</a> </li>
+<li class='toc3'><a href='#-hash'>hash</a> </li>
+<li class='toc3'><a href='#-path'>path</a> </li>
+<li class='toc3'><a href='#-remove'>remove</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<div class='note'><span class='notelabel'>NOTE:</span> As of SC 3.5 <a href="./../Classes/OSCFunc.html">OSCFunc</a> and <a href="./../Classes/OSCdef.html">OSCdef</a> are the recommended way of registering for incoming OSC messages. They are faster, safer, and have more logical argument order than the old responder classes, and they support pattern matching and custom listening ports. Use of the older classes OSCresponder, OSCresponderNode, and OSCpathResponder can be unsafe, since responders in user and class code can override each other unintentionally. They are maintained for legacy code only.
+<p>The replacement for path matching is to be found in the template argument of OSCFunc and OSCDef (see example below).</div>
+<p>Register a function to be called upon receiving a command with a specific path.
+<p>Other applications sending messages to SuperCollider should distinguish between sending messages to the server or the language. Server messages are documented in the <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a> and should be sent to the server's port - <code class='code prettyprint lang-sc'>s.addr.port</code> - which is <strong>57110</strong> by default. Messages sent to the server will not be processed by any <a href="./../Classes/OSCresponder.html">OSCresponder</a> in the language.
+<p>Messages from external clients that should be processed by OSCresponders must be sent to the language port, <strong>57120</strong> by default. Use <code class='code prettyprint lang-sc'>NetAddr.langPort</code> to confirm which port the SuperCollider language is listening on.
+<p>See <a href="./../Guides/OSC_communication.html">OSC Communication</a> for more details.<h3><a class='anchor' name='Command paths'>Command paths</a></h3>
+
+<p>OSC commands sometimes include additional parameters to specify the right responder.
+<p>For example <code class='code prettyprint lang-sc'>/tr</code> commands, which are generated on the server by the <a href="./../Classes/SendTrig.html">SendTrig</a> Ugen create an OSC packet consisting of: <code class='code prettyprint lang-sc'>[ /tr, nodeID, triggerID, value]</code>. This array actually specifies the source of value: <code class='code prettyprint lang-sc'>[ /tr, nodeID, triggerID]</code>. We will refer to that array as a command path.
+<p>To create an OSCpathResponder for a specific trigger, the <strong>cmdName</strong> parameter is simply replaced by the complete command path.<h3><a class='anchor' name='Path defaults'>Path defaults</a></h3>
+
+<p>Any element of the command path array can be set to nil to create a responder that will handle multiple command paths.
+<p>For example, setting the commandpath: <code class='code prettyprint lang-sc'>['/tr', nil, triggerID]</code> makes a responder that responds to <code class='code prettyprint lang-sc'>/tr</code> messages from any Synth but with a specific triggerID.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>addr</span>, <span class='argstr'>cmdPath</span>, <span class='argstr'>action</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>addr<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/NetAddr.html">NetAddr</a>, usually obtained from your server: server-addr. An address of nil will respond to messages from anywhere.<tr><td class='argumentname'>cmdPath<td class='argumentdesc'>
+<p>A command path, such as ['\c_set', bus index].<tr><td class='argumentname'>action<td class='argumentdesc'>
+<p>A <a href="./../Classes/Function.html">Function</a> that will be evaluated when a cmd of that name is received from addr. arguments: time, theResponder, message<div class='note'><span class='notelabel'>NOTE:</span> OSCresponderNode evaluates its function in the system process. In order to access the application process (e.g. for GUI access ) use { ... }.defer; within the action function, e.g., <code class='code prettyprint lang-sc'>{ |time, resp, msg| { gui.value_(msg[3]) }.defer }</code></div></table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-==' href='./../Overviews/Methods.html#=='>==</a> (<span class='argstr'>that</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-add' href='./../Overviews/Methods.html#add'>add</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dispatcher' href='./../Overviews/Methods.html#dispatcher'>dispatcher</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dispatcher' href='./../Overviews/Methods.html#dispatcher'>dispatcher</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-findDispatcher' href='./../Overviews/Methods.html#findDispatcher'>findDispatcher</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hash' href='./../Overviews/Methods.html#hash'>hash</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-path' href='./../Overviews/Methods.html#path'>path</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-path' href='./../Overviews/Methods.html#path'>path</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-remove' href='./../Overviews/Methods.html#remove'>remove</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>s.boot;
+
+(
+    var commandpath, response, aSynth, nodeID, triggerID;
+    triggerID = 1;
+    aSynth = { arg freq = 1, triggerID = 1;
+        SendTrig.kr(SinOsc.kr(freq), triggerID, 666)
+    }.play;
+    nodeID = aSynth.nodeID;
+    commandpath = ['/tr', nodeID, triggerID];
+    response = { arg time, responder, message; message.postln };
+
+    o = OSCpathResponder(s.addr, commandpath, response);
+    o.add;
+)
+
+// switch on and off:
+o.remove;
+o.add;
+
+
+// this can be written now conveniently and efficiently with OSCFunc.
+// the argTemplate is like the "path" of OSCpathResponder, but without the OSC-path itself.
+(
+    var commandpath, response, aSynth, nodeID, triggerID;
+    triggerID = 1;
+    aSynth = { arg freq = 1, triggerID = 1;
+        SendTrig.kr(SinOsc.kr(freq), triggerID, 666)
+    }.play;
+    nodeID = aSynth.nodeID;
+    commandpath = [nodeID, triggerID];
+    response = { arg message; message.postln };
+
+    o = OSCFunc(response, '/tr', s.addr, argTemplate: commandpath);
+
+)
+
+// an OSCFunc is removed with cmd-Period.
+// in order to switch it on and off programmatically:
+o.remove;
+o.add;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/OSCpathResponder.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/OSCpathResponder.schelp</a><br>link::Classes/OSCpathResponder::<br>sc version: 3.8dev</div></div></body></html>

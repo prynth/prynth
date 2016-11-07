@@ -1,0 +1,117 @@
+<html><head><title>play</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider REFERENCE</div>
+<div id='categories'><a href='./../Browse.html#Common methods'>Common methods</a></div>
+<h1>play</h1>
+<div id='summary'>Start a process</div>
+</div>
+<div class='subheader'>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc3'><a href='#.play'>play</a> </li>
+<li class='toc1'><a href='#Clocks, Routines, Streams and Patterns'>Clocks, Routines, Streams and Patterns</a></li>
+<ul class='toc'><li class='toc2'><a href='#clock.play (stream)'>clock.play (stream)</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#routine.play (clock)'>routine.play (clock)</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#stream.play (clock)'>stream.play (clock)</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#pausestream.play (clock) / task.play (clock)'>pausestream.play (clock) / task.play (clock)</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#pattern.play (clock, protoEvent)'>pattern.play (clock, protoEvent)</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Playing single Synths from SynthDefs on the server'>Playing single Synths from SynthDefs on the server</a></li>
+<ul class='toc'><li class='toc2'><a href='#function.play (target, outbus, fadeTime, addAction, args)'>function.play (target, outbus, fadeTime, addAction, args)</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#synthDef.play (target, args, addAction)'>synthDef.play (target, args, addAction)</a></li>
+<ul class='toc'></ul></ul></ul></div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.play' href='./../Overviews/Methods.html#play'>play</a> </h3>
+<div class='method'>
+<p>The <code class='code prettyprint lang-sc'>play</code> message is of common use in sc. Different objects respond to it in various ways, but the simple meaning is: <strong>start a process</strong>. It is usually implemented by objects in contributed libraries as well.
+<p>play usually returns the playing object which might not be the same as the one the message was sent to.
+<p>opposite: <code class='code prettyprint lang-sc'>stop</code></div><h2><a class='anchor' name='Clocks, Routines, Streams and Patterns'>Clocks, Routines, Streams and Patterns</a></h2>
+
+<p>For a full list of which classes that implements <code class='code prettyprint lang-sc'>play</code>, see <a href="./../Overviews/Methods.html#play">Methods: play</a><h3><a class='anchor' name='clock.play (stream)'>clock.play (stream)</a></h3>
+
+<p>returns: the clock<pre class='code prettyprint lang-sc'>(
+r = Routine.new({ "...playing".postln; 1.wait; "ok, that was it".postln });
+SystemClock.play(r);
+)</pre>
+
+<p>See <a href="./../Classes/Clock.html#*play">Clock: *play</a><h3><a class='anchor' name='routine.play (clock)'>routine.play (clock)</a></h3>
+
+<p>returns: the routine<pre class='code prettyprint lang-sc'>Routine.new({ "...playing".postln; 1.wait; "ok, that was it".postln }).play;</pre>
+
+<p>See <a href="./../Classes/Routine.html#-play">Routine: -play</a><h3><a class='anchor' name='stream.play (clock)'>stream.play (clock)</a></h3>
+
+<p>returns: the stream
+<p>the stream will loop until it returns nil<pre class='code prettyprint lang-sc'>FuncStream({ "ok, that was it".postln; 1 }).play;</pre>
+
+<p>See <a href="./../Classes/FuncStream.html#-play">FuncStream: -play</a><h3><a class='anchor' name='pausestream.play (clock) / task.play (clock)'>pausestream.play (clock) / task.play (clock)</a></h3>
+
+<p>returns: the stream<pre class='code prettyprint lang-sc'>a = PauseStream.new(FuncStream.new({ "ok, that was it".postln; 1 }));
+a.play;
+a.stop;
+a.play;
+a.stop;
+
+a = Task.new({ loop({ "ok, that was it".postln; 1.wait; }) });
+a.play;
+a.stop;</pre>
+
+<p>See <a href="./../Classes/Stream.html#-play">Stream: -play</a> and <a href="./../Classes/Task.html#-play">Task: -play</a><h3><a class='anchor' name='pattern.play (clock, protoEvent)'>pattern.play (clock, protoEvent)</a></h3>
+
+<p>returns: an <a href="./../Classes/EventStreamPlayer.html">EventStreamPlayer</a><pre class='code prettyprint lang-sc'>(
+Pseq([
+    Pbind(\freq, Pn(500, 1)),
+    Pbind(\dur, Pn(0.1, 1))
+], 2).play;
+)</pre>
+
+<p>See <a href="./../Classes/Pattern.html#-play">Pattern: -play</a><h2><a class='anchor' name='Playing single Synths from SynthDefs on the server'>Playing single Synths from SynthDefs on the server</a></h2>
+
+<p>The following play messages both cause a SynthDef to be written, send it to the server and start a synth with it there.
+<p>Note that they should not be used in quickly running automated processes, as there are more efficient alternatives ( see <a href="./../Guides/SynthDefsVsSynths.html">SynthDefs versus Synths</a> )<h3><a class='anchor' name='function.play (target, outbus, fadeTime, addAction, args)'>function.play (target, outbus, fadeTime, addAction, args)</a></h3>
+
+<p>returns: a <a href="./../Classes/Synth.html">Synth</a><table>
+<tr><td>outbus<td>on what bus to play (default: 0)<tr><td>fadeTime<td>in what time to fade out when released (defaulr: 0.02)<tr><td>addAction<td>where to add the node (\addToHead by default)<tr><td>args<td>controls to set when starting the synth</table>
+
+<p>See <a href="./../Classes/Function.html#-play">Function: -play</a><pre class='code prettyprint lang-sc'>a = { PinkNoise.ar([0.1, 0.1]) }.play;
+a.release;
+
+// setting argument
+a = { |freq = 500| HPF.ar(PinkNoise.ar([1, 1] * 0.4), freq) }.play;
+a.set(\freq, 1000)
+a.release;
+
+// passing argument with play:
+a = { |freq = 500| HPF.ar(PinkNoise.ar([1, 1] * 0.4), freq) }.play(args: [\freq, 10000]);
+
+// note that you can use Out ugens but you do not need to
+{ Out.ar(1, PinkNoise.ar(0.1)) }.play;
+{ XOut.ar(0, MouseX.kr(0,1), PinkNoise.ar(0.1*[1,1])) }.play; // mouse x controls level</pre>
+<h3><a class='anchor' name='synthDef.play (target, args, addAction)'>synthDef.play (target, args, addAction)</a></h3>
+
+<p>returns: a <a href="./../Classes/Synth.html">Synth</a>
+<p>Note that you need an out ugen to hear the result. Examples of how to write to the busses in the helpfiles: <a href="./../Classes/Out.html">Out</a> / <a href="./../Classes/ReplaceOut.html">ReplaceOut</a> / <a href="./../Classes/XOut.html">XOut</a> / <a href="./../Classes/OffsetOut.html">OffsetOut</a>
+<p>Nevertheless, synths can also run without any writing activity: (see e.g. <a href="./../Classes/SendTrig.html">SendTrig</a>)
+<p>Some operations provide an out ugen internally: see for example <code class='code prettyprint lang-sc'>function.play</code>, which plays out to a bus number provided in the argument passed to <code class='code prettyprint lang-sc'>.play</code><pre class='code prettyprint lang-sc'>(
+x = SynthDef("test", { arg out, amp=0.1;
+    var sound;
+    sound = PinkNoise.ar(amp * [1,1]);
+    Out.ar(out, sound);
+}).play;
+)
+
+//set the synth
+x.set(\amp, 0.2);
+//free the synth
+x.free;</pre>
+
+<p>See <a href="./../Classes/SynthDef.html#-play">SynthDef: -play</a><div class='note'><span class='notelabel'>NOTE:</span> <code class='code prettyprint lang-sc'>Synth.play(function)</code> is synonymous, for backwards compatibility with sc2</div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/play.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/play.schelp</a><br>link::Reference/play::<br>sc version: 3.8dev</div></div></body></html>

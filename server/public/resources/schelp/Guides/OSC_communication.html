@@ -1,0 +1,73 @@
+<html><head><title>OSC Communication</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider GUIDES</div>
+<div id='categories'><a href='./../Browse.html#External Control>OSC'>External Control>OSC</a></div>
+<h1>OSC Communication</h1>
+<div id='summary'>OSC network communication</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Classes/NetAddr.html">NetAddr</a>, <a href="./../Classes/OSCFunc.html">OSCFunc</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Sending OSC to another application'>Sending OSC to another application</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Receiving OSC from another application'>Receiving OSC from another application</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Receiving from an application that is sending from a variable port'>Receiving from an application that is sending from a variable port</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Testing incoming traffic'>Testing incoming traffic</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Custom OSC message processing'>Custom OSC message processing</a></li>
+<ul class='toc'></ul></ul></div>
+<p>OSC communication between programs is often done to send messages from one application to another, possibly with the applications running on different computers. In SuperCollider this communication is done by creating a <a href="./../Classes/NetAddr.html">NetAddr</a> of the target application and creating an <a href="./../Classes/OSCFunc.html">OSCFunc</a> to listen to another application. The underlying protocol of OSC is either UDP or TCP.<h2><a class='anchor' name='Sending OSC to another application'>Sending OSC to another application</a></h2>
+
+<p>To establish communication to another application, you need to know on which port that application is listening. For example if an application is listening on port 7771, we can create a NetAddr and send it a message:<pre class='code prettyprint lang-sc'>b = NetAddr.new("127.0.0.1", 7771);    // create the NetAddr
+b.sendMsg("/hello", "there");    // send the application the message "hello" with the parameter "there"</pre>
+<h2><a class='anchor' name='Receiving OSC from another application'>Receiving OSC from another application</a></h2>
+
+<p>To listen to another application, that application needs to send a message to the port SuperCollider is listening on. Normally the default port is 57120, but it could be something different if that port was already bound when SC started. The current default port can be retrieved with<pre class='code prettyprint lang-sc'>NetAddr.langPort;    // retrieve the current port SC is listening to</pre>
+
+<p>Or you can retrieve both the IP and the port with:<pre class='code prettyprint lang-sc'>NetAddr.localAddr    // retrieve the current IP and port</pre>
+
+<p>You can open additional ports using <a href="./../Classes/Main.html#-openUDPPort">Main: -openUDPPort</a>. This will return a <a href="./../Classes/Boolean.html">Boolean</a> indicating whether SC succeeded in opening the new port. Or you can just pass a custom port as the <strong>recvPort</strong> argument to <a href="./../Classes/OSCFunc.html">OSCFunc</a> and it will open it automatically if not already open.<pre class='code prettyprint lang-sc'>thisProcess.openUDPPort(1121); // attempt to open 1121
+thisProcess.openPorts; // list all open ports</pre>
+
+<p>To listen to incoming messages, an <a href="./../Classes/OSCFunc.html">OSCFunc</a> needs to be created in SuperCollider. If the sending application <strong>has a fixed port it sends message from</strong>, you can set the OSCFunc to listen only to messages coming from that IP and port:<pre class='code prettyprint lang-sc'>n = NetAddr.new("127.0.0.1", 7771);    // create the NetAddr
+// create the OSCresponderNode
+o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln; }, '/goodbye', n);
+o.free;    // remove the OSCFunc when you are done.</pre>
+
+<p><div class='note'><span class='notelabel'>NOTE:</span> The port 7771 above is the port the other application is sending <strong>from</strong>, not the port SC is receiving on. See the <strong>recvPort</strong> argument in <a href="./../Classes/OSCFunc.html#*new">OSCFunc: *new</a> if you want to receive on another port than NetAddr.langPort.</div><h2><a class='anchor' name='Receiving from an application that is sending from a variable port'>Receiving from an application that is sending from a variable port</a></h2>
+
+<p>Some applications (notably Pd and Max) do not send messages from a fixed port, but instead use a different port each time they send out a message, or each time a patch starts up it picks a random port. In that case the OSCFunc needs to be set up, so that it listens to messages coming from anywhere. You do this by passing nil as the srcID argument.<pre class='code prettyprint lang-sc'>o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln; }, '/goodbye'); // create the OSCresponderNode
+o.free;    // remove the OSCresponderNode when you are done.</pre>
+<h2><a class='anchor' name='Testing incoming traffic'>Testing incoming traffic</a></h2>
+
+<p>OSCFunc has a convenience method, <a href="./../Classes/OSCFunc.html#*trace">OSCFunc: *trace</a> which posts all incoming OSC messages:<pre class='code prettyprint lang-sc'>OSCFunc.trace(true); // Turn posting on
+OSCFunc.trace(false); // Turn posting off</pre>
+<h2><a class='anchor' name='Custom OSC message processing'>Custom OSC message processing</a></h2>
+
+<p>All incoming OSC messages call the message recvOSCmessage in <a href="./../Classes/Main.html">Main</a>. If needed, one can add a custom <a href="./../Classes/Function.html">Function</a> or other object to Main's recvOSCFunc variable. Although one can do this directly using the corresponding setter, it is better to use the <a href="./../Classes/Main.html#-addOSCRecvFunc">Main: -addOSCRecvFunc</a> and <a href="./../Classes/Main.html#-removeOSCRecvFunc">Main: -removeOSCRecvFunc</a> to avoid overwriting any other functions that may have been added by class code.<pre class='code prettyprint lang-sc'>// this example is basically like OSCFunc.trace but filters out
+// /status.reply messages
+(
+f = { |msg, time, addr|
+    if(msg[0] != '/status.reply') {
+        "time: % sender: %\nmessage: %\n".postf(time, addr, msg);
+    }
+};
+thisProcess.addOSCRecvFunc(f);
+);
+
+// stop posting.
+thisProcess.removeOSCRecvFunc(f);</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/OSC_communication.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/OSC_communication.schelp</a><br>link::Guides/OSC_communication::<br>sc version: 3.8dev</div></div></body></html>

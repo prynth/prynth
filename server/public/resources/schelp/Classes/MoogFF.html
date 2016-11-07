@@ -1,0 +1,64 @@
+<html><head><title>MoogFF</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Filters'>UGens>Filters</a></div>
+<h1>MoogFF</h1>
+<div id='summary'>Moog VCF implementation, designed by Federico Fontana</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/MoogFF.sc'>MoogFF.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Filter.html">Filter</a> : <a href="../Classes/PureUGen.html">PureUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/RLPF.html">RLPF</a>, <a href="./../Classes/LPF.html">LPF</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A digital implementation of the Moog VCF (filter).<a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> <a class='footnote anchor' name='footnote_org_2' href='#footnote_2'><sup>2</sup></a> <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>in</span>, <span class='argstr'>freq: 100</span>, <span class='argstr'>gain: 2</span>, <span class='argstr'>reset: 0</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>in</span>, <span class='argstr'>freq: 100</span>, <span class='argstr'>gain: 2</span>, <span class='argstr'>reset: 0</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>the input signal.<tr><td class='argumentname'>freq<td class='argumentdesc'>
+<p>the cutoff frequency.<tr><td class='argumentname'>gain<td class='argumentdesc'>
+<p>the filter resonance gain, between zero and 4.<tr><td class='argumentname'>reset<td class='argumentdesc'>
+<p>when greater than zero, this will reset the state of the digital filters at the beginning of a computational block.<tr><td class='argumentname'>mul<td class='argumentdesc'><tr><td class='argumentname'>add<td class='argumentdesc'></table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>s.boot;
+// Play it with the mouse...
+x = { MoogFF.ar(WhiteNoise.ar(01.1), MouseY.kr(100, 10000, 1), MouseX.kr(0, 4)) }.play(s);
+x.free;
+
+// Mmmm, throbby
+(
+x = {
+    MoogFF.ar(
+        Pulse.ar([40,121], [0.3,0.7]),
+        SinOsc.kr(LFNoise0.kr(0.42).range(0.001, 2.2)).range(30, 4200),
+        0.83 * 4)}.play(s);
+)
+x.free;</pre>
+<div class='footnotes'>
+<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - The design of this filter is described in the conference paper Fontana, F. (2007) <em>Preserving the Digital Structure of the Moog VCF</em>. In Proc. ICMC07, Copenhagen, 25-31 August 2007.</div><a class='anchor' name='footnote_2'/><div class='footnote'>[<a href='#footnote_org_2'>2</a>] - Original Java code created by F. Fontana - August 2007 - federico.fontana@univr.it Ported to C++ for SuperCollider by Dan Stowell</div></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/MoogFF.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/MoogFF.schelp</a><br>link::Classes/MoogFF::<br>sc version: 3.8dev</div></div></body></html>

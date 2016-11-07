@@ -1,0 +1,157 @@
+<html><head><title>Demand</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Demand'>UGens>Demand</a></div>
+<h1>Demand</h1>
+<div id='summary'>Demand results from demand rate UGens.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Demand.sc'>Demand.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Duty.html">Duty</a>, <a href="./../Classes/TDuty.html">TDuty</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>When there is a trigger at the trig input, a value is demanded each UGen in the list and output. The unit generators in the list should be 'demand' rate.
+<p>When there is a trigger at the reset input, the demand rate UGens in the list are reset.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>trig</span>, <span class='argstr'>reset</span>, <span class='argstr'>demandUGens</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>trig</span>, <span class='argstr'>reset</span>, <span class='argstr'>demandUGens</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>trig<td class='argumentdesc'>
+<p>Trigger. Can be any signal. A trigger happens when the signal changes from non-positive to positive.<tr><td class='argumentname'>reset<td class='argumentdesc'>
+<p>Trigger. Resets the list of UGens when triggered.<tr><td class='argumentname'>demandUGens<td class='argumentdesc'>
+<p>List of demand-rate UGens to get values from. When the shortest stream ends, this ugen will set the <a href="./../Classes/Done.html">'done' flag</a>.</table><h4>Discussion:</h4>
+
+<p>By design, a reset trigger only resets the demand ugens; it does not reset the value at Demand's output. Demand continues to hold its value until the next value is demanded, at which point its output value will be the first expected item in the list. To jump to the start value upon receipt of a reset trigger, one can add (+) the two triggers together:<pre class='code prettyprint lang-sc'>(
+a = { |t_trig, t_reset|
+    var    d = Demand.kr(t_trig + t_reset, t_reset, Dseries(0, 1, inf));
+    d.poll(t_trig + t_reset);
+    0.0;
+}.play
+)
+a.set(\t_trig, 1); // do this a few times -- the demand value should increase by 1 each time
+a.set(\t_reset, 1);    // goes immediately back to 0</pre>
+
+<p>One demand ugen represents a single stream of values, so that embedding the same ugen twice calls this stream twice. To isolate a demand ugen, use a function:<pre class='code prettyprint lang-sc'>{
+var a, b, t = Impulse.kr(2);
+a = { Dseq([1, 2, 3, 4, 5], inf) } * 100;
+b = a + 1;
+Demand.kr(t, 0, [a, b]).poll(t)
+}.play</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// examples
+
+(
+{
+    var trig, seq, freq;
+    trig = Impulse.kr(24);
+    seq = Drand([Dseq((1..5).mirror1, 1), Drand((4..10), 8)], 2000);
+    freq = Demand.kr(trig, 0, seq * 100);
+    SinOsc.ar(freq + [0,0.7]).cubed.cubed.scaleneg(MouseX.kr(-1,1)) * 0.1;
+}.play;
+)
+
+(
+{
+    var trig, seq, freq;
+    trig = Impulse.kr(12);
+    seq = Drand([Dseq((1..5).mirror1, 1), Drand((4..10), 8)], 2000) * Drand([1,2,4,8],2000);
+    freq = Demand.kr(trig, 0, seq * 100);
+    SinOsc.ar(freq + [0,0.7]).cubed.cubed.scaleneg(MouseX.kr(-1,1)) * 0.1;
+}.play;
+)
+
+
+
+
+(
+{
+    var freq, trig, reset, seq;
+    trig = Impulse.kr(10);
+    seq = Diwhite(60, 72, inf).midicps;
+    freq = Demand.kr(trig, 0, seq);
+    SinOsc.ar(freq + [0,0.7]).cubed.cubed * 0.1;
+}.play;
+)
+
+(
+{
+    var freq, trig, reset, seq;
+    trig = Impulse.kr(10);
+    seq = Dseq([72, 75, 79, Drand([82,84,86])], inf).midicps;
+    freq = Demand.kr(trig, 0, seq);
+    SinOsc.ar(freq + [0,0.7]).cubed.cubed * 0.1;
+}.play;
+)
+
+
+(
+{
+    var freq, trig, reset, seq;
+    trig = Impulse.kr(10);
+    seq = Dswitch1(
+        [
+            Diwhite(60, 72, inf),
+            Dseq([72, 75, 79, Drand([82,84,86])], inf)
+        ],
+        LFPulse.kr(0.2)
+    );
+    freq = Demand.kr(trig, 0, seq.midicps);
+    SinOsc.ar(freq + [0,0.7]).cubed.cubed * 0.1;
+}.play;
+)
+
+
+(
+{
+    var freq, trig, reset, seq1, seq2;
+    trig = Impulse.kr(10);
+    seq1 = Drand([72, 75, 79, 82] - 12, inf).midicps;
+    seq2 = Dseq([72, 75, 79, Drand([82,84,86])], inf).midicps;
+    freq = Demand.kr(trig, 0, [seq1, seq2]);
+    SinOsc.ar(freq + [0,0.7]).cubed.cubed * 0.1;
+}.play;
+)
+
+(
+{
+    var trig, seq;
+    trig = Impulse.kr(8);
+    seq = Drand([
+        Dseq([4,0,0,1,2,1,0,1]),
+        Dseq([4,0,2,0,1,0,1,1]),
+        Dseq([4,0,0,2,0,0,1,1]),
+        Dseq([4,0,1,2,0,1,2,0]),
+        Dseq([4,1,1,1,2,2,3,3]),
+        Dseq([4,1,0,1,0,1,0,1])
+    ], inf);
+    trig = Demand.kr(trig, 0, seq * 0.4) * trig;
+    {LPF.ar(PinkNoise.ar, 5000)}.dup * Decay.kr(trig, 0.5);
+}.play;
+)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Demand.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Demand.schelp</a><br>link::Classes/Demand::<br>sc version: 3.8dev</div></div></body></html>

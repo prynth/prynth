@@ -1,0 +1,66 @@
+<html><head><title>TermanWang</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Generators>Chaotic'>UGens>Generators>Chaotic</a></div>
+<h1>TermanWang</h1>
+<div id='summary'>Neural Oscillator</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/SLUGens/classes/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/SLUGens/classes/SLUGens.sc'>SLUGens.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/FitzHughNagumo.html">FitzHughNagumo</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div>
+<p>//SLUGens released under the GNU GPL as extensions for SuperCollider 3, by Nick Collins, <a href="http://composerprogrammer.com/index.html">http://composerprogrammer.com/index.html</a><a class='anchor' name='kw_SLUGens'>&nbsp;</a><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>NOTE: experimental, not working well
+<p>Naive Euler ODE solver implementation of a neural oscillator model by Terman and Wang (see Brown, G.J., and Wang, D. 2006. "Neural and Perceptual Modeling." In Wang, D., and Brown, G. J., eds. Computational Auditory Scene Analysis: Principles, Algorithms, and Applications. Hoboken, NJ: John Wiley and Sons/IEEE Press, p.355). 
+<p>Dx = ratex * ( 3*x - x^3 (+ 2) - y + input ) 
+<p>Dy = ratey * (eta ( alpha* (1 + tanh(x/beta)) - y ))
+<p>All parameters can have .kr rate UGens plugged in. The +2 is left out and can be added back in as part of the input. eta can also be left out as part of yrate. <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>input: 0</span>, <span class='argstr'>reset: 0</span>, <span class='argstr'>ratex: 0.01</span>, <span class='argstr'>ratey: 0.01</span>, <span class='argstr'>alpha: 1</span>, <span class='argstr'>beta: 1</span>, <span class='argstr'>eta: 1</span>, <span class='argstr'>initx: 0</span>, <span class='argstr'>inity: 0</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>input<td class='argumentdesc'>
+<p>audio rate input<tr><td class='argumentname'>reset<td class='argumentdesc'>
+<p>restart<tr><td class='argumentname'>ratex<td class='argumentdesc'>
+<p>update rate for x<tr><td class='argumentname'>ratey<td class='argumentdesc'>
+<p>update rate for y <tr><td class='argumentname'>alpha<td class='argumentdesc'><tr><td class='argumentname'>beta<td class='argumentdesc'><tr><td class='argumentname'>eta<td class='argumentdesc'>
+<p>Equation parameters<tr><td class='argumentname'>initx<td class='argumentdesc'>
+<p>reset value for u<tr><td class='argumentname'>inity<td class='argumentdesc'>
+<p>reset value for w</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>//difficult to find active parameters, forced to try resetting! 
+
+{Out.ar(0,Pan2.ar(0.5*TermanWang.ar(2.0,Impulse.kr(MouseX.kr(1,1000)),0.1,0.01,1.0,1.0,1.0,MouseX.kr(0.4,1.2), MouseY.kr(2.0,4.0)),0.0))}.play;
+
+
+{Out.ar(0,Pan2.ar(0.5*TermanWang.ar(LFNoise1.ar(LFNoise0.kr(0.5,500,500),1.0,3.0),Impulse.kr(MouseX.kr(1,10000, 'exponential')),0.01,0.01,1.0,1.0,1.0,MouseX.kr(0.4,1.2), MouseY.kr(2.0,4.0)),0.0))}.play;
+
+
+{Out.ar(0,Pan2.ar(FreeVerb.ar(0.5*TermanWang.ar(2.0+ SinOsc.ar(MouseX.kr(10,10000,'exponential'),0,MouseY.kr(0.1,100.0,'exponential')),Impulse.kr(MouseX.kr(1,10000, 'exponential')),0.01,0.01,1.0,1.0,1.0,MouseX.kr(0.4,1.2), MouseY.kr(2.0,4.0)),0.5)))}.play;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/SLUGens/HelpSource/Classes/TermanWang.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/SLUGens/HelpSource/Classes/TermanWang.schelp</a><br>link::Classes/TermanWang::<br>sc version: 3.8dev</div></div></body></html>

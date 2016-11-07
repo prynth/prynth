@@ -1,0 +1,114 @@
+<html><head><title>Array2D</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Collections>Ordered'>Collections>Ordered</a></div>
+<h1>Array2D</h1>
+<div id='summary'>two-dimensional array</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/Array2D.sc'>Array2D.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Collection.html">Collection</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Array.html">Array</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*fromArray'>fromArray</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-at'>at</a> </li>
+<li class='toc3'><a href='#-put'>put</a> </li>
+<li class='toc3'><a href='#-colsDo'>colsDo</a> </li>
+<li class='toc3'><a href='#-rowsDo'>rowsDo</a> </li>
+<li class='toc3'><a href='#-colAt'>colAt</a> </li>
+<li class='toc3'><a href='#-rowAt'>rowAt</a> </li>
+<li class='toc3'><a href='#-asArray'>asArray</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-array'>array</a> </li>
+<li class='toc3'><a href='#-cols'>cols</a> </li>
+<li class='toc3'><a href='#-do'>do</a> </li>
+<li class='toc3'><a href='#-rows'>rows</a> </li>
+<li class='toc3'><a href='#-with'>with</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Represents a two-dimensional array of data. The number of rows and columns is fixed.<div class='note'><span class='notelabel'>NOTE:</span> It is possible to implement a similar behaviour using an "array-of-arrays" - see the examples towards the bottom of this page for comparison.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>rows: 1</span>, <span class='argstr'>cols: 1</span>)</h3>
+<div class='method'>
+<p>Create an array of the specified size.<pre class='code prettyprint lang-sc'>a = Array2D.new(3,4);
+a[2,2] = 1;
+a.postln</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fromArray' href='./../Overviews/Methods.html#fromArray'>fromArray</a> (<span class='argstr'>rows</span>, <span class='argstr'>cols</span>, <span class='argstr'>array</span>)</h3>
+<div class='method'>
+<p>Build an Array2D from the supplied array.<pre class='code prettyprint lang-sc'>a = Array2D.fromArray(3,4, [9,8,7,6,5,4,3,2,1,2,3,4]);
+a[2,2] = 1;
+a.postln</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-at' href='./../Overviews/Methods.html#at'>at</a> (<span class='argstr'>row</span>, <span class='argstr'>col</span>)</h3>
+<div class='method'>
+<p>Get a value from the array.<pre class='code prettyprint lang-sc'>a.at(2,3);
+a[2,3];</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-put' href='./../Overviews/Methods.html#put'>put</a> (<span class='argstr'>row</span>, <span class='argstr'>col</span>, <span class='argstr'>val</span>)</h3>
+<div class='method'>
+<p>Put a value into the array.<pre class='code prettyprint lang-sc'>a.put(2,3, 72);
+a[2,3];</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-colsDo' href='./../Overviews/Methods.html#colsDo'>colsDo</a> (<span class='argstr'>func</span>)</h3>
+<div class='method'>
+<p>Iterate over the columns. Each column will be passed to <strong>func</strong> in turn.<pre class='code prettyprint lang-sc'>a.colsDo(_.postln);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-rowsDo' href='./../Overviews/Methods.html#rowsDo'>rowsDo</a> (<span class='argstr'>func</span>)</h3>
+<div class='method'>
+<p>Iterate over the rows. Each row will be passed to <strong>func</strong> in turn.<pre class='code prettyprint lang-sc'>a.rowsDo(_.postln);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-colAt' href='./../Overviews/Methods.html#colAt'>colAt</a> (<span class='argstr'>ci</span>)</h3>
+<div class='method'>
+<p>Retrieve a single column.<pre class='code prettyprint lang-sc'>a.colAt(2);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-rowAt' href='./../Overviews/Methods.html#rowAt'>rowAt</a> (<span class='argstr'>ri</span>)</h3>
+<div class='method'>
+<p>Retrieve a single row.<pre class='code prettyprint lang-sc'>a.rowAt(2);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-asArray' href='./../Overviews/Methods.html#asArray'>asArray</a> </h3>
+<div class='method'>
+<p>Return a flat array containing the elements.<pre class='code prettyprint lang-sc'>a.postln;
+a.asArray.postln;</pre>
+
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p><a href="./../Classes/Array.html">Array</a></div></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-array' href='./../Overviews/Methods.html#array'>array</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cols' href='./../Overviews/Methods.html#cols'>cols</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-do' href='./../Overviews/Methods.html#do'>do</a> (<span class='argstr'>func</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rows' href='./../Overviews/Methods.html#rows'>rows</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-with' href='./../Overviews/Methods.html#with'>with</a> (<span class='argstr'>aarray</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// "a" is an array-of-arrays
+a = { { 100.0.rand }.dup(100) }.dup(100);
+// "b" is an equivalent Array2D, made using the "fromArray" class method
+b = Array2D.fromArray(100,100, a.flat);
+
+// Accessing
+a[15][22]
+b[15, 22]
+
+// Speed comparison 1: random access
+bench { 100.do(a[100.rand][100.rand]) }
+bench { 100.do(b[100.rand, 100.rand]) }
+
+// Speed comparison 2: iteration
+bench { 100.do(a.do { |row| row.do { |item| item * 2 } }) }
+bench { 100.do(b.do { |item| item * 2 }) }</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Array2D.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Array2D.schelp</a><br>link::Classes/Array2D::<br>sc version: 3.8dev</div></div></body></html>

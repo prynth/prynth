@@ -1,0 +1,141 @@
+<html><head><title>Duty</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Demand'>UGens>Demand</a></div>
+<h1>Duty</h1>
+<div id='summary'>Demand results from demand rate UGens.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Demand.sc'>Demand.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/TDuty.html">TDuty</a></div>
+<div id='related'>See also: <a href="./../Classes/Demand.html">Demand</a>, <a href="./../Classes/TDuty.html">TDuty</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-canFreeSynth'>canFreeSynth</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A value is demanded of each UGen in the list and output according to a stream of duration values. The unit generators in the list should be 'demand' rate.
+<p>When there is a trigger at the reset input, the demand rate UGens in the list and the duration are reset. The reset input may also be a demand UGen, providing a stream of reset times.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>dur: 1</span>, <span class='argstr'>reset: 0</span>, <span class='argstr'>level: 1</span>, <span class='argstr'>doneAction: 0</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>dur: 1</span>, <span class='argstr'>reset: 0</span>, <span class='argstr'>level: 1</span>, <span class='argstr'>doneAction: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>dur<td class='argumentdesc'>
+<p>Time values. Can be a demand UGen or any signal. The next level is acquired after duration.<tr><td class='argumentname'>reset<td class='argumentdesc'>
+<p>Trigger or reset time values. Resets the list of UGens and the duration UGen when triggered. The reset input may also be a demand UGen, providing a stream of reset times.<tr><td class='argumentname'>level<td class='argumentdesc'>
+<p>Demand UGen providing the output values.<tr><td class='argumentname'>doneAction<td class='argumentdesc'>
+<p>A doneAction that is evaluated when the duration stream ends. See
+<p><a href="./../Reference/UGen-doneActions.html">UGen done-actions</a> for more detail.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-canFreeSynth' href='./../Overviews/Methods.html#canFreeSynth'>canFreeSynth</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc</a></div>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+    {
+        var freq;
+        freq = Duty.kr(
+                Drand([0.01, 0.2, 0.4], inf), // demand ugen as durations
+                0,
+                Dseq([204, 400, 201, 502, 300, 200], inf)
+            );
+        SinOsc.ar(freq * [1, 1.01]) * 0.1
+
+    }.play;
+)
+
+(
+    {
+        var freq;
+        freq = Duty.kr(
+                MouseX.kr(0.001, 2, 1), // control rate ugen as durations
+                0,
+                Dseq([204, 400, 201, 502, 300, 200], inf)
+            );
+        SinOsc.ar(freq * [1, 1.01]) * 0.1
+
+    }.play;
+)</pre>
+
+<p>Resetting the demand ugens:<pre class='code prettyprint lang-sc'>(
+    {
+        var freq;
+        freq = Duty.kr(
+                Dseq([0.2, 0.3, 0.4, Dseq([1, 1, 1, 2, 1, 2], inf)]) / 2,
+                Dust.kr(1), // control rate reset
+                Dseq([0, 1, 2, Dseq([1, 2, 3, 4, 5], inf)])
+            ) * 30 + 250;
+        SinOsc.ar(freq * [1, 1.01]) * 0.1
+
+    }.play;
+)
+
+(
+    {
+        var freq;
+        freq = Duty.kr(
+                Dseq([0.2, 0.3, 0.4, Dseq([1, 1, 1, 2, 1, 2], inf)]) / 2,
+                Dseq([1, 2, 4, 5], inf), // demand rate reset
+                Dseq([0, 1, 2, Dseq([1, 2, 3, 4, 5], inf)])
+            ) * 30 + 250;
+        SinOsc.ar(freq * [1, 1.01]) * 0.1
+
+    }.play;
+)</pre>
+
+<p>Demand ugen as audio oscillator:<pre class='code prettyprint lang-sc'>(
+    {
+        var a, n=5, m=64;
+        a = {
+            var x;
+            x = { 0.2.rand2 } ! m;
+            x = x ++ ({  Drand({ 0.2.rand2 } ! n) } ! m.rand);
+            Dseq(x.scramble, inf)
+        } ! n;
+        Duty.ar(
+                MouseX.kr(1, 125, 1) * SampleDur.ir * [1, 1.02],
+                0,
+                Dswitch1(a, MouseY.kr(0, n-1))
+            )
+
+    }.play;
+)</pre>
+
+<p>single sample feedback: a lin cong algorithm:<pre class='code prettyprint lang-sc'>(
+b = Buffer.alloc(s, 1);
+{
+var x, y, rate, a, c, m;
+    rate = MouseX.kr(100, SampleRate.ir);
+    a = 1.1;
+    c = 0.13;
+    m = 1.0;
+    x = Dbufrd(b); // read from buffer
+    x = x * a + c % m;
+    y = Dbufwr(x, b); // write to buffer
+    Duty.ar(1 / rate, 0, y) * 0.1;
+}.play;
+)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Duty.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Duty.schelp</a><br>link::Classes/Duty::<br>sc version: 3.8dev</div></div></body></html>

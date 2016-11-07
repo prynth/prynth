@@ -1,0 +1,414 @@
+<html><head><title>Plotter</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Accessories'>GUI>Accessories</a></div>
+<h1>Plotter</h1>
+<div id='summary'>Plot numerical data on a window or view</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>PlotView.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Reference/plot.html">plot</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Keyboard shortcuts'>Keyboard shortcuts</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Method extensions'>Method extensions</a></li>
+<ul class='toc'><li class='toc3'><a href='#.plot'>plot</a> </li>
+<li class='toc3'><a href='#.plotGraph'>plotGraph</a> </li>
+</ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Accessing Instance Variables'>Accessing Instance Variables</a></li>
+<ul class='toc'><li class='toc3'><a href='#-makeWindow'>makeWindow</a> </li>
+<li class='toc3'><a href='#-plotMode'>plotMode</a> </li>
+<li class='toc3'><a href='#-setProperties'>setProperties</a> </li>
+<li class='toc3'><a href='#-editMode'>editMode</a> </li>
+<li class='toc3'><a href='#-resolution'>resolution</a> </li>
+<li class='toc3'><a href='#-findSpecs'>findSpecs</a> </li>
+<li class='toc3'><a href='#-superpose'>superpose</a> </li>
+<li class='toc3'><a href='#-value'>value</a> </li>
+<li class='toc3'><a href='#-data'>data</a> </li>
+<li class='toc3'><a href='#-cursorPos'>cursorPos</a> </li>
+<li class='toc3'><a href='#-plots'>plots</a> </li>
+<li class='toc3'><a href='#-specs'>specs</a> </li>
+<li class='toc3'><a href='#-domainSpecs'>domainSpecs</a> </li>
+<li class='toc3'><a href='#-editFunc'>editFunc</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-bounds'>bounds</a> </li>
+<li class='toc3'><a href='#-calcDomainSpecs'>calcDomainSpecs</a> </li>
+<li class='toc3'><a href='#-calcSpecs'>calcSpecs</a> </li>
+<li class='toc3'><a href='#-domain'>domain</a> </li>
+<li class='toc3'><a href='#-draw'>draw</a> </li>
+<li class='toc3'><a href='#-drawBounds'>drawBounds</a> </li>
+<li class='toc3'><a href='#-drawFunc'>drawFunc</a> </li>
+<li class='toc3'><a href='#-editData'>editData</a> </li>
+<li class='toc3'><a href='#-editPlotIndex'>editPlotIndex</a> </li>
+<li class='toc3'><a href='#-editPos'>editPos</a> </li>
+<li class='toc3'><a href='#-getDataPoint'>getDataPoint</a> </li>
+<li class='toc3'><a href='#-gui'>gui</a> </li>
+<li class='toc3'><a href='#-interactionView'>interactionView</a> </li>
+<li class='toc3'><a href='#-makePlots'>makePlots</a> </li>
+<li class='toc3'><a href='#-maxval'>maxval</a> </li>
+<li class='toc3'><a href='#-minval'>minval</a> </li>
+<li class='toc3'><a href='#-name'>name</a> </li>
+<li class='toc3'><a href='#-normalized'>normalized</a> </li>
+<li class='toc3'><a href='#-numChannels'>numChannels</a> </li>
+<li class='toc3'><a href='#-numFrames'>numFrames</a> </li>
+<li class='toc3'><a href='#-parent'>parent</a> </li>
+<li class='toc3'><a href='#-pointIsInWhichPlot'>pointIsInWhichPlot</a> </li>
+<li class='toc3'><a href='#-postCurrentValue'>postCurrentValue</a> </li>
+<li class='toc3'><a href='#-prReshape'>prReshape</a> </li>
+<li class='toc3'><a href='#-print'>print</a> </li>
+<li class='toc3'><a href='#-refresh'>refresh</a> </li>
+<li class='toc3'><a href='#-setValue'>setValue</a> </li>
+<li class='toc3'><a href='#-updatePlotBounds'>updatePlotBounds</a> </li>
+<li class='toc3'><a href='#-updatePlotSpecs'>updatePlotSpecs</a> </li>
+<li class='toc3'><a href='#-updatePlots'>updatePlots</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Changing global defaults'>Changing global defaults</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Plot data of up to three dimensions on a <a href="./../Classes/Window.html">Window</a> or <a href="./../Classes/UserView.html">UserView</a>.<h3><a class='anchor' name='Keyboard shortcuts'>Keyboard shortcuts</a></h3>
+
+<p>When the plotter window has focus, the following keyboard shortcuts can be used to change the display:<table>
+<tr><td>+ / -<td>vertical zoom<tr><td>=<td>compare plot channels<tr><td>n<td>toggle normalize display (0..1) / (-1..1), or fit range<tr><td>s<td>toggle superposition (see: superpose)<tr><td>m<td>switch plot mode (see: <a href="./../Classes/Plotter.html#plotMode">Plotter: plotMode</a>)<tr><td>e<td>toggle editing (see: <a href="./../Classes/Plotter.html#editMode">Plotter: editMode</a>)<tr><td>g<td>toggle horizontal (domain) grid<tr><td>G<td>toggle vertical (codomain) grid<tr><td>p<td>print curve<tr><td>ctrl-+ / -<td>zoom font<tr><td>alt-click<td>post value</table>
+<h3><a class='anchor' name='Method extensions'>Method extensions</a></h3>
+
+<p>Plotter extends other classes with methods. To see what classes implements plot, see <a href="./../Overviews/Methods.html#plot">Methods: plot</a><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.plot' href='./../Overviews/Methods.html#plot'>plot</a> (args)</h3>
+<div class='method'>
+<p><pre class='code prettyprint lang-sc'>// plot array
+[1, 6, 2, -5, 2].plot;
+(0..100).normalize(0, 8pi).sin.plot;
+
+// nested arrays
+{ (0..100).normalize(0, 15.0.rand).sin }.dup(3).plot;
+{ { (0..17).normalize(0, 15.0.rand).sin }.dup(4) }.dup(3).plot;
+
+// UGen functions
+{ SinOsc.ar([700, 357]) * SinOsc.ar([400, 476]) * 0.2 }.plot;
+
+// Buffer
+Buffer.read(s, Platform.resourceDir +/+ "sounds/SinedPink.aiff").plot;
+
+// Env
+Env.perc(0.4, 0.6).plot;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>&nbsp;</span><a name='.plotGraph' href='./../Overviews/Methods.html#plotGraph'>plotGraph</a> (n,from,to,...)</h3>
+<div class='method'>
+<p><pre class='code prettyprint lang-sc'>{ |x| sin(x) }.plotGraph(300,0,2*pi);
+{ |x| sin(1/x)*x }.plotGraph(from:0.0001,to:0.2);</pre>
+</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>name</span>, <span class='argstr'>bounds</span>, <span class='argstr'>parent</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>name<td class='argumentdesc'>
+<p>Plot window title.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>The window bounds (a <a href="./../Classes/Rect.html">Rect</a>).<tr><td class='argumentname'>parent<td class='argumentdesc'>
+<p>Either a <a href="./../Classes/Window.html">Window</a> / <a href="./../Classes/View.html">View</a> may be passed in - then the plot is embedded. Otherwise a new <a href="./../Classes/Window.html">Window</a> is created.</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>(
+a = Plotter("the plot", Rect(600, 30, 800, 250));
+a.value = (0..1000).normalize(0, 14pi).curdle(0.01).scramble.flat.sin;
+)</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Accessing Instance Variables'>Accessing Instance Variables</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeWindow' href='./../Overviews/Methods.html#makeWindow'>makeWindow</a> (<span class='argstr'>argParent</span>, <span class='argstr'>argBounds</span>)</h3>
+<div class='method'>
+<p>Open given plotter in a new window or within a given composite view.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>argParent<td class='argumentdesc'>
+<p>Either a <a href="./../Classes/Window.html">Window</a> or <a href="./../Classes/View.html">View</a> may be passed in - then the plot is embedded. Otherwise a new <a href="./../Classes/Window.html">Window</a> is created.<tr><td class='argumentname'>argBounds<td class='argumentdesc'>
+<p>The window bounds (a <a href="./../Classes/Rect.html">Rect</a>).</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-plotMode' href='./../Overviews/Methods.html#plotMode'>plotMode</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-plotMode' href='./../Overviews/Methods.html#plotMode'>plotMode</a> = value</h3>
+<div class='method'>
+<p>Set the style of data display.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(symbol)<td class='argumentdesc'>
+<p>Available modes:<table>
+<tr><td><code class='code prettyprint lang-sc'>\linear</code><td>connecting data points with linear interpolation<tr><td><code class='code prettyprint lang-sc'>\points</code><td>draw data points only<tr><td><code class='code prettyprint lang-sc'>\plines</code><td>combination of lines and points<tr><td><code class='code prettyprint lang-sc'>\levels</code><td>horizontal lines<tr><td><code class='code prettyprint lang-sc'>\steps</code><td>connecting data points with step interpolation</table>
+
+<p></table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>a = (0..20).scramble.plot;
+a.plotMode = \points; a.refresh;
+a.plotMode = \plines; a.refresh;
+a.plotMode = \levels; a.refresh;
+a.plotMode = \steps; a.refresh;
+a.plotMode = \linear; a.refresh;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setProperties' href='./../Overviews/Methods.html#setProperties'>setProperties</a> ( <span class='argstr'>... pairs</span>)</h3>
+<div class='method'>
+<p>Set properties of all plot views. Defaults are taken from <code class='code prettyprint lang-sc'>GUI.skin.at(\plot);</code><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>... pairs<td class='argumentdesc'>
+<p>A list of symbol,value pairs. Supported properties:<ul>
+<li>font<li>fontColor<li>gridColorX<li>gridColorY<li>plotColor (an <a href="./../Classes/Array.html">Array</a>)<li>backgroundColor<li>gridLinePattern<li>gridLineSmoothing ( <a href="./../Classes/Boolean.html">Boolean</a> )<li>labelX<li>labelY<li>gridOnX ( <a href="./../Classes/Boolean.html">Boolean</a> )<li>gridOnY ( <a href="./../Classes/Boolean.html">Boolean</a> )</ul>
+
+<p></table><h4>Discussion:</h4>
+
+<p>Example:<pre class='code prettyprint lang-sc'>(
+a = { (0..30).scramble }.dup(2).plot;
+a.setProperties(
+    \fontColor, Color.red,
+    \plotColor, Color.blue,
+    \backgroundColor, Color.black,
+    \gridColorX, Color.white,
+    \labelX, "Humidity"
+);
+a.refresh;
+);
+
+GUI.skin.at(\plot); // defaults</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-editMode' href='./../Overviews/Methods.html#editMode'>editMode</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-editMode' href='./../Overviews/Methods.html#editMode'>editMode</a> = value</h3>
+<div class='method'>
+<p>If the edit mode is set to true, the data may be edited via cursor.<pre class='code prettyprint lang-sc'>a = (0..20).plot;
+a.editMode = true; // now edit the data by clicking into the plot..
+a.value; // the value</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-resolution' href='./../Overviews/Methods.html#resolution'>resolution</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-resolution' href='./../Overviews/Methods.html#resolution'>resolution</a> = value</h3>
+<div class='method'>
+<p>Set the number of data points displayed maximally per pixel (default: 1)<pre class='code prettyprint lang-sc'>a = (0..200).scramble.plot;
+a.resolution = 8; a.refresh; // resizing the window shows interpolation
+a.resolution = 1; a.refresh;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-findSpecs' href='./../Overviews/Methods.html#findSpecs'>findSpecs</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-findSpecs' href='./../Overviews/Methods.html#findSpecs'>findSpecs</a> = value</h3>
+<div class='method'>
+<p>If true (default: <code class='code prettyprint lang-sc'>true</code>), specs are derived from new data (using min and max values) automatically.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-superpose' href='./../Overviews/Methods.html#superpose'>superpose</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-superpose' href='./../Overviews/Methods.html#superpose'>superpose</a> = <span class='argstr'>flag</span></h3>
+<div class='method'>
+<p>If set to true, plotter displays channels on top of each other (keyboard shortcut: s)<pre class='code prettyprint lang-sc'>a = { (0..30).scramble }.dup(2).plot;
+a.superpose = true; a.refresh;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-value' href='./../Overviews/Methods.html#value'>value</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-value' href='./../Overviews/Methods.html#value'>value</a> = <span class='argstr'>arrays</span></h3>
+<div class='method'>
+<p>Return or set the data values. Data may be numerical arrays of up to 3 dimensions.<pre class='code prettyprint lang-sc'>a = [1, 4, 2, 7, 4].dup(2).plot;
+a.value;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-data' href='./../Overviews/Methods.html#data'>data</a> </h3>
+<div class='method'>
+<p>Reference to the current internal data.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-cursorPos' href='./../Overviews/Methods.html#cursorPos'>cursorPos</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the last cursorPos (a <a href="./../Classes/Point.html">Point</a>).</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-plots' href='./../Overviews/Methods.html#plots'>plots</a> </h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the single subplots (a <a href="./../Classes/Plot.html">Plot</a>).</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-specs' href='./../Overviews/Methods.html#specs'>specs</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-specs' href='./../Overviews/Methods.html#specs'>specs</a> = <span class='argstr'>argSpecs</span></h3>
+<div class='method'>
+<p>Set or get the spec for the y-axis (codomain).<pre class='code prettyprint lang-sc'>a = { (40..3000).scramble }.dup(2).plot;
+a.specs = \freq.asSpec; a.refresh;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-domainSpecs' href='./../Overviews/Methods.html#domainSpecs'>domainSpecs</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-domainSpecs' href='./../Overviews/Methods.html#domainSpecs'>domainSpecs</a> = <span class='argstr'>argSpecs</span></h3>
+<div class='method'>
+<p>Set or get the spec for the x-axis (domain).<pre class='code prettyprint lang-sc'>a = { (40..300).scramble }.dup(2).plot;
+a.domainSpecs = \freq.asSpec; a.refresh;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-editFunc' href='./../Overviews/Methods.html#editFunc'>editFunc</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-editFunc' href='./../Overviews/Methods.html#editFunc'>editFunc</a> = value</h3>
+<div class='method'>
+<p>Supply a function which is evaluated when editing data. The function is called with the arguments: <code class='code prettyprint lang-sc'>plotter</code>, <code class='code prettyprint lang-sc'>plotIndex</code>, <code class='code prettyprint lang-sc'>index</code>, <code class='code prettyprint lang-sc'>val</code>, <code class='code prettyprint lang-sc'>x</code>, <code class='code prettyprint lang-sc'>y</code>.<h4>Discussion:</h4>
+
+<p>Example:<pre class='code prettyprint lang-sc'>(
+a = { (0..10).scramble.normalize }.dup(2).plot;
+a.editMode = true;
+a.editFunc = { |...args| args.postln };
+);
+
+// using plotter as a control interface
+(
+a = (0..10).scramble.normalize(300, 400).plot;
+a.specs = \freq; a.plotMode = \points;
+a.editMode = true;
+x = { SinOsc.ar(\freq.kr(a.value)).mean * 0.1 }.play;
+a.editFunc = { |plotter, plotIndex, i, val|
+    x.setn(\freq, a.value)
+};
+a.parent.onClose = { x.release };
+);
+
+(
+a = { (0..10).scramble.normalize(300, 400) }.dup.plot;
+a.specs = \freq; a.plotMode = \levels;
+a.editMode = true;
+x = {
+    var phase = SinOsc.ar(\rate.kr(a.value[1]));
+    SinOsc.ar(\freq.kr(a.value[0]), phase).mean * 0.1
+}.play;
+a.editFunc = { |plotter, plotIndex, i, val|
+    x.setn(\freq, a.value[0]);
+    x.setn(\rate, a.value[1]);
+};
+a.parent.onClose = { x.release };
+);</pre>
+</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-calcDomainSpecs' href='./../Overviews/Methods.html#calcDomainSpecs'>calcDomainSpecs</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-calcSpecs' href='./../Overviews/Methods.html#calcSpecs'>calcSpecs</a> (<span class='argstr'>separately: true</span>, <span class='argstr'>minval</span>, <span class='argstr'>maxval</span>, <span class='argstr'>defaultRange</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-domain' href='./../Overviews/Methods.html#domain'>domain</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-domain' href='./../Overviews/Methods.html#domain'>domain</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-draw' href='./../Overviews/Methods.html#draw'>draw</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-drawBounds' href='./../Overviews/Methods.html#drawBounds'>drawBounds</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-drawFunc' href='./../Overviews/Methods.html#drawFunc'>drawFunc</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-drawFunc' href='./../Overviews/Methods.html#drawFunc'>drawFunc</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-editData' href='./../Overviews/Methods.html#editData'>editData</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-editPlotIndex' href='./../Overviews/Methods.html#editPlotIndex'>editPlotIndex</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-editPos' href='./../Overviews/Methods.html#editPos'>editPos</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getDataPoint' href='./../Overviews/Methods.html#getDataPoint'>getDataPoint</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gui' href='./../Overviews/Methods.html#gui'>gui</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-interactionView' href='./../Overviews/Methods.html#interactionView'>interactionView</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makePlots' href='./../Overviews/Methods.html#makePlots'>makePlots</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxval' href='./../Overviews/Methods.html#maxval'>maxval</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxval' href='./../Overviews/Methods.html#maxval'>maxval</a> = <span class='argstr'>val</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-minval' href='./../Overviews/Methods.html#minval'>minval</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minval' href='./../Overviews/Methods.html#minval'>minval</a> = <span class='argstr'>val</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-normalized' href='./../Overviews/Methods.html#normalized'>normalized</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-normalized' href='./../Overviews/Methods.html#normalized'>normalized</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-numChannels' href='./../Overviews/Methods.html#numChannels'>numChannels</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-numFrames' href='./../Overviews/Methods.html#numFrames'>numFrames</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-parent' href='./../Overviews/Methods.html#parent'>parent</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-parent' href='./../Overviews/Methods.html#parent'>parent</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pointIsInWhichPlot' href='./../Overviews/Methods.html#pointIsInWhichPlot'>pointIsInWhichPlot</a> (<span class='argstr'>point</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-postCurrentValue' href='./../Overviews/Methods.html#postCurrentValue'>postCurrentValue</a> (<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prReshape' href='./../Overviews/Methods.html#prReshape'>prReshape</a> (<span class='argstr'>item</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-print' href='./../Overviews/Methods.html#print'>print</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-refresh' href='./../Overviews/Methods.html#refresh'>refresh</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setValue' href='./../Overviews/Methods.html#setValue'>setValue</a> (<span class='argstr'>arrays</span>, <span class='argstr'>findSpecs: true</span>, <span class='argstr'>refresh: true</span>, <span class='argstr'>separately: true</span>, <span class='argstr'>minval</span>, <span class='argstr'>maxval</span>, <span class='argstr'>defaultRange</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-updatePlotBounds' href='./../Overviews/Methods.html#updatePlotBounds'>updatePlotBounds</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-updatePlotSpecs' href='./../Overviews/Methods.html#updatePlotSpecs'>updatePlotSpecs</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-updatePlots' href='./../Overviews/Methods.html#updatePlots'>updatePlots</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// embedding in another GUI
+(
+w = Window("plot panel", Rect(20, 30, 520, 450));
+Slider.new(w, Rect(10, 10, 490, 20)).resize_(2).action_ { |v|
+    a.value = (0..(v.value.linexp(0, 1, 5, 8000)).asInteger).scramble;
+    w.refresh;
+};
+z = CompositeView(w, Rect(10, 35, 490, 400)).background_(Color.rand(0.7)).resize_(5);
+a = Plotter("plot", parent: z).value_([0, 1, 2, 3, 4].scramble * 100);
+w.front;
+)
+
+
+(
+a = Plotter("the plot", Rect(600, 30, 600, 400));
+a.value = (0..100).normalize(0, 8pi).sin;
+)
+
+a.value = { |i| (0..90) % (i + 12) + ( (0..90) % (i + 2 * 1) ) }.dup(3);
+a.value = (0..12).squared;
+a.plotMode = \points; a.refresh;
+a.plotMode = \levels; a.refresh;
+a.plotMode = \plines; a.refresh;
+
+a.domainSpecs = [[0, 115, \lin, 1]]; a.refresh;
+
+a.parent.close; // close window
+a.makeWindow;    // open it again
+
+a.value = { (0..70).scramble }.dup(3);
+a.plotMode = \linear; a.refresh;
+a.value = { |i| (0..2000).normalize(0, 4pi + i).sin } ! 4; // lots of values, test efficiency
+a.value = { |i| (0..10000).normalize(0, 8pi + i).sin } ! 3; // lots of values, test efficiency
+a.value = { (0..140).scramble } ! 7;
+
+a.value = { |i| (0..90).normalize(0, 8pi + (i*2pi)).sin } ! 2 * [400, 560] + 700;
+a.value = { |i| (_ + 2.0.rand).dup(100).normalize(0, 8pi + i).sin } ! 2 * 400 + 700;
+
+
+// multi channel expansion of single values
+a.value = { |i| (_ + 2.0.rand).dup(100).normalize(0, 8pi + i).sin *.t [1, 2, 3] } ! 2 * 400 + 700;
+a.value = { |i| (0..10) **.t [1, 1.2, 1.3, 1.5] * (3.5 ** i) }.dup(3);
+
+a.parent.bounds = Rect(400, 100, 500, 700);
+a.parent.bounds = Rect(600, 30, 500, 300);
+
+a.superpose = true;
+a.value = { |i| (0..20) * (3.5 ** i) }.dup(5);
+a.superpose = false;
+
+// specs
+
+a.value = (50..90).midicps.scramble;
+a.specs = \freq; a.refresh;
+a.value = (1..60).scramble.neg;
+a.specs = \db; a.refresh;
+
+a.value = { |i| { exprand(1e3, (10 ** (i + 8))) }.dup(90) }.dup(3);
+a.value = { { exprand(1e3, 1e9) }.dup(90) }.dup(3);
+a.specs = [[1e3, 1e10, \exp], [1e3, 1e20, \exp], [1e3, 1e30, \exp]]; a.refresh;
+a.domainSpecs = [[0, 5], [-8, 100], [-1, 1]]; a.refresh;
+
+
+// Array:plot
+(
+a = (4 ** (-5..0)).postln.plot;
+a.specs = \delay; a.refresh;
+a.domainSpecs = [0, 10, \lin, 0, 0, " Kg"].asSpec; a.refresh;
+);
+
+a.domainSpecs = [0.1, 10, \exponential, 0, 0, " Kg"].asSpec; a.refresh;
+a.domainSpecs = [-10, 10, \lin, 0, 0, " Kg"].asSpec; a.refresh;
+
+
+a = [(0..100) * 9, (200..1300) * 2, (200..1000)/ 5].plot;
+a.superpose = true;
+
+a = [[0, 1.2, 1.5], [0, 1.3, 1.5, 1.6], [0, 1.5, 1.8, 2, 6]].midiratio.plot;
+a.plotMode = \levels; a.refresh;
+a.superpose = false;
+
+
+// Function:plot
+a = { SinOsc.ar([700, 357]) * SinOsc.ar([400, 476]) * 0.2 }.plot;
+a = { SinOsc.ar([700, 357] *0.02) * SinOsc.ar([400, 476]) * 0.3 }.plot(0.2, minval: -1);
+a = { SinOsc.ar(440) }.plot(1);
+
+
+// Env:plot
+Env.perc(0.4, 0.6).plot;
+Env.new({ 1.0.rand2 }! 8, { 1.0.rand } ! 7, \sin).plot;
+
+// Buffer:plot
+b = Buffer.read(s, Platform.resourceDir +/+ "sounds/SinedPink.aiff");
+        // Platform.resourceDir +/+ "sounds/SinedPink.aiff" contains SinOsc on left, PinkNoise on right
+b.plot;
+b.free;</pre>
+<h2><a class='anchor' name='Changing global defaults'>Changing global defaults</a></h2>
+
+<p>The default styles are kept (and may be overridden) in <code class='code prettyprint lang-sc'>GUI.skin.at(\plot)</code>. See also <a href="./../Classes/GUI.html">GUI</a> help.<pre class='code prettyprint lang-sc'>// specify plot layout
+(
+GUI.skin.plot.gridLinePattern = FloatArray[1, 0];
+GUI.skin.plot.fontColor = Color(0.5, 1, 0);
+GUI.skin.plot.gridColorX = Color.yellow(0.5);
+GUI.skin.plot.gridColorY = Color.yellow(0.5);
+GUI.skin.plot.background = Color.black;
+GUI.skin.plot.plotColor = (10..0).normalize(0.1, 1).collect { |i| Color.rand(i) };
+GUI.skin.plot.labelX = "X";
+GUI.skin.plot.labelY = "Y";
+);
+
+(
+x = { |i| (0..60).scramble.clump(8) * (3.5 ** i) }.dup(3);
+x.plot("ARRAY:PLOT", Rect(200, 300, 600, 500));
+)
+
+GUI.skin.plot.put(\plotColor, { Color.rand(0.0, 0.8) } ! 8);
+[(0..100), (20..120), (40..140)].squared.flop.bubble.plot;
+
+// reset the defaults:
+Plot.initClass;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Plotter.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Plotter.schelp</a><br>link::Classes/Plotter::<br>sc version: 3.8dev</div></div></body></html>

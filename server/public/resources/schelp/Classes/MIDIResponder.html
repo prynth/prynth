@@ -1,0 +1,96 @@
+<html><head><title>MIDIResponder</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#External Control>MIDI'>External Control>MIDI</a></div>
+<h1>MIDIResponder</h1>
+<div id='summary'>Register multiple functions to be evaluated when MIDI events occur</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/MIDIResponder.sc'>MIDIResponder.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/CCResponder.html">CCResponder</a>, <a href="../Classes/NoteOnResponder.html">NoteOnResponder</a>, <a href="../Classes/ProgramChangeResponder.html">ProgramChangeResponder</a>, <a href="../Classes/TouchResponder.html">TouchResponder</a></div>
+<div id='related'>See also: <a href="./../Classes/MIDIFunc.html">MIDIFunc</a>, <a href="./../Classes/MIDIdef.html">MIDIdef</a>, <a href="./../Classes/MIDIIn.html">MIDIIn</a>, <a href="./../Guides/MIDI.html">MIDI</a>, <a href="./../Guides/UsingMIDI.html">Using MIDI</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Creation and initialization'>Creation and initialization</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Removal'>Removal</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*removeAll'>removeAll</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-function'>function</a> </li>
+<li class='toc3'><a href='#-match'>match</a> </li>
+<li class='toc3'><a href='#-matchEvent'>matchEvent</a> </li>
+<li class='toc3'><a href='#-remove'>remove</a> </li>
+<li class='toc3'><a href='#-respond'>respond</a> </li>
+<li class='toc3'><a href='#-swallowEvent'>swallowEvent</a> </li>
+<li class='toc3'><a href='#-value'>value</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<div class='note'><span class='notelabel'>NOTE:</span> SC 3.5 added the <a href="./../Classes/MIDIFunc.html">MIDIFunc</a> and <a href="./../Classes/MIDIdef.html">MIDIdef</a> classes. These are faster, and aim to have a more convenient, logical and consistent interface, which shares a common design with <a href="./../Classes/OSCFunc.html">OSCFunc</a> and <a href="./../Classes/OSCdef.html">OSCdef</a>. They also provide support for all MIDI message types.</div>
+<p>MIDIResponder is an <em>abstract</em> class. Its subclasses allow functions to be registered to respond to midi events.
+<p>Read the general help file here and then see the individual help files.<dl>
+<dt><a href="./../Classes/CCResponder.html">CCResponder</a><dd>Respond to control messages<dt><a href="./../Classes/NoteOnResponder.html">NoteOnResponder</a><dd>Respond to note-on messages<dt><a href="./../Classes/NoteOffResponder.html">NoteOffResponder</a><dd>Respond to note-off messages<dt><a href="./../Classes/BendResponder.html">BendResponder</a><dd>Respond to pitch bend messages<dt><a href="./../Classes/TouchResponder.html">TouchResponder</a><dd>Respond to aftertouch messages<dt><a href="./../Classes/ProgramChangeResponder.html">ProgramChangeResponder</a><dd>Respond to programchange messages</dl>
+<h3><a class='anchor' name='Creation and initialization'>Creation and initialization</a></h3>
+<ul>
+<li>CCResponder(function, src, chan, num, value, install = true, swallowEvent = false)<li>NoteOnResponder(function, src, chan, num, veloc, install = true, swallowEvent = false)<li>NoteOffResponder(function, src, chan, num, veloc, install = true, swallowEvent = false)<li>BendResponder(function, src, chan, value, install = true, swallowEvent = false)<li>TouchResponder(function, src, chan, value, install = true, swallowEvent = false)<li>ProgramChangeResponder(function, src, chan, value, install = true)</ul>
+<dl>
+<dt>function<dd>The function to execute when the incoming MIDI event matches the responder. The function takes the arguments src, chan, A, B (or for Bend, ProgramChange and Touch: src, chan, value).<dt>src<dd>If a number is given, the responder will fire only for messages coming in from this port. The number may be the system UID (obtained from MIDIClient.sources[index].uid) or the index itself. If nil, the responder will match any port.<dt>chan<dd>The MIDI channel(s) to match.<dt>num<dd>The control or note number(s) to match.<dt>value<dd>The value(s) to match.<dt>veloc<dd>The velocities to match.<dt>install<dd>If true, install the responder automatically so it is active and ready to respond. If false, then it will be inactive.<dt>swallowEvent<dd>If true, then if the midi event is matched, cease testing any further responders. eg. if a CCResponder matches port, chan and num, and swallowEvent is set to true, then no further CCResponders will be offered the chance to respond to the event. The event is "swallowed". By default this is false. Note that doing this will prevent any other responders of this type from responding, including ones added behind the scenes in classes. Note also that this functionality is sensitive to the order in which responders are added.</dl>
+
+<p>Any of the matching values may be one of the following:<dl>
+<dt>Nil<dd>Match anything. eg. if chan is nil, then respond to any MIDI channel.<dt>Integer<dd>Match only this specific number.<dt>Array<dd>Match any item in the array. Any kind of <a href="./../Classes/Collection.html">Collection</a> will work here.<dt>Function<dd>Evaluate the function with the incoming value as the argument. The function should return true or false.</dl>
+
+<p>For instance, the following example would respond to note on messages from any port, channels 2 and 7 only, even numbered note numbers only, and only velocity values greater than 50.<pre class='code prettyprint lang-sc'>NoteOnResponder({ |src, chan, num, vel| [src, chan, num, vel].postln },
+    nil,    // any port
+    [2, 7],    // midi channels 2 or 7 only
+    (0, 2..126),    // this is an array of even numbers. could also be specified as { |num| num.even } or _.even
+    { |vel| vel &gt; 50 });    // velocities greater than 50</pre>
+
+<p>MIDIResponders automatically initialize the MIDIClient with 1 standard device. This means the first time you install any MIDIResponder, it will make sure that MIDI has been initialized. If you have more devices or a specific setup, simply initialize the MIDIClient yourself before using any MIDIResponders.<h3><a class='anchor' name='Removal'>Removal</a></h3>
+
+<p>Just call .remove on the responder.<pre class='code prettyprint lang-sc'>c = CCResponder({ ... }, num: 1);    // respond to any modwheel
+
+c.remove;        // stop this responder</pre>
+
+<p>Or remove all of a specific class:<pre class='code prettyprint lang-sc'>CCResponder.removeAll
+NoteOnResponder.removeAll
+NoteOffResponder.removeAll
+BendResponder.removeAll
+TouchResponder.removeAll
+ProgramChange.removeAll</pre>
+
+<p>or remove all midi responders in all classes:<pre class='code prettyprint lang-sc'>MIDIResponder.removeAll</pre>
+
+<p><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*removeAll' href='./../Overviews/Methods.html#removeAll'>removeAll</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-function' href='./../Overviews/Methods.html#function'>function</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-function' href='./../Overviews/Methods.html#function'>function</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-match' href='./../Overviews/Methods.html#match'>match</a> (<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>, <span class='argstr'>value</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-matchEvent' href='./../Overviews/Methods.html#matchEvent'>matchEvent</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-matchEvent' href='./../Overviews/Methods.html#matchEvent'>matchEvent</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-remove' href='./../Overviews/Methods.html#remove'>remove</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-respond' href='./../Overviews/Methods.html#respond'>respond</a> (<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>, <span class='argstr'>value</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-swallowEvent' href='./../Overviews/Methods.html#swallowEvent'>swallowEvent</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-swallowEvent' href='./../Overviews/Methods.html#swallowEvent'>swallowEvent</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-value' href='./../Overviews/Methods.html#value'>value</a> (<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>a</span>, <span class='argstr'>b</span>)</h3>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/MIDIResponder.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/MIDIResponder.schelp</a><br>link::Classes/MIDIResponder::<br>sc version: 3.8dev</div></div></body></html>

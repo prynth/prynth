@@ -1,0 +1,207 @@
+<html><head><title>EventStreamCleanup</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a></div>
+<h1>EventStreamCleanup</h1>
+<div id='summary'>Helper class that collects information about internal state of streams that needs to be released</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/EventStreamCleanup.sc'>EventStreamCleanup.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-addFunction'>addFunction</a> </li>
+<li class='toc3'><a href='#-update'>update</a> </li>
+<li class='toc3'><a href='#-exit'>exit</a> </li>
+<li class='toc3'><a href='#-functions'>functions</a> </li>
+<li class='toc3'><a href='#-clear'>clear</a> </li>
+<li class='toc3'><a href='#-terminate'>terminate</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-addNodeCleanup'>addNodeCleanup</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Event streams created by objects like <a href="./../Classes/Pmono.html">Pmono</a> or <a href="./../Classes/Pfx.html">Pfx</a> are special: when they start, they create some state (like a new synth) that is present over the whole period of the stream, or at least over several events. When such a stream ends, it releases this state. There are other streams, however, <strong>that may stop their input stream at any time</strong> (e.g. <a href="./../Classes/Pfindur.html">Pfindur</a> or <a href="./../Classes/Pdef.html">Pdef</a>). Them the state of any stream buried in the hierarchy of input streams must be released by them. EventStreamCleanup collects the cleanup functions and can run them when the stream is cut.<div class='note'><span class='notelabel'>NOTE:</span> So all event patterns that can end a subpattern (and streams respectively) have to use an EventStreamCleanup.</div>
+<p>Some examples of patterns that may stop an input stream and update an EventStreamCleanup:<ul>
+<li><a href="./../Classes/Pbindf.html">Pbindf</a> (stops its event stream if one of its parameter streams ends)<li><a href="./../Classes/Pfin.html">Pfin</a> (stops stream after a number of events)<li><a href="./../Classes/Pfindur.html">Pfindur</a> (stops stream after a certain elapsed time)<li><a href="./../Classes/Pdef.html">Pdef</a> (stops stream when replaced by a new one)<li><a href="./../Classes/Pset.html">Pset</a> (stops its event stream when its parameter streams ends)<li><a href="./../Classes/Pswitch1.html">Pswitch1</a> (stops all input streams after fixed number of items or when one of them ends. Not <a href="./../Classes/Pswitch.html">Pswitch</a>, which completely embeds every input stream)</ul>
+
+<p>Some examples of patterns that create state that lasts over several events. They also release the state via EventStreamCleanup:<ul>
+<li><a href="./../Classes/Pmono.html">Pmono</a> (starts one synth that it controls over time)<li><a href="./../Classes/Pfx.html">Pfx</a> (starts an effect synth that it feeds through the signals of the substreams)<li><a href="./../Classes/Pproto.html">Pproto</a> (initializes resources and keeps them available)<li><a href="./../Classes/Pspawner.html">Pspawner</a> (schedules streams and releases them after some time)</ul>
+<pre class='code prettyprint lang-sc'>// wrap a pattern in a stop condition
+(
+f = { |pat, condition|
+    Prout { |inval|
+        var stream = pat.asStream;
+        var cleanup = EventStreamCleanup.new;
+        var outval;
+        while {
+            outval = stream.next(inval);
+            outval.notNil and: { condition.value(outval) }
+        } {
+            cleanup.update(outval);
+            inval = outval.yield;
+        };
+        cleanup.exit(inval);
+    }
+
+};
+p = Plazy { Pmono(\default, \note, Pgeom(rrand(1, 1.5), rrand(1.05, 2), inf), \harmonic, [0.78, 1, 1.2], \dur, 1/rrand(4, 7), \amp, 0.4) };
+x = f.(p, { |outval| outval[\note] &lt; 20 }); // always stop at 20
+Pn(x).play; // loop it.
+);</pre>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> </h3>
+<div class='method'>
+<p>Create a new instance.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-addFunction' href='./../Overviews/Methods.html#addFunction'>addFunction</a> (<span class='argstr'>event</span>, <span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Add a new cleanup function which will be called when the stream is made to end somewhere downstreams. This is called only in patterns that create resources that need to be released (e.g. <a href="./../Classes/Pmono.html">Pmono</a> or <a href="./../Classes/Pfx.html">Pfx</a>).<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>event<td class='argumentdesc'>
+<p>The outevent that is passed on downstreams and which communicates to any stream-ending pattern what needs to be done to release the resources. <strong>It must be yielded after update!</strong><tr><td class='argumentname'>function<td class='argumentdesc'>
+<p>The function that is called for cleanup. E.g. <code class='code prettyprint lang-sc'>{ group.free }</code>.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-update' href='./../Overviews/Methods.html#update'>update</a> (<span class='argstr'>event</span>)</h3>
+<div class='method'>
+<p>For every new event, the cleanup must be updated to receive information from any input stream further up. This method is called from all streams that may stop early (e.g. <a href="./../Classes/Pmono.html">Pmono</a> or <a href="./../Classes/Pfindur.html">Pfindur</a>).<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>event<td class='argumentdesc'>
+<p>The outevent from the input stream. <strong>It must be yielded after update!</strong></table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-exit' href='./../Overviews/Methods.html#exit'>exit</a> (<span class='argstr'>event</span>, <span class='argstr'>freeNodes: true</span>)</h3>
+<div class='method'>
+<p>Run all functions that have been collected over time, adding appropriate information to the event, in case it is passed on as an inevent.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>event<td class='argumentdesc'>
+<p>The inevent that is passed through to the outer stream<tr><td class='argumentname'>freeNodes<td class='argumentdesc'>
+<p>Used internally.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>An event. In embedInStream, this event must be returned (<code class='code prettyprint lang-sc'>^cleanup.exit(inevent)</code>)</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-functions' href='./../Overviews/Methods.html#functions'>functions</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-functions' href='./../Overviews/Methods.html#functions'>functions</a> = value</h3>
+<div class='method'>
+<p>A collections of cleanup functions.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clear' href='./../Overviews/Methods.html#clear'>clear</a> </h3>
+<div class='method'>
+<p>Empty the cleanup functions, without evaluating them.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-terminate' href='./../Overviews/Methods.html#terminate'>terminate</a> (<span class='argstr'>freeNodes: true</span>)</h3>
+<div class='method'>
+<p>Run all functions that have been collected over time without adding information to an event.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>freeNodes<td class='argumentdesc'>
+<p>Used internally.</table></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-addNodeCleanup' href='./../Overviews/Methods.html#addNodeCleanup'>addNodeCleanup</a> (<span class='argstr'>event</span>, <span class='argstr'>function</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// some code from the class library
+
+// here is a pattern that can end the stream externally after a number of steps
+Pfin : FilterPattern {
+    var &lt;&gt;count;
+    *new { arg count, pattern;
+        ^super.new(pattern).count_(count)
+    }
+    storeArgs { ^[count,pattern] }
+
+    embedInStream { arg event;
+        var inevent;
+        var stream = pattern.asStream;
+        var cleanup = EventStreamCleanup.new;
+        count.value(event).do({
+            inevent = stream.next(event) ?? { ^event };
+            cleanup.update(inevent);
+            event = inevent.yield;
+        });
+        ^cleanup.exit(event)
+    }
+}
+
+// and here is a pattern that adds a resource: a bus in which the events play
+
+Pbus : FilterPattern {
+    var &lt;&gt;numChannels, &lt;&gt;rate, &lt;&gt;dur=2.0, &lt;&gt;fadeTime;
+
+    *new { arg pattern, dur=2.0, fadeTime=0.02, numChannels=2, rate=\audio;
+        ^super.new(pattern).dur_(dur).numChannels_(numChannels).rate_(rate).fadeTime_(fadeTime)
+    }
+
+    storeArgs { ^[ pattern, dur, fadeTime, numChannels, rate ] }
+
+    embedInStream { arg inevent;
+        var server, groupID, linkID, bus, ingroup, cleanup;
+        var patterns, event, freeBus, stream, cleanupEvent;
+
+        cleanup = EventStreamCleanup.new;
+        server = inevent[\server] ?? { Server.default };
+        groupID = server.nextNodeID;
+        linkID = server.nextNodeID;
+        ingroup = inevent[\group];
+
+        // could use a special event type for this:
+        if(rate == \audio) {
+            bus = server.audioBusAllocator.alloc(numChannels);
+            freeBus = { server.audioBusAllocator.free(bus) };
+        } {
+            bus = server.controlBusAllocator.alloc(numChannels);
+            freeBus = { server.controlBusAllocator.free(bus) };
+        };
+
+        CmdPeriod.doOnce(freeBus);
+
+        event = inevent.copy;
+        event[\addAction] = 0; // \addToHead
+        event[\type] = \group;
+        event[\delta] = 0;
+        event[\id] = groupID;
+        event[\group] = ingroup;
+        event.yield;
+
+        inevent = event = inevent.copy;
+
+        event[\type] = \on;
+        event[\group] = groupID;
+        event[\addAction] = 3; // \addBefore
+        event[\delta] = 0;
+        event[\id] = linkID;
+        event[\fadeTime] = fadeTime;
+        event[\instrument] = format("system_link_%_%", rate, numChannels);
+        event[\in] = bus;
+        event[\msgFunc] = #{ |out, in, fadeTime, gate=1|
+            [\out, out, \in, in, \fadeTime, fadeTime, \gate, gate, \doneAction, 3]
+        };
+
+        cleanupEvent = (type: \off, parent: event, fadeTime: fadeTime.abs, hasGate: true, gate: 0);
+
+        cleanup.addFunction(event, { | flag |
+            if(flag) { defer ( {cleanupEvent.play}, dur) };
+        });
+
+        cleanup.addFunction(event, { defer({ freeBus.value;}, fadeTime.abs + dur) });
+
+        // doneAction = 3;
+        // remove and deallocate both this synth and the preceeding node
+        // (which is the group).
+        inevent = event.yield;
+
+        // now embed the pattern
+        stream = Pchain(pattern, (group: groupID, out: bus)).asStream;
+        loop {
+            event = stream.next(inevent) ?? { ^cleanup.exit(inevent) };
+            cleanup.update(event);
+            inevent = event.yield;
+        }
+    }
+}</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/EventStreamCleanup.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/EventStreamCleanup.schelp</a><br>link::Classes/EventStreamCleanup::<br>sc version: 3.8dev</div></div></body></html>

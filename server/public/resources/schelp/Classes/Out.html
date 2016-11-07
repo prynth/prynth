@@ -1,0 +1,73 @@
+<html><head><title>Out</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>InOut'>UGens>InOut</a></div>
+<h1>Out</h1>
+<div id='summary'>Write a signal to a bus.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/InOut.sc'>InOut.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/AbstractOut.html">AbstractOut</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/OffsetOut.html">OffsetOut</a>, <a href="../Classes/ReplaceOut.html">ReplaceOut</a></div>
+<div id='related'>See also: <a href="./../Classes/OffsetOut.html">OffsetOut</a>, <a href="./../Classes/ReplaceOut.html">ReplaceOut</a>, <a href="./../Classes/XOut.html">XOut</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*numFixedArgs'>numFixedArgs</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-writesToBus'>writesToBus</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Write a signal to a bus.
+<p>Note that using the Bus class to allocate a multichannel bus simply reserves a series of adjacent bus indices with the Server object's bus allocators. abus.index simply returns the first of those indices. When using a Bus with an In or Out UGen there is nothing to stop you from reading to or writing from a larger range, or from hardcoding to a bus that has been allocated. You are responsible for making sure that the number of channels match and that there are no conflicts.<div class='note'><span class='notelabel'>NOTE:</span> Out is subject to control rate jitter. Where sample accurate output is needed, use <a href="./../Classes/OffsetOut.html">OffsetOut</a> .</div>
+<p>See the <a href="./../Reference/Server-Architecture.html">Server Architecture</a> and <a href="./../Classes/Bus.html">Bus</a> helpfiles for more information on buses and how they are used.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>bus</span>, <span class='argstr'>channelsArray</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>bus</span>, <span class='argstr'>channelsArray</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bus<td class='argumentdesc'>
+<p>The index of the bus to write out to. The lowest numbers are written to the audio hardware.<tr><td class='argumentname'>channelsArray<td class='argumentdesc'>
+<p>An Array of channels or single output to write out. You cannot change the size of this once a SynthDef has been built.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*numFixedArgs' href='./../Overviews/Methods.html#numFixedArgs'>numFixedArgs</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-writesToBus' href='./../Overviews/Methods.html#writesToBus'>writesToBus</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+SynthDef("help-out", { arg out=0, freq=440;
+    var source;
+        source = SinOsc.ar(freq, 0, 0.1);
+
+        // write to the bus, adding to previous contents
+        Out.ar(out, source);
+
+}).send(s);
+)
+
+
+Synth("help-out", [\freq, 500]);
+Synth("help-out", [\freq, 600]);
+Synth("help-out", [\freq, 700]);</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Out.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Out.schelp</a><br>link::Classes/Out::<br>sc version: 3.8dev</div></div></body></html>

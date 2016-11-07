@@ -1,0 +1,65 @@
+<html><head><title>DNoiseRing</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Demand'>UGens>Demand</a></div>
+<h1>DNoiseRing</h1>
+<div id='summary'>Demand rate implementation of a Wiard noise ring</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/DEINDUGens/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/DEINDUGens/NoiseRing.sc'>NoiseRing.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/DUGen.html">DUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Overviews/DEIND.html">DEIND</a>, <a href="./../Classes/Duty.html">Duty</a>, <a href="./../Classes/Demand.html">Demand</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Demand rate implementation of a Wiard noise ring.
+<p><em>In latter model synthesizers, digital noise sources began to appear in place of analog ones. Traditionally, a psuedo-random shift register set up for optimal length. By optimal length, it is meant that every state of all available bits will appear at some time, but the order is unknown. Essentially a counter that counts in an unknown order. This represents the maximum state of information "entropy" available for that number of bits. But music has close self-similarity over short periods of time. That is, it repeats itself with changes appearing slowly. This shift register generator is designed to give control of the rate of appearance of new information. It has a tight set of controls over how random it actually is and how fast change occurs.</em>(text from <a href="http://mamonu.weebly.com/wiard-noisering.html)">http://mamonu.weebly.com/wiard-noisering.html)</a>
+<p>Developed as part of the <a href="./../Overviews/DEIND.html">DEIND</a> project.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>change: 0.5</span>, <span class='argstr'>chance: 0.5</span>, <span class='argstr'>shift: 1</span>, <span class='argstr'>numBits: 8</span>, <span class='argstr'>resetval: 0</span>)</h3>
+<div class='method'>
+<p>change = 0.5, chance = 0.5, shift = 1, numBits = 8, resetval = 0;<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>change<td class='argumentdesc'>
+<p>The higher change, the greater the chance for a new value<tr><td class='argumentname'>chance<td class='argumentdesc'>
+<p>The higher chance, the greater the chance the new value is HIGH<tr><td class='argumentname'>shift<td class='argumentdesc'>
+<p>not yet implemented.<tr><td class='argumentname'>numBits<td class='argumentdesc'>
+<p>not yet implemented.<tr><td class='argumentname'>resetval<td class='argumentdesc'>
+<p>Initial value</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Demand rate UGen.</div></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>Plot<pre class='code prettyprint lang-sc'>{
+Demand.ar(Impulse.ar(1000), 0, DNoiseRing(change: 0.1, numBits: 32)) * (2**32).reciprocal
+}.plot(1)</pre>
+
+<p>Plain 32bit value scaled to 0..1 and out of the speaker<pre class='code prettyprint lang-sc'>{Demand.ar(Impulse.ar(10000), 0, DNoiseRing(change: MouseX.kr(0, 1), chance: 0.51, numBits: 32)) * (2**32).reciprocal}.play</pre>
+
+<p>As a sequencer<pre class='code prettyprint lang-sc'>{
+var freq = (Demand.ar(Impulse.ar(10), 0, DNoiseRing(change: MouseX.kr(0, 1), chance: MouseY.kr(0, 1), numBits: 32))).linlin(0, 2**32, 40, 40+48).midicps.poll;
+    
+    SinOsc.ar(freq)!2
+}.play</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/DEINDUGens/HelpSource/Classes/DNoiseRing.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/DEINDUGens/HelpSource/Classes/DNoiseRing.schelp</a><br>link::Classes/DNoiseRing::<br>sc version: 3.8dev</div></div></body></html>

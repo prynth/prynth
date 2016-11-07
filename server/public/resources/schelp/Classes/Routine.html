@@ -1,0 +1,347 @@
+<html><head><title>Routine</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Core>Kernel'>Core>Kernel</a></div>
+<h1>Routine</h1>
+<div id='summary'>Functions that can return in the middle and then resume where they left off</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Core/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Core/Thread.sc'>Thread.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Thread.html">Thread</a> : <a href="../Classes/Stream.html">Stream</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/FuncStreamAsRoutine.html">FuncStreamAsRoutine</a></div>
+<div id='related'>See also: <a href="./../Classes/Stream.html">Stream</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*run'>run</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-next'>next</a> </li>
+<li class='toc3'><a href='#-value'>value</a> </li>
+<li class='toc3'><a href='#-resume'>resume</a> </li>
+<li class='toc3'><a href='#-stop'>stop</a> </li>
+<li class='toc3'><a href='#-reset'>reset</a> </li>
+<li class='toc3'><a href='#-play'>play</a> </li>
+<li class='toc3'><a href='#-awake'>awake</a> </li>
+<li class='toc2'><a href='#Accessible instance variables'>Accessible instance variables</a></li>
+<ul class='toc'><li class='toc3'><a href='#-beats'>beats</a> </li>
+<li class='toc3'><a href='#-seconds'>seconds</a> </li>
+<li class='toc3'><a href='#-clock'>clock</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-p'>p</a> </li>
+<li class='toc3'><a href='#-prStart'>prStart</a> </li>
+<li class='toc3'><a href='#-prStop'>prStop</a> </li>
+<li class='toc3'><a href='#-run'>run</a> </li>
+<li class='toc3'><a href='#-valueArray'>valueArray</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A Routine runs a <a href="./../Classes/Function.html">Function</a> and allows it to be suspended in the middle and be resumed again where it left off. This functionality is supported by the Routine's superclass <a href="./../Classes/Thread.html">Thread</a>. Effectively, Routines can be used to implement co-routines as found in Scheme and some other languages.
+<p>A Routine is <strong>started</strong> the first time <a href="#-next">-next</a> is called, which will run the Function from the beginning. It is <strong>suspended</strong> when it "yields" (using <a href="./../Classes/Object.html#-yield">Object: -yield</a> within the Function), and then <strong>resumed</strong> using <a href="#-next">-next</a> again. When the Function returns, the Routine is considered <strong>stopped</strong>, and calling <a href="#-next">-next</a> will have no effect - unless the Routine is <strong>reset</strong> using <a href="#-reset">-reset</a>, which will rewind the Function to the beginning. You can stop a Routine before its Function returns using <a href="#-stop">-stop</a>.
+<p>When a Routine is <strong>scheduled</strong> on a <a href="./../Classes/Clock.html">Clock</a> (e.g. using <a href="#-play">-play</a>), it will be started or resumed at the scheduled time. The value yielded by the Routine will be used as the time difference for rescheduling the Routine. (See <a href="#-awake">-awake</a>).
+<p>Since Routine inherits from <a href="./../Classes/Thread.html">Thread</a>, it has its own associated <a href="./../Classes/Thread.html#-beats">logical time</a>, etc. When a Routine is started or resumed, it becomes the <a href="./../Classes/Thread.html#.thisThread">current thread</a>.
+<p>Routine also inherits from <a href="./../Classes/Stream.html">Stream</a>, and thus shares its ability to be combined using math operations and "filtered".<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>func</span>, <span class='argstr'>stackSize: 512</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Thread.html'>Thread</a></div>
+<div class='method'>
+<p>Creates an instance of Routine, passing it the Function with code to run.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A Function with code for the Thread to run.<tr><td class='argumentname'>stackSize<td class='argumentdesc'>
+<p>Call stack size (an Integer).</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>a = Routine.new({ 1.yield; 2.yield; });
+a.next.postln;
+a.next.postln;
+a.next.postln;</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*run' href='./../Overviews/Methods.html#run'>run</a> (<span class='argstr'>func</span>, <span class='argstr'>stackSize</span>, <span class='argstr'>clock</span>, <span class='argstr'>quant</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-next' href='./../Overviews/Methods.html#next'>next</a> (<span class='argstr'>inval</span>)</h3>
+<div class='method'>
+<p>This method performs differently according to the Routine's state:<ul>
+<li>Starts the Routine, if it has not been started yet or it has been <a href="#-reset">reset</a>; i.e runs its Function from the beginning, passing on the <code class='code prettyprint lang-sc'>inval</code> argument.<li>Resumes the Routine, if it has been suspended (it has yielded); i.e. resumes its Function from the point where <a href="./../Classes/Object.html#-yield">yield</a> was called on an Object, passing the <code class='code prettyprint lang-sc'>inval</code> argument as the return value of <code class='code prettyprint lang-sc'>yield</code>.<li>Does nothing if the Routine has stopped (because its Function has returned, or <a href="#-stop">-stop</a> has been called).</ul>
+
+<p>Since Routine inherits from <a href="./../Classes/Thread.html">Thread</a>, it will become the <em>current thread</em> when it is started or resumed; i.e. <a href="./../Classes/Thread.html#.thisThread">thisThread</a> used in the Routine Function will return the Routine. It will inherit the parent thread's logical time and clock (see <a href="./../Classes/Thread.html#-parent">Thread: -parent</a>).
+<p>Synonyms for <code class='code prettyprint lang-sc'>next</code> are <a href="#-value">-value</a> and <a href="#-resume">-resume</a>.<h4>Returns:</h4>
+<div class='returnvalue'><ul>
+<li>Either the value that the Routine yields (the Object on which <a href="./../Classes/Object.html#-yield">yield</a> is called within the Routine Function),<li>...or <code class='code prettyprint lang-sc'>nil</code>, if the Routine has stopped.</ul>
+</div><h4>Discussion:</h4>
+
+<p>When a Routine is started by a call to this method (or one of its synonyms), the method's argument is passed on as the argument to the Routine Function:<pre class='code prettyprint lang-sc'>Routine { arg inval;
+    inval.postln;
+}.value("hello routine");</pre>
+
+<p>After the Routine has yielded (it has been suspended at the point in its Function where <code class='code prettyprint lang-sc'>yield</code> is called on an Object), a call to this method (or its synonyms) resumes executing the Function and the argument to this method becomes the return value of <code class='code prettyprint lang-sc'>yield</code>. To access that value within the Function, you have to assign it to a variable - typically, the argument of the Function is reused:<pre class='code prettyprint lang-sc'>(
+r = Routine { arg inval;
+    inval.postln;
+    inval = 123.yield;
+    inval.postln;
+}
+)
+
+r.value("hello routine");
+r.value("goodbye routine");</pre>
+
+<p>Typically, a Routine yields multiple times, and each time the result of the yield is reassigning to the argument of its Function.<pre class='code prettyprint lang-sc'>(
+r = Routine { arg inval;
+    inval.postln; // Post the value passed in when started.
+    5.do { arg i;
+        inval = (i + 10).yield;
+        inval.postln; // Post the value passed in when resumed.
+    }
+}
+)
+(
+5.do {
+    r.value("hello routine").postln; // Post the value that the Routine yields.
+}
+)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-value' href='./../Overviews/Methods.html#value'>value</a> (<span class='argstr'>inval</span>)</h3>
+<div class='method'>
+<p>Equivalent to <a href="#-next">-next</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-resume' href='./../Overviews/Methods.html#resume'>resume</a> (<span class='argstr'>inval</span>)</h3>
+<div class='method'>
+<p>Equivalent to <a href="#-next">-next</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-stop' href='./../Overviews/Methods.html#stop'>stop</a> </h3>
+<div class='method'>
+<p>Equivalent to the Routine Function reaching its end or returning: after this, the Routine will never run again (the <a href="#-next">-next</a> method has no effect and returns <code class='code prettyprint lang-sc'>nil</code>), unless <a href="#-reset">-reset</a> is called.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-reset' href='./../Overviews/Methods.html#reset'>reset</a> </h3>
+<div class='method'>
+<p>Causes the Routine to start from the beginning next time <a href="#-next">-next</a> is called.<h4>Discussion:</h4>
+
+<p>If a Routine is stopped (its Function has returned or <a href="#-stop">-stop</a> has been called), it will never run again (the <a href="#-next">-next</a> method has no effect and returns <code class='code prettyprint lang-sc'>nil</code>), unless this method is called.
+<p>A Routine cannot reset itself, except by calling <a href="./../Classes/Object.html#-yieldAndReset">Object: -yieldAndReset</a>.
+<p>See also: <a href="./../Classes/Object.html#-yield">Object: -yield</a>, <a href="./../Classes/Object.html#-alwaysYield">Object: -alwaysYield</a></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-play' href='./../Overviews/Methods.html#play'>play</a> (<span class='argstr'>clock</span>, <span class='argstr'>quant</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Stream.html'>Stream</a></div>
+<div class='method'>
+<p>In the SuperCollider application, a Routine can be played using a <a href="./../Classes/Clock.html">Clock</a>, as can any <a href="./../Classes/Stream.html">Stream</a>. every time the Routine yields, it should do so with a float, the clock will interpret that, usually pausing for that many seconds, and then resume the routine, passing it the clock's current time.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>clock<td class='argumentdesc'>
+<p>a Clock, TempoClock by default<tr><td class='argumentname'>quant<td class='argumentdesc'>
+<p>see the <a href="./../Classes/Quant.html">Quant</a> helpfile</table><h4>Discussion:</h4>
+
+<p>using <a href="./../Classes/Object.html#idle">Object:idle</a> within a routine, return values until this time is over. Time is measured relative to the thread's clock.<pre class='code prettyprint lang-sc'>// for 6 seconds, return 200, then continue
+(
+r = Routine {
+        199.yield;
+        189.yield;
+        200.idle(6);
+        199.yield;
+        189.yield;
+};
+
+fork {
+    loop {
+        r.value.postln;
+        1.wait;
+    }
+}
+);
+
+// the value can also be a stream or a function
+(
+r = Routine {
+        199.yield;
+        189.yield;
+        Routine { 100.do { |i| i.yield } }.idle(6);
+        199.yield;
+        189.yield;
+};
+
+fork {
+    loop {
+        r.value.postln;
+        1.wait;
+    }
+}
+);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-awake' href='./../Overviews/Methods.html#awake'>awake</a> (<span class='argstr'>inBeats</span>, <span class='argstr'>inSeconds</span>, <span class='argstr'>inClock</span>)</h3>
+<div class='method'>
+<p>This method is called by a <a href="./../Classes/Clock.html">Clock</a> on which the Routine was scheduled when its scheduling time is up. It calls <a href="#-next">-next</a>, passing on the scheduling time in beats as an argument. The value returned by <code class='code prettyprint lang-sc'>next</code> (the value yielded by the Routine) will in turn be returned by this method, thus determining the time which the Routine will be rescheduled for.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>inBeats<td class='argumentdesc'>
+<p>The scheduling time in beats. This is equal to the current logical time (<a href="./../Classes/Thread.html#-beats">Thread: -beats</a>).<tr><td class='argumentname'>inSeconds<td class='argumentdesc'>
+<p>The scheduling time in seconds. This is equal to the current logical time (<a href="./../Classes/Thread.html#-seconds">Thread: -seconds</a>).<tr><td class='argumentname'>inClock<td class='argumentdesc'>
+<p>The clock which awoke the Routine.</table></div><h3><a class='anchor' name='Accessible instance variables'>Accessible instance variables</a></h3>
+
+<p>Routine inherits from <a href="./../Classes/Thread.html">Thread</a>, which allows access to some of its state:<pre class='code prettyprint lang-sc'>(
+r = Routine { arg inval;
+    loop {
+        // thisThread refers to the routine.
+        postf("beats: % seconds: % time: % \n",
+            thisThread.beats, thisThread.seconds, Main.elapsedTime
+        );
+        1.0.yield;
+
+    }
+}.play;
+)
+
+r.stop;
+r.beats;
+r.seconds;
+r.clock;</pre>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-beats' href='./../Overviews/Methods.html#beats'>beats</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-beats' href='./../Overviews/Methods.html#beats'>beats</a> = <span class='argstr'>inBeats</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Thread.html'>Thread</a></div>
+<div class='method'>
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The elapsed beats (logical time) of the routine. The beats do not proceed when the routine is not playing.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-seconds' href='./../Overviews/Methods.html#seconds'>seconds</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-seconds' href='./../Overviews/Methods.html#seconds'>seconds</a> = <span class='argstr'>inSeconds</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Thread.html'>Thread</a></div>
+<div class='method'>
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The elapsed seconds (logical time) of the routine. The seconds do not proceed when the routine is not playing, it is the converted beat value.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clock' href='./../Overviews/Methods.html#clock'>clock</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-clock' href='./../Overviews/Methods.html#clock'>clock</a> = <span class='argstr'>inClock</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Thread.html'>Thread</a></div>
+<div class='method'>
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The thread's clock. If it has not played, it is the SystemClock.</div></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-p' href='./../Overviews/Methods.html#p'>p</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prStart' href='./../Overviews/Methods.html#prStart'>prStart</a> (<span class='argstr'>inval</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prStop' href='./../Overviews/Methods.html#prStop'>prStop</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-run' href='./../Overviews/Methods.html#run'>run</a> (<span class='argstr'>inval</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-valueArray' href='./../Overviews/Methods.html#valueArray'>valueArray</a> (<span class='argstr'>inval</span>)</h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+var r, outval;
+r = Routine.new({ arg inval;
+    ("-&gt;inval was " ++ inval).postln;
+    inval = 1.yield;
+    ("-&gt;inval was " ++ inval).postln;
+    inval = 2.yield;
+    ("-&gt;inval was " ++ inval).postln;
+    inval = 99.yield;
+});
+
+outval = r.next('a');
+("&lt;-outval was " ++ outval).postln;
+outval = r.next('b');
+("&lt;-outval was " ++ outval).postln;
+r.reset; "reset".postln;
+outval = r.next('c');
+("&lt;-outval was " ++ outval).postln;
+outval = r.next('d');
+("&lt;-outval was " ++ outval).postln;
+outval = r.next('e');
+("&lt;-outval was " ++ outval).postln;
+outval = r.next('f');
+("&lt;-outval was " ++ outval).postln;
+)</pre>
+<pre class='code prettyprint lang-sc'>// wait
+
+(
+var r;
+r = Routine {
+    10.do({ arg a;
+        a.postln;
+        // Often you might see Wait being used to pause a routine
+        // This waits for one second between each number
+        1.wait;
+    });
+    // Wait half second before saying we're done
+    0.5.wait;
+    "done".postln;
+}.play;
+)</pre>
+<pre class='code prettyprint lang-sc'>// waitUntil
+
+(
+var r;
+r = Routine {
+    var times = { rrand(1.0, 10.0) }.dup(10) + thisThread.beats;
+    times = times.sort;
+    times.do({ arg a;
+        waitUntil(a);
+        a.postln;
+    });
+    // Wait half second before saying we're done
+    0.5.wait;
+    "done".postln;
+}.play;
+)</pre>
+<pre class='code prettyprint lang-sc'>// Using Routine to set button states on the fly.
+(
+var update, w, b;
+w = SCWindow.new("State Window", Rect(150,SCWindow.screenBounds.height-140,380,60));
+
+// a convenient way to set the button label
+update = {
+    |but, string| but.states = [[string.asString, Color.black, Color.red]];
+    but.refresh;
+};
+
+b = SCButton(w, Rect(10,10,360,40));
+b.font_(Font("Impact", 24));
+
+update.value(b, "there is only one state");
+
+// if an action should do something different each time it is called, a routine is the
+// right thing to use. This is better than creating variables outside and setting them
+// from the action function to keep state from one action to the next
+
+b.action_(Routine { |butt|
+    rrand(15, 45).do { |i|
+        update.value(butt, "%. there is still only 1 state".format(i + 2));
+        0.yield; // stop here
+    };
+    w.close;
+});
+
+w.front;
+)</pre>
+<pre class='code prettyprint lang-sc'>// drawing in a window dynamcially with Pen
+(
+var w, much = 0.02, string, synth;
+
+w = Window.new("swing", Rect(100, 100, 300, 500)).front;
+w.view.background_(Color.new255(153, 255, 102).vary);
+
+string = "swing ".dup(24).join;
+
+w.drawFunc = Routine {
+    var i = 0;
+    var size = 40;
+    var func = { |i, j| sin(i * 0.07 + (j * 0.0023) + 1.5pi) * much + 1 };
+    var scale;
+    Pen.font = Font("Helvetica-Bold", 40);
+    loop {
+        i = i + 1;
+        string.do {    |char, j|
+
+            scale = func.value(i, j).dup(6);
+
+            Pen.fillColor = Color.new255(0, 120, 120).vary;
+            Pen.matrix = scale * #[1, 0, 0, 1, 1, 0];
+            Pen.stringAtPoint(char.asString,
+                ((size * (j % 9)) - 10) @ (size * (j div: 9))
+            );
+        };
+        0.yield // stop here, return something unimportant
+    }
+};
+
+fork { while { w.isClosed.not } { defer { w.refresh }; 0.04.wait; } };
+
+w.front;
+
+)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Routine.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Routine.schelp</a><br>link::Classes/Routine::<br>sc version: 3.8dev</div></div></body></html>

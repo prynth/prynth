@@ -1,0 +1,122 @@
+<html><head><title>Messages</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider REFERENCE</div>
+<div id='categories'><a href='./../Browse.html#Language>OOP'>Language>OOP</a></div>
+<h1>Messages</h1>
+<div id='summary'>Method calls, sending messages to objects</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Reference/Classes.html">Classes</a>, <a href="./../Classes/Class.html">Class</a>, <a href="./../Classes/Object.html">Object</a>, <a href="./../Guides/Intro-to-Objects.html">Introduction to Objects</a>, <a href="./../Guides/Polymorphism.html">Polymorphism</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Binary operator messages'>Binary operator messages</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Operator Precedence'>Operator Precedence</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Functional notation messages'>Functional notation messages</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Receiver notation messages'>Receiver notation messages</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Default Argument Values'>Default Argument Values</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Keyword Arguments'>Keyword Arguments</a></li>
+<ul class='toc'><li class='toc2'><a href='#Cost of using keyword arguments'>Cost of using keyword arguments</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Introduction'>Introduction</a></h2>
+
+<p>Sending messages is the way things get done in an object oriented language. A message consists of a message selector which names the type of operation, a receiver to which the message is sent and in some cases a list of arguments which give additional information pertaining to the operation. A message always returns a result. The kind of result depends on the kind of message. In the default case, the return value is the receiver itself.
+<p>Messages may be written using binary operators, functional notation or receiver notation.<h2><a class='anchor' name='Binary operator messages'>Binary operator messages</a></h2>
+
+<p>A binary operator selector is any string of characters from the list of legal binary operator characters:<pre class='code prettyprint lang-sc'>! @ % &amp; * - + = | &lt; &gt; ? /</pre>
+
+<p>An exception is that no operator may begin with <code class='code prettyprint lang-sc'>//</code> or <code class='code prettyprint lang-sc'>/*</code> which are comment delimiters.
+<p>A binary operator expression consists of two expressions with a binary operator between them.<pre class='code prettyprint lang-sc'>1 + 2        // sum of one and two
+a - b        // difference of a and b
+x &lt; 0.0        // answer whether x is less than zero</pre>
+
+<p>A binary operator can also be an identifier followed by a colon.<pre class='code prettyprint lang-sc'>10 rrand: 100</pre>
+<h2><a class='anchor' name='Operator Precedence'>Operator Precedence</a></h2>
+
+<p>There is none. All binary operators have the same level of precedence and associate from left to right. For example, the expression:<pre class='code prettyprint lang-sc'>a * b + c * d</pre>
+
+<p>is equivalent to:<pre class='code prettyprint lang-sc'>((a * b) + c) * d</pre>
+
+<p>and not:<pre class='code prettyprint lang-sc'>(a * b) + (c * d)</pre>
+
+<p>Therefore it is usually better style to fully parenthesize your expressions.<h2><a class='anchor' name='Functional notation messages'>Functional notation messages</a></h2>
+
+<p>The message selector preceeds the parenthesized argument list. The first argument in the list is actually the receiver.<pre class='code prettyprint lang-sc'>sin(x)      // sine of x
+max(a, b)   // maximum of a and b</pre>
+<h2><a class='anchor' name='Receiver notation messages'>Receiver notation messages</a></h2>
+
+<p>A method call in functional notation may be converted to receiver notation by putting the receiver before the method name followed by a dot as shown below.<pre class='code prettyprint lang-sc'>max(a, b)
+
+// is equivalent to:
+
+a.max(b)
+
+// and
+
+sin(x)
+
+// is equivalent to:
+
+x.sin</pre>
+
+<p>another example:<pre class='code prettyprint lang-sc'>g(f(a, b), c)
+
+// is equivalent to:
+
+g(a.f(b), c)
+
+// is equivalent to:
+
+f(a, b).g(c)
+
+// is equivalent to:
+
+a.f(b).g(c)</pre>
+<h2><a class='anchor' name='Default Argument Values'>Default Argument Values</a></h2>
+
+<p>You may call a function or method with more or fewer arguments than it was declared to accept. If fewer arguments are passed, those arguments not passed are set to a default value if one is given in the method or function definition, or otherwise to nil. If too many arguments are passed, the excess arguments are either collected into an Array or ignored depending on whether or not the function or method has an ellipsis argument (explained in <a href="./../Reference/Functions.html">Functions</a>). When calling a method or function with zero arguments you can omit the parentheses:<pre class='code prettyprint lang-sc'>// x is declared to take two arguments a and b which default to 1 and 2 respectively.
+// It returns their sum. This syntax will be explained in the section on Functions.
+x = { arg a=1, b=2; a + b };
+
+z = x.value;            // z is set to 3. (a defaults to 1, b defaults to 2)
+z = x.value(10);        // z is set to 12. (a is 10, b defaults to 2)
+z = x.value(10, 5);     // z is set to 15. (a is 10, b is 5)
+z = x.value(10, 5, 9);  // z is set to 15. (a is 10, b is 5, 9 is ignored)</pre>
+<h2><a class='anchor' name='Keyword Arguments'>Keyword Arguments</a></h2>
+
+<p>Arguments to Methods may be specified by the name by which they are declared in a method's definition. Such arguments are called keyword arguments. Any argument may be passed as a keyword argument except for the receiver <code class='code prettyprint lang-sc'>this</code>. Keyword arguments must come after any normal (aka <em>positional</em>) arguments, and may be specified in any order. If a keyword is specified and there is no matching argument then it is ignored and a warning will be printed. This warning may be turned off globally by making the following call:<pre class='code prettyprint lang-sc'>keywordWarnings(false)</pre>
+
+<p>If a keyword argument and a positional argument specify the same argument, then the keyword argument value overrides the positional argument value.
+<p>For example the <code class='code prettyprint lang-sc'>ar</code> class method of the SinOsc class takes arguments named freq, phase, mul, and add in that order. All of the following are legal calls to that method.<pre class='code prettyprint lang-sc'>SinOsc.ar(800, pi, 0.2, 0); // all normal arguments: freq, phase, mul, add
+
+// freq = 800, mul = 0.2, others get default values.
+SinOsc.ar(800, mul: 0.2);
+
+// freq = 800, phase = pi, mul = 0.2, add gets its default value of zero.
+SinOsc.ar(phase: pi, mul: 0.2, freq: 800);
+
+// keyword value of 1200 overrides the positional arg value of 800
+SinOsc.ar(800, freq: 1200);</pre>
+
+<p><pre class='code prettyprint lang-sc'>SinOsc.ar(zorg: 999); // invalid keyword prints warning</pre>
+
+<p>The arguments to a Function may also be specified by keyword arguments when using the 'value' message.<pre class='code prettyprint lang-sc'>// function args may be specified by keyword.
+{ arg a=1, b=2, c=3; [a, b, c].postln }.value(b: 7, c: 8);</pre>
+
+<p>You may also use keyword arguments when using the 'perform' method.<pre class='code prettyprint lang-sc'>SinOsc.perform('ar', phase: pi, mul: 0.2, freq: 800);</pre>
+
+<p><h3><a class='anchor' name='Cost of using keyword arguments'>Cost of using keyword arguments</a></h3>
+
+<p>When using keyword arguments there is a runtime cost to do the matching that you should be aware of. The cost can be worth the convenience when speed is not critical.<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/Messages.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/Messages.schelp</a><br>link::Reference/Messages::<br>sc version: 3.8dev</div></div></body></html>

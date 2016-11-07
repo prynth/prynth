@@ -1,0 +1,220 @@
+<html><head><title>Writing Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider GUIDES</div>
+<div id='categories'><a href='./../Browse.html#HelpSystem'>HelpSystem</a></div>
+<h1>Writing Help</h1>
+<div id='summary'>Get started with writing help</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Reference/SCDocSyntax.html">SCDoc Syntax</a>, <a href="./../Classes/SCDoc.html">SCDoc</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Writing new help'>Writing new help</a></li>
+<ul class='toc'><li class='toc2'><a href='#News in SC 3.5.2'>News in SC 3.5.2</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Documenting new classes'>Documenting new classes</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Converting old helpfiles'>Converting old helpfiles</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Directory layout'>Directory layout</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Document header'>Document header</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Normal documents'>Normal documents</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Class reference'>Class reference</a></li>
+<ul class='toc'><li class='toc2'><a href='#Methods and arguments'>Methods and arguments</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Copy methods from other class'>Copy methods from other class</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Redirect classes'>Redirect classes</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Example'>Example</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Categories'>Categories</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Cross-document linking'>Cross-document linking</a></li>
+<ul class='toc'><li class='toc2'><a href='#Methods'>Methods</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Making the document findable by Search'>Making the document findable by Search</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Extensions'>Extensions</a></li>
+<ul class='toc'><li class='toc2'><a href='#Quarks and extensions'>Quarks and extensions</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Method extensions'>Method extensions</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Links'>Links</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Contributing with the documentation'>Contributing with the documentation</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Writing new help'>Writing new help</a></h2>
+
+<p>The simplest way is to look at an existing help file or class document, and read this document and <a href="./../Reference/SCDocSyntax.html">SCDoc Syntax</a><div class='note'><span class='notelabel'>NOTE:</span> The help files should use UTF-8 encoding!</div><h3><a class='anchor' name='News in SC 3.5.2'>News in SC 3.5.2</a></h3>
+
+<p>SCDoc has been rewritten and the parser is now implemented in C++ for speed and stability. The syntax has gotten stricter, and it will throw errors or warnings if there are faults in the documentation.
+<p>Some important changes to keep in mind:<ul>
+<li>Linking to sections does no longer use lower_case_and_underscored anchors, but the exact section title as it is. Example: <code>link::#Language-side news::</code> renders: <a href="#Language-side news">Language-side news</a><li>Run <code class='code prettyprint lang-sc'>SCDoc.indexAllDocuments</code> if you add a new document or other file and want to see the change reflected in the help. If you just changed a document and want to see the changes, just press Reload in the browser and SCDoc will detect and re-index automatically.<li>The <code>CLASS::</code> tag is deprecated, just use <code>TITLE::</code> instead also for class reference docs.<li>The argument name given to the <code>ARGUMENT::</code> tag is now optional. If not given, SCDoc will auto-fill the real argument name.</ul>
+<h3><a class='anchor' name='Documenting new classes'>Documenting new classes</a></h3>
+
+<p>When you navigate to an undocumented class, it will contain an schelp template that can be filled in and saved to HelpSource/Classes/ClassName.schelp.<h2><a class='anchor' name='Converting old helpfiles'>Converting old helpfiles</a></h2>
+
+<p>There is no automated process for this, but for most help files it's really simple to do it manually:<ol>
+<li>open the old helpfile in your web browser<li>copy the text and insert it in a new textfile: FileName.schelp<li>add the appropriate tags, like title, sections, etc.. (see below)<li>save the file to the right subdirectory under HelpSource, depending on the document kind (see <a href="#Directory layout">Directory layout</a> below)<li><strong>check that it rendered OK</strong>. You can run <code class='code prettyprint lang-sc'>SCDoc.indexAllDocuments</code> (link to method documentation: <a href="./../Classes/SCDoc.html#*indexAllDocuments">SCDoc: *indexAllDocuments</a>) to make SCDoc detect the new file and add it to the document index.
+<p>If the file already existed and you want to see the changes, just press Reload in the help browser and SCDoc will re-render it.</ol>
+
+<p>A list of all undocumented classes can be seen here: <a href="./../Browse.html#Undocumented classes">Browse: Undocumented classes</a> (auto-generated).<h2><a class='anchor' name='Directory layout'>Directory layout</a></h2>
+
+<p>The help system uses different folders under HelpSource depending on document kind:<dl>
+<dt>HelpSource<dd><dl>
+<dt>Classes<dd>class reference, file must be named as the class.<dt>Reference<dd>other reference documentation.<dt>Tutorials<dd>yes, tutorials.<dt>Guides<dd>guides that explain stuff but without beeing a real tutorial.<dt>Overviews<dd>overviews of other documents, these are mostly auto-generated.<dt>Other<dd>stuff that don't fit in any other directory.</dl>
+</dl>
+<div class='note'><span class='notelabel'>NOTE:</span> It's important that the document is put in the right folder. For Classes, it's a must!</div>
+<p>All .schelp files will be parsed and rendered to an equal directory layout in the help target directory. Any other files, like images or ready-made HTML files, will just be copied.<h2><a class='anchor' name='Document header'>Document header</a></h2>
+
+<p>All tags that are used for document metadata should be entered at the top of the document source file, before any section or other text. See <a href="./../Reference/SCDocSyntax.html#Header tags">SCDoc Syntax: Header tags</a><div class='note'><span class='notelabel'>NOTE:</span> You should always specify title, summary and categories.</div><h2><a class='anchor' name='Normal documents'>Normal documents</a></h2>
+
+<p>Example header:<pre>title:: My help file
+summary:: A short single-line summary of what this is
+categories:: Language&gt;Conditionals, SomeOtherCategory
+related:: Reference/FooBar</pre>
+<p>Then use normal text in sections and subsections, and possible other tags for lists, tables, trees, images, links, etc.. See <a href="./../Reference/SCDocSyntax.html">SCDoc Syntax</a> for tag reference.<pre>section:: Introduction
+
+This is a nice document...
+blah blah blah..
+
+subsection:: Details
+
+Some details..</pre><h2><a class='anchor' name='Class reference'>Class reference</a></h2>
+
+<p>Class reference has some special tags and a more strict structure. Normal text should be written inside the special top-level sections DESCRIPTION, CLASSMETHODS, INSTANCEMETHODS and EXAMPLES.
+<p>Named subsections can be used under each of the above mentioned top-level sections.
+<p>Also named sections can be used, but they will be put after all above top-level sections.<h3><a class='anchor' name='Methods and arguments'>Methods and arguments</a></h3>
+
+<p>Methods are documented like this:<ul class='tree'>
+<li><code>method::</code> name(s)<ul class='tree'>
+<li>short description of method.<li><code>argument::</code> name1<ul class='tree'>
+<li>description of argument</ul>
+
+<p><li><code>argument::</code> name2<ul class='tree'>
+<li>description of another argument.</ul>
+
+<p><li><code>returns::</code><ul class='tree'>
+<li>description of return value</ul>
+
+<p><li><code>discussion::</code><ul class='tree'>
+<li>optional discussion and example code</ul>
+</ul>
+</ul>
+<div class='note'><span class='notelabel'>NOTE:</span> Don't list arguments in the method tag, only the method names</div>
+<p>After the method description comes the arguments, written with <code>argument:: name</code> where <strong>name</strong> is optional, and will be auto-filled in if not given. If given, it must match the real argument name of the method. After each argument line comes the description of that argument.
+<p>There is an optional <code>returns::</code> tag that could be used to describe the methods return value.
+<p>If a longer discussion is needed, use the <code>discussion::</code> tag. This is a good place to insert example code, etc.
+<p>Setters are handled automagically, when documenting a setter/getter, use only the getter name (no underscore) and describe both setter and getter as a single property, example:<pre>method:: helpSourceDir
+set or get the help source directory</pre>
+<p>Methods get an anchor name automatically, prefixed with <code>*</code> for class methods and <code>-</code> for instance methods. For example, to link to the <code>foo</code> class method, use <code>link::#*foo::</code>.
+<p>The <code>method::</code> tag can be used also in normal documents, and <em>should</em> then have argumentnames. This can be useful for documenting common interfaces outside of a specific class document, for example <a href="./../Reference/plot.html">plot</a>. Anchors for these methods get prefixed with a dot (.) instead of * or -.
+<p>When multiple methods have the same signature (like ar and kr in ugens), they should all be listed in one single method tag.
+<p>SCDoc generates docs for all undocumented methods. To ignore private methods, add them to a <code>private::</code> tag, which works just like the method tag but without a section body.
+<p>Extensions can add methods to existing class docs, see the <a href="#Extensions">Extensions</a> section below.<h3><a class='anchor' name='Copy methods from other class'>Copy methods from other class</a></h3>
+
+<p>You can use <code>copymethod:: ClassName, methodName</code> to copy the documentation of a method from another helpfile to this one.
+<p><code>methodName</code> must be prefixed with <code>*</code> (asterix) for class methods and <code>-</code> (dash) for instance methods.<h3><a class='anchor' name='Redirect classes'>Redirect classes</a></h3>
+
+<p>Some classes uses the <code class='code prettyprint lang-sc'>*doesNotUnderstand</code> trick to redirect to another implementing class. To document such classes, you need to add this tag in the header:<pre>redirect:: implClass</pre>
+<p>Where <code>implClass</code> is the name of the class variable holding the implementing class.<h3><a class='anchor' name='Example'>Example</a></h3>
+
+<p>An example of documentation for LFPulse UGen, saved to HelpSource/Classes/LFPulse.schelp<pre>TITLE:: LFPulse
+summary:: pulse oscillator
+categories:: UGens&gt;Generators&gt;Deterministic, UGens&gt;Oscillators
+related:: Classes/LFSaw
+
+DESCRIPTION::
+A non-band-limited pulse oscillator. Outputs a high value of one and a low value of zero.
+
+CLASSMETHODS::
+private:: categories
+
+METHOD:: ar, kr
+
+argument::freq
+frequency in Hertz
+
+argument::iphase
+initial phase offset in cycles ( 0..1 )
+
+argument::width
+pulse width duty cycle from zero to one.
+
+returns::
+An UGen.
+
+EXAMPLES::
+
+a plot:
+code:: { LFPulse.ar(Line.kr(100, 800, 0.1)) }.plot(0.1); ::
+
+50 Hz wave:
+code:: { LFPulse.ar(50) * 0.1 }.play; ::</pre><h2><a class='anchor' name='Categories'>Categories</a></h2>
+
+<p>Try to find good categories for the doc you are writing/converting. If a suitable category already exists, you should use that. See the <a href="./../Browse.html">Document Browser</a> (auto-generated) for existing categories.
+<p>For UGens, you should use the existing categories like UGens&gt;Filter&gt;Nonlinear. View the current categories like this:<pre class='code prettyprint lang-sc'>Ball.categories</pre>
+
+<p>Documents can exist in multiple categories, and also have hierarchical categories, like Sequencing&gt;Patterns.<h2><a class='anchor' name='Cross-document linking'>Cross-document linking</a></h2>
+
+<p>To link another document, use <code>link::Path/To/Document::</code> where the path is relative to <a href="./../Classes/SCDoc.html#*helpTargetDir">SCDoc: *helpTargetDir</a> and the document filename is with no extension. Example:<pre>Also take a look at link::Classes/SinOsc:: and link::Reference/Literals::</pre><h3><a class='anchor' name='Methods'>Methods</a></h3>
+
+<p>To link to a specific class method, append <code class='code prettyprint lang-sc'>#*methodName</code> or to an instance method, append <code class='code prettyprint lang-sc'>#-methodName</code>:<pre>Also take a look at the play method of link::Classes/Function#-play::</pre>
+<p>This will render as <a href="./../Classes/Function.html#-play">Function: -play</a>
+<p>For generic methods documented outside of instancemethods or classmethods (like the generic <a href="./../Reference/play.html">play</a> document), use a dot (.) as prefix instead of * or -.
+<p>The special <a href="./../Overviews/Methods.html">Methods</a> overview is dynamic and allows a specific method to be shown by appending <code class='code prettyprint lang-sc'>#name</code> where name is the name of the method:<pre>For all implementations of play, see link::Overviews/Methods#play::</pre><h2><a class='anchor' name='Making the document findable by Search'>Making the document findable by Search</a></h2>
+
+<p>The <a href="./../Search.html">Search</a> page can match on document title/filename, summary, non-private methods, and categories. If you mention something that should match in search but is not one of the above, you can explicitly add it with the keyword tag:<pre>keyword:: someKeyWords</pre><h2><a class='anchor' name='Extensions'>Extensions</a></h2>
+<h3><a class='anchor' name='Quarks and extensions'>Quarks and extensions</a></h3>
+
+<p>Each extension should have their own HelpSource folder with files that should be included in the help system.
+<p>Example file layout:<pre class='code prettyprint lang-sc'>MyQuark/HelpSource/Classes/MyClass1.schelp
+MyQuark/HelpSource/Classes/MyClass2.schelp
+MyQuark/HelpSource/Guides/MyGuide.schelp
+MyQuark/HelpSource/Guides/MyPicture.png
+MyQuark/MyClass1.sc
+MyQuark/MyClass2.sc</pre>
+<div class='note'><span class='notelabel'>NOTE:</span> All helpfiles contained in a quark will automatically get a category "Quarks&gt;NameOfQuark" added, so you should not add this yourself. This makes it easy to navigate all documentation of a specific quark.</div>
+<p>If you want to set a main help file for the quark, set <code class='code prettyprint lang-sc'>\schelp</code> in the Quark directory file to the path for the help file relative to <code>HelpSource</code> and without the <code>.schelp</code> extension. Example: <code class='code prettyprint lang-sc'>\schelp: "Guides/MyGuide"</code><h3><a class='anchor' name='Method extensions'>Method extensions</a></h3>
+
+<p>An extension that adds methods to existing classes should document these in <code class='code prettyprint lang-sc'>Classes/TheClass.ext.schelp</code>, only including the relevant bits (no title, summary, categories, etc..)
+<p>Example: Classes/String.ext.schelp<pre>INSTANCEMETHODS::
+
+subsection:: Extensions by SCDoc
+
+method:: stripWhiteSpace
+strips whitespace at the beginning and end of the string
+returns:: the stripped string</pre>
+<p>The contents are inserted into the right spot (section, subsection, etc). It works for all kind of sections, for example one can add a subsection to <code class='code prettyprint lang-sc'>DESCRIPTION::</code> with additional information, or add another top-level section, etc.<h2><a class='anchor' name='Links'>Links</a></h2>
+
+<p>URL's are automagically converted to links.
+<p>The <code class='code prettyprint lang-sc'>link::</code> tag is used for cross-reference between docs. It uses a simple namespace, example:<pre class='code prettyprint lang-sc'>See also link::Classes/SinOsc:: for a nice oscillator.
+Or take a look at link::Browse#UGens:: for a full list.
+The link::Overviews/Methods#play#play method:: is often very useful.</pre>
+
+<p>Anchors can be inserted manually with <code class='code prettyprint lang-sc'>anchor::name::</code> and referenced like this:<pre class='code prettyprint lang-sc'>link::Foo/Bar#hello::</pre>
+
+<p>or to jump to an anchor in this document:<pre class='code prettyprint lang-sc'>link::#hello::</pre>
+
+<p>All sections get anchor names automagically.
+<p>All methods get anchor names prefixed with <code class='code prettyprint lang-sc'>*</code> for class methods and <code class='code prettyprint lang-sc'>-</code> for instance methods.
+<p>One can change the rendered text of the link by using another <code class='code prettyprint lang-sc'>#</code> character:<pre class='code prettyprint lang-sc'>Also see link::Classes/SinOsc##a nice oscillator::</pre>
+
+<p>A link to specific methods:<pre class='code prettyprint lang-sc'>Take a look at link::Classes/SinOsc#*ar:: and link::Classes/Function#-play::</pre>
+
+<p>Renders as: <a href="./../Classes/SinOsc.html#*ar">SinOsc: *ar</a> and <a href="./../Classes/Function.html#-play">Function: -play</a>
+<p>The <a href="./../Overviews/Methods.html">Methods</a> overview is dynamic and allows a specific method to be shown, by using the methodname as anchor, for example to get a list of all classes implementing <code class='code prettyprint lang-sc'>play</code> :<pre class='code prettyprint lang-sc'>All classes implementing code::play:: can be seen link::Overviews/Methods#play#here::.</pre>
+
+<p>Renders as: All classes implementing <code class='code prettyprint lang-sc'>play</code> can be seen <a href="./../Overviews/Methods.html#play">here</a>.
+<p>The <a href="./../Browse.html">Browse</a> page is also dynamic, and can take a category tree as anchor name:<pre class='code prettyprint lang-sc'>For more filters, see link::Browse#UGens&gt;Filters::</pre>
+
+<p>Renders as: For more filters, see <a href="./../Browse.html#UGens>Filters">Browse: UGens&gt;Filters</a><h2><a class='anchor' name='Contributing with the documentation'>Contributing with the documentation</a></h2>
+
+<p>The easiest way to contribute to the documentation is:
+<p> 1. Fork the supercolider respository <a href="https://github.com/supercollider/supercollider">https://github.com/supercollider/supercollider</a> 2. Clone your repository<pre class='code prettyprint lang-sc'>    git clone --recursive git://github.com/{your_username}/supercollider.git</pre>
+
+<p> 3. Create a branch for doc updates<pre class='code prettyprint lang-sc'>    git checkout -b doc_updates</pre>
+
+<p> 4. Do your update, commit your changes and push to github<pre class='code prettyprint lang-sc'>    git push origin -u doc_updates</pre>
+
+<p> 5. Submit your pull request through github, from your branch doc_updates to supercollider master<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/WritingHelp.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/WritingHelp.schelp</a><br>link::Guides/WritingHelp::<br>sc version: 3.8dev</div></div></body></html>

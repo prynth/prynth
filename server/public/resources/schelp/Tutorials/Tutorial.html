@@ -1,0 +1,343 @@
+<html><head><title>SuperCollider 3 Server Tutorial</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS</div>
+<div id='categories'><a href='./../Browse.html#Tutorials'>Tutorials</a></div>
+<h1>SuperCollider 3 Server Tutorial</h1>
+<div id='summary'>A short tutorial covering many concepts</div>
+</div>
+<div class='subheader'>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Booting a Server'>Booting a Server</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Making Sound'>Making Sound</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Using Arguments'>Using Arguments</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Controlling a Synth'>Controlling a Synth</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Adding an Effect Dynamically'>Adding an Effect Dynamically</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Mapping an Argument to a Control Bus'>Mapping an Argument to a Control Bus</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Sequencing with Routines'>Sequencing with Routines</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Sequencing with Patterns'>Sequencing with Patterns</a></li>
+<ul class='toc'></ul></ul></div>
+<p>To follow this tutorial you should read
+<p><a href="./../Reference/Server-Architecture.html">Server Architecture</a>
+<p>and
+<p><a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a>.
+<p>Since version 3.6 SuperCollider consists of three separate components: The sound synthesiser (audio server), the programming language (and language interpreter) and the code editor (integrated development environment, or shortly, IDE).
+<p>The server can run either inside the language application ("internal server"), as a separate program on the same machine ("local server"), or run on a different computer across a network connection. The language application sends command messages to the server using a subset of the Open Sound Control protocol.<h2><a class='anchor' name='Booting a Server'>Booting a Server</a></h2>
+
+<p>In order to run sound we need to start a server running. The easiest way to start a server is to click on "Boot Server" in the pull-up menu you get by clicking on the server stats field on the bottom of the IDE's editor window. Or by clicking on the "Start Server" button in the respective server window. This you get with s.makeWindow (for instance for the default server) for any server object you created (see below). Sometimes though it is useful to start a server programmatically. To do this we need to get or create a server object and tell it to "boot". Two servers, internal and local, are predefined.
+<p>The internal server runs in the same process as the SuperCollider application. It is internal to the program itself.<pre class='code prettyprint lang-sc'>// set the interpreter variable i to the internal server object.
+i = Server.internal;</pre>
+
+<p><strong>VERY IMPORTANT</strong> : This line must be executed for the variable 'i' to be set. The mechanics are different depending on your platform. The MacOSX standard is to place the cursor anywhere on this line and press the "Enter" key on the numeric keypad. Pressing the main return key does not execute code! This allows you to write code fragments of multiple lines. To execute a multi-line block of code, select the block and press "Enter." For convenience, a code block can be enclosed in parentheses, and the entire block selected by double-clicking just inside either parenthesis. (For instructions in other editors (e.g. on Linux or Windows), consult the documentation specific to that platform. See also the helpfile <a href="./../Reference/KeyboardShortcuts.html">Keyboard Shortcuts</a> for key commands in other editors.) If you don't have an enter key, then you can use ctrl-Return, Ctrl-c, fn-Return (on Some Macs), or Shift-Return.
+<p>The local server runs on the same machine as the SuperCollider application, but is a separate program, 'scsynth'.<div class='note'><span class='notelabel'>NOTE:</span> By default the interpreter variable <code class='code prettyprint lang-sc'>s</code> is set to the local server at startup. For further information see the <a href="./../Classes/Server.html">Server</a> helpfile.</div><pre class='code prettyprint lang-sc'>// set the interpreter variable s to the local server object.
+s = Server.local;    // s is set to Server.default at startup of SuperCollider</pre>
+
+<p>To boot the server you send it the boot message.<pre class='code prettyprint lang-sc'>s.boot;</pre>
+
+<p>To quit the server send it the quit message.<pre class='code prettyprint lang-sc'>s.quit;</pre>
+
+<p>We can also create a server to run. To create a server object we need to provide the IP address or the server and a port number. Port numbers are somewhat arbitrary but they should not conflict with common protocols like telnet, ftp http, etc. The IP address 127.0.0.1 is defined to mean the local host. This is the IP address to use for running a server on your own machine.<pre class='code prettyprint lang-sc'>// create another server object that will run on the local host using port #58009
+m = Server(\myServer, NetAddr("127.0.0.1", 58009));
+
+m.boot; //start the server
+
+m.quit; // quit the server</pre>
+
+<p>It is not possible to boot a server on a remote machine, but if you have one running already or you know of one running, you can send messages to it. You create the server object using the IP address of the machine running the server and the port it is using.<pre class='code prettyprint lang-sc'>// create a server object for talking to the server running on a 
+// remote machine having IP address 192.168.0.47 using port #57110
+r = Server(\myServer, NetAddr("192.168.0.47", 57110));</pre>
+<h2><a class='anchor' name='Making Sound'>Making Sound</a></h2>
+
+<p>(note: This tutorial uses raw OSC commands as described in <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a>, rather than the classes <a href="./../Classes/Synth.html">Synth</a> and <a href="./../Classes/Group.html">Group</a>. See those helpfiles also for some simpler ways of working with Synths. This tutorial explains the basic underlying design of Synths and SynthDefs).
+<p>Now lets make some audio.
+<p>Boot the server:<pre class='code prettyprint lang-sc'>s.boot;</pre>
+
+<p>Create a <a href="./../Classes/SynthDef.html">SynthDef</a>. A SynthDef is a description of a processing module that you want to run on the server. It can read audio from the server's audio buses, read control from the control buses and write control or audio back to buses. Here we will create a sine oscillator and send it to audio bus zero.<pre class='code prettyprint lang-sc'>(
+SynthDef("sine", { arg freq=800;
+    var osc;
+    osc = SinOsc.ar(freq, 0, 0.1); // 800 Hz sine oscillator
+    Out.ar(0, osc); // send output to audio bus zero.
+}).writeDefFile; // write the def to disk in the default directory synthdefs/
+)</pre>
+
+<p>Send the SynthDef to the server.<pre class='code prettyprint lang-sc'>s.sendSynthDef("sine");</pre>
+
+<p>Start the sound. The <code class='code prettyprint lang-sc'>/s_new</code> command creates a new Synth which is an instance of the "sine" SynthDef. Each synth running on the server needs to have a unique ID. The simplest and safest way to do this is to get an ID from the server's NodeIDAllocator. This will automatically allow IDs to be reused, and will prevent conflicts both with your own nodes, and with nodes created automatically for purposes such as visual scoping and recording. Each synth needs to be installed in a Group. We install it in group one which is the default group. There is a group zero, called the RootNode, which contains the default group, but it is generally best not to use it as doing so can result in order of execution issues with automatically created nodes such as those mentioned above. (For more detail see the <a href="./../Reference/default_group.html">default_group</a>, <a href="./../Classes/RootNode.html">RootNode</a>, and <a href="./../Guides/Order-of-execution.html">Order of execution</a> helpfiles.)<pre class='code prettyprint lang-sc'>s.sendMsg("/s_new", "sine", x = s.nextNodeID, 1, 1);</pre>
+
+<p>Stop the sound.<pre class='code prettyprint lang-sc'>s.sendMsg("/n_free", x);</pre>
+
+<p>Stop the server.<pre class='code prettyprint lang-sc'>s.quit;</pre>
+
+<p>SynthDef has three methods which send the def automatically, load which writes it to disk, and send which sends it without writing it to disk. The latter can be useful to avoid clutter on your drive, but is limited to SynthDefs up to a certain complexity.
+<p>Most generally useful and recommended is to use the method <strong>add</strong>, which sends or writes to disk only if it can't send, and it sends to all servers listed in the SynthDefLib (A server can be added by SynthDescLib.global.addServer(server)).<pre class='code prettyprint lang-sc'>(
+SynthDef("sine", { arg freq=800;
+    var osc;
+    osc = SinOsc.ar(freq, 0, 0.1); // 800 Hz sine oscillator
+    Out.ar(0, osc); // send output to audio bus zero.
+}).add;
+)
+
+
+(
+SynthDef("sine", { arg freq=800;
+    var osc;
+    osc = SinOsc.ar(freq, 0, 0.1); // 800 Hz sine oscillator
+    Out.ar(0, osc); // send output to audio bus zero.
+}).load(s); // write to disk and send
+)
+
+(
+SynthDef("sine", { arg freq=800;
+    var osc;
+    osc = SinOsc.ar(freq, 0, 0.1); // 800 Hz sine oscillator
+    Out.ar(0, osc); // send output to audio bus zero.
+}).send(s); // send without writing
+)</pre>
+<h2><a class='anchor' name='Using Arguments'>Using Arguments</a></h2>
+
+<p>It is useful to be able to specify parameters of a synth when it is created. Here a frequency argument is added to the sine SynthDef so that we can create it<pre class='code prettyprint lang-sc'>s.boot;
+
+(
+SynthDef("sine", { arg freq;
+    var osc;
+    osc = SinOsc.ar(freq, 0, 0.1); // 800 Hz sine oscillator
+    Out.ar(0, osc); // send output to audio bus zero.
+}).add;
+)</pre>
+
+<p>Play a 900 Hz sine wave.<pre class='code prettyprint lang-sc'>s.sendMsg("/s_new", "sine", x = s.nextNodeID, 1, 1, "freq", 900);
+
+s.sendMsg("/n_free", x);</pre>
+
+<p>Play a 1000 Hz sine wave.<pre class='code prettyprint lang-sc'>s.sendMsg("/s_new", "sine", y = s.nextNodeID, 1, 1, "freq", 1000);
+
+s.sendMsg("/n_free", y);</pre>
+
+<p>Playing three voices at once<pre class='code prettyprint lang-sc'>(
+s.sendMsg("/s_new", "sine", x = s.nextNodeID, 1, 1, "freq", 800);
+s.sendMsg("/s_new", "sine", y = s.nextNodeID, 1, 1, "freq", 1001);
+s.sendMsg("/s_new", "sine", z = s.nextNodeID, 1, 1, "freq", 1202);
+)
+
+(
+s.sendMsg("/n_free", x);
+s.sendMsg("/n_free", y);
+s.sendMsg("/n_free", z);
+)</pre>
+
+<p>Playing three voices at once using bundles. Bundles allow you to send multiple messages with a time stamp. The messages in the bundle will be scheduled to be performed together. The time argument to sendBundle is an offset into the future from the current thread's logical time.<pre class='code prettyprint lang-sc'>(
+s.sendBundle(0.2,
+    ["/s_new", "sine", x = s.nextNodeID, 1, 1, "freq", 800],
+    ["/s_new", "sine", y = s.nextNodeID, 1, 1, "freq", 1001],
+    ["/s_new", "sine", z = s.nextNodeID, 1, 1, "freq", 1202]);
+s.sendBundle(1.2, ["/n_free", x],["/n_free", y],["/n_free", z]);
+)</pre>
+<h2><a class='anchor' name='Controlling a Synth'>Controlling a Synth</a></h2>
+
+<p>You can send messages to update the values of a Synth's arguments.
+<p>Play a 900 Hz sine wave.<pre class='code prettyprint lang-sc'>s.sendMsg("/s_new", "sine", x = s.nextNodeID, 1, 1, "freq", 900);</pre>
+
+<p>Change the frequency using the /n_set command. You send the node ID, the parameter name and the value.<pre class='code prettyprint lang-sc'>s.sendMsg("/n_set", x, "freq", 800);
+
+s.sendMsg("/n_set", x, "freq", 700);
+
+s.sendMsg("/n_free", x);</pre>
+<h2><a class='anchor' name='Adding an Effect Dynamically'>Adding an Effect Dynamically</a></h2>
+
+<p>You can dynamically add and remove an effect to process another synth. In order to do this, the effect has to be added after the node to be processed.<pre class='code prettyprint lang-sc'>(
+// define a noise pulse
+SynthDef("tish", { arg freq = 1200, rate = 2;
+    var osc, trg;
+    trg = Decay2.ar(Impulse.ar(rate,0,0.3), 0.01, 0.3);
+    osc = {WhiteNoise.ar(trg)}.dup;
+    Out.ar(0, osc); // send output to audio bus zero.
+}).add;
+)
+
+(
+// define an echo effect
+SynthDef("echo", { arg delay = 0.2, decay = 4;
+    var in;
+    in = In.ar(0,2);
+    // use ReplaceOut to overwrite the previous contents of the bus.
+    ReplaceOut.ar(0, CombN.ar(in, 0.5, delay, decay, 1, in));
+}).add;
+)
+
+// start the pulse
+s.sendMsg("/s_new", "tish", x = s.nextNodeID, 1, 1, \freq, 200, \rate, 1.2);
+
+// add an effect
+s.sendMsg("/s_new", "echo", y = s.nextNodeID, 1, 1);
+
+// stop the effect
+s.sendMsg("/n_free", y);
+
+// add an effect (time has come today.. hey!)
+s.sendMsg("/s_new", "echo", z = s.nextNodeID, 1, 1, \delay, 0.1, \decay, 4);
+
+// stop the effect
+s.sendMsg("/n_free", z);
+
+// stop the pulse
+s.sendMsg("/n_free", x);</pre>
+
+<p>This works because we added the effect after the other node. Sometimes you will need to use groups or <code class='code prettyprint lang-sc'>/n_after</code> to insure that an effect gets added after what it is supposed to process.<h2><a class='anchor' name='Mapping an Argument to a Control Bus'>Mapping an Argument to a Control Bus</a></h2>
+<pre class='code prettyprint lang-sc'>(
+// define a control
+SynthDef("line", { arg i_bus=10, i_start=1000, i_end=500, i_time=1;
+    ReplaceOut.kr(i_bus, Line.kr(i_start, i_end, i_time, doneAction: 2));
+}).add
+)</pre>
+
+<p>Play a 900 Hz sine wave.<pre class='code prettyprint lang-sc'>s.sendMsg("/s_new", "sine", x = s.nextNodeID, 1, 1, "freq", 900);</pre>
+
+<p>Put a frequency value on the control bus.<pre class='code prettyprint lang-sc'>s.sendMsg("/c_set", 10, x);</pre>
+
+<p>Map the node's freq argument to read from control bus #10.<pre class='code prettyprint lang-sc'>s.sendMsg("/n_map", x, \freq, 10);</pre>
+
+<p>Change the value on the control bus.<pre class='code prettyprint lang-sc'>s.sendMsg("/c_set", 10, 1200);</pre>
+
+<p>Start a control process that writes to bus #10. The <a href="./../Classes/EnvGen.html">EnvGen</a> doneAction will free this node automatically when it finishes.<pre class='code prettyprint lang-sc'>s.sendMsg("/s_new", "line", s.nextNodeID, 0, 1);</pre>
+
+<p>Free the node.<pre class='code prettyprint lang-sc'>s.sendMsg("/n_free", x);</pre>
+<h2><a class='anchor' name='Sequencing with Routines'>Sequencing with Routines</a></h2>
+<pre class='code prettyprint lang-sc'>(
+var space, offset, timer, saw, envsaw, sampler, delay;
+
+SynthDef("saw", { arg out=100, pan=0, trig=0.0, freq=500, amp=1, cutoff=10000, rezz=1;
+    freq = Lag.kr(freq,0.1);
+    Out.ar(out,Pan2.ar(RLPF.ar(Saw.ar([freq,freq*2],amp),cutoff,rezz),
+        pan));
+}).add;
+
+SynthDef("envsaw",{ arg out=100, pan=0, sustain=0.5, freq=500, amp=1, cutoff=10000, rezz=1;
+    var env;
+    env = EnvGen.kr(Env.perc(0.01, sustain, 0.2), doneAction:0, gate:amp);
+    Out.ar(out,Pan2.ar(RLPF.ar(Saw.ar(Lag.kr(freq,0.1),env),cutoff,rezz)*amp,
+        pan));
+}).add;
+
+SynthDef("delay", { arg out=0, delay = 0.4, decay = 14;
+    var in;
+    in = In.ar(out,2);
+    Out.ar(out, CombN.ar(in, 0.5, delay, decay, 1, in));
+}).add;
+
+SynthDef("sampler",{ arg sample, trig=1,rate=1.0,out=0,bufnum=0,pan=0,amp=1, sustain=0.25;
+    var env;
+    env = EnvGen.kr(Env.perc(0.001, sustain, 0.001), doneAction:2);
+    Out.ar(out,
+        Pan2.ar(
+        PlayBuf.ar(1,bufnum,rate,InTrig.kr(trig),0,0)*amp,
+            pan);
+    )
+}).add;
+
+Tempo.bpm = 120;
+timer = BeatSched.new;
+offset = Tempo.tempo.reciprocal;
+
+space = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+
+saw = Synth("saw");
+delay = Synth.after(saw,"delay", [\decay, 20]);
+
+timer.sched(0,{
+    var r;
+    r = Routine({ var wait, freq, cutoff,rezz;
+        wait = Pseq([2],inf).asStream;
+        freq = Pseq([30,40,42,40],inf).asStream;
+        cutoff = Pfunc({500.rand2+1000}).asStream;
+        rezz = 0.5;
+        inf.do({ 
+            saw.set("freq", freq.next.midicps, "cutoff", cutoff.next, "rezz", rezz, "amp", 0.1, "out", 0);
+            (wait.next*offset).wait
+        });
+    });
+    timer.sched(0, r);
+});
+
+timer.sched(0,{
+    var r;
+    r=Routine({ var wait, rate;
+        wait = Pseq([0.25],inf).asStream;
+        rate = Pfunc({0.5.rand}).asStream;
+        inf.do({
+            Synth.before(delay, "sampler", [\bufnum, space, \trig, 1, \amp,0.1, \rate, rate.next, \sustain,         wait.next]);
+            (wait.next*offset).wait});});
+        timer.sched(0,r);
+});
+
+)</pre>
+<h2><a class='anchor' name='Sequencing with Patterns'>Sequencing with Patterns</a></h2>
+<pre class='code prettyprint lang-sc'>(
+//sappy emo electronica example...
+Tempo.bpm = 120;
+SynthDef("patternefx_Ex", { arg out, in;
+    var audio, efx;
+    audio = In.ar([20,21],2);
+    efx=CombN.ar(audio, 0.5, [0.24,0.4], 2, 1);
+    Out.ar([0,1], audio+efx);
+    }).add;
+
+Synth.new("patternefx_Ex");
+
+SynthDef("pattern_Ex", { arg out, freq = 1000, gate = 1, pan = 0, cut = 4000, rez = 0.8, amp = 1;
+    Out.ar(out,
+        Pan2.ar(
+            RLPF.ar(
+                Pulse.ar(freq,0.05),
+            cut, rez),
+        pan) * EnvGen.kr(Env.linen(0.01, 1, 0.3), gate, amp, doneAction:2);
+    )
+    }).add;
+
+SynthDef("bass_Ex", { arg out, freq = 1000, gate = 1, pan = 0, cut = 4000, rez = 0.8, amp = 1;
+    Out.ar(out,
+        Pan2.ar(
+            RLPF.ar(
+                SinOsc.ar(freq,0.05),
+            cut, rez),
+        pan) * EnvGen.kr(Env.linen(0.01, 1, 0.3), gate, amp, doneAction:2);
+    )
+    }).add;
+
+SynthDescLib.global.read;
+
+
+Pseq([
+
+Ptpar([
+0,Pbind(\instrument,\pattern_Ex, \out, 20, \dur,Pseq([2],16), \root,[-24,-17], \degree,Pseq([0,3,5,7,9,11,5,1],2),     \pan,1,\cut,Pxrand([1000,500,2000,300],16), \rez,Pfunc({0.7.rand +0.3}), \amp,0.12),
+
+0.5,Pbind(\instrument,\pattern_Ex, \out, 20, \dur,Pseq([Pseq([2],15),1.5],1), \root,-12, \degree,Pseq([0,3,5,7,9,11,5,1],2), \pan,-1,\cut,2000, \rez,0.6, \amp,0.1);
+]),
+
+Ptpar([
+0,Pbind(\instrument,\pattern_Ex, \out, 20, \dur,2, \root,[-24,-17], \degree,Pseq([0,3,5,7,9,11,5,1],inf),     \pan,1,\cut,Pxrand([1000,500,2000,300],inf), \rez,Pfunc({0.7.rand +0.3}), \amp,0.12),
+
+0,Pbind(\instrument,\bass_Ex, \dur,1, \root,-24, \degree,Pseq([0],inf), \pan,0, \cut,128, \rez,0.1, \amp,0.3),
+
+0.5,Pbind(\instrument,\pattern_Ex, \out, 20, \dur,2, \root,-12, \degree,Pseq([0,3,5,7,9,11,5,1],inf), \pan,-1,\cut,2000, \rez,0.6, \amp,0.1);
+]);
+
+
+]).play;
+
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Tutorial.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Tutorial.schelp</a><br>link::Tutorials/Tutorial::<br>sc version: 3.8dev</div></div></body></html>

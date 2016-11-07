@@ -1,0 +1,149 @@
+<html><head><title>Exception</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Core'>Core</a></div>
+<h1>Exception</h1>
+<div id='summary'>root error class</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Core/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Core/Error.sc'>Error.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/Error.html">Error</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Background: General exception handling'>Background: General exception handling</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Common syntax in other languages for exception handling is:'>Common syntax in other languages for exception handling is:</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*debug'>debug</a> </li>
+<li class='toc3'><a href='#*handling'>handling</a> </li>
+<li class='toc3'><a href='#*inProtectedFunction'>inProtectedFunction</a> </li>
+<li class='toc3'><a href='#*new'>new</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-adviceLink'>adviceLink</a> </li>
+<li class='toc3'><a href='#-adviceLinkPage'>adviceLinkPage</a> </li>
+<li class='toc3'><a href='#-errorString'>errorString</a> </li>
+<li class='toc3'><a href='#-isException'>isException</a> </li>
+<li class='toc3'><a href='#-path'>path</a> </li>
+<li class='toc3'><a href='#-postProtectedBacktrace'>postProtectedBacktrace</a> </li>
+<li class='toc3'><a href='#-protectedBacktrace'>protectedBacktrace</a> </li>
+<li class='toc3'><a href='#-reportError'>reportError</a> </li>
+<li class='toc3'><a href='#-what'>what</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>The root of SuperCollider's error handling mechanism.
+<p>Exception is an abstract class, defining basic error behavior. This class is not directly used in SuperCollider. Users may create subclasses of Exception to identify specific types of failure conditions.
+<p>The built-in exception types are actually subclasses of <a href="./../Classes/Error.html">Error</a> -- see its help file for the hierarchy.<h3><a class='anchor' name='Background: General exception handling'>Background: General exception handling</a></h3>
+
+<p>An exception is any event that disrupts the normal execution flow of a program. In practice there is not much distinction between an exception and an error; in SuperCollider, we tend to speak of errors where other object-oriented languages (Java, C++) would use exception consistently.
+<p>If a piece of code runs into an unexpected condition, it creates an exception object that holds information about the faulty condition, and then "throws" that object. From there, the interpreter unwinds backward through all the preceding stack frames looking for an exception handler that will "catch" the exception. The exception handler can take an alternate route to resolve the failure and continue normally; if this is not possible, it can re-throw the exception back to the previous stack frame. An exception that never gets caught causes execution to abort. In SuperCollider, this results in the standard error dump (see the Understanding-Errors help file for details); in C++ or Java, the effect is catastrophic, causing the whole program to crash.<h3><a class='anchor' name='Common syntax in other languages for exception handling is:'>Common syntax in other languages for exception handling is:</a></h3>
+<pre class='code prettyprint lang-sc'>try { ...code... }
+catch { ...exception handler... }</pre>
+
+<p>Specific languages may have other variants. The SuperCollider compiler doesn't have room for the "catch" keyword, so the syntax is simpler:<pre class='code prettyprint lang-sc'>try { ...code... } { ...exception handler... };</pre>
+
+<p>With "try", "if" the error cannot be handled, you have to re-throw the error explicitly:<pre class='code prettyprint lang-sc'>try { ...code... } { |error|
+    if( test: can I handle the error? ) {
+        handle gracefully
+    } { error.throw }
+};</pre>
+
+<p>SuperCollider includes a variant, borrowed from Scheme, in which the exception is always fatal, but the preceding code might have allocated some resources that need to be released before reporting the error. For example, you might open a file and do some processing on it that might encounter an error. Good practice is to close the file before the error halt, which you can do this way:<pre class='code prettyprint lang-sc'>file = File(path, "r");
+protect {
+    work with the file here, which might cause an error
+} {
+    file.close;
+};</pre>
+
+<p>With "protect" the second function will execute even if there is no error, and any error will be passed up the chain.
+<p>In Java, you can catch specific classes of exception. You can simulate this usage with the following construction:<pre class='code prettyprint lang-sc'>// Java-style
+
+try {  }
+catch { FileNotFoundException e } { console.printLine("File not found: " + e.path) }
+catch { EmptyFileException e } { console.printLine("File is empty: " + e.path) };
+
+// SuperCollider-style (hypothetical; these specific exceptions do not exist in the main library
+
+try {  } { |error|
+    switch(error.species.name)
+        { 'FileNotFoundException' } { postln("File not found:" + e.path) }
+        { 'EmptyFileException' } { postln("File is empty:" + e.path) }
+            // default condition: unhandled exception, rethrow
+        { error.throw }
+}</pre>
+
+<p>Following is an example that recovers from a failed attempt to write into an immutable array, by re-attempting the write on a copy of the array.<pre class='code prettyprint lang-sc'>(
+~inPlaceSub = { |array, find, replace|
+    array.do({ |item, i|
+        if(item == find) { array[i] = replace };
+    });
+};
+
+~trySub = { |array, find, replace|
+    try {
+        ~inPlaceSub.(array, find, replace)
+    } { |error|
+        switch(error.species.name)
+            { 'PrimitiveFailedError' } {
+                if(error.what.find("immutable").notNil) {
+                    "caught ImmutableError".postln;
+                    ~inPlaceSub.(array.copy, find, replace)
+                } { "unknown primitive exception".postln; error.throw; }
+            }
+                // default case: unhandled exception, should die so re-throw error
+            { "unknown exception".postln; error.throw; }
+    };
+};
+)
+
+// pass in a mutable array, OK
+~trySub.((0..9), 9, 19);
+
+// pass in a literal array, Immutable exception is caught and handled
+~trySub.(#[0, 1, 2, 3, 4, 5], 5, 6);
+
+// pass in a nonsense value, other exception is re-thrown
+~trySub.(10, 5, 6);</pre>
+
+<p><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*debug' href='./../Overviews/Methods.html#debug'>debug</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*debug' href='./../Overviews/Methods.html#debug'>debug</a> = value</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*handling' href='./../Overviews/Methods.html#handling'>handling</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*handling' href='./../Overviews/Methods.html#handling'>handling</a> = value</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*inProtectedFunction' href='./../Overviews/Methods.html#inProtectedFunction'>inProtectedFunction</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*inProtectedFunction' href='./../Overviews/Methods.html#inProtectedFunction'>inProtectedFunction</a> = value</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>what</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-adviceLink' href='./../Overviews/Methods.html#adviceLink'>adviceLink</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-adviceLinkPage' href='./../Overviews/Methods.html#adviceLinkPage'>adviceLinkPage</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-errorString' href='./../Overviews/Methods.html#errorString'>errorString</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isException' href='./../Overviews/Methods.html#isException'>isException</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-path' href='./../Overviews/Methods.html#path'>path</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-path' href='./../Overviews/Methods.html#path'>path</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-postProtectedBacktrace' href='./../Overviews/Methods.html#postProtectedBacktrace'>postProtectedBacktrace</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-protectedBacktrace' href='./../Overviews/Methods.html#protectedBacktrace'>protectedBacktrace</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-protectedBacktrace' href='./../Overviews/Methods.html#protectedBacktrace'>protectedBacktrace</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-reportError' href='./../Overviews/Methods.html#reportError'>reportError</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-what' href='./../Overviews/Methods.html#what'>what</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-what' href='./../Overviews/Methods.html#what'>what</a> = value</h3>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Exception.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Exception.schelp</a><br>link::Classes/Exception::<br>sc version: 3.8dev</div></div></body></html>

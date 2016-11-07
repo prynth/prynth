@@ -1,0 +1,326 @@
+<html><head><title>ProxyMixer</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Libraries>JITLib>GUI'>Libraries>JITLib>GUI</a>, <a href='./../Browse.html#Live Coding'>Live Coding</a></div>
+<h1>ProxyMixer</h1>
+<div id='summary'>mix control for a proxyspace or Ndef.all</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/ProxyMixer.sc'>ProxyMixer.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/JITGui.html">JITGui</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/NdefMixer.html">NdefMixer</a></div>
+<div id='related'>See also: <a href="./../Classes/ProxySpace.html">ProxySpace</a>, <a href="./../Classes/Ndef.html">Ndef</a>, <a href="./../Classes/JITGui.html">JITGui</a>, <a href="./../Classes/NdefGui.html">NdefGui</a>, <a href="./../Classes/MonitorGui.html">MonitorGui</a>, <a href="./../Classes/NdefParamGui.html">NdefParamGui</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Creation'>Creation</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*small'>small</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Instance variables'>Instance variables</a></li>
+<ul class='toc'><li class='toc3'><a href='#-arZone'>arZone</a>  <a href='#-krZone'>krZone</a>  <a href='#-editZone'>editZone</a>  <a href='#-arGuis'>arGuis</a>  <a href='#-krGuis'>krGuis</a>  <a href='#-editGui'>editGui</a>  <a href='#-arScroller'>arScroller</a>  <a href='#-krScroller'>krScroller</a> </li>
+<li class='toc3'><a href='#-proxyspace'>proxyspace</a>  <a href='#-existingProxies'>existingProxies</a>  <a href='#-activeProxies'>activeProxies</a>  <a href='#-playingProxies'>playingProxies</a>  <a href='#-selectedKeys'>selectedKeys</a>  <a href='#-arNames'>arNames</a>  <a href='#-krNames'>krNames</a>  <a href='#-numArs'>numArs</a>  <a href='#-numKrs'>numKrs</a>  <a href='#-atAr'>atAr</a>  <a href='#-atKr'>atKr</a> </li>
+</ul><li class='toc2'><a href='#Instance methods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-highlight'>highlight</a>  <a href='#-unhighlight'>unhighlight</a> </li>
+<li class='toc3'><a href='#-highlightSlots'>highlightSlots</a> </li>
+<li class='toc3'><a href='#-sizes'>sizes</a>  <a href='#-switchSize'>switchSize</a> </li>
+<li class='toc3'><a href='#-arKeysRotation'>arKeysRotation</a>  <a href='#-krKeysRotation'>krKeysRotation</a> </li>
+<li class='toc3'><a href='#-title'>title</a> </li>
+<li class='toc3'><a href='#-getNameLeftBorder'>getNameLeftBorder</a>  <a href='#-setNameLeftBorder'>setNameLeftBorder</a>  <a href='#-shiftNameLeftBorder'>shiftNameLeftBorder</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-accepts'>accepts</a> </li>
+<li class='toc3'><a href='#-checkUpdate'>checkUpdate</a> </li>
+<li class='toc3'><a href='#-enableNameResize'>enableNameResize</a> </li>
+<li class='toc3'><a href='#-getState'>getState</a> </li>
+<li class='toc3'><a href='#-makeArZone'>makeArZone</a> </li>
+<li class='toc3'><a href='#-makeEditZone'>makeEditZone</a> </li>
+<li class='toc3'><a href='#-makeKrZone'>makeKrZone</a> </li>
+<li class='toc3'><a href='#-makeTopLine'>makeTopLine</a> </li>
+<li class='toc3'><a href='#-makeViews'>makeViews</a> </li>
+<li class='toc3'><a href='#-makeWindow'>makeWindow</a> </li>
+<li class='toc3'><a href='#-setDefaults'>setDefaults</a> </li>
+<li class='toc3'><a href='#-setEdButs'>setEdButs</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>ProxyMixer provides controls for handling and editing the node proxies in a proxyspace and their monitors (cross-platform graphics). It replaces the earlier ProxyMixer class. For Ndefs, use <a href="./../Classes/NdefMixer.html">NdefMixer</a>.
+<p>Overview: <a href="./../Overviews/JITLib.html">JITLib</a><pre class='code prettyprint lang-sc'>// First examples:
+(
+p = ProxySpace.push(s.boot, p);
+"abcde".do { |k| p[k.asSymbol].ar };
+m = ProxyMixer(p, 8);
+n.parent.alwaysOnTop_(true); // show mixer in front of IDE
+)
+
+p.do(_.play(0));
+m.object_(nil);
+m.object_(p);
+
+// if you have JITLibExtensions installed, try ProxyMeter to see the proxy levels:
+if (\ProxyMeter.asClass.notNil) { ProxyMeter.addMixer(m); };
+
+
+"abcdefghijk".do { |k| p[k.asSymbol].ar };
+
+"lmnopqrtuvw".do { |k| p[k.asSymbol].kr };
+
+"abcdefghijk".do { |k, i|
+    p[k.asSymbol].playN(vol: 0.8 - (0.1 * i) );
+    p[k.asSymbol].source = {
+        VarSaw.ar((i + 1 * 100) + [-1, 1])
+        * LFSaw.ar((i + 1 * 0.25));
+    };
+};</pre>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Creation'>Creation</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>obj</span>, <span class='argstr'>numItems: 16</span>, <span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>makeSkip: true</span>, <span class='argstr'>options</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>obj<td class='argumentdesc'>
+<p>the proxyspace to show and control<tr><td class='argumentname'>numItems<td class='argumentdesc'>
+<p>how many ar and kr proxies can be shown<tr><td class='argumentname'>parent<td class='argumentdesc'>
+<p>by default nil, so a window is made automatically. if a parent is supplied, the ProxyMixer will be shown there.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>window bounds - default is nil, so it determines it size.<tr><td class='argumentname'>makeSkip<td class='argumentdesc'>
+<p>a flag whether to make make a skijack<tr><td class='argumentname'>options<td class='argumentdesc'>
+<p>additional settings - currently none provided.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*small' href='./../Overviews/Methods.html#small'>small</a> (<span class='argstr'>obj</span>, <span class='argstr'>numItems: 16</span>, <span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>makeSkip: true</span>)</h3>
+<div class='method'>
+<p>like *new, but creates a proxyMixer for small screen sizes.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Instance variables'>Instance variables</a></h3>
+
+<p><strong>GUI areas and elements:</strong><h3 class='imethodname'><span class='methprefix'>-</span><a name='-arZone' href='./../Overviews/Methods.html#arZone'>arZone</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-krZone' href='./../Overviews/Methods.html#krZone'>krZone</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-editZone' href='./../Overviews/Methods.html#editZone'>editZone</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-arGuis' href='./../Overviews/Methods.html#arGuis'>arGuis</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-krGuis' href='./../Overviews/Methods.html#krGuis'>krGuis</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-editGui' href='./../Overviews/Methods.html#editGui'>editGui</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-arScroller' href='./../Overviews/Methods.html#arScroller'>arScroller</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-krScroller' href='./../Overviews/Methods.html#krScroller'>krScroller</a> </h3>
+<div class='method'>
+<p><strong>current state and access methods:</strong></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-proxyspace' href='./../Overviews/Methods.html#proxyspace'>proxyspace</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-proxyspace' href='./../Overviews/Methods.html#proxyspace'>proxyspace</a> = <span class='argstr'>obj</span></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-existingProxies' href='./../Overviews/Methods.html#existingProxies'>existingProxies</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-activeProxies' href='./../Overviews/Methods.html#activeProxies'>activeProxies</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-playingProxies' href='./../Overviews/Methods.html#playingProxies'>playingProxies</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-selectedKeys' href='./../Overviews/Methods.html#selectedKeys'>selectedKeys</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-arNames' href='./../Overviews/Methods.html#arNames'>arNames</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-krNames' href='./../Overviews/Methods.html#krNames'>krNames</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-numArs' href='./../Overviews/Methods.html#numArs'>numArs</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-numKrs' href='./../Overviews/Methods.html#numKrs'>numKrs</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-atAr' href='./../Overviews/Methods.html#atAr'>atAr</a> (<span class='argstr'>index</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-atKr' href='./../Overviews/Methods.html#atKr'>atKr</a> (<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p></div><h3><a class='anchor' name='Instance methods'>Instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-highlight' href='./../Overviews/Methods.html#highlight'>highlight</a> (<span class='argstr'>index</span>, <span class='argstr'>prefix</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-unhighlight' href='./../Overviews/Methods.html#unhighlight'>unhighlight</a> (<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>highlight and unhighlight an arGui slot in the arZone (left)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-highlightSlots' href='./../Overviews/Methods.html#highlightSlots'>highlightSlots</a> (<span class='argstr'>parOffset</span>, <span class='argstr'>num</span>, <span class='argstr'>highNames: [  ]</span>, <span class='argstr'>clearOthers: true</span>)</h3>
+<div class='method'>
+<p>highlight a block of the arGuis in the arZone/</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sizes' href='./../Overviews/Methods.html#sizes'>sizes</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-switchSize' href='./../Overviews/Methods.html#switchSize'>switchSize</a> (<span class='argstr'>index</span>, <span class='argstr'>hideZones: false</span>)</h3>
+<div class='method'>
+<p>switch between display modes 0: ar, 1: ar+kr, 2: ar+kr+ed</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-arKeysRotation' href='./../Overviews/Methods.html#arKeysRotation'>arKeysRotation</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-krKeysRotation' href='./../Overviews/Methods.html#krKeysRotation'>krKeysRotation</a> </h3>
+<div class='method'>
+<p>if too many proxies are present, by how much to rotate arKeys or krKeys to display.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-title' href='./../Overviews/Methods.html#title'>title</a> </h3>
+<div class='method'>
+<p>get the proxymixer window title.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-getNameLeftBorder' href='./../Overviews/Methods.html#getNameLeftBorder'>getNameLeftBorder</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setNameLeftBorder' href='./../Overviews/Methods.html#setNameLeftBorder'>setNameLeftBorder</a> (<span class='argstr'>xpos: 250</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-shiftNameLeftBorder' href='./../Overviews/Methods.html#shiftNameLeftBorder'>shiftNameLeftBorder</a> (<span class='argstr'>x: 0</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
+<div class='method'>
+<p>trade nameView size and volume slider size:<pre class='code prettyprint lang-sc'>m.getNameLeftBorder; // get its current left border position
+m.setNameLeftBorder(250); // default
+m.setNameLeftBorder(200); // aps left pos, smaller slider
+// relative adjust:
+m.shiftNameLeftBorder(10);
+m.shiftNameLeftBorder(-10);
+
+strong::standard JITGui methods: ::
+method:: setDefaults, accepts, getState, checkUpdate
+
+strong::internal - making the ProxyMixer gui elements: ::
+method:: makeViews, makeTopLine, makeArZone, makeKrZone, makeEditZone, setEdButs
+
+Examples::
+
+code::
+
+// make a proxyspace and 5 ar proxies, and a mixer to show them
+(
+p = ProxySpace.push(s.boot, p);
+"abcde".do { |k| p[k.asSymbol].ar };
+m = ProxyMixer(p, 8);
+p.do(_.play(0));
+)
+
+m.object_(nil); // no object
+m.object_(p);   // the proxyspace
+
+// if you have JITLibExtensions installed, try ProxyMeter to see the proxy levels:
+if (\ProxyMeter.asClass.notNil) { ProxyMeter.addMixer(m); };
+
+    // make too many ar proxies, get a scroller
+"abcdefghijk".do { |k| p[k.asSymbol].ar };
+
+    // make too many kr proxies, get a scroller
+"lmnopqrtuvw".do { |k| p[k.asSymbol].kr };
+
+p.stop;
+    // play some of them
+m.arNames.scramble.keep(5).do { |k| p[k.asSymbol].playN };
+
+    // the top left menu sets which proxies will be shown.
+
+        // existingProxies: even an empty proxy is shown
+~test.ar;
+
+(        // activeProxies: proxy appears when it is alive
+~test = { |freq=250, intv=19, timescale=1, curve=0, loopnode=0|
+    var env = EnvGen.kr(
+        Env({ 1.0.rand2 }!11, {1.0.rand}!10, curve, releaseNode: 9, loopNode: loopnode),
+        timeScale: timescale);
+    var pitch = (env * [1, 0.33, -1] * intv).midiratio * freq;
+    Splay.ar(Formant.ar(pitch, pitch.scramble * 2, pitch.scramble)) * 0.1;
+};
+)
+~test.lag(\freq, 4);
+
+        // playingProxies : only those that really play are shown.
+~test.playN(vol: 1);
+
+// switch back to active proxies...
+        // the reduce button removes all proxies that are not playing
+        // and that are not used as sources in other proxies:
+~otto = { |dens=12| Dust.ar(dens) };
+
+~otto.clear;        // remove it
+p.reduce;
+
+        // doc and docSel post the current proxyspace as code
+p.document;
+
+        // ProxyMixer has three preset widths:
+m.switchSize(0);    // ar zone only
+m.switchSize(1);    // ar + kr
+m.switchSize(2);    // ar + kr + edit zone
+
+        // try with a small ProxyMixer:
+l = ProxyMixer.small(p, 8);
+l.switchSize(0, true);    // ar zone only
+l.switchSize(1, true);    // ar + kr
+l.switchSize(2, true);    // ar + edit zone
+
+        // Record opens a utility window, RecordProxyMixer.
+        // this requires the JITLibExtensions quark.
+
+    // the line of controls for one proxy and its monitor is
+    // a ProxyMonitorGui, so for full details see ProxyMonitorGui.help.
+
+    // it displays current volume,
+~test.vol_(0.05);
+~test.vol_(0.1);
+
+    // proxy name; play/stop/end control:
+~test.playN;        // playN as is
+~test.stop;        // stop
+~test.end;        // option-click on stop : end the monitor and the proxy itself.
+~test.playN(vol: 0);    // option-click on play : start playing with volume zero.
+
+~test.playNDialog;  // shift-click on play/stop: set multichan outputs from code
+
+
+s.scope(8);
+~test.playN(4);    // set proxy's first output channel:
+~test.playN(0);
+
+// One can move the border between sliders and nameView:
+
+n.enableNameResize(true);    // try click and dragging that border now
+
+n.setNameLeftBorder(200);   // or set by code
+
+    //    paus/rsum toggles pause and resume:
+~test.pause;
+~test.resume;
+
+    // send button resends the proxy,
+    // option-click on send rebuilds the proxy
+    // (e.g. for lookup in client-site state)
+~test.send;
+~test.send;
+~test.rebuild;
+~test.rebuild;
+
+
+    // the ed button sends this proxy to the editor - see below
+
+        // kr proxies show up in the middle
+~lfo = { SinOsc.kr(2) };
+~lfnoyz0 = { |lofreq = 0.5, mul=1, add| LFDNoise0.kr(lofreq, mul, add) };
+
+        // the editor zone is a NodeProxyEditor
+        // open it and set some params
+m.switchSize(2);
+m.editGui.object_(~test);
+~test.set(\freq, exprand(80, 1250));    // set ~tests parameters
+~test.set(\intv, 1.0.linrand);
+
+    //    if you declare global specs for the range of a parameter,
+    //    they can be used in the editor:
+m.editGui.paramGui.specs.clear;
+
+Spec.add(\intv, [0, 36, \lin]);
+Spec.add(\timescale, [0.001, 10, \exp]);
+Spec.add(\loopnode, [0, 7, \lin, 1]);
+Spec.add(\curve, [-10, 10]);
+
+m.editGui.object_(~test);
+
+        // you can map a kr proxy to a control param;
+~test.map(\intv, ~lfnoyz0);
+~test.unmap(\intv);
+        // this also works by dragging the kr proxy name
+        // the field left of the param name.
+
+
+p.reduce(method: \clear);
+
+p.clean;
+
+p.clear;</pre>
+
+<p></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-accepts' href='./../Overviews/Methods.html#accepts'>accepts</a> (<span class='argstr'>obj</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-checkUpdate' href='./../Overviews/Methods.html#checkUpdate'>checkUpdate</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-enableNameResize' href='./../Overviews/Methods.html#enableNameResize'>enableNameResize</a> (<span class='argstr'>flag: true</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getState' href='./../Overviews/Methods.html#getState'>getState</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeArZone' href='./../Overviews/Methods.html#makeArZone'>makeArZone</a> (<span class='argstr'>isSmall: false</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeEditZone' href='./../Overviews/Methods.html#makeEditZone'>makeEditZone</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeKrZone' href='./../Overviews/Methods.html#makeKrZone'>makeKrZone</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeTopLine' href='./../Overviews/Methods.html#makeTopLine'>makeTopLine</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeViews' href='./../Overviews/Methods.html#makeViews'>makeViews</a> (<span class='argstr'>options</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeWindow' href='./../Overviews/Methods.html#makeWindow'>makeWindow</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setDefaults' href='./../Overviews/Methods.html#setDefaults'>setDefaults</a> (<span class='argstr'>options</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setEdButs' href='./../Overviews/Methods.html#setEdButs'>setEdButs</a> (<span class='argstr'>isSmall: false</span>)</h3>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/ProxyMixer.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/ProxyMixer.schelp</a><br>link::Classes/ProxyMixer::<br>sc version: 3.8dev</div></div></body></html>

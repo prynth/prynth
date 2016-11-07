@@ -1,0 +1,72 @@
+<html><head><title>Coyote</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Analysis'>UGens>Analysis</a></div>
+<h1>Coyote</h1>
+<div id='summary'>an amplitude tracking based onset detector</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/BatUGens/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/BatUGens/BatUGens.sc'>BatUGens.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Onsets.html">Onsets</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Coyote is an onset detector which tries to find onset attacks in a signal without using FFT processing. It tracks the amplitude changes in the incoming signal and sends a trigger when an onset is found. To get the best tracking for a particular signal by tweaking the arguments, one needs to understand how the onset detection works inside the UGen:
+<p>Coyote compares three different analysis results in parallel and tries to report an onset event in the signal. The first phase is amplitude tracking. The trackFall argument is the 60dB convergence time of the decaying signal(the attack time is constant: 0.001, the process is the same with the <a href="./../Classes/Amplitude.html">Amplitude</a> UGen, trackFall is the releaseTime). The output of this tracking is divided to 3 inputs inside. The first two are smoothers(lowpass filters) with different lag times. slowLag is the lag time of the slow smoother, and the fastLag is the lag time of the fast one. The fast smoother is multiplied by a value(fastMul argument) which should be between 0 and 0.9 so its output is always below the slow smoother, except in onsets. So when an onset occurs, the fast smoother output rises quicker than the slow smoother, and when the fast one exceeds the slower at an instant(occurs only at onsets), a trigger is sent to the output from the UGen. For the next trigger to happen, a specified time should pass which is defined by the minDur parameter. So minDur defines the minimum time between events/triggers.
+<p>This approach is extremely fast in response(compared to FFT based detectors) when detecting onsets and works well on most contexts(guitar, percussion, etc...). But it has a drawback when there are sustaining sounds present from the same instrument at the moment of an onset, so there is a third unit inside that averages the input beginning from the last trigger whose output is also smoothed by a smoother(lag time is also set to slowLag) and it too is compared with the output of fast smoother to make the tracking work better when there are sustaining sounds present at the moment of an onset.
+<p>The default values are a good starting point and works well on many contexts.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>in: 0</span>, <span class='argstr'>trackFall: 0.2</span>, <span class='argstr'>slowLag: 0.2</span>, <span class='argstr'>fastLag: 0.01</span>, <span class='argstr'>fastMul: 0.5</span>, <span class='argstr'>thresh: 0.05</span>, <span class='argstr'>minDur: 0.1</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>Signal input.<tr><td class='argumentname'>trackFall<td class='argumentdesc'>
+<p>60dB convergence time for the initial amplitude tracker.<tr><td class='argumentname'>slowLag<td class='argumentdesc'>
+<p>Lag time for the slow smoother.<tr><td class='argumentname'>fastLag<td class='argumentdesc'>
+<p>Lag time for the fast smoother.<tr><td class='argumentname'>fastMul<td class='argumentdesc'>
+<p>Multiplier for the fast smoother. At the instant of onsets, fast smoother output will exceed the slow smoother and trigger an onset report. If you want to tweak the sensitivity of the tracking, you should try tweaking this value first. Higher values(approaching to 1) makes the tracking more sensitive.<tr><td class='argumentname'>thresh<td class='argumentdesc'>
+<p>The minimum threshold for the input to begin tracking onsets.<tr><td class='argumentname'>minDur<td class='argumentdesc'>
+<p>Minimum duration between events.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// Right speaker is the source and at left is a burst of noise when an onset is detected
+(
+SynthDef("coyote", {  var sounds = Mix.fill(3, { var trig = Dust.kr(1);
+                                                 Saw.ar(TRand.kr(50, 880, trig),
+                                                        Decay.kr(trig,
+                                                                 TRand.kr(0.1, 2, trig),
+                                                                 3.reciprocal)); } );
+
+                      var detect = PinkNoise.ar(Decay.kr(Coyote.kr(sounds,
+                                                                   fastMul: 0.6,
+                                                                   thresh: 0.001), 0.2));
+
+                      Out.ar(0, [detect, sounds]); } ).send(s);
+)
+
+x = Synth.new("coyote")
+x.free;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/BatUGens/HelpSource/Classes/Coyote.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/BatUGens/HelpSource/Classes/Coyote.schelp</a><br>link::Classes/Coyote::<br>sc version: 3.8dev</div></div></body></html>

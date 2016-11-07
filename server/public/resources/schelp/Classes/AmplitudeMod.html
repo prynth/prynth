@@ -1,0 +1,80 @@
+<html><head><title>AmplitudeMod</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Analysis>Amplitude'>UGens>Analysis>Amplitude</a></div>
+<h1>AmplitudeMod</h1>
+<div id='summary'>amplitude follower</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/BlackrainUGens/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/BlackrainUGens/blackrain_ugens.sc'>blackrain_ugens.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Amplitude.html">Amplitude</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Tracks the peak amplitude of a signal. As a opposed to <a href="./../Classes/Amplitude.html">Amplitude</a>, AmplitudeMod, allows attack and release times to be modulated once the UGen has been instantiated. There is a tiny overhead associated to this.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>in: 0</span>, <span class='argstr'>attackTime: 0.01</span>, <span class='argstr'>releaseTime: 0.01</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>in: 0</span>, <span class='argstr'>attackTime: 0.01</span>, <span class='argstr'>releaseTime: 0.01</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>input<td class='argumentdesc'>
+<p>input signal.<tr><td class='argumentname'>attackTime<td class='argumentdesc'>
+<p>60dB convergence time for following attacks.<tr><td class='argumentname'>releaseTime<td class='argumentdesc'>
+<p>60dB convergence time for following decays.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+// use input amplitude to control Pulse amplitude - use headphones to prevent feedback.
+SynthDef("help-AmplitudeMod",{ arg out=0;
+    Out.ar(out,
+        Pulse.ar(90, 0.3, Amplitude.kr(SoundIn.ar))
+    )
+}).play;
+
+)
+
+
+(
+// use input amplitude to control SinOsc frequency - use headphones to prevent feedback.
+z = SynthDef("help-AmplitudeMod",{ arg out=0, attack=0.01, release=0.01;
+    Out.ar(out,
+        SinOsc.ar(
+            AmplitudeMod.kr(
+                    SoundIn.ar,
+                    attack,
+                    release,
+                    1200,
+                    400)
+            , 0, 0.3)
+    )
+}).play;
+
+)
+z.set(\attack, 0.050)
+z.set(\release, 0.125)
+
+z.free</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/BlackrainUGens/HelpSource/Classes/AmplitudeMod.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/BlackrainUGens/HelpSource/Classes/AmplitudeMod.schelp</a><br>link::Classes/AmplitudeMod::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,278 @@
+<html><head><title>Understanding Streams, Patterns and Events - Part 6</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS</div>
+<div id='categories'><a href='./../Browse.html#Tutorials>Streams-Patterns-Events'>Tutorials>Streams-Patterns-Events</a></div>
+<h1>Understanding Streams, Patterns and Events - Part 6</h1>
+<div id='summary'>Parallel Patterns</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Tutorials/Streams-Patterns-Events1.html">Understanding Streams, Patterns and Events - Part 1</a>, <a href="./../Tutorials/Streams-Patterns-Events2.html">Understanding Streams, Patterns and Events - Part 2</a>, <a href="./../Tutorials/Streams-Patterns-Events3.html">Understanding Streams, Patterns and Events - Part 3</a>, <a href="./../Tutorials/Streams-Patterns-Events4.html">Understanding Streams, Patterns and Events - Part 4</a>, <a href="./../Tutorials/Streams-Patterns-Events5.html">Understanding Streams, Patterns and Events - Part 5</a>, <a href="./../Tutorials/Streams-Patterns-Events7.html">Understanding Streams, Patterns and Events - Part 7</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Parallel Patterns'>Parallel Patterns</a></li>
+<ul class='toc'><li class='toc2'><a href='#Ppar'>Ppar</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Ptpar'>Ptpar</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#FilterPatterns and transformation'>FilterPatterns and transformation</a></li>
+<ul class='toc'><li class='toc2'><a href='#Padd, Pmul, Pset, Pstretch'>Padd, Pmul, Pset, Pstretch</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Paddp, Pmulp, Psetp, Pstretchp'>Paddp, Pmulp, Psetp, Pstretchp</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Pbindf'>Pbindf</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Parallel Patterns'>Parallel Patterns</a></h2>
+<h3><a class='anchor' name='Ppar'>Ppar</a></h3>
+
+<p>The <a href="./../Classes/Ppar.html">Ppar</a> pattern allows you to merge multiple event streams to play in parallel.
+<p>Ppar is a <a href="./../Classes/ListPattern.html">ListPattern</a> and so like most ListPatterns it takes two arguments, a <strong>list</strong> of event patterns to play in parallel and a <strong>repeats</strong> count.
+<p>Ppar's child patterns must be event patterns. Using value patterns in a Ppar is an error because value patterns contain no duration data.
+<p>A Ppar is done when all of its subpatterns are done.<pre class='code prettyprint lang-sc'>(
+Ppar([
+    Pbind(\dur, 0.2, \midinote, Pseq([62, 65, 69, 72], inf)),
+    Pbind(\dur, 0.4, \midinote, Pseq([50, 45], inf))
+]).play
+)
+
+
+(
+// Ppars can be nested
+Ppar([
+    Pbind(
+        \dur, Prand([0.2, 0.4, 0.6], inf),
+        \midinote, Prand([72, 74, 76, 77, 79, 81], inf),
+        \db, -26,
+        \legato, 1.1
+    ),
+    Pseq([
+        Pbind(\dur, 3.2, \freq, Pseq([\rest]) ),
+        Prand([
+            Ppar([
+                Pbind(\dur, 0.2, \pan,  0.5, \midinote, Pseq([60, 64, 67, 64])),
+                Pbind(\dur, 0.4, \pan, -0.5, \midinote, Pseq([48, 43]))
+            ]),
+            Ppar([
+                Pbind(\dur, 0.2, \pan,  0.5, \midinote, Pseq([62, 65, 69, 65])),
+                Pbind(\dur, 0.4, \pan, -0.5, \midinote, Pseq([50, 45]))
+            ]),
+            Ppar([
+                Pbind(\dur, 0.2, \pan,  0.5, \midinote, Pseq([64, 67, 71, 67])),
+                Pbind(\dur, 0.4, \pan, -0.5, \midinote, Pseq([52, 47]))
+            ])
+        ], 12)
+    ], inf)
+], inf).play;
+)</pre>
+<h3><a class='anchor' name='Ptpar'>Ptpar</a></h3>
+
+<p>The <a href="./../Classes/Ppar.html">Ppar</a> pattern starts all of its subpatterns at the same time.
+<p>A <a href="./../Classes/Ptpar.html">Ptpar</a> pattern includes a start time parameter before each subpattern which allow the subpatterns to be started at some time delay within the pattern. The start time is given in beats.<pre class='code prettyprint lang-sc'>(
+var makePattern, durpat;
+
+durpat = Pseq([ Pgeom(0.05, 1.1, 24), Pgeom(0.5, 0.909, 24) ], 2);
+
+makePattern = { arg note, db, pan;
+    Pbind( \dur, durpat, \db, db, \pan, pan, \midinote, Pseq([note, note-4], inf) );
+};
+
+Ptpar([
+    0.0, makePattern.value(53, -20, -0.9),
+    2.0, makePattern.value(60, -23, -0.3),
+    4.0, makePattern.value(67, -26,  0.3),
+    6.0, makePattern.value(74, -29,  0.9)
+], inf).play;
+)</pre>
+
+<p>The time arguments are sent the <code class='code prettyprint lang-sc'>value</code> message when the Ptpar pattern is started, so you may use functions to specify the times.<pre class='code prettyprint lang-sc'>(
+var makePattern, durpat;
+
+durpat = Pseq([ Pgeom(0.05, 1.1, 24), Pgeom(0.5, 0.909, 24) ], 2);
+
+makePattern = { arg note, db, pan;
+    Pbind( \dur, durpat, \db, db, \pan, pan, \midinote, Pseq([note, note-4], inf) );
+};
+
+Ptpar([
+    { 0.0 }, makePattern.value(53, -20, -0.9),
+    { 8.0.rand }, makePattern.value(60, -23, -0.3),
+    { 8.0.rand }, makePattern.value(67, -26,  0.3),
+    { 8.0.rand }, makePattern.value(74, -29,  0.9)
+], inf).play;
+)</pre>
+<h2><a class='anchor' name='FilterPatterns and transformation'>FilterPatterns and transformation</a></h2>
+
+<p>FilterPatterns take an existing pattern and apply some modification to its properties.<h3><a class='anchor' name='Padd, Pmul, Pset, Pstretch'>Padd, Pmul, Pset, Pstretch</a></h3>
+
+<p>There is a simpler way to write the modal transposition example given in part 5. In fact the earlier examples are setting the values of <code class='code prettyprint lang-sc'>mtranspose</code> and <code class='code prettyprint lang-sc'>ctranspose</code> which is not the best way to change those variables, because it wipes out any modifications to them by parent patterns. It is better to take the current value of those properties and add a value to them.
+<p>The <a href="./../Classes/Padd.html">Padd</a> filter takes the current value of a property and adds a value to it.<pre class='code prettyprint lang-sc'>(
+// modal transposition
+var pattern;
+
+// define the basic pattern
+pattern = Pbind(
+    \dur, 0.15,
+    \degree, Pseq([ Pshuf(#[-7,-3,0,2,4,7], 4), Pseq([0,1,2,3,4,5,6,7]) ], 1)
+);
+
+Pseq([
+    pattern,        // untransposed
+    Padd(\mtranspose, 1, pattern),    // modal transpose up 1 degree
+    Padd(\mtranspose, 2, pattern)    // modal transpose up 2 degrees
+], inf).play
+)</pre>
+
+<p>Similarly, <a href="./../Classes/Pmul.html">Pmul</a> multiplies the current value of a property by a value. <a href="./../Classes/Pset.html">Pset</a> sets the property to a value.
+<p>In order to process duration correctly <a href="./../Classes/Pstretch.html">Pstretch</a> should be used.<pre class='code prettyprint lang-sc'>(
+// beat stretching using Pstretch
+var pattern;
+
+// define the basic pattern
+pattern = Pbind(
+    \dur, 0.15,
+    \degree, Pseq([ Pshuf(#[-7,-3,0,2,4,7], 4), Pseq([0,1,2,3,4,5,6,7]) ], 1)
+);
+
+Pseq([
+    pattern,        // normal
+    Pstretch(0.5, pattern),    // stretch durations by a factor of 1/2
+    Pstretch(2.0, pattern)    // stretch durations by a factor of 2
+], inf).play
+)</pre>
+<h3><a class='anchor' name='Paddp, Pmulp, Psetp, Pstretchp'>Paddp, Pmulp, Psetp, Pstretchp</a></h3>
+
+<p>In fact there is an even shorter version of the modal transposition example. <a href="./../Classes/Paddp.html">Paddp</a> reads one pattern to get values for adding to a property and plays the second pattern once through modified with each new value.<pre class='code prettyprint lang-sc'>(
+// modal transposition
+var pattern;
+
+// define the basic pattern
+pattern = Pbind(
+    \dur, 0.15,
+    \degree, Pseq([ Pshuf(#[-7,-3,0,2,4,7], 4), Pseq([0,1,2,3,4,5,6,7]) ], 1)
+);
+
+Paddp(
+    \mtranspose,        // property to be modified
+    Pseq([0,1,2], inf),    // a value pattern as a source of values for adding to mtranspose
+    pattern            // the pattern to be modified
+).play
+)</pre>
+
+<p>Nested modifications:<pre class='code prettyprint lang-sc'>(
+// modal transposition
+var pat1, pat2;
+
+// define the basic pattern
+pat1 = Pbind(
+    \dur, 0.15,
+    \degree, Pseq([ Pshuf(#[-7,-3,0,2,4,7], 4), Pseq([0,1,2,3,4,5,6,7]) ], 1)
+);
+
+pat2 = Paddp(
+    \mtranspose,    // property to be modified
+    Pseq([0,1,2]),    // a value pattern as a source of values for adding to mtranspose
+    Ppar([
+        pat1,
+        Padd(\mtranspose, -3, pat1),    // down a 4th
+        Padd(\mtranspose, 2, pat1)    // up a 3rd
+    ])
+);
+
+Pseq([
+    pat1,    // unmodified pattern
+    pat2,    // parallel sequence
+    Pstretch(1.5, pat2)    // parallel sequence stretched by 3/2
+], inf).play
+)</pre>
+
+<p>Another example using Paddp:<pre class='code prettyprint lang-sc'>(
+var chord;
+chord = Prand([[53, 58, 64],[53, 60, 64],[57,60,65]]);
+Paddp(\ctranspose, Prand([-1,0,2,4,5], inf),
+    Ppar([
+        Pbind(    // melody part
+            \dur, Prand([0.2, 0.4, 0.6], inf),
+            \midinote, Pxrand([71, 72, 74, 76, 77, 79], 10),
+            \db, -26,
+            \legato, 1.1
+        ),
+        Pbind(    // harmony part
+            \pan, 0.4,
+            \dur, Pseq([0.1, 0.5, 0.4, 0.6], 4),
+            \midinote, Pseq([chord,\rest,chord,\rest], 4)
+        ),
+        Pbind(    // bass part
+            \pan, -0.4,
+            \dur, 0.4,
+            \midinote, Pseq([38, 45, 38, 36], 4)
+        )
+    ])
+).play
+)
+
+
+(
+// chromatic transposition
+var pattern;
+
+// define the basic pattern
+pattern = Pbind(
+    \dur, 0.1,
+    \degree, Pseq([0,1,2,3,4,5,6,7])
+);
+
+Paddp(
+    \ctranspose,        // property to be modified
+    Pseries(0,1,12),    // a value pattern as a source of values for multiplying with ctranspose
+    pattern            // the pattern to be modified
+).play
+)
+
+
+(
+// beat time stretching
+var pattern;
+
+// define the basic pattern
+pattern = Pbind(
+    \dur, 0.1,
+    \degree, Pseq([0,1,2,3,4,5,6,7])
+);
+
+Pstretchp(
+    Pseq([1,2,3], inf),    // a value pattern as a source of values for multiplying with stretch
+    pattern            // the pattern to be modified
+).play
+)</pre>
+<h3><a class='anchor' name='Pbindf'>Pbindf</a></h3>
+
+<p><a href="./../Classes/Pbindf.html">Pbindf</a> is like <a href="./../Classes/Pbind.html">Pbind</a> except that it merges all the bound symbols into events that it gets from a subpattern. It takes the same initial arguments in pairs as Pbind does, with an additional pattern to be modified as the last argument.<pre class='code prettyprint lang-sc'>(
+var pattern;
+pattern = Pbind( \midinote, Pseq(#[60, 62, 64, 65, 67, 69, 71, 72]) );
+
+Pseq([
+    Pbindf(pattern, \legato, 0.1, \dur, 0.2),
+    Pbindf(pattern, \legato, 1.0, \dur, 0.125),
+    Pbindf(pattern, \legato, 2.0, \dur, 0.3)
+], inf).play
+)</pre>
+
+<p>Patterns can be used as the arguments to Pbindf.<pre class='code prettyprint lang-sc'>(
+var pattern;
+pattern = Pbind( \midinote, Pseq(#[60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79]) );
+
+Pseq([
+    Pbindf(pattern,\legato, 0.1, \dur, Pgeom(0.3, 0.85, inf)),
+    Pbindf(pattern,\legato, 1.0, \dur, Pseq([0.3, 0.15], inf)),
+    Pbindf(pattern,\legato, 2.0, \dur, Pseq([0.2, 0.2, 0.4], inf))
+], inf).play
+)</pre>
+
+<p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events7.html">Understanding Streams, Patterns and Events - Part 7</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events6.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events6.schelp</a><br>link::Tutorials/Streams-Patterns-Events6::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,306 @@
+<html><head><title>Introduction to GUI</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider GUIDES</div>
+<div id='categories'><a href='./../Browse.html#GUI'>GUI</a></div>
+<h1>Introduction to GUI</h1>
+<div id='summary'>An introduction to writing graphical user interface code</div>
+</div>
+<div class='subheader'>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#First problem: Platform independence'>First problem: Platform independence</a></li>
+<ul class='toc'><li class='toc2'><a href='#Use "GUI redirect" classes whenever possible'>Use "GUI redirect" classes whenever possible</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Basic elements: Windows, views and containers'>Basic elements: Windows, views and containers</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Automatic positioning and resizing of views'>Automatic positioning and resizing of views</a></li>
+<ul class='toc'><li class='toc2'><a href='#View's resize options'>View's resize options</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Decorators'>Decorators</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Layouts'>Layouts</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Customizing appearance'>Customizing appearance</a></li>
+<ul class='toc'><li class='toc2'><a href='#Colors'>Colors</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Palette'>Palette</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Fonts'>Fonts</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Other visual properties'>Other visual properties</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Actions and hooks: Make that button do something!'>Actions and hooks: Make that button do something!</a></li>
+<ul class='toc'><li class='toc2'><a href='#Default actions'>Default actions</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Keyboard and mouse actions'>Keyboard and mouse actions</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Drag and drop actions'>Drag and drop actions</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Other specialized actions'>Other specialized actions</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Hooks'>Hooks</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Custom views'>Custom views</a></li>
+<ul class='toc'><li class='toc2'><a href='#The simple way: using the UserView class'>The simple way: using the UserView class</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#The advanced way: subclassing the UserView'>The advanced way: subclassing the UserView</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Caution: GUI and timing'>Caution: GUI and timing</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='First problem: Platform independence'>First problem: Platform independence</a></h2>
+
+<p><strong>Why do you need to know about this?</strong><ol>
+<li>You'll create a Window.new and wonder why you got back a SCWindow or QWindow.<li>You might use Mac-only GUI objects and wonder why your friend on Windows can't run your code.<li>On Mac, you might run some examples that are specific to Q- objects and wonder why they don't work right away.</ol>
+
+<p><strong>Short answer</strong>
+<p>Make sure you select the right <strong>GUI kit</strong>.
+<p>When SuperCollider starts, one of the available kits becomes the default.<table>
+<tr><td><strong>Platform</strong><td><strong>Default kit</strong><tr><td>Mac OSX<td>Cocoa -- <code class='code prettyprint lang-sc'>GUI.cocoa</code><tr><td>Linux/FreeBSD<td>Qt -- <code class='code prettyprint lang-sc'>GUI.qt</code><tr><td>Windows<td>Qt -- <code class='code prettyprint lang-sc'>GUI.qt</code></table>
+
+<p>For most cases, the Qt GUI kit is sufficient. Cocoa is retained as the default in Mac OSX for historical reasons. (This may change in a future release.)<div class='warning'><span class='warninglabel'>WARNING:</span> Some GUI examples are Qt-specific. They are labeled as such in the documentation. <strong>These examples will not work in OSX unless you manually switch to the Qt kit</strong> by running the following code:
+<p><code class='code prettyprint lang-sc'>GUI.qt;</code></div>
+<p>See the <a href="./../Classes/GUI.html">GUI</a> help file for more background on the GUI kits.<h3><a class='anchor' name='Use "GUI redirect" classes whenever possible'>Use "GUI redirect" classes whenever possible</a></h3>
+
+<p>It is strongly recommended to use generic view class names: Window, Button, Slider, etc. Code written using the generic names can run in other GUI kits.<pre class='code prettyprint lang-sc'>// DO write
+w = Window.new.front;
+
+// DO NOT write
+w = SCWindow.new.front;</pre>
+
+<p>In the second example, the use of the Cocoa-specific window class ensures that the code will not run in Linux or Windows without modification. This is usually not a good idea.
+<p>For a list of all the generic GUI classes and their kit-specific equivalents see <a href="./../Overviews/GUI-Classes.html">List of GUI classes</a>.
+<p>In the rest of this document we will refer to GUI classes by their generic name, adding notes where important differences between GUI kits are of concern.<h2><a class='anchor' name='Basic elements: Windows, views and containers'>Basic elements: Windows, views and containers</a></h2>
+
+<p>The most fundamental element of the GUI is the <strong>Window</strong>. It occupies a rectangular space on screen within which other GUI elements are displayed. It usually has a bar that displays the window's title and allows for moving it, resizing it and closing it with the controls it displays or through mouse and keyboard interaction. Some of these aspects may be controlled within SuperCollider GUI code, though it is largely platform-dependent how precisely interaction with a window happens and is visually indicated.
+<p>The GUI elements contained within a Window are called <strong>views</strong>. They all inherit from the basic View class. The view occupies a rectangular space of the window within which it draws itself to display some data or to indicate a mode of interaction between the user and the program. Views receive keyboard and mouse events generated by the user and respond to them by controlling the behavior of the program. They also display information about the state of the program and the data on which it operates.
+<p>There are also special types of views that can contain other views and are thus called <strong>containers</strong>, for example the CompositeView. They allow for structuring GUI in a hierarchical way. A container view is called a <strong>parent</strong> of the views it contains, and they are called its <strong>children</strong>. Hierarchical organization allows to easily change aspects of all the views within a container: if the parent view is hidden, so are all the children; if the parent view is moved, so are they. Children are positioned with coordinates relative to their parent.<div class='note'><span class='notelabel'>NOTE:</span> In many aspects, a Window is also considered to be a parent of the views it contains, and can functionally take the same place in code as container views, although that is not true in all cases. When a Window is created it implicitely creates a container view occupying its entire space. When a view is created with a Window as its parent it will actually become a child of that container. See Window's <a href="./../Classes/Window.html#-view">view</a> method and View's <a href="./../Classes/View.html#*new">constructor</a> for details.</div><div class='note'><span class='notelabel'>NOTE:</span> In <strong>Qt GUI</strong> there is no distinction between windows, views, and containers. An instance of the View class itself can be displayed directly on screen, and can contain other views, so the same applies to all its subclasses. Most of the methods that are specific to Window and containers in other GUI kits are shared by all views in Qt.</div>
+<p>The following example shows a window containing a Button, a Slider and a group of StaticText views contained in a CompositeView. When the button is clicked the visibility of the CompositeView is toggled, while interacting with the Slider will move the CompositeView (and consequently all its contents) in horizontal direction.<pre class='code prettyprint lang-sc'>w = Window.new("GUI Introduction", Rect(200,200,255,100));
+b = Button.new(w,Rect(10,0,80,30)).states_([["Hide"],["Show"]]);
+s = Slider.new(w,Rect(95,0,150,30));
+c = CompositeView.new(w,Rect(20,35,100,60));
+StaticText.new(c,Rect(0,0,80,30)).string_("Hello");
+StaticText.new(c,Rect(20,30,80,30)).string_("World!");
+b.action = { c.visible = b.value.asBoolean.not };
+s.action = { c.bounds = Rect( s.value * 150 + 20, 35, 100, 100 ) };
+w.front;</pre>
+<h2><a class='anchor' name='Automatic positioning and resizing of views'>Automatic positioning and resizing of views</a></h2>
+
+<p>As a handy alternative to specifying all the dimensions and positions of views explicitely in code, SuperCollider allows for automatic positioning and resizing of views in relation to each other and in relation to window size - at the view creation and dynamically, when window is resized. There is several mechanisms for this purpose.<h3><a class='anchor' name='View's resize options'>View's resize options</a></h3>
+
+<p>Views can automatically resize or move when their parent is resized, in one of the nine different ways that define how each of the view's edges will move along with the parent's edges. For documentation see the view's <a href="./../Classes/View.html#-resize">resize</a> method and <a href="./../Reference/Resize.html">Resize behaviour</a> document.<pre class='code prettyprint lang-sc'>w = Window.new("GUI Introduction", Rect(200,200,200,200));
+TextField.new(w,Rect(0,0,200,30)).resize_(2);
+Slider.new(w,Rect(0,30,30,170)).resize_(4);
+TextView.new(w,Rect(30,30,170,170)).resize_(5);
+w.front;</pre>
+<h3><a class='anchor' name='Decorators'>Decorators</a></h3>
+
+<p>Decorators are objects that can be assigned to container views to carry the task of positioning the container's child views (currently there exists only one: FlowLayout). After a decorator is assigned to a container, the views created as its children will automatically be positioned in a specific pattern. See documentation of <a href="./../Classes/FlowLayout.html">FlowLayout</a> for details.<pre class='code prettyprint lang-sc'>w = Window.new("GUI Introduction", Rect(200,200,320,320)).front;
+// notice that FlowLayout refers to w.view, which is the container view
+// automatically created with the window and occupying its entire space
+w.view.decorator = FlowLayout(w.view.bounds);
+14.do{ Slider(w, 150@20) };</pre>
+<h3><a class='anchor' name='Layouts'>Layouts</a></h3>
+
+<p>Layout classes make part of a complex system to manage both position and size of views. Using layouts, only relations of views within a pattern of organization need to be specified and their exact positions as well as sizes will automatically be deduced based on their type (the content they display and the type of interaction they offer) and in accord with principles of good GUI usability. Layouts also position and resize views dynamically, whenever their parent is resized or their contents change.
+<p>See the <a href="./../Guides/GUI-Layout-Management.html">Layout Management</a> guide for detailed explanation.<div class='note'><span class='notelabel'>NOTE:</span> Layouts are currently implemented <strong>only in Qt GUI</strong>. The following example will not work in other GUI kits.<pre class='code prettyprint lang-sc'>w = Window.new("GUI Introduction").layout_(
+    VLayout(
+        HLayout( Button(), TextField(), Button() ),
+        TextView()
+    )
+).front;</pre>
+</div><div class='note'><span class='notelabel'>NOTE:</span> Layouts are not compatible with decorators and will ignore view resize options. The effect of combining layouts and decorators is undefined.</div><h2><a class='anchor' name='Customizing appearance'>Customizing appearance</a></h2>
+
+<p>Views offer various ways to customize their appearance. This ranges from decorative changing of colors they use to draw themselves to controlling how they display various kinds of data.<h3><a class='anchor' name='Colors'>Colors</a></h3>
+
+<p>Colors are represented in GUI code by the <a href="./../Classes/Color.html">Color</a> class.
+<p>A typical color that can be customized is background color - a color of choice can be applied to whatever is considered to be the background of a particular view. Views that display some text will typically also allow customizing its color as well.
+<p>Custom colors may be associated with different changing states of views or data they display, for example: Button allows to associate background and text colors with each one of its states, and will thus switch colors together with state when clicked; ListView allows to set a different background color for each of its items, as well as special background and text colors applied only to the item currently selected.
+<p>Whenever you execute the following example, random colors will be applied to different aspects of the views:<pre class='code prettyprint lang-sc'>(
+w = Window("GUI Introduction").background_(Color.rand).front;
+b = Button(w, Rect(10,10,100,30)).states_([
+    ["One",Color.rand,Color.rand],
+    ["Two",Color.rand,Color.rand],
+    ["Three",Color.rand,Color.rand]
+]);
+l = ListView.new(w, Rect(10,50,200,100))
+    .items_(["One","Two","Three"])
+    .colors_([Color.rand,Color.rand,Color.rand])
+    .hiliteColor_(Color.blue)
+    .selectedStringColor_(Color.white);
+s = Slider(w, Rect(10, 160, 200, 20))
+    .knobColor_(Color.rand)
+    .background_(Color.rand);
+)</pre>
+<h3><a class='anchor' name='Palette'>Palette</a></h3>
+
+<p>In Qt GUI, the complete set of colors used to draw the views is represented by a palette (see the <a href="./../Classes/QPalette.html">QPalette</a> class). Using a palette, you can define (most of) the appearance of the whole GUI in one go.
+<p>In the following example, clicking on the button will switch between two palettes. Note however, that the color assigned to the first Button state will beat the red color defined in the palette, and that colors of individual ListView items are not controlled by the palette.<pre class='code prettyprint lang-sc'>(
+x = QPalette.auto(Color.red(0.8), Color.red(0.5));
+y = QPalette.auto(Color.cyan(1.4), Color.cyan(1.8));
+p = QtGUI.palette;
+QtGUI.palette = x;
+w = Window.new("GUI Introduction").front;
+w.onClose = {QtGUI.palette = p};
+Button.new(w, Rect(10,10,100,30)).states_([
+    ["Red", Color.black, Color.grey(0.7)],
+    ["Cyan"]
+]).action_({ |b| QtGUI.palette = if(b.value == 0){x}{y} });
+ListView.new(w, Rect(10,50,200,100))
+    .items_(["One","Two","Three"])
+    .colors_([Color.grey(0.4),Color.grey(0.5),Color.grey(0.6)]);
+Slider(w, Rect(10, 160, 200, 20));
+RangeSlider(w, Rect(10, 190, 200, 20));
+)</pre>
+<h3><a class='anchor' name='Fonts'>Fonts</a></h3>
+
+<p>Views that display some text will typically allow you to specify a custom font for it. Fonts are represented by the <a href="./../Classes/Font.html">Font</a> class, which can also be queried for the default font used in general, as well as the default font specifically for the "serif", "sans-serif" and "monospace" font types. It can also be queried for all available fonts on the system.<pre class='code prettyprint lang-sc'>(
+w = Window.new("GUI Introduction",Rect(200,200,200,70)).front;
+a = [Font.defaultMonoFace, Font.defaultSansFace, Font.defaultSerifFace];
+b = Button.new(w,Rect(10,10,180,50))
+    .states_([["Monospace"],["Sans serif"],["Serif"]])
+    .font_(a[0])
+    .action_({|b| b.font = a[b.value]});
+)</pre>
+<h3><a class='anchor' name='Other visual properties'>Other visual properties</a></h3>
+
+<p>Complex views may have many other ways to customize how they display the same data. <a href="./../Classes/MultiSliderView.html">MultiSliderView</a> and <a href="./../Classes/EnvelopeView.html">EnvelopeView</a> are good examples.<h2><a class='anchor' name='Actions and hooks: Make that button do something!'>Actions and hooks: Make that button do something!</a></h2>
+
+<p>Views and windows can be assigned <strong>actions</strong> that they will perform whenever a specific event occurs as a result of user's interaction. Technically, an action can be any Object, and when the relevant event occurs, it's <a href="./../Classes/Object.html#-value">value</a> method will be called. For example, it is useful to assign a Function as an action, which allows one to define an arbitrary chunk of code to be performed in response to a GUI event.
+<p>Objects can also be given to views and windows to evalute on events that are not a direct result of user's interaction, but convey useful information about the view's operation and the state it moved in. In this case they are often differentiated from actions and called <strong>hooks</strong>.
+<p>Here, we will give an overview of different kinds of actions and hooks. See <a href="./../Classes/View.html#Actions in general">View: Actions in general</a> and following sections for precise explanation of how to assign and make use of them.<h3><a class='anchor' name='Default actions'>Default actions</a></h3>
+
+<p>Views can typically be assigned a default action with their <a href="./../Classes/View.html#-action">action</a> setter method, which will be performed when the view's primary mode of interaction is invoked. The default action for a Button for example occurs when it is clicked, for a Slider when its handle is moved.
+<p>In the following example, pressing the button will open an exact same window but at different position.<pre class='code prettyprint lang-sc'>~makeWindow = { var w;
+    w = Window.new("Evader",Rect(500.rand + 100, 500.rand + 100, 200,50)).front;
+    Button.new(w,Rect(10,10,180,30)).states_([["Evade"]]).action_(~makeWindow);
+};
+~makeWindow.value;</pre>
+<h3><a class='anchor' name='Keyboard and mouse actions'>Keyboard and mouse actions</a></h3>
+
+<p>All the views can be assigned actions to specific mouse and keyboard events, no matter what other effects those events might have on the view or what other specialized actions or hooks the view might trigger on these events.
+<p>You can assign actions to <strong>mouse events</strong> generated when the mouse pointer enters the space of a view, when it moves over them, and when a mouse button is pressed or released.
+<p>See <a href="./../Classes/View.html#Mouse actions">View: Mouse actions</a> for details.
+<p>In the following example the StaticText will report whether the Button is pressed or released.<pre class='code prettyprint lang-sc'>w = Window.new(bounds:Rect(200,200,200,50)).front;
+b = Button.new(w,Rect(10,10,80,30)).states_([["Off"],["On"]]);
+t = StaticText(w,Rect(100,10,90,30)).string_("Button released");
+b.mouseDownAction = { t.string = "Button pressed" };
+b.mouseUpAction = { t.string = "Button released" };</pre>
+
+<p>You can assign actions to <strong>keyboard events</strong> generated whenever a key is pressed or released while the view has keyboard focus. Keyboard focus is a state of a view in which it has exclusive priority to respond to keyboard events. A view that has keyboard focus typically in a way visually indicates so. On most platforms, pressing the Tab key will switch the keyboard focus between views in the active window and clicking on a view will give it focus.
+<p>See <a href="./../Classes/View.html#Key actions">View: Key actions</a> for details.
+<p>Typing text into any of the TextFields in the following example will change the color of the rectangle bellow, for each TextField a different color.<pre class='code prettyprint lang-sc'>w = Window.new(bounds:Rect(200,200,200,100)).front;
+x = TextField(w,Rect(10,10,80,30));
+y = TextField(w,Rect(110,10,80,30));
+t = StaticText(w,Rect(10,40,180,50));
+~reset = {t.background = Color.red};
+x.keyDownAction = {t.background = Color.green};
+x.keyUpAction = ~reset;
+y.keyDownAction = {t.background = Color.blue};
+y.keyUpAction = ~reset;
+~reset.value;</pre>
+
+<p>If a key or mouse event is not handled by the view on which it occurs, it may <strong>propagate</strong> to the parent view, and trigger the parent's action. See <a href="./../Classes/View.html#Key and mouse event processing">View: Key and mouse event processing</a> for detailed explanation.<h3><a class='anchor' name='Drag and drop actions'>Drag and drop actions</a></h3>
+
+<p>When a mouse button is pressed on a view together with Cmd(Mac OS) or Ctrl(Other OS) key and the mouse pointer is moved while holding the button, a <strong>drag-and-drop</strong> operation is initiated - in case the view supports it. Most views have a default object that they export when a drag is attempted. For a Slider it is its value, for a List it is the numeric index of the currently selected item, etc. It is said that the exported object is being <strong>dragged</strong>. When the dragging gesture ends on another view by releasing the mouse button on top of it, it is said that the dragged object was <strong>dropped</strong> on another view. A view may respond to various objects dropped on it in different ways.
+<p>It is possible to customize what object a view exports when dragged from and how a view reacts to objects dropped by assigning custom drag and drop actions.
+<p>See <a href="./../Classes/View.html#Drag and drop">View: Drag and drop</a> for details.<pre class='code prettyprint lang-sc'>(
+    w = Window.new.front;
+    a = Button(w, Rect(10, 10, 200, 20)).states_([["Hi There!"]]);
+    a.beginDragAction = { a.dragLabel ="I'm dragging: \""++ a.states[0][0]++"\""; a.states[0][0] };
+    DragSink(w,Rect(10,40,200,20)).align_(\center).string="Cmd-drag from Button to here";
+)</pre>
+<h3><a class='anchor' name='Other specialized actions'>Other specialized actions</a></h3>
+
+<p>Some views can be assigned actions on other events specific to their mode of interaction with the user which you are invited to discover by consulting their documentation.<h3><a class='anchor' name='Hooks'>Hooks</a></h3>
+
+<p>Hooks are various events that signify important changes of state of GUI elements. Technically they are used the same way as actions, but are distinguished from them to denote events that are not a direct result of the user's interaction. Methods of GUI classes used to assign hooks are usually prefixed with "on". (You will also find this naming pattern in methods of other SuperCollider classes, that have hooks in the same sense).
+<p>For example, one hook that every view as well as Window has is onClose, which is triggered when the window is closed or the view is removed. Other hooks for example exist for the case when a Window becomes or ceases to be the active one.<h2><a class='anchor' name='Custom views'>Custom views</a></h2>
+
+<p>The UserView is a view that displays and does nothing on itself, but allows <em>you</em> to define how it will be drawn, and for which you can define the entire behavior using mouse, key, and drag and drop actions. For documentation on all of these aspects, see <a href="./../Classes/UserView.html">UserView</a>, <a href="./../Classes/View.html">View</a>, and <a href="./../Classes/Pen.html">Pen</a>. The explanation below, however, will demonstrate the basic techniques for designing a custom view.
+<p>There is two ways of using the UserView class: either creating it and using its methods to define its behavior, or subclassing it, which gives you more freedom but is more complex. Either way, you will be using the <a href="./../Classes/Pen.html">Pen</a> class to draw the view. Pen is a powerful class that allows you to algorithmically draw using simple visual primitives like lines, arcs, curves, rectangles, ellipses, etc. and fill the shapes with colors and gradients.<h3><a class='anchor' name='The simple way: using the UserView class'>The simple way: using the UserView class</a></h3>
+
+<p>The simple way comprises the following steps:<ol>
+<li>create a User View<li>define a draw function<li>define the default action<li>define mouse actions<li>define key actions<li>define drag and drop actions</ol>
+
+<p>You can omit steps which you don't need.<pre class='code prettyprint lang-sc'>(
+var value = 0.5;
+w = Window.new.front;
+
+// (1) create a UserView
+v = UserView(w,Rect(50,50,200,20));
+
+// (2) define a drawing function using Pen
+v.drawFunc = {
+    // Draw the fill
+    Pen.fillColor = Color.grey;
+    Pen.addRect(Rect(0,0, v.bounds.width*value,v.bounds.height));
+    Pen.fill;
+    // Draw the triangle
+    Pen.fillColor = Color.red;
+    Pen.moveTo(((v.bounds.width*value)-5) @ v.bounds.height);
+    Pen.lineTo(((v.bounds.width*value)+5) @ v.bounds.height);
+    Pen.lineTo(((v.bounds.width*value)) @ (v.bounds.height/2));
+    Pen.lineTo(((v.bounds.width*value)-5) @ v.bounds.height);
+    Pen.fill;
+    // Draw the frame
+    Pen.strokeColor = Color.black;
+    Pen.addRect(Rect(0,0, v.bounds.width,v.bounds.height));
+    Pen.stroke;
+};
+
+// (3) set the default action
+v.action = {value.postln; v.refresh};
+
+// (4) define mouse actions
+v.mouseDownAction = { arg view, x = 0.5,y, m;
+    //m.postln;
+    ([256, 0].includes(m)).if{ // restrict to no modifier
+    value = (x).linlin(0,v.bounds.width,0,1); v.doAction};
+};
+
+v.mouseMoveAction = v.mouseDownAction;
+
+// (5) (optional) define key actions
+v.keyDownAction = { arg view, char, modifiers, unicode,keycode;
+    if (unicode == 16rF700, { value = (value+0.1).clip(0,1) });
+    if (unicode == 16rF703, { value = (value+0.1).clip(0,1) });
+    if (unicode == 16rF701, { value = (value-0.1).clip(0,1) });
+    if (unicode == 16rF702, { value = (value-0.1).clip(0,1) });
+    v.doAction;
+};
+
+// (6) (optional) define drag and drop behavior
+v.beginDragAction = {value}; // what to drag
+v.canReceiveDragHandler = {View.currentDrag.isNumber}; // what to receive
+v.receiveDragHandler = {value = View.currentDrag; v.doAction }; // what to do on receiving
+
+
+// just for testing drag and drop
+Slider(w,Rect(50,100,200,20));
+
+StaticText(w,Rect(50,150,350,50)).string_("To Test Drag and Drop,\nHold down Cmd (Ctl) Key");
+
+)</pre>
+<h3><a class='anchor' name='The advanced way: subclassing the UserView'>The advanced way: subclassing the UserView</a></h3>
+
+<p>Subclassing the UserView differs in many aspects from the example above. For a subclassing template and a quick tutorial on how to write a custom widget as a UserView subclass, see the <a href="./../Guides/UserView-Subclassing.html">Custom Views</a> guide.<h2><a class='anchor' name='Caution: GUI and timing'>Caution: GUI and timing</a></h2>
+<div class='warning'><span class='warninglabel'>WARNING:</span> Executing code that uses the GUI system is restricted to main application context. There are many ways in SuperCollider for code to be executed in other contexts that run in parallel with the main one, and interacting with GUI objects is not allowed there. This includes:<ul>
+<li>Code scheduled on the SystemClock and the TempoClock<li>Code executed in response to OSC messages</ul>
+</div>
+<p>If you attempt to interact with a GUI object in the contexts listed above, an error will be thrown.
+<p>Therefore, if you want to use Functions, Routines, Tasks and other similar objects to schedule code that interacts with GUI elements, you must do so using the AppClock, since code scheduled on the AppClock is performed in the main application context. You can of course also reschedule GUI code to the AppClock from within code performed in other contexts, and the <a href="./../Classes/Function.html#-defer">'defer'</a> mechanism is a convenient shorthand for this.
+<p>An example of scheduling GUI code on the AppClock:<pre class='code prettyprint lang-sc'>w=Window.new.front;
+Routine{
+    20.do{
+    w.bounds=Rect(200.rand, 200+200.rand, 300,300);
+    0.1.wait;
+    };
+    w.close;
+}.play(AppClock)</pre>
+
+<p>The same thing using the SystemClock in combination with the defer mechanism:<pre class='code prettyprint lang-sc'>w=Window.new.front;
+Routine{
+    20.do{
+    {w.bounds=Rect(200.rand, 200+200.rand, 300,300) }.defer; // you must defer this
+    0.1.wait;
+    };
+    {w.close}.defer; // you must defer this
+}.play(SystemClock)</pre>
+
+<p>As mentioned above, using the GUI system is also not allowed in code performed directly in response to OSC messages (this includes functions given to all kinds of OSC reponder classes). The same solutions as above apply:<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/GUI-Introduction.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/GUI-Introduction.schelp</a><br>link::Guides/GUI-Introduction::<br>sc version: 3.8dev</div></div></body></html>

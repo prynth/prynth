@@ -1,0 +1,212 @@
+<html><head><title>ObjectGui</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI'>GUI</a></div>
+<h1>ObjectGui</h1>
+<div id='summary'>Controller class for MVC architecture, superclass for all XYZGui classes</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/tools/guicrucial/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/tools/guicrucial/ObjectGui.sc'>ObjectGui.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/SCViewHolder.html">SCViewHolder</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/StringGui.html">StringGui</a></div>
+<div id='related'>See also: <a href="./../Reference/gui.html">gui</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-guiBody'>guiBody</a> </li>
+<li class='toc3'><a href='#-update'>update</a> </li>
+<li class='toc3'><a href='#-gui'>gui</a> </li>
+<li class='toc3'><a href='#-guify'>guify</a> </li>
+<li class='toc3'><a href='#-model'>model</a> </li>
+<li class='toc3'><a href='#-dragSource'>dragSource</a> </li>
+<li class='toc3'><a href='#-viewDidClose'>viewDidClose</a> </li>
+<li class='toc3'><a href='#-background'>background</a> </li>
+<li class='toc3'><a href='#-writeName'>writeName</a> </li>
+<li class='toc3'><a href='#-prWriteName'>prWriteName</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>In the MVC architecture this is the Controller, which creates Views for manipulating the properties of your Model, and receives messages from the View and enacts the changes on the Model.
+<p>Each class specifies its Gui class via the guiClass method.
+<p>The default guiClass for an Object is ObjectGui.  So if a class does not implement guiClass at all, then at least there is a default ObjectGui that will display the name.
+<p>Many subclasses overide the guiClass method to specify a different class, one that subclasses ObjectGui.
+<p>It is the simplest display, it is just the object asString.
+<p>The .gui method is called on your model:<pre class='code prettyprint lang-sc'>// standard usage
+theModel.gui( parent, bounds )
+
+// this results in these steps:
+guiClass = theModel.guiClass;
+gui = guiClass.new( theModel );
+gui.gui( parent, bounds );</pre>
+
+<p>In addition to those steps the model/gui dependencies are managed, defaults (nil parent or nil bounds) are managed and when the window or parent view is closed then dependencies are safely managed.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>model</span>)</h3>
+<div class='method'>
+<p>Create a gui controller object but does not yet create the views / window. Call .gui to create the views.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>model<td class='argumentdesc'>
+<p>The model is the object that the GUI is a graphical interface for.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>the ObjectGui or subclass object</div></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-guiBody' href='./../Overviews/Methods.html#guiBody'>guiBody</a> (<span class='argstr'>layout</span>, <span class='argstr'>bounds</span> <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>When implementing subclasses this is the primary and often the only method that needs to be implemented. The ObjectGui parent class takes care of setting up all windows and dependencies and then the guiBody method adds views to the layout. It is normal to declare instance variables in the ObjectGui subclass that are used to store the widgets so they can be updated later.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>layout<td class='argumentdesc'>
+<p>Usually a FlowView : a parent view with a FlowLayout to add views to.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>nil or a Rect.<tr><td class='argumentname'>... args<td class='argumentdesc'>
+<p>More args may be passed here.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>this</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-update' href='./../Overviews/Methods.html#update'>update</a> (<span class='argstr'>theChanged</span>, <span class='argstr'>theChanger</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'>
+<p>When the model is changed and the .changed method is called then .update is called on all dependants including this gui object. Update the views you have placed in the guiBody.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>changed<td class='argumentdesc'>
+<p>The model. Within your gui class the model is already in the instance variable 'model'.<tr><td class='argumentname'>changer<td class='argumentdesc'>
+<p>Depends on the conventions of how .changed was called. If an object called someModel.changed(this) then it is supplying itself as the changer and will be passed through here. Sometimes a flag is used: someModel.changed('points') and the gui may know of and particpate in that convention. Sometimes no changer is passed in.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-gui' href='./../Overviews/Methods.html#gui'>gui</a> (<span class='argstr'>parent</span>, <span class='argstr'>bounds</span> <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>The standard method to create a view / window. Usually you call yourModel.gui(parent,bounds) and this creates the gui (of the related ObjectGui subclass) and then theObjectGui.gui(parent,bounds) is called, forwarding the arguments. So this method is what receives the forwarded (parent,bounds) from the initial call to theModel.gui(parent,bounds). Usually you do not call this manually and would avoid reimplementing it.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>parent<td class='argumentdesc'>
+<p>parent view : nil, a Window, a FlowView or any other usable container view.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>nil or a Rect. The default of nil will offer the entire bounds to the guiBody method and then shrink the view size afterwards to the exact size of the contents that were actually added.<tr><td class='argumentname'>... args<td class='argumentdesc'>
+<p>More args may be passed into theModel.gui(parent,bounds,anArg,moreArg) and will be forwarded to guiBody.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>this</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-guify' href='./../Overviews/Methods.html#guify'>guify</a> (<span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>title</span>)</h3>
+<div class='method'>
+<p>This converts a supplied parent and bounds into a usable parent container view on a window. It creates a window if needed.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>parent<td class='argumentdesc'>
+<p>parent view or nil<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>desired bounds or nil<tr><td class='argumentname'>title<td class='argumentdesc'>
+<p>window title IF a new window is being created. if there is a parent view then title is ignored.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>converted parent</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-model' href='./../Overviews/Methods.html#model'>model</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-model' href='./../Overviews/Methods.html#model'>model</a> = <span class='argstr'>newModel</span></h3>
+<div class='method'>
+<p>set a new model. This allows to use a single gui and dynamically swap in a different model of the same class. The old model releases the gui as a dependant and the new model adds the gui as a dependent. Then the views are updated.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>newModel<td class='argumentdesc'>
+<p>The new object</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>(returnvalue)</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-dragSource' href='./../Overviews/Methods.html#dragSource'>dragSource</a> </h3>
+<div class='method'>
+<p>The default implementation of writeName places a nameplate on the gui that is draggable. This method is an accessor for that dragSource object.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a GUi.dragSource</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-viewDidClose' href='./../Overviews/Methods.html#viewDidClose'>viewDidClose</a> </h3>
+<div class='method'>
+<p>This is called when the parent view closes. It releases dependants.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>this</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-background' href='./../Overviews/Methods.html#background'>background</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-background' href='./../Overviews/Methods.html#background'>background</a> = <span class='argstr'>b</span></h3>
+<div class='method'>
+<p>Each ObjectGui subclass may implement a default background color.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a color</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-writeName' href='./../Overviews/Methods.html#writeName'>writeName</a> (<span class='argstr'>layout</span>)</h3>
+<div class='method'>
+<p>ObjectGui by default makes a nameplate with the name of the model. Implement this in subclasses if a different name style or no nameplate is desired. Note: this may change in the near future. So many classes overide this to shut off the name.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>layout<td class='argumentdesc'>
+<p>The layout to place the nameplate on. Probably the same as is being passed to guiBody</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-prWriteName' href='./../Overviews/Methods.html#prWriteName'>prWriteName</a> (<span class='argstr'>layout</span>, <span class='argstr'>name</span>)</h3>
+<div class='method'>
+<p>The default write name implementation. You could call this from a subclass if you are primarily implementing writeName to customize what name is shown or to add other items to that area.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>layout<td class='argumentdesc'>
+<p>the layout<tr><td class='argumentname'>name<td class='argumentdesc'>
+<p>the string to display</table></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>YourSimpleGuiClass : ObjectGui {
+
+    guiBody { arg layout;
+    
+        // we refer to the model and
+        // access its variable howFast.
+        // if its a simple number, it will display
+        // using the default ObjectGui class, which
+        // will simply show its value as a string.
+        model.howFast.gui(layout);
+    }
+}
+
+
+// more complex
+YourGuiClass : ObjectGui {
+    
+    var numberEditor;
+    
+    //for example
+    guiBody { arg layout;
+        var r;
+        // the object you are making a gui for is referred to as the model
+        
+        // display some param on screen.
+        // here we assume that someParam is something that
+        //  has a suitable gui class
+        // implemented, or that the default ObjectGui is sufficient.
+        model.someParam.gui(layout);
+        
+        // using non 'gui' objects
+        r = layout.layRight(300,300); // allocate yourself some space
+        Button(layout.win,r)
+            .action_({ arg butt;
+                model.goApeShit;
+            });
+        
+        // note: NumberEditor is a cruciallib class
+        // which is itself a model (its an editor of a value)
+        // and has its own gui class that creates and manages the NumberBox view
+        numberEditor = NumberEditor(model.howFast,[0,100])
+            .action_({ arg val; 
+                model.howFast = val; 
+                model.changed(this); 
+                // tell the model that this gui changed it
+            });
+        numberEditor.gui(layout);
+    }
+    
+    // your gui object will have update called any time the .changed message
+    // is sent to your model
+    update { arg changed,changer;
+    
+        if(changer !== this,{ 
+            /* if it is this gui object that changed the value
+                using the numberEditor, then we already have a correct
+                display and don't need to waste cpu to update it.
+                if anyone else changed anything about the model,
+                we will update ourselves here.
+            */
+            numberEditor.value = model.howFast;
+            /*
+                note that 
+                    numberEditor.value = model.howFast;
+                is passive, and does not fire the numberEditor's action.    
+
+                numberEditor.activeValue = model.howFast
+                would fire the action as well, resulting in a loop that would
+                probably crash your machine.
+            */
+        }
+    }
+
+}</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/ObjectGui.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/ObjectGui.schelp</a><br>link::Classes/ObjectGui::<br>sc version: 3.8dev</div></div></body></html>

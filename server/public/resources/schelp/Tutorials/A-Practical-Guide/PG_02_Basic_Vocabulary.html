@@ -1,0 +1,183 @@
+<html><head><title>Pattern Guide 02: Basic Vocabulary</title>
+<link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../scdoc.js' type='text/javascript'></script>
+<script src='./../../docmap.js' type='text/javascript'></script>
+<script src='./../../prettify.js' type='text/javascript'></script>
+<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./../..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS/A-PRACTICAL-GUIDE</div>
+<div id='categories'><a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>Streams-Patterns-Events>A-Practical-Guide</a></div>
+<h1>Pattern Guide 02: Basic Vocabulary</h1>
+<div id='summary'>Common patterns to generate streams of single values</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_01_Introduction.html">Pattern Guide 01: Introduction</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_03_What_Is_Pbind.html">Pattern Guide 03: What Is Pbind</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#Basic Vocabulary: Generating values'>Basic Vocabulary: Generating values</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Quick reference'>Quick reference</a></li>
+<ul class='toc'><li class='toc2'><a href='#Primary Patterns'>Primary Patterns</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Additional List Patterns'>Additional List Patterns</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Additional Random Number Generators'>Additional Random Number Generators</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Functional descriptions of patterns'>Functional descriptions of patterns</a></li>
+<ul class='toc'><li class='toc2'><a href='#List Patterns'>List Patterns</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Random-order list patterns'>Random-order list patterns</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Interlacing values and making arrays'>Interlacing values and making arrays</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Arithmetic and geometric series'>Arithmetic and geometric series</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Random numbers and probability distributions'>Random numbers and probability distributions</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Catchall Patterns'>Catchall Patterns</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Basic Vocabulary: Generating values'>Basic Vocabulary: Generating values</a></h2>
+
+<p>Before getting to the really cool things patterns can do, we need to build up a basic vocabulary. We'll start with some words, then move into phrases in the next tutorial.
+<p>Some of the patterns will be demonstrated with a Pbind construct. This is a taste of things to come -- sequencing sonic events using patterns. Don't worry about how Pbind works just yet... all in good time.
+<p>Let's start with a very quick reference of some basic patterns. More complete descriptions follow this list. The list might seem long at first, but concentrate your attention on patterns marked with a star. Those are the most basic, and commonly used. Again, the purpose is to start learning the vocabulary of patterns -- like learning new words when studying a human language.
+<p>This document describes a lot of patterns, but what I call "primary patterns" are the most important. If you are new to patterns, concentrate on these first. You can always come back and look at the rest later.
+<p>For more information on any of these patterns, select the class name and use the help key for your editor to open its help file.<h2><a class='anchor' name='Quick reference'>Quick reference</a></h2>
+<h3><a class='anchor' name='Primary Patterns'>Primary Patterns</a></h3>
+<dl>
+<dt><code class='code prettyprint lang-sc'>Pseq(list, repeats, offset)</code><dd>Play through the entire list <code class='code prettyprint lang-sc'>repeats</code> times. Like <code class='code prettyprint lang-sc'>list.do</code>.<dt><code class='code prettyprint lang-sc'>Prand(list, repeats)</code><dd>Choose items from the list randomly (same as <code class='code prettyprint lang-sc'>list.choose</code>).<dt><code class='code prettyprint lang-sc'>Pxrand(list, repeats)</code><dd>Choose randomly, but never repeat the same item twice in immediate succession.<dt><code class='code prettyprint lang-sc'>Pshuf(list, repeats)</code><dd>Shuffle the list in random order, and use the same random order <code class='code prettyprint lang-sc'>repeats</code> times. Like <code class='code prettyprint lang-sc'>list.scramble</code>.<dt><code class='code prettyprint lang-sc'>Pwrand(list, weights, repeats)</code><dd>Choose randomly, according to weighted probabilities (same as <code class='code prettyprint lang-sc'>list.wchoose(weights)</code>).<dt><code class='code prettyprint lang-sc'>Pseries(start, step, length)</code><dd>Arithmetic series (addition).<dt><code class='code prettyprint lang-sc'>Pgeom(start, grow, length)</code><dd>Geometric series (multiplication).<dt><code class='code prettyprint lang-sc'>Pwhite(lo, hi, length)</code><dd>Random numbers, equal distribution ("white noise"). Like <code class='code prettyprint lang-sc'>rrand(lo, hi)</code> .<dt><code class='code prettyprint lang-sc'>Pexprand(lo, hi, length)</code><dd>Random numbers, exponential distribution. Like <code class='code prettyprint lang-sc'>exprand(lo, hi)</code> .<dt><code class='code prettyprint lang-sc'>Pbrown(lo, hi, step, length)</code><dd>Brownian motion, arithmetic scale (addition).<dt><code class='code prettyprint lang-sc'>Pfunc(nextFunc, resetFunc)</code><dd>Get the stream values from a user-supplied function.<dt><code class='code prettyprint lang-sc'>Pfuncn(func, repeats)</code><dd>Get values from the function, but stop after <code class='code prettyprint lang-sc'>repeats</code> items.<dt><code class='code prettyprint lang-sc'>Prout(routineFunc)</code><dd>Use the function like a routine. The function should return values using <code class='code prettyprint lang-sc'>.yield</code> or <code class='code prettyprint lang-sc'>.embedInStream</code>.</dl>
+<h3><a class='anchor' name='Additional List Patterns'>Additional List Patterns</a></h3>
+<dl>
+<dt><code class='code prettyprint lang-sc'>Pser(list, repeats, offset)</code><dd>Play through the list as many times as needed, but output only <code class='code prettyprint lang-sc'>repeats</code> items.<dt><code class='code prettyprint lang-sc'>Pslide(list, repeats, len, step, start, wrapAtEnd)</code><dd>Play overlapping segments from the list.<dt><code class='code prettyprint lang-sc'>Pwalk(list, stepPattern, directionPattern, startPos)</code><dd>Random walk over the list.<dt><code class='code prettyprint lang-sc'>Place(list, repeats, offset)</code><dd>Interlace any arrays found in the main list.<dt><code class='code prettyprint lang-sc'>Ppatlace(list, repeats, offset)</code><dd>Interlace any patterns found in the main list.<dt><code class='code prettyprint lang-sc'>Ptuple(list, repeats)</code><dd>Collect the list items into an array as the return value.</dl>
+<h3><a class='anchor' name='Additional Random Number Generators'>Additional Random Number Generators</a></h3>
+<dl>
+<dt><code class='code prettyprint lang-sc'>Pgbrown(lo, hi, step, length)</code><dd>Brownian motion, geometric scale (multiplication).<dt><code class='code prettyprint lang-sc'>Pbeta(lo, hi, prob1, prob2, length)</code><dd>Beta distribution, where <code class='code prettyprint lang-sc'>prob1 = α</code> (alpha) and <code class='code prettyprint lang-sc'>prob2 = β</code> (beta).<dt><code class='code prettyprint lang-sc'>Pcauchy(mean, spread, length)</code><dd>Cauchy distribution.<dt><code class='code prettyprint lang-sc'>Pgauss(mean, dev, length)</code><dd>Guassian (normal) distribution.<dt><code class='code prettyprint lang-sc'>Phprand(lo, hi, length)</code><dd>Returns the greater of two equal-distribution random numbers.<dt><code class='code prettyprint lang-sc'>Plprand(lo, hi, length)</code><dd>Returns the lesser of two equal-distribution random numbers.<dt><code class='code prettyprint lang-sc'>Pmeanrand(lo, hi, length)</code><dd>Returns the average of two equal-distribution random numbers, i.e., <code class='code prettyprint lang-sc'>(x + y) / 2</code>.<dt><code class='code prettyprint lang-sc'>Ppoisson(mean, length)</code><dd>Poisson distribution.<dt><code class='code prettyprint lang-sc'>Pprob(distribution, lo, hi, length, tableSize)</code><dd>Arbitrary distribution, based on a probability table.</dl>
+<h2><a class='anchor' name='Functional descriptions of patterns'>Functional descriptions of patterns</a></h2>
+<h3><a class='anchor' name='List Patterns'>List Patterns</a></h3>
+
+<p>The most obvious thing one would want to do with a pattern is to give it a list of values and have it read them out in order. You have a couple of choices, which differ in their handling of the <code class='code prettyprint lang-sc'>repeats</code> parameter.<dl>
+<dt><code class='code prettyprint lang-sc'>Pseq(list, repeats, offset)</code><dd>Play through the entire list <code class='code prettyprint lang-sc'>repeats</code> times.<dt><code class='code prettyprint lang-sc'>Pser(list, repeats, offset)</code><dd>Play through the list as many times as needed, but output only <code class='code prettyprint lang-sc'>repeats</code> items.<pre class='code prettyprint lang-sc'>Pseq(#[1, 2, 3], 4).asStream.all;    // 12 items = 4 repeats * 3 items
+Pser(#[1, 2, 3], 4).asStream.all;    // 4 items only</pre>
+
+<p><a href="./../../Classes/Pseq.html">Pseq</a> is an obvious choice for streaming out known pitch and rhythm values.
+<p>Before playing a Pbind pattern such as this, make sure the server is booted.<pre class='code prettyprint lang-sc'>s.boot;
+
+(
+p = Pbind(
+    \degree, Pseq(#[0, 0, 4, 4, 5, 5, 4], 1),
+    \dur, Pseq(#[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1], 1)
+).play;
+)</pre>
+
+<p>To stop the examples in this file, use the "stop" keyboard shortcut (cmd-. on Mac OSX, alt-. on Windows, check documentation for other editors). Or:<pre class='code prettyprint lang-sc'>p.stop;</pre>
+
+<p>A variation, <a href="./../../Classes/Pslide.html">Pslide</a>, plays overlapping segments of the input list.<dt><code class='code prettyprint lang-sc'>Pslide(list, repeats, len, step, start, wrapAtEnd)</code><dd>Play overlapping segments from the list.<dl>
+<dt><code class='code prettyprint lang-sc'>repeats</code><dd>number of segments<dt><code class='code prettyprint lang-sc'>len</code><dd>length of each segment<dt><code class='code prettyprint lang-sc'>step</code><dd>is how far to step the start of each segment from previous.<dt><code class='code prettyprint lang-sc'>start</code><dd>what index to start at.<dt><code class='code prettyprint lang-sc'>wrapAtEnd</code><dd>if true (default), indexing wraps around if goes past beginning or end. If false, the pattern stops if it hits a nil element or goes outside the list bounds.</dl>
+
+<p>If <code class='code prettyprint lang-sc'>step == 1</code>, then the first segment is at <code class='code prettyprint lang-sc'>start</code>, the second at <code class='code prettyprint lang-sc'>start + 1</code>, and so on.<pre class='code prettyprint lang-sc'>Pslide(#[1, 2, 3, 4, 5, 6, 7, 8], 10, 3, 1, 0, false).asStream.all;
+
+// or, to show the segments as separate arrays
+Pslide(#[1, 2, 3, 4, 5, 6, 7, 8], 10, 3, 1, 0, false).clump(3).asStream.all;
+
+// Flock of Seagulls!
+(
+p = Pbind(
+    \degree, Pslide((-6, -4 .. 12), 8, 3, 1, 0),
+    \dur, Pseq(#[0.1, 0.1, 0.2], inf),
+    \sustain, 0.15
+).play;
+)</pre>
+</dl>
+<h3><a class='anchor' name='Random-order list patterns'>Random-order list patterns</a></h3>
+<dl>
+<dt><code class='code prettyprint lang-sc'>Prand(list, repeats)</code><dd>Choose items from the list randomly (same as <code class='code prettyprint lang-sc'>list.choose</code>).<pre class='code prettyprint lang-sc'>// Prand: given scale degrees (pentatonic) with equal probability of each
+(
+p = Pbind(
+    \degree, Prand([0, 1, 2, 4, 5], inf),
+    \dur, 0.25
+).play;
+)</pre>
+<dt><code class='code prettyprint lang-sc'>Pxrand(list, repeats)</code><dd>Choose randomly, but never repeat the same item twice in immediate succession.<pre class='code prettyprint lang-sc'>// Pxrand: same as above but never repeats a pitch twice in a row
+(
+p = Pbind(
+    \degree, Pxrand([0, 1, 2, 4, 5], inf),
+    \dur, 0.25
+).play;
+)</pre>
+<dt><code class='code prettyprint lang-sc'>Pshuf(list, repeats)</code><dd>Shuffle the list in random order, and use the same random order <code class='code prettyprint lang-sc'>repeats</code> times. Like <code class='code prettyprint lang-sc'>list.scramble</code>.<pre class='code prettyprint lang-sc'>// Pshuf: randomly ordered once and repeated
+(
+p = Pbind(
+    \degree, Pshuf([0, 1, 2, 4, 5], inf),
+    \dur, 0.25
+).play;
+)</pre>
+<dt><code class='code prettyprint lang-sc'>Pwrand(list, weights, repeats)</code><dd>Choose randomly, according to weighted probabilities (same as <code class='code prettyprint lang-sc'>list.wchoose(weights)</code>).<pre class='code prettyprint lang-sc'>// Pwrand: these probabilities favor triadic notes from scale degrees
+(
+p = Pbind(
+    \degree, Pwrand((0..7), [4, 1, 3, 1, 3, 2, 1].normalizeSum, inf),
+    \dur, 0.25
+).play;
+)</pre>
+<dt><code class='code prettyprint lang-sc'>Pwalk(list, stepPattern, directionPattern, startPos)</code><dd>Random walk over the list. This pattern is a bit more complicated; see its <a href="./../../Classes/Pwalk.html">help</a> file for details.</dl>
+<h3><a class='anchor' name='Interlacing values and making arrays'>Interlacing values and making arrays</a></h3>
+
+<p>These are opposing operations: interlacing means splitting arrays and merging them into a stream of single values, and arrays can be made out of single-value streams as well.<dl>
+<dt><code class='code prettyprint lang-sc'>Place(list, repeats, offset)</code><dd>Take one from each item in the main array item in succession. Hard to explain, easier to see:<pre class='code prettyprint lang-sc'>Place([0, [1, 2], [3, 4, 5]], 3).asStream.all;
+--&gt; [ 0, 1, 3, 0, 2, 4, 0, 1, 5 ]</pre>
+
+<p>If we turn this into a matrix and read vertically, the original arrays are clearly visible:<pre class='code prettyprint lang-sc'>Place([0, [1, 2], [3, 4, 5]], 3).clump(3).do(_.postln);
+
+[ 0, 1, 3 ]    // leftmost column: 0 from first Place item
+[ 0, 2, 4 ]    // second column: alternates between 1 and 2, from second Place item
+[ 0, 1, 5 ]    // third column: 3, 4, 5 from third Place item</pre>
+<dt><code class='code prettyprint lang-sc'>Ppatlace(list, repeats, offset)</code><dd>Take one value from each sub-pattern in order.<pre class='code prettyprint lang-sc'>// Hanon exercise
+(
+p = Pbind(
+    \degree, Ppatlace([
+        Pseries(0, 1, 8),    // first, third etc. notes
+        Pseries(2, 1, 7)    // second, fourth etc. notes
+    ], inf),
+    \dur, 0.25
+).play;
+)</pre>
+
+<p>That's also a taste of things to come: Patterns can be nested.<dt><code class='code prettyprint lang-sc'>Ptuple(list, repeats)</code><dd>Get one value from each item in the array, and return all of them as an array of values.<pre class='code prettyprint lang-sc'>// Chords
+// \degree receives [7, 9, 4], then [6, 7, 4] successively, expanded to chords on the server
+(
+p = Pbind(
+    \degree, Ptuple([
+        Pseries(7, -1, 8),
+        Pseq([9, 7, 7, 7, 4, 4, 2, 2], 1),
+        Pseq([4, 4, 4, 2, 2, 0, 0, -3], 1)
+    ], 1),
+    \dur, 1
+).play;
+)</pre>
+</dl>
+<h3><a class='anchor' name='Arithmetic and geometric series'>Arithmetic and geometric series</a></h3>
+
+<p>Now, let's move to patterns that produce values mathematically, without using a predefined list.<dl>
+<dt><code class='code prettyprint lang-sc'>Pseries(start, step, length)</code><dd>Arithmetic series, successively adding <code class='code prettyprint lang-sc'>step</code> to the starting value, returning a total of <code class='code prettyprint lang-sc'>length</code> items.<dt><code class='code prettyprint lang-sc'>Pgeom(start, grow, length)</code><dd>Geometric series, successively multiplying the current value by <code class='code prettyprint lang-sc'>grow</code>.<pre class='code prettyprint lang-sc'>// Use Pseries for a scale and Pgeom for an accelerando
+(
+p = Pbind(
+    \degree, Pseries(-7, 1, 15),
+    \dur, Pgeom(0.5, 0.89140193218427, 15)
+).play;
+)</pre>
+
+<p><strong>Third-party extension alert</strong> : If you want an arithmetic or geometric series to start at one number and end at another specific number, the step size/multiplier must be calculated from the endpoints and the number of items desired. The <strong>ddwPatterns</strong> quark includes a convenience method, <code class='code prettyprint lang-sc'>fromEndpoints</code>, for both Pseries and Pgeom that performs this calculation. It's necessary to give an exact number of repeats, at least two and less than infinity.<pre class='code prettyprint lang-sc'>p = Pgeom.fromEndpoints(0.5, 0.1, 15);    // error if ddwPatterns not installed
+p.postcs;</pre>
+
+<p>Prints:<pre class='code prettyprint lang-sc'>Pgeom(0.5, 0.89140193218427, 15)</pre>
+</dl>
+<h3><a class='anchor' name='Random numbers and probability distributions'>Random numbers and probability distributions</a></h3>
+<dl>
+<dt><code class='code prettyprint lang-sc'>Pwhite(lo, hi, length)</code><dd>Produces <code class='code prettyprint lang-sc'>length</code> random numbers with equal distribution ('white' refers to white noise).<dt><code class='code prettyprint lang-sc'>Pexprand(lo, hi, length)</code><dd>Same, but the random numbers have an exponential distribution, favoring lower numbers. This is good for frequencies, and also durations (because you need more notes with a shorter duration to balance the weight of longer notes).<dt><code class='code prettyprint lang-sc'>Pbrown(lo, hi, step, length)</code><dd>Brownian motion. Each value adds a random <code class='code prettyprint lang-sc'>step</code> to the previous value, where the <code class='code prettyprint lang-sc'>step</code> has an equal distribution between <code class='code prettyprint lang-sc'>-step</code> and <code class='code prettyprint lang-sc'>+step</code>.<dt><code class='code prettyprint lang-sc'>Pgbrown(lo, hi, step, length)</code><dd>Brownian motion on a geometric scale. Each value multiplies a random <code class='code prettyprint lang-sc'>step</code> factor to the previous value.<dt><code class='code prettyprint lang-sc'>Pbeta(lo, hi, prob1, prob2, length)</code><dd>Beta distribution, where <code class='code prettyprint lang-sc'>prob1 = α</code> (alpha) and <code class='code prettyprint lang-sc'>prob2 = β</code> (beta).<dt><code class='code prettyprint lang-sc'>Pcauchy(mean, spread, length)</code><dd>Cauchy distribution.<dt><code class='code prettyprint lang-sc'>Pgauss(mean, dev, length)</code><dd>Guassian (normal) distribution.<dt><code class='code prettyprint lang-sc'>Phprand(lo, hi, length)</code><dd>Returns the greater of two equal-distribution random numbers.<dt><code class='code prettyprint lang-sc'>Plprand(lo, hi, length)</code><dd>Returns the lesser of two equal-distribution random numbers.<dt><code class='code prettyprint lang-sc'>Pmeanrand(lo, hi, length)</code><dd>Returns the average of two equal-distribution random numbers, i.e., <code class='code prettyprint lang-sc'>(x + y) / 2</code>.<dt><code class='code prettyprint lang-sc'>Ppoisson(mean, length)</code><dd>Poisson distribution.<dt><code class='code prettyprint lang-sc'>Pprob(distribution, lo, hi, length, tableSize)</code><dd>Given an array of relative probabilities across the desired range (a histogram) representing an arbitrary distribution, generates random numbers corresponding to that distribution.</dl>
+
+<p>To see a distribution, make a histogram out of it.<pre class='code prettyprint lang-sc'>Pmeanrand(0.0, 1.0, inf).asStream.nextN(10000).histo(200, 0.0, 1.0).plot;</pre>
+<h3><a class='anchor' name='Catchall Patterns'>Catchall Patterns</a></h3>
+
+<p>Not everything is pre-written as a pattern class. These patterns let you embed custom logic.<dl>
+<dt><code class='code prettyprint lang-sc'>Pfunc(nextFunc, resetFunc)</code><dd>The next value is the return value from evaluating <code class='code prettyprint lang-sc'>nextFunc</code>. If <code class='code prettyprint lang-sc'>.reset</code> is called on a stream made from this pattern, <code class='code prettyprint lang-sc'>resetFunc</code> is evaluated. The stream will run indefinitely until <code class='code prettyprint lang-sc'>nextFunc</code> returns <code class='code prettyprint lang-sc'>nil</code>.<dt><code class='code prettyprint lang-sc'>Pfuncn(func, repeats)</code><dd>Like Pfunc, output values come from evaluating the function. Pfuncn, however, returns exactly <code class='code prettyprint lang-sc'>repeats</code> values and then stops. The default number of repeats is 1.<dt><code class='code prettyprint lang-sc'>Prout(routineFunc)</code><dd>Use the <code class='code prettyprint lang-sc'>routineFunc</code> in a routine. The stream's output values are whatever this function <code class='code prettyprint lang-sc'>.yield</code>s. Prout ends when it yields <code class='code prettyprint lang-sc'>nil</code>.</dl>
+
+<p>Next, we'll look at the central pattern for audio sequencing: <a href="./../../Classes/Pbind.html">Pbind</a>.
+<p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_01_Introduction.html">Pattern Guide 01: Introduction</a>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_03_What_Is_Pbind.html">Pattern Guide 03: What Is Pbind</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_02_Basic_Vocabulary.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_02_Basic_Vocabulary.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_02_Basic_Vocabulary::<br>sc version: 3.8dev</div></div></body></html>

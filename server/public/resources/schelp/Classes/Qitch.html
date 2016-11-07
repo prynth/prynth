@@ -1,0 +1,127 @@
+<html><head><title>Qitch</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES (extension)</div>
+<div id='categories'><a href='./../Browse.html#UGens>Analysis>Pitch'>UGens>Analysis>Pitch</a></div>
+<h1>Qitch</h1>
+<div id='summary'>constant Q transform pitch follower</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/Extensions/SC3plugins/PitchDetection/classes/<a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/PitchDetection/classes/Qitch.sc'>Qitch.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/Tartini.html">Tartini</a>, <a href="./../Classes/Pitch.html">Pitch</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>This alternative pitch follower works in the frequency domain rather than <a href="./../Classes/Pitch.html">Pitch</a>'s time domain correlation. Tradeoffs are made between latency and frequency resolution. It is meant to provide a relatively stable resultant tracked pitch based on a harmonic template.<div class='note'><span class='notelabel'>NOTE:</span> You must load one of the auxilliary data files into a <a href="./../Classes/Buffer.html">Buffer</a> and pass the bufnum to the routine. These files take the form:<ul>
+<li>QspeckernN1024SR44100.wav<li>QspeckernN2048SR44100.wav<li>QspeckernN4096SR44100.wav<li>QspeckernN8192SR44100.wav<li>QspeckernN2048SR48000.wav<li>QspeckernN4096SR48000.wav</ul>
+
+<p>Only use the one for your output sampling rate. Bigger N means more stability and resolution but longer delay and higher average CPU cost. N= 2048 is a good tradeoff if you don't want to track over 1000Hz fundamentals. The 48000 SR files are untested and provided without any promises.</div>
+<p>In technical terms, this UGen calculates an FFT, applying Brown and Puckette's efficient constant Q transform on a quartertone scale, base note F3= 174.6Hz. Cross correlation search leads to the best match for a harmonic spectrum grid with falling amplitude components. A further fine tuning takes place based on instantaneous frequency estimation (rate of change of phase) for the winning FFT bin.
+<p>The algorithms are based on the following papers:
+<p>Judith C. Brown and Miller S. Puckette, 1992, <em>"An efficient algorithm for the calculation of a constant Q transform"</em>. Journal of the Acoustical Society of America. 92(5); 2698-701.
+<p>Judith C. Brown, 1992, <em>"Musical Fundamental Frequency Tracking Using a Pattern Recognition Method"</em>. Journal of the Acoustical Society of America. 92(3); 1394-402.
+<p>Judith C. Brown and Miller S. Puckette, 1993, <em>"A High-Resolution Fundamental Frequency Determination Based on Phase Changes of the Fourier Transform"</em>. Journal of the Acoustical Society of America. 94(2); 662-7.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>in: 0</span>, <span class='argstr'>databufnum</span>, <span class='argstr'>ampThreshold: 0.01</span>, <span class='argstr'>algoflag: 1</span>, <span class='argstr'>ampbufnum</span>, <span class='argstr'>minfreq: 0</span>, <span class='argstr'>maxfreq: 2500</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>the audio rate input signal<tr><td class='argumentname'>databufnum<td class='argumentdesc'>
+<p>you must provide the initialisation data required by Qitch. This in the form of a .wav file that must be loaded to a buffer (see examples below). The data files should have come with this UGen.<tr><td class='argumentname'>ampThreshold<td class='argumentdesc'>
+<p>Qitch outputs a 0 in <strong>hasFreq</strong> if the input amplitude is below this threshold. Same as original <a href="./../Classes/Pitch.html">Pitch</a>.<tr><td class='argumentname'>algoflag<td class='argumentdesc'>
+<p>0 means use just the constant Q template pattern matcher. 1 flags the refinement based on the phase estimate.<tr><td class='argumentname'>ampbufnum<td class='argumentdesc'>
+<p>you may provide an 11 component buffer with template amplitudes- see example below.<tr><td class='argumentname'>minfreq<td class='argumentdesc'>
+<p>minimum output frequency in Hz<tr><td class='argumentname'>maxfreq<td class='argumentdesc'>
+<p>maximum output frequency in Hz</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>(use headphones!)<pre class='code prettyprint lang-sc'>s = Server.local;
+
+//assumes data file is in SC home application directory; else provide full path
+b = Buffer.read(s, "QspeckernN4096SR44100.wav");
+//this line is absolutely essential! You must load the data required by the UGen!
+
+b.numFrames //it's not that much data
+
+
+(
+a= SynthDef("testqitch",{arg infreq=440;
+    var in, freq, hasFreq, out;
+
+    in=SinOsc.ar(infreq);
+
+    # freq, hasFreq = Qitch.kr(in, b.bufnum,0.01,1);
+
+    Out.ar(0,[SinOsc.ar(freq,0.1),in]);
+}).play(s);
+)
+
+a.set(\infreq,237);
+
+
+
+c=Buffer.read(s,"/Volumes/data/audio/nikkisitar/warmup.wav"); //sitar test file, try anything you have on your disk
+
+c.numFrames
+
+( //sample tracking
+SynthDef("pitchFollow1",{
+    var in, amp, freq, hasFreq, out;
+
+    in = PlayBuf.ar(1,c.bufnum, loop:1);
+    amp = Amplitude.kr(in, 0.05, 0.05);
+
+    # freq, hasFreq = Qitch.kr(in, b.bufnum, 0.1,1, -1,261, 800 );
+
+    out = Mix.new(VarSaw.ar(freq * [0.5,1,2], 0, LFNoise1.kr(0.3,0.1,0.1), amp));
+
+    Out.ar(0,[out,in])
+}).play(s);
+)
+
+
+b = Buffer.read(s, "QspeckernN2048SR44100.wav"); //quicker response with this data set
+
+d = Buffer.alloc(s,11); //make an amp template
+d.setn(0, [1,0.98,0.92,0.88,0.84,0.8,0.76,0.72,1.68,1.64,1.6]); //must have 11 components
+
+//analogous to example in the Pitch helpfile
+(
+SynthDef("pitchFollow1",{
+    var in, amp, freq, hasFreq, out;
+    in = Mix.new(SoundIn.ar([0,1]));
+    amp = Amplitude.kr(in, 0.05, 0.05);
+    # freq, hasFreq = Qitch.kr(in, b.bufnum, 0.02, 1, d.bufnum, 160, 880);
+
+    //freq = Lag.kr(freq.cpsmidi.round(1).midicps, 0.05);
+    out = Mix.new(VarSaw.ar(freq * [0.5,1,2], 0, LFNoise1.kr(0.3,0.1,0.1), amp));
+    6.do({
+        out = AllpassN.ar(out, 0.040, [0.040.rand,0.040.rand], 2)
+    });
+    Out.ar(0,out)
+}).play(s);
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/PitchDetection/HelpSource/Classes/Qitch.schelp'>/usr/local/share/SuperCollider/Extensions/SC3plugins/PitchDetection/HelpSource/Classes/Qitch.schelp</a><br>link::Classes/Qitch::<br>sc version: 3.8dev</div></div></body></html>

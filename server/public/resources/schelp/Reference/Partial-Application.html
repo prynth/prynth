@@ -1,0 +1,67 @@
+<html><head><title>Partial Application</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider REFERENCE</div>
+<div id='categories'><a href='./../Browse.html#Language'>Language</a></div>
+<h1>Partial Application</h1>
+<div id='summary'>Create Functions via Partial Application</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Reference/Functions.html">Functions</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'></ul></div>
+<p>Partial application is a way to create a function by passing only some arguments to a method. The <code class='code prettyprint lang-sc'>_</code> character stands in for missing arguments and becomes an argument to the created function. It only applies to a single method, list, or dictionary call, not to a more complex nested expression.
+<p>for example:<pre class='code prettyprint lang-sc'>f = _ + 2;</pre>
+
+<p>f is now a function of one argument.<pre class='code prettyprint lang-sc'>f.value(7); // returns 9</pre>
+
+<p>it is equivalent to having written:<pre class='code prettyprint lang-sc'>f = {|x| x + 2 };</pre>
+
+<p>(except that there is no name 'x' declared)<pre class='code prettyprint lang-sc'>g = Point(_, _);</pre>
+
+<p>g is a function of two arguments.<pre class='code prettyprint lang-sc'>g.value(3, 4);</pre>
+
+<p>Here are some example usages of this in a collect message. Below each is written the equivalent function.<pre class='code prettyprint lang-sc'>(1..8).collect(_.isPrime);
+(1..8).collect {|x| x.isPrime };
+
+(1..8).collect(_.hash);
+(1..8).collect {|x| x.hash };
+
+(1..8).collect([\a, \b, _]);
+(1..8).collect {|x| [\a, \b, x] };
+
+(1..8).collect((a:_));
+(1..8).collect {|x| (a:x) };
+
+(1..8).collect(Polar(_, pi));
+(1..8).collect {|x| Polar(x, pi) };
+
+(1..8).collect((1.._));
+(1..8).collect {|x| (1..x) };</pre>
+<pre class='code prettyprint lang-sc'>f = (a:_, b:_); // f is a two argument function
+g = f.(_, 5);   // g is a partial application of f
+g.(7);          // get the answer
+
+// equivalent to this:
+f = {|x, y| (a:x, b:y) }
+g = {|z| f.(z, 5) };
+g.value(7);</pre>
+
+<p>An example of what you can't do:<pre class='code prettyprint lang-sc'>(1..8).collect( Point(100 * _, 50) ); // nested expression won't work.
+// only the * gets partially applied, not the surrounding expression.
+
+(1..8).collect {|x| Point(100 * x, 50) }; // need to use a function for this.</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/Partial-Application.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/Partial-Application.schelp</a><br>link::Reference/Partial-Application::<br>sc version: 3.8dev</div></div></body></html>

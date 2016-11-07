@@ -1,0 +1,52 @@
+<html><head><title>jitlib_networking</title>
+<link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../scdoc.js' type='text/javascript'></script>
+<script src='./../../docmap.js' type='text/javascript'></script>
+<script src='./../../prettify.js' type='text/javascript'></script>
+<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./../..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider TUTORIALS/JITLIB</div>
+<div id='categories'><a href='./../../Browse.html#Libraries>JITLib>Tutorials'>Libraries>JITLib>Tutorials</a>, <a href='./../../Browse.html#Tutorials>JITLib'>Tutorials>JITLib</a></div>
+<h1>jitlib_networking</h1>
+<div id='summary'>networked programming</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../Overviews/JITLib.html">JITLib</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#1) using ProxySpace with more than one client, with separate bus spaces'>1) using ProxySpace with more than one client, with separate bus spaces</a></li>
+<ul class='toc'><li class='toc2'><a href='#before you start'>before you start</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#a) boot the (remote) server and create a local model'>a) boot the (remote) server and create a local model</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#b) from each client, initialize the default node and set notify to true:'>b) from each client, initialize the default node and set notify to true:</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#c) now create a ProxySpace from the server:'>c) now create a ProxySpace from the server:</a></li>
+<ul class='toc'></ul></ul></ul></div>
+<p><em>please note any problems, I'll try to add solutions here.</em><h2><a class='anchor' name='1) using ProxySpace with more than one client, with separate bus spaces'>1) using ProxySpace with more than one client, with separate bus spaces</a></h2>
+<div class='note'><span class='notelabel'>NOTE:</span> if only one client is using a remote server, only step (a) and step (d) are relevant. The clientID argument can be left out then.</div><h3><a class='anchor' name='before you start'>before you start</a></h3>
+
+<p>remember to synchronize your system clocks. This can be done by:<dl>
+<dt>in OS X<dd>SystemPreferences&gt;Date&amp;Time: set <em>"Set Date &amp; Time automatically"</em> to true.<dt>in linux<dd>set the ntp clock</dl>
+
+<p>a local time server is better than the apple time server. if you cannot sync the time, you can set the server latency to <code class='code prettyprint lang-sc'>nil</code>. This will break the pattern's functionality though.<h3><a class='anchor' name='a) boot the (remote) server and create a local model'>a) boot the (remote) server and create a local model</a></h3>
+<pre class='code prettyprint lang-sc'>s = Server("serverName", NetAddr(hostname, port));
+s.options.maxLogins = 16; // or the maximum number of participants in the network
+s.boot; // you cannot directly boot a remote server instance, but this initializes everything that is needed</pre>
+
+<p><dl>
+<dt>serverName<dd>can be any name<dt>hostname<dd>is an ip address, or if you have a name resolution, a network name<dt>port<dd>the port on which the server is listening. default is 57110</dl>
+
+<p>see <a href="./../../Classes/Server.html">Server</a><h3><a class='anchor' name='b) from each client, initialize the default node and set notify to true:'>b) from each client, initialize the default node and set notify to true:</a></h3>
+<pre class='code prettyprint lang-sc'>s.boot; // this will initialize the tree and start notification
+
+// if needed, a server window can be created:
+s.makeWindow;</pre>
+<h3><a class='anchor' name='c) now create a ProxySpace from the server:'>c) now create a ProxySpace from the server:</a></h3>
+<pre class='code prettyprint lang-sc'>p = ProxySpace.push(s);</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/JITLib/jitlib_networking.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/JITLib/jitlib_networking.schelp</a><br>link::Tutorials/JITLib/jitlib_networking::<br>sc version: 3.8dev</div></div></body></html>

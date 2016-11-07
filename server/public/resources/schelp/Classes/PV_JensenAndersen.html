@@ -1,0 +1,61 @@
+<html><head><title>PV_JensenAndersen</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>FFT'>UGens>FFT</a></div>
+<h1>PV_JensenAndersen</h1>
+<div id='summary'>FFT feature detector for onset detection.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/FFT2.sc'>FFT2.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/PV_ChainUGen.html">PV_ChainUGen</a> : <a href="../Classes/WidthFirstUGen.html">WidthFirstUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/PV_HainsworthFoote.html">PV_HainsworthFoote</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>FFT feature detector for onset detection based on work described in <em>Jensen, K. &amp; Andersen, T. H. (2003). Real-time Beat Estimation Using Feature Extraction. In Proceedings of the Computer Music Modeling and Retrieval Symposium, Lecture Notes in Computer Science. Springer Verlag.</em>
+<p>First order derivatives of the features are taken. <code class='code prettyprint lang-sc'>threshold</code> may need to be set low to pick up on changes.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>buffer</span>, <span class='argstr'>propsc: 0.25</span>, <span class='argstr'>prophfe: 0.25</span>, <span class='argstr'>prophfc: 0.25</span>, <span class='argstr'>propsf: 0.25</span>, <span class='argstr'>threshold: 1</span>, <span class='argstr'>waittime: 0.04</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>buffer<td class='argumentdesc'>
+<p>FFT buffer.<tr><td class='argumentname'>propsc<td class='argumentdesc'>
+<p>Proportion of spectral centroid feature.<tr><td class='argumentname'>prophfe<td class='argumentdesc'>
+<p>Proportion of high frequency energy feature.<tr><td class='argumentname'>prophfc<td class='argumentdesc'>
+<p>Proportion of high frequency content feature.<tr><td class='argumentname'>propsf<td class='argumentdesc'>
+<p>Proportion of spectral flux feature.<tr><td class='argumentname'>threshold<td class='argumentdesc'>
+<p>Threshold level for allowing a detection.<tr><td class='argumentname'>waittime<td class='argumentdesc'>
+<p>If triggered, minimum wait until a further frame can cause another spot (useful to stop multiple detects on heavy signals).</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+SynthDef(\fftod, { var source1, detect;
+        source1 = AudioIn.ar(1);
+        detect = PV_JensenAndersen.ar(FFT(LocalBuf(2048), source1),
+            threshold:MouseX.kr(0.1,1.0));
+        Out.ar(0, SinOsc.ar([440,445], 0, Decay.ar(0.1*detect, 0.1)));
+    }).play(s);
+)</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/PV_JensenAndersen.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/PV_JensenAndersen.schelp</a><br>link::Classes/PV_JensenAndersen::<br>sc version: 3.8dev</div></div></body></html>

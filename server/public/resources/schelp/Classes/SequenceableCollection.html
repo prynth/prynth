@@ -1,0 +1,897 @@
+<html><head><title>SequenceableCollection</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Collections>Ordered'>Collections>Ordered</a></div>
+<h1>SequenceableCollection</h1>
+<div id='summary'>Abstract superclass of integer indexable collections</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Collections/SequenceableCollection.sc'>SequenceableCollection.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Collection.html">Collection</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/ArrayedCollection.html">ArrayedCollection</a>, <a href="../Classes/LinkedList.html">LinkedList</a>, <a href="../Classes/List.html">List</a>, <a href="../Classes/Order.html">Order</a>, <a href="../Classes/RingBuffer.html">RingBuffer</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*fill'>fill</a> </li>
+<li class='toc3'><a href='#*series'>series</a> </li>
+<li class='toc3'><a href='#*geom'>geom</a> </li>
+<li class='toc3'><a href='#*fib'>fib</a> </li>
+<li class='toc3'><a href='#*rand'>rand</a> </li>
+<li class='toc3'><a href='#*rand2'>rand2</a> </li>
+<li class='toc3'><a href='#*linrand'>linrand</a> </li>
+<li class='toc3'><a href='#*exprand'>exprand</a> </li>
+<li class='toc3'><a href='#*interpolation'>interpolation</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*newFromFile'>newFromFile</a> </li>
+<li class='toc3'><a href='#*streamContents'>streamContents</a> </li>
+<li class='toc3'><a href='#*streamContentsLimit'>streamContentsLimit</a> </li>
+<li class='toc3'><a href='#*tuningScale'>tuningScale</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-|@|'>|@|</a> </li>
+<li class='toc3'><a href='#-@@'>@@</a> </li>
+<li class='toc3'><a href='#-@|@'>@|@</a> </li>
+<li class='toc3'><a href='#-first'>first</a> </li>
+<li class='toc3'><a href='#-last'>last</a> </li>
+<li class='toc3'><a href='#-putFirst'>putFirst</a>  <a href='#-putLast'>putLast</a> </li>
+<li class='toc3'><a href='#-indexOf'>indexOf</a> </li>
+<li class='toc3'><a href='#-indexOfEqual'>indexOfEqual</a> </li>
+<li class='toc3'><a href='#-indicesOfEqual'>indicesOfEqual</a> </li>
+<li class='toc3'><a href='#-indexOfGreaterThan'>indexOfGreaterThan</a> </li>
+<li class='toc3'><a href='#-selectIndices'>selectIndices</a> </li>
+<li class='toc3'><a href='#-selectIndicesAs'>selectIndicesAs</a> </li>
+<li class='toc3'><a href='#-rejectIndices'>rejectIndices</a> </li>
+<li class='toc3'><a href='#-rejectIndicesAs'>rejectIndicesAs</a> </li>
+<li class='toc3'><a href='#-maxIndex'>maxIndex</a> </li>
+<li class='toc3'><a href='#-minIndex'>minIndex</a> </li>
+<li class='toc3'><a href='#-find'>find</a> </li>
+<li class='toc3'><a href='#-findAll'>findAll</a> </li>
+<li class='toc3'><a href='#-indexIn'>indexIn</a> </li>
+<li class='toc3'><a href='#-indexInBetween'>indexInBetween</a> </li>
+<li class='toc3'><a href='#-blendAt'>blendAt</a> </li>
+<li class='toc3'><a href='#-copyRange'>copyRange</a> </li>
+<li class='toc3'><a href='#-copyToEnd'>copyToEnd</a> </li>
+<li class='toc3'><a href='#-copyFromStart'>copyFromStart</a> </li>
+<li class='toc3'><a href='#-remove'>remove</a> </li>
+<li class='toc3'><a href='#-take'>take</a> </li>
+<li class='toc3'><a href='#-obtain'>obtain</a> </li>
+<li class='toc3'><a href='#-instill'>instill</a> </li>
+<li class='toc3'><a href='#-keep'>keep</a> </li>
+<li class='toc3'><a href='#-drop'>drop</a> </li>
+<li class='toc3'><a href='#-join'>join</a> </li>
+<li class='toc3'><a href='#-flat'>flat</a> </li>
+<li class='toc3'><a href='#-flatten'>flatten</a> </li>
+<li class='toc3'><a href='#-flop'>flop</a> </li>
+<li class='toc3'><a href='#-flopWith'>flopWith</a> </li>
+<li class='toc3'><a href='#-flopTogether'>flopTogether</a> </li>
+<li class='toc3'><a href='#-flopDeep'>flopDeep</a> </li>
+<li class='toc3'><a href='#-maxSizeAtDepth'>maxSizeAtDepth</a> </li>
+<li class='toc3'><a href='#-maxDepth'>maxDepth</a> </li>
+<li class='toc3'><a href='#-isSeries'>isSeries</a> </li>
+<li class='toc3'><a href='#-resamp0'>resamp0</a> </li>
+<li class='toc3'><a href='#-resamp1'>resamp1</a> </li>
+<li class='toc3'><a href='#-choose'>choose</a> </li>
+<li class='toc3'><a href='#-wchoose'>wchoose</a> </li>
+<li class='toc3'><a href='#-sort'>sort</a> </li>
+<li class='toc3'><a href='#-sortBy'>sortBy</a> </li>
+<li class='toc3'><a href='#-order'>order</a> </li>
+<li class='toc3'><a href='#-swap'>swap</a> </li>
+<li class='toc3'><a href='#-pairsDo'>pairsDo</a> </li>
+<li class='toc3'><a href='#-doAdjacentPairs'>doAdjacentPairs</a> </li>
+<li class='toc3'><a href='#-separate'>separate</a> </li>
+<li class='toc3'><a href='#-split'>split</a> </li>
+<li class='toc3'><a href='#-clump'>clump</a> </li>
+<li class='toc3'><a href='#-clumps'>clumps</a> </li>
+<li class='toc3'><a href='#-curdle'>curdle</a> </li>
+<li class='toc3'><a href='#-integrate'>integrate</a> </li>
+<li class='toc3'><a href='#-differentiate'>differentiate</a> </li>
+<li class='toc3'><a href='#-reduce'>reduce</a> </li>
+<li class='toc3'><a href='#-convertDigits'>convertDigits</a> </li>
+<li class='toc3'><a href='#-hammingDistance'>hammingDistance</a> </li>
+<li class='toc2'><a href='#Math Support - Unary Messages'>Math Support - Unary Messages</a></li>
+<ul class='toc'><li class='toc3'><a href='#-neg'>neg</a>  <a href='#-reciprocal'>reciprocal</a>  <a href='#-bitNot'>bitNot</a>  <a href='#-abs'>abs</a>  <a href='#-asFloat'>asFloat</a>  <a href='#-asInt'>asInt</a>  <a href='#-ceil'>ceil</a>  <a href='#-floor'>floor</a>  <a href='#-frac'>frac</a>  <a href='#-sign'>sign</a>  <a href='#-squared'>squared</a>  <a href='#-cubed'>cubed</a>  <a href='#-sqrt'>sqrt</a>  <a href='#-exp'>exp</a>  <a href='#-midicps'>midicps</a>  <a href='#-cpsmidi'>cpsmidi</a>  <a href='#-midiratio'>midiratio</a>  <a href='#-ratiomidi'>ratiomidi</a>  <a href='#-ampdb'>ampdb</a>  <a href='#-dbamp'>dbamp</a>  <a href='#-octcps'>octcps</a>  <a href='#-cpsoct'>cpsoct</a>  <a href='#-log'>log</a>  <a href='#-log2'>log2</a>  <a href='#-log10'>log10</a>  <a href='#-sin'>sin</a>  <a href='#-cos'>cos</a>  <a href='#-tan'>tan</a>  <a href='#-asin'>asin</a>  <a href='#-acos'>acos</a>  <a href='#-atan'>atan</a>  <a href='#-sinh'>sinh</a>  <a href='#-cosh'>cosh</a>  <a href='#-tanh'>tanh</a>  <a href='#-rand'>rand</a>  <a href='#-rand2'>rand2</a>  <a href='#-linrand'>linrand</a>  <a href='#-bilinrand'>bilinrand</a>  <a href='#-sum3rand'>sum3rand</a>  <a href='#-distort'>distort</a>  <a href='#-softclip'>softclip</a>  <a href='#-coin'>coin</a>  <a href='#-even'>even</a>  <a href='#-odd'>odd</a>  <a href='#-isPositive'>isPositive</a>  <a href='#-isNegative'>isNegative</a>  <a href='#-isStrictlyPositive'>isStrictlyPositive</a>  <a href='#-real'>real</a>  <a href='#-imag'>imag</a>  <a href='#-magnitude'>magnitude</a>  <a href='#-magnitudeApx'>magnitudeApx</a>  <a href='#-phase'>phase</a>  <a href='#-angle'>angle</a>  <a href='#-rho'>rho</a>  <a href='#-theta'>theta</a>  <a href='#-asFloat'>asFloat</a>  <a href='#-asInteger'>asInteger</a> </li>
+<li class='toc3'><a href='#-performUnaryOp'>performUnaryOp</a> </li>
+</ul><li class='toc2'><a href='#Math Support - Binary Messages'>Math Support - Binary Messages</a></li>
+<ul class='toc'><li class='toc3'><a href='#-+'>+</a>  <a href='#--'>-</a>  <a href='#-*'>*</a>  <a href='#-/'>/</a>  <a href='#-div'>div</a>  <a href='#-%'>%</a>  <a href='#-**'>**</a>  <a href='#-min'>min</a>  <a href='#-max'>max</a>  <a href='#-<'>&lt;</a>  <a href='#-<='>&lt;=</a>  <a href='#->'>&gt;</a>  <a href='#->='>&gt;=</a>  <a href='#-&'>&amp;</a>  <a href='#-|'>|</a>  <a href='#-bitXor'>bitXor</a>  <a href='#-lcm'>lcm</a>  <a href='#-gcd'>gcd</a>  <a href='#-round'>round</a>  <a href='#-trunc'>trunc</a>  <a href='#-atan2'>atan2</a>  <a href='#-hypot'>hypot</a>  <a href='#->>'>&gt;&gt;</a>  <a href='#-+>>'>+&gt;&gt;</a>  <a href='#-ring1'>ring1</a>  <a href='#-ring2'>ring2</a>  <a href='#-ring3'>ring3</a>  <a href='#-ring4'>ring4</a>  <a href='#-difsqr'>difsqr</a>  <a href='#-sumsqr'>sumsqr</a>  <a href='#-sqrdif'>sqrdif</a>  <a href='#-absdif'>absdif</a>  <a href='#-amclip'>amclip</a>  <a href='#-scaleneg'>scaleneg</a>  <a href='#-clip2'>clip2</a>  <a href='#-excess'>excess</a>  <a href='#-<!'>&lt;!</a>  <a href='#-rrand'>rrand</a>  <a href='#-exprand'>exprand</a> </li>
+<li class='toc3'><a href='#-performBinaryOp'>performBinaryOp</a> </li>
+</ul><li class='toc2'><a href='#Multichannel wrappers'>Multichannel wrappers</a></li>
+<ul class='toc'><li class='toc3'><a href='#-clip'>clip</a>  <a href='#-wrap'>wrap</a>  <a href='#-fold'>fold</a>  <a href='#-prune'>prune</a>  <a href='#-linlin'>linlin</a>  <a href='#-linexp'>linexp</a>  <a href='#-explin'>explin</a>  <a href='#-expexp'>expexp</a>  <a href='#-lincurve'>lincurve</a>  <a href='#-curvelin'>curvelin</a>  <a href='#-bilin'>bilin</a>  <a href='#-biexp'>biexp</a>  <a href='#-range'>range</a>  <a href='#-exprange'>exprange</a>  <a href='#-unipolar'>unipolar</a>  <a href='#-bipolar'>bipolar</a>  <a href='#-lag'>lag</a>  <a href='#-lag2'>lag2</a>  <a href='#-lag3'>lag3</a>  <a href='#-lagud'>lagud</a>  <a href='#-lag2ud'>lag2ud</a>  <a href='#-lag3ud'>lag3ud</a>  <a href='#-varlag'>varlag</a>  <a href='#-slew'>slew</a>  <a href='#-blend'>blend</a>  <a href='#-checkBadValues'>checkBadValues</a> </li>
+<li class='toc3'><a href='#-multichannelExpandRef'>multichannelExpandRef</a> </li>
+</ul><li class='toc2'><a href='#Rhythm-lists'>Rhythm-lists</a></li>
+<ul class='toc'><li class='toc3'><a href='#-convertRhythm'>convertRhythm</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-++'>++</a> </li>
+<li class='toc3'><a href='#-+++'>+++</a> </li>
+<li class='toc3'><a href='#-=='>==</a> </li>
+<li class='toc3'><a href='#-asAddendsOf'>asAddendsOf</a> </li>
+<li class='toc3'><a href='#-asFraction'>asFraction</a> </li>
+<li class='toc3'><a href='#-asMIDIInPortUID'>asMIDIInPortUID</a> </li>
+<li class='toc3'><a href='#-asPaddedString'>asPaddedString</a> </li>
+<li class='toc3'><a href='#-asPoint'>asPoint</a> </li>
+<li class='toc3'><a href='#-asQuant'>asQuant</a> </li>
+<li class='toc3'><a href='#-asRect'>asRect</a> </li>
+<li class='toc3'><a href='#-asSequenceableCollection'>asSequenceableCollection</a> </li>
+<li class='toc3'><a href='#-ascii'>ascii</a> </li>
+<li class='toc3'><a href='#-aswAddendsOf'>aswAddendsOf</a> </li>
+<li class='toc3'><a href='#-bitAnd'>bitAnd</a> </li>
+<li class='toc3'><a href='#-bitHammingDistance'>bitHammingDistance</a> </li>
+<li class='toc3'><a href='#-bitOr'>bitOr</a> </li>
+<li class='toc3'><a href='#-canFreeSynth'>canFreeSynth</a> </li>
+<li class='toc3'><a href='#-cauchy'>cauchy</a> </li>
+<li class='toc3'><a href='#-containsSeqColl'>containsSeqColl</a> </li>
+<li class='toc3'><a href='#-convertOneRhythm'>convertOneRhythm</a> </li>
+<li class='toc3'><a href='#-curverange'>curverange</a> </li>
+<li class='toc3'><a href='#-degrad'>degrad</a> </li>
+<li class='toc3'><a href='#-degreeToKey'>degreeToKey</a> </li>
+<li class='toc3'><a href='#-delimit'>delimit</a> </li>
+<li class='toc3'><a href='#-firstArg'>firstArg</a> </li>
+<li class='toc3'><a href='#-flatIf'>flatIf</a> </li>
+<li class='toc3'><a href='#-fold2'>fold2</a> </li>
+<li class='toc3'><a href='#-gaussian'>gaussian</a> </li>
+<li class='toc3'><a href='#-hanWindow'>hanWindow</a> </li>
+<li class='toc3'><a href='#-hash'>hash</a> </li>
+<li class='toc3'><a href='#-hoareFind'>hoareFind</a> </li>
+<li class='toc3'><a href='#-hoareMedian'>hoareMedian</a> </li>
+<li class='toc3'><a href='#-hoarePartition'>hoarePartition</a> </li>
+<li class='toc3'><a href='#-hypotApx'>hypotApx</a> </li>
+<li class='toc3'><a href='#-indexOfPrime'>indexOfPrime</a> </li>
+<li class='toc3'><a href='#-insertionSort'>insertionSort</a> </li>
+<li class='toc3'><a href='#-insertionSortRange'>insertionSortRange</a> </li>
+<li class='toc3'><a href='#-isAssociationArray'>isAssociationArray</a> </li>
+<li class='toc3'><a href='#-isSequenceableCollection'>isSequenceableCollection</a> </li>
+<li class='toc3'><a href='#-keyToDegree'>keyToDegree</a> </li>
+<li class='toc3'><a href='#-keysValuesDo'>keysValuesDo</a> </li>
+<li class='toc3'><a href='#-lastIndex'>lastIndex</a> </li>
+<li class='toc3'><a href='#-leftShift'>leftShift</a> </li>
+<li class='toc3'><a href='#-logistic'>logistic</a> </li>
+<li class='toc3'><a href='#-median'>median</a> </li>
+<li class='toc3'><a href='#-mergeSort'>mergeSort</a> </li>
+<li class='toc3'><a href='#-mergeSortTemp'>mergeSortTemp</a> </li>
+<li class='toc3'><a href='#-mergeTemp'>mergeTemp</a> </li>
+<li class='toc3'><a href='#-middle'>middle</a> </li>
+<li class='toc3'><a href='#-middleIndex'>middleIndex</a> </li>
+<li class='toc3'><a href='#-midinote'>midinote</a> </li>
+<li class='toc3'><a href='#-minNyquist'>minNyquist</a> </li>
+<li class='toc3'><a href='#-mod'>mod</a> </li>
+<li class='toc3'><a href='#-moddif'>moddif</a> </li>
+<li class='toc3'><a href='#-mode'>mode</a> </li>
+<li class='toc3'><a href='#-multiChannelPerform'>multiChannelPerform</a> </li>
+<li class='toc3'><a href='#-nearestInList'>nearestInList</a> </li>
+<li class='toc3'><a href='#-nearestInScale'>nearestInScale</a> </li>
+<li class='toc3'><a href='#-nearestTo'>nearestTo</a> </li>
+<li class='toc3'><a href='#-nearestToList'>nearestToList</a> </li>
+<li class='toc3'><a href='#-nextPrime'>nextPrime</a> </li>
+<li class='toc3'><a href='#-nextTimeOnGrid'>nextTimeOnGrid</a> </li>
+<li class='toc3'><a href='#-notemidi'>notemidi</a> </li>
+<li class='toc3'><a href='#-nthPrime'>nthPrime</a> </li>
+<li class='toc3'><a href='#-pareto'>pareto</a> </li>
+<li class='toc3'><a href='#-performBinaryOpOnComplex'>performBinaryOpOnComplex</a> </li>
+<li class='toc3'><a href='#-performBinaryOpOnSeqColl'>performBinaryOpOnSeqColl</a> </li>
+<li class='toc3'><a href='#-performBinaryOpOnSimpleNumber'>performBinaryOpOnSimpleNumber</a> </li>
+<li class='toc3'><a href='#-performDegreeToKey'>performDegreeToKey</a> </li>
+<li class='toc3'><a href='#-performKeyToDegree'>performKeyToDegree</a> </li>
+<li class='toc3'><a href='#-performNearestInList'>performNearestInList</a> </li>
+<li class='toc3'><a href='#-performNearestInScale'>performNearestInScale</a> </li>
+<li class='toc3'><a href='#-poisson'>poisson</a> </li>
+<li class='toc3'><a href='#-pow'>pow</a> </li>
+<li class='toc3'><a href='#-prFlat'>prFlat</a> </li>
+<li class='toc3'><a href='#-prUnixCmd'>prUnixCmd</a> </li>
+<li class='toc3'><a href='#-prepareForProxySynthDef'>prepareForProxySynthDef</a> </li>
+<li class='toc3'><a href='#-prevPrime'>prevPrime</a> </li>
+<li class='toc3'><a href='#-quickSort'>quickSort</a> </li>
+<li class='toc3'><a href='#-quickSortRange'>quickSortRange</a> </li>
+<li class='toc3'><a href='#-raddeg'>raddeg</a> </li>
+<li class='toc3'><a href='#-ramp'>ramp</a> </li>
+<li class='toc3'><a href='#-rate'>rate</a> </li>
+<li class='toc3'><a href='#-rectWindow'>rectWindow</a> </li>
+<li class='toc3'><a href='#-removing'>removing</a> </li>
+<li class='toc3'><a href='#-rightShift'>rightShift</a> </li>
+<li class='toc3'><a href='#-roundUp'>roundUp</a> </li>
+<li class='toc3'><a href='#-schedBundleArrayOnClock'>schedBundleArrayOnClock</a> </li>
+<li class='toc3'><a href='#-scurve'>scurve</a> </li>
+<li class='toc3'><a href='#-sortMap'>sortMap</a> </li>
+<li class='toc3'><a href='#-sortedMedian'>sortedMedian</a> </li>
+<li class='toc3'><a href='#-sqrsum'>sqrsum</a> </li>
+<li class='toc3'><a href='#-sumRhythmDivisions'>sumRhythmDivisions</a> </li>
+<li class='toc3'><a href='#-thresh'>thresh</a> </li>
+<li class='toc3'><a href='#-top'>top</a> </li>
+<li class='toc3'><a href='#-transposeKey'>transposeKey</a> </li>
+<li class='toc3'><a href='#-triWindow'>triWindow</a> </li>
+<li class='toc3'><a href='#-unixCmd'>unixCmd</a> </li>
+<li class='toc3'><a href='#-unlace'>unlace</a> </li>
+<li class='toc3'><a href='#-unsignedRightShift'>unsignedRightShift</a> </li>
+<li class='toc3'><a href='#-welWindow'>welWindow</a> </li>
+<li class='toc3'><a href='#-wrap2'>wrap2</a> </li>
+<li class='toc3'><a href='#-wrapAt'>wrapAt</a> </li>
+<li class='toc3'><a href='#-wrapAtDepth'>wrapAtDepth</a> </li>
+<li class='toc3'><a href='#-wrapPut'>wrapPut</a> </li>
+<li class='toc3'><a href='#-writeFile'>writeFile</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>SequenceableCollection is a subclass of Collection whose elements can be indexed by an Integer. It has many useful subclasses; <a href="./../Classes/Array.html">Array</a> and <a href="./../Classes/List.html">List</a> are amongst the most commonly used.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fill' href='./../Overviews/Methods.html#fill'>fill</a> (<span class='argstr'>size</span>, <span class='argstr'>function</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
+<div class='method'>
+<p>Creates a Collection of the given size, the elements of which are determined by evaluation the given function. The function is passed the index as an argument.<pre class='code prettyprint lang-sc'>Array.fill(4, { arg i; i * 2 });
+Bag.fill(14, { arg i; i.rand });</pre>
+<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p>The size of the collection which is returned. If nil, it returns an empty collection. If an array of sizes is given, the resulting collection has the appropriate dimensions (see: <a href="#*fillND).">*fillND).</a><pre class='code prettyprint lang-sc'>Array.fill([2, 2, 3], { arg i, j, k;  i * 100 + (j * 10) + k });</pre>
+<tr><td class='argumentname'>function<td class='argumentdesc'>
+<p>The function which is called for each new element - the index is passed in as a first argument. The function be anything that responds to the message "value".<pre class='code prettyprint lang-sc'>Array.fill(10, { arg i; 2 ** i });
+Array.fill(10, Pxrand([0, 1, 2], inf).iter);
+Array.fill(10, 7); // an object that doesn't respond with a new value is just repeatedly added.</pre>
+</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*series' href='./../Overviews/Methods.html#series'>series</a> (<span class='argstr'>size</span>, <span class='argstr'>start: 0</span>, <span class='argstr'>step: 1</span>)</h3>
+<div class='method'>
+<p>Fill a SequenceableCollection with an arithmetic series.<pre class='code prettyprint lang-sc'>Array.series(5, 10, 2);</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*geom' href='./../Overviews/Methods.html#geom'>geom</a> (<span class='argstr'>size</span>, <span class='argstr'>start</span>, <span class='argstr'>grow</span>)</h3>
+<div class='method'>
+<p>Fill a SequenceableCollection with a geometric series.<pre class='code prettyprint lang-sc'>Array.geom(5, 1, 3);</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fib' href='./../Overviews/Methods.html#fib'>fib</a> (<span class='argstr'>size</span>, <span class='argstr'>a: 0</span>, <span class='argstr'>b: 1</span>)</h3>
+<div class='method'>
+<p>Fill a SequenceableCollection with a fibonacci series.<pre class='code prettyprint lang-sc'>Array.fib(5);
+Array.fib(5, 2, 32); // start from 32 with step 2.</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>size<td class='argumentdesc'>
+<p>the number of values in the collection<tr><td class='argumentname'>a<td class='argumentdesc'>
+<p>the starting step value<tr><td class='argumentname'>b<td class='argumentdesc'>
+<p>the starting value</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*rand' href='./../Overviews/Methods.html#rand'>rand</a> (<span class='argstr'>size</span>, <span class='argstr'>minVal</span>, <span class='argstr'>maxVal</span>)</h3>
+<div class='method'>
+<p>Fill a SequenceableCollection with random values in the range <strong>minVal</strong> to <strong>maxVal</strong>.<pre class='code prettyprint lang-sc'>Array.rand(8, 1, 100);</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*rand2' href='./../Overviews/Methods.html#rand2'>rand2</a> (<span class='argstr'>size</span>, <span class='argstr'>val</span>)</h3>
+<div class='method'>
+<p>Fill a SequenceableCollection with random values in the range -<strong>val</strong> to +<strong>val</strong>.<pre class='code prettyprint lang-sc'>Array.rand2(8, 100);</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*linrand' href='./../Overviews/Methods.html#linrand'>linrand</a> (<span class='argstr'>size</span>, <span class='argstr'>minVal</span>, <span class='argstr'>maxVal</span>)</h3>
+<div class='method'>
+<p>Fill a SequenceableCollection with random values in the range <strong>minVal</strong> to <strong>maxVal</strong> with a linear distribution.<pre class='code prettyprint lang-sc'>Array.linrand(8, 1, 100);</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*exprand' href='./../Overviews/Methods.html#exprand'>exprand</a> (<span class='argstr'>size</span>, <span class='argstr'>minVal</span>, <span class='argstr'>maxVal</span>)</h3>
+<div class='method'>
+<p>Fill a SequenceableCollection with random values in the range <strong>minVal</strong> to <strong>maxVal</strong> with exponential distribution.<pre class='code prettyprint lang-sc'>Array.exprand(8, 1, 100);</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*interpolation' href='./../Overviews/Methods.html#interpolation'>interpolation</a> (<span class='argstr'>size</span>, <span class='argstr'>start: 0</span>, <span class='argstr'>end: 1</span>)</h3>
+<div class='method'>
+<p>Fill a SequenceableCollection with the interpolated values between the <strong>start</strong> and <strong>end</strong> values.<pre class='code prettyprint lang-sc'>Array.interpolation(5, 3.2, 20.5);</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*newFromFile' href='./../Overviews/Methods.html#newFromFile'>newFromFile</a> (<span class='argstr'>path</span>, <span class='argstr'>columnSeparator: $ </span>, <span class='argstr'>rowSeparator: $\n</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-newFromFile.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-newFromFile.sc</a></div>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*streamContents' href='./../Overviews/Methods.html#streamContents'>streamContents</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*streamContentsLimit' href='./../Overviews/Methods.html#streamContentsLimit'>streamContentsLimit</a> (<span class='argstr'>function</span>, <span class='argstr'>limit: 2000</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*tuningScale' href='./../Overviews/Methods.html#tuningScale'>tuningScale</a> (<span class='argstr'>rootFreq: 440</span>, <span class='argstr'>stepRatios: [ 1.5, 2 ]</span>, <span class='argstr'>loFreqBound: 20</span>, <span class='argstr'>hiFreqBound: 20000</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/tuningScale.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/tuningScale.sc</a></div>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-|@|' href='./../Overviews/Methods.html#|@|'>|@|</a> (<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>synonym for <a href="./../Classes/ArrayedCollection.html#-clipAt">ArrayedCollection: -clipAt</a>.<pre class='code prettyprint lang-sc'>[3, 4, 5]|@|6;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-@@' href='./../Overviews/Methods.html#@@'>@@</a> (<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>synonym for <a href="./../Classes/ArrayedCollection.html#-wrapAt">ArrayedCollection: -wrapAt</a>.<pre class='code prettyprint lang-sc'>[3, 4, 5]@@6;
+[3, 4, 5]@@ -1;
+[3, 4, 5]@@[6, 8]</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-@|@' href='./../Overviews/Methods.html#@|@'>@|@</a> (<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>synonym for <a href="./../Classes/ArrayedCollection.html#-foldAt">ArrayedCollection: -foldAt</a>.<pre class='code prettyprint lang-sc'>[3, 4, 5]@|@[6, 8];</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-first' href='./../Overviews/Methods.html#first'>first</a> </h3>
+<div class='method'>
+<p>Return the first element of the collection.<pre class='code prettyprint lang-sc'>[3, 4, 5].first;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-last' href='./../Overviews/Methods.html#last'>last</a> </h3>
+<div class='method'>
+<p>Return the last element of the collection.<pre class='code prettyprint lang-sc'>[3, 4, 5].last;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-putFirst' href='./../Overviews/Methods.html#putFirst'>putFirst</a> (<span class='argstr'>obj</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-putLast' href='./../Overviews/Methods.html#putLast'>putLast</a> (<span class='argstr'>obj</span>)</h3>
+<div class='method'>
+<p>Place <strong>item</strong> at the first / last index in the collection. Note that if the collection is empty (and therefore has no indexed slots) the item will not be added.<pre class='code prettyprint lang-sc'>[3, 4, 5].putFirst(100);
+[3, 4, 5].putLast(100);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-indexOf' href='./../Overviews/Methods.html#indexOf'>indexOf</a> (<span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Return the index of an <strong>item</strong> in the collection, or nil if not found.<pre class='code prettyprint lang-sc'>[3, 4, 100, 5].indexOf(100);
+[3, 4, \foo, \bar].indexOf(\foo);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-indexOfEqual' href='./../Overviews/Methods.html#indexOfEqual'>indexOfEqual</a> (<span class='argstr'>item</span>, <span class='argstr'>offset: 0</span>)</h3>
+<div class='method'>
+<p>Return the index of something in the collection that equals the <strong>item</strong>, or nil if not found.<pre class='code prettyprint lang-sc'>[3, 4, "foo", "bar"].indexOfEqual("foo");</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-indicesOfEqual' href='./../Overviews/Methods.html#indicesOfEqual'>indicesOfEqual</a> (<span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Return an array of indices of things in the collection that equal the <strong>item</strong>, or nil if not found.<pre class='code prettyprint lang-sc'>y = [7, 8, 7, 6, 5, 6, 7, 6, 7, 8, 9];
+y.indicesOfEqual(7);
+y.indicesOfEqual(5);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-indexOfGreaterThan' href='./../Overviews/Methods.html#indexOfGreaterThan'>indexOfGreaterThan</a> (<span class='argstr'>val</span>)</h3>
+<div class='method'>
+<p>Return the first index containing an <strong>item</strong> which is greater than <strong>item</strong>.<pre class='code prettyprint lang-sc'>y = List[ 10, 5, 77, 55, 12, 123];
+y.indexOfGreaterThan(70);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-selectIndices' href='./../Overviews/Methods.html#selectIndices'>selectIndices</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Return a new collection of same type as receiver which consists of all indices of those elements of the receiver for which function answers <code class='code prettyprint lang-sc'>true</code>. The function is passed two arguments, the item and an integer index.<pre class='code prettyprint lang-sc'>#[a, b, c, g, h, h, j, h].selectIndices({|item, i| item === \h})</pre>
+
+<p>If you want to control what type of collection is returned, use <a href="#-selectIndicesAs">-selectIndicesAs</a></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-selectIndicesAs' href='./../Overviews/Methods.html#selectIndicesAs'>selectIndicesAs</a> (<span class='argstr'>function</span>, <span class='argstr'>class</span>)</h3>
+<div class='method'>
+<p>Return a new collection of type <em>class</em> which consists of all indices of those elements of the receiver for which function answers <code class='code prettyprint lang-sc'>true</code>. The function is passed two arguments, the item and an integer index.<pre class='code prettyprint lang-sc'>#[a, b, c, g, h, h, j, h].selectIndicesAs({|item, i| item === \h}, Set)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-rejectIndices' href='./../Overviews/Methods.html#rejectIndices'>rejectIndices</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Return a new collection of same type as receiver which consists of all indices of those elements of the receiver for which function answers <code class='code prettyprint lang-sc'>false</code>. The function is passed two arguments, the item and an integer index.<pre class='code prettyprint lang-sc'>#[a, b, c, g, h, h, j, h].rejectIndices({|item, i| item === \h})</pre>
+
+<p>If you want to control what type of collection is returned, use <a href="#-rejectIndicesAs">-rejectIndicesAs</a></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-rejectIndicesAs' href='./../Overviews/Methods.html#rejectIndicesAs'>rejectIndicesAs</a> (<span class='argstr'>function</span>, <span class='argstr'>class</span>)</h3>
+<div class='method'>
+<p>Return a new collection of type <em>class</em> which consists of all indices of those elements of the receiver for which function answers <code class='code prettyprint lang-sc'>false</code>. The function is passed two arguments, the item and an integer index.<pre class='code prettyprint lang-sc'>#[a, b, c, g, h, h, j, h].rejectIndicesAs({|item, i| item === \h}, Set)</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxIndex' href='./../Overviews/Methods.html#maxIndex'>maxIndex</a> (<span class='argstr'>function</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
+<div class='method'>
+<p>Answer the index of the maximum of the results of <strong>function</strong> evaluated for each item in the receiver. The function is passed two arguments, the item and an integer index. If function is nil, then answer the maximum of all items in the receiver.<pre class='code prettyprint lang-sc'>List[1, 2, 3, 4].maxIndex({ arg item, i; item + 10 });
+[3.2, 12.2, 13, 0.4].maxIndex;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-minIndex' href='./../Overviews/Methods.html#minIndex'>minIndex</a> (<span class='argstr'>function</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
+<div class='method'>
+<p>Answer the index of the minimum of the results of <strong>function</strong> evaluated for each item in the receiver. The function is passed two arguments, the item and an integer index. If function is nil, then answer the minimum of all items in the receiver.<pre class='code prettyprint lang-sc'>List[1, 2, 3, 4].minIndex({ arg item, i; item + 10 });
+List[3.2, 12.2, 13, 0.4].minIndex;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-find' href='./../Overviews/Methods.html#find'>find</a> (<span class='argstr'>sublist</span>, <span class='argstr'>offset: 0</span>)</h3>
+<div class='method'>
+<p>If the <strong>sublist</strong> exists in the receiver (in the specified order), at an offset greater than or equal to the initial <strong>offset</strong>, then return the starting index.<pre class='code prettyprint lang-sc'>y = [7, 8, 7, 6, 5, 6, 7, 6, 7, 8, 9];
+y.find([7, 6, 5]);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-findAll' href='./../Overviews/Methods.html#findAll'>findAll</a> (<span class='argstr'>arr</span>, <span class='argstr'>offset: 0</span>)</h3>
+<div class='method'>
+<p>Similar to <a href="#-find">-find</a> but returns an array of all the indices at which the sequence is found.<pre class='code prettyprint lang-sc'>y = [7, 8, 7, 6, 5, 6, 7, 6, 7, 8, 9];
+y.findAll([7, 6]);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-indexIn' href='./../Overviews/Methods.html#indexIn'>indexIn</a> (<span class='argstr'>val</span>)</h3>
+<div class='method'>
+<p>Returns the closest index of the value in the collection (collection must be sorted).<pre class='code prettyprint lang-sc'>[2, 3, 5, 6].indexIn(5.2);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-indexInBetween' href='./../Overviews/Methods.html#indexInBetween'>indexInBetween</a> (<span class='argstr'>val</span>)</h3>
+<div class='method'>
+<p>Returns a linearly interpolated float index for the value (collection must be sorted). Inverse operation is <a href="#-blendAt">-blendAt</a>.<pre class='code prettyprint lang-sc'>x = [2, 3, 5, 6].indexInBetween(5.2);
+[2, 3, 5, 6].blendAt(x);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-blendAt' href='./../Overviews/Methods.html#blendAt'>blendAt</a> (<span class='argstr'>index</span>, <span class='argstr'>method: 'clipAt'</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<div class='method'>
+<p>Returns a linearly interpolated value between the two closest indices. Inverse operation is <a href="#-indexInBetween">-indexInBetween</a>.<pre class='code prettyprint lang-sc'>x = [2, 5, 6].blendAt(0.4);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-copyRange' href='./../Overviews/Methods.html#copyRange'>copyRange</a> (<span class='argstr'>start</span>, <span class='argstr'>end</span>)</h3>
+<div class='method'>
+<p>Return a new SequenceableCollection which is a copy of the indexed slots of the receiver from <strong>start</strong> to <strong>end</strong>. If <strong>end</strong> &lt; <strong>start</strong>, an empty collection is returned.<pre class='code prettyprint lang-sc'>(
+var y, z;
+z = [1, 2, 3, 4, 5];
+y = z.copyRange(1, 3);
+z.postln;
+y.postln;
+)</pre>
+
+<p><div class='warning'><span class='warninglabel'>WARNING:</span> <code class='code prettyprint lang-sc'>x.copyRange(a, b)</code> is <strong>not</strong> equivalent to <code class='code prettyprint lang-sc'>x[a..b]</code>. The latter compiles to <a href="./../Classes/ArrayedCollection.html#-copySeries">ArrayedCollection: -copySeries</a>, which has different behavior when <strong>end</strong> &lt; <strong>start</strong>.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-copyToEnd' href='./../Overviews/Methods.html#copyToEnd'>copyToEnd</a> (<span class='argstr'>start</span>)</h3>
+<div class='method'>
+<p>Return a new SequenceableCollection which is a copy of the indexed slots of the receiver from <strong>start</strong> to the end of the collection. <code class='code prettyprint lang-sc'>x.copyToEnd(a)</code> can also be written as <code class='code prettyprint lang-sc'>x[a..]</code></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-copyFromStart' href='./../Overviews/Methods.html#copyFromStart'>copyFromStart</a> (<span class='argstr'>end</span>)</h3>
+<div class='method'>
+<p>Return a new SequenceableCollection which is a copy of the indexed slots of the receiver from the start of the collection to <strong>end</strong>. <code class='code prettyprint lang-sc'>x.copyFromStart(a)</code> can also be written as <code class='code prettyprint lang-sc'>x[..a]</code></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-remove' href='./../Overviews/Methods.html#remove'>remove</a> (<span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Remove <strong>item</strong> from collection.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-take' href='./../Overviews/Methods.html#take'>take</a> (<span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Remove and return <strong>item</strong> from collection. The last item in the collection will move to occupy the vacated slot (and the collection size decreases by one). See also takeAt, defined for <a href="./../Classes/ArrayedCollection.html#-takeAt">ArrayedCollection: -takeAt</a>.<pre class='code prettyprint lang-sc'>a = [11, 12, 13, 14, 15];
+a.take(12);
+a;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-obtain' href='./../Overviews/Methods.html#obtain'>obtain</a> (<span class='argstr'>index</span>, <span class='argstr'>default</span>)</h3>
+<div class='method'>
+<p>Retrieve an element from a given index (like <a href="./../Classes/SequenceableCollection.html#-at">SequenceableCollection: -at</a>). This method is also implemented in <a href="./../Classes/Object.html">Object</a>, so that you can use it in situations where you don't want to know if the receiver is a collection or not. See also: <a href="./../Classes/SequenceableCollection.html#-instill">SequenceableCollection: -instill</a><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>index<td class='argumentdesc'>
+<p>The index at which to look for an element<tr><td class='argumentname'>default<td class='argumentdesc'>
+<p>If index exceeds collection size, or receiver is nil, return this instead<pre class='code prettyprint lang-sc'>(
+a = [10, 20, 30];
+b = [10, 20];
+c = 7;
+);
+
+ // obtain third element, if outside bounds return 1
+a.obtain(2, 1);
+b.obtain(2, 1);
+c.obtain(2, 1);</pre>
+</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-instill' href='./../Overviews/Methods.html#instill'>instill</a> (<span class='argstr'>index</span>, <span class='argstr'>item</span>, <span class='argstr'>default</span>)</h3>
+<div class='method'>
+<p>Put an element at a given index (like <a href="./../Classes/SequenceableCollection.html#-put">SequenceableCollection: -put</a>). This method is also implemented in <a href="./../Classes/Object.html">Object</a>, so that you can use it in situations where you don't want to know if the receiver is a collection or not. It will always return a new collection. See also: <a href="./../Classes/SequenceableCollection.html#-obtain">SequenceableCollection: -obtain</a><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>index<td class='argumentdesc'>
+<p>The index at which to put the item<tr><td class='argumentname'>item<td class='argumentdesc'>
+<p>The object to put into the new collection<tr><td class='argumentname'>default<td class='argumentdesc'>
+<p>If the index exceeds the current collection's size, extend the collection with this element<pre class='code prettyprint lang-sc'>(
+a = [10, 20, 30, 40];
+b = [10, 20];
+c = 7;
+);
+
+a.instill(2, -1);
+b.instill(2, -1);
+c.instill(2, -1);
+// providing a default value
+c.instill(2, -1, 0);</pre>
+</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-keep' href='./../Overviews/Methods.html#keep'>keep</a> (<span class='argstr'>n</span>)</h3>
+<div class='method'>
+<p>Keep the first <strong>n</strong> items of the array. If <strong>n</strong> is negative, keep the last -<strong>n</strong> items.<pre class='code prettyprint lang-sc'>a = [1, 2, 3, 4, 5];
+a.keep(3);
+a.keep(-3);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-drop' href='./../Overviews/Methods.html#drop'>drop</a> (<span class='argstr'>n</span>)</h3>
+<div class='method'>
+<p>Drop the first <strong>n</strong> items of the array. If <strong>n</strong> is negative, drop the last -<strong>n</strong> items.<pre class='code prettyprint lang-sc'>a = [1, 2, 3, 4, 5];
+a.drop(3);
+a.drop(-3);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-join' href='./../Overviews/Methods.html#join'>join</a> (<span class='argstr'>joiner</span>)</h3>
+<div class='method'>
+<p>Returns a <a href="./../Classes/String.html">String</a> formed by connecting all the elements of the receiver, with <strong>joiner</strong> inbetween. See also <a href="./../Classes/String.html#-split">String: -split</a> as the complementary operation.<pre class='code prettyprint lang-sc'>["m", "ss", "ss", "pp", ""].join("i").postcs;
+"mississippi".split("i").postcs;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-flat' href='./../Overviews/Methods.html#flat'>flat</a> </h3>
+<div class='method'>
+<p>Returns a collection from which all nesting has been flattened.<pre class='code prettyprint lang-sc'>[[1, 2, 3], [[4, 5], [[6]]]].flat;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-flatten' href='./../Overviews/Methods.html#flatten'>flatten</a> (<span class='argstr'>numLevels: 1</span>)</h3>
+<div class='method'>
+<p>Returns a collection from which <strong>numLevels</strong> of nesting has been flattened.<pre class='code prettyprint lang-sc'>[[1, 2, 3], [[4, 5], [[6]]]].flatten(1).postcs;
+[[1, 2, 3], [[4, 5], [[6]]]].flatten(2).postcs;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-flop' href='./../Overviews/Methods.html#flop'>flop</a> </h3>
+<div class='method'>
+<p>Invert rows and colums in a two dimensional Collection (turn inside out). See also: <a href="./../Classes/Function.html">Function</a>.<pre class='code prettyprint lang-sc'>[[1, 2, 3], [4, 5, 6]].flop;
+[[1, 2, 3], [4, 5, 6], [7, 8]].flop; // shorter array wraps
+[].flop; // result is always 2-d.</pre>
+
+<p>Note that the innermost arrays are not copied:<pre class='code prettyprint lang-sc'>a = [1, 2];
+x = [[[a, 5], [a, 10]], [[a, 50, 60]]].flop;
+a[0] = pi;
+x // pi is everywhere</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-flopWith' href='./../Overviews/Methods.html#flopWith'>flopWith</a> (<span class='argstr'>func</span>)</h3>
+<div class='method'>
+<p>Flop with a user defined function. Can be used to collect over several collections in parallel.<pre class='code prettyprint lang-sc'>[[1, 2, 3], [4, 5, 6]].flopWith(_+_);
+[[1, 2, 3], 1, [7, 8]].flopWith{ |a,b,c| a+b+c }; // shorter array wraps
+
+// typical use case (pseudocode)
+[synths, buffers].flopWith{ |a,b| a.set(\buf, b) }</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A function taking as many arguments as elements in the array.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-flopTogether' href='./../Overviews/Methods.html#flopTogether'>flopTogether</a> ( <span class='argstr'>... moreArrays</span>)</h3>
+<div class='method'>
+<p>Invert rows and colums in a an array of dimensional Collections (turn inside out), so that they all match up in size, but remain separated.<pre class='code prettyprint lang-sc'>(
+a = flopTogether(
+    [[1, 2, 3], [4, 5, 6, 7, 8]] * 100,
+    [[1, 2, 3], [4, 5, 6], [7, 8]],
+    [1000]
+)
+);
+
+a.collect(_.size); // sizes are the same
+a.collect(_.shape) // shapes can be different</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-flopDeep' href='./../Overviews/Methods.html#flopDeep'>flopDeep</a> (<span class='argstr'>rank</span>)</h3>
+<div class='method'>
+<p>Fold dimensions in a multi-dimensional Collection (turn inside out).<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>rank<td class='argumentdesc'>
+<p>The depth (dimension) from which the array is inverted inside-out.<pre class='code prettyprint lang-sc'>[[1, 2, 3], [[41, 52], 5, 6]].flopDeep(2);
+[[1, 2, 3], [[41, 52], 5, 6]].flopDeep(1);
+[[1, 2, 3], [[41, 52], 5, 6]].flopDeep(0);
+[[1, 2, 3], [[41, 52], 5, 6]].flopDeep; // without argument, flop from the deepest level
+
+[[[10, 100, 1000], 2, 3], [[41, 52], 5, 6]].flopDeep(2); // shorter array wraps
+[].flopDeep(1); // result is always one dimension higher.
+[[]].flopDeep(4);</pre>
+<div class='note'><span class='notelabel'>NOTE:</span> Note that, just like in flop, the innermost arrays (deeper than rank) are not copied.</div><pre class='code prettyprint lang-sc'>a = [1, 2];
+x = [[[a, 5], [a, 10]], [[a, 50, 60]]].flopDeep(1);
+a[0] = pi;
+x // pi is everywhere</pre>
+</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxSizeAtDepth' href='./../Overviews/Methods.html#maxSizeAtDepth'>maxSizeAtDepth</a> (<span class='argstr'>rank</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
+<div class='method'>
+<p>Returns the maximum size of all subarrays at a certain depth (dimension)<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>rank<td class='argumentdesc'>
+<p>The depth at which the size of the arrays is measured<pre class='code prettyprint lang-sc'>[[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxSizeAtDepth(2);
+[[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxSizeAtDepth(1);
+[[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxSizeAtDepth(0);
+[].maxSizeAtDepth(0);
+[[]].maxSizeAtDepth(0);
+[[]].maxSizeAtDepth(1);</pre>
+</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-maxDepth' href='./../Overviews/Methods.html#maxDepth'>maxDepth</a> (<span class='argstr'>max: 1</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
+<div class='method'>
+<p>Returns the maximum depth of all subarrays.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>max<td class='argumentdesc'>
+<p>Internally used only.<pre class='code prettyprint lang-sc'>[[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxDepth</pre>
+</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-isSeries' href='./../Overviews/Methods.html#isSeries'>isSeries</a> (<span class='argstr'>step</span>)</h3>
+<div class='method'>
+<p>Returns true if the collection is an arithmetic series.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>step<td class='argumentdesc'>
+<p>Step size to look for. If none is given, any step size will match.<pre class='code prettyprint lang-sc'>[ 0, 1, 2, 3, 4, 5 ].isSeries; // true
+[ 1.5, 2.5, 3.5, 4.5, 5.5, 6.5 ].isSeries; // true
+[ 0, 1, 4, 5 ].isSeries; // false
+[ 0, 3, 6, 9, 12, 15 ].isSeries; // true
+[ 0, 3, 6, 9, 12, 15 ].isSeries(1); // false
+[ 2 ] // true
+[ ] // true (empty sequence)</pre>
+</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-resamp0' href='./../Overviews/Methods.html#resamp0'>resamp0</a> (<span class='argstr'>newSize</span>)</h3>
+<div class='method'>
+<p>Returns a new Collection of the desired length, with values resampled evenly-spaced from the receiver without interpolation.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4].resamp0(12);
+[1, 2, 3, 4].resamp0(2);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-resamp1' href='./../Overviews/Methods.html#resamp1'>resamp1</a> (<span class='argstr'>newSize</span>)</h3>
+<div class='method'>
+<p>Returns a new Collection of the desired length, with values resampled evenly-spaced from the receiver with linear interpolation.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4].resamp1(12);
+[1, 2, 3, 4].resamp1(3);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-choose' href='./../Overviews/Methods.html#choose'>choose</a> </h3>
+<div class='method'>
+<p>Choose an element from the collection at random.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4].choose;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-wchoose' href='./../Overviews/Methods.html#wchoose'>wchoose</a> (<span class='argstr'>weights</span>)</h3>
+<div class='method'>
+<p>Choose an element from the collection at random using a list of probabilities or weights. The weights must sum to 1.0.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4].wchoose([0.1, 0.2, 0.3, 0.4]);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sort' href='./../Overviews/Methods.html#sort'>sort</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Sort the contents of the collection using the comparison function argument. The function should take two elements as arguments and return true if the first argument should be sorted before the second argument. If the function is nil, the following default function is used. { arg a, b; a &lt; b }<pre class='code prettyprint lang-sc'>[6, 2, 1, 7, 5].sort;
+[6, 2, 1, 7, 5].sort({ arg a, b; a &gt; b }); // reverse sort</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-sortBy' href='./../Overviews/Methods.html#sortBy'>sortBy</a> (<span class='argstr'>key</span>)</h3>
+<div class='method'>
+<p>Sort the contents of the collection using the key <strong>key</strong>, which is assumed to be found inside each element of the receiver.<pre class='code prettyprint lang-sc'>(
+a = [
+    Dictionary[\a-&gt;5, \b-&gt;1, \c-&gt;62],
+    Dictionary[\a-&gt;2, \b-&gt;9, \c-&gt;65],
+    Dictionary[\a-&gt;8, \b-&gt;5, \c-&gt;68],
+    Dictionary[\a-&gt;1, \b-&gt;3, \c-&gt;61],
+    Dictionary[\a-&gt;6, \b-&gt;7, \c-&gt;63]
+]
+)
+a.sortBy(\b);
+a.sortBy(\c);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-order' href='./../Overviews/Methods.html#order'>order</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Return an array of indices that would sort the collection into order. <strong>function</strong> is treated the same way as for the <a href="#-sort">-sort</a> method.<pre class='code prettyprint lang-sc'>[6, 2, 1, 7, 5].order;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-swap' href='./../Overviews/Methods.html#swap'>swap</a> (<span class='argstr'>i</span>, <span class='argstr'>j</span>)</h3>
+<div class='method'>
+<p>Swap two elements in the collection at indices <strong>i</strong> and <strong>j</strong>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pairsDo' href='./../Overviews/Methods.html#pairsDo'>pairsDo</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Calls function for each subsequent pair of elements in the SequentialCollection. The function is passed the two elements and an index.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4, 5].pairsDo({ arg a, b; [a, b].postln; });</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-doAdjacentPairs' href='./../Overviews/Methods.html#doAdjacentPairs'>doAdjacentPairs</a> (<span class='argstr'>function</span>)</h3>
+<div class='method'>
+<p>Calls function for every adjacent pair of elements in the SequentialCollection. The function is passed the two adjacent elements and an index.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4, 5].doAdjacentPairs({ arg a, b; [a, b].postln; });</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-separate' href='./../Overviews/Methods.html#separate'>separate</a> (<span class='argstr'>function: true</span>)</h3>
+<div class='method'>
+<p>Separates the collection into sub-collections by calling the function for each adjacent pair of elements. If the function returns true, then a separation is made between the elements.<pre class='code prettyprint lang-sc'>[1, 2, 3, 5, 6, 8, 10].separate({ arg a, b; (b - a) &gt; 1 }).postcs;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-split' href='./../Overviews/Methods.html#split'>split</a>: METHOD NOT FOUND!</h3>
+<div class='method'>
+<p>Separates the collection into sub-collections at the separator element or subarray. The separator is a <a href="./../Classes/Collection.html">Collection</a>, or anything that can be converted into the class this method is called on. It is <strong>not</strong> included in the output array. The default separator is $/, for the common use in <a href="./../Classes/String.html">String</a>.<pre class='code prettyprint lang-sc'>[1, 2, 1, 2, 3, 1, 2, 1, 3].split([2, 1])</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clump' href='./../Overviews/Methods.html#clump'>clump</a> (<span class='argstr'>groupSize</span>)</h3>
+<div class='method'>
+<p>Separates the collection into sub-collections by separating every groupSize elements.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4, 5, 6, 7, 8].clump(3).postcs;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clumps' href='./../Overviews/Methods.html#clumps'>clumps</a> (<span class='argstr'>groupSizeList</span>)</h3>
+<div class='method'>
+<p>Separates the collection into sub-collections by separating elements into groupings whose size is given by integers in the groupSizeList.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4, 5, 6, 7, 8].clumps([1, 2]).postcs;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-curdle' href='./../Overviews/Methods.html#curdle'>curdle</a> (<span class='argstr'>probability</span>)</h3>
+<div class='method'>
+<p>Separates the collection into sub-collections by randomly separating elements according to the given probability.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4, 5, 6, 7, 8].curdle(0.3).postcs;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-integrate' href='./../Overviews/Methods.html#integrate'>integrate</a> </h3>
+<div class='method'>
+<p>Returns a collection with the incremental sums of all elements.<pre class='code prettyprint lang-sc'>[3, 4, 1, 1].integrate;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-differentiate' href='./../Overviews/Methods.html#differentiate'>differentiate</a> </h3>
+<div class='method'>
+<p>Returns a collection with the pairwise difference between all elements.<pre class='code prettyprint lang-sc'>[3, 4, 1, 1].differentiate;</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-reduce' href='./../Overviews/Methods.html#reduce'>reduce</a> (<span class='argstr'>operator</span>)</h3>
+<div class='method'>
+<p>Applies the method named by operator to the first and second elements of the collection - then applies the method to the result and to the third element of the collection - then applies the method to the result and to the fourth element of the collection - and so on, until the end of the array.<pre class='code prettyprint lang-sc'>[3, 4, 5, 6].reduce('*'); // this is the same as [3, 4, 5, 6].product
+[3, 4, 5, 6].reduce(\lcm); // Lowest common multiple of the whole set of numbers
+["d", "e", (0..9), "h"].reduce('++'); // concatenation
+[3, 4, 5, 6].reduce({ |a, b| sin(a) * sin(b) }); // product of sines</pre>
+
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>operator<td class='argumentdesc'>
+<p>may be a <a href="./../Classes/Function.html">Function</a> or a <a href="./../Classes/Symbol.html">Symbol</a>.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-convertDigits' href='./../Overviews/Methods.html#convertDigits'>convertDigits</a> (<span class='argstr'>base: 10</span>)</h3>
+<div class='method'>
+<p>Returns an integer resulting from interpreting the elements as digits to a given base (default 10). See also asDigits in <a href="./../Classes/Integer.html#asDigits">Integer: asDigits</a> for the complementary method.<pre class='code prettyprint lang-sc'>[1, 0, 0, 0].convertDigits;
+[1, 0, 0, 0].convertDigits(2);
+[1, 0, 0, 0].convertDigits(3);</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hammingDistance' href='./../Overviews/Methods.html#hammingDistance'>hammingDistance</a> (<span class='argstr'>that</span>)</h3>
+<div class='method'>
+<p>Returns the count of array elements that are not equal in identical positions. <a href="http://en.wikipedia.org/wiki/Hamming_distance">http://en.wikipedia.org/wiki/Hamming_distance</a>
+<p>The collections are not wrapped - if one array is shorter than the other, the difference in size should be included in the count.<pre class='code prettyprint lang-sc'>[0, 0, 0, 1, 1, 1, 0, 1, 0, 0].hammingDistance([0, 0, 1, 1, 0, 0, 0, 0, 1, 1]);
+"SuperMan".hammingDistance("SuperCollider");</pre>
+</div><h3><a class='anchor' name='Math Support - Unary Messages'>Math Support - Unary Messages</a></h3>
+
+<p>All of the following messages send the message <a href="#-performUnaryOp">-performUnaryOp</a> to the receiver with the unary message selector as an argument.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-neg' href='./../Overviews/Methods.html#neg'>neg</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-reciprocal' href='./../Overviews/Methods.html#reciprocal'>reciprocal</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bitNot' href='./../Overviews/Methods.html#bitNot'>bitNot</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-abs' href='./../Overviews/Methods.html#abs'>abs</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asFloat' href='./../Overviews/Methods.html#asFloat'>asFloat</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asInt' href='./../Overviews/Methods.html#asInt'>asInt</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ceil' href='./../Overviews/Methods.html#ceil'>ceil</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-floor' href='./../Overviews/Methods.html#floor'>floor</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-frac' href='./../Overviews/Methods.html#frac'>frac</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sign' href='./../Overviews/Methods.html#sign'>sign</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-squared' href='./../Overviews/Methods.html#squared'>squared</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cubed' href='./../Overviews/Methods.html#cubed'>cubed</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sqrt' href='./../Overviews/Methods.html#sqrt'>sqrt</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-exp' href='./../Overviews/Methods.html#exp'>exp</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-midicps' href='./../Overviews/Methods.html#midicps'>midicps</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cpsmidi' href='./../Overviews/Methods.html#cpsmidi'>cpsmidi</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-midiratio' href='./../Overviews/Methods.html#midiratio'>midiratio</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ratiomidi' href='./../Overviews/Methods.html#ratiomidi'>ratiomidi</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ampdb' href='./../Overviews/Methods.html#ampdb'>ampdb</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-dbamp' href='./../Overviews/Methods.html#dbamp'>dbamp</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-octcps' href='./../Overviews/Methods.html#octcps'>octcps</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cpsoct' href='./../Overviews/Methods.html#cpsoct'>cpsoct</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-log' href='./../Overviews/Methods.html#log'>log</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-log2' href='./../Overviews/Methods.html#log2'>log2</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-log10' href='./../Overviews/Methods.html#log10'>log10</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sin' href='./../Overviews/Methods.html#sin'>sin</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cos' href='./../Overviews/Methods.html#cos'>cos</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-tan' href='./../Overviews/Methods.html#tan'>tan</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asin' href='./../Overviews/Methods.html#asin'>asin</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-acos' href='./../Overviews/Methods.html#acos'>acos</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-atan' href='./../Overviews/Methods.html#atan'>atan</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sinh' href='./../Overviews/Methods.html#sinh'>sinh</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cosh' href='./../Overviews/Methods.html#cosh'>cosh</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-tanh' href='./../Overviews/Methods.html#tanh'>tanh</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rand' href='./../Overviews/Methods.html#rand'>rand</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rand2' href='./../Overviews/Methods.html#rand2'>rand2</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-linrand' href='./../Overviews/Methods.html#linrand'>linrand</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bilinrand' href='./../Overviews/Methods.html#bilinrand'>bilinrand</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sum3rand' href='./../Overviews/Methods.html#sum3rand'>sum3rand</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-distort' href='./../Overviews/Methods.html#distort'>distort</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-softclip' href='./../Overviews/Methods.html#softclip'>softclip</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-coin' href='./../Overviews/Methods.html#coin'>coin</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-even' href='./../Overviews/Methods.html#even'>even</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-odd' href='./../Overviews/Methods.html#odd'>odd</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isPositive' href='./../Overviews/Methods.html#isPositive'>isPositive</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isNegative' href='./../Overviews/Methods.html#isNegative'>isNegative</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isStrictlyPositive' href='./../Overviews/Methods.html#isStrictlyPositive'>isStrictlyPositive</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-real' href='./../Overviews/Methods.html#real'>real</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-imag' href='./../Overviews/Methods.html#imag'>imag</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-magnitude' href='./../Overviews/Methods.html#magnitude'>magnitude</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-magnitudeApx' href='./../Overviews/Methods.html#magnitudeApx'>magnitudeApx</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-phase' href='./../Overviews/Methods.html#phase'>phase</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-angle' href='./../Overviews/Methods.html#angle'>angle</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rho' href='./../Overviews/Methods.html#rho'>rho</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-theta' href='./../Overviews/Methods.html#theta'>theta</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asFloat' href='./../Overviews/Methods.html#asFloat'>asFloat</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asInteger' href='./../Overviews/Methods.html#asInteger'>asInteger</a> </h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-performUnaryOp' href='./../Overviews/Methods.html#performUnaryOp'>performUnaryOp</a> (<span class='argstr'>aSelector</span>)</h3>
+<div class='method'>
+<p>Creates a new collection of the results of applying the selector to all elements in the receiver.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4].neg;
+[1, 2, 3, 4].reciprocal;</pre>
+</div><h3><a class='anchor' name='Math Support - Binary Messages'>Math Support - Binary Messages</a></h3>
+
+<p>All of the following messages send the message <a href="#-performBinaryOp">-performBinaryOp</a> to the receiver with the binary message selector and the second operand as arguments.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-+' href='./../Overviews/Methods.html#+'>+</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='--' href='./../Overviews/Methods.html#-'>-</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-*' href='./../Overviews/Methods.html#*'>*</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-/' href='./../Overviews/Methods.html#/'>/</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-div' href='./../Overviews/Methods.html#div'>div</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-%' href='./../Overviews/Methods.html#%'>%</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-**' href='./../Overviews/Methods.html#**'>**</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-min' href='./../Overviews/Methods.html#min'>min</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-max' href='./../Overviews/Methods.html#max'>max</a> (<span class='argstr'>aNumber: 0</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-<' href='./../Overviews/Methods.html#&lt;'>&lt;</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-<=' href='./../Overviews/Methods.html#&lt;='>&lt;=</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='->' href='./../Overviews/Methods.html#&gt;'>&gt;</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='->=' href='./../Overviews/Methods.html#&gt;='>&gt;=</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-&' href='./../Overviews/Methods.html#&amp;'>&amp;</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-|' href='./../Overviews/Methods.html#|'>|</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bitXor' href='./../Overviews/Methods.html#bitXor'>bitXor</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lcm' href='./../Overviews/Methods.html#lcm'>lcm</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gcd' href='./../Overviews/Methods.html#gcd'>gcd</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-round' href='./../Overviews/Methods.html#round'>round</a> (<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-trunc' href='./../Overviews/Methods.html#trunc'>trunc</a> (<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-atan2' href='./../Overviews/Methods.html#atan2'>atan2</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hypot' href='./../Overviews/Methods.html#hypot'>hypot</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='->>' href='./../Overviews/Methods.html#&gt;&gt;'>&gt;&gt;</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-+>>' href='./../Overviews/Methods.html#+&gt;&gt;'>+&gt;&gt;</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ring1' href='./../Overviews/Methods.html#ring1'>ring1</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ring2' href='./../Overviews/Methods.html#ring2'>ring2</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ring3' href='./../Overviews/Methods.html#ring3'>ring3</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ring4' href='./../Overviews/Methods.html#ring4'>ring4</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-difsqr' href='./../Overviews/Methods.html#difsqr'>difsqr</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sumsqr' href='./../Overviews/Methods.html#sumsqr'>sumsqr</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sqrdif' href='./../Overviews/Methods.html#sqrdif'>sqrdif</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-absdif' href='./../Overviews/Methods.html#absdif'>absdif</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-amclip' href='./../Overviews/Methods.html#amclip'>amclip</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-scaleneg' href='./../Overviews/Methods.html#scaleneg'>scaleneg</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-clip2' href='./../Overviews/Methods.html#clip2'>clip2</a> (<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-excess' href='./../Overviews/Methods.html#excess'>excess</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-<!' href='./../Overviews/Methods.html#&lt;!'>&lt;!</a> (<span class='argstr'>that</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rrand' href='./../Overviews/Methods.html#rrand'>rrand</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-exprand' href='./../Overviews/Methods.html#exprand'>exprand</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-performBinaryOp' href='./../Overviews/Methods.html#performBinaryOp'>performBinaryOp</a> (<span class='argstr'>aSelector</span>, <span class='argstr'>theOperand</span>, <span class='argstr'>adverb</span>)</h3>
+<div class='method'>
+<p>Creates a new collection of the results of applying the selector with the operand to all elements in the receiver. If the operand is a collection then elements of that collection are paired with elements of the receiver.<pre class='code prettyprint lang-sc'>([1, 2, 3, 4] * 10);
+([1, 2, 3, 4] * [4, 5, 6, 7]);</pre>
+</div><h3><a class='anchor' name='Multichannel wrappers'>Multichannel wrappers</a></h3>
+
+<p>All of the following messages are performed on the elements of this collection, using <a href="./../Classes/Object.html#-multiChannelPerform">Object: -multiChannelPerform</a>.
+<p>The result depends on the objects in the collection, but the main use case is for <a href="./../Classes/UGen.html">UGen</a>s.
+<p>See also <a href="./../Guides/Multichannel-Expansion.html">Multichannel Expansion</a><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clip' href='./../Overviews/Methods.html#clip'>clip</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-wrap' href='./../Overviews/Methods.html#wrap'>wrap</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fold' href='./../Overviews/Methods.html#fold'>fold</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prune' href='./../Overviews/Methods.html#prune'>prune</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-linlin' href='./../Overviews/Methods.html#linlin'>linlin</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-linexp' href='./../Overviews/Methods.html#linexp'>linexp</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-explin' href='./../Overviews/Methods.html#explin'>explin</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-expexp' href='./../Overviews/Methods.html#expexp'>expexp</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lincurve' href='./../Overviews/Methods.html#lincurve'>lincurve</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-curvelin' href='./../Overviews/Methods.html#curvelin'>curvelin</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bilin' href='./../Overviews/Methods.html#bilin'>bilin</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-biexp' href='./../Overviews/Methods.html#biexp'>biexp</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-range' href='./../Overviews/Methods.html#range'>range</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-exprange' href='./../Overviews/Methods.html#exprange'>exprange</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-unipolar' href='./../Overviews/Methods.html#unipolar'>unipolar</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bipolar' href='./../Overviews/Methods.html#bipolar'>bipolar</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lag' href='./../Overviews/Methods.html#lag'>lag</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lag2' href='./../Overviews/Methods.html#lag2'>lag2</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lag3' href='./../Overviews/Methods.html#lag3'>lag3</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lagud' href='./../Overviews/Methods.html#lagud'>lagud</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lag2ud' href='./../Overviews/Methods.html#lag2ud'>lag2ud</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lag3ud' href='./../Overviews/Methods.html#lag3ud'>lag3ud</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-varlag' href='./../Overviews/Methods.html#varlag'>varlag</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-slew' href='./../Overviews/Methods.html#slew'>slew</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-blend' href='./../Overviews/Methods.html#blend'>blend</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-checkBadValues' href='./../Overviews/Methods.html#checkBadValues'>checkBadValues</a> ( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Calls <code class='code prettyprint lang-sc'>this.multiChannelPerform(selector, *args)</code> where selector is the name of the message.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-multichannelExpandRef' href='./../Overviews/Methods.html#multichannelExpandRef'>multichannelExpandRef</a> (<span class='argstr'>rank</span>)</h3>
+<div class='method'>
+<p>This method is called internally on inputs to UGens that take multidimensional arrays, like <a href="./../Classes/Klank.html">Klank</a> and it allows proper multichannel expansion even in those cases. For SequenceableCollection, this returns the collection itself, assuming that it contains already a number of Refs. See <a href="./../Classes/Ref.html">Ref</a> for the corresponding method implementation.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>rank<td class='argumentdesc'>
+<p>The depth at which the list is expanded. For instance the Klank spec has a rank of 2. For more examples, see <a href="./../Classes/SequenceableCollection.html#-flopDeep">SequenceableCollection: -flopDeep</a><pre class='code prettyprint lang-sc'>`([[[100, 200], 500], nil, [[[0.01, 0.3], 0.8]]]).multichannelExpandRef(2);
+[`[[100, 200], nil, [0.2, 0.8]], `[[130, 202], nil, [0.2, 0.5]]].multichannelExpandRef(2);</pre>
+</table></div><h3><a class='anchor' name='Rhythm-lists'>Rhythm-lists</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-convertRhythm' href='./../Overviews/Methods.html#convertRhythm'>convertRhythm</a> </h3>
+<div class='method'>
+<p>Convert a rhythm-list to durations.<h4>Discussion:</h4>
+
+<p>supports a variation of Mikael Laurson's rhythm list RTM-notation.<a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> 
+<p>The method converts a collection of the form <code class='code prettyprint lang-sc'>[beat-count, [rtm-list], repeats]</code> to a <a href="./../Classes/List.html">List</a> of <a href="./../Classes/Float.html">Float</a>s. A negative integer within the rtm-list equates to a value tied over to the duration following. The method is recursive in that any subdivision within the rtm-list can itself be a nested convertRhythm collection (see example below). The repeats integer has a default value of 1.
+<p>If the divisions in the rtm-list are events, the event durations are interpreted as relative durations, and a list of events is returned.<pre class='code prettyprint lang-sc'>// using numbers as score
+[3, [1, 2, 1], 1].convertRhythm; // List[ 0.75, 1.5, 0.75 ]
+[2, [1, 3, [1, [2, 1, 1, 1]], 1, 3], 1].convertRhythm;
+[2, [1, [1, [2, 1, 1, 1]]], 1].convertRhythm;
+[2, [1, [1, [2, 1, 1, 1]]], 2].convertRhythm; // repeat
+[2, [1, [1, [2, 1, 1, -1]]], 2].convertRhythm; // negative value is tied over.
+
+// sound example
+Pbind(\degree, Pseries(0, 1, inf), \dur, Pseq([2, [1, [1, [2, 1, 1, -1]]], 2].convertRhythm)).play;</pre>
+</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-++' href='./../Overviews/Methods.html#++'>++</a> (<span class='argstr'>aSequenceableCollection</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-+++' href='./../Overviews/Methods.html#+++'>+++</a> (<span class='argstr'>aSequenceableCollection</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-==' href='./../Overviews/Methods.html#=='>==</a> (<span class='argstr'>aCollection</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asAddendsOf' href='./../Overviews/Methods.html#asAddendsOf'>asAddendsOf</a> (<span class='argstr'>sum</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-asAddendsOf.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-asAddendsOf.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asFraction' href='./../Overviews/Methods.html#asFraction'>asFraction</a> (<span class='argstr'>denominator: 100</span>, <span class='argstr'>fasterBetter: true</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asMIDIInPortUID' href='./../Overviews/Methods.html#asMIDIInPortUID'>asMIDIInPortUID</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/asMIDIPort.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Control/asMIDIPort.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asPaddedString' href='./../Overviews/Methods.html#asPaddedString'>asPaddedString</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/Integer-asPaddedString.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/Integer-asPaddedString.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asPoint' href='./../Overviews/Methods.html#asPoint'>asPoint</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asQuant' href='./../Overviews/Methods.html#asQuant'>asQuant</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asRect' href='./../Overviews/Methods.html#asRect'>asRect</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asSequenceableCollection' href='./../Overviews/Methods.html#asSequenceableCollection'>asSequenceableCollection</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ascii' href='./../Overviews/Methods.html#ascii'>ascii</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-aswAddendsOf' href='./../Overviews/Methods.html#aswAddendsOf'>aswAddendsOf</a> (<span class='argstr'>summation</span>, <span class='argstr'>weights</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-asAddendsOf.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-asAddendsOf.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bitAnd' href='./../Overviews/Methods.html#bitAnd'>bitAnd</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bitHammingDistance' href='./../Overviews/Methods.html#bitHammingDistance'>bitHammingDistance</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-bitOr' href='./../Overviews/Methods.html#bitOr'>bitOr</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-canFreeSynth' href='./../Overviews/Methods.html#canFreeSynth'>canFreeSynth</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-cauchy' href='./../Overviews/Methods.html#cauchy'>cauchy</a> (<span class='argstr'>spread: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-containsSeqColl' href='./../Overviews/Methods.html#containsSeqColl'>containsSeqColl</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-convertOneRhythm' href='./../Overviews/Methods.html#convertOneRhythm'>convertOneRhythm</a> (<span class='argstr'>list</span>, <span class='argstr'>tie: 0</span>, <span class='argstr'>stretch: 1</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-curverange' href='./../Overviews/Methods.html#curverange'>curverange</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-degrad' href='./../Overviews/Methods.html#degrad'>degrad</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-degreeToKey' href='./../Overviews/Methods.html#degreeToKey'>degreeToKey</a> (<span class='argstr'>scale</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-delimit' href='./../Overviews/Methods.html#delimit'>delimit</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-firstArg' href='./../Overviews/Methods.html#firstArg'>firstArg</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-flatIf' href='./../Overviews/Methods.html#flatIf'>flatIf</a> (<span class='argstr'>func</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fold2' href='./../Overviews/Methods.html#fold2'>fold2</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-gaussian' href='./../Overviews/Methods.html#gaussian'>gaussian</a> (<span class='argstr'>dev: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hanWindow' href='./../Overviews/Methods.html#hanWindow'>hanWindow</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hash' href='./../Overviews/Methods.html#hash'>hash</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hoareFind' href='./../Overviews/Methods.html#hoareFind'>hoareFind</a> (<span class='argstr'>k</span>, <span class='argstr'>function</span>, <span class='argstr'>left</span>, <span class='argstr'>right</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hoareMedian' href='./../Overviews/Methods.html#hoareMedian'>hoareMedian</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hoarePartition' href='./../Overviews/Methods.html#hoarePartition'>hoarePartition</a> (<span class='argstr'>l0</span>, <span class='argstr'>r0</span>, <span class='argstr'>p</span>, <span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-hypotApx' href='./../Overviews/Methods.html#hypotApx'>hypotApx</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-indexOfPrime' href='./../Overviews/Methods.html#indexOfPrime'>indexOfPrime</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-insertionSort' href='./../Overviews/Methods.html#insertionSort'>insertionSort</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-insertionSortRange' href='./../Overviews/Methods.html#insertionSortRange'>insertionSortRange</a> (<span class='argstr'>function</span>, <span class='argstr'>left</span>, <span class='argstr'>right</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isAssociationArray' href='./../Overviews/Methods.html#isAssociationArray'>isAssociationArray</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isSequenceableCollection' href='./../Overviews/Methods.html#isSequenceableCollection'>isSequenceableCollection</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keyToDegree' href='./../Overviews/Methods.html#keyToDegree'>keyToDegree</a> (<span class='argstr'>scale</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-keysValuesDo' href='./../Overviews/Methods.html#keysValuesDo'>keysValuesDo</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-lastIndex' href='./../Overviews/Methods.html#lastIndex'>lastIndex</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-leftShift' href='./../Overviews/Methods.html#leftShift'>leftShift</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-logistic' href='./../Overviews/Methods.html#logistic'>logistic</a> (<span class='argstr'>spread: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-median' href='./../Overviews/Methods.html#median'>median</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mergeSort' href='./../Overviews/Methods.html#mergeSort'>mergeSort</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mergeSortTemp' href='./../Overviews/Methods.html#mergeSortTemp'>mergeSortTemp</a> (<span class='argstr'>function</span>, <span class='argstr'>tempArray</span>, <span class='argstr'>left</span>, <span class='argstr'>right</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mergeTemp' href='./../Overviews/Methods.html#mergeTemp'>mergeTemp</a> (<span class='argstr'>function</span>, <span class='argstr'>tempArray</span>, <span class='argstr'>left</span>, <span class='argstr'>mid</span>, <span class='argstr'>right</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-middle' href='./../Overviews/Methods.html#middle'>middle</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-middleIndex' href='./../Overviews/Methods.html#middleIndex'>middleIndex</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-midinote' href='./../Overviews/Methods.html#midinote'>midinote</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/midinote.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/midinote.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-minNyquist' href='./../Overviews/Methods.html#minNyquist'>minNyquist</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mod' href='./../Overviews/Methods.html#mod'>mod</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-moddif' href='./../Overviews/Methods.html#moddif'>moddif</a> ( <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mode' href='./../Overviews/Methods.html#mode'>mode</a> (<span class='argstr'>degree</span>, <span class='argstr'>octave: 12</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-multiChannelPerform' href='./../Overviews/Methods.html#multiChannelPerform'>multiChannelPerform</a> (<span class='argstr'>selector</span> <span class='argstr'>... args</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nearestInList' href='./../Overviews/Methods.html#nearestInList'>nearestInList</a> (<span class='argstr'>list</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nearestInScale' href='./../Overviews/Methods.html#nearestInScale'>nearestInScale</a> (<span class='argstr'>scale</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nearestTo' href='./../Overviews/Methods.html#nearestTo'>nearestTo</a> (<span class='argstr'>value</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/tuningScale.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/tuningScale.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nearestToList' href='./../Overviews/Methods.html#nearestToList'>nearestToList</a> (<span class='argstr'>values</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/tuningScale.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/tuningScale.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nextPrime' href='./../Overviews/Methods.html#nextPrime'>nextPrime</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nextTimeOnGrid' href='./../Overviews/Methods.html#nextTimeOnGrid'>nextTimeOnGrid</a> (<span class='argstr'>clock</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-notemidi' href='./../Overviews/Methods.html#notemidi'>notemidi</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/midinote.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/midinote.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nthPrime' href='./../Overviews/Methods.html#nthPrime'>nthPrime</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pareto' href='./../Overviews/Methods.html#pareto'>pareto</a> (<span class='argstr'>shape: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-performBinaryOpOnComplex' href='./../Overviews/Methods.html#performBinaryOpOnComplex'>performBinaryOpOnComplex</a> (<span class='argstr'>aSelector</span>, <span class='argstr'>aComplex</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-performBinaryOpOnSeqColl' href='./../Overviews/Methods.html#performBinaryOpOnSeqColl'>performBinaryOpOnSeqColl</a> (<span class='argstr'>aSelector</span>, <span class='argstr'>theOperand</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-performBinaryOpOnSimpleNumber' href='./../Overviews/Methods.html#performBinaryOpOnSimpleNumber'>performBinaryOpOnSimpleNumber</a> (<span class='argstr'>aSelector</span>, <span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-performDegreeToKey' href='./../Overviews/Methods.html#performDegreeToKey'>performDegreeToKey</a> (<span class='argstr'>scaleDegree</span>, <span class='argstr'>stepsPerOctave: 12</span>, <span class='argstr'>accidental: 0</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-performKeyToDegree' href='./../Overviews/Methods.html#performKeyToDegree'>performKeyToDegree</a> (<span class='argstr'>degree</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-performNearestInList' href='./../Overviews/Methods.html#performNearestInList'>performNearestInList</a> (<span class='argstr'>degree</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-performNearestInScale' href='./../Overviews/Methods.html#performNearestInScale'>performNearestInScale</a> (<span class='argstr'>degree</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-poisson' href='./../Overviews/Methods.html#poisson'>poisson</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pow' href='./../Overviews/Methods.html#pow'>pow</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prFlat' href='./../Overviews/Methods.html#prFlat'>prFlat</a> (<span class='argstr'>list</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prUnixCmd' href='./../Overviews/Methods.html#prUnixCmd'>prUnixCmd</a> (<span class='argstr'>postOutput: true</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prepareForProxySynthDef' href='./../Overviews/Methods.html#prepareForProxySynthDef'>prepareForProxySynthDef</a> (<span class='argstr'>proxy</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/local/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-prevPrime' href='./../Overviews/Methods.html#prevPrime'>prevPrime</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-quickSort' href='./../Overviews/Methods.html#quickSort'>quickSort</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-quickSortRange' href='./../Overviews/Methods.html#quickSortRange'>quickSortRange</a> (<span class='argstr'>i</span>, <span class='argstr'>j</span>, <span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-raddeg' href='./../Overviews/Methods.html#raddeg'>raddeg</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ramp' href='./../Overviews/Methods.html#ramp'>ramp</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rate' href='./../Overviews/Methods.html#rate'>rate</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rectWindow' href='./../Overviews/Methods.html#rectWindow'>rectWindow</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-removing' href='./../Overviews/Methods.html#removing'>removing</a> (<span class='argstr'>item</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-rightShift' href='./../Overviews/Methods.html#rightShift'>rightShift</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-roundUp' href='./../Overviews/Methods.html#roundUp'>roundUp</a> (<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-schedBundleArrayOnClock' href='./../Overviews/Methods.html#schedBundleArrayOnClock'>schedBundleArrayOnClock</a> (<span class='argstr'>clock</span>, <span class='argstr'>bundleArray</span>, <span class='argstr'>lag: 0</span>, <span class='argstr'>server</span>, <span class='argstr'>latency</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-scurve' href='./../Overviews/Methods.html#scurve'>scurve</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sortMap' href='./../Overviews/Methods.html#sortMap'>sortMap</a> (<span class='argstr'>function</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sortedMedian' href='./../Overviews/Methods.html#sortedMedian'>sortedMedian</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sqrsum' href='./../Overviews/Methods.html#sqrsum'>sqrsum</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sumRhythmDivisions' href='./../Overviews/Methods.html#sumRhythmDivisions'>sumRhythmDivisions</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-thresh' href='./../Overviews/Methods.html#thresh'>thresh</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-top' href='./../Overviews/Methods.html#top'>top</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-transposeKey' href='./../Overviews/Methods.html#transposeKey'>transposeKey</a> (<span class='argstr'>amount</span>, <span class='argstr'>octave: 12</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-triWindow' href='./../Overviews/Methods.html#triWindow'>triWindow</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-unixCmd' href='./../Overviews/Methods.html#unixCmd'>unixCmd</a> (<span class='argstr'>action</span>, <span class='argstr'>postOutput: true</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-unlace' href='./../Overviews/Methods.html#unlace'>unlace</a> (<span class='argstr'>numlists</span>, <span class='argstr'>clumpSize: 1</span>, <span class='argstr'>clip: false</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-unsignedRightShift' href='./../Overviews/Methods.html#unsignedRightShift'>unsignedRightShift</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-welWindow' href='./../Overviews/Methods.html#welWindow'>welWindow</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-wrap2' href='./../Overviews/Methods.html#wrap2'>wrap2</a> (<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-wrapAt' href='./../Overviews/Methods.html#wrapAt'>wrapAt</a> (<span class='argstr'>index</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-wrapAtDepth' href='./../Overviews/Methods.html#wrapAtDepth'>wrapAtDepth</a> (<span class='argstr'>rank</span>, <span class='argstr'>index</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-wrapPut' href='./../Overviews/Methods.html#wrapPut'>wrapPut</a> (<span class='argstr'>index</span>, <span class='argstr'>value</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-writeFile' href='./../Overviews/Methods.html#writeFile'>writeFile</a> (<span class='argstr'>path</span>, <span class='argstr'>columnSeparator: $ </span>, <span class='argstr'>rowSeparator: $\n</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-newFromFile.sc'>/usr/local/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-newFromFile.sc</a></div>
+<div class='footnotes'>
+<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - see Laurson and Kuuskankare's 2003, "From RTM-notation to ENP-score-notation" <a href="http://jim2003.agglo-montbeliard.fr/articles/laurson.pdf">http://jim2003.agglo-montbeliard.fr/articles/laurson.pdf</a></div></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/SequenceableCollection.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/SequenceableCollection.schelp</a><br>link::Classes/SequenceableCollection::<br>sc version: 3.8dev</div></div></body></html>

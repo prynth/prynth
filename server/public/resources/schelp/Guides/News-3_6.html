@@ -1,0 +1,73 @@
+<html><head><title>News in 3.6</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider GUIDES</div>
+<div id='categories'><a href='./../Browse.html#News'>News</a></div>
+<h1>News in 3.6</h1>
+<div id='summary'>A summary of news in SC 3.6</div>
+</div>
+<div class='subheader'>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#SuperCollider IDE'>SuperCollider IDE</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Language-side news'>Language-side news</a></li>
+<ul class='toc'><li class='toc2'><a href='#More informative syntax errors'>More informative syntax errors</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Remove old syntax'>Remove old syntax</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#YAML/JSON parser'>YAML/JSON parser</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#SynthDef optimizations for additive terms'>SynthDef optimizations for additive terms</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Basic dead code elimination for SynthDefs'>Basic dead code elimination for SynthDefs</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Case sensitive String comparision'>Case sensitive String comparision</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#SplayAz Bug Fix'>SplayAz Bug Fix</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Array primitives respect mutability'>Array primitives respect mutability</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Server-side news'>Server-side news</a></li>
+<ul class='toc'><li class='toc2'><a href='#SynthDef2 fileformat'>SynthDef2 fileformat</a></li>
+<li class='toc2'><a href='#C++ base class for Unit Generators'>C++ base class for Unit Generators</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='SuperCollider IDE'>SuperCollider IDE</a></h2>
+
+<p>A new cross-platform SuperCollider coding environment.
+<p>Read <a href="./../Guides/SCIde.html">the guide</a>!<h2><a class='anchor' name='Language-side news'>Language-side news</a></h2>
+<h3><a class='anchor' name='More informative syntax errors'>More informative syntax errors</a></h3>
+
+<p>The parser now posts the details of syntax errors, example:<pre class='code prettyprint lang-sc'>[1,2,%,4];
+123;</pre>
+
+<p>Posts the following error message:<pre>ERROR: syntax error, unexpected BINOP, expecting ']'
+  in file 'selected text'
+  line 1 char 6:
+
+  [1,2,%,4];
+       ^
+  123;
+-----------------------------------
+ERROR: Command line parse failed</pre><h3><a class='anchor' name='Remove old syntax'>Remove old syntax</a></h3>
+
+<p><code class='code prettyprint lang-sc'>#(a:1)</code> was valid syntax, but yielded nonsense results. This will now result in a syntax error instead.<h3><a class='anchor' name='YAML/JSON parser'>YAML/JSON parser</a></h3>
+
+<p><a href="./../Classes/String.html#-parseYAML">String: -parseYAML</a> and <a href="./../Classes/String.html#-parseYAMLFile">String: -parseYAMLFile</a> can be used to parse YAML or JSON.<h3><a class='anchor' name='SynthDef optimizations for additive terms'>SynthDef optimizations for additive terms</a></h3>
+
+<p>When the SynthDef is compiled, separate additive ugens are combined via the new <a href="./../Classes/Sum3.html">Sum3</a> and <a href="./../Classes/Sum4.html">Sum4</a> ugens.<h3><a class='anchor' name='Basic dead code elimination for SynthDefs'>Basic dead code elimination for SynthDefs</a></h3>
+
+<p>The process of building synthdefs now performs a simple dead code elimination pass, which removes all <a href="./../Classes/PureUGen.html">PureUGen</a> instaces without successor.<h3><a class='anchor' name='Case sensitive String comparision'>Case sensitive String comparision</a></h3>
+
+<p>String comparision operators (<code>==, !=, &lt;=, &gt;=, &gt;, &lt;</code>) are now case sensitive.<pre class='code prettyprint lang-sc'>"Foo" == "fOo"; // false</pre>
+<h3><a class='anchor' name='SplayAz Bug Fix'>SplayAz Bug Fix</a></h3>
+
+<p>Positioning of SplayAz was broken. The semantics of the <code>spread</code> and <code>center</code> arguments has been changed in order to fix the behavior.<h3><a class='anchor' name='Array primitives respect mutability'>Array primitives respect mutability</a></h3>
+
+<p>The array primitives now respect object mutability: writing to an immutable object now fails and changing an immutable object with <code>add</code>, <code>addAll</code>, <code>insert</code>, <code>extend</code>, <code>growClear</code> and <code>overwrite</code> will return a newly allocated object.<h2><a class='anchor' name='Server-side news'>Server-side news</a></h2>
+<h3><a class='anchor' name='SynthDef2 fileformat'>SynthDef2 fileformat</a></h3>
+<h3><a class='anchor' name='C++ base class for Unit Generators'>C++ base class for Unit Generators</a></h3>
+
+<p>A new C++ base class has been introduced, which extends the plain c-style Unit struct by a C++ interface.<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/News-3_6.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/News-3_6.schelp</a><br>link::Guides/News-3_6::<br>sc version: 3.8dev</div></div></body></html>

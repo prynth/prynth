@@ -1,0 +1,1097 @@
+<html><head><title>Pen</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#GUI>Accessories'>GUI>Accessories</a></div>
+<h1>Pen</h1>
+<div id='summary'>Draw custom graphics</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QPen.sc'>QPen.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/QPen.html">QPen</a></div>
+<div id='related'>See also: <a href="./../Classes/QPenPrinter.html">QPenPrinter</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Construct path'>Construct path</a></li>
+<ul class='toc'><li class='toc3'><a href='#*moveTo'>moveTo</a> </li>
+<li class='toc3'><a href='#*lineTo'>lineTo</a> </li>
+<li class='toc3'><a href='#*line'>line</a> </li>
+<li class='toc3'><a href='#*curveTo'>curveTo</a> </li>
+<li class='toc3'><a href='#*quadCurveTo'>quadCurveTo</a> </li>
+<li class='toc3'><a href='#*arcTo'>arcTo</a> </li>
+<li class='toc3'><a href='#*addArc'>addArc</a> </li>
+<li class='toc3'><a href='#*addWedge'>addWedge</a> </li>
+<li class='toc3'><a href='#*addAnnularWedge'>addAnnularWedge</a> </li>
+<li class='toc3'><a href='#*addRect'>addRect</a> </li>
+<li class='toc3'><a href='#*addOval'>addOval</a> </li>
+</ul><li class='toc2'><a href='#Draw the path'>Draw the path</a></li>
+<ul class='toc'><li class='toc3'><a href='#*stroke'>stroke</a> </li>
+<li class='toc3'><a href='#*fill'>fill</a> </li>
+<li class='toc3'><a href='#*draw'>draw</a> </li>
+<li class='toc3'><a href='#*fillStroke'>fillStroke</a> </li>
+</ul><li class='toc2'><a href='#Construct and draw'>Construct and draw</a></li>
+<ul class='toc'><li class='toc3'><a href='#*strokeRect'>strokeRect</a> </li>
+<li class='toc3'><a href='#*fillRect'>fillRect</a> </li>
+<li class='toc3'><a href='#*strokeOval'>strokeOval</a> </li>
+<li class='toc3'><a href='#*fillOval'>fillOval</a> </li>
+</ul><li class='toc2'><a href='#Gradients'>Gradients</a></li>
+<ul class='toc'><li class='toc3'><a href='#*fillAxialGradient'>fillAxialGradient</a> </li>
+<li class='toc3'><a href='#*fillRadialGradient'>fillRadialGradient</a> </li>
+</ul><li class='toc2'><a href='#Graphics State Methods'>Graphics State Methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*translate'>translate</a> </li>
+<li class='toc3'><a href='#*scale'>scale</a> </li>
+<li class='toc3'><a href='#*skew'>skew</a> </li>
+<li class='toc3'><a href='#*rotate'>rotate</a> </li>
+<li class='toc3'><a href='#*matrix'>matrix</a> </li>
+<li class='toc3'><a href='#*width'>width</a> </li>
+<li class='toc3'><a href='#*use'>use</a> </li>
+<li class='toc3'><a href='#*path'>path</a> </li>
+<li class='toc3'><a href='#*beginPath'>beginPath</a> </li>
+<li class='toc3'><a href='#*beginTransparencyLayer'>beginTransparencyLayer</a> </li>
+<li class='toc3'><a href='#*endTransparencyLayer'>endTransparencyLayer</a> </li>
+<li class='toc3'><a href='#*clip'>clip</a> </li>
+<li class='toc3'><a href='#*smoothing'>smoothing</a> </li>
+<li class='toc3'><a href='#*setShadow'>setShadow</a> </li>
+<li class='toc3'><a href='#*joinStyle'>joinStyle</a> </li>
+<li class='toc3'><a href='#*capStyle'>capStyle</a> </li>
+<li class='toc3'><a href='#*alpha'>alpha</a> </li>
+<li class='toc3'><a href='#*blendMode'>blendMode</a> </li>
+<li class='toc3'><a href='#*lineDash'>lineDash</a> </li>
+<li class='toc3'><a href='#*drawImage'>drawImage</a> </li>
+</ul><li class='toc2'><a href='#Animation'>Animation</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Matrix example'>Matrix example</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Transparency layer example'>Transparency layer example</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Blending modes'>Blending modes</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*addRoundedRect'>addRoundedRect</a> </li>
+<li class='toc3'><a href='#*addWedge_Deg'>addWedge_Deg</a> </li>
+<li class='toc3'><a href='#*color'>color</a> </li>
+<li class='toc3'><a href='#*fillColor'>fillColor</a> </li>
+<li class='toc3'><a href='#*font'>font</a> </li>
+<li class='toc3'><a href='#*nonimpl'>nonimpl</a> </li>
+<li class='toc3'><a href='#*pop'>pop</a> </li>
+<li class='toc3'><a href='#*prAddAnnularWedge'>prAddAnnularWedge</a> </li>
+<li class='toc3'><a href='#*prAddArc'>prAddArc</a> </li>
+<li class='toc3'><a href='#*prBegin'>prBegin</a> </li>
+<li class='toc3'><a href='#*prDrawImage'>prDrawImage</a> </li>
+<li class='toc3'><a href='#*prEnd'>prEnd</a> </li>
+<li class='toc3'><a href='#*prSetFont'>prSetFont</a> </li>
+<li class='toc3'><a href='#*prTileImage'>prTileImage</a> </li>
+<li class='toc3'><a href='#*push'>push</a> </li>
+<li class='toc3'><a href='#*rotateDeg'>rotateDeg</a> </li>
+<li class='toc3'><a href='#*string'>string</a> </li>
+<li class='toc3'><a href='#*stringAtPoint'>stringAtPoint</a> </li>
+<li class='toc3'><a href='#*stringCenteredIn'>stringCenteredIn</a> </li>
+<li class='toc3'><a href='#*stringInRect'>stringInRect</a> </li>
+<li class='toc3'><a href='#*stringLeftJustIn'>stringLeftJustIn</a> </li>
+<li class='toc3'><a href='#*stringRightJustIn'>stringRightJustIn</a> </li>
+<li class='toc3'><a href='#*strokeColor'>strokeColor</a> </li>
+<li class='toc3'><a href='#*tileImage'>tileImage</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A class which allows you to draw custom graphics on a UserView or Window.
+<p>The following methods must be called within a <a href="./../Classes/Window.html#-drawFunc">Window: -drawFunc</a> or a <a href="./../Classes/UserView.html#-drawFunc">UserView: -drawFunc</a> function, and will only be visible once the window or the view is refreshed. Each call to <a href="./../Classes/Window.html#-refresh">Window: -refresh</a> or <a href="./../Classes/UserView.html#-refresh">UserView: -refresh</a> will 'overwrite' all previous drawing by executing the currently defined function, unless <a href="./../Classes/UserView.html#-clearOnRefresh">UserView: -clearOnRefresh</a> is set to <code class='code prettyprint lang-sc'>false</code><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Construct path'>Construct path</a></h3>
+
+<p>The following methods define paths. You will need to call <a href="#*stroke">*stroke</a> or <a href="#*fill">*fill</a> to actually draw them.<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*moveTo' href='./../Overviews/Methods.html#moveTo'>moveTo</a> (<span class='argstr'>point</span>)</h3>
+<div class='method'>
+<p>Move the Pen to point.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>point<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a></table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*lineTo' href='./../Overviews/Methods.html#lineTo'>lineTo</a> (<span class='argstr'>point</span>)</h3>
+<div class='method'>
+<p>Draw a line (define a path) from the current position to point.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>point<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a></table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*line' href='./../Overviews/Methods.html#line'>line</a> (<span class='argstr'>p1</span>, <span class='argstr'>p2</span>)</h3>
+<div class='method'>
+<p>Draw a line (define a path) from p1 to p2. Current position will be p2.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>p1<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a><tr><td class='argumentname'>p2<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a></table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*curveTo' href='./../Overviews/Methods.html#curveTo'>curveTo</a> (<span class='argstr'>endPoint</span>, <span class='argstr'>cPoint1</span>, <span class='argstr'>cPoint2</span>)</h3>
+<div class='method'>
+<p>Draws a cubic bezier curve from the current position to point. <strong>cpoint1</strong> and <strong>cpoint2</strong> are control points determining the curve's curvature.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>endPoint<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a><tr><td class='argumentname'>cPoint1<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a><tr><td class='argumentname'>cPoint2<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a></table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*quadCurveTo' href='./../Overviews/Methods.html#quadCurveTo'>quadCurveTo</a> (<span class='argstr'>endPoint</span>, <span class='argstr'>cPoint</span>)</h3>
+<div class='method'>
+<p>Draws a quad bezier curve from the current position to point. <strong>cpoint1</strong> is a control point determining the curve's curvature.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>endPoint<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a><tr><td class='argumentname'>cPoint1<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a></table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*arcTo' href='./../Overviews/Methods.html#arcTo'>arcTo</a> (<span class='argstr'>point1</span>, <span class='argstr'>point2</span>, <span class='argstr'>radius</span>)</h3>
+<div class='method'>
+<p>Draws an arc of a circle using a radius and tangent points.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>point1<td class='argumentdesc'>
+<p>The end point of the first tangent line. Its start point is the current position. An instance of <a href="./../Classes/Point.html">Point</a><tr><td class='argumentname'>point2<td class='argumentdesc'>
+<p>The end point of the second tangent line. Its start point is point1. An instance of <a href="./../Classes/Point.html">Point</a><tr><td class='argumentname'>radius<td class='argumentdesc'>
+<p>The radius of the arc.</table><h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+var w = Window("arcTo", Rect(100, 200, 300, 300)).front;
+var r= 15;
+w.drawFunc = { |v|
+    Pen.fillColor = Color.blue;
+    Pen.strokeColor = Color.red;
+    Pen.moveTo(150@150);
+    Pen.arcTo(200@150, 200@225, r);
+    Pen.arcTo(200@225, 100@225, r);
+    Pen.arcTo(100@225, 100@150, r);
+    Pen.arcTo(100@150, 150@150, r);
+    Pen.lineTo(150@150);
+    Pen.fillStroke;
+};
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*addArc' href='./../Overviews/Methods.html#addArc'>addArc</a> (<span class='argstr'>center</span>, <span class='argstr'>radius</span>, <span class='argstr'>startAngle</span>, <span class='argstr'>arcAngle</span>)</h3>
+<div class='method'>
+<p>Draw an arc around the <a href="./../Classes/Point.html">Point</a> <strong>center</strong>, at <strong>radius</strong> number of pixels. <strong>startAngle</strong> and <strong>arcAngle</strong> refer to the starting angle and the extent of the arc, and are in radians [0..2pi].<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    Pen.translate(100, 100);
+    10.do{
+        // set the Color
+        Pen.color = Color.red(rrand(0.0, 1), rrand(0.0, 0.5));
+        Pen.addArc((100.rand)@(100.rand), rrand(10, 100), 2pi.rand, pi);
+        Pen.perform([\stroke, \fill].choose);
+    }
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*addWedge' href='./../Overviews/Methods.html#addWedge'>addWedge</a> (<span class='argstr'>center</span>, <span class='argstr'>radius</span>, <span class='argstr'>startAngle</span>, <span class='argstr'>sweepLength</span>)</h3>
+<div class='method'>
+<p>Draw a wedge around the <a href="./../Classes/Point.html">Point</a> <strong>center</strong>, at <strong>radius</strong> number of pixels. <strong>startAngle</strong> and <strong>sweepLength</strong> refer to the starting angle and the extent of the arc, and are in radians [0..2pi].<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    Pen.translate(100, 100);
+    10.do{
+        // set the Color
+        Pen.color = Color.blue(rrand(0.0, 1), rrand(0.0, 0.5));
+        Pen.addWedge((100.rand)@(100.rand), rrand(10, 100), 2pi.rand, 2pi.rand);
+        Pen.perform([\stroke, \fill].choose);
+    }
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*addAnnularWedge' href='./../Overviews/Methods.html#addAnnularWedge'>addAnnularWedge</a> (<span class='argstr'>center</span>, <span class='argstr'>innerRadius</span>, <span class='argstr'>outerRadius</span>, <span class='argstr'>startAngle</span>, <span class='argstr'>sweepLength</span>)</h3>
+<div class='method'>
+<p>Draw an annular wedge around the <a href="./../Classes/Point.html">Point</a> <strong>center</strong>, from <strong>innerRadius</strong> to <strong>outerRadius</strong> in pixels. <strong>startAngle</strong> and <strong>sweepLength</strong> refer to the starting angle and the extent of the arc, and are in radians [0..2pi].<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    Pen.translate(100, 100);
+    1000.do{
+        // set the Color
+        Pen.color = Color.green(rrand(0.0, 1), rrand(0.0, 0.5));
+        Pen.addAnnularWedge(
+            (100.rand)@(100.rand),
+            rrand(10, 50),
+            rrand(51, 100),
+            2pi.rand,
+            2pi.rand
+        );
+        Pen.perform([\stroke, \fill].choose);
+    }
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*addRect' href='./../Overviews/Methods.html#addRect'>addRect</a> (<span class='argstr'>aRect</span>)</h3>
+<div class='method'>
+<p>Adds a <a href="./../Classes/Rect.html">Rect</a> to the drawing.<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    80.do{
+        // set the Color
+        Pen.color = Color.green(rrand(0.0, 1), rrand(0.0, 0.5));
+        Pen.addRect(
+            Rect(20, 20, (w.bounds.width-40).rand, (w.bounds.height-40).rand)
+        );
+        Pen.perform([\stroke, \fill].choose);
+    }
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*addOval' href='./../Overviews/Methods.html#addOval'>addOval</a> (<span class='argstr'>rect</span>)</h3>
+<div class='method'>
+<p>Adds an Oval shape that fits inside the <a href="./../Classes/Rect.html">Rect</a> to the current path.</div><h3><a class='anchor' name='Draw the path'>Draw the path</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*stroke' href='./../Overviews/Methods.html#stroke'>stroke</a> </h3>
+<div class='method'>
+<p>Outline the previous defined path.<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    // set the Color
+    Pen.strokeColor = Color.red;
+    Pen.moveTo(200@100);
+
+    Pen.lineTo(250@200);
+    Pen.lineTo(300@200);
+    Pen.lineTo(200@250);
+    Pen.lineTo(100@200);
+    Pen.lineTo(150@200);
+    Pen.lineTo(200@100);
+
+    Pen.stroke
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fill' href='./../Overviews/Methods.html#fill'>fill</a> </h3>
+<div class='method'>
+<p>Fill the previous defined path.<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    // set the Color
+    Pen.fillColor = Color.red;
+    Pen.moveTo(200@100);
+
+    Pen.lineTo(250@200);
+    Pen.lineTo(300@200);
+    Pen.lineTo(200@250);
+    Pen.lineTo(100@200);
+    Pen.lineTo(150@200);
+    Pen.lineTo(200@100);
+
+    Pen.fill
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*draw' href='./../Overviews/Methods.html#draw'>draw</a> (<span class='argstr'>style</span>)</h3>
+<div class='method'>
+<p>Draw the previous defined path using any of the following options:<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>style<td class='argumentdesc'><table>
+<tr><td>0<td>fill<tr><td>1<td>fill using even-odd rule<tr><td>2<td>stroke<tr><td>3<td>fill and stroke the current path<tr><td>4<td>fill and stroke using even-odd rule</table>
+
+<p></table><h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    // set the Color
+    Pen.fillColor = Color.red;
+    Pen.moveTo(200@100);
+
+    Pen.lineTo(250@200);
+    Pen.lineTo(300@200);
+    Pen.lineTo(200@250);
+    Pen.lineTo(100@200);
+    Pen.lineTo(150@200);
+    Pen.lineTo(200@100);
+
+    Pen.draw(4); // fill and then stroke
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fillStroke' href='./../Overviews/Methods.html#fillStroke'>fillStroke</a> </h3>
+<div class='method'>
+<p>Fill and stroke the current path. Shortcut to the draw(3) method.</div><h3><a class='anchor' name='Construct and draw'>Construct and draw</a></h3>
+
+<p>These methods do not require separate calls to <a href="#*stroke">*stroke</a> or <a href="#*fill">*fill</a>.<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*strokeRect' href='./../Overviews/Methods.html#strokeRect'>strokeRect</a> (<span class='argstr'>rect</span>)</h3>
+<div class='method'>
+<p>Strokes a <a href="./../Classes/Rect.html">Rect</a> into the window.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fillRect' href='./../Overviews/Methods.html#fillRect'>fillRect</a> (<span class='argstr'>rect</span>)</h3>
+<div class='method'>
+<p>Draws a filled <a href="./../Classes/Rect.html">Rect</a> into the window.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*strokeOval' href='./../Overviews/Methods.html#strokeOval'>strokeOval</a> (<span class='argstr'>rect</span>)</h3>
+<div class='method'>
+<p>Strokes an oval into the window.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fillOval' href='./../Overviews/Methods.html#fillOval'>fillOval</a> (<span class='argstr'>rect</span>)</h3>
+<div class='method'>
+<p>Draws a filled oval into the window.</div><h3><a class='anchor' name='Gradients'>Gradients</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fillAxialGradient' href='./../Overviews/Methods.html#fillAxialGradient'>fillAxialGradient</a> (<span class='argstr'>startPoint</span>, <span class='argstr'>endPoint</span>, <span class='argstr'>startColor</span>, <span class='argstr'>endColor</span>)</h3>
+<div class='method'>
+<p>Fills an Axial gradient.<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.drawFunc = {
+    // fill the gradient
+    Pen.addRect(w.view.bounds.insetBy(30));
+    Pen.fillAxialGradient(w.view.bounds.leftTop, w.view.bounds.rightBottom, Color.rand, Color.rand);
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fillRadialGradient' href='./../Overviews/Methods.html#fillRadialGradient'>fillRadialGradient</a> (<span class='argstr'>innerCircleCenter</span>, <span class='argstr'>outerCircleCenter</span>, <span class='argstr'>startRadius</span>, <span class='argstr'>endRadius</span>, <span class='argstr'>startColor</span>, <span class='argstr'>endColor</span>)</h3>
+<div class='method'>
+<p>Fills a Radial gradient.<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.drawFunc = {
+    // fill the gradient
+    Pen.addOval(w.view.bounds.insetBy(30));
+    Pen.fillRadialGradient(w.view.bounds.center,
+        w.view.bounds.center, 0, w.bounds.width, Color.rand, Color.rand);
+};
+w.refresh;
+)</pre>
+</div><h3><a class='anchor' name='Graphics State Methods'>Graphics State Methods</a></h3>
+
+<p>The following commands transform the graphics state, i.e. they effect all subsequent drawing commands. These transformations are cumulative, i.e. each command applies to the previous graphics state, not the original one.<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*translate' href='./../Overviews/Methods.html#translate'>translate</a> (<span class='argstr'>x: 0</span>, <span class='argstr'>y: 0</span>)</h3>
+<div class='method'>
+<p>Translate the coordinate system to have its origin moved by x,y<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    Pen.strokeColor = Color.blue;
+    Pen.translate(200,100); // 0@0 is now 200@100
+    Pen.moveTo(0@0);
+    Pen.lineTo(50@100);
+    Pen.lineTo(100@100);
+    Pen.lineTo(0@150);
+    Pen.lineTo(-100@100);
+    Pen.lineTo(-50@100);
+    Pen.lineTo(0@0);
+    Pen.stroke
+};
+w.refresh;
+)</pre>
+
+<p>Cumulative translations:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.clear);
+w.drawFunc = {
+    Pen.strokeColor = Color.black;
+    35.do { // draw 35 lines
+        Pen.moveTo(0@0);
+        Pen.lineTo(50@350);
+        Pen.translate(10, 0); // shift 10 to the right every time
+        Pen.stroke
+    }
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*scale' href='./../Overviews/Methods.html#scale'>scale</a> (<span class='argstr'>x: 0</span>, <span class='argstr'>y: 0</span>)</h3>
+<div class='method'>
+<p>Scales subsequent drawing. x and y are scaling factors (i.e. 1 is normal, 2 is double size, etc.).<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    Pen.strokeColor = Color.green;
+    Pen.translate(200,100);
+    Pen.scale(0.5, 2);
+    Pen.moveTo(0@0); // you have to set a starting point...
+    Pen.lineTo(50@100);
+    Pen.lineTo(100@100);
+    Pen.lineTo(0@150);
+    Pen.lineTo(-100@100);
+    Pen.lineTo(-50@100);
+    Pen.lineTo(0@0);
+    Pen.stroke
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*skew' href='./../Overviews/Methods.html#skew'>skew</a> (<span class='argstr'>x: 0</span>, <span class='argstr'>y: 0</span>)</h3>
+<div class='method'>
+<p>Skews subsequent drawing. x and y are skewing factors (i.e. 1 is normal).<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    Pen.fillColor = Color.green(0.5, 0.8);
+    Pen.translate(200,100);
+    Pen.skew(0.5, 0.2);
+    Pen.moveTo(0@0); // you have to set a starting point...
+    Pen.lineTo(50@100);
+    Pen.lineTo(100@100);
+    Pen.lineTo(0@150);
+    Pen.lineTo(-100@100);
+    Pen.lineTo(-50@100);
+    Pen.lineTo(0@0);
+    Pen.fill
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*rotate' href='./../Overviews/Methods.html#rotate'>rotate</a> (<span class='argstr'>angle: 0</span>, <span class='argstr'>x: 0</span>, <span class='argstr'>y: 0</span>)</h3>
+<div class='method'>
+<p>Rotates subsequent drawing around the <a href="./../Classes/Point.html">Point</a> <code class='code prettyprint lang-sc'>x@y</code> by the amount <strong>angle</strong> in radians [0..2pi].<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+c = 0;
+w.drawFunc = {
+    Pen.translate(220, 200);
+    10.do({
+        Pen.translate(0,10);
+        Pen.fillColor = Color.hsv(c.fold(0, 1), 1, 1, 0.5);
+        Pen.moveTo(0@0); // you have to set a starting point...
+        Pen.lineTo(50@100);
+        Pen.lineTo(100@100);
+        Pen.lineTo(0@150);
+        Pen.lineTo(-100@100);
+        Pen.lineTo(-50@100);
+        Pen.lineTo(0@0);
+        Pen.fill;
+        Pen.rotate(0.2pi);
+        c = c + 0.1;
+    });
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*matrix' href='./../Overviews/Methods.html#matrix'>matrix</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*matrix' href='./../Overviews/Methods.html#matrix'>matrix</a> = <span class='argstr'>matrixArray</span></h3>
+<div class='method'>
+<p>Gets or sets the coordinate system transformation matrix.
+<p>See <a href="#Matrix example">Matrix example</a> for an example.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>matrixArray<td class='argumentdesc'>
+<p>An array of the form <code class='code prettyprint lang-sc'>[ zoomX, shearingY, shearingX, zoomY, translateX, translateY ]</code></table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*width' href='./../Overviews/Methods.html#width'>width</a><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*width' href='./../Overviews/Methods.html#width'>width</a> = <span class='argstr'>width</span></h3>
+<div class='method'>
+<p>Sets the width of the Pen for the whole stroke</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*use' href='./../Overviews/Methods.html#use'>use</a> (<span class='argstr'>aFunction</span>)</h3>
+<div class='method'>
+<p>Draw function, and then revert to the previous graphics state. This allows you to make complex transformations of the graphics state without having to explicitly revert to get back to 'normal'.<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+// modified by an example of Stefan Wittwer
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    //paint origin
+    Pen.fillColor = Color.gray(0, 0.5);
+    Pen.addArc(0@0, 20, 0, 2pi);
+    Pen.fill;
+    Pen.width = 10;
+
+    Pen.use { // draw something complex...
+        Pen.width = 0.5;
+        Pen.translate(100,100);
+        Pen.fillColor = Color.blue;
+        Pen.addArc(0@0, 10, 0, 2pi);
+        Pen.fill;
+        20.do{
+            Pen.moveTo(0@0);
+            Pen.lineTo(100@0);
+            Pen.strokeColor = Color.red(0.8, rrand(0.7, 1));
+            Pen.stroke;
+            Pen.skew(0, 0.1);
+        };
+    };
+
+    // now go on with all params as before
+    // translation, skewing, width, and color modifications do not apply
+    Pen.line(10@120, 300@120);
+    Pen.stroke;
+};
+w.refresh
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*path' href='./../Overviews/Methods.html#path'>path</a> </h3>
+<div class='method'>
+<p>Make a path, consisting of the drawing made in function.<div class='note'><span class='notelabel'>NOTE:</span> Unfortunately not working for now... (there's no Pen.endPath which currently is used in this method)</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*beginPath' href='./../Overviews/Methods.html#beginPath'>beginPath</a> </h3>
+<div class='method'>
+<p>Discard any previous path.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*beginTransparencyLayer' href='./../Overviews/Methods.html#beginTransparencyLayer'>beginTransparencyLayer</a> </h3>
+<div class='method'>
+<p>Begins a new transparency layer. Transparency layers are useful when you want to apply an effect to a group of objects or create a composite graphic. See <a href="#Transparency layer example">Transparency layer example</a>.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*endTransparencyLayer' href='./../Overviews/Methods.html#endTransparencyLayer'>endTransparencyLayer</a> </h3>
+<div class='method'>
+<p>Ends the current transparency layer.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*clip' href='./../Overviews/Methods.html#clip'>clip</a> </h3>
+<div class='method'>
+<p>Use the previously defined path as a clipping path.<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+w.drawFunc = {
+    // outline the clipping path
+    Pen.moveTo(110@110);
+    Pen.lineTo(290@110);
+    Pen.lineTo(290@240);
+    Pen.lineTo(110@240);
+    Pen.lineTo(110@110);
+    // now clip
+    Pen.clip;
+
+    // everything else we draw is now clipped
+    Pen.fillColor = Color.yellow;
+    Pen.fillRect(Rect(0,0,400,400));
+    Pen.fillColor = Color.red;
+    Pen.moveTo(200@100);
+
+    Pen.lineTo(250@200);
+    Pen.lineTo(300@200);
+    Pen.lineTo(200@250);
+    Pen.lineTo(100@200);
+    Pen.lineTo(150@200);
+
+    Pen.fill;
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*smoothing' href='./../Overviews/Methods.html#smoothing'>smoothing</a><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*smoothing' href='./../Overviews/Methods.html#smoothing'>smoothing</a> = <span class='argstr'>flag</span></h3>
+<div class='method'>
+<p>Turns on/off anti-aliasing.<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+var w = Window("smoothing", Rect(100, 200, 500, 300)).front;
+w.view.background_(Color.white);
+w.drawFunc = { |v|
+    Pen.strokeColor = Color.grey(0.25);
+    Pen.smoothing_(false); //no anti-aliasing
+    50.do{|i|
+        Pen.moveTo(50@50.rrand(250));
+        Pen.lineTo(250@50.rrand(250));
+    };
+    Pen.stroke;
+    Pen.smoothing_(true); //anti-aliasing (default)
+    50.do{|i|
+        Pen.moveTo(250@50.rrand(250));
+        Pen.lineTo(450@50.rrand(250));
+    };
+    Pen.stroke;
+};
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*setShadow' href='./../Overviews/Methods.html#setShadow'>setShadow</a> (<span class='argstr'>offsetPoint</span>, <span class='argstr'>blur</span>, <span class='argstr'>color</span>)</h3>
+<div class='method'>
+<p>Will fill the current path with a shadow. You should use this option between Pen.push / Pen.pop (or Pen.use)</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*joinStyle' href='./../Overviews/Methods.html#joinStyle'>joinStyle</a><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*joinStyle' href='./../Overviews/Methods.html#joinStyle'>joinStyle</a> = <span class='argstr'>style</span></h3>
+<div class='method'>
+<p>Set the lines joining style according to the defined options:<table>
+<tr><td>0<td>miter<tr><td>1<td>round<tr><td>2<td>bevel</table>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*capStyle' href='./../Overviews/Methods.html#capStyle'>capStyle</a><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*capStyle' href='./../Overviews/Methods.html#capStyle'>capStyle</a> = <span class='argstr'>style</span></h3>
+<div class='method'>
+<p>Set the lines joining style according to the defined options:<table>
+<tr><td>0<td>butt<tr><td>1<td>round<tr><td>2<td>square</table>
+
+<p><h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>(
+w = Window.new.front;
+w.view.background_(Color.white);
+StaticText(w, Rect(0,0,180,20))
+    .string_(" Change Line Cap &amp; Join Styles: ");
+y = PopUpMenu(w, Rect(180,0,130,20))
+    .items_(["Butt - Miter", "Round - Round", "Square - Bevel"])
+    .action_({w.refresh});
+w.drawFunc = {
+    Pen.strokeColor = Color.red;
+    Pen.width_(8.0);
+    Pen.capStyle_(y.value);
+    Pen.joinStyle_(y.value);
+    Pen.moveTo(200@100);
+    Pen.lineTo(250@200);
+    Pen.lineTo(300@200);
+    Pen.lineTo(200@250);
+    Pen.lineTo(100@200);
+    Pen.lineTo(150@200);
+    Pen.lineTo(200@100);
+    Pen.stroke;
+};
+w.refresh;
+)</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*alpha' href='./../Overviews/Methods.html#alpha'>alpha</a><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*alpha' href='./../Overviews/Methods.html#alpha'>alpha</a> = <span class='argstr'>value</span></h3>
+<div class='method'>
+<p>Set the opacity level.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*blendMode' href='./../Overviews/Methods.html#blendMode'>blendMode</a><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*blendMode' href='./../Overviews/Methods.html#blendMode'>blendMode</a> = <span class='argstr'>mode</span></h3>
+<div class='method'>
+<p>Set the blending mode to use. See <a href="#Blending modes">Blending modes</a> for more information.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*lineDash' href='./../Overviews/Methods.html#lineDash'>lineDash</a><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*lineDash' href='./../Overviews/Methods.html#lineDash'>lineDash</a> = <span class='argstr'>pattern</span></h3>
+<div class='method'>
+<p>Set the line dash pattern. pattern should be a <a href="./../Classes/FloatArray.html">FloatArray</a> of values that specify the lengths of the painted segments and not painted segments.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*drawImage' href='./../Overviews/Methods.html#drawImage'>drawImage</a> (<span class='argstr'>target</span>, <span class='argstr'>image</span>, <span class='argstr'>source</span>, <span class='argstr'>operation: 'sourceOver'</span>, <span class='argstr'>opacity: 1</span>)</h3>
+<div class='method'>
+<p>Draw a bitmap image using the Image class.<h4>Discussion:</h4>
+
+<p>example:<pre class='code prettyprint lang-sc'>w = Window.new.front;
+w.view.background = Color.red;
+i = Image.open(SCDoc.helpSourceDir +/+ "images/Swamp.png");
+w.drawFunc_({
+    Pen.drawImage( Point(140, 140), i, operation: 'sourceOver', opacity:1);
+});
+
+examples::
+Simple rotating and scaling:
+code::
+(
+    w = Window("Pen Rotation and Scaling", Rect(128, 64, 360, 360));
+    w.drawFunc = {
+        Pen.use {
+            // use the same rect for everything, just scale and rotate
+            var r = Rect(0,0,200,80);
+            Pen.fillColor = Color.black;
+            // offset all subsequent co-ordinates
+            Pen.translate(80,20);
+            Pen.fillRect(r);
+            Pen.fillColor = Color.red;
+            // scale all subsequent co-ordinates
+            Pen.scale(0.8, 0.8);
+            Pen.translate(8,10);
+            // rotate all subsequent co-ordinates
+            Pen.rotate(0.1pi);
+            Pen.fillRect(r);
+            Pen.strokeColor = Color.blue;
+            // lather, rinse, repeat
+            Pen.scale(0.8, 0.8);
+            Pen.rotate(0.1pi);
+            Pen.width = 3;
+            Pen.strokeRect(r);
+            Pen.fillColor = Color.yellow(1,0.5);
+            Pen.scale(0.8, 0.8);
+            Pen.rotate(0.1pi);
+            Pen.translate(20,-20);
+            Pen.fillOval(r);
+        }
+    };
+
+    w.front;
+)</pre>
+
+<p>Redraw at random interval, different every time:<pre class='code prettyprint lang-sc'>(
+var w, run = true;
+w = Window("my name is... panel", Rect(128, 64, 800, 800));
+w.view.background = Color.white;
+w.onClose = { run = false; };
+w.front;
+w.drawFunc = {
+    Pen.use {
+        Pen.width = 0.2;
+        400.do {
+            Pen.beginPath;
+            Pen.moveTo(Point(10.rand * 80 + 40, 10.rand * 80 + 40));
+            Pen.lineTo(Point(10.rand * 80 + 40, 10.rand * 80 + 40));
+            Pen.stroke;
+        };
+    };
+};
+
+{ while { run } { w.refresh; 1.0.rand.wait } }.fork(AppClock)
+
+)</pre>
+
+<p><pre class='code prettyprint lang-sc'>(
+var w, run = true;
+w = Window("my name is... panel", Rect(128, 64, 800, 500));
+w.view.background = Color.white;
+w.onClose = { run = false; };
+w.front;
+w.drawFunc = {
+    Pen.use {
+        Pen.width = 2;
+        80.do {
+            Pen.width = rrand(0,4) + 0.5;
+            Pen.beginPath;
+            Pen.moveTo(Point(800.rand, 500.rand));
+            Pen.lineTo(Point(800.rand, 500.rand));
+            Pen.stroke;
+        };
+    };
+};
+
+{ while { run } { w.refresh; 1.0.rand.wait } }.fork(AppClock)
+
+)</pre>
+</div><h3><a class='anchor' name='Animation'>Animation</a></h3>
+
+<p>Uses random seed to 'store' data By reseting the seed each time the same random values and shapes are generated for each 'frame' These can then be subjected to cumulative rotation, etc., by simply incrementing the phase var.<pre class='code prettyprint lang-sc'>(
+// By James McCartney
+var w, h = 700, v = 700, seed, run = true, phase = 0;
+w = Window("wedge", Rect(40, 40, h, v), false);
+w.view.background = Color.rand(0,0.3);
+w.onClose = { run = false }; // stop the thread on close
+w.front;
+// store an initial seed value for the random generator
+seed = Date.seed;
+w.drawFunc = {
+    Pen.width = 2;
+    Pen.use {
+        // reset this thread's seed for a moment
+        thisThread.randSeed = Date.seed;
+        // now a slight chance of a new seed or background color
+        if (0.006.coin) { seed = Date.seed; };
+        if (0.02.coin) { w.view.background = Color.rand(0,0.3); };
+        // either revert to the stored seed or set the new one
+        thisThread.randSeed = seed;
+        // the random values below will be the same each time if the seed has not changed
+        // only the phase value has advanced
+        Pen.translate(h/2, v/2);
+        // rotate the whole image
+        // negative random values rotate one direction, positive the other
+        Pen.rotate(phase * 1.0.rand2);
+        // scale the rotated y axis in a sine pattern
+        Pen.scale(1, 0.3 * sin(phase * 1.0.rand2 + 2pi.rand) + 0.5 );
+        // create a random number of annular wedges
+        rrand(6,24).do {
+            Pen.color = Color.rand(0.0,1.0).alpha_(rrand(0.1,0.7));
+            Pen.beginPath;
+            Pen.addAnnularWedge(Point(0,0), a = rrand(60,300), a + 50.rand2, 2pi.rand
+                + (phase * 2.0.rand2), 2pi.rand);
+            if (0.5.coin) {Pen.stroke}{Pen.fill};
+        };
+    };
+};
+
+// fork a thread to update 20 times a second, and advance the phase each time
+{ while { run } { w.refresh; 0.05.wait; phase = phase + 0.01pi;} }.fork(AppClock)
+
+)</pre>
+
+<p><pre class='code prettyprint lang-sc'>(
+var w, phase = 0, seed = Date.seed, run = true;
+w = Window("my name is... panel", Rect(128, 64, 800, 800));
+w.view.background = Color.blue(0.4);
+w.onClose = { run = false; };
+w.front;
+w.drawFunc = {
+    Pen.use {
+        if (0.02.coin) { seed = Date.seed; };
+        thisThread.randSeed = seed;
+        Pen.strokeColor = Color.white;
+        200.do {
+            var a = 4.rand;
+            var b = 24.rand;
+            var r1 = 230 + (50 * a);
+            var a1 = 2pi / 24 * b + phase;
+            var r2 = 230 + (50 * (a + 1.rand2).fold(0,3));
+            var a2 = 2pi / 24 * (b + (3.rand2)).wrap(0,23) + phase;
+            Pen.width = 0.2 + 1.0.linrand;
+            Pen.beginPath;
+            Pen.moveTo(Polar(r1, a1).asPoint + Point(400,400));
+            Pen.lineTo(Polar(r2, a2).asPoint + Point(400,400));
+            Pen.stroke;
+        };
+        thisThread.randSeed = Date.seed;
+        40.do {
+            var a = 4.rand;
+            var b = 24.rand;
+            var r1 = 230 + (50 * a);
+            var a1 = 2pi / 24 * b + phase;
+            var r2 = 230 + (50 * (a + 1.rand2).fold(0,3));
+            var a2 = 2pi / 24 * (b + (3.rand2)).wrap(0,23) + phase;
+            Pen.width = 0.2 + 1.5.linrand;
+            Pen.beginPath;
+            Pen.moveTo(Polar(r1, a1).asPoint + Point(400,400));
+            Pen.lineTo(Polar(r2, a2).asPoint + Point(400,400));
+            Pen.stroke;
+        };
+    };
+};
+
+{ while { run } { w.refresh; 0.1.wait; phase = phase + (2pi/(20*24)) } }.fork(AppClock)
+
+)</pre>
+<pre class='code prettyprint lang-sc'>(
+var w, h = 800, v = 600, seed = Date.seed, phase = 0, zoom = 0.7, zoomf = 1, run = true;
+w = Window("affines", Rect(40, 40, h, v));
+w.view.background = Color.blue(0.4);
+w.onClose = { run = false };
+w.front;
+w.drawFunc = {
+    thisThread.randSeed = Date.seed;
+    if (0.0125.coin) { seed = Date.seed; phase = 0; zoom = 0.7; zoomf = exprand(1/1.01, 1.01); }
+    { phase = phase + (2pi/80); zoom = zoom * zoomf; };
+    thisThread.randSeed = seed;
+    Pen.use {
+        var p1 = Point(20.rand2 + (h/2), 20.rand2 + (v/2));
+        var p2 = Point(20.rand2 + (h/2), 20.rand2 + (v/2));
+        var xscales = { exprand(2** -0.1, 2**0.1) } ! 2;
+        var yscales = { exprand(2** -0.1, 2**0.1) } ! 2;
+        var xlates = { 8.rand2 } ! 2;
+        var ylates = { 8.rand2 } ! 2;
+        var rots = { 2pi.rand + phase } ! 2;
+        var xform;
+        xscales = (xscales ++ (1/xscales)) * 1;
+        yscales = (yscales ++ (1/yscales)) * 1;
+        xlates = xlates ++ xlates.neg;
+        ylates = ylates ++ xlates.neg;
+        rots = rots ++ rots.neg;
+        xform = {|i| [xlates[i], ylates[i], rots[i], xscales[i], yscales[i]] } ! 4;
+        Pen.strokeColor = Color.grey(1,0.5);
+        Pen.width = 8.linrand + 1;
+        Pen.translate(400, 400);
+        Pen.scale(zoom, zoom);
+        Pen.translate(-400, -400);
+        1200.do {
+            var p, rot, xlate, ylate, xscale, yscale;
+            Pen.width = 8.linrand + 1;
+            Pen.beginPath;
+            #rot, xlate, ylate, xscale, yscale = xform.choose;
+            Pen.translate(xlate, ylate);
+            Pen.rotate(rot, h/2, v/2);
+            Pen.scale(xscale, yscale);
+                Pen.moveTo(p1);
+                Pen.lineTo(p2);
+            Pen.stroke;
+        };
+    };
+};
+
+{ while { run } { w.refresh; 0.05.wait; } }.fork(AppClock)
+
+)</pre>
+<h3><a class='anchor' name='Matrix example'>Matrix example</a></h3>
+<pre class='code prettyprint lang-sc'>(
+var controlWindow, w;
+var r, a, b, c, d, matrix = [1, 0, 0, 1, 10, 10];
+var sliders, spex, name;
+
+w = Window.new.front;
+w.view.background_(Color.white);
+
+// create a controller-window
+controlWindow = Window("matrix controls", Rect(400,200,350,120));
+controlWindow.front;
+
+// determine the rectangle to be drawn
+r = Rect.fromPoints(a = 0 @ 0, c = 180 @ 180);
+b = r.leftBottom;
+d = r.rightTop;
+
+// the drawFunc
+w.drawFunc = {
+    Pen.strokeColor = Color.red;
+    Pen.matrix = matrix;
+    Pen.width = 5;
+    Pen.strokeRect(r);
+    Pen.strokeOval(r);
+    Pen.color = Color.blue;
+    Pen.width = 0.1;
+    Pen.line(a, c);
+    Pen.line(b, d);
+    Pen.stroke;
+
+    Pen.font = Font( "Helvetica-Bold", 12 );
+    Pen.stringAtPoint( "A", a - 6 );
+    Pen.stringAtPoint( "B", b - 6 );
+    Pen.stringAtPoint( "C", c - (0@6) );
+    Pen.stringAtPoint( "D", d - (0@6) );
+
+    Pen.font = Font( "Helvetica", 10 );
+    Pen.stringInRect( "a matrix test", r.moveBy( 50, 50 ));
+};
+
+controlWindow.view.decorator = sliders = FlowLayout(controlWindow.view.bounds);
+spex = [
+    [0, 2.0].asSpec,
+    [0, 2.0].asSpec,
+    [0, 2.0].asSpec,
+    [0, 2.0].asSpec,
+    [0, 200.0].asSpec,
+    [0, 200.0].asSpec
+];
+name = #[zoomX, shearingY, shearingX, zoomY, translateX, translateY];
+6.do { |i|
+    EZSlider(controlWindow, 300 @ 14, name[i], spex[i], { |ez| var val;
+            val = ez.value;
+            [i, val.round(10e-4)].postln;
+            matrix.put(i, val);
+            w.refresh; // reevaluate drawFunc function
+    }, matrix[i]);
+    sliders.nextLine;
+};
+w.refresh;
+)</pre>
+<h3><a class='anchor' name='Transparency layer example'>Transparency layer example</a></h3>
+<pre class='code prettyprint lang-sc'>(
+w = Window.new("Transparency Layer test", Rect(400,400,430,450)).front;
+w.drawFunc = {
+    Color.blue.setStroke;
+
+    Pen.use {
+    Pen.setShadow(2@2, 10, Color.black);
+    Pen.beginTransparencyLayer;
+
+    Color.red.setFill;
+    Pen.addOval(Rect(20,40,100,100));
+    Pen.fill;
+
+    Color.green.setFill;
+    Pen.addOval(Rect(30,70,100,100));
+    Pen.fill;
+
+    Color.blue.setFill;
+    Pen.addOval(Rect(60,40,100,100));
+    Pen.fill;
+
+    "With Transparency Layer".drawCenteredIn(Rect(30, 40, 100, 100), Font.default, Color.white);
+    Pen.endTransparencyLayer;
+    };
+
+    Pen.use {
+    Pen.translate(200, 0);
+    Pen.setShadow(2@2, 10, Color.black);
+
+
+    Color.red.setFill;
+    Pen.addOval(Rect(20,40,100,100));
+    Pen.fill;
+
+    Color.green.setFill;
+    Pen.addOval(Rect(30,70,100,100));
+    Pen.fill;
+
+    Color.blue.setFill;
+    Pen.addOval(Rect(60,40,100,100));
+    Pen.fill;
+
+    "Without Transparency Layer".drawCenteredIn(Rect(30, 40, 100, 100), Font.default, Color.white);
+    };
+
+    Pen.use {
+        Pen.translate(0, 200);
+        Pen.setShadow(2@2, 10, Color.black);
+        Pen.beginTransparencyLayer;
+
+        Pen.push;
+        Pen.addOval(Rect(20,40,170,170));
+        Pen.fillAxialGradient(w.view.bounds.leftTop, w.view.bounds.rightBottom, Color.rand, Color.rand);
+        Pen.pop;
+
+        "With Transparency Layer".drawCenteredIn(Rect(20,40,170,170), Font.default, Color.white);
+
+        Pen.endTransparencyLayer;
+    };
+
+    Pen.use {
+        Pen.translate(200, 200);
+        Pen.setShadow(2@2, 10, Color.black);
+        Pen.addOval(Rect(20,40,170,170));
+        Pen.fillAxialGradient(w.view.bounds.leftTop, w.view.bounds.rightBottom, Color.rand, Color.rand);
+
+        "Without Transparency Layer".drawCenteredIn(Rect(20,40,170,170), Font.default, Color.white);
+    };
+};
+w.refresh;
+)</pre>
+<h3><a class='anchor' name='Blending modes'>Blending modes</a></h3>
+<pre class='code prettyprint lang-sc'>/*
+different blend modes:
+OS X 10.4 and &gt; Only
+--------------------
+0 - Normal
+1 - Multiply
+2 - Screen
+3 - Overlay
+4 - Darken
+5 - Lighten
+6 - ColorDodge
+7 - ColorBurn
+8 - SoftLight
+9 - HardLight
+10 - Difference
+11 - Exclusion
+12 - Hue
+13 - Saturation
+14 - Color
+15 - Luminosity
+
+OS 10.5 and &gt; Only
+--------------------
+16 - Clear
+17 - Copy
+18 - SourceIn
+19 - SourceOut
+20 - SourceATop
+21 - DestinationOver
+22 - DestinationIn
+23 - DestinationATop
+24 - XOR
+25 - PlusDarker
+26 - PlusLighter
+*/
+
+(
+    var blendMode=0, blendString="Normal";
+    w = Window.new.front;
+    m = SCPopUpMenu(w, Rect(10, w.view.bounds.height - 30, 150, 20));
+    m.items = [
+        "0 - Normal",
+        "1 - Multiply",
+        "2 - Screen",
+        "3 - Overlay",
+        "4 - Darken",
+        "5 - Lighten",
+        "6 - ColorDodge",
+        "7 - ColorBurn",
+        "8 - SoftLight",
+        "9 - HardLight",
+        "10 - Difference",
+        "11 - Exclusion",
+        "12 - Hue",
+        "13 - Saturation",
+        "14 - Color",
+        "15 - Luminosity"
+    ];
+
+    m.action_({|view|
+        blendMode = view.value;
+        blendString = view.items.at(blendMode);
+        w.refresh;
+    });
+    w.drawFunc = {
+        80.do{|i|
+            Pen.use {
+            Pen.blendMode_(blendMode);
+            Pen.color = Color.green(0.6, 0.10);
+            Pen.addRect(
+                Rect(20, 20, 20 + (i*4), 20 + (i*4));
+            );
+            Pen.fill;
+            };
+        }
+    };
+    w.refresh;
+)</pre>
+
+<p><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*addRoundedRect' href='./../Overviews/Methods.html#addRoundedRect'>addRoundedRect</a> (<span class='argstr'>aRect</span>, <span class='argstr'>radiusX</span>, <span class='argstr'>radiusY</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*addWedge_Deg' href='./../Overviews/Methods.html#addWedge_Deg'>addWedge_Deg</a> (<span class='argstr'>center</span>, <span class='argstr'>radius</span>, <span class='argstr'>startAngle</span>, <span class='argstr'>sweepLength</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*color' href='./../Overviews/Methods.html#color'>color</a><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*color' href='./../Overviews/Methods.html#color'>color</a> = <span class='argstr'>aColor</span></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fillColor' href='./../Overviews/Methods.html#fillColor'>fillColor</a><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*fillColor' href='./../Overviews/Methods.html#fillColor'>fillColor</a> = <span class='argstr'>aColor</span></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*font' href='./../Overviews/Methods.html#font'>font</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*font' href='./../Overviews/Methods.html#font'>font</a> = <span class='argstr'>aFont</span></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*nonimpl' href='./../Overviews/Methods.html#nonimpl'>nonimpl</a> (<span class='argstr'>methodName</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*pop' href='./../Overviews/Methods.html#pop'>pop</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*prAddAnnularWedge' href='./../Overviews/Methods.html#prAddAnnularWedge'>prAddAnnularWedge</a> (<span class='argstr'>center</span>, <span class='argstr'>innerRadius</span>, <span class='argstr'>outerRadius</span>, <span class='argstr'>startAngle</span>, <span class='argstr'>sweepLength</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*prAddArc' href='./../Overviews/Methods.html#prAddArc'>prAddArc</a> (<span class='argstr'>center</span>, <span class='argstr'>radius</span>, <span class='argstr'>startAngle</span>, <span class='argstr'>arcAngle</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*prBegin' href='./../Overviews/Methods.html#prBegin'>prBegin</a> (<span class='argstr'>aView</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*prDrawImage' href='./../Overviews/Methods.html#prDrawImage'>prDrawImage</a> (<span class='argstr'>target</span>, <span class='argstr'>image</span>, <span class='argstr'>source</span>, <span class='argstr'>operation</span>, <span class='argstr'>opacity</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*prEnd' href='./../Overviews/Methods.html#prEnd'>prEnd</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*prSetFont' href='./../Overviews/Methods.html#prSetFont'>prSetFont</a> (<span class='argstr'>aFont</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*prTileImage' href='./../Overviews/Methods.html#prTileImage'>prTileImage</a> (<span class='argstr'>target</span>, <span class='argstr'>image</span>, <span class='argstr'>source</span>, <span class='argstr'>operation</span>, <span class='argstr'>opacity</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*push' href='./../Overviews/Methods.html#push'>push</a> </h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*rotateDeg' href='./../Overviews/Methods.html#rotateDeg'>rotateDeg</a> (<span class='argstr'>angle: 0</span>, <span class='argstr'>x: 0</span>, <span class='argstr'>y: 0</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*string' href='./../Overviews/Methods.html#string'>string</a> (<span class='argstr'>aString</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*stringAtPoint' href='./../Overviews/Methods.html#stringAtPoint'>stringAtPoint</a> (<span class='argstr'>string</span>, <span class='argstr'>point</span>, <span class='argstr'>font</span>, <span class='argstr'>color</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*stringCenteredIn' href='./../Overviews/Methods.html#stringCenteredIn'>stringCenteredIn</a> (<span class='argstr'>string</span>, <span class='argstr'>rect</span>, <span class='argstr'>font</span>, <span class='argstr'>color</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*stringInRect' href='./../Overviews/Methods.html#stringInRect'>stringInRect</a> (<span class='argstr'>string</span>, <span class='argstr'>rect</span>, <span class='argstr'>font</span>, <span class='argstr'>color</span>, <span class='argstr'>alignment</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*stringLeftJustIn' href='./../Overviews/Methods.html#stringLeftJustIn'>stringLeftJustIn</a> (<span class='argstr'>string</span>, <span class='argstr'>rect</span>, <span class='argstr'>font</span>, <span class='argstr'>color</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*stringRightJustIn' href='./../Overviews/Methods.html#stringRightJustIn'>stringRightJustIn</a> (<span class='argstr'>string</span>, <span class='argstr'>rect</span>, <span class='argstr'>font</span>, <span class='argstr'>color</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*strokeColor' href='./../Overviews/Methods.html#strokeColor'>strokeColor</a><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*strokeColor' href='./../Overviews/Methods.html#strokeColor'>strokeColor</a> = <span class='argstr'>aColor</span></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*tileImage' href='./../Overviews/Methods.html#tileImage'>tileImage</a> (<span class='argstr'>target</span>, <span class='argstr'>image</span>, <span class='argstr'>source</span>, <span class='argstr'>operation: 'sourceOver'</span>, <span class='argstr'>opacity: 1</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Pen.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Pen.schelp</a><br>link::Classes/Pen::<br>sc version: 3.8dev</div></div></body></html>

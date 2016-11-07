@@ -1,0 +1,283 @@
+<html><head><title>Group</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Server>Nodes'>Server>Nodes</a>, <a href='./../Browse.html#Server>Abstractions'>Server>Abstractions</a></div>
+<h1>Group</h1>
+<div id='summary'>Client-side representation of a group node on the server</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/Node.sc'>Node.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/AbstractGroup.html">AbstractGroup</a> : <a href="../Classes/Node.html">Node</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/RootNode.html">RootNode</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#RootNode and the default group'>RootNode and the default group</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Bundling'>Bundling</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Creation with Immediate Instantiation on the Server'>Creation with Immediate Instantiation on the Server</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+</ul><li class='toc2'><a href='#Convenience methods for add actions'>Convenience methods for add actions</a></li>
+<ul class='toc'><li class='toc3'><a href='#*after'>after</a> </li>
+<li class='toc3'><a href='#*before'>before</a> </li>
+<li class='toc3'><a href='#*head'>head</a> </li>
+<li class='toc3'><a href='#*tail'>tail</a> </li>
+<li class='toc3'><a href='#*replace'>replace</a> </li>
+</ul><li class='toc2'><a href='#Creation without Instantiation on the Server'>Creation without Instantiation on the Server</a></li>
+<ul class='toc'><li class='toc3'><a href='#*basicNew'>basicNew</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Creation without Instantiation on the Server'>Creation without Instantiation on the Server</a></li>
+<ul class='toc'><li class='toc3'><a href='#-newMsg'>newMsg</a> </li>
+<li class='toc3'><a href='#-addToHeadMsg'>addToHeadMsg</a> </li>
+<li class='toc3'><a href='#-addToTailMsg'>addToTailMsg</a> </li>
+<li class='toc3'><a href='#-addBeforeMsg'>addBeforeMsg</a> </li>
+<li class='toc3'><a href='#-addAfterMsg'>addAfterMsg</a> </li>
+<li class='toc3'><a href='#-addReplaceMsg'>addReplaceMsg</a> </li>
+</ul><li class='toc2'><a href='#Control and Introspection'>Control and Introspection</a></li>
+<ul class='toc'><li class='toc3'><a href='#-moveNodeToHead'>moveNodeToHead</a>  <a href='#-moveNodeToHeadMsg'>moveNodeToHeadMsg</a> </li>
+<li class='toc3'><a href='#-moveNodeToTail'>moveNodeToTail</a>  <a href='#-moveNodeToTailMsg'>moveNodeToTailMsg</a> </li>
+<li class='toc3'><a href='#-freeAll'>freeAll</a>  <a href='#-freeAllMsg'>freeAllMsg</a> </li>
+<li class='toc3'><a href='#-deepFree'>deepFree</a>  <a href='#-deepFreeMsg'>deepFreeMsg</a> </li>
+<li class='toc3'><a href='#-dumpTree'>dumpTree</a> </li>
+<li class='toc3'><a href='#-queryTree'>queryTree</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A Group is the client-side representation of a group node on the server, which is a collection of other nodes organized as a linked list. The Nodes within a Group may be controlled together, and may be both <a href="./../Classes/Synth.html">Synth</a>s and other Groups. Groups are thus useful for controlling a number of nodes at once, and when used as targets can be very helpful in controlling order of execution. (See <a href="./../Guides/Order-of-execution.html">Order of execution</a> for more details on this topic).
+<p>For more on the crucial distinction between client objects and server nodes, see <a href="./../Guides/ClientVsServer.html">Client vs Server</a>. For information on creating nodes without using objects, see <a href="./../Guides/NodeMessaging.html">Node Messaging</a>.
+<p>N.B. Group is a subclass of Node, and thus many of its most useful and important methods are documented in the <a href="./../Classes/Node.html">Node</a> help file. Please refer to it for more information.<h3><a class='anchor' name='RootNode and the default group'>RootNode and the default group</a></h3>
+
+<p>When a Server is booted there is a top level group with an ID of zero that defines the root of the tree. This is represented by a subclass of Group: <a href="./../Classes/RootNode.html">RootNode</a>. If the Server was booted from within SCLang (as opposed to from the command line) then a default_group with an ID of 1 will be automatically created. This group is the default enclosing group for all Nodes, i.e. it's what you get if you don't specify. In general you should create new Nodes within the default group of a Server rather than in its RootNode. See <a href="./../Classes/Server.html">Server</a>, <a href="./../Reference/default_group.html">default_group</a> and <a href="./../Classes/RootNode.html">RootNode</a> for more detail.<h3><a class='anchor' name='Bundling'>Bundling</a></h3>
+
+<p>Some of the methods below have two versions: a regular one which sends its corresponding message to the server immediately, and one which returns the message in an <a href="./../Classes/Array.html">Array</a> so that it can be added to a bundle. It is also possible to capture the messages generated by the regular methods using Server's automated bundling capabilities. See <a href="./../Classes/Server.html">Server</a> and <a href="./../Guides/Bundled-Messages.html">Bundled Server Messages</a> for more detail.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Creation with Immediate Instantiation on the Server'>Creation with Immediate Instantiation on the Server</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>target</span>, <span class='argstr'>addAction: 'addToHead'</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Create and return a Group.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>target<td class='argumentdesc'>
+<p>A target for this Group. If target is not a Group or Synth, it will be converted as follows: If it is a Server, it will be converted to the default_group of that server. If it is nil, to the default_group of the default Server.<tr><td class='argumentname'>addAction<td class='argumentdesc'>
+<p>one of the following Symbols:<table>
+<tr><td>\addToHead<td>(the default) add at the head of the group specified by target<tr><td>\addToTail<td>add at the tail of the group specified by target<tr><td>\addAfter<td>add immediately after target in its server's node order<tr><td>\addBefore<td>add immediately before target in its server's node order<tr><td>\addReplace<td>replace target and take its place in its server's node order</table>
+
+<p>Note: A Synth is not a valid target for \addToHead and \addToTail.</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>s.boot;
+g = Group.new; // add a Group at the head of the default Server's default group
+h = Group.new(g, \addAfter);
+s.queryAllNodes; // note the Group within the default group (ID 1)
+g.free; h.free;</pre>
+</div><h3><a class='anchor' name='Convenience methods for add actions'>Convenience methods for add actions</a></h3>
+
+<p>The following convenience methods correspond to the add actions above:<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*after' href='./../Overviews/Methods.html#after'>after</a> (<span class='argstr'>aNode</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Create and return a Group and add it immediately after aNode.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*before' href='./../Overviews/Methods.html#before'>before</a> (<span class='argstr'>aNode</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Create and return a Group and add it immediately before aNode.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*head' href='./../Overviews/Methods.html#head'>head</a> (<span class='argstr'>aGroup</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Create and return a Group. If aGroup is a Group add it at the head of that group. If it is a Server, add it at the head of the default_group of that server. If it is nil, add it at the head of the default_group of the default Server.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*tail' href='./../Overviews/Methods.html#tail'>tail</a> (<span class='argstr'>aGroup</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Create and return a Group. If aGroup is a Group add it at the tail of that group. If it is a Server, add it at the tail of the default_group of that server. If it is nil, add it at the tail of the default_group of the default Server.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*replace' href='./../Overviews/Methods.html#replace'>replace</a> (<span class='argstr'>nodeToReplace</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Create and return a Group and use it to replace nodeToReplace, taking its place in its server's node order.</div><h3><a class='anchor' name='Creation without Instantiation on the Server'>Creation without Instantiation on the Server</a></h3>
+
+<p>For use in message bundles it is also possible to create a Group object in the client app without immediately creating a group node on the server. Once done one can call methods which create messages to add to a bundle, which when sent to the server will instantiate the group or perform other operations. (See <strong>Control</strong>, below.)<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*basicNew' href='./../Overviews/Methods.html#basicNew'>basicNew</a> (<span class='argstr'>server</span>, <span class='argstr'>nodeID</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/Node.html'>Node</a></div>
+<div class='method'>
+<p>Create and return a Group object without creating a group node on the server. (This method is inherited from Node and is documented here only for convenience.)<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>server<td class='argumentdesc'>
+<p>An optional instance of Server. If nil this will default to the default Server.<tr><td class='argumentname'>nodeID<td class='argumentdesc'>
+<p>An optional node ID number. If not supplied one will be generated by the Server's NodeIDAllocator. Normally you should not need to supply an ID.</table><h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>s.boot;
+g = Group.basicNew(s); // Create without sending
+s.sendBundle(nil, g.newMsg;); // Now send a message; create at the head of s' default group
+s.queryAllNodes;
+g.free;</pre>
+
+<p>After creation, use instance methods <code class='code prettyprint lang-sc'>newMsg, addToHeadMsg, addToTailMsg, addBeforeMsg, addAfterMsg, addReplaceMsg</code> to instantiate this synth on the server. See <a href="#instancemethods">Instance Methods</a> below.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Creation without Instantiation on the Server'>Creation without Instantiation on the Server</a></h3>
+
+<p>Use class method <code class='code prettyprint lang-sc'>basicNew</code> to create a Synth without instantiating it on the server. Then use the following instance methods:<h3 class='imethodname'><span class='methprefix'>-</span><a name='-newMsg' href='./../Overviews/Methods.html#newMsg'>newMsg</a> (<span class='argstr'>target</span>, <span class='argstr'>addAction: 'addToHead'</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Returns a message of the type g_new which can be bundled. When sent to the server this message will instantiate this group. If target is nil, it will default to the default_group of the Server specified in *basicNew when this Group was created. The default addAction is \addToHead. (See *new above for details of addActions.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addToHeadMsg' href='./../Overviews/Methods.html#addToHeadMsg'>addToHeadMsg</a> (<span class='argstr'>aGroup</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Returns a message of the type g_new which can be bundled. When sent to the server this message will instantiate this group. If aGroup is a Group it will be added at the head of that group. If it is nil, it will be added at the head of the default_group of this Group's server (as specified when *basicNew was called).</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addToTailMsg' href='./../Overviews/Methods.html#addToTailMsg'>addToTailMsg</a> (<span class='argstr'>aGroup</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Returns a message of the type g_new which can be bundled. When sent to the server this message will instantiate this group. If aGroup is a Group it will be added at the tail of that group. If it is nil, it will be added at the tail of the default_group of this Group's server (as specified when *basicNew was called).</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addBeforeMsg' href='./../Overviews/Methods.html#addBeforeMsg'>addBeforeMsg</a> (<span class='argstr'>aNode</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Returns a message of the type g_new which can be bundled. When sent to the server this message will instantiate this group, immediately before aNode.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addAfterMsg' href='./../Overviews/Methods.html#addAfterMsg'>addAfterMsg</a> (<span class='argstr'>aNode</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Returns a message of the type g_new which can be bundled. When sent to the server this message will instantiate this group, immediately after aNode.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addReplaceMsg' href='./../Overviews/Methods.html#addReplaceMsg'>addReplaceMsg</a> (<span class='argstr'>nodeToReplace</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Returns a message of the type g_new which can be bundled. When sent to the server this message will instantiate this group, replacing nodeToReplace in the server's node order.</div><h3><a class='anchor' name='Control and Introspection'>Control and Introspection</a></h3>
+
+<p>For further methods of controlling Groups (set, map, etc.), see the <a href="./../Classes/Node.html">Node</a> help file.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveNodeToHead' href='./../Overviews/Methods.html#moveNodeToHead'>moveNodeToHead</a> (<span class='argstr'>aNode</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveNodeToHeadMsg' href='./../Overviews/Methods.html#moveNodeToHeadMsg'>moveNodeToHeadMsg</a> (<span class='argstr'>aNode</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Move aNode to the head of this group</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveNodeToTail' href='./../Overviews/Methods.html#moveNodeToTail'>moveNodeToTail</a> (<span class='argstr'>aNode</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveNodeToTailMsg' href='./../Overviews/Methods.html#moveNodeToTailMsg'>moveNodeToTailMsg</a> (<span class='argstr'>aNode</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Move aNode to the tail of this group</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-freeAll' href='./../Overviews/Methods.html#freeAll'>freeAll</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-freeAllMsg' href='./../Overviews/Methods.html#freeAllMsg'>freeAllMsg</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Free all the nodes in this group, but do not free this group itself.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-deepFree' href='./../Overviews/Methods.html#deepFree'>deepFree</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-deepFreeMsg' href='./../Overviews/Methods.html#deepFreeMsg'>deepFreeMsg</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Free all Synths in the group, and all Synths in any enclosed groups, but do not free this group or any of its enclosed groups.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-dumpTree' href='./../Overviews/Methods.html#dumpTree'>dumpTree</a> (<span class='argstr'>postControls: false</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Post a representation of this group's node subtree. (Sends a message of the type g_dumpTree.) If <code class='code prettyprint lang-sc'>postControls</code> is true, then the current Control (arg) values for any synths contained in this group will be posted as well. The default is false.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-queryTree' href='./../Overviews/Methods.html#queryTree'>queryTree</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/AbstractGroup.html'>AbstractGroup</a></div>
+<div class='method'>
+<p>Queries the server for a message describing this group's node subtree. (Sends a message of the type g_queryTree.) This reply is passed to the action function as an argument. See g_queryTree in Server-Command-Reference or the example below for information on how the reply is structured.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>s.boot;
+
+(
+SynthDef("help-Group-moto-rev", { arg out=0,freq=100,ffreq=120;
+    var x;
+    x = RLPF.ar(LFPulse.ar(SinOsc.kr(0.2, 0, 10, freq), [0,0.1], 0.1),
+        ffreq, 0.1).clip2(0.4);
+    Out.ar(out, x);
+}).add;
+
+
+SynthDef("help-Group-wah", { arg out, rate = 1.5, cfreq = 1400, mfreq = 1200, rq=0.1;
+    var zin, zout, q;
+
+    zin = In.ar(out, 2);
+    cfreq = Lag3.kr(cfreq, 0.1);
+    mfreq = Lag3.kr(mfreq, 0.1);
+    q   = Ramp.kr(rq, 0.1);
+    zout = RLPF.ar(zin, LFNoise1.kr(rate, mfreq, cfreq), q, 10).distort
+        * 0.15;
+
+    // replace the incoming bus with the effected version
+    ReplaceOut.ar( out , zout );
+
+}).add;
+)
+
+g = Group.new;
+
+(
+l = Array.fill(3,{
+    // random freq for each synth, added to g at the head
+    Synth("help-Group-moto-rev",["out",0,"freq",rrand(10,120)],g,\addToHead);
+});
+)
+
+// set all controls that match "ffreq" in all nodes in g to 90
+g.set("ffreq",300);
+
+g.set("freq",80);
+
+// since we stored the Synths in an Array, we can also control them individually
+(
+r = Routine({
+    inf.do({
+        l.do({ arg node;
+            node.set("freq",rrand(10,120));
+            1.0.wait;
+        });
+    })
+});
+
+r.play;
+)
+
+// g is in a group too. Since we didn't specify it's the default group (ID 1) of the default Server
+g.group.inspect;
+
+// asking a wah to go order-of-execution after g, in the same group as g.
+x = Synth.after(g,"help-Group-wah",["out",0]);
+
+// now dump my tree to confirm
+g.dumpTree;
+
+x.free;
+
+// free all nodes in g, but not g itself
+g.freeAll;
+
+// don't forget the Routine is still running...
+r.stop;
+
+// oh, and set l to nil so the Synths and Array can be garbage collected
+l = nil;
+
+// and i'm still on the server, its just my children that were freed
+g.query;
+
+// don't need the individual synth objects this time
+(
+3.do({
+    // random freq for each synth, added to g at the head
+    Synth("help-Group-moto-rev",["out",0,"freq",rrand(10,1200)],g,\addToHead);
+});
+)
+
+// now query my tree and post a graph of it (duplicates dumpTree)
+// msg format is ['/g_querytree.reply', node1-ID, numChildren, defName, child1-ID, numChildren, ...]
+(
+g.queryTree({|msg|
+   var i = 1, tabs = 0, dumpFunc;
+   ("NODE TREE Group" + msg[1]).postln;
+   if(msg[2] &gt; 0, {
+       dumpFunc = {|numChildren|
+           tabs = tabs + 1;
+           numChildren.do({
+               i = i + 3;
+               tabs.do({ "   ".post });
+               msg[i].post;
+               (" " ++ msg[i + 2]).postln;
+               if(msg[i + 1] &gt; 0, { dumpFunc.value(msg[i + 1]) });
+           });
+           tabs = tabs - 1;
+       };
+       dumpFunc.value(msg[2]);
+   });
+});
+)
+
+// kill me and my children
+g.free;
+
+// see, I'm gone
+g.query;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Group.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Group.schelp</a><br>link::Classes/Group::<br>sc version: 3.8dev</div></div></body></html>

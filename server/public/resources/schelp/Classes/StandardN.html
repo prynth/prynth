@@ -1,0 +1,66 @@
+<html><head><title>StandardN</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Generators>Chaotic'>UGens>Generators>Chaotic</a></div>
+<h1>StandardN</h1>
+<div id='summary'>Standard map chaotic generator</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Chaos.sc'>Chaos.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/ChaosGen.html">ChaosGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/StandardL.html">StandardL</a></div>
+<div id='related'>See also: <a href="./../Classes/StandardL.html">StandardL</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*equation'>equation</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A non-interpolating sound generator based on the difference equations:<pre>        x(n+1) = (x(n) + y(n+1)) % 2pi
+        y(n+1) = (y(n) + k * sin(x(n))) % 2pi</pre>
+<p>The standard map is an area preserving map of a cylinder discovered by the plasma physicist Boris Chirikov.
+<p>sclang code translation:<pre class='code prettyprint lang-sc'>(
+var k = 1, xi = 0.5, yi = 0, size = 64;
+plot(size.collect { yi = yi + (k * sin(xi)) % 2pi; xi = (xi + yi) % 2pi; xi - pi * 0.3183098861837907 });
+)</pre>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>freq: 22050</span>, <span class='argstr'>k: 1</span>, <span class='argstr'>xi: 0.5</span>, <span class='argstr'>yi: 0</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>freq<td class='argumentdesc'>
+<p>Iteration frequency in Hertz<tr><td class='argumentname'>k<td class='argumentdesc'>
+<p>Perturbation amount<tr><td class='argumentname'>xi<td class='argumentdesc'>
+<p>Initial value of x<tr><td class='argumentname'>yi<td class='argumentdesc'>
+<p>Initial value of y<tr><td class='argumentname'>mul<td class='argumentdesc'><tr><td class='argumentname'>add<td class='argumentdesc'></table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*equation' href='./../Overviews/Methods.html#equation'>equation</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// vary frequency
+{ StandardN.ar(MouseX.kr(20, SampleRate.ir)) * 0.3 }.play(s);</pre>
+<pre class='code prettyprint lang-sc'>// mouse-controlled param
+{ StandardN.ar(SampleRate.ir/2, MouseX.kr(0.9,4)) * 0.3 }.play(s);</pre>
+<pre class='code prettyprint lang-sc'>// as a frequency control
+{ SinOsc.ar(StandardN.ar(40, MouseX.kr(0.9,4))*800+900)*0.4 }.play(s);</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/StandardN.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/StandardN.schelp</a><br>link::Classes/StandardN::<br>sc version: 3.8dev</div></div></body></html>

@@ -1,0 +1,93 @@
+<html><head><title>DelTapWr</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Buffer'>UGens>Buffer</a>, <a href='./../Browse.html#UGens>Delays'>UGens>Delays</a></div>
+<h1>DelTapWr</h1>
+<div id='summary'>Write to a buffer for a DelTapRd UGen</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Delays.sc'>Delays.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/DelTapRd.html">DelTapRd</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Write to a buffer for a <a href="./../Classes/DelTapRd.html">DelTapRd</a> UGen<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>buffer</span>, <span class='argstr'>in</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>buffer</span>, <span class='argstr'>in</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>buffer<td class='argumentdesc'>
+<p>the buffer to write signal into. Max delay time is based on buffer size.<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>the signal to write to the buffer.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>phase - DelTapWr outputs its current sample value for use in the phase argument in DelTapRd</div></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// a Buffer for the UGens to use, one second at the current sample rate
+b = Buffer.alloc(s, s.sampleRate * 1, 1);
+
+// write a signal into a delay, tap it at mutiple times
+SynthDef(\test, {arg buffer;
+    var src, tapPhase, tap1, tap2, tap3;
+    src = WhiteNoise.ar(0.2) * Decay.kr(Dust.kr(3), 0.2);
+    tapPhase = DelTapWr.ar(buffer, src);
+    #tap1, tap2, tap3 = DelTapRd.ar(buffer, tapPhase,
+        [0.2, 0.27, 0.303],      // tap times
+        1,                      // no interp
+        [1.0, 0.4, 0.2]         // muls for each tap
+        );
+    Out.ar(0, [src + tap2, tap1 + tap3])
+    }).send(s);
+
+x = Synth(\test, [\buffer, b]);
+x.free;
+b.free;</pre>
+<pre class='code prettyprint lang-sc'>// a Buffer for the UGens to use
+b = Buffer.alloc(s, 44100, 1);
+
+// write a signal into a delay, tap it at mutiple times
+SynthDef(\write, {arg buffer, cout;
+    var src, tapPhase, tap1, tap2, tap3;
+    src = WhiteNoise.ar(0.2) * Decay.kr(Dust.kr(3), 0.7);
+    tapPhase = DelTapWr.ar(buffer, src);
+    Out.kr(cout, tapPhase);
+    }).send(s);
+
+SynthDef(\readFilt, {arg buffer, cin;
+    var phase, src, filt;
+    phase = In.kr(cin);
+    src = DelTapRd.ar(buffer, phase, [0.01, 0.2]);
+    filt = BPF.ar(src, 880, 0.01) * 10;
+    Out.ar(0, filt);
+    }).send(s);
+
+c = Bus.control;
+
+x = Synth(\write, [\buffer, b, \cout, c]);
+y = Synth(\readFilt, [\buffer, b, \cin, c]);
+
+x.free;
+b.free;</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/DelTapWr.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/DelTapWr.schelp</a><br>link::Classes/DelTapWr::<br>sc version: 3.8dev</div></div></body></html>

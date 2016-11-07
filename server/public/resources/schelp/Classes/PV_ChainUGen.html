@@ -1,0 +1,172 @@
+<html><head><title>PV_ChainUGen</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>FFT'>UGens>FFT</a></div>
+<h1>PV_ChainUGen</h1>
+<div id='summary'>Base class for UGens that alter FFT chains</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/FFTUnpacking.sc'>FFTUnpacking.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/WidthFirstUGen.html">WidthFirstUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/Cepstrum.html">Cepstrum</a>, <a href="../Classes/FFT.html">FFT</a>, <a href="../Classes/FFTTrigger.html">FFTTrigger</a>, <a href="../Classes/PV_BinBufRd.html">PV_BinBufRd</a>, <a href="../Classes/PV_BinDelay.html">PV_BinDelay</a>, <a href="../Classes/PV_BinFilter.html">PV_BinFilter</a>, <a href="../Classes/PV_BinPlayBuf.html">PV_BinPlayBuf</a>, <a href="../Classes/PV_BinScramble.html">PV_BinScramble</a>, <a href="../Classes/PV_BinShift.html">PV_BinShift</a>, <a href="../Classes/PV_BinWipe.html">PV_BinWipe</a>, <a href="../Classes/PV_BrickWall.html">PV_BrickWall</a>, <a href="../Classes/PV_BufRd.html">PV_BufRd</a>, <span id='hiddensubclasses' style='display:none;'><a href="../Classes/PV_ConformalMap.html">PV_ConformalMap</a>, <a href="../Classes/PV_DiffMags.html">PV_DiffMags</a>, <a href="../Classes/PV_Diffuser.html">PV_Diffuser</a>, <a href="../Classes/PV_ExtractRepeat.html">PV_ExtractRepeat</a>, <a href="../Classes/PV_Freeze.html">PV_Freeze</a>, <a href="../Classes/PV_HainsworthFoote.html">PV_HainsworthFoote</a>, <a href="../Classes/PV_Invert.html">PV_Invert</a>, <a href="../Classes/PV_JensenAndersen.html">PV_JensenAndersen</a>, <a href="../Classes/PV_MagAbove.html">PV_MagAbove</a>, <a href="../Classes/PV_MagBuffer.html">PV_MagBuffer</a>, <a href="../Classes/PV_MagDiv.html">PV_MagDiv</a>, <a href="../Classes/PV_MagExp.html">PV_MagExp</a>, <a href="../Classes/PV_MagFreeze.html">PV_MagFreeze</a>, <a href="../Classes/PV_MagLog.html">PV_MagLog</a>, <a href="../Classes/PV_MagMap.html">PV_MagMap</a>, <a href="../Classes/PV_MagMul.html">PV_MagMul</a>, <a href="../Classes/PV_MagMulAdd.html">PV_MagMulAdd</a>, <a href="../Classes/PV_MagShift.html">PV_MagShift</a>, <a href="../Classes/PV_MagSmear.html">PV_MagSmear</a>, <a href="../Classes/PV_MagSmooth.html">PV_MagSmooth</a>, <a href="../Classes/PV_MagSquared.html">PV_MagSquared</a>, <a href="../Classes/PV_MagSubtract.html">PV_MagSubtract</a>, <a href="../Classes/PV_MaxMagN.html">PV_MaxMagN</a>, <a href="../Classes/PV_NoiseSynthP.html">PV_NoiseSynthP</a>, <a href="../Classes/PV_OddBin.html">PV_OddBin</a>, <a href="../Classes/PV_PhaseShift.html">PV_PhaseShift</a>, <a href="../Classes/PV_PitchShift.html">PV_PitchShift</a>, <a href="../Classes/PV_PlayBuf.html">PV_PlayBuf</a>, <a href="../Classes/PV_RandComb.html">PV_RandComb</a>, <a href="../Classes/PV_RandWipe.html">PV_RandWipe</a>, <a href="../Classes/PV_RecordBuf.html">PV_RecordBuf</a>, <a href="../Classes/PV_RectComb.html">PV_RectComb</a>, <a href="../Classes/PV_RectComb2.html">PV_RectComb2</a>, <a href="../Classes/PV_SpectralEnhance.html">PV_SpectralEnhance</a>, <a href="../Classes/PV_SpectralMap.html">PV_SpectralMap</a>, <a href="../Classes/PV_Whiten.html">PV_Whiten</a>, <a href="../Classes/PackFFT.html">PackFFT</a></span><a class='subclass_toggle' href='#' onclick='javascript:showAllSubclasses(this); return false'>&hellip;&nbsp;see&nbsp;all</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-pvcalc'>pvcalc</a> </li>
+<li class='toc3'><a href='#-pvcalc2'>pvcalc2</a> </li>
+<li class='toc3'><a href='#-pvcollect'>pvcollect</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-addCopiesIfNeeded'>addCopiesIfNeeded</a> </li>
+<li class='toc3'><a href='#-fftSize'>fftSize</a> </li>
+</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#pvcalc'>pvcalc</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#pvcalc2'>pvcalc2</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#pvcollect'>pvcollect</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>"PV_ChainUGen" is an abstract class - in other words, a class that you do not use directly. Instead, use one of its subclasses. It represents phase-vocoder UGens - i.e. UGens which apply some kind of transformation to the frequency-domain signal produced by FFT.
+<p>(Strictly, this class encompasses all units whose output is an FFT chain. This is why FFT is in this group but IFFT is not - the IFFT unit outputs ordinary time-domain audio.)
+<p>For more info on using these units, see <a href="./../Guides/FFT-Overview.html">FFT Overview</a>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pvcalc' href='./../Overviews/Methods.html#pvcalc'>pvcalc</a> (<span class='argstr'>numframes</span>, <span class='argstr'>func</span>, <span class='argstr'>frombin: 0</span>, <span class='argstr'>tobin</span>, <span class='argstr'>zeroothers: 0</span>)</h3>
+<div class='method'>
+<p>Process the bins of an FFT chain<h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>chain = chain.pvcalc(numframes, func, frombin, tobin, zeroothers)</pre>
+
+<p>pvcalc applies function <code class='code prettyprint lang-sc'>func</code> to the frequency-domain data of an FFT chain. <code class='code prettyprint lang-sc'>func</code> should be a function that takes two arrays as inputs (magnitude, and phase) and returns a resulting pair of arrays <code class='code prettyprint lang-sc'>[magnitude, phase]</code>.
+<p>frombin, tobin, and zeroothers are optional arguments which limit the processing to a specified integer range of FFT bins. If zeroothers is set to 1 then bins outside of the range being processed are silenced.
+<p>See <code class='code prettyprint lang-sc'>pvcollect</code> below for discussion of efficiency considerations. See also <code class='code prettyprint lang-sc'>pvcalc2</code> below, and <a href="./../Classes/UnpackFFT.html">UnpackFFT</a>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pvcalc2' href='./../Overviews/Methods.html#pvcalc2'>pvcalc2</a> (<span class='argstr'>chain2</span>, <span class='argstr'>numframes</span>, <span class='argstr'>func</span>, <span class='argstr'>frombin: 0</span>, <span class='argstr'>tobin</span>, <span class='argstr'>zeroothers: 0</span>)</h3>
+<div class='method'>
+<p>Process the bins of two FFT chains<h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>chain = chain.pvcalc2(chain2, numframes, func, frombin, tobin, zeroothers)</pre>
+
+<p>pvcalc2 is just like pvcalc but can combine two FFT chains together. See <code class='code prettyprint lang-sc'>pvcalc</code> above for more information.
+<p><code class='code prettyprint lang-sc'>func</code> should be a function that takes four arrays as inputs (magnitudes1, phases1, magnitudes2, phases2) and returns a resulting pair of arrays <code class='code prettyprint lang-sc'>[magnitude, phase]</code>.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pvcollect' href='./../Overviews/Methods.html#pvcollect'>pvcollect</a> (<span class='argstr'>numframes</span>, <span class='argstr'>func</span>, <span class='argstr'>frombin: 0</span>, <span class='argstr'>tobin</span>, <span class='argstr'>zeroothers: 0</span>)</h3>
+<div class='method'>
+<p>Process each bin of an FFT chain, separately<h4>Discussion:</h4>
+<pre class='code prettyprint lang-sc'>chain = chain.pvcollect(numframes, func, frombin, tobin, zeroothers)</pre>
+
+<p>pvcollect applies function <code class='code prettyprint lang-sc'>func</code> to each bin of an FFT chain. func should be a function that takes <code class='code prettyprint lang-sc'>magnitude, phase, bin, index</code> as inputs and returns a resulting <code class='code prettyprint lang-sc'>[magnitude, phase]</code>.
+<p>The "bin" is the integer bin number, starting at 0 for DC, while "index" is the iteration number, always starting with 0. You can optionally ignore the phase and only return a single (magnitude) value, in which case the phase is assumed to be left unchanged.
+<p>frombin, tobin, and zeroothers are optional arguments which limit the processing to a specified integer range of FFT bins. If zeroothers is set to 1 then bins outside of the range being processed are silenced.
+<p>Note that this procedure can be relatively CPU-heavy, depending on how you use it. Using pvcollect (or its components, UnpackFFT &amp; PackFFT) is usually less efficient than using a single "PV_" unit generator to process an FFT chain, because it involves the creation of quite a large graph of demand-rate unit generators.
+<p>If you wish to reduce the CPU impact of using this approach, try the following:<ul>
+<li>Use the frombin and tobin arguments to limit the number of FFT bins that will be included in the calculation. Often the lower FFT bins contain the loudest and/or most relevant information, so perhaps your effect sounds very similar if you ignore the higher-up bins (either leave them unprocessed, or discard them by setting the zeroothers argument to 1, which has the effect of a band-pass frequency-domain filter).<li>Use a smaller FFT buffer size.<li>Avoid creating ugens inside your calculation function if at all possible. For example, a deterministic ugen such as LFPar.kr(0.5, 0, 1) will be replicated once for each bin if specified inside the function, despite the fact that the output is always the same. Define it outside the calculation function and then reference it by variable name.<li>Avoid unused calculations! For example, uncommenting all the different lines in the above will waste effort because many values will be calculated but not used. This cannot be optimised away during compilation. It is particularly important because all calculations are duplicated (once for each bin) so can have a significant impact on efficiency.<li>If you find yourself calling pvcollect on an FFT chain more than once in series, you should definitely try to combine your processing into a single pvcollect function, to avoid unneccessary unpacking-then-packing-then-unpacking-then-packing.</ul>
+</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-addCopiesIfNeeded' href='./../Overviews/Methods.html#addCopiesIfNeeded'>addCopiesIfNeeded</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fftSize' href='./../Overviews/Methods.html#fftSize'>fftSize</a> </h3>
+<h2><a class='anchor' name='examples'>Examples</a></h2>
+<h3><a class='anchor' name='pvcalc'>pvcalc</a></h3>
+<pre class='code prettyprint lang-sc'>(
+s.waitForBoot({
+    c = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+})
+)
+
+(
+x = {
+    var in, chain, v;
+    in = PlayBuf.ar(1, c, BufRateScale.kr(c), loop: 1);
+    chain = FFT(LocalBuf(1024), in);
+
+    chain = chain.pvcalc(1024, {|mags, phases|
+//////// Try uncommenting each of these lines in turn and re-running the synth:
+        [mags * {1.5.rand}.dup(mags.size), phases + {pi.rand}.dup(phases.size)]; // Arbitrary filter, arbitrary phase shift
+        //[mags.reverse, phases.reverse]; // Upside-down!
+        //[mags.differentiate, phases.differentiate]; // Differentiate along frequency axis
+        //[mags[30..] ++ mags[..30], phases[30..] ++ phases[..30]]; // ".rotate" doesn't work directly, but this is equivalent
+    }, frombin: 0, tobin: 250, zeroothers: 0);
+
+    Out.ar(0, 0.5 * IFFT(chain).dup);
+}.play(s);
+)
+x.free;</pre>
+<h3><a class='anchor' name='pvcalc2'>pvcalc2</a></h3>
+<pre class='code prettyprint lang-sc'>(
+s.waitForBoot({
+c = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+})
+)
+
+(
+x = {
+    var fftsize = 1024;
+    var in, chain, in2, chain2, out;
+    in = PlayBuf.ar(1, c, BufRateScale.kr(c), loop: 1);
+    chain = FFT(LocalBuf(fftsize), in);
+
+    // in2 = PlayBuf.ar(1, e, BufRateScale.kr(e), loop: 1);
+    // JMcC babbling brook
+    in2 = ({
+        RHPF.ar(OnePole.ar(BrownNoise.ar, 0.99), LPF.ar(BrownNoise.ar, 14)
+            * 400 + 500, 0.03, 0.003)}!2)
+            + ({RHPF.ar(OnePole.ar(BrownNoise.ar, 0.99), LPF.ar(BrownNoise.ar, 20)
+            * 800 + 1000, 0.03, 0.005)}!2
+        )
+            * 4;
+    chain2 = FFT(LocalBuf(fftsize), in2);
+
+    chain = chain.pvcalc2(chain2, fftsize, {|mags, phases, mags2, phases2|
+        [mags * mags2 / 10, phases2 + phases]
+    }, frombin: 0, tobin: 125, zeroothers: 0);
+
+    out = IFFT(chain);
+    Out.ar(0, 0.5 * out.dup);
+}.play(s);
+)
+x.free;</pre>
+<h3><a class='anchor' name='pvcollect'>pvcollect</a></h3>
+<pre class='code prettyprint lang-sc'>(
+s.waitForBoot({
+c = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+})
+)
+
+(
+x = {
+    var in, chain, v;
+    in = PlayBuf.ar(1, c, BufRateScale.kr(c), loop: 1);
+    chain = FFT(LocalBuf(1024), in);
+
+    v = LFPar.kr(0.5).range(0.1, 1);
+
+    chain = chain.pvcollect(1024, {|mag, phase, index|
+//////// Try uncommenting each of these lines in turn and re-running the synth:
+        //mag;
+        //[mag, phase];
+        //[mag, phase] / 3;
+        //[mag, phase].sqrt;
+        //[mag, 3.14.rand];
+        //[mag, LFNoise0.kr.range(0, 3.14)];
+        //[mag * Dseq([1, 0, 0, 1, 1, 0, 1, 0].stutter(8), 999999999999)]; // Can even use Demand ugens! One val demanded each frame
+        //[mag.sqrt, 3.14.rand];
+        //if(index % 7 == 0, mag, 0); // Comb filter
+        //if(LFNoise0.kr(10) &gt; 0.5, mag, 0);
+        //mag + DelayN.kr(mag, 1, v); // Spectral delay
+        if((index-LFPar.kr(0.1).range(2, 1024/20)).abs &lt; 10, mag, 0); // Swept bandpass
+    }, frombin: 0, tobin: 250, zeroothers: 0);
+
+    Out.ar(0, 0.5 * IFFT(chain).dup);
+}.play(s);
+)
+x.free;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/PV_ChainUGen.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/PV_ChainUGen.schelp</a><br>link::Classes/PV_ChainUGen::<br>sc version: 3.8dev</div></div></body></html>

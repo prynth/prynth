@@ -1,0 +1,239 @@
+<html><head><title>HIDFunc</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#External Control>HID'>External Control>HID</a></div>
+<h1>HIDFunc</h1>
+<div id='summary'>Fast responder for incoming data from human input devices (HID)</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/HIDFunc.sc'>HIDFunc.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/AbstractResponderFunc.html">AbstractResponderFunc</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/HIDdef.html">HIDdef</a></div>
+<div id='related'>See also: <a href="./../Classes/HID.html">HID</a>, <a href="./../Classes/HIDdef.html">HIDdef</a>, <a href="./../Classes/HIDProto.html">HIDProto</a>, <a href="./../Classes/HIDElementProto.html">HIDElementProto</a>, <a href="./../Classes/OSCFunc.html">OSCFunc</a>, <a href="./../Classes/MIDIFunc.html">MIDIFunc</a>, <a href="./../Guides/Working_with_HID.html">Working with HID</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*defaultDispatchers'>defaultDispatchers</a> </li>
+<li class='toc3'><a href='#*usage'>usage</a> </li>
+<li class='toc3'><a href='#*device'>device</a> </li>
+<li class='toc3'><a href='#*usageID'>usageID</a> </li>
+<li class='toc3'><a href='#*proto'>proto</a> </li>
+<li class='toc3'><a href='#*element'>element</a> </li>
+<li class='toc2'><a href='#Debugging'>Debugging</a></li>
+<ul class='toc'><li class='toc3'><a href='#*trace'>trace</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-type'>type</a> </li>
+<li class='toc3'><a href='#-elUsage'>elUsage</a> </li>
+<li class='toc3'><a href='#-elementTemplate'>elementTemplate</a> </li>
+<li class='toc3'><a href='#-devUsage'>devUsage</a> </li>
+<li class='toc3'><a href='#-deviceTemplate'>deviceTemplate</a> </li>
+<li class='toc3'><a href='#-argTemplate'>argTemplate</a> </li>
+<li class='toc3'><a href='#-argTemplateType'>argTemplateType</a> </li>
+<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#Filtering based on usage'>Filtering based on usage</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Filtering based on usage ID'>Filtering based on usage ID</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Filtering based on a device'>Filtering based on a device</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Filtering based on a prototype element'>Filtering based on a prototype element</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Filtering based on an element ID'>Filtering based on an element ID</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Human input devices can be used as controllers for making music. This class provides you with access to them in a way similar to OSCFunc and MIDIFunc.
+<p>HIDFunc (and its subclass <a href="./../Classes/HIDdef.html">HIDdef</a>) registers one or more functions to respond to an incoming HID message. Many of its methods are inherited from its superclass <a href="./../Classes/AbstractResponderFunc.html">AbstractResponderFunc</a>.<div class='note'><span class='notelabel'>NOTE:</span> HIDFuncs are removed on Cmd-. by default. This can be overriden using either of the fix or permanent methods.</div>
+<p>The development of this SuperCollider implementation of HID access was funded by the SuperCollider community and BEK, Bergen Elektronisk Kunst, Bergen, Norway, <a href="http://www.bek.no">http://www.bek.no</a><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*defaultDispatchers' href='./../Overviews/Methods.html#defaultDispatchers'>defaultDispatchers</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*defaultDispatchers' href='./../Overviews/Methods.html#defaultDispatchers'>defaultDispatchers</a> = value</h3>
+<div class='method'>
+<p>Get or set an <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> containing the default dispatcher objects for HIDFuncs of different types (these are what you get if you pass nil as the dispatcher argument to <a href="#*new">*new</a>). These objects will decide if any of their registered HIDFuncs should respond to an incoming HID message. The dictionary should have the keys <code class='code prettyprint lang-sc'>[\usage, \usageID, \device, \proto, \element]</code> and values of an appropriate subclass of <a href="./../Classes/AbstractDispatcher.html">AbstractDispatcher</a> for each message type. By default these will be instances of <code class='code prettyprint lang-sc'>HIDUsageDispatcher</code>, <code class='code prettyprint lang-sc'>HIDElementProtoDispatcher</code>, <code class='code prettyprint lang-sc'>HIDDeviceDispatcher</code>, <code class='code prettyprint lang-sc'>HIDElementProtoDispatcher</code> and <code class='code prettyprint lang-sc'>HIDElementDispatcher</code> respectively.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The getter returns an <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a>.</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*usage' href='./../Overviews/Methods.html#usage'>usage</a> (<span class='argstr'>func</span>, <span class='argstr'>elUsageName</span>, <span class='argstr'>devUsageName</span>, <span class='argstr'>deviceInfo</span>, <span class='argstr'>argTemplate</span>, <span class='argstr'>argTemplateType</span>, <span class='argstr'>dispatcher</span>)</h3>
+<div class='method'>
+<p>A convenience method to filter an incoming HID value based on the name of its control usage. E.g. the name of an X-axis of a joystick or the horizontal movement of a mouse has the name <code class='code prettyprint lang-sc'>\X</code>. These usage names are standardized by manufacturers and are looked up in usage tables based on the information coming from the device. If you have an open HID device, you can look up the available usages with: <code class='code prettyprint lang-sc'>~hid.postUsages</code>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A <a href="./../Classes/Function.html">Function</a> or similar object which will respond to the incoming message. It will be passed...<tr><td class='argumentname'>elUsageName<td class='argumentdesc'>
+<p>The name of the usage to look for. This can be one usage name, or an array of usage names.<tr><td class='argumentname'>devUsageName<td class='argumentdesc'>
+<p>The name of the device usage to look for, e.g. <code class='code prettyprint lang-sc'>\GamePad</code> or <code class='code prettyprint lang-sc'>\Mouse</code>. If left blank, the <code class='code prettyprint lang-sc'>HIDFunc</code> will match any device.<tr><td class='argumentname'>deviceInfo<td class='argumentdesc'>
+<p>An <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> or <a href="./../Classes/HIDProto.html">HIDProto</a> with a more detailed filtering for a device.<tr><td class='argumentname'>argTemplate<td class='argumentdesc'>
+<p>This should be an object that implements the method <code class='code prettyprint lang-sc'>matchItem</code>. Depending on the <code class='code prettyprint lang-sc'>argTemplateType</code>, it will be passed either the rawValue of the value of the element to be matched.<tr><td class='argumentname'>argTemplateType<td class='argumentdesc'>
+<p>If the argTemplateType is <code class='code prettyprint lang-sc'>\rawValue</code> (the default) then the matching is done based on the incoming raw value of the element (not mapped according to the logical min and max). Otherwise the matching is done according to the mapped value.<tr><td class='argumentname'>dispatcher<td class='argumentdesc'>
+<p>An optional instance of an appropriate subclass of <a href="./../Classes/AbstractDispatcher.html">AbstractDispatcher</a>. This can be used to allow for customised dispatching. Normally this should not be needed. The default for this type of <code class='code prettyprint lang-sc'>HIDFunc</code> is <code class='code prettyprint lang-sc'>HIDUsageDispatcher</code></table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A new instance of HIDFunc which responds to a specific element usage and device type.</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*device' href='./../Overviews/Methods.html#device'>device</a> (<span class='argstr'>func</span>, <span class='argstr'>elUsageName</span>, <span class='argstr'>deviceName</span>, <span class='argstr'>deviceInfo</span>, <span class='argstr'>argTemplate</span>, <span class='argstr'>argTemplateType</span>, <span class='argstr'>dispatcher</span>)</h3>
+<div class='method'>
+<p>A convenience method to filter an incoming HID value based on the name of the device. This type of HIDFunc differs from <code class='code prettyprint lang-sc'>HIDFunc.usage</code> in that it filter specifically by device name, rather than device usage, otherwise the arguments are the same.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A <a href="./../Classes/Function.html">Function</a> or similar object which will respond to the incoming message. It will be passed...<tr><td class='argumentname'>elUsageName<td class='argumentdesc'>
+<p>The name of the usage to look for. This can be one usage name, or an array of usage names.<tr><td class='argumentname'>deviceName<td class='argumentdesc'>
+<p>The name of the device to look for, note that this has to match the string as returned by the device exactly. You can look this string up in the device list: <code class='code prettyprint lang-sc'>HID.postAvailable</code><tr><td class='argumentname'>deviceInfo<td class='argumentdesc'>
+<p>An <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> or <a href="./../Classes/HIDProto.html">HIDProto</a> with a more detailed filtering for a device.<tr><td class='argumentname'>argTemplate<td class='argumentdesc'>
+<p>This should be an object that implements the method <code class='code prettyprint lang-sc'>matchItem</code>. Depending on the <code class='code prettyprint lang-sc'>argTemplateType</code>, it will be passed either the rawValue of the value of the element to be matched.<tr><td class='argumentname'>argTemplateType<td class='argumentdesc'>
+<p>If the argTemplateType is <code class='code prettyprint lang-sc'>\rawValue</code> (the default) then the matching is done based on the incoming raw value of the element (not mapped according to the logical min and max). Otherwise the matching is done according to the mapped value.<tr><td class='argumentname'>dispatcher<td class='argumentdesc'>
+<p>An optional instance of an appropriate subclass of <a href="./../Classes/AbstractDispatcher.html">AbstractDispatcher</a>. This can be used to allow for customised dispatching. Normally this should not be needed. The default for this type of <code class='code prettyprint lang-sc'>HIDFunc</code> is <code class='code prettyprint lang-sc'>HIDDeviceDispatcher</code></table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A new instance of HIDFunc which responds to a specific element usage for a specific device.</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*usageID' href='./../Overviews/Methods.html#usageID'>usageID</a> (<span class='argstr'>func</span>, <span class='argstr'>elUsageID</span>, <span class='argstr'>elPageID</span>, <span class='argstr'>deviceName</span>, <span class='argstr'>deviceInfo</span>, <span class='argstr'>argTemplate</span>, <span class='argstr'>argTemplateType</span>, <span class='argstr'>dispatcher</span>)</h3>
+<div class='method'>
+<p>A convenience method to filter an incoming HID value based on the number of its control usage. If the device is using a non-standard usage number, then this method can be used to look for it. A controls usage is fully specified by the combinaton of its usage ID and its usage page.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A <a href="./../Classes/Function.html">Function</a> or similar object which will respond to the incoming message. It will be passed...usage<tr><td class='argumentname'>elUsageID<td class='argumentdesc'>
+<p>The id (an <a href="./../Classes/Integer.html">Integer</a>) of the usage to look for. This can be one usage id, or an array of usage ids.<tr><td class='argumentname'>elPageID<td class='argumentdesc'>
+<p>The id (an <a href="./../Classes/Integer.html">Integer</a>) of the page of the usage to look for. This can be one page id, or an array of page ids.<tr><td class='argumentname'>deviceName<td class='argumentdesc'>
+<p>Since this type of HIDFunc is meant for non-standardized controls, you can filter by a specific device name, rather than a general usage, similar to <code class='code prettyprint lang-sc'>HIDFunc.device</code><tr><td class='argumentname'>deviceInfo<td class='argumentdesc'>
+<p>An <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> or <a href="./../Classes/HIDProto.html">HIDProto</a> with a more detailed filtering for a device.<tr><td class='argumentname'>argTemplate<td class='argumentdesc'>
+<p>This should be an object that implements the method <code class='code prettyprint lang-sc'>matchItem</code>. Depending on the <code class='code prettyprint lang-sc'>argTemplateType</code>, it will be passed either the rawValue of the value of the element to be matched.<tr><td class='argumentname'>argTemplateType<td class='argumentdesc'>
+<p>If the argTemplateType is <code class='code prettyprint lang-sc'>\rawValue</code> (the default) then the matching is done based on the incoming raw value of the element (not mapped according to the logical min and max). Otherwise the matching is done according to the mapped value.<tr><td class='argumentname'>dispatcher<td class='argumentdesc'>
+<p>An optional instance of an appropriate subclass of <a href="./../Classes/AbstractDispatcher.html">AbstractDispatcher</a>. This can be used to allow for customised dispatching. Normally this should not be needed. The default for this type of <code class='code prettyprint lang-sc'>HIDFunc</code> is <code class='code prettyprint lang-sc'>HIDElementProtoDispatcher</code></table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A new instance of HIDFunc which responds to a specific element usage id for a specific device.</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*proto' href='./../Overviews/Methods.html#proto'>proto</a> (<span class='argstr'>func</span>, <span class='argstr'>protoElement</span>, <span class='argstr'>deviceInfo</span>, <span class='argstr'>argTemplate</span>, <span class='argstr'>argTemplateType</span>, <span class='argstr'>dispatcher</span>)</h3>
+<div class='method'>
+<p>A convenience method to filter an incoming HID value based on a matching template of an element (a <a href="./../Classes/HIDElementProto.html">HIDElementProto</a>). If you have number of conditions for the element that should be matched, then this method can be used to look for it.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A <a href="./../Classes/Function.html">Function</a> or similar object which will respond to the incoming message. It will be passed...usage<tr><td class='argumentname'>protoElement<td class='argumentdesc'>
+<p>The id (an <a href="./../Classes/Integer.html">Integer</a>) of the usage to look for. This can be one usage id, or an array of usage ids.<tr><td class='argumentname'>deviceInfo<td class='argumentdesc'>
+<p>An <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> or <a href="./../Classes/HIDProto.html">HIDProto</a> with a more detailed filtering for a device.<tr><td class='argumentname'>argTemplate<td class='argumentdesc'>
+<p>This should be an object that implements the method <code class='code prettyprint lang-sc'>matchItem</code>. Depending on the <code class='code prettyprint lang-sc'>argTemplateType</code>, it will be passed either the rawValue of the value of the element to be matched.<tr><td class='argumentname'>argTemplateType<td class='argumentdesc'>
+<p>If the argTemplateType is <code class='code prettyprint lang-sc'>\rawValue</code> (the default) then the matching is done based on the incoming raw value of the element (not mapped according to the logical min and max). Otherwise the matching is done according to the mapped value.<tr><td class='argumentname'>dispatcher<td class='argumentdesc'>
+<p>An optional instance of an appropriate subclass of <a href="./../Classes/AbstractDispatcher.html">AbstractDispatcher</a>. This can be used to allow for customised dispatching. Normally this should not be needed. The default for this type of <code class='code prettyprint lang-sc'>HIDFunc</code> is <code class='code prettyprint lang-sc'>HIDElementProtoDispatcher</code></table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A new instance of HIDFunc which responds to a specific prototype element.</div></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*element' href='./../Overviews/Methods.html#element'>element</a> (<span class='argstr'>func</span>, <span class='argstr'>elID</span>, <span class='argstr'>deviceName</span>, <span class='argstr'>deviceInfo</span>, <span class='argstr'>argTemplate</span>, <span class='argstr'>argTemplateType</span>, <span class='argstr'>dispatcher</span>)</h3>
+<div class='method'>
+<p>A convenience method to filter an incoming HID value based on the index of its element. If the device is using something non-standard, or you want to access keyboard elements directly, then this method can be used to look for it. Note that the element index is not necessarily the same across different operating systems (i.e. it may vary between Linux and OSX and Windows).<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A <a href="./../Classes/Function.html">Function</a> or similar object which will respond to the incoming message. It will be passed...<tr><td class='argumentname'>elID<td class='argumentdesc'>
+<p>The id (an <a href="./../Classes/Integer.html">Integer</a>) of the element to look for. This can be one element id, or an array of element ids.<tr><td class='argumentname'>deviceName<td class='argumentdesc'>
+<p>Since this type of HIDFunc is meant for non-standardized elements, you can filter by a specific device name, rather than a general usage, similar to <code class='code prettyprint lang-sc'>HIDFunc.device</code><tr><td class='argumentname'>deviceInfo<td class='argumentdesc'>
+<p>An <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> or <a href="./../Classes/HIDProto.html">HIDProto</a> with a more detailed filtering for a device.<tr><td class='argumentname'>argTemplate<td class='argumentdesc'>
+<p>This should be an object that implements the method <code class='code prettyprint lang-sc'>matchItem</code>. Depending on the <code class='code prettyprint lang-sc'>argTemplateType</code>, it will be passed either the rawValue of the value of the element to be matched.<tr><td class='argumentname'>argTemplateType<td class='argumentdesc'>
+<p>If the argTemplateType is <code class='code prettyprint lang-sc'>\rawValue</code> (the default) then the matching is done based on the incoming raw value of the element (not mapped according to the logical min and max). Otherwise the matching is done according to the mapped value.<tr><td class='argumentname'>dispatcher<td class='argumentdesc'>
+<p>An optional instance of an appropriate subclass of <a href="./../Classes/AbstractDispatcher.html">AbstractDispatcher</a>. This can be used to allow for customised dispatching. Normally this should not be needed. The default for this type of <code class='code prettyprint lang-sc'>HIDFunc</code> is <code class='code prettyprint lang-sc'>HIDElementDispatcher</code></table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A new instance of HIDFunc which responds to a specific element id for a specific device.</div></div><h3><a class='anchor' name='Debugging'>Debugging</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*trace' href='./../Overviews/Methods.html#trace'>trace</a> (<span class='argstr'>bool: true</span>)</h3>
+<div class='method'>
+<p>A convenience method which dumps all incoming HID messages.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bool<td class='argumentdesc'>
+<p>A <a href="./../Classes/Boolean.html">Boolean</a> indicating whether dumping is on or off.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-type' href='./../Overviews/Methods.html#type'>type</a> </h3>
+<div class='method'>
+<p>The type of HIDFunc.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a <a href="./../Classes/Symbol.html">Symbol</a>, one of <code class='code prettyprint lang-sc'>\usage</code>, <code class='code prettyprint lang-sc'>\device</code>, <code class='code prettyprint lang-sc'>\usageID</code>, <code class='code prettyprint lang-sc'>\proto</code> or <code class='code prettyprint lang-sc'>\element</code>.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-elUsage' href='./../Overviews/Methods.html#elUsage'>elUsage</a> </h3>
+<div class='method'>
+<p>The usage name, usage id, or element id of the element/control to match, depending on the type of HIDFunc</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-elementTemplate' href='./../Overviews/Methods.html#elementTemplate'>elementTemplate</a> </h3>
+<div class='method'>
+<p>An instance of HIDElementProto, describing the template for the element to match.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-devUsage' href='./../Overviews/Methods.html#devUsage'>devUsage</a> </h3>
+<div class='method'>
+<p>The device usage or device name of the element/control to match, depending on the type of HIDFunc</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-deviceTemplate' href='./../Overviews/Methods.html#deviceTemplate'>deviceTemplate</a> </h3>
+<div class='method'>
+<p>An instance of HIDProto, describing the template for the device to match.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-argTemplate' href='./../Overviews/Methods.html#argTemplate'>argTemplate</a> </h3>
+<div class='method'>
+<p>This should be an object that implements the method <code class='code prettyprint lang-sc'>matchItem</code>. Depending on the <code class='code prettyprint lang-sc'>argTemplateType</code>, it will be passed either the rawValue of the value of the element to be matched.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-argTemplateType' href='./../Overviews/Methods.html#argTemplateType'>argTemplateType</a> </h3>
+<div class='method'>
+<p>If the argTemplateType is <code class='code prettyprint lang-sc'>\rawValue</code> (the default) then the matching is done based on the incoming raw value of the element (not mapped according to the logical min and max). Otherwise the matching is done according to the mapped value.</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>For all the examples below here, you will need to have initialized an HID device (see also <a href="./../Guides/Working_with_HID.html">Working with HID</a>). The examples below should work with a standard USB mouse.<pre class='code prettyprint lang-sc'>HID.findAvailable; // check which devices are attached
+HID.postAvailable; // post the available devices
+~myhid = HID.open( 1103, 53251 ); // adapt this line for  the device that you want to open!</pre>
+<h3><a class='anchor' name='Filtering based on usage'>Filtering based on usage</a></h3>
+<pre class='code prettyprint lang-sc'>// filter all events coming from the x-axis of a mouse
+a = HIDFunc.usage( { |...args| args.postln; }, \X, \Mouse );
+// disable the function again:
+a.free;
+
+// filter all events coming from a mouse
+a = HIDFunc.usage( { |...args| args.postln; }, nil, \Mouse );
+// disable the function again:
+a.free;
+
+// filter all events coming from an X-axis (could be from a mouse or a joystick or a gamepad)
+a = HIDFunc.usage( { |...args| args.postln; }, \X );
+// disable the function again:
+a.free;
+
+// filter all events coming from an X-axis or an Y-axis (could be from a mouse or a joystick or a gamepad)
+a = HIDFunc.usage( { |...args| args.postln; }, [\X,\Y] );
+// disable the function again:
+a.free;
+
+
+// usage of argTemplate: matching the rawValue (is the default behaviour)
+
+// only react when the values are below zero:
+a = HIDFunc.usage( { |...args| args.postln; }, [\X,\Y], argTemplate: { |val| val &lt; 0 } );
+a.free;
+
+// only match when rawvalue == -1
+a = HIDFunc.usage( { |...args| args.postln; }, [\X,\Y], argTemplate: -1 );
+a.free;
+
+// only match when rawvalue is one of [-3,-2,-1]
+a = HIDFunc.usage( { |...args| args.postln; }, [\X,\Y], argTemplate: [-3,-2,-1] );
+a.free;
+
+// usage of argTemplate: matching the scaled value when smaller than 0.5
+a = HIDFunc.usage( { |...args| args.postln; }, [\X,\Y], argTemplate: { |val| val &lt; 0.5 }, argTemplateType: \value );
+a.free;
+
+
+// using deviceInfo rather than deviceUsage (you can add more device specifications to match)
+a = HIDFunc.usage( { |...args| args.postln; }, \X, deviceInfo: ( usageName: \Mouse ) );
+a.free;
+
+a = HIDFunc.usage( { |...args| args.postln; }, nil, deviceInfo: ( usageName: \Mouse ) );
+a.free;</pre>
+<h3><a class='anchor' name='Filtering based on usage ID'>Filtering based on usage ID</a></h3>
+<pre class='code prettyprint lang-sc'>// filter by usage ID 48 on usage page 1
+a = HIDFunc.usageID( { |...args| args.postln; }, 48, 1 );
+a.free;
+
+// filter by usage ID 48 or 49 on usage page 1
+a = HIDFunc.usageID( { |...args| args.postln; }, [48,49], 1 );
+a.free;
+
+// filter by any usage ID on usage page 1
+a = HIDFunc.usageID( { |...args| args.postln; }, nil, 1 );
+a.free;
+
+// filter by usage ID 48 on usage page 1, of a device with an empty string as a name (fill in the name of your mouse there).
+a = HIDFunc.usageID( { |...args| args.postln; }, 48, 1, "" );
+a.free;
+
+// filter by usage ID 48 on usage page 1, of a device with path "/dev/hidraw2" (adapt this path to the device you want to match)
+a = HIDFunc.usageID( { |...args| args.postln; }, 48, 1, deviceInfo: ( path: "/dev/hidraw2" )  );
+a.free;</pre>
+<h3><a class='anchor' name='Filtering based on a device'>Filtering based on a device</a></h3>
+<pre class='code prettyprint lang-sc'>// filter for device with name "", and element with usage \X.
+a = HIDFunc.device( { |...args| args.postln; }, \X, "" );
+a.free;</pre>
+<h3><a class='anchor' name='Filtering based on a prototype element'>Filtering based on a prototype element</a></h3>
+<pre class='code prettyprint lang-sc'>// create an prototype element with usageName \X
+c = HIDElementProto.new.usageName_( \X );
+a = HIDFunc.proto( { |...args| args.postln; }, c );
+a.free;</pre>
+<h3><a class='anchor' name='Filtering based on an element ID'>Filtering based on an element ID</a></h3>
+<pre class='code prettyprint lang-sc'>// filter for elements with element id 6:
+a = HIDFunc.element( { |...args| args.postln; }, 6 );
+a.free;</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/HIDFunc.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/HIDFunc.schelp</a><br>link::Classes/HIDFunc::<br>sc version: 3.8dev</div></div></body></html>

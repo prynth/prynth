@@ -1,0 +1,223 @@
+<html><head><title>Platform</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Platform'>Platform</a></div>
+<h1>Platform</h1>
+<div id='summary'>handle cross-platform differencies</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Platform/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Platform/Platform.sc'>Platform.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
+<div id='subclasses'>Subclasses: <a href="../Classes/UnixPlatform.html">UnixPlatform</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Platform name and platform dependent actions'>Platform name and platform dependent actions</a></li>
+<ul class='toc'><li class='toc3'><a href='#*case'>case</a> </li>
+<li class='toc3'><a href='#*ideName'>ideName</a> </li>
+</ul><li class='toc2'><a href='#Directories and filesystem stuff'>Directories and filesystem stuff</a></li>
+<ul class='toc'><li class='toc3'><a href='#*classLibraryDir'>classLibraryDir</a> </li>
+<li class='toc3'><a href='#*helpDir'>helpDir</a> </li>
+<li class='toc3'><a href='#*systemAppSupportDir'>systemAppSupportDir</a> </li>
+<li class='toc3'><a href='#*userAppSupportDir'>userAppSupportDir</a> </li>
+<li class='toc3'><a href='#*userConfigDir'>userConfigDir</a> </li>
+<li class='toc3'><a href='#*systemExtensionDir'>systemExtensionDir</a> </li>
+<li class='toc3'><a href='#*userExtensionDir'>userExtensionDir</a> </li>
+<li class='toc3'><a href='#*platformDir'>platformDir</a> </li>
+<li class='toc3'><a href='#*pathSeparator'>pathSeparator</a> </li>
+<li class='toc3'><a href='#*resourceDir'>resourceDir</a> </li>
+<li class='toc3'><a href='#*defaultTempDir'>defaultTempDir</a> </li>
+</ul><li class='toc2'><a href='#Features'>Features</a></li>
+<ul class='toc'><li class='toc3'><a href='#*when'>when</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*clearMetadata'>clearMetadata</a> </li>
+<li class='toc3'><a href='#*deprecatedStartupFiles'>deprecatedStartupFiles</a> </li>
+<li class='toc3'><a href='#*getMouseCoords'>getMouseCoords</a> </li>
+<li class='toc3'><a href='#*isPathSeparator'>isPathSeparator</a> </li>
+<li class='toc3'><a href='#*makeServerWindowAction'>makeServerWindowAction</a> </li>
+<li class='toc3'><a href='#*makeSynthDescWindowAction'>makeSynthDescWindowAction</a> </li>
+<li class='toc3'><a href='#*openHTMLFileAction'>openHTMLFileAction</a> </li>
+<li class='toc3'><a href='#*openHelpFileAction'>openHelpFileAction</a> </li>
+<li class='toc3'><a href='#*userHomeDir'>userHomeDir</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-name'>name</a> </li>
+<li class='toc3'><a href='#-recompile'>recompile</a> </li>
+<li class='toc2'><a href='#Directories and filesystem stuff'>Directories and filesystem stuff</a></li>
+<ul class='toc'><li class='toc3'><a href='#-classLibraryDir'>classLibraryDir</a> </li>
+<li class='toc3'><a href='#-helpDir'>helpDir</a> </li>
+<li class='toc3'><a href='#-systemAppSupportDir'>systemAppSupportDir</a> </li>
+<li class='toc3'><a href='#-userAppSupportDir'>userAppSupportDir</a> </li>
+<li class='toc3'><a href='#-userConfigDir'>userConfigDir</a> </li>
+<li class='toc3'><a href='#-systemExtensionDir'>systemExtensionDir</a> </li>
+<li class='toc3'><a href='#-userExtensionDir'>userExtensionDir</a> </li>
+<li class='toc3'><a href='#-platformDir'>platformDir</a> </li>
+<li class='toc3'><a href='#-pathSeparator'>pathSeparator</a> </li>
+<li class='toc3'><a href='#-resourceDir'>resourceDir</a> </li>
+<li class='toc3'><a href='#-recordingsDir'>recordingsDir</a> </li>
+<li class='toc3'><a href='#-defaultTempDir'>defaultTempDir</a> </li>
+</ul><li class='toc2'><a href='#Startup files'>Startup files</a></li>
+<ul class='toc'><li class='toc3'><a href='#-startupFiles'>startupFiles</a> </li>
+<li class='toc3'><a href='#-loadStartupFiles'>loadStartupFiles</a> </li>
+</ul><li class='toc2'><a href='#Features'>Features</a></li>
+<ul class='toc'><li class='toc3'><a href='#-declareFeature'>declareFeature</a> </li>
+<li class='toc3'><a href='#-hasFeature'>hasFeature</a> </li>
+<li class='toc3'><a href='#-when'>when</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-clearMetadata'>clearMetadata</a> </li>
+<li class='toc3'><a href='#-defaultGUIScheme'>defaultGUIScheme</a> </li>
+<li class='toc3'><a href='#-devLoc'>devLoc</a> </li>
+<li class='toc3'><a href='#-devpath'>devpath</a> </li>
+<li class='toc3'><a href='#-getMouseCoords'>getMouseCoords</a> </li>
+<li class='toc3'><a href='#-ideName'>ideName</a> </li>
+<li class='toc3'><a href='#-initPlatform'>initPlatform</a> </li>
+<li class='toc3'><a href='#-isPathSeparator'>isPathSeparator</a> </li>
+<li class='toc3'><a href='#-isSleeping'>isSleeping</a> </li>
+<li class='toc3'><a href='#-killAll'>killAll</a> </li>
+<li class='toc3'><a href='#-userHomeDir'>userHomeDir</a> </li>
+<li class='toc3'><a href='#-writeClientCSS'>writeClientCSS</a> </li>
+</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>The Platform class (along with its subclasses) handles things which differ between operating systems (mac/linux/windows/...), to simplify cross-platform aspects of SuperCollider.
+<p>Platform is an abstract class encapsulating various platform dependent constants and properties, such as directories, primitive features and startup files. The platform object is accessible through the <code class='code prettyprint lang-sc'>platform</code> method of the main process instance:<pre class='code prettyprint lang-sc'>thisProcess.platform</pre>
+
+<p>Currently implemented platforms include: OSXPlatform, LinuxPlatform, WindowsPlatform, UnixPlatform.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+
+<p>Most of Platforms class methods are simply wrappers to <code class='code prettyprint lang-sc'>thisProcess.platform.method</code>.<h3><a class='anchor' name='Platform name and platform dependent actions'>Platform name and platform dependent actions</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*case' href='./../Overviews/Methods.html#case'>case</a> ( <span class='argstr'>... cases</span>)</h3>
+<div class='method'>
+<p>Perform actions depending on the current platform (name), just like Object:switch:<pre class='code prettyprint lang-sc'>Platform.case(
+    \osx,       { "OSX".postln },
+    \linux,     { "Linux".postln },
+    \windows,   { "Windows".postln }
+);</pre>
+</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ideName' href='./../Overviews/Methods.html#ideName'>ideName</a> </h3>
+<div class='method'>
+<p>returns a String indicating which IDE the language believes it is running in. (Often this is determined via the "-i" option to the sclang executable.) This is determined when sclang starts and cannot be changed dynamically.
+<p>The main purpose of this is to include/exclude folders from the class search patch depending on which IDE is in use: for example, if the value of ideName is "scapp" then folders named "scide_scapp" are included and all other folders beginning with "scide_" are excluded. The default value of this is "none".
+<p>Known IDE names in use are "scapp" (SuperCollider.app on Mac), "scvim" (vim), "scel" (emacs). Others may be used.</div><h3><a class='anchor' name='Directories and filesystem stuff'>Directories and filesystem stuff</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*classLibraryDir' href='./../Overviews/Methods.html#classLibraryDir'>classLibraryDir</a> </h3>
+<div class='method'>
+<p>location of the bundled class library</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*helpDir' href='./../Overviews/Methods.html#helpDir'>helpDir</a> </h3>
+<div class='method'>
+<p>location of the bundled help files</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*systemAppSupportDir' href='./../Overviews/Methods.html#systemAppSupportDir'>systemAppSupportDir</a> </h3>
+<div class='method'>
+<p>system application support directory</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*userAppSupportDir' href='./../Overviews/Methods.html#userAppSupportDir'>userAppSupportDir</a> </h3>
+<div class='method'>
+<p>user application support directory</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*userConfigDir' href='./../Overviews/Methods.html#userConfigDir'>userConfigDir</a> </h3>
+<div class='method'>
+<p>directory for configuration files</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*systemExtensionDir' href='./../Overviews/Methods.html#systemExtensionDir'>systemExtensionDir</a> </h3>
+<div class='method'>
+<p>system extension directory (see <a href="./../Guides/UsingExtensions.html">Using Extensions</a>)</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*userExtensionDir' href='./../Overviews/Methods.html#userExtensionDir'>userExtensionDir</a> </h3>
+<div class='method'>
+<p>user extension directory (see <a href="./../Guides/UsingExtensions.html">Using Extensions</a>)</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*platformDir' href='./../Overviews/Methods.html#platformDir'>platformDir</a> </h3>
+<div class='method'>
+<p>platform specific directory for class files (see <a href="./../Guides/UsingExtensions.html">Using Extensions</a>)</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*pathSeparator' href='./../Overviews/Methods.html#pathSeparator'>pathSeparator</a> </h3>
+<div class='method'>
+<p>platform specific path separator</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*resourceDir' href='./../Overviews/Methods.html#resourceDir'>resourceDir</a> </h3>
+<div class='method'>
+<p>platform specific resource directory</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*defaultTempDir' href='./../Overviews/Methods.html#defaultTempDir'>defaultTempDir</a> </h3>
+<div class='method'>
+<p>default directory for temporary files</div><h3><a class='anchor' name='Features'>Features</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*when' href='./../Overviews/Methods.html#when'>when</a> (<span class='argstr'>features</span>, <span class='argstr'>ifFunction</span>, <span class='argstr'>elseFunction</span>)</h3>
+<div class='method'>
+<p>Evaluate ifFunction if all features are present, otherwise evaluate elseFunction.<pre class='code prettyprint lang-sc'>Platform.when(#[\Document, \SCWindow], { "yeehah!".postln });</pre>
+</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*clearMetadata' href='./../Overviews/Methods.html#clearMetadata'>clearMetadata</a> (<span class='argstr'>path</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*deprecatedStartupFiles' href='./../Overviews/Methods.html#deprecatedStartupFiles'>deprecatedStartupFiles</a> (<span class='argstr'>paths</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*getMouseCoords' href='./../Overviews/Methods.html#getMouseCoords'>getMouseCoords</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/deprecated/3.7/deprecated-3.7.sc'>/usr/local/share/SuperCollider/SCClassLibrary/deprecated/3.7/deprecated-3.7.sc</a></div>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*isPathSeparator' href='./../Overviews/Methods.html#isPathSeparator'>isPathSeparator</a> (<span class='argstr'>char</span>)</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*makeServerWindowAction' href='./../Overviews/Methods.html#makeServerWindowAction'>makeServerWindowAction</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*makeServerWindowAction' href='./../Overviews/Methods.html#makeServerWindowAction'>makeServerWindowAction</a> = value</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*makeSynthDescWindowAction' href='./../Overviews/Methods.html#makeSynthDescWindowAction'>makeSynthDescWindowAction</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*makeSynthDescWindowAction' href='./../Overviews/Methods.html#makeSynthDescWindowAction'>makeSynthDescWindowAction</a> = value</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*openHTMLFileAction' href='./../Overviews/Methods.html#openHTMLFileAction'>openHTMLFileAction</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*openHTMLFileAction' href='./../Overviews/Methods.html#openHTMLFileAction'>openHTMLFileAction</a> = value</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*openHelpFileAction' href='./../Overviews/Methods.html#openHelpFileAction'>openHelpFileAction</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*openHelpFileAction' href='./../Overviews/Methods.html#openHelpFileAction'>openHelpFileAction</a> = value</h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*userHomeDir' href='./../Overviews/Methods.html#userHomeDir'>userHomeDir</a> </h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-name' href='./../Overviews/Methods.html#name'>name</a> </h3>
+<div class='method'>
+<p>returns the platform name</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-recompile' href='./../Overviews/Methods.html#recompile'>recompile</a> </h3>
+<div class='method'>
+<p>recompile class library</div><h3><a class='anchor' name='Directories and filesystem stuff'>Directories and filesystem stuff</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-classLibraryDir' href='./../Overviews/Methods.html#classLibraryDir'>classLibraryDir</a> </h3>
+<div class='method'>
+<p>location of the bundled class library</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-helpDir' href='./../Overviews/Methods.html#helpDir'>helpDir</a> </h3>
+<div class='method'>
+<p>location of the bundled help files</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-systemAppSupportDir' href='./../Overviews/Methods.html#systemAppSupportDir'>systemAppSupportDir</a> </h3>
+<div class='method'>
+<p>system application support directory</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-userAppSupportDir' href='./../Overviews/Methods.html#userAppSupportDir'>userAppSupportDir</a> </h3>
+<div class='method'>
+<p>user application support directory</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-userConfigDir' href='./../Overviews/Methods.html#userConfigDir'>userConfigDir</a> </h3>
+<div class='method'>
+<p>directory for configuration files</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-systemExtensionDir' href='./../Overviews/Methods.html#systemExtensionDir'>systemExtensionDir</a> </h3>
+<div class='method'>
+<p>system extension directory (see <a href="./../Guides/UsingExtensions.html">Using Extensions</a>)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-userExtensionDir' href='./../Overviews/Methods.html#userExtensionDir'>userExtensionDir</a> </h3>
+<div class='method'>
+<p>user extension directory (see <a href="./../Guides/UsingExtensions.html">Using Extensions</a>)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-platformDir' href='./../Overviews/Methods.html#platformDir'>platformDir</a> </h3>
+<div class='method'>
+<p>platform specific directory for class files (see <a href="./../Guides/UsingExtensions.html">Using Extensions</a>)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pathSeparator' href='./../Overviews/Methods.html#pathSeparator'>pathSeparator</a> </h3>
+<div class='method'>
+<p>platform specific path separator</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-resourceDir' href='./../Overviews/Methods.html#resourceDir'>resourceDir</a> </h3>
+<div class='method'>
+<p>platform specific resource directory</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-recordingsDir' href='./../Overviews/Methods.html#recordingsDir'>recordingsDir</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-recordingsDir' href='./../Overviews/Methods.html#recordingsDir'>recordingsDir</a> = value</h3>
+<div class='method'>
+<p>recording directory</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultTempDir' href='./../Overviews/Methods.html#defaultTempDir'>defaultTempDir</a> </h3>
+<div class='method'>
+<p>default directory for temporary files</div><h3><a class='anchor' name='Startup files'>Startup files</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-startupFiles' href='./../Overviews/Methods.html#startupFiles'>startupFiles</a> </h3>
+<div class='method'>
+<p>files to be loaded on startup</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-loadStartupFiles' href='./../Overviews/Methods.html#loadStartupFiles'>loadStartupFiles</a> </h3>
+<div class='method'>
+<p>(re)load startup files</div><h3><a class='anchor' name='Features'>Features</a></h3>
+
+<p>Features are abstract symbols that can be declared by extension authors and be checked during runtime in user code. Apart from explicitly declared features, class and primitive names are implicitly declared.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-declareFeature' href='./../Overviews/Methods.html#declareFeature'>declareFeature</a> (<span class='argstr'>aFeature</span>)</h3>
+<div class='method'>
+<p>Declare aSymbol to be a feature present in the runtime. Class names and primitive names cannot be declared as features.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hasFeature' href='./../Overviews/Methods.html#hasFeature'>hasFeature</a> (<span class='argstr'>symbol</span>)</h3>
+<div class='method'>
+<p>Return true if the feature aSymbol is present in the runtime system. aSymbol can refer to explicitly declared features as well as class and primitive names.<pre class='code prettyprint lang-sc'>thisProcess.platform.hasFeature(\Object);
+thisProcess.platform.hasFeature('_SCWindow_BeginFullScreen');
+thisProcess.platform.hasFeature('_myFuncyPrimitive');
+
+thisProcess.platform.declareFeature('superCrazyCompositionSystem');
+thisProcess.platform.hasFeature('superCrazyCompositionSystem');</pre>
+</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-when' href='./../Overviews/Methods.html#when'>when</a> (<span class='argstr'>features</span>, <span class='argstr'>ifFunction</span>, <span class='argstr'>elseFunction</span>)</h3>
+<div class='method'>
+<p>Evaluate ifFunction if all features are present, otherwise evaluate elseFunction.<pre class='code prettyprint lang-sc'>thisProcess.platform.when(#[\Document, \SCWindow], { "yeehah!".postln });</pre>
+
+<p></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-clearMetadata' href='./../Overviews/Methods.html#clearMetadata'>clearMetadata</a> (<span class='argstr'>path</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-defaultGUIScheme' href='./../Overviews/Methods.html#defaultGUIScheme'>defaultGUIScheme</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-devLoc' href='./../Overviews/Methods.html#devLoc'>devLoc</a> (<span class='argstr'>inpath</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-devpath' href='./../Overviews/Methods.html#devpath'>devpath</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-devpath' href='./../Overviews/Methods.html#devpath'>devpath</a> = value</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getMouseCoords' href='./../Overviews/Methods.html#getMouseCoords'>getMouseCoords</a> </h3>
+<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/deprecated/3.7/deprecated-3.7.sc'>/usr/local/share/SuperCollider/SCClassLibrary/deprecated/3.7/deprecated-3.7.sc</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-ideName' href='./../Overviews/Methods.html#ideName'>ideName</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-initPlatform' href='./../Overviews/Methods.html#initPlatform'>initPlatform</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isPathSeparator' href='./../Overviews/Methods.html#isPathSeparator'>isPathSeparator</a> (<span class='argstr'>char</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isSleeping' href='./../Overviews/Methods.html#isSleeping'>isSleeping</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-killAll' href='./../Overviews/Methods.html#killAll'>killAll</a> (<span class='argstr'>cmdLineArgs</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-userHomeDir' href='./../Overviews/Methods.html#userHomeDir'>userHomeDir</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-writeClientCSS' href='./../Overviews/Methods.html#writeClientCSS'>writeClientCSS</a> </h3>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Platform.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Platform.schelp</a><br>link::Classes/Platform::<br>sc version: 3.8dev</div></div></body></html>

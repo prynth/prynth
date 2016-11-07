@@ -1,0 +1,110 @@
+<html><head><title>SubsampleOffset</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#UGens>Info'>UGens>Info</a></div>
+<h1>SubsampleOffset</h1>
+<div id='summary'>Offset from synth start within one sample.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/InfoUGens.sc'>InfoUGens.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/InfoUGenBase.html">InfoUGenBase</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/ControlRate.html">ControlRate</a>, <a href="./../Classes/RadiansPerSample.html">RadiansPerSample</a>, <a href="./../Classes/SampleDur.html">SampleDur</a>, <a href="./../Classes/SampleRate.html">SampleRate</a>, <a href="./../Classes/OffsetOut.html">OffsetOut</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ir'>ir</a> </li>
+<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>When a synth is created from a time stamped osc-bundle, it starts calculation at the next possible block (normally 64 samples). Using an OffsetOut UGen, one can delay the audio so that it matches sample accurately.
+<p>For some synthesis methods, one needs subsample accuracy. SubsampleOffset provides the information where, within the current sample, the synth was scheduled. It can be used to offset envelopes or resample the audio output.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ir' href='./../Overviews/Methods.html#ir'>ir</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/InfoUGenBase.html'>InfoUGenBase</a></div>
+<div class='method'>
+<p></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>// example: demonstrate cubic subsample interpolation
+
+
+// impulse train that can be moved between samples
+(
+SynthDef(\Help_SubsampleOffset, { |out, addOffset|
+    var in, dt, sampDur, extraSamples, sampleOffset, resampledSignal;
+    in = Impulse.ar(2000, 0, 0.3); // some input.
+    sampDur = SampleDur.ir;     // duration of one sample
+    extraSamples = 4;            // DelayC needs at least 4 samples buffer
+    sampleOffset = 1 - SubsampleOffset.ir; // balance out subsample offset
+    sampleOffset = sampleOffset + MouseX.kr(0, addOffset); // add a mouse dependent offset
+    // cubic resampling:
+    resampledSignal = DelayC.ar(in,
+                            maxdelaytime: sampDur * (1 + extraSamples),
+                            delaytime: sampDur * (sampleOffset + extraSamples)
+                    );
+    OffsetOut.ar(out, resampledSignal)
+}).add;
+)
+
+// create 2 pulse trains 1 sample apart, move one relatively to the other.
+// when cursor is at the left, the impulses are adjacent, on the right, they are
+// exactly 1 sample apart.
+
+(
+var dt = s.sampleRate.reciprocal; // 1 sample delay
+s.sendBundle(0.2, [9, \Help_SubsampleOffset, s.nextNodeID, 1, 1, \out, 40, \addOffset, 3]);
+s.sendBundle(0.2 + dt, [9, \Help_SubsampleOffset, s.nextNodeID, 1, 1, \out, 40, \addOffset, 0]);
+)
+
+s.scope(1, 40, zoom: 0.2);
+
+
+
+
+
+// example of a subsample accurate sine grain:
+// (I don't hear a difference to normal sample accurate grains, but maybe
+// someone could add an example that shows the effect)
+
+(
+SynthDef("Help_Subsample_Grain",
+    { arg out=0, freq=440, sustain=0.005, attack=0.001;
+        var env, offset, sig, sd;
+
+        sd = SampleDur.ir;
+        offset = (1 - SubsampleOffset.ir) * sd;
+        // free synth after delay:
+        Line.ar(1,0, attack + sustain + offset, doneAction:2);
+        env = EnvGen.kr(Env.perc(attack, sustain, 0.2));
+        sig = SinOsc.ar(freq, 0, env);
+
+        sig = DelayC.ar(sig, sd * 4, offset);
+        OffsetOut.ar(out, sig);
+    }, [\ir, \ir, \ir, \ir]).add;
+)
+
+(
+    Routine {
+        loop {
+            s.sendBundle(0.2, [9, \Help_Subsample_Grain, -1, 1, 1, \freq, 1000]);
+            rrand(0.001, 0.002).wait;
+        }
+    }.play;
+)</pre>
+<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/SubsampleOffset.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/SubsampleOffset.schelp</a><br>link::Classes/SubsampleOffset::<br>sc version: 3.8dev</div></div></body></html>

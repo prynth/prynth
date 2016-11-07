@@ -1,0 +1,322 @@
+<html><head><title>NdefGui</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+<script type='text/javascript'>var helpRoot='./..';</script>
+</head>
+<ul id='menubar'></ul>
+<body onload='fixTOC();prettyPrint()'>
+<div class='contents'>
+<div class='header'>
+<div id='label'>SuperCollider CLASSES</div>
+<div id='categories'><a href='./../Browse.html#Libraries>JITLib>GUI'>Libraries>JITLib>GUI</a>, <a href='./../Browse.html#Live Coding'>Live Coding</a></div>
+<h1>NdefGui</h1>
+<div id='summary'>a gui for a NodeProxy or Ndef</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/JITLib/GUI/NdefGui.sc'>NdefGui.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/JITGui.html">JITGui</a> : <a href="../Classes/Object.html">Object</a></div>
+<div id='related'>See also: <a href="./../Classes/JITGui.html">JITGui</a>, <a href="./../Classes/MonitorGui.html">MonitorGui</a>, <a href="./../Classes/NdefParamGui.html">NdefParamGui</a>, <a href="./../Classes/NdefMixer.html">NdefMixer</a>, <a href="./../Classes/ProxyMixer.html">ProxyMixer</a></div>
+</div>
+<div id='toc'>
+<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Creation'>Creation</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*big'>big</a> </li>
+<li class='toc3'><a href='#*full'>full</a> </li>
+<li class='toc3'><a href='#*audio'>audio</a> </li>
+<li class='toc3'><a href='#*audioSm'>audioSm</a> </li>
+<li class='toc3'><a href='#*control'>control</a> </li>
+</ul><li class='toc2'><a href='#Class Variables'>Class Variables</a></li>
+<ul class='toc'><li class='toc3'><a href='#*buttonSizes'>buttonSizes</a> </li>
+<li class='toc3'><a href='#*buttonFuncs'>buttonFuncs</a> </li>
+<li class='toc3'><a href='#*makeButFuncs'>makeButFuncs</a> </li>
+</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Instance Variables'>Instance Variables</a></li>
+<ul class='toc'><li class='toc3'><a href='#-nameView'>nameView</a>  <a href='#-typeView'>typeView</a>  <a href='#-monitorGui'>monitorGui</a>  <a href='#-paramGui'>paramGui</a>  <a href='#-fadeBox'>fadeBox</a>  <a href='#-pauseBut'>pauseBut</a>  <a href='#-sendBut'>sendBut</a>  <a href='#-edBut'>edBut</a>  <a href='#-wakeBut'>wakeBut</a> </li>
+</ul><li class='toc2'><a href='#Instance Methods'>Instance Methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-edits'>edits</a> </li>
+<li class='toc3'><a href='#-editKeys'>editKeys</a> </li>
+<li class='toc3'><a href='#-highlight'>highlight</a>  <a href='#-unhighlight'>unhighlight</a> </li>
+<li class='toc3'><a href='#-highlightName'>highlightName</a>  <a href='#-unhighlightName'>unhighlightName</a> </li>
+<li class='toc3'><a href='#-highlightParams'>highlightParams</a> </li>
+<li class='toc3'><a href='#-addReplaceKey'>addReplaceKey</a>  <a href='#-removeReplaceKey'>removeReplaceKey</a> </li>
+<li class='toc3'><a href='#-proxy'>proxy</a> </li>
+<li class='toc3'><a href='#-setDefaults'>setDefaults</a>  <a href='#-accepts'>accepts</a>  <a href='#-getState'>getState</a>  <a href='#-checkUpdate'>checkUpdate</a> </li>
+<li class='toc3'><a href='#-makeViews'>makeViews</a>  <a href='#-makeNameView'>makeNameView</a>  <a href='#-makeTypeView'>makeTypeView</a>  <a href='#-makeClrBut'>makeClrBut</a>  <a href='#-makeWakeBut'>makeWakeBut</a>  <a href='#-makeResetBut'>makeResetBut</a>  <a href='#-makeScopeBut'>makeScopeBut</a>  <a href='#-makeDocBut'>makeDocBut</a>  <a href='#-makeEndBut'>makeEndBut</a>  <a href='#-makeFadeBox'>makeFadeBox</a>  <a href='#-makeMonitor'>makeMonitor</a>  <a href='#-makePauseBut'>makePauseBut</a>  <a href='#-makeSendBut'>makeSendBut</a>  <a href='#-makeEdBut'>makeEdBut</a>  <a href='#-makeRipBut'>makeRipBut</a>  <a href='#-makePollBut'>makePollBut</a> </li>
+</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'><li class='toc2'><a href='#Some configuration options'>Some configuration options</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Some configuration options'>Some configuration options</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Test - drag and drop proxies between NdefGuis'>Test - drag and drop proxies between NdefGuis</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Test - replacing keys'>Test - replacing keys</a></li>
+<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>NdefGui provides controls for handling and editing a <a href="./../Classes/NodeProxy.html">NodeProxy</a> or <a href="./../Classes/Ndef.html">Ndef</a>, and its monitors. NdefGui replaces <a href="./../Classes/NodeProxyEditor.html">NodeProxyEditor</a>. It provides:<ul>
+<li>sliders for numerical settings<li>mapping of kr proxies to parameters<li>optional controls for playing / monitoring</ul>
+
+<p>Both <a href="./../Classes/NodeProxy.html">NodeProxy</a> and <a href="./../Classes/Ndef.html">Ndef</a> implement a <strong>.gui</strong> message, which returns a NdefGui for that NodeProxy. Overview: <a href="./../Overviews/JITLib.html">JITLib</a>.<pre class='code prettyprint lang-sc'>(
+s.boot;
+Ndef(\a, { |freq=300, dens=20, amp=0.1, pan|
+    Pan2.ar(Ringz.ar(Dust.ar(dens, amp / (dens.max(1).sqrt)), freq, 0.2), pan)
+}).gui;
+)</pre>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3><a class='anchor' name='Creation'>Creation</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>object</span>, <span class='argstr'>numItems: 4</span>, <span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>makeSkip: true</span>, <span class='argstr'>options</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>object<td class='argumentdesc'>
+<p>the nodeproxy to be shown and edited, or nil.<tr><td class='argumentname'>numItems<td class='argumentdesc'>
+<p>How many sliders or textviews for paramaters to provide. Default value is 0.<tr><td class='argumentname'>parent<td class='argumentdesc'>
+<p>a parent view where NdefGui is to be shown. If nil, a window is made.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>bounds where the view (or window) will be shown.<tr><td class='argumentname'>makeSkip<td class='argumentdesc'>
+<p>a flag whether to create and start a <a href="./../Classes/SkipJack.html">SkipJack</a> for auto-updating.<tr><td class='argumentname'>options<td class='argumentdesc'>
+<p>an array of symbols for options of what to display. See list below.
+<p><strong>Preset options lists which can be used in *new:</strong></table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*big' href='./../Overviews/Methods.html#big'>big</a> </h3>
+<div class='method'>
+<p>two lines of controls for a big NdefGui, usually in its own window</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*full' href='./../Overviews/Methods.html#full'>full</a> </h3>
+<div class='method'>
+<p>two lines of controls for a very big NdefGui</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*audio' href='./../Overviews/Methods.html#audio'>audio</a> </h3>
+<div class='method'>
+<p>for ar proxies, used in ProxyMixer left hand side</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*audioSm' href='./../Overviews/Methods.html#audioSm'>audioSm</a> </h3>
+<div class='method'>
+<p>for ar proxies, used in ProxyMixer.small on left hand side</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*control' href='./../Overviews/Methods.html#control'>control</a> </h3>
+<div class='method'>
+<p>for kr proxies, used in ProxyMixer mid section</div><h3><a class='anchor' name='Class Variables'>Class Variables</a></h3>
+<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*buttonSizes' href='./../Overviews/Methods.html#buttonSizes'>buttonSizes</a> </h3>
+<div class='method'>
+<p>a dict for the sizes of the different gui elements.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*buttonFuncs' href='./../Overviews/Methods.html#buttonFuncs'>buttonFuncs</a> </h3>
+<div class='method'>
+<p>a lookup dict for making the different buttons.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*makeButFuncs' href='./../Overviews/Methods.html#makeButFuncs'>makeButFuncs</a> </h3>
+<div class='method'>
+<p>not a class var, but the method that inits buttonFuncs.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Instance Variables'>Instance Variables</a></h3>
+
+<p>As in all JITGuis:
+<p>... object, numItems, parent, bounds; zone, minSize, defPos, skin, font, skipjack ...<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nameView' href='./../Overviews/Methods.html#nameView'>nameView</a> </h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/JITGui.html'>JITGui</a></div>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-typeView' href='./../Overviews/Methods.html#typeView'>typeView</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-monitorGui' href='./../Overviews/Methods.html#monitorGui'>monitorGui</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-paramGui' href='./../Overviews/Methods.html#paramGui'>paramGui</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fadeBox' href='./../Overviews/Methods.html#fadeBox'>fadeBox</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-pauseBut' href='./../Overviews/Methods.html#pauseBut'>pauseBut</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-sendBut' href='./../Overviews/Methods.html#sendBut'>sendBut</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-edBut' href='./../Overviews/Methods.html#edBut'>edBut</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-wakeBut' href='./../Overviews/Methods.html#wakeBut'>wakeBut</a> </h3>
+<div class='method'>
+<p>Various views the NdefGui has if they were present in the options.</div><h3><a class='anchor' name='Instance Methods'>Instance Methods</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-edits' href='./../Overviews/Methods.html#edits'>edits</a> </h3>
+<div class='method'>
+<p>the paramGui's widgets (usually, EZSliders)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-editKeys' href='./../Overviews/Methods.html#editKeys'>editKeys</a> </h3>
+<div class='method'>
+<p>the currently used param names</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-highlight' href='./../Overviews/Methods.html#highlight'>highlight</a> (<span class='argstr'>index</span>, <span class='argstr'>prefix</span>, <span class='argstr'>color</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-unhighlight' href='./../Overviews/Methods.html#unhighlight'>unhighlight</a> (<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>highlight and unhighlight a single slider by index</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-highlightName' href='./../Overviews/Methods.html#highlightName'>highlightName</a> (<span class='argstr'>prefix: ""</span>, <span class='argstr'>color</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-unhighlightName' href='./../Overviews/Methods.html#unhighlightName'>unhighlightName</a> </h3>
+<div class='method'>
+<p>highlight and unhighlight the nameView</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-highlightParams' href='./../Overviews/Methods.html#highlightParams'>highlightParams</a> (<span class='argstr'>parOffset</span>, <span class='argstr'>num</span>, <span class='argstr'>highNames</span>, <span class='argstr'>clearOthers: true</span>)</h3>
+<div class='method'>
+<p>highlight a contiguous group of sliders; used for showing assigned MIDI faderboxes etc.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-addReplaceKey' href='./../Overviews/Methods.html#addReplaceKey'>addReplaceKey</a> (<span class='argstr'>replaced</span>, <span class='argstr'>replacer</span>, <span class='argstr'>spec</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-removeReplaceKey' href='./../Overviews/Methods.html#removeReplaceKey'>removeReplaceKey</a> (<span class='argstr'>replaced</span>)</h3>
+<div class='method'>
+<p>editKeys with technical names can be replaced with more user-friendly ones.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-proxy' href='./../Overviews/Methods.html#proxy'>proxy</a></h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-proxy' href='./../Overviews/Methods.html#proxy'>proxy</a> = <span class='argstr'>proxy</span></h3>
+<div class='method'>
+<p>an alias to method object, object_
+<p><strong>Standard JITGui methods:</strong></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setDefaults' href='./../Overviews/Methods.html#setDefaults'>setDefaults</a> (<span class='argstr'>options</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-accepts' href='./../Overviews/Methods.html#accepts'>accepts</a> (<span class='argstr'>obj</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-getState' href='./../Overviews/Methods.html#getState'>getState</a> </h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-checkUpdate' href='./../Overviews/Methods.html#checkUpdate'>checkUpdate</a> </h3>
+<div class='method'>
+<p><strong>Methods that make the various gui elements:</strong></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeViews' href='./../Overviews/Methods.html#makeViews'>makeViews</a> (<span class='argstr'>options</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeNameView' href='./../Overviews/Methods.html#makeNameView'>makeNameView</a> (<span class='argstr'>nameWid</span>, <span class='argstr'>height</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeTypeView' href='./../Overviews/Methods.html#makeTypeView'>makeTypeView</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeClrBut' href='./../Overviews/Methods.html#makeClrBut'>makeClrBut</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeWakeBut' href='./../Overviews/Methods.html#makeWakeBut'>makeWakeBut</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeResetBut' href='./../Overviews/Methods.html#makeResetBut'>makeResetBut</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeScopeBut' href='./../Overviews/Methods.html#makeScopeBut'>makeScopeBut</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeDocBut' href='./../Overviews/Methods.html#makeDocBut'>makeDocBut</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeEndBut' href='./../Overviews/Methods.html#makeEndBut'>makeEndBut</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeFadeBox' href='./../Overviews/Methods.html#makeFadeBox'>makeFadeBox</a> (<span class='argstr'>width: 60</span>, <span class='argstr'>height: 18</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeMonitor' href='./../Overviews/Methods.html#makeMonitor'>makeMonitor</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>, <span class='argstr'>npOptions</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makePauseBut' href='./../Overviews/Methods.html#makePauseBut'>makePauseBut</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeSendBut' href='./../Overviews/Methods.html#makeSendBut'>makeSendBut</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeEdBut' href='./../Overviews/Methods.html#makeEdBut'>makeEdBut</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makeRipBut' href='./../Overviews/Methods.html#makeRipBut'>makeRipBut</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<h3 class='imethodname'><span class='methprefix'>-</span><a name='-makePollBut' href='./../Overviews/Methods.html#makePollBut'>makePollBut</a> (<span class='argstr'>width</span>, <span class='argstr'>height</span>)</h3>
+<div class='method'></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>    // some preparation - make an ar and a kr nodeproxy.
+s.boot;
+(
+Ndef(\lfo, { |lofreq| SinOsc.kr(lofreq) });
+Ndef(\a, { |freq=300, dens=20, amp=0.1, pan|
+    Pan2.ar(Ringz.ar(Dust.ar(dens, amp / (dens.max(1).sqrt)), freq, 0.2), pan)
+});
+)
+
+    // make an NdefGui. By default, this has a lot of the options on.
+n = NdefGui.new;
+n.object_(Ndef(\lfo));
+Ndef(\lfo).set(\lofreq, 12);
+
+n.object_(Ndef(\a));
+Ndef(\a).set(\freq, 120);</pre>
+<h3><a class='anchor' name='Some configuration options'>Some configuration options</a></h3>
+<pre class='code prettyprint lang-sc'>    // some preparation - make an ar and a kr nodeproxy.
+s.boot;
+(
+Ndef(\lfo, { |lofreq| SinOsc.kr(lofreq) });
+Ndef(\a, { |freq=300, dens=20, amp=0.1, pan|
+    Pan2.ar(Ringz.ar(Dust.ar(dens, amp / (dens.max(1).sqrt)), freq, 0.2), pan)
+});
+)
+
+    // make an NdefGui. By default, this has a lot of the options on.
+n = NdefGui.new;
+n.object_(Ndef(\lfo));
+Ndef(\lfo).set(\lofreq, 12);
+
+n.object_(Ndef(\a));
+Ndef(\a).set(\freq, 120);</pre>
+<h3><a class='anchor' name='Some configuration options'>Some configuration options</a></h3>
+<pre class='code prettyprint lang-sc'>    // numItems - sliders for setting parameters
+n = NdefGui(Ndef(\a), 8);
+
+    // 4 sets of configurations are provided:
+n = NdefGui(Ndef(\a), 0, options: NdefGui.control);
+n = NdefGui(Ndef(\a), 0, options: NdefGui.audio);
+n = NdefGui(Ndef(\a), 0, options: NdefGui.big);
+n = NdefGui(Ndef(\a), 0, options: NdefGui.full);
+
+
+NdefGui.control;    // used for control proxies in ProxyMixer/NdefMixer
+-&gt;    [ \name, \pausR, \sendR, \poll, \ed ]
+
+NdefGui.audio;        // used for audio proxies in ProxyMixer/NdefMixer
+-&gt;    [ \monitor, \playN, \name, \pausR, \sendR, \ed ]
+
+NdefGui.big;        // used for the big NdefGui in ProxyMixer/NdefMixer
+-&gt;    [ \name, \type, \CLR, \reset, \scope, \doc, \end, \fade,
+        \monitor, \playN, \pausR, \sendR, \poll ]
+
+            // all of 'em
+NdefGui.full;
+-&gt;    [     name, \type, \CLR, \reset, \scope, \doc, \end, \fade, \rip,
+        monitor, \playN, \pausR, \sendR, \poll, \ed ]
+/*
+    // the choice of elements is:
+    \name        a dragboth for the proxy's name
+    \type        a view for the proxy's type (ir, ar + numChans, kr + numChans)
+    \CLR         button to clear proxy
+    \reset        button to reset proxy nodemap
+    \scope        button to scope proxy
+    \doc            button to document proxy as code
+    \end            button to end proxy
+    \fade        EZNumber for setting proxy fadetime
+
+    \monitor        MonitorGui for audio proxies
+    \playN        a button for editing playN settings (within the MonitorGui)
+
+    \rip        (^)    button to open a new editor on the proxy (used in ProxyMixer/NdefMixer)
+
+    \pausR        a button to toggle proxy pause/resume
+    \sendR        a button to re-send; alt-click tells the proxy to rebuild
+    \poll        poll the proxy
+
+    * preset storage in JITLibExtensions, see ProxyPreset / NdefPreset
+
+*/
+
+//     add your own functions to add your own elements, such as:
+NdefGui.buttonSizes.put(\zoink, 60);
+NdefGui.buttonFuncs.put(\zoink, { |ndgui| Button(ndgui.zone, 60@20).states_([["zoink"]]).action_({ ndgui.object.zoink }) });
+
+n = NdefGui(Ndef(\a), 4, options: NdefGui.big ++ [\zoink]);
+
+
+    // make one and watch how the elements change
+n = NdefGui(Ndef(\a), 4, options: NdefGui.big);
+
+Ndef(\a).stop;
+Ndef(\a).play;
+Ndef(\a).vol_(0.3);
+Ndef(\a).stop;
+
+Ndef(\a).playN([2, 5]);   // does not display fully on outNumberBox
+Ndef(\a).playN([2, 5], vol: 0.34);
+
+
+    // as in ProxyMixer, left side
+n = NdefGui(Ndef(\a), options: NdefGui.audio);
+
+// as in ProxyMixer control zone
+n = NdefGui(Ndef(\a), 4, options: NdefGui.control);
+
+    // NdefGui default
+n = NdefGui(options: NdefGui.big);
+
+    // and a few more
+n = NdefGui(bounds: 400@20, options: NdefGui.full);
+
+    // put in a window - then no margin is added
+(
+w = Window().front;
+w.addFlowLayout;
+n = NdefGui(Ndef(\a), 4, w, options: NdefGui.big);
+)
+
+
+Ndef(\a, { |freq = 10| Blip.ar(freq) }).set(\freq, 200)
+Ndef(\a, { |freq = 10, amp = 0.1| Blip.ar(freq) * amp })
+Ndef(\a).set(\freq, 220)
+Ndef(\a).set(\harm, 20)
+Ndef(\a, { |freq = 10, amp = 0.1, harm = 20| Blip.ar(freq, harm) * amp })</pre>
+<h3><a class='anchor' name='Test - drag and drop proxies between NdefGuis'>Test - drag and drop proxies between NdefGuis</a></h3>
+
+<p>This seems broken in 3.7.0 - drags are sticky and can't be dropped.<pre class='code prettyprint lang-sc'>(
+    p = ProxySpace.push(s.boot);
+
+l = NdefGui(nil, 3).moveTo(10, 120);
+m = NdefGui(nil, 3).moveTo(10, 240);
+n = NdefGui(nil, 3).moveTo(10, 360);
+o = NdefGui(nil, 3).moveTo(10, 480);
+
+Spec.add(\dens, [0.1, 300, \exp]);
+
+    // make 3 kinds of proxies: using tilde/proxyspace, Ndef, and unnamed.
+~spacy = {|dens=5| Formlet.ar(Dust.ar(dens ! 2), LFDNoise0.kr(20 ! 2).lag(0.1).linexp(-1, 1, 300, 5000), 0.003, 0.03) };
+Ndef(\ndeffy, { GrayNoise.ar( 0.1 ! 2) });
+c = NodeProxy.audio.source_({ PinkNoise.ar(0.1 ! 2) });
+
+    // put one in each editor
+l.object_(~spacy);
+m.object_(Ndef(\ndeffy));
+n.object_(c);
+)
+    // One should also be able to drag and drop text into the drag,
+    // but this is also not working yet.
+(    Ndef(\a)    )</pre>
+<h3><a class='anchor' name='Test - replacing keys'>Test - replacing keys</a></h3>
+
+<p>This is used in ProxyChain (JITLibExtensions).<pre class='code prettyprint lang-sc'>(
+Ndef(\a, { |freq=300, dens=20, amp=0.1, pan|
+    Pan2.ar(Ringz.ar(Dust.ar(dens, amp / (dens.max(1).sqrt)), freq, 0.2), pan)
+});
+n = NdefGui(Ndef(\a));
+)
+n.addReplaceKey(\freq, \myFreak);
+    // ATM needs an extra update:
+x = n.object; n.object_(nil); n.object_(x);</pre>
+
+<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/NdefGui.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/NdefGui.schelp</a><br>link::Classes/NdefGui::<br>sc version: 3.8dev</div></div></body></html>
