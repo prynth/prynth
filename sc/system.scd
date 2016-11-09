@@ -1,7 +1,7 @@
 fork{
 
 ~sounds = (
-	path: PathName.new("/home/pi/scdmi/server/public/sounds/")
+	path: PathName.new("/home/pi/prynth/server/public/sounds/")
 );
 
 80.do{ | i |
