@@ -1,3 +1,3 @@
 #!/bin/bash
-/home/pi/scdmi/bin/stopsc.sh
-sudo sclang /home/pi/scdmi/sc/main.scd
+/home/pi/prynth/bin/stopsc.sh
+sudo sclang /home/pi/prynth/sc/main.scd

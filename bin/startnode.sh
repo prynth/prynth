@@ -1,4 +1,4 @@
 #!/bin/bash
-cd /home/pi/scdmi/server/
+cd /home/pi/prynth/server/
 sudo nodejs ./bin/www
 
