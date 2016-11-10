@@ -10,7 +10,7 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-var routes = require('./routes/index')(io); //index expects an impit
+var routes = require('./routes/index')(io); //index expects an input
 var users = require('./routes/users');
 
 // view engine setup

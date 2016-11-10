@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/html">
 <head>
-    <title>Supercollider instrument #1</title>
+    <title>Prynth</title>
     <link rel='stylesheet' href='stylesheets/style.css' />
 
     <!--Jquery-->
@@ -18,53 +18,59 @@
     <script src="javascripts/codemirror/addon/selection/active-line.js"></script>
 
     <script src="socket.io/socket.io.js"></script>
-
-
-    <!--<style>-->
-        <!--#chat{height:100px;}-->
-    <!--</style>-->
 </head>
 
 
 <body>
 
-<div style="float: left; width: 800px; padding-left: 10px; padding-right: 10px;">
-	<h1>Editor</h1>
+<div style="float: left; width: 700px; padding-left: 10px; padding-right: 10px;">
 
-	<button type="button" id="runButton">Run</button>
-	<button type="button" id="killButton">Kill</button>
-	<button type="button" id="saveButton">Save</button>
-	<a href="/resources/schelp" target="_blank"><button type="button">Help</button></a>
 
-	<form>
-		<textarea id="codeTextarea"><%=code%></textarea>
+        <a href="http://prynth.github.io" target="_blank" style="text-decoration: none">
+        <img src="/resources/images/prynth_logo.png" style="width: 40px;"> <font style="font-size:4em;"> Prynth</font> </a>
+
+
+</div>
+
+
+
+
+<div style="float: left; width: 700px; padding-left: 10px; padding-right: 10px;">
+    
+    <h1>Editor</h1>
+
+    <button type="button" id="runButton">Run</button>
+    <button type="button" id="killButton">Kill</button>
+    <button type="button" id="saveButton">Save</button>
+    <a href="/resources/schelp" target="_blank"><button type="button">Help</button></a>
+
+    <form>
+        <textarea id="codeTextarea"><%=code%></textarea>
         <br>
-        <textarea id="status" style="height: 160px; width: 800px"></textarea>
-	</form>
+        <textarea id="status" style="width: 700px; height: 160px;"></textarea>
+    </form>
     <button type="button" id="clearStatusButton">Clear</button>
 
     <!--<div id="chat"></div>-->
     <!--<form id="send-message">-->
-        <!--<input size="35" id="message">-->
-        <!--<input type="submit">-->
+    <!--<input size="35" id="message">-->
+    <!--<input type="submit">-->
     <!--</form>-->
 </div>
-
-
-<div style="float: left; width: 250px; padding-left: 10px; padding-right: 10px;">
+<div style="float: left; width: 200px; padding-left: 10px; padding-right: 10px;">
 
     <h1>System</h1>
     <div id="clock">Time:</div>
-	Hostname: <%=hostname%> <br>
-	Ethernet IP: <%=ethernetIP%> <br>
-	Wireless IP: <%=wirelessIP%> <br>
-	CPU Usage: <%=cpu%> % <br>
-	Free Memory: <%=freemem%> Mb of <%=totalmem%> Mb <br>
+    Hostname: <%=hostname%> <br>
+    Ethernet IP: <%=ethernetIP%> <br>
+    Wireless IP: <%=wirelessIP%> <br>
+    CPU Usage: <%=cpu%> % <br>
+    Free Memory: <%=freemem%> Mb of <%=totalmem%> Mb <br>
 
-	<button type="button" id="rebootButton">Reboot</button>
-	<button type="button" id="shutdownButton">Shutdown</button>
+    <button type="button" id="rebootButton">Reboot</button>
+    <button type="button" id="shutdownButton">Shutdown</button>
 
-	<br>
+    <br>
 
     <h1>Patches</h1>
 
@@ -81,14 +87,13 @@
         <textarea id="newPatchTextarea"></textarea>
     </form>
 
-    <br>
-	<h1>Samples</h1>
+    <h1>Samples</h1>
 
     <form method="post" action="/sample" >
-	<% for (var i = 0; i < samples.length; i++) { %>
-    [<%=i%>]  <input type="checkbox" name="sample" value=<%=samples[i]%> > <%=samples[i]%> </input> <a onclick="this.firstChild.play()" style="font-size: 12px;"><audio src=sounds/<%=samples[i]%> ></audio>▸</a> <br>
-	<% } %>
-    <input type="submit" name="action" value="Delete"/>
+        <% for (var i = 0; i < samples.length; i++) { %>
+        [<%=i%>]  <input type="checkbox" name="sample" value=<%=samples[i]%> > <%=samples[i]%> </input> <a onclick="this.firstChild.play()" style="font-size: 12px;"><audio src=sounds/<%=samples[i]%> ></audio>▸</a> <br>
+        <% } %>
+        <input type="submit" name="action" value="Delete"/>
     </form>
 
     <form enctype="multipart/form-data" method="post" action="/upload_sample">
@@ -101,6 +106,12 @@
 
 </div>
 
+<br>
+<div style="float:left; width: 700px; padding-left: 10px;">
+    <footer>
+        <% include footer %>
+    </footer>
+</div>
 
 <script>
     //Main javascripting
@@ -116,7 +127,7 @@
         //lineWrapping: true,
         theme: "mymonokai"
     });
-    editor.setSize(800, 600);
+    editor.setSize(700, 600);
 
     var socket = io.connect();
 
@@ -165,18 +176,18 @@
         $rebootButton.click(function () {$.ajax({method: "POST", url: '/reboot'});});
         $clearButton.click(function () {$status.html('');});
         $saveNewPatchButton.click(function () {
-                $.ajax({method: "POST",
-                url: '/new_patch',
-                data: {name: $newPatchTextarea.val(), code: editor.getValue()},
-                    success:function (data) {
-                        $newPatchTextarea.val('');
-                        if (typeof data.redirect == 'string'){
-                            window.location = data.redirect;
-                        }
+                    $.ajax({method: "POST",
+                        url: '/new_patch',
+                        data: {name: $newPatchTextarea.val(), code: editor.getValue()},
+                        success:function (data) {
+                            $newPatchTextarea.val('');
+                            if (typeof data.redirect == 'string'){
+                                window.location = data.redirect;
+                            }
 
-                    }
-                });
-        }
+                        }
+                    });
+                }
 
         )
 
@@ -205,10 +216,6 @@
 
 
 </script>
-
-<footer>
-	<% include footer %>
-</footer>
 
 </body>
 </html>
