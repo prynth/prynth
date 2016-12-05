@@ -25,7 +25,7 @@ byte adcArrayByteTemp [numAdc][numSensor];
 
 void setup() {
 	//Initialize serial coms
-	// Serial.begin(57600); //Teensy debug serial
+//	 Serial.begin(57600); //Teensy debug serial
 	Serial2.begin(57600, SERIAL_8N1);//Pi serial
 	//Serial3.begin(31250); //MIDI serial
 
@@ -84,11 +84,11 @@ void loop(){
 				// byte mask2 = 15;
 
 				//debug (needs to uncoment serial on top)
-				// Serial.print(mux);
-				// Serial.print("/");
-				// Serial.print(sensor);
-				// Serial.print("/");
-				// Serial.println(adcArrayByte[j][i]);
+//				Serial.print(mux);
+//				Serial.print("/");
+//				Serial.print(sensor);
+//				Serial.print("/");
+//				Serial.println(adcArrayByte[j][i]);
 
 				mux = mux << 4;
 
@@ -104,7 +104,7 @@ void loop(){
 				//send midi
 				//sendMidicc(1, 60 +i, float(adcArray[0][i])/1024 *127);
 
-				delay(1);
+//				delay(1);
 
 			};
 		};
