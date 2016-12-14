@@ -10,8 +10,8 @@ int led = 13;
 
 int const numAdc = 10; //number of adcs used (number of muxes)
 int const numSensor = 8; // number of sensors (on each mux)
-int const numReadings = 6;
-float const pastWeight = 0.7;
+int const numReadings = 1;
+float const pastWeight = 0.9;
 
 int i, j = 0;
 
@@ -25,7 +25,7 @@ byte adcArrayByteTemp [numAdc][numSensor];
 
 void setup() {
 	//Initialize serial coms
-//	 Serial.begin(57600); //Teensy debug serial
+	//  Serial.begin(57600); //Teensy USB debug serial
 	Serial2.begin(57600, SERIAL_8N1);//Pi serial
 	//Serial3.begin(31250); //MIDI serial
 
@@ -65,15 +65,17 @@ void loop(){
 
 		for (j=0; j< numAdc; j++){
 
-			//read analog values into array
-			// adcArrayTemp[j][i] = analogRead(j);
+			//read analog values for number of readings and apply weighted average
+			//different filtering techniques can be introduced here
 			for (int z = 0; z < numReadings; z++) {
 				adcArrayTemp[j][i] = (adcArrayTemp[j][i] * pastWeight) + ((analogRead(j) * (1-pastWeight)));
 			}
+			//
 
-			adcArrayByteTemp[j][i] = (byte)(round((float)adcArrayTemp[j][i]/1024 * 250)); //reserve slip encoding bytes 253, 254, 255
+			//encode to quasi-8bit resolution, reserving slip encoding bytes 253, 254, 255
+			adcArrayByteTemp[j][i] = (byte)(round((float)adcArrayTemp[j][i]/1024 * 250));
 
-			//filter  noise (if difference between stored and temp values is bigger than...)
+			//if it's different from past values send via serial to RPi
 			if ( adcArrayByteTemp[j][i] != adcArrayByte [j][i]){
 
 				adcArrayByte[j][i] = adcArrayByteTemp [j][i];
@@ -83,28 +85,28 @@ void loop(){
 				// byte mask1 = 240;
 				// byte mask2 = 15;
 
-				//debug (needs to uncoment serial on top)
-//				Serial.print(mux);
-//				Serial.print("/");
-//				Serial.print(sensor);
-//				Serial.print("/");
-//				Serial.println(adcArrayByte[j][i]);
+				//debug (needs to uncoment USB serial on top)
+				//Serial.print(mux);
+				//Serial.print("/");
+				//Serial.print(sensor);
+				//Serial.print("/");
+				//Serial.println(adcArrayByte[j][i]);
 
 				mux = mux << 4;
 
 				byte id = mux | sensor;
 
-				//send to raspberry pi with quasi 8 bit precision
+				// send to raspberry pi
 				Serial2.write(253);
 				Serial2.write(254);
 				Serial2.write(id);
 				Serial2.write(adcArrayByte[j][i]);
 				Serial2.write(255);
 
-				//send midi
+				//send if midi serial enabled
 				//sendMidicc(1, 60 +i, float(adcArray[0][i])/1024 *127);
 
-//				delay(1);
+				//delay(1);
 
 			};
 		};
