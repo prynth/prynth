@@ -68,7 +68,7 @@
       'f(x, n) = log [builtin ~4~] x [builtin ^n^]');
 
   MT('spanAndCode',
-      'A [quote %span element%] and [atom @code element@]');
+      'A [quote %span element%] and [atom @supercolliderfiles element@]');
 
   MT('spanBogus',
       'Percentage 25% is not a span.');
@@ -328,7 +328,7 @@
       '[header&header-1 h1. Header Text]');
 
   MT('bc..ThenParagraph',
-      '[atom bc.. # Some ruby code]',
+      '[atom bc.. # Some ruby supercolliderfiles]',
       '[atom obj = {foo: :bar}]',
       '[atom puts obj]',
       '',

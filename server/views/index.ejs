@@ -1,223 +1,290 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html">
+<html>
 <head>
-    <title>Prynth</title>
-    <link rel='stylesheet' href='stylesheets/style.css' />
+	<title>Prynth</title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
 
-    <!--Jquery-->
-    <script src="javascripts/jquery/jquery-1.12.3.min.js"></script>
+	<!--Jquery-->
+	<script src="javascripts/jquery/jquery-3.2.1.min.js"></script>
 
-    <!--codemirror-->
-    <script src="javascripts/codemirror/lib/codemirror.js"></script>
+	<!--socket.io-->
+	<script src="javascripts/socket.io/socket.io.js"></script>
 
-    <link rel="stylesheet" href="javascripts/codemirror/lib/codemirror.css">
-    <link rel="stylesheet" href="javascripts/codemirror/theme/mymonokai.css">
+	<!--codemirror-->
+	<script src="javascripts/codemirror/lib/codemirror.js"></script>
 
-    <script src="javascripts/codemirror/mode/javascript/javascript.js"></script>
-    <script src="javascripts/codemirror/addon/edit/matchbrackets.js"></script>
-    <script src="javascripts/codemirror/addon/selection/active-line.js"></script>
+	<link rel="stylesheet" href="javascripts/codemirror/lib/codemirror.css">
+	<link rel="stylesheet" href="javascripts/codemirror/theme/prynth-cm.css">
 
-    <script src="socket.io/socket.io.js"></script>
+	<script src="javascripts/codemirror/mode/javascript/javascript.js"></script>
+	<script src="javascripts/codemirror/addon/edit/matchbrackets.js"></script>
+	<script src="javascripts/codemirror/addon/selection/active-line.js"></script>
 </head>
-
 
 <body>
 
-<div style="float: left; width: 700px; padding-left: 10px; padding-right: 10px;">
+	<div style="width: 1000px; padding-left: 10px; padding-right: 10px;">
+		<a href="http://prynth.github.io" target="_blank" style="text-decoration: none"><img src="/images/prynth_logo.png" style="width: 30px;"> <span style="font-size:2em;"> Prynth</span> </a>
+		<label id="heartLabel"></label>
+	</div>
+	<div class="clearfix"></div>
 
+	<div style="width: 1000px; height: 800px">
+		<div style="float: left; width: 600px; height: 500px; padding-left: 10px; padding-right: 10px;">
+			<h2>Editor</h2>
+			<form>
+				<textarea id="codeTextarea"></textarea>
+				<button type="button" id="runButton">Run</button>
+				<button type="button" id="killButton">Kill</button>
+				<a href="/schelp/help.html" target="_blank"><button type="button">Help</button></a>
+				<a href="/settings" target="_blank"><button type="button">Settings</button></a>
 
-        <a href="http://prynth.github.io" target="_blank" style="text-decoration: none">
-        <img src="/resources/images/prynth_logo.png" style="width: 40px;"> <font style="font-size:4em;"> Prynth</font> </a>
+				<br>
+				<br>
+				<textarea id="consoleTextarea" style="width: 600px; height: 140px;"></textarea>
+				<br>
+				<button type="button" id="clearConsoleButton">Clear</button>
+			</form>
+		</div>
 
+		<!--<div style="width: 200px; float: left">-->
+			<!--<h2>System</h2>-->
+			<!--Uptime: <span id="clock" class="panel"></span><br>-->
+			<!--Hostname: <span id="hostname" class="panel"></span><br>-->
+			<!--Ethernet IP: <span id="ethernetip" class="panel"></span><br>-->
+			<!--Wireless IP: <span id="wirelessip" class="panel"></span><br>-->
+			<!--CPU usage: <span id="cpu" class="panel"></span><br>-->
+			<!--Free memory: <span id="freemem" class="panel"></span><br>-->
+		<!--</div>-->
 
-</div>
+		<div style="width: 200px; float: left">
+			<h2>SC files</h2>
+			<select id="supercolliderfiles" multiple style="width:200px; height:120px">
+				<% for (var i = 0; i < supercolliderfiles.length; i++) { %>
+				<option value="<%=i%>"><%=supercolliderfiles[i]%>
+				<% } %>
+			</select>
+			<br>
 
+			<button type="button" id="savescfilebutton">Save</button>
+			<button type="button" id="loadscfilebutton">Load</button>
+			<button type="button" id="deletescfilebutton">Delete</button>
 
+		</div>
 
+		<div style="width: 200px; float: left">
+			<h2>Sound files</h2>
+			<select id="soundfiles" multiple style="width: 200px; height: 120px">
+				<% for (var i = 0; i < soundfiles.length; i++) { %>
+				<option value="<%=i%>"><%=soundfiles[i]%>
+			<% } %>
+			</select>
+			<br>
+			<form id = "soundfileupload" enctype="multipart/form-data" method="post" action="/soundfileupload">
+				<label class="myLabel">
+					<input type="file" style="visibility: hidden" name="filename" multiple onchange="javascript:this.form.submit();"/>
+					<span>Upload</span>
+				</label>
+			<button type="button" id="deletesoundfilebutton">Delete</button>
+			</form>
+		</div>
+	</div>
 
-<div style="float: left; width: 700px; padding-left: 10px; padding-right: 10px;">
-    
-    <h1>Editor</h1>
+	<div class="clearfix"></div>
+	<div style="width: 800px; padding-left: 10px;">
+		<footer>
+            <% include footer %>
+		</footer>
+	</div>
 
-    <button type="button" id="runButton">Run</button>
-    <button type="button" id="killButton">Kill</button>
-    <button type="button" id="saveButton">Save</button>
-    <a href="/resources/schelp" target="_blank"><button type="button">Help</button></a>
-
-    <form>
-        <textarea id="codeTextarea"><%=code%></textarea>
-        <br>
-        <textarea id="status" style="width: 700px; height: 160px;"></textarea>
-    </form>
-    <button type="button" id="clearStatusButton">Clear</button>
-
-    <!--<div id="chat"></div>-->
-    <!--<form id="send-message">-->
-    <!--<input size="35" id="message">-->
-    <!--<input type="submit">-->
-    <!--</form>-->
-</div>
-<div style="float: left; width: 200px; padding-left: 10px; padding-right: 10px;">
-
-    <h1>System</h1>
-    <div id="clock">Time:</div>
-    Hostname: <%=hostname%> <br>
-    Ethernet IP: <%=ethernetIP%> <br>
-    Wireless IP: <%=wirelessIP%> <br>
-    CPU Usage: <%=cpu%> % <br>
-    Free Memory: <%=freemem%> Mb of <%=totalmem%> Mb <br>
-
-    <button type="button" id="rebootButton">Reboot</button>
-    <button type="button" id="shutdownButton">Shutdown</button>
-
-    <br>
-
-    <h1>Patches</h1>
-
-    <form method="post" action="/patch" >
-        <% for (var i = 0; i < patches.length; i++) { %>
-        <input type="checkbox" name="patch" value=<%=patches[i]%> > <%=patches[i]%> </input> <br>
-        <% } %>
-        <input type="submit" name="action" value="Load"/>
-        <input type="submit" name="action" value="Delete"/>
-    </form>
-
-    <form method="post" action="/">
-        <button type="button" id="saveNewPatchButton">Save current as:</button>
-        <textarea id="newPatchTextarea"></textarea>
-    </form>
-
-    <h1>Samples</h1>
-
-    <form method="post" action="/sample" >
-        <% for (var i = 0; i < samples.length; i++) { %>
-        [<%=i%>]  <input type="checkbox" name="sample" value=<%=samples[i]%> > <%=samples[i]%> </input> <a onclick="this.firstChild.play()" style="font-size: 12px;"><audio src=sounds/<%=samples[i]%> ></audio>▸</a> <br>
-        <% } %>
-        <input type="submit" name="action" value="Delete"/>
-    </form>
-
-    <form enctype="multipart/form-data" method="post" action="/upload_sample">
-        <label class="myLabel">
-            <input type="file" style="visibility: hidden" name="filename" required/>
-            <span>Choose file</span>
-        </label>
-        <input type="submit" name="action" value="Upload">
-    </form>
-
-</div>
-
-<br>
-<div style="float:left; width: 700px; padding-left: 10px;">
-    <footer>
-        <% include footer %>
-    </footer>
-</div>
 
 <script>
-    //Main javascripting
+		var editor = CodeMirror.fromTextArea(document.getElementById("codeTextarea"), {
+			lineNumbers: true,
+			mode: "javascript",
+			matchBrackets: true,
+			autofocus: true,
+			styleActiveLine: true,
+			smartIndent: false,
+			indentWithTabs: true,
+			lineWrapping: true,
+			theme: "prynth-cm",
+		});
 
-    var editor = CodeMirror.fromTextArea(document.getElementById("codeTextarea"), {
-        lineNumbers: true,
-        mode: "javascript",
-        matchBrackets: true,
-        autofocus: true,
-        styleActiveLine: true,
-        smartIndent: false,
-        indentWithTabs: true,
-        //lineWrapping: true,
-        theme: "mymonokai"
-    });
-    editor.setSize(700, 600);
+		editor.setSize(600, 480);
 
-    var socket = io.connect();
+		//post for run button
+		function interpret(data) {
+			$.ajax({method: "POST", url: '/interpret', data: {code: data}});
+		}
+		
+		function detectOS() {
+			var OSName='Unknown OS';
+			if (navigator.appVersion.indexOf("Win")!== -1) OSName="Windows";
+			if (navigator.appVersion.indexOf("Mac")!== -1) OSName="MacOS";
+			if (navigator.appVersion.indexOf("X11")!== -1) OSName="UNIX";
+			if (navigator.appVersion.indexOf("Linux")!== -1) OSName="Linux";
+			return OSName;
+		}
 
-    $(document).ready(function () {
+		function setExtrakeys() {
 
-        var $status = $('#status');
-        var $clearButton= $('#clearStatusButton');
+			var OS = detectOS();
 
-        var $clock = $('#clock');
+//			var modifierKey = '';
 
-        var $runButton = $('#runButton');
-        var $killButton = $('#killButton');
-        var $saveButton = $('#saveButton');
-        var $shutdownButton = $('#shutdownButton');
-        var $rebootButton = $('#rebootButton');
-        var $saveNewPatchButton = $('#saveNewPatchButton');
-
-        var $newPatchTextarea = $('#newPatchTextarea');
-
-//        var $messageForm = $('#send-message');
-//        var $messageBox = $('#message');
-//        var $chat = $('#chat');
-
-        //status feedback
-        socket.on('stdout', function (data) {
-            console.log(data);
-            $status.append(data + '\n');
-        });
-
-
-        //buttons (had callbacks, were substituted by socket comm)
-        $runButton.click(function () {$.ajax({method: "POST", url: '/start_sc', data: {code: editor.getValue()}});});
-        $killButton.click(function () {$.ajax({method: "POST", url: '/stop_sc'});});
-        $saveButton.click(function () {
-            $.ajax({
-                method: "POST",
-                url: '/save_code',
-                data: {code: editor.getValue()}
-//                left has an example of an ajax post callback (receives res.send('something') from route)
-//                , success: function (data) {
-//                    $status.html(data);
-//                }
-            });
-        });
-        $shutdownButton.click(function () {$.ajax({method: "POST", url: '/shutdown'});});
-        $rebootButton.click(function () {$.ajax({method: "POST", url: '/reboot'});});
-        $clearButton.click(function () {$status.html('');});
-        $saveNewPatchButton.click(function () {
-                    $.ajax({method: "POST",
-                        url: '/new_patch',
-                        data: {name: $newPatchTextarea.val(), code: editor.getValue()},
-                        success:function (data) {
-                            $newPatchTextarea.val('');
-                            if (typeof data.redirect == 'string'){
-                                window.location = data.redirect;
-                            }
-
-                        }
-                    });
-                }
-
-        )
-
-        //clock display that responds to tick from server
-        socket.on('tick from server', function (data) {
-            $clock.html(data);
-        });
-
-        //request action from server (chat example)
-//        $messageForm.submit(function (e) {
-//            e.preventDefault();
-//            socket.emit('request', $messageBox.val());
-//            $messageBox.val('');
-//        });
-
-        //get response info from server (chat example)
-//        socket.on('response', function (data) {
-//            $chat.append(data + '<br>');
-//        });
+//			if(OS === 'MacOS'){modifierKey = 'Cmd'} else {modifierKey = 'Ctrl'};
 //
-        $(window).on('beforeunload', function(){
-            socket.close();
-        });
+//			var interpret = modifierKey + '-Enter';
+//			var kill = modifierKey + '-.';
 
-    });
+			if (OS === 'MacOS'){
+				editor.setOption("extraKeys", {
+					'Cmd-Enter' : function () {
+						let selection = editor.getSelection();
+						if (selection !== '') {
+							interpret(selection);
+						} else {
+							interpret(editor.getLine(editor.getCursor().line));
+						}
+					},
+					'Cmd-.' : function () {
+						interpret('s.freeAll;');
+					}
+				});
+			} else {
+				editor.setOption("extraKeys", {
+					'Ctrl-Enter' : function () {
+						let selection = editor.getSelection();
+						if (selection !== '') {
+							interpret(selection);
+						} else {
+							interpret(editor.getLine(editor.getCursor().line));
+						}
+					},
+					'Ctrl-.' : function () {
+						interpret('s.freeAll;');
+					}
+				});
+
+			}
+		}
+
+		$(document).ready(function () {
+
+			let $runButton = $('#runButton');
+			let $killButton = $('#killButton');
+			let $clearConsoleButton = $('#clearConsoleButton');
+
+			let $loadscfilebutton = $('#loadscfilebutton');
+			let $savescfilebutton = $('#savescfilebutton');
+			let $deletescfilebutton = $('#deletescfilebutton');
+			let $deletesoundfilebutton = $('#deletesoundfilebutton');
+
+			let $consoleTextarea = $('#consoleTextarea');
+			let $supercolliderfiles = $('#supercolliderfiles');
+			let $soundfiles = $('#soundfiles');
+
+			let $heartlabel = $('#heartLabel');
+			let $tempheartlabel = "";
+
+//			let $clock = $('#clock');
+//			let $hostname = $('#hostname');
+//			let $ethernetip = $('#ethernetip');
+//			let $wirelessip = $('#wirelessip');
+//			let $cpu = $('#cpu');
+//			let $freemem = $('#freemem');
+
+			let socket = io.connect();
+			setExtrakeys();
 
 
-</script>
+			//run all code in editor window
+			$runButton.click(function () {interpret(editor.getValue());});
+			//kill all nodes on server
+			$killButton.click(function () {interpret('s.freeAll;')});
+
+			//clear console textarea
+			$clearConsoleButton.click(function () {$consoleTextarea.html('');});
+
+			//file management buttons
+			$loadscfilebutton.click(function () {
+				let temp = $supercolliderfiles.val();
+				let fileindex =  JSON.stringify(temp);
+				$.ajax({method: "POST", url: '/supercolliderfiles',data: {action: 'load', fileindex: fileindex}});
+			})
+
+			$savescfilebutton.click(function () {
+			//here we need to implement save function to create new scd files
+				let filename=prompt('Enter new file name');
+				if(filename) {
+					$.ajax({method: "POST", url: '/supercolliderfiles',data: {action: 'save', filename: filename, code: editor.getValue()}});
+				}
+
+			})
+
+			$deletescfilebutton.click(function () {
+				let temp = $supercolliderfiles.val();
+				let fileindex =  JSON.stringify(temp);
+				$.ajax({method: "POST", url: '/supercolliderfiles',data: {action: 'delete', fileindex: fileindex}
+				});
+			})
+
+
+			$deletesoundfilebutton.click(function () {
+				let temp = $soundfiles.val();
+				let fileindex =  JSON.stringify(temp);
+				$.ajax({method: "POST", url: '/soundfiles',data: {action: 'delete', fileindex: fileindex}
+				});
+			})
+
+			//socket actions
+			socket.on('toeditor', function (data) {
+				editor.setValue(data);
+			});
+
+			socket.on('toconsole', function (data) {
+				$consoleTextarea.append(data);
+				$consoleTextarea.scrollTop($consoleTextarea[0].scrollHeight);
+			});
+
+			socket.on('tosupercolliderfiles', function (data) {
+				$supercolliderfiles[0].options.length = 0;
+				$.each(data, function(key, value) {
+					$supercolliderfiles
+						.append($('<option>', { value : key })
+                        	.text(value));
+				});
+			});
+
+			socket.on('tosoundfiles', function (data) {
+				$soundfiles[0].options.length = 0;
+				$.each(data, function(key, value) {
+					$soundfiles
+						.append($('<option>', { value : key })
+							.text(value));
+				});
+			});
+
+			//receive systeminfo
+			socket.on('systeminfo', function (data) {
+				if ($heartlabel.html() === '\u2665') {$heartlabel.html('\u2764');} else {$heartlabel.html('\u2665');}
+
+//				$clock.html(data.tick +' s');
+//				$hostname.html(data.hostname);
+//				$ethernetip.html(data.ethernetip);
+//				$wirelessip.html(data.wirelessip);
+//				$cpu.html(data.cpu + ' %');
+//				$freemem.html(data.freemem + ' Mb' );
+			})
+
+
+			//close socket when closing client
+			$(window).on('beforeunload', function(){
+				socket.close();
+			});
+		})
+	</script>
 
 </body>
 </html>
-
-

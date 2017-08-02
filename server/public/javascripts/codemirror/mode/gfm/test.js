@@ -8,15 +8,15 @@
   function FT(name) { test.mode(name, modeHighlightFormatting, Array.prototype.slice.call(arguments, 1)); }
 
   FT("codeBackticks",
-     "[comment&formatting&formatting-code `][comment foo][comment&formatting&formatting-code `]");
+     "[comment&formatting&formatting-supercolliderfiles `][comment foo][comment&formatting&formatting-supercolliderfiles `]");
 
   FT("doubleBackticks",
-     "[comment&formatting&formatting-code ``][comment foo ` bar][comment&formatting&formatting-code ``]");
+     "[comment&formatting&formatting-supercolliderfiles ``][comment foo ` bar][comment&formatting&formatting-supercolliderfiles ``]");
 
   FT("codeBlock",
-     "[comment&formatting&formatting-code-block ```css]",
+     "[comment&formatting&formatting-supercolliderfiles-block ```css]",
      "[tag foo]",
-     "[comment&formatting&formatting-code-block ```]");
+     "[comment&formatting&formatting-supercolliderfiles-block ```]");
 
   FT("taskList",
      "[variable-2&formatting&formatting-list&formatting-list-ul - ][meta&formatting&formatting-task [ ]]][variable-2  foo]",
@@ -35,7 +35,7 @@
      "foo_bar_hello");
 
   MT("emStrongUnderscore",
-     "[strong __][em&strong _foo__][em _] bar");
+     "[em&strong ___foo___] bar");
 
   MT("fencedCodeBlocks",
      "[comment ```]",
@@ -51,37 +51,40 @@
      "[comment ```]",
      "bar");
 
+  MT("fencedCodeBlockModeSwitchingObjc",
+     "[comment ```objective-c]",
+     "[keyword @property] [variable NSString] [operator *] [variable foo];",
+     "[comment ```]",
+     "bar");
+
   MT("fencedCodeBlocksNoTildes",
      "~~~",
      "foo",
      "~~~");
 
   MT("taskListAsterisk",
-     "[variable-2 * []] foo]", // Invalid; must have space or x between []
-     "[variable-2 * [ ]]bar]", // Invalid; must have space after ]
-     "[variable-2 * [x]]hello]", // Invalid; must have space after ]
-     "[variable-2 * ][meta [ ]]][variable-2  [world]]]", // Valid; tests reference style links
+     "[variable-2 * ][link&variable-2 [[]]][variable-2 foo]", // Invalid; must have space or x between []
+     "[variable-2 * ][link&variable-2 [[ ]]][variable-2 bar]", // Invalid; must have space after ]
+     "[variable-2 * ][link&variable-2 [[x]]][variable-2 hello]", // Invalid; must have space after ]
+     "[variable-2 * ][meta [ ]]][variable-2  ][link&variable-2 [[world]]]", // Valid; tests reference style links
      "    [variable-3 * ][property [x]]][variable-3  foo]"); // Valid; can be nested
 
   MT("taskListPlus",
-     "[variable-2 + []] foo]", // Invalid; must have space or x between []
-     "[variable-2 + [ ]]bar]", // Invalid; must have space after ]
-     "[variable-2 + [x]]hello]", // Invalid; must have space after ]
-     "[variable-2 + ][meta [ ]]][variable-2  [world]]]", // Valid; tests reference style links
+     "[variable-2 + ][link&variable-2 [[]]][variable-2 foo]", // Invalid; must have space or x between []
+     "[variable-2 + ][link&variable-2 [[x]]][variable-2 hello]", // Invalid; must have space after ]
+     "[variable-2 + ][meta [ ]]][variable-2  ][link&variable-2 [[world]]]", // Valid; tests reference style links
      "    [variable-3 + ][property [x]]][variable-3  foo]"); // Valid; can be nested
 
   MT("taskListDash",
-     "[variable-2 - []] foo]", // Invalid; must have space or x between []
-     "[variable-2 - [ ]]bar]", // Invalid; must have space after ]
-     "[variable-2 - [x]]hello]", // Invalid; must have space after ]
-     "[variable-2 - ][meta [ ]]][variable-2  [world]]]", // Valid; tests reference style links
+     "[variable-2 - ][link&variable-2 [[]]][variable-2 foo]", // Invalid; must have space or x between []
+     "[variable-2 - ][link&variable-2 [[x]]][variable-2 hello]", // Invalid; must have space after ]
+     "[variable-2 - ][meta [ ]]][variable-2  world]", // Valid; tests reference style links
      "    [variable-3 - ][property [x]]][variable-3  foo]"); // Valid; can be nested
 
   MT("taskListNumber",
-     "[variable-2 1. []] foo]", // Invalid; must have space or x between []
-     "[variable-2 2. [ ]]bar]", // Invalid; must have space after ]
-     "[variable-2 3. [x]]hello]", // Invalid; must have space after ]
-     "[variable-2 4. ][meta [ ]]][variable-2  [world]]]", // Valid; tests reference style links
+     "[variable-2 1. ][link&variable-2 [[]]][variable-2 foo]", // Invalid; must have space or x between []
+     "[variable-2 2. ][link&variable-2 [[ ]]][variable-2 bar]", // Invalid; must have space after ]
+     "[variable-2 3. ][meta [ ]]][variable-2  world]", // Valid; tests reference style links
      "    [variable-3 1. ][property [x]]][variable-3  foo]"); // Valid; can be nested
 
   MT("SHA",
@@ -178,7 +181,7 @@
      "[header&header-1 # heading]",
      "",
      "[comment ```]",
-     "[comment code]",
+     "[comment supercolliderfiles]",
      "[comment ```]",
      "",
      "Commit: [link be6a8cc1c1ecfe9489fb51e4869af15a13fc2cd2]",

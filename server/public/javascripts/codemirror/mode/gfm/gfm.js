@@ -37,7 +37,7 @@ CodeMirror.defineMode("gfm", function(config, modeConfig) {
     token: function(stream, state) {
       state.combineTokens = null;
 
-      // Hack to prevent formatting override inside code blocks (block and inline)
+      // Hack to prevent formatting override inside supercolliderfiles blocks (block and inline)
       if (state.codeBlock) {
         if (stream.match(/^```+/)) {
           state.codeBlock = false;
@@ -113,7 +113,6 @@ CodeMirror.defineMode("gfm", function(config, modeConfig) {
   };
 
   var markdownConfig = {
-    underscoresBreakWords: false,
     taskLists: true,
     fencedCodeBlocks: '```',
     strikethrough: true

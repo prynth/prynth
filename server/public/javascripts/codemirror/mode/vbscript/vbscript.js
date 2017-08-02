@@ -6,7 +6,7 @@ For extra ASP classic objects, initialize CodeMirror instance with this option:
     isASP: true
 
 E.G.:
-    var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+    var editor = CodeMirror.fromTextArea(document.getElementById("supercolliderfiles"), {
         lineNumbers: true,
         isASP: true
       });

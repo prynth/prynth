@@ -268,7 +268,7 @@ CodeMirror.defineMode("perl",function(){
                 chmod                           :1,     // - changes the permissions on a list of files
                 chomp                           :1,     // - remove a trailing record separator from a string
                 chop                            :1,     // - remove the last character from a string
-                chown                           :1,     // - change the owership on a list of files
+                chown                           :1,     // - change the ownership on a list of files
                 chr                             :1,     // - get character this number represents
                 chroot                          :1,     // - make directory new root for path lookups
                 close                           :1,     // - close file (or pipe or socket) handle
@@ -293,7 +293,7 @@ CodeMirror.defineMode("perl",function(){
                 endpwent                        :1,     // - be done using passwd file
                 endservent                      :1,     // - be done using services file
                 eof                             :1,     // - test a filehandle for its end
-                'eval'                          :1,     // - catch exceptions or compile and run code
+                'eval'                          :1,     // - catch exceptions or compile and run supercolliderfiles
                 'exec'                          :1,     // - abandon this program to run another
                 exists                          :1,     // - test whether a hash key is present
                 exit                            :1,     // - terminate this program
@@ -333,7 +333,7 @@ CodeMirror.defineMode("perl",function(){
                 given                           :1,     //
                 glob                            :1,     // - expand filenames using wildcards
                 gmtime                          :1,     // - convert UNIX time into record or string using Greenwich time
-                'goto'                          :1,     // - create spaghetti code
+                'goto'                          :1,     // - create spaghetti supercolliderfiles
                 grep                            :1,     // - locate elements in a list test true against a given criterion
                 hex                             :1,     // - convert a string to a hexadecimal number
                 'import'                        :1,     // - patch a module's namespace into your own

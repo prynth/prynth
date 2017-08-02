@@ -15,13 +15,15 @@
     strikethrough: true,
     tokenTypeOverrides: {
       "header" : "override-header",
-      "code" : "override-code",
+      "code" : "override-supercolliderfiles",
       "quote" : "override-quote",
       "list1" : "override-list1",
       "list2" : "override-list2",
       "list3" : "override-list3",
       "hr" : "override-hr",
       "image" : "override-image",
+      "imageAltText": "override-image-alt-text",
+      "imageMarker": "override-image-marker",
       "linkInline" : "override-link-inline",
       "linkEmail" : "override-link-email",
       "linkText" : "override-link-text",
@@ -53,10 +55,10 @@
      "[strong&formatting&formatting-strong __][strong foo][strong&formatting&formatting-strong __]");
 
   FT("formatting_codeBackticks",
-     "[comment&formatting&formatting-code `][comment foo][comment&formatting&formatting-code `]");
+     "[comment&formatting&formatting-supercolliderfiles `][comment foo][comment&formatting&formatting-supercolliderfiles `]");
 
   FT("formatting_doubleBackticks",
-     "[comment&formatting&formatting-code ``][comment foo ` bar][comment&formatting&formatting-code ``]");
+     "[comment&formatting&formatting-supercolliderfiles ``][comment foo ` bar][comment&formatting&formatting-supercolliderfiles ``]");
 
   FT("formatting_atxHeader",
      "[header&header-1&formatting&formatting-header&formatting-header-1 # ][header&header-1 foo # bar ][header&header-1&formatting&formatting-header&formatting-header-1 #]");
@@ -88,6 +90,9 @@
 
   FT("formatting_escape",
      "[formatting-escape \\*]");
+
+  FT("formatting_image",
+     "[formatting&formatting-image&image&image-marker !][formatting&formatting-image&image&image-alt-text&link [[][image&image-alt-text&link alt text][formatting&formatting-image&image&image-alt-text&link ]]][formatting&formatting-link-string&string&url (][url&string http://link.to/image.jpg][formatting&formatting-link-string&string&url )]");
 
   MT("plainText",
      "foo");
@@ -130,17 +135,17 @@
   MT("codeBlocksUsing1Tab",
      "\t[comment foo]");
 
-  // No code blocks directly after paragraph
+  // No supercolliderfiles blocks directly after paragraph
   // http://spec.commonmark.org/0.19/#example-65
   MT("noCodeBlocksAfterParagraph",
      "Foo",
      "    Bar");
 
-  // Inline code using backticks
+  // Inline supercolliderfiles using backticks
   MT("inlineCodeUsingBackticks",
      "foo [comment `bar`]");
 
-  // Block code using single backtick (shouldn't work)
+  // Block supercolliderfiles using single backtick (shouldn't work)
   MT("blockCodeSingleBacktick",
      "[comment `]",
      "[comment foo]",
@@ -153,7 +158,7 @@
      "foo [comment `bar]");
 
   // Per documentation: "To include a literal backtick character within a
-  // code span, you can use multiple backticks as the opening and closing
+  // supercolliderfiles span, you can use multiple backticks as the opening and closing
   // delimiters"
   MT("doubleBackticks",
      "[comment ``foo ` bar``]");
@@ -161,11 +166,11 @@
   // Tests based on Dingus
   // http://daringfireball.net/projects/markdown/dingus
   //
-  // Multiple backticks within an inline code block
+  // Multiple backticks within an inline supercolliderfiles block
   MT("consecutiveBackticks",
      "[comment `foo```bar`]");
 
-  // Multiple backticks within an inline code block with a second code block
+  // Multiple backticks within an inline supercolliderfiles block with a second supercolliderfiles block
   MT("consecutiveBackticks",
      "[comment `foo```bar`] hello [comment `world`]");
 
@@ -352,11 +357,10 @@
      "[variable-2 1. foo]",
      "[variable-2 2. bar]");
 
-  // Lists require a preceding blank line (per Dingus)
-  MT("listBogus",
+  MT("listFromParagraph",
      "foo",
-     "1. bar",
-     "2. hello");
+     "[variable-2 1. bar]",
+     "[variable-2 2. hello]");
 
   // List after hr
   MT("listAfterHr",
@@ -377,28 +381,28 @@
   MT("listAsteriskFormatting",
      "[variable-2 * ][variable-2&em *foo*][variable-2  bar]",
      "[variable-2 * ][variable-2&strong **foo**][variable-2  bar]",
-     "[variable-2 * ][variable-2&strong **][variable-2&em&strong *foo**][variable-2&em *][variable-2  bar]",
+     "[variable-2 * ][variable-2&em&strong ***foo***][variable-2  bar]",
      "[variable-2 * ][variable-2&comment `foo`][variable-2  bar]");
 
   // Formatting in lists (+)
   MT("listPlusFormatting",
      "[variable-2 + ][variable-2&em *foo*][variable-2  bar]",
      "[variable-2 + ][variable-2&strong **foo**][variable-2  bar]",
-     "[variable-2 + ][variable-2&strong **][variable-2&em&strong *foo**][variable-2&em *][variable-2  bar]",
+     "[variable-2 + ][variable-2&em&strong ***foo***][variable-2  bar]",
      "[variable-2 + ][variable-2&comment `foo`][variable-2  bar]");
 
   // Formatting in lists (-)
   MT("listDashFormatting",
      "[variable-2 - ][variable-2&em *foo*][variable-2  bar]",
      "[variable-2 - ][variable-2&strong **foo**][variable-2  bar]",
-     "[variable-2 - ][variable-2&strong **][variable-2&em&strong *foo**][variable-2&em *][variable-2  bar]",
+     "[variable-2 - ][variable-2&em&strong ***foo***][variable-2  bar]",
      "[variable-2 - ][variable-2&comment `foo`][variable-2  bar]");
 
   // Formatting in lists (1.)
   MT("listNumberFormatting",
      "[variable-2 1. ][variable-2&em *foo*][variable-2  bar]",
      "[variable-2 2. ][variable-2&strong **foo**][variable-2  bar]",
-     "[variable-2 3. ][variable-2&strong **][variable-2&em&strong *foo**][variable-2&em *][variable-2  bar]",
+     "[variable-2 3. ][variable-2&em&strong ***foo***][variable-2  bar]",
      "[variable-2 4. ][variable-2&comment `foo`][variable-2  bar]");
 
   // Paragraph lists
@@ -589,6 +593,20 @@
   MT("hrDashLong",
      "[hr ---------------------------------------]");
 
+  //Images
+  MT("Images",
+     "[image&image-marker !][image&image-alt-text&link [[alt text]]][string&url (http://link.to/image.jpg)]")
+
+  //Images with highlight alt text
+  MT("imageEm",
+     "[image&image-marker !][image&image-alt-text&link [[][image-alt-text&em&image&link *alt text*][image&image-alt-text&link ]]][string&url (http://link.to/image.jpg)]");
+
+  MT("imageStrong",
+     "[image&image-marker !][image&image-alt-text&link [[][image-alt-text&strong&image&link **alt text**][image&image-alt-text&link ]]][string&url (http://link.to/image.jpg)]");
+
+  MT("imageEmStrong",
+     "[image&image-marker !][image&image-alt-text&link [[][image&image-alt-text&em&strong&link ***alt text***][image&image-alt-text&link ]]][string&url (http://link.to/image.jpg)]");
+
   // Inline link with title
   MT("linkTitle",
      "[link [[foo]]][string&url (http://example.com/ \"bar\")] hello");
@@ -599,7 +617,7 @@
 
   // Inline link with image
   MT("linkImage",
-     "[link [[][tag ![[foo]]][string&url (http://example.com/)][link ]]][string&url (http://example.com/)] bar");
+     "[link [[][link&image&image-marker !][link&image&image-alt-text&link [[alt text]]][string&url (http://link.to/image.jpg)][link ]]][string&url (http://example.com/)] bar");
 
   // Inline link with Em
   MT("linkEm",
@@ -611,25 +629,30 @@
 
   // Inline link with EmStrong
   MT("linkEmStrong",
-     "[link [[][link&strong **][link&em&strong *foo**][link&em *][link ]]][string&url (http://example.com/)] bar");
+     "[link [[][link&em&strong ***foo***][link ]]][string&url (http://example.com/)] bar");
+
+  MT("multilineLink",
+     "[link [[foo]",
+     "[link bar]]][string&url (https://foo#_a)]",
+     "should not be italics")
 
   // Image with title
   MT("imageTitle",
-     "[tag ![[foo]]][string&url (http://example.com/ \"bar\")] hello");
+     "[image&image-marker !][image&image-alt-text&link [[alt text]]][string&url (http://example.com/ \"bar\")] hello");
 
   // Image without title
   MT("imageNoTitle",
-     "[tag ![[foo]]][string&url (http://example.com/)] bar");
+     "[image&image-marker !][image&image-alt-text&link [[alt text]]][string&url (http://example.com/)] bar");
 
   // Image with asterisks
   MT("imageAsterisks",
-     "[tag ![[*foo*]]][string&url (http://example.com/)] bar");
+     "[image&image-marker !][image&image-alt-text&link [[ ][image&image-alt-text&em&link *alt text*][image&image-alt-text&link ]]][string&url (http://link.to/image.jpg)] bar");
 
   // Not a link. Should be normal text due to square brackets being used
   // regularly in text, especially in quoted material, and no space is allowed
   // between square brackets and parentheses (per Dingus).
   MT("notALink",
-     "[[foo]] (bar)");
+     "[link [[foo]]] (bar)");
 
   // Reference-style links
   MT("linkReference",
@@ -645,16 +668,16 @@
 
   // Reference-style links with EmStrong
   MT("linkReferenceEmStrong",
-     "[link [[][link&strong **][link&em&strong *foo**][link&em *][link ]]][string&url [[bar]]] hello");
+     "[link [[][link&em&strong ***foo***][link ]]][string&url [[bar]]] hello");
 
-  // Reference-style links with optional space separator (per docuentation)
+  // Reference-style links with optional space separator (per documentation)
   // "You can optionally use a space to separate the sets of brackets"
   MT("linkReferenceSpace",
      "[link [[foo]]] [string&url [[bar]]] hello");
 
   // Should only allow a single space ("...use *a* space...")
   MT("linkReferenceDoubleSpace",
-     "[[foo]]  [[bar]] hello");
+     "[link [[foo]]]  [link [[bar]]] hello");
 
   // Reference-style links with implicit link name
   MT("linkImplicit",
@@ -683,7 +706,7 @@
   MT("labelTitleSingleQuotes",
      "[link [[foo]]:] [string&url http://example.com/  'bar']");
 
-  MT("labelTitleParenthese",
+  MT("labelTitleParentheses",
      "[link [[foo]]:] [string&url http://example.com/  (bar)]");
 
   MT("labelTitleInvalid",
@@ -700,7 +723,7 @@
      "[link [[foo]]:] [string&url http://example.com/]",
      "[string 'bar'] hello");
 
-  MT("labelTitleNextParenthese",
+  MT("labelTitleNextParentheses",
      "[link [[foo]]:] [string&url http://example.com/]",
      "[string (bar)] hello");
 
@@ -715,7 +738,7 @@
      "[link [[foo \\]]: bar]]:] [string&url http://example.com/]");
 
   MT("labelEscapeEnd",
-     "[[foo\\]]: http://example.com/");
+     "\\[[foo\\]]: http://example.com/");
 
   MT("linkWeb",
      "[link <http://example.com/>] foo");
@@ -739,7 +762,7 @@
      "foo[em *bar*]hello");
 
   MT("emInWordUnderscore",
-     "foo[em _bar_]hello");
+     "foo_bar_hello");
 
   // Per documentation: "...surround an * or _ with spaces, it’ll be
   // treated as a literal asterisk or underscore."
@@ -748,11 +771,11 @@
      "foo [em _bar _ hello_] world");
 
   MT("emEscapedBySpaceOut",
-     "foo _ bar[em _hello_]world");
+     "foo _ bar [em _hello_] world");
 
   MT("emEscapedByNewline",
      "foo",
-     "_ bar[em _hello_]world");
+     "_ bar [em _hello_] world");
 
   // Unclosed emphasis characters
   // Instead of simply marking as EM / STRONG, it would be nice to have an
@@ -773,14 +796,17 @@
      "[em *foo][em&strong **bar*][strong hello**] world");
 
   MT("emStrongUnderscore",
-     "[em _foo][em&strong __bar_][strong hello__] world");
+     "[em _foo ][em&strong __bar_][strong  hello__] world");
 
   // "...same character must be used to open and close an emphasis span.""
   MT("emStrongMixed",
      "[em _foo][em&strong **bar*hello__ world]");
 
   MT("emStrongMixed",
-     "[em *foo][em&strong __bar_hello** world]");
+     "[em *foo ][em&strong __bar_hello** world]");
+
+  MT("linkWithNestedParens",
+     "[link [[foo]]][string&url (bar(baz))]")
 
   // These characters should be escaped:
   // \   backslash
@@ -844,12 +870,12 @@
     "[override-header&override-header-6 ###### Foo]");
 
   TokenTypeOverrideTest("overrideCode",
-    "[override-code `foo`]");
+    "[override-supercolliderfiles `foo`]");
 
   TokenTypeOverrideTest("overrideCodeBlock",
-    "[override-code ```]",
-    "[override-code foo]",
-    "[override-code ```]");
+    "[override-supercolliderfiles ```]",
+    "[override-supercolliderfiles foo]",
+    "[override-supercolliderfiles ```]");
 
   TokenTypeOverrideTest("overrideQuote",
     "[override-quote&override-quote-1 > foo]",
@@ -875,7 +901,7 @@
     "[override-hr * * *]");
 
   TokenTypeOverrideTest("overrideImage",
-    "[override-image ![[foo]]][override-link-href&url (http://example.com/)]")
+    "[override-image&override-image-marker !][override-image&override-image-alt-text&link [[alt text]]][override-link-href&url (http://link.to/image.jpg)]");
 
   TokenTypeOverrideTest("overrideLinkText",
     "[override-link-text [[foo]]][override-link-href&url (http://example.com)]");
@@ -898,7 +924,7 @@
   // Tests to make sure GFM-specific things aren't getting through
 
   MT("taskList",
-     "[variable-2 * [ ]] bar]");
+     "[variable-2 * ][link&variable-2 [[ ]]][variable-2 bar]");
 
   MT("noFencedCodeBlocks",
      "~~~",

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Settings</title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+
+	<!--Jquery-->
+	<script src="javascripts/jquery/jquery-3.2.1.min.js"></script>
+
+	<!--socket.io-->
+	<script src="javascripts/socket.io/socket.io.js"></script>
+
+</head>
+
+<body>
+<div style="width: 1000px; padding-left: 10px; padding-right: 10px;">
+	<a href="http://prynth.github.io" target="_blank" style="text-decoration: none"><img src="/images/prynth_logo.png" style="width: 30px;"> <span style="font-size:2em;"> Prynth</span> </a>
+</div>
+<div class="clearfix"></div>
+
+<h2>Settings</h2><br>
+
+<div style="width: 1000px; height: 800px">
+
+
+	<div style="width: 200px; float: left">
+		<h3>System Info</h3>
+		Uptime: <span id="clock" class="panel"></span><br>
+		Hostname: <span id="hostname" class="panel"></span><br>
+		Ethernet IP: <span id="ethernetip" class="panel"></span><br>
+		Wireless IP: <span id="wirelessip" class="panel"></span><br>
+		CPU usage: <span id="cpu" class="panel"></span><br>
+		Free memory: <span id="freemem" class="panel"></span><br>
+	</div>
+
+
+	<div style="width: 200px; float: left">
+		<h3>WiFi</h3>
+		<form>
+			<input type="text" id="networkSSIDTextarea" style="height: 1em; width: 13em;"<br>
+			<input type="password" id="networkPasswordTextarea" style="height: 1em; width: 13em;"><br>
+			<button type="button" id="networkButton">Save</button>
+		</form>
+	</div>
+
+	<div style="width: 200px; float: left">
+		<h3>Hostname</h3>
+		<form>
+			<input type="text" id="hostnameTextarea" style="height: 1em; width: 13em;"><br>
+			<button type="button" id="hostnameButton">Save</button>
+		</form>
+	</div>
+
+	<div style="width: 200px; float: left">
+		<h3>Default SuperCollider File</h3>
+		<form>
+			<input type="text" id="defaultSCFileTextarea" style="height: 1em; width: 13em;" value="<%= defaultSCFile %>"><br>
+			<button type="button" id="defaultSCFileButton">Save</button>
+		</form>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function () {
+
+		let socket = io.connect();
+
+		let $clock = $('#clock');
+		let $hostname = $('#hostname');
+		let $ethernetip = $('#ethernetip');
+		let $wirelessip = $('#wirelessip');
+		let $cpu = $('#cpu');
+		let $freemem = $('#freemem');
+
+		let $networkSSIDTextarea = $('#networkSSIDTextarea');
+		let $networkPasswordTextarea = $('#networkPasswordTextarea');
+		let $networkSubmit= $('#networkButton');
+
+		let $defaultSCFileTextarea = $('#defaultSCFileTextarea');
+		let $defaultSCFileSubmit = $('#defaultSCFileButton')
+
+		$networkSubmit.click(function () {
+			let networkName = $networkSSIDTextarea.val();
+			let networkPass = $networkPasswordTextarea.val();
+			$.ajax({method: "POST", url: '/settings/setwifi', data: {networkname: networkName, networkpass: networkPass}});
+		});
+
+		$defaultSCFileSubmit.click(function () {
+			let defaultSCFile = $defaultSCFileTextarea.val();
+			$.ajax({method: "POST", url: '/settings/setdefaultscfile', data: {defaultSCFile: defaultSCFile}});
+		})
+
+		//receive systeminfo
+		socket.on('systeminfo', function (data) {
+			$clock.html(data.tick +' s');
+			$hostname.html(data.hostname);
+			$ethernetip.html(data.ethernetip);
+			$wirelessip.html(data.wirelessip);
+			$cpu.html(data.cpu + ' %');
+			$freemem.html(data.freemem + ' Mb' );
+		})
+
+		//close socket when closing client
+		$(window).on('beforeunload', function(){
+			socket.close();
+		});
+
+	});
+</script>
+
+</body>
+</html>
