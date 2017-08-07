@@ -80,11 +80,11 @@ router.post('/hostname', function (req, res) {
 	console.log(command1);
 	console.log(command2);
 	//
-	// var child1 =  exec('sudo sed -i "s/\\(127.0.1.1 *\\).*/\\1\\tnewhostname/" /etc/hosts', function (error, stdout, stderr) {
-	// 	var child2 = exec('sudo sed -i "s/^.*/raspberrypi/" /etc/hostname', function (error, stdout, stderr) {
-	// 		res.redirect('/settings');
-	// 	});
-	// });
+	var child1 =  exec(command1, function (error, stdout, stderr) {
+		var child2 = exec(command2, function (error, stdout, stderr) {
+			res.redirect('/settings');
+		});
+	});
 
 
 });
