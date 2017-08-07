@@ -22,11 +22,11 @@ router.get('/', function(req, res, next) {
 
 
 router.post('/shutdown', function (req, res) {
-	var child = exec('sudo poweroff');
+	exec('sudo poweroff');
 })
 
 router.post('/shutdown', function (req, res) {
-	var child = exec('sudo reboot');
+	exec('sudo reboot');
 })
 
 router.post('/setwifi', function (req, res) {
