@@ -41,7 +41,6 @@ router.post('/setwifi', function (req, res) {
 
 	var buffer = "";
 
-	//CHANGE TO RELATIVE PATHS!!!
 	var configFile = fs.readFileSync(private_path +'config.json');
 	var configData = JSON.parse(configFile);
 
@@ -63,6 +62,25 @@ router.post('/setwifi', function (req, res) {
 
 })
 
+router.post('/hostname', function (req, res) {
+	var hostname = req.body.hostname;
+
+	var configFile = fs.readFileSync(private_path +'config.json');
+	var configData = JSON.parse(configFile);
+
+	configData.hostname= hostname;
+	var configJSON = JSON.stringify(configData, null, 2);
+
+	// console.log(configJSON);
+	fs.writeFileSync(private_path +'config.json', configJSON);
+
+	exec('sudo sed -i "s/\\(127.0.1.1 *\\).*/\\1\\tnewhostname/" /etc/hosts', function (error, stdout, stderr) {
+		exec('sudo sed -i "s/^.*/raspberrypi/" /etc/hostname', function (error, stdout, stderr) {
+			res.redirect('/settings');
+		};
+	});
+})
+
 router.post('/setdefaultscfile', function (req, res) {
 	var defaultSCFile= req.body.defaultSCFile;
 	console.log(defaultSCFile);
@@ -75,7 +93,6 @@ router.post('/setdefaultscfile', function (req, res) {
 	var configJSON = JSON.stringify(configData, null, 2);
 
 	fs.writeFileSync(private_path +'config.json', configJSON);
-
 })
 
 
