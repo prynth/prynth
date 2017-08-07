@@ -36,7 +36,7 @@ router.post('/setwifi', function (req, res) {
 	// console.log(configJSON);
 	fs.writeFileSync(private_path +'config.json', configJSON);
 
-	var command = 'sudo sed -i "/#prynth begin/,/#prynth end/ s/\\(ssid *= *\\).*/\\1\\"'+networkname+'\\"/ ;/#prynth begin/,/#prynth end/ s/\\(password *= *\\).*/\\1\\"'+networkpass+'\\"/" /etc/wpa_supplicant/wpa_supplicant.conf';
+	var command = 'sudo sed -i "/#prynth begin/,/#prynth end/ s/\\(ssid *= *\\).*/\\1\\"'+networkname+'\\"/ ;/#prynth begin/,/#prynth end/ s/\\(psk *= *\\).*/\\1\\"'+networkpass+'\\"/" /etc/wpa_supplicant/wpa_supplicant.conf';
 	console.log(command);
 
 	var child = exec(command, function (error, stdout, stderr) {
