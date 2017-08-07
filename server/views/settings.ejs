@@ -31,6 +31,10 @@
 		Wireless IP: <span id="wirelessip" class="panel"></span><br>
 		CPU usage: <span id="cpu" class="panel"></span><br>
 		Free memory: <span id="freemem" class="panel"></span><br>
+		<form>
+			<button type="button" id="rebootButton">Reboot</button>
+			<button type="button" id="shutdownButton">Shutdown</button>
+		</form>
 	</div>
 
 
@@ -77,7 +81,10 @@
 		let $networkSubmit= $('#networkButton');
 
 		let $defaultSCFileTextarea = $('#defaultSCFileTextarea');
-		let $defaultSCFileSubmit = $('#defaultSCFileButton')
+		let $defaultSCFileSubmit = $('#defaultSCFileButton');
+
+		let $rebootSubmit = $('#rebootButton');
+		let $shutdownSubmit = $('#shutdownButton');
 
 		$networkSubmit.click(function () {
 			let networkName = $networkSSIDTextarea.val();
@@ -88,7 +95,15 @@
 		$defaultSCFileSubmit.click(function () {
 			let defaultSCFile = $defaultSCFileTextarea.val();
 			$.ajax({method: "POST", url: '/settings/setdefaultscfile', data: {defaultSCFile: defaultSCFile}});
-		})
+		});
+
+		$rebootSubmit.click(function () {
+			$.ajax({method: "POST", url: '/reboot', data: {}});
+		});
+
+		$shutdownSubmit.click(function () {
+			$.ajax({method: "POST", url: '/shutdown', data: {}});
+		});
 
 		//receive systeminfo
 		socket.on('systeminfo', function (data) {

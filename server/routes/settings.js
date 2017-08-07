@@ -20,6 +20,15 @@ router.get('/', function(req, res, next) {
 	res.render('settings', {defaultSCFile: defaultSCFile, defaultssid: defaultssid, hostname: hostname});
 });
 
+
+router.post('/shutdown', function (req, res) {
+	var child = exec('sudo poweroff');
+})
+
+router.post('/shutdown', function (req, res) {
+	var child = exec('sudo reboot');
+})
+
 router.post('/setwifi', function (req, res) {
 	var networkname = req.body.networkname;
 	var networkpass = req.body.networkpass;
