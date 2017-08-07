@@ -77,9 +77,9 @@ router.post('/hostname', function (req, res) {
 	exec('sudo sed -i "s/\\(127.0.1.1 *\\).*/\\1\\tnewhostname/" /etc/hosts', function (error, stdout, stderr) {
 		exec('sudo sed -i "s/^.*/raspberrypi/" /etc/hostname', function (error, stdout, stderr) {
 			res.redirect('/settings');
-		};
+		});
 	});
-})
+});
 
 router.post('/setdefaultscfile', function (req, res) {
 	var defaultSCFile= req.body.defaultSCFile;
