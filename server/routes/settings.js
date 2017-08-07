@@ -2,6 +2,7 @@ let express = require('express');
 let router = express.Router();
 let exec = require('child_process').exec;
 let fs = require('fs');
+let os = require('os');
 let path = require('path');
 let private_path = path.join(__dirname, '../private/');
 
@@ -13,9 +14,10 @@ router.get('/', function(req, res, next) {
 	var configData = JSON.parse(configFile);
 	var defaultSCFile = configData.defaultSCFile;
 	var defaultssid = configData.wifinetworks[0];
+	var hostname = os.hostname();
 	// var hostname = configData.hostname;
 
-	res.render('settings', {defaultSCFile: defaultSCFile, defaultssid: defaultssid});
+	res.render('settings', {defaultSCFile: defaultSCFile, defaultssid: defaultssid, hostname: hostname});
 });
 
 router.post('/setwifi', function (req, res) {
