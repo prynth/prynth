@@ -73,6 +73,12 @@ router.post('/hostname', function (req, res) {
 
 	// console.log(configJSON);
 	fs.writeFileSync(private_path +'config.json', configJSON);
+
+	var command1 = 'sudo sed -i "s/\\(127.0.1.1 *\\).*/\\1\\tnewhostname/" /etc/hosts';
+	var command2 = 'sudo sed -i "s/^.*/raspberrypi/" /etc/hostname';
+
+	console.log(command1);
+	console.log(command2);
 	//
 	// var child1 =  exec('sudo sed -i "s/\\(127.0.1.1 *\\).*/\\1\\tnewhostname/" /etc/hosts', function (error, stdout, stderr) {
 	// 	var child2 = exec('sudo sed -i "s/^.*/raspberrypi/" /etc/hostname', function (error, stdout, stderr) {
