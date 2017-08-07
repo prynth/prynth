@@ -12,9 +12,10 @@ router.get('/', function(req, res, next) {
 	var configFile = fs.readFileSync(private_path +'config.json');
 	var configData = JSON.parse(configFile);
 	var defaultSCFile = configData.defaultSCFile;
+	var defaultssid = configData.wifinetworks[0];
 	// var hostname = configData.hostname;
 
-	res.render('settings', {defaultSCFile: defaultSCFile});
+	res.render('settings', {defaultSCFile: defaultSCFile, defaultssid: defaultssid});
 });
 
 router.post('/setwifi', function (req, res) {
@@ -35,7 +36,7 @@ router.post('/setwifi', function (req, res) {
 	// console.log(configJSON);
 	fs.writeFileSync(private_path +'config.json', configJSON);
 
-	var command = 'gsed -i "/#prynth start/,/#prynth end/ s/\\(ssid *= *\\).*/\\1\\"'+networkname+'\\"/ ;/#prynth start/,/#prynth end/ s/\\(password *= *\\).*/\\1\\"'+networkpass+'\\"/" /Users/if/Desktop/myconf.conf';
+	var command = 'sudo sed -i "/#prynth start/,/#prynth end/ s/\\(ssid *= *\\).*/\\1\\"'+networkname+'\\"/ ;/#prynth start/,/#prynth end/ s/\\(password *= *\\).*/\\1\\"'+networkpass+'\\"/" /etc/wpa_supplicant/wpa_supplicant.conf';
 	console.log(command);
 
 	var child = exec(command, function (error, stdout, stderr) {
