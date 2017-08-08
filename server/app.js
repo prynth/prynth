@@ -7,11 +7,16 @@ var bodyParser = require('body-parser');
 
 // let events = require('events');
 let os = require('os');
+let exec = require('child_process').exec;
 
 let multer = require('multer');
 let fs = require('fs');
 let sc = require('supercolliderjs');
+
+
 let sclang;
+let jackd;
+let serial2osc;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -81,6 +86,14 @@ app.use(function(err, req, res, next) {
 
 
 ////////////
+// start jackd
+if(jackd = null){
+	exec('sudo jackd -P75 -dalsa -dhw:1 -p1024 -n3 -s -r44100', function (error, stdout, stderr) {
+		console.log(stdout);
+		// res.redirect('/settings');
+	});
+};
+
 
 //start sclang
 if(sclang == null) {
