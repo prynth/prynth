@@ -1,7 +1,7 @@
 s.waitForBoot{
-
-"default.scd executed".postln;
-//"sinetest.scd".loadRelative;
-
-
-}
+	fork{
+		~path = "/home/pi/prynth/server/public/supercolliderfiles/";
+		2.wait;
+		(~path++"sinetest.scd").load;
+	};
+};

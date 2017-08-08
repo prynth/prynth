@@ -1,7 +1,3 @@
 s.waitForBoot{
-
-"foo.scd executed".postln;
-//"sinetest.scd".loadRelative;
-
-
-}
+    "foo.scd executed".postln;
+};
