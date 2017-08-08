@@ -1,0 +1,1 @@
+(dur:1, strum: 0.1, degree: [0,4,7]).play;
