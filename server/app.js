@@ -91,19 +91,15 @@ app.use(function(err, req, res, next) {
 if(jackd == null){
 	exec('sudo jackd -P75 -dalsa -dhw:1 -p1024 -n3 -s -r44100', function (error, stdout, stderr) {
 		console.log(stdout);
-
-		//start serial2osc
-		if(serial2osc == null){
-			exec('sudo /home/pi/prynth/serial2osc/serial2osc -s', function (error, stdout, stderr) {
-				console.log(stdout);
-			});
-		};
-
 	});
 };
 
-
-
+//start serial2osc
+if(serial2osc == null){
+	exec('sudo /home/pi/prynth/serial2osc/serial2osc -s', function (error, stdout, stderr) {
+		console.log(stdout);
+	});
+};
 
 //start sclang
 if(sclang == null) {
