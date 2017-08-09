@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');
 // let events = require('events');
 let os = require('os');
 let exec = require('child_process').exec;
-let execSync = require('child_process').execSync;
 
 let multer = require('multer');
 let fs = require('fs');

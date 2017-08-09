@@ -62,6 +62,18 @@
 			<button type="button" id="defaultSCFileButton">Save</button>
 		</form>
 	</div>
+
+	<div style="width: 200px; float: left">
+		<h3>Sensor data target</h3>
+		<form>
+			<select id="sensorDataTarget">
+				<option>Language</option>
+				<option>Server</option>
+			</select>
+			<br>
+			<button type="button" id="sensorDataTargetButton">Save</button>
+		</form>
+	</div>
 </div>
 
 <script>
@@ -86,6 +98,9 @@
 		let $defaultSCFileTextarea = $('#defaultSCFileTextarea');
 		let $defaultSCFileSubmit = $('#defaultSCFileButton');
 
+		let $sensorDataTarget = $('#sensorDataTarget');
+		let $sensorDataTargetButton = $('#sensorDataTargetButton');
+
 		let $rebootSubmit = $('#rebootButton');
 		let $shutdownSubmit = $('#shutdownButton');
 
@@ -107,6 +122,11 @@
 			$.ajax({method: "POST", url: '/settings/setdefaultscfile', data: {defaultSCFile: defaultSCFile}});
 			alert('Default file updated. This file will run automatically the next time Prynth is booted.');
 		});
+
+		$sensorDataTargetButton.click(function () {
+			let temp = $sensorDataTarget.val();
+			console.log(temp);
+		})
 
 		$rebootSubmit.click(function () {
 			$.ajax({method: "POST", url: 'settings/reboot'});
