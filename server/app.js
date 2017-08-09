@@ -85,11 +85,11 @@ app.use(function(err, req, res, next) {
 
 ////////////
 //start jackd
-// if(jackd == null){
-// 	exec('sudo jackd -P75 -dalsa -dhw:1 -p1024 -n3 -s -r44100', function (error, stdout, stderr) {
-// 		console.log(stdout);
-// 	});
-// };
+if(jackd == null){
+	exec('sudo jackd -P75 -dalsa -dhw:1 -p1024 -n3 -s -r44100', function (error, stdout, stderr) {
+		console.log(stdout);
+	});
+};
 
 //start serial2osc
 if(serial2osc == null){
@@ -97,9 +97,9 @@ if(serial2osc == null){
 
 	let target = 'sudo home/pi/prynth/serial2osc/serial2osc -'+config.sensorDataTarget;
 	console.log(target);
-	// exec(target, function (error, stdout, stderr) {
-	// 	console.log(stdout);
-	// });
+	exec(target, function (error, stdout, stderr) {
+		console.log(stdout);
+	});
 };
 
 //start sclang
