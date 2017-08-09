@@ -95,8 +95,9 @@ if(jackd == null){
 if(serial2osc == null){
 	// TODO: introduce variation according to setting via json
 
-	let target = config.sensorDataTarget;
-	exec('sudo ~/prynth/serial2osc/serial2osc -'++target, function (error, stdout, stderr) {
+	let target = 'sudo ~/prynth/serial2osc/serial2osc -'+config.sensorDataTarget;
+	console.log(target);
+	exec(target, function (error, stdout, stderr) {
 		console.log(stdout);
 	});
 };
