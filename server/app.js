@@ -91,11 +91,15 @@ if(jackd == null){
 	let sampleRate = config.jack.sampleRate;
 
 	let command = 'sudo jackd -P75 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
-	console.log('jack command: '+command);
-	
-	exec('sudo jackd -P75 -dalsa -dhw:1 -p1024 -n3 -s -r44100', function (error, stdout, stderr) {
+	// console.log('jack command: '+command);
+
+	exec(command, function (error, stdout, stderr) {
 		console.log(stdout);
 	});
+
+	// exec('sudo jackd -P75 -dalsa -dhw:1 -p1024 -n3 -s -r44100', function (error, stdout, stderr) {
+	// 	console.log(stdout);
+	// });
 };
 
 //start serial2osc
