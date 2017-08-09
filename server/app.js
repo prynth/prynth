@@ -86,6 +86,13 @@ app.use(function(err, req, res, next) {
 ////////////
 //start jackd
 if(jackd == null){
+	let device = config.jack.device;
+	let vectorSize = config.jack.vectorSize;
+	let sampleRate = config.jack.sampleRate;
+
+	let command = 'sudo jackd -P75 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
+	console.log('jack command: '+command);
+	
 	exec('sudo jackd -P75 -dalsa -dhw:1 -p1024 -n3 -s -r44100', function (error, stdout, stderr) {
 		console.log(stdout);
 	});
@@ -93,17 +100,11 @@ if(jackd == null){
 
 //start serial2osc
 if(serial2osc == null){
-	// TODO: introduce variation according to setting via json
 	let target = 'sudo /home/pi/prynth/serial2osc/serial2osc -'+config.sensorDataTarget;
 	console.log(target);
 	exec(target, function (error, stdout, stderr) {
 		console.log(stdout);
 	});
-
-	// exec('sudo /home/pi/prynth/serial2osc/serial2osc -s', function (error, stdout, stderr) {
-	// 	console.log(stdout);
-	// });
-
 };
 
 //start sclang

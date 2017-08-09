@@ -77,15 +77,12 @@ router.post('/sethostname', function (req, res) {
 	var command1 = 'sudo sed -i "s/\\(127.0.1.1 *\\).*/\\1\\t'+hostname+'/" /etc/hosts';
 	var command2 = 'sudo sed -i "s/^.*/'+hostname+'/" /etc/hostname';
 
-	console.log(command1);
-	console.log(command2);
-	//
+	// TODO: do I need variables here??
 	var child1 =  exec(command1, function (error, stdout, stderr) {
 		var child2 = exec(command2, function (error, stdout, stderr) {
 			res.redirect('/settings');
 		});
 	});
-
 
 });
 
