@@ -94,12 +94,16 @@ if(jackd == null){
 //start serial2osc
 if(serial2osc == null){
 	// TODO: introduce variation according to setting via json
-
-	let target = 'sudo home/pi/prynth/serial2osc/serial2osc -'+config.sensorDataTarget;
+	let target = 'sudo /home/pi/prynth/serial2osc/serial2osc -'+config.sensorDataTarget;
 	console.log(target);
 	exec(target, function (error, stdout, stderr) {
 		console.log(stdout);
 	});
+
+	// exec('sudo /home/pi/prynth/serial2osc/serial2osc -s', function (error, stdout, stderr) {
+	// 	console.log(stdout);
+	// });
+
 };
 
 //start sclang
