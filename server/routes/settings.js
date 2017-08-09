@@ -62,13 +62,13 @@ router.post('/setwifi', function (req, res) {
 
 })
 
-router.post('/hostname', function (req, res) {
+router.post('/sethostname', function (req, res) {
 	var hostname = req.body.hostname;
 
 	var configFile = fs.readFileSync(private_path +'config.json');
 	var configData = JSON.parse(configFile);
 
-	configData.hostname= hostname;
+	configData.hostname = hostname;
 	var configJSON = JSON.stringify(configData, null, 2);
 
 	// console.log(configJSON);
@@ -91,13 +91,27 @@ router.post('/hostname', function (req, res) {
 
 router.post('/setdefaultscfile', function (req, res) {
 	var defaultSCFile= req.body.defaultSCFile;
-	console.log(defaultSCFile);
+	// console.log(defaultSCFile);
 
 	//CHANGE TO RELATIVE PATHS!!!
 	var configFile = fs.readFileSync(private_path +'config.json');
 	var configData = JSON.parse(configFile);
 
 	configData.defaultSCFile = defaultSCFile;
+	var configJSON = JSON.stringify(configData, null, 2);
+
+	fs.writeFileSync(private_path +'config.json', configJSON);
+});
+
+router.post('/setsensordatatarget', function (req, res) {
+	var sensordatatarget= req.body.sensorDataTarget;
+	console.log(sensordatatarget);
+
+	//CHANGE TO RELATIVE PATHS!!!
+	var configFile = fs.readFileSync(private_path +'config.json');
+	var configData = JSON.parse(configFile);
+
+	configData.sensorDataTarget= sensordatatarget;
 	var configJSON = JSON.stringify(configData, null, 2);
 
 	fs.writeFileSync(private_path +'config.json', configJSON);

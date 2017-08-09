@@ -66,7 +66,7 @@
 	<div style="width: 200px; float: left">
 		<h3>Sensor data target</h3>
 		<form>
-			<select id="sensorDataTarget">
+			<select id="sensorDataTargetSelect">
 				<option>Language</option>
 				<option>Server</option>
 			</select>
@@ -98,7 +98,7 @@
 		let $defaultSCFileTextarea = $('#defaultSCFileTextarea');
 		let $defaultSCFileSubmit = $('#defaultSCFileButton');
 
-		let $sensorDataTarget = $('#sensorDataTarget');
+		let $sensorDataTargetSelect = $('#sensorDataTargetSelect');
 		let $sensorDataTargetButton = $('#sensorDataTargetButton');
 
 		let $rebootSubmit = $('#rebootButton');
@@ -113,7 +113,7 @@
 
 		$hostnameSubmit.click(function () {
 			let hostname = $hostnameTextarea.val();
-			$.ajax({method: "POST", url: '/settings/hostname', data: {hostname: hostname}});
+			$.ajax({method: "POST", url: '/settings/sethostname', data: {hostname: hostname}});
 			alert('Hostname updadated. Needs reboot.');
 		});
 
@@ -124,9 +124,11 @@
 		});
 
 		$sensorDataTargetButton.click(function () {
-			let temp = $sensorDataTarget.val();
-			console.log(temp);
-		})
+			let sensorDataTargetOutput;
+			let sensorDataTarget = $sensorDataTargetSelect.val();
+			if(sensorDataTarget === "Server"){sensorDataTargetOutput = "s"} else {sensorDataTargetOutput = "l"}
+			$.ajax({method: "POST", url: '/settings/setsensordatatarget', data: {sensorDataTarget: sensorDataTargetOutput}});
+		});
 
 		$rebootSubmit.click(function () {
 			$.ajax({method: "POST", url: 'settings/reboot'});

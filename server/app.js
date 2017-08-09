@@ -5,14 +5,12 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-// let events = require('events');
 let os = require('os');
 let exec = require('child_process').exec;
 
 let multer = require('multer');
 let fs = require('fs');
 let sc = require('supercolliderjs');
-
 
 let sclang;
 let jackd;
@@ -95,7 +93,10 @@ if(jackd == null){
 
 //start serial2osc
 if(serial2osc == null){
-	exec('sudo /home/pi/prynth/serial2osc/serial2osc -s', function (error, stdout, stderr) {
+	// TODO: introduce variation according to setting via json
+
+	let target = config.sensorDataTarget;
+	exec('sudo ~/prynth/serial2osc/serial2osc -'++target, function (error, stdout, stderr) {
 		console.log(stdout);
 	});
 };
