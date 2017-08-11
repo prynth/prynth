@@ -104,8 +104,10 @@ if(jackd == null){
 
 //start serial2osc
 if(serial2osc == null){
-	let target = 'sudo /home/pi/prynth/serial2osc/serial2osc -'+config.sensorDataTarget;
-	console.log(target);
+
+	// let target = 'sudo /home/pi/prynth/serial2osc/serial2osc -'+config.sensorDataTarget;
+	let target = path.join(__dirname, '../serial2osc/serial2osc')+' -'+config.sensorDataTarget;
+	// console.log(target);
 	exec(target, function (error, stdout, stderr) {
 		console.log(stdout);
 	});
