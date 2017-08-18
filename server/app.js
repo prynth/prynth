@@ -94,7 +94,7 @@ if(jackd == null){
 	let command = 'sudo jackd -P75 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
 	console.log('jack command: '+command);
 
-	exec(command, function (error, stdout, stderr) {
+	jackd = exec(command, function (error, stdout, stderr) {
 		console.log(stdout);
 	});
 
@@ -104,7 +104,7 @@ if(jackd == null){
 if(serial2osc == null){
 	let target = path.join(__dirname, '../serial2osc/serial2osc')+' -'+config.sensorDataTarget;
 
-	exec(target, function (error, stdout, stderr) {
+	serial2osc = exec(target, function (error, stdout, stderr) {
 		console.log(stdout);
 	});
 };
