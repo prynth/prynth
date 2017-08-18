@@ -91,7 +91,7 @@ if(jackd == null){
 	let sampleRate = config.jack.sampleRate;
 
 	let command = 'sudo jackd -P75 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
-	// console.log('jack command: '+command);
+	console.log('jack command: '+command);
 
 	exec(command, function (error, stdout, stderr) {
 		console.log(stdout);
