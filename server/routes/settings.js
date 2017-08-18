@@ -18,12 +18,18 @@ router.get('/', function(req, res, next) {
 	var hostname = os.hostname();
 	// var hostname = configData.hostname;
 	var sensordatatarget = configData.sensorDataTarget;
+	var audiodevice = configData.jack.device;
+	var vectorsize = configData.jack.vectorSize;
+	var samplerate = configData.jack.sampleRate;
 
 	res.render('settings', {
 		defaultSCFile: defaultSCFile,
 		defaultssid: defaultssid,
 		hostname: hostname,
-		sensordatatarget: sensordatatarget
+		sensordatatarget: sensordatatarget,
+		audiodevice: audiodevice,
+		vectorsize: vectorsize,
+		samplerate: samplerate
 	});
 });
 

@@ -19,6 +19,11 @@
 
 <h2>Settings</h2>
 
+<%= sensordatatarget %>
+<%= audiodevice %>
+<%= vectorsize %>
+<%= samplerate %>
+
 <div style="width: 1000px; height: 800px;">
 
 
@@ -66,7 +71,7 @@
 		<h3 class="PrynthPanelLabel">Sensor data target</h3>
 		<form>
 			<select id="sensorDataTargetSelect">
-				<option>Choose...</option>
+				<option selected disabled></option>
 				<option value="l">Language</option>
 				<option value="s">Server</option>
 			</select>
@@ -80,26 +85,25 @@
 		<form>
 			<h4 class="PrynthPanelLabel">Device ID number (ALSA)</h4>
 			<select id="jackDevice">
-				<option selected disabled>Choose...</option>
-				<option>0</option>
-				<option>1</option>
+				<option selected disabled></option>
+				<option value="0">0</option>
+				<option value="1">1</option>
 			</select>
 			<br>
 			<br>
 			<h4  class="PrynthPanelLabel">Vector Size</h4>
 			<select id="jackVectorSize">
-				<option selected disabled>Choose...</option>
-				<option>256</option>
-				<option>514</option>
-				<option>1024</option>
+				<option selected disabled></option>
+				<option value="256">256</option>
+				<option value="514">514</option>
+				<option value="1024">1024</option>
 			</select>
 			<br>
 			<br>
 			<h4  class="PrynthPanelLabel">Sample Rate</h4>
 			<select id="jackSampleRate">
-				<option selected disabled>Choose...</option>
-				<option>44100</option>
-				<option>48000</option>
+				<option value="44100">44100</option>
+				<option value="48000">48000</option>
 			</select>
 			<br>
 			<button type="button" id="audioDeviceButton">Save</button>
@@ -138,9 +142,14 @@
 		let $jackSampleRate = $('#jackSampleRate');
 		let $audioDeviceSubmit = $('#audioDeviceButton');
 
-
 		let $rebootSubmit = $('#rebootButton');
 		let $shutdownSubmit = $('#shutdownButton');
+
+
+		$sensorDataTargetSelect.val('<%=sensordatatarget%>');
+		$jackDevice.val('<%=audiodevice%>');
+		$jackVectorSize.val('<%=vectorsize%>');
+		$jackSampleRate.val('<%=samplerate%>');
 
 		$rebootSubmit.click(function () {
 			$.ajax({method: "POST", url: 'settings/reboot'});
@@ -185,7 +194,6 @@
 			$.ajax({method: "POST", url: '/settings/setjack', data: {device: audioDevice, vectorSize: audioVectorSize, sampleRate: audioSampleRate}});
 			alert('Jack settings updated. Needs reboot.');
 		})
-
 
 		//receive systeminfo
 		socket.on('systeminfo', function (data) {
