@@ -7,6 +7,7 @@ var bodyParser = require('body-parser');
 
 let os = require('os');
 let exec = require('child_process').exec;
+let execSync = require('child_process').execSync;
 
 let multer = require('multer');
 let fs = require('fs');
@@ -93,7 +94,7 @@ if(jackd == null){
 	let command = 'sudo jackd -P75 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
 	console.log('jack command: '+command);
 
-	exec(command, function (error, stdout, stderr) {
+	execSync(command, function (error, stdout, stderr) {
 		console.log(stdout);
 	});
 
@@ -101,10 +102,8 @@ if(jackd == null){
 
 //start serial2osc
 if(serial2osc == null){
-
-	// let target = 'sudo /home/pi/prynth/serial2osc/serial2osc -'+config.sensorDataTarget;
 	let target = path.join(__dirname, '../serial2osc/serial2osc')+' -'+config.sensorDataTarget;
-	// console.log(target);
+
 	exec(target, function (error, stdout, stderr) {
 		console.log(stdout);
 	});
