@@ -86,19 +86,19 @@ app.use(function(err, req, res, next) {
 
 ////////////
 //start jackd
-// if(jackd == null){
-// 	let device = config.jack.device;
-// 	let vectorSize = config.jack.vectorSize;
-// 	let sampleRate = config.jack.sampleRate;
-//
-// 	let command = 'sudo jackd -P75 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
-// 	// console.log('jack command: '+command);
-//
-// 	jackd = exec(command, function (error, stdout, stderr) {
-// 		console.log(stdout);
-// 	});
-//
-// };
+if(jackd == null){
+	let device = config.jack.device;
+	let vectorSize = config.jack.vectorSize;
+	let sampleRate = config.jack.sampleRate;
+
+	let command = 'jackd -P75 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
+	// console.log('jack command: '+command);
+
+	jackd = exec(command, function (error, stdout, stderr) {
+		console.log(stdout);
+	});
+
+};
 
 //start serial2osc
 if(serial2osc == null){
