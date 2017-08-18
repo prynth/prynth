@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 
 let os = require('os');
 let exec = require('child_process').exec;
-let execSync = require('child_process').execSync;
 
 let multer = require('multer');
 let fs = require('fs');
@@ -94,13 +93,9 @@ if(jackd == null){
 	let command = 'sudo jackd -P75 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
 	console.log('jack command: '+command);
 
-	execSync(command, function (error, stdout, stderr) {
+	exec(command, function (error, stdout, stderr) {
 		console.log(stdout);
 	});
-
-	// exec('sudo jackd -P75 -dalsa -dhw:1 -p1024 -n3 -s -r44100', function (error, stdout, stderr) {
-	// 	console.log(stdout);
-	// });
 
 };
 
