@@ -95,11 +95,40 @@ if(jackd == null){
 
 	exec(command, function (error, stdout, stderr) {
 		console.log(stdout);
+		if(sclang == null) {
+			sc.lang.boot({stdin: false, echo: false, debug: false}).then(function (lang) {
+				sclang = lang;
+				sclang.on('stdout', function (text) {
+					io.sockets.emit('toconsole', text);
+				});
+				sclang.on('state', function (text) {
+					io.sockets.emit('toconsole', JSON.stringify(text));
+				});
+				sclang.on('stderror', function (text) {
+					io.sockets.emit('toconsole', JSON.stringify(text));
+				});
+				sclang.on('error', function (text) {
+					io.sockets.emit('toconsole', JSON.stringify(text));
+				});
+			}).then(function () {
+				sclang.executeFile(path.join(supercolliderfiles_path, config.defaultSCFile)).then(
+					function (answer) {
+						io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
+					},
+					function (error) {
+						io.sockets.emit('toconsole', 'cannot run or find default file. Check your settings...\n');
+						io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
+					}
+				)
+				// console.log(path.join(supercolliderfiles_path, 'default.scd'));
+			})
+		};
 	});
 
 	// exec('sudo jackd -P75 -dalsa -dhw:1 -p1024 -n3 -s -r44100', function (error, stdout, stderr) {
 	// 	console.log(stdout);
 	// });
+
 };
 
 //start serial2osc
@@ -114,34 +143,34 @@ if(serial2osc == null){
 };
 
 //start sclang
-if(sclang == null) {
-	sc.lang.boot({stdin: false, echo: false, debug: false}).then(function (lang) {
-		sclang = lang;
-		sclang.on('stdout', function (text) {
-			io.sockets.emit('toconsole', text);
-		});
-		sclang.on('state', function (text) {
-			io.sockets.emit('toconsole', JSON.stringify(text));
-		});
-		sclang.on('stderror', function (text) {
-			io.sockets.emit('toconsole', JSON.stringify(text));
-		});
-		sclang.on('error', function (text) {
-			io.sockets.emit('toconsole', JSON.stringify(text));
-		});
-	}).then(function () {
-		sclang.executeFile(path.join(supercolliderfiles_path, config.defaultSCFile)).then(
-			function (answer) {
-				io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
-			},
-			function (error) {
-				io.sockets.emit('toconsole', 'cannot run or find default file. Check your settings...\n');
-				io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
-			}
-		)
-		// console.log(path.join(supercolliderfiles_path, 'default.scd'));
-	})
-};
+// if(sclang == null) {
+// 	sc.lang.boot({stdin: false, echo: false, debug: false}).then(function (lang) {
+// 		sclang = lang;
+// 		sclang.on('stdout', function (text) {
+// 			io.sockets.emit('toconsole', text);
+// 		});
+// 		sclang.on('state', function (text) {
+// 			io.sockets.emit('toconsole', JSON.stringify(text));
+// 		});
+// 		sclang.on('stderror', function (text) {
+// 			io.sockets.emit('toconsole', JSON.stringify(text));
+// 		});
+// 		sclang.on('error', function (text) {
+// 			io.sockets.emit('toconsole', JSON.stringify(text));
+// 		});
+// 	}).then(function () {
+// 		sclang.executeFile(path.join(supercolliderfiles_path, config.defaultSCFile)).then(
+// 			function (answer) {
+// 				io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
+// 			},
+// 			function (error) {
+// 				io.sockets.emit('toconsole', 'cannot run or find default file. Check your settings...\n');
+// 				io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
+// 			}
+// 		)
+// 		// console.log(path.join(supercolliderfiles_path, 'default.scd'));
+// 	})
+// };
 
 //interprets in supercolliderfiles (receives from post via socket and outputs to console via socket)
 app.on('interpret', function (msg) {
