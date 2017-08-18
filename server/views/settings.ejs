@@ -9,7 +9,6 @@
 
 	<!--socket.io-->
 	<script src="javascripts/socket.io/socket.io.js"></script>
-
 </head>
 
 <body>
@@ -67,9 +66,9 @@
 		<h3 class="PrynthPanelLabel">Sensor data target</h3>
 		<form>
 			<select id="sensorDataTargetSelect">
-				<option selected disabled>Choose...</option>
-				<option>Language</option>
-				<option>Server</option>
+				<option>Choose...</option>
+				<option value="l">Language</option>
+				<option value="s">Server</option>
 			</select>
 			<br>
 			<button type="button" id="sensorDataTargetButton">Save</button>
@@ -80,7 +79,7 @@
 		<h3 class="PrynthPanelLabel">Audio Device</h3>
 		<form>
 			<h4 class="PrynthPanelLabel">Device ID number (ALSA)</h4>
-			<select id="device">
+			<select id="jackDevice">
 				<option selected disabled>Choose...</option>
 				<option>0</option>
 				<option>1</option>
@@ -88,7 +87,7 @@
 			<br>
 			<br>
 			<h4  class="PrynthPanelLabel">Vector Size</h4>
-			<select id="vectorSize">
+			<select id="jackVectorSize">
 				<option selected disabled>Choose...</option>
 				<option>256</option>
 				<option>514</option>
@@ -97,7 +96,7 @@
 			<br>
 			<br>
 			<h4  class="PrynthPanelLabel">Sample Rate</h4>
-			<select id="sampleRate">
+			<select id="jackSampleRate">
 				<option selected disabled>Choose...</option>
 				<option>44100</option>
 				<option>48000</option>
@@ -134,8 +133,24 @@
 		let $sensorDataTargetSelect = $('#sensorDataTargetSelect');
 		let $sensorDataTargetButton = $('#sensorDataTargetButton');
 
+		let $jackDevice = $('#jackDevice');
+		let $jackVectorSize = $('#jackVectorSize');
+		let $jackSampleRate = $('#jackSampleRate');
+		let $audioDeviceSubmit = $('#audioDeviceButton');
+
+
 		let $rebootSubmit = $('#rebootButton');
 		let $shutdownSubmit = $('#shutdownButton');
+
+		$rebootSubmit.click(function () {
+			$.ajax({method: "POST", url: 'settings/reboot'});
+			alert('Rebooting...');
+		});
+
+		$shutdownSubmit.click(function () {
+			$.ajax({method: "POST", url: 'settings/shutdown'});
+			alert('Shutting down...')
+		});
 
 		$networkSubmit.click(function () {
 			let networkName = $networkSSIDTextarea.val();
@@ -157,23 +172,20 @@
 		});
 
 		$sensorDataTargetButton.click(function () {
-			let sensorDataTargetOutput;
 			let sensorDataTarget = $sensorDataTargetSelect.val();
-			if(sensorDataTarget === "Server"){sensorDataTargetOutput = "s"} else {sensorDataTargetOutput = "l"}
-			$.ajax({method: "POST", url: '/settings/setsensordatatarget', data: {sensorDataTarget: sensorDataTargetOutput}});
+			$.ajax({method: "POST", url: '/settings/setsensordatatarget', data: {sensorDataTarget: sensorDataTarget}});
 			alert('Sensor data target updated. Needs reboot.');
-
 		});
 
-		$rebootSubmit.click(function () {
-			$.ajax({method: "POST", url: 'settings/reboot'});
-			alert('Rebooting...');
-		});
+		$audioDeviceSubmit.click(function () {
+			let audioDevice = $jackDevice.val();
+			let audioVectorSize = $jackVectorSize.val();
+			let audioSampleRate = $jackSampleRate.val();
 
-		$shutdownSubmit.click(function () {
-			$.ajax({method: "POST", url: 'settings/shutdown'});
-			alert('Shutting down...')
-		});
+			$.ajax({method: "POST", url: '/settings/setjack', data: {device: audioDevice, vectorSize: audioVectorSize, sampleRate: audioSampleRate}});
+			alert('Jack settings updated. Needs reboot.');
+		})
+
 
 		//receive systeminfo
 		socket.on('systeminfo', function (data) {
@@ -189,6 +201,7 @@
 		$(window).on('beforeunload', function(){
 			socket.close();
 		});
+
 
 	});
 </script>

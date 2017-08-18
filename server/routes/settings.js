@@ -12,12 +12,19 @@ let private_path = path.join(__dirname, '../private/');
 router.get('/', function(req, res, next) {
 	var configFile = fs.readFileSync(private_path +'config.json');
 	var configData = JSON.parse(configFile);
+
 	var defaultSCFile = configData.defaultSCFile;
 	var defaultssid = configData.wifinetworks[0];
 	var hostname = os.hostname();
 	// var hostname = configData.hostname;
+	var sensordatatarget = configData.sensorDataTarget;
 
-	res.render('settings', {defaultSCFile: defaultSCFile, defaultssid: defaultssid, hostname: hostname});
+	res.render('settings', {
+		defaultSCFile: defaultSCFile,
+		defaultssid: defaultssid,
+		hostname: hostname,
+		sensordatatarget: sensordatatarget
+	});
 });
 
 
@@ -102,9 +109,7 @@ router.post('/setdefaultscfile', function (req, res) {
 
 router.post('/setsensordatatarget', function (req, res) {
 	var sensordatatarget= req.body.sensorDataTarget;
-	console.log(sensordatatarget);
 
-	//CHANGE TO RELATIVE PATHS!!!
 	var configFile = fs.readFileSync(private_path +'config.json');
 	var configData = JSON.parse(configFile);
 
@@ -112,7 +117,28 @@ router.post('/setsensordatatarget', function (req, res) {
 	var configJSON = JSON.stringify(configData, null, 2);
 
 	fs.writeFileSync(private_path +'config.json', configJSON);
-})
+});
+
+router.post('/setjack', function (req, res) {
+	var jackDevice= req.body.device;
+	var jackVectorSize = req.body.vectorSize;
+	var jackSampleRate = req.body.sampleRate;
+
+	var configFile = fs.readFileSync(private_path +'config.json');
+	var configData = JSON.parse(configFile);
+
+	// configData.jack.device = jackDevice;
+	// configData.jack.vectorSize = jackVectorSize
+	// configData.jack.sampleRate = jackSampleRate;
+
+	configData.jack = {"device": jackDevice, "vectorSize": jackVectorSize, "sampleRate": jackSampleRate};
+
+	console.log(jackDevice, jackVectorSize, jackSampleRate)
+
+	var configJSON = JSON.stringify(configData, null, 2);
+
+	fs.writeFileSync(private_path +'config.json', configJSON);
+});
 
 
 module.exports = router;
