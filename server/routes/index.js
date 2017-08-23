@@ -2,8 +2,6 @@ let express = require('express');
 let router = express.Router();
 let multer = require('multer');
 let fs = require('fs');
-let util = require('util');
-let configFile = require('../private/config.json');
 let path = require('path');
 
 let storage = multer.diskStorage({
@@ -17,9 +15,9 @@ let supercolliderfiles = [''];
 let public_path = path.join(__dirname, '../public/');
 let tempcode;
 
+refreshFiles();
 
 router.get('/', function(req, res, next) {
-	refreshFiles();
 	res.render('index', {supercolliderfiles: supercolliderfiles, soundfiles: soundfiles, tempcode: tempcode});
 });
 
@@ -78,7 +76,6 @@ router.post('/supercolliderfiles', function (req, res) {
 	}
 })
 
-
 router.post('/soundfiles', function (req, res) {
 
 	if(req.body.action === 'upload'){
@@ -99,7 +96,6 @@ router.post('/soundfiles', function (req, res) {
 		res.redirect('/refresh-files');
 	};
 });
-
 
 router.post('/soundfileupload', function (req, res) {
 	upload(req,res,function(err) {
