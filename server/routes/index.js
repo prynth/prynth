@@ -51,9 +51,10 @@ router.post('/supercolliderfiles', function (req, res) {
 	};
 
 	if(req.body.action === 'save'){
-		console.log(req.body.filename);
-		console.log(req.body.code);
-		fs.writeFile(public_path + 'supercolliderfiles/' + req.body.filename, req.body.code, function (err) {
+		tempcode = req.body.code;
+		// console.log(req.body.filename);
+		// console.log(req.body.code);
+		fs.writeFile(public_path + 'supercolliderfiles/' + req.body.filename, tempcode, function (err) {
 			if(err) {
 				res.send('error saving file');
 				return console.log(err);
@@ -63,7 +64,6 @@ router.post('/supercolliderfiles', function (req, res) {
 				res.redirect('refresh-files');
 			}
 		});
-
 	};
 
 	if(req.body.action === 'delete') {
