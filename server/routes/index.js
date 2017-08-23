@@ -15,6 +15,7 @@ let upload = multer({ storage : storage}).array('filename', 10);
 let soundfiles = [''];
 let supercolliderfiles = [''];
 let public_path = path.join(__dirname, '../public/');
+let tempcode;
 
 
 router.get('/', function(req, res, next) {
@@ -27,7 +28,7 @@ router.get('/', function(req, res, next) {
 	// var defaultSCFile = configFile.defaultSCFile;
 	// console.log(defaultSCFile);
 	// res.render('index', {supercolliderfiles: supercolliderfiles, soundfiles: soundfiles, defaultSCFile: defaultSCFile});
-	res.render('index', {supercolliderfiles: supercolliderfiles, soundfiles: soundfiles});
+	res.render('index', {supercolliderfiles: supercolliderfiles, soundfiles: soundfiles, tempcode: tempcode});
 });
 
 
@@ -37,7 +38,7 @@ router.post('/interpret', function (req, res) {
 });
 
 router.post('/runtemp', function (req, res) {
-	res.app.emit('runtemp', req.body.code);
+	res.app.emit('runtemp', tempcode);
 	res.sendStatus(200);
 });
 
@@ -59,6 +60,7 @@ router.post('/supercolliderfiles', function (req, res) {
 	if(req.body.action === 'load'){
 		let filetoload = supercolliderfiles[JSON.parse(req.body.fileindex)[0]];
 		let buffer = fs.readFileSync((public_path + 'supercolliderfiles/' + filetoload), 'utf8');
+		tempcode = buffer;
 		res.io.emit('toeditor', buffer);
 		res.sendStatus(200);
 	};
