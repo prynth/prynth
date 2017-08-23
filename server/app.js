@@ -36,7 +36,7 @@ var systemInfo;
 
 //public path
 let supercolliderfiles_path = path.join(__dirname, 'public/supercolliderfiles/');
-
+let public_path = path.join(__dirname, '../public/');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -153,6 +153,32 @@ app.on('interpret', function (msg) {
 				.catch(function (error) {
 					io.sockets.emit('toconsole', JSON.stringify(error));
 				});
+	};
+
+});
+
+app.on('runtemp', function (msg) {
+	if(sclang !== null){
+
+		fs.writeFile(supercolliderfiles_path + '.temp.scd', msg, function (err) {
+			if (err) {
+				res.send('error saving file');
+				return console.log(err);
+			} else {
+				io.sockets.emit('toconsole', '\ntemp file saved');
+
+				sclang.executeFile(path.join(supercolliderfiles_path, '.temp.scd')).then(
+					function (answer) {
+						io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
+					},
+					function (error) {
+						io.sockets.emit('toconsole', 'cannot run or find temp file.\n');
+						io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
+					}
+				);
+			}
+			;
+		});
 	};
 
 });

@@ -36,6 +36,11 @@ router.post('/interpret', function (req, res) {
 	res.sendStatus(200);
 });
 
+router.post('/runtemp', function (req, res) {
+	res.app.emit('runtemp', req.body.code);
+	res.sendStatus(200);
+});
+
 router.get('/refresh-files', function (req, res) {
 	soundfiles = fs.readdirSync(public_path + 'soundfiles');
 	soundfiles = soundfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
