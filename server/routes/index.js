@@ -27,6 +27,7 @@ router.post('/interpret', function (req, res) {
 });
 
 router.post('/runtemp', function (req, res) {
+	tempcode = req.body.code;
 	res.app.emit('runtemp', tempcode);
 	res.sendStatus(200);
 });
