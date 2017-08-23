@@ -19,7 +19,11 @@ let public_path = path.join(__dirname, '../public/');
 
 router.get('/', function(req, res, next) {
 	soundfiles = fs.readdirSync(public_path + 'soundfiles');
+    soundfiles = soundfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
+
 	supercolliderfiles = fs.readdirSync(public_path + 'supercolliderfiles');
+	supercolliderfiles = supercolliderfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
+
 	// var defaultSCFile = configFile.defaultSCFile;
 	// console.log(defaultSCFile);
 	// res.render('index', {supercolliderfiles: supercolliderfiles, soundfiles: soundfiles, defaultSCFile: defaultSCFile});
@@ -33,8 +37,12 @@ router.post('/interpret', function (req, res) {
 });
 
 router.get('/refresh-files', function (req, res) {
-	supercolliderfiles = fs.readdirSync(public_path + 'supercolliderfiles');
 	soundfiles = fs.readdirSync(public_path + 'soundfiles');
+	soundfiles = soundfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
+
+	supercolliderfiles = fs.readdirSync(public_path + 'supercolliderfiles');
+	supercolliderfiles = supercolliderfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
+
 	res.io.emit('tosupercolliderfiles', supercolliderfiles);
 	res.io.emit('tosoundfiles', soundfiles);
 	// res.sendStatus(200);
