@@ -19,18 +19,9 @@ let tempcode;
 
 
 router.get('/', function(req, res, next) {
-	soundfiles = fs.readdirSync(public_path + 'soundfiles');
-    soundfiles = soundfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
-
-	supercolliderfiles = fs.readdirSync(public_path + 'supercolliderfiles');
-	supercolliderfiles = supercolliderfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
-
-	// var defaultSCFile = configFile.defaultSCFile;
-	// console.log(defaultSCFile);
-	// res.render('index', {supercolliderfiles: supercolliderfiles, soundfiles: soundfiles, defaultSCFile: defaultSCFile});
+	refreshFiles();
 	res.render('index', {supercolliderfiles: supercolliderfiles, soundfiles: soundfiles, tempcode: tempcode});
 });
-
 
 router.post('/interpret', function (req, res) {
 	res.app.emit('interpret', req.body.code);
@@ -43,15 +34,11 @@ router.post('/runtemp', function (req, res) {
 });
 
 router.get('/refresh-files', function (req, res) {
-	soundfiles = fs.readdirSync(public_path + 'soundfiles');
-	soundfiles = soundfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
 
-	supercolliderfiles = fs.readdirSync(public_path + 'supercolliderfiles');
-	supercolliderfiles = supercolliderfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
-
+	refreshFiles();
 	res.io.emit('tosupercolliderfiles', supercolliderfiles);
 	res.io.emit('tosoundfiles', soundfiles);
-	// res.sendStatus(200);
+
 	res.redirect('/');
 })
 
@@ -123,5 +110,14 @@ router.post('/soundfileupload', function (req, res) {
 	res.redirect('/refresh-files');
 })
 
+
+
+function refreshFiles() {
+	soundfiles = fs.readdirSync(public_path + 'soundfiles');
+	soundfiles = soundfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
+
+	supercolliderfiles = fs.readdirSync(public_path + 'supercolliderfiles');
+	supercolliderfiles = supercolliderfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
+};
 
 module.exports = router;
