@@ -19,122 +19,118 @@
 	<script src="javascripts/codemirror/mode/javascript/javascript.js"></script>
 	<script src="javascripts/codemirror/addon/edit/matchbrackets.js"></script>
 	<script src="javascripts/codemirror/addon/selection/active-line.js"></script>
+
+	<style type="text/css">
+		.CodeMirror {width:100%; height:460px;}
+	</style>
+
 </head>
 
 <body>
+<div style="width: 100vw;">
+	<a href="http://prynth.github.io" target="_blank" style="text-decoration: none"><img src="/images/prynth_logo.png" style="width: 30px;"> <span style="font-size:2em;"> Prynth</span> </a>
+	<label id="heartLabel"></label>
+</div>
 
-	<div style="width: 1000px; padding-left: 10px; padding-right: 10px;">
-		<a href="http://prynth.github.io" target="_blank" style="text-decoration: none"><img src="/images/prynth_logo.png" style="width: 30px;"> <span style="font-size:2em;"> Prynth</span> </a>
-		<label id="heartLabel"></label>
-	</div>
-	<div class="clearfix"></div>
 
-	<div style="width: 1000px; height: 800px">
-		<div style="float: left; width: 605px; height: auto;" class="PrynthPanel">
-			<h2 class="PrynthPanelLabel">Editor</h2>
-			<form>
-				<textarea id="codeTextarea"><%=tempcode%></textarea>
-				<button type="button" id="runButton">Run</button>
-				<button type="button" id="killButton">Kill</button>
-				<a href="/schelp/index.html" target="_blank"><button type="button">Help</button></a>
-				<a href="/settings" target="_blank"><button type="button">Settings</button></a>
+<div style="width: 70vw; height: 720px; float: left" class="PrynthPanel">
+	<form>
+		<h2 class="PrynthPanelLabel">Editor</h2>
+		<textarea id="codeTextarea"><%=tempcode%></textarea>
+		<button type="button" id="runButton">Run</button>
+		<button type="button" id="killButton">Kill</button>
+		<a href="/schelp/index.html" target="_blank"><button type="button">Help</button></a>
+		<a href="/settings" target="_blank"><button type="button">Settings</button></a>
 
-				<br>
-				<br>
-				<textarea id="consoleTextarea" style="width: 600px; height: 140px;"></textarea>
-				<br>
-				<button type="button" id="clearConsoleButton">Clear</button>
-			</form>
-		</div>
+		<br>
+		<br>
 
-		<!--<div style="width: 200px; float: left">-->
-			<!--<h2>System</h2>-->
-			<!--Uptime: <span id="clock" class="panel"></span><br>-->
-			<!--Hostname: <span id="hostname" class="panel"></span><br>-->
-			<!--Ethernet IP: <span id="ethernetip" class="panel"></span><br>-->
-			<!--Wireless IP: <span id="wirelessip" class="panel"></span><br>-->
-			<!--CPU usage: <span id="cpu" class="panel"></span><br>-->
-			<!--Free memory: <span id="freemem" class="panel"></span><br>-->
-		<!--</div>-->
+		<h2 class="PrynthPanelLabel">Post Window</h2>
+		<textarea id="consoleTextarea" style="width: 100%; height: 120px;"></textarea>
+		<br>
+		<button type="button" id="clearConsoleButton">Clear</button>
+	</form>
+</div>
 
-		<div style="width: 200px; float: left" class="PrynthPanel">
-			<h2 class="PrynthPanelLabel">SC files</h2>
-			<select id="supercolliderfiles" multiple style="width:200px; height:120px">
-				<% for (var i = 0; i < supercolliderfiles.length; i++) { %>
-				<option value="<%=i%>"><%=supercolliderfiles[i]%>
+<div style="float: right; width: 25vw">
+	<div style="width: 200px;" class="PrynthPanel">
+		<h2 class="PrynthPanelLabel">SC files</h2>
+		<select id="supercolliderfiles" multiple style="width:200px; height:120px">
+			<% for (var i = 0; i < supercolliderfiles.length; i++) { %>
+			<option value="<%=i%>"><%=supercolliderfiles[i]%>
 				<% } %>
-			</select>
-			<br>
+		</select>
+		<br>
 
-			<button type="button" id="savescfilebutton">Save</button>
-			<button type="button" id="loadscfilebutton">Load</button>
-			<button type="button" id="deletescfilebutton">Delete</button>
+		<button type="button" id="savescfilebutton">Save</button>
+		<button type="button" id="loadscfilebutton">Load</button>
+		<button type="button" id="deletescfilebutton">Delete</button>
+	</div>
 
-		</div>
-
-		<div style="width: 200px; float: left" class="PrynthPanel">
-			<h2 class="PrynthPanelLabel">Sound files</h2>
-			<select id="soundfiles" multiple style="width: 200px; height: 120px">
-				<% for (var i = 0; i < soundfiles.length; i++) { %>
-				<option value="<%=i%>"><%=soundfiles[i]%>
-			<% } %>
-			</select>
-			<br>
-			<form id = "soundfileupload" enctype="multipart/form-data" method="post" action="/soundfileupload">
-				<label class="myLabel">
-					<input type="file" style="visibility: hidden" name="filename" multiple onchange="javascript:this.form.submit();"/>
-					<span>Upload</span>
-				</label>
+	<div style="width: 200px;" class="PrynthPanel">
+		<h2 class="PrynthPanelLabel">Sound files</h2>
+		<select id="soundfiles" multiple style="width: 200px; height: 120px">
+			<% for (var i = 0; i < soundfiles.length; i++) { %>
+			<option value="<%=i%>"><%=soundfiles[i]%>
+				<% } %>
+		</select>
+		<br>
+		<form id = "soundfileupload" enctype="multipart/form-data" method="post" action="/soundfileupload">
+			<label class="myLabel">
+				<input type="file" style="visibility: hidden" name="filename" multiple onchange="javascript:this.form.submit();"/>
+				<span>Upload</span>
+			</label>
 			<button type="button" id="deletesoundfilebutton">Delete</button>
-			</form>
-		</div>
+		</form>
 	</div>
+</div>
 
-	<div class="clearfix"></div>
-	<div style="width: 800px; padding-left: 10px;">
-		<footer>
-            <% include footer %>
-		</footer>
-	</div>
+
+<div style="width: 100vw; float: left">
+	<footer>
+        <% include footer %>
+	</footer>
+</div>
 
 
 <script>
-		var editor = CodeMirror.fromTextArea(document.getElementById("codeTextarea"), {
-			lineNumbers: true,
-			mode: "javascript",
-			matchBrackets: true,
-			autofocus: true,
-			styleActiveLine: true,
-			smartIndent: false,
-			indentWithTabs: true,
-			lineWrapping: true,
-			theme: "prynth-cm",
-		});
+	var editor = CodeMirror.fromTextArea(document.getElementById("codeTextarea"), {
+		lineNumbers: true,
+		mode: "javascript",
+		matchBrackets: true,
+		autofocus: true,
+		styleActiveLine: true,
+		smartIndent: false,
+		indentWithTabs: true,
+		lineWrapping: true,
+		theme: "prynth-cm",
+	});
 
-		editor.setSize(605, 480);
 
-		//post for run button
-		function interpret(data) {
-			$.ajax({method: "POST", url: '/interpret', data: {code: data}});
-		}
+	//        editor.setSize(width: "400px", height: "600px");
 
-		function runtemp(data) {
-			$.ajax({method: "POST", url: '/runtemp', data: {code: data}});
+	//post for run button
+	function interpret(data) {
+		$.ajax({method: "POST", url: '/interpret', data: {code: data}});
+	}
+
+	function runtemp(data) {
+		$.ajax({method: "POST", url: '/runtemp', data: {code: data}});
 //			$.ajax({method: "POST", url: '/runtemp'});
-		}
+	}
 
-		function detectOS() {
-			var OSName='Unknown OS';
-			if (navigator.appVersion.indexOf("Win")!== -1) OSName="Windows";
-			if (navigator.appVersion.indexOf("Mac")!== -1) OSName="MacOS";
-			if (navigator.appVersion.indexOf("X11")!== -1) OSName="UNIX";
-			if (navigator.appVersion.indexOf("Linux")!== -1) OSName="Linux";
-			return OSName;
-		}
+	function detectOS() {
+		var OSName='Unknown OS';
+		if (navigator.appVersion.indexOf("Win")!== -1) OSName="Windows";
+		if (navigator.appVersion.indexOf("Mac")!== -1) OSName="MacOS";
+		if (navigator.appVersion.indexOf("X11")!== -1) OSName="UNIX";
+		if (navigator.appVersion.indexOf("Linux")!== -1) OSName="Linux";
+		return OSName;
+	}
 
-		function setExtrakeys() {
+	function setExtrakeys() {
 
-			var OS = detectOS();
+		var OS = detectOS();
 
 //			var modifierKey = '';
 
@@ -143,55 +139,55 @@
 //			var interpret = modifierKey + '-Enter';
 //			var kill = modifierKey + '-.';
 
-			if (OS === 'MacOS'){
-				editor.setOption("extraKeys", {
-					'Cmd-Enter' : function () {
-						let selection = editor.getSelection();
-						if (selection !== '') {
-							interpret(selection);
-						} else {
-							interpret(editor.getLine(editor.getCursor().line));
-						}
-					},
-					'Cmd-.' : function () {
-						interpret('s.freeAll;');
+		if (OS === 'MacOS'){
+			editor.setOption("extraKeys", {
+				'Cmd-Enter' : function () {
+					let selection = editor.getSelection();
+					if (selection !== '') {
+						interpret(selection);
+					} else {
+						interpret(editor.getLine(editor.getCursor().line));
 					}
-				});
-			} else {
-				editor.setOption("extraKeys", {
-					'Ctrl-Enter' : function () {
-						let selection = editor.getSelection();
-						if (selection !== '') {
-							interpret(selection);
-						} else {
-							interpret(editor.getLine(editor.getCursor().line));
-						}
-					},
-					'Ctrl-.' : function () {
-						interpret('s.freeAll;');
+				},
+				'Cmd-.' : function () {
+					interpret('s.freeAll;');
+				}
+			});
+		} else {
+			editor.setOption("extraKeys", {
+				'Ctrl-Enter' : function () {
+					let selection = editor.getSelection();
+					if (selection !== '') {
+						interpret(selection);
+					} else {
+						interpret(editor.getLine(editor.getCursor().line));
 					}
-				});
+				},
+				'Ctrl-.' : function () {
+					interpret('s.freeAll;');
+				}
+			});
 
-			}
 		}
+	}
 
-		$(document).ready(function () {
+	$(document).ready(function () {
 
-			let $runButton = $('#runButton');
-			let $killButton = $('#killButton');
-			let $clearConsoleButton = $('#clearConsoleButton');
+		let $runButton = $('#runButton');
+		let $killButton = $('#killButton');
+		let $clearConsoleButton = $('#clearConsoleButton');
 
-			let $loadscfilebutton = $('#loadscfilebutton');
-			let $savescfilebutton = $('#savescfilebutton');
-			let $deletescfilebutton = $('#deletescfilebutton');
-			let $deletesoundfilebutton = $('#deletesoundfilebutton');
+		let $loadscfilebutton = $('#loadscfilebutton');
+		let $savescfilebutton = $('#savescfilebutton');
+		let $deletescfilebutton = $('#deletescfilebutton');
+		let $deletesoundfilebutton = $('#deletesoundfilebutton');
 
-			let $consoleTextarea = $('#consoleTextarea');
-			let $supercolliderfiles = $('#supercolliderfiles');
-			let $soundfiles = $('#soundfiles');
+		let $consoleTextarea = $('#consoleTextarea');
+		let $supercolliderfiles = $('#supercolliderfiles');
+		let $soundfiles = $('#soundfiles');
 
-			let $heartlabel = $('#heartLabel');
-			let $tempheartlabel = "";
+		let $heartlabel = $('#heartLabel');
+		let $tempheartlabel = "";
 
 //			let $clock = $('#clock');
 //			let $hostname = $('#hostname');
@@ -200,80 +196,80 @@
 //			let $cpu = $('#cpu');
 //			let $freemem = $('#freemem');
 
-			let socket = io.connect();
-			setExtrakeys();
+		let socket = io.connect();
+		setExtrakeys();
 
 
-			//run all code in editor window
-			$runButton.click(function () {runtemp(editor.getValue());});
-			//kill all nodes on server
-			$killButton.click(function () {interpret('s.freeAll;')});
+		//run all code in editor window
+		$runButton.click(function () {runtemp(editor.getValue());});
+		//kill all nodes on server
+		$killButton.click(function () {interpret('s.freeAll;')});
 
-			//clear console textarea
-			$clearConsoleButton.click(function () {$consoleTextarea.html('');});
+		//clear console textarea
+		$clearConsoleButton.click(function () {$consoleTextarea.html('');});
 
-			//file management buttons
-			$loadscfilebutton.click(function () {
-				let temp = $supercolliderfiles.val();
-				let fileindex =  JSON.stringify(temp);
-				$.ajax({method: "POST", url: '/supercolliderfiles',data: {action: 'load', fileindex: fileindex}});
-			})
+		//file management buttons
+		$loadscfilebutton.click(function () {
+			let temp = $supercolliderfiles.val();
+			let fileindex =  JSON.stringify(temp);
+			$.ajax({method: "POST", url: '/supercolliderfiles',data: {action: 'load', fileindex: fileindex}});
+		})
 
-			$savescfilebutton.click(function () {
+		$savescfilebutton.click(function () {
 			//here we need to implement save function to create new scd files
-				let filename=prompt('Enter new file name');
-				if(filename) {
-					$.ajax({method: "POST", url: '/supercolliderfiles',data: {action: 'save', filename: filename, code: editor.getValue()}});
-				}
+			let filename=prompt('Enter new file name');
+			if(filename) {
+				$.ajax({method: "POST", url: '/supercolliderfiles',data: {action: 'save', filename: filename, code: editor.getValue()}});
+			}
 
-			})
+		})
 
-			$deletescfilebutton.click(function () {
-				let temp = $supercolliderfiles.val();
-				let fileindex =  JSON.stringify(temp);
-				$.ajax({method: "POST", url: '/supercolliderfiles',data: {action: 'delete', fileindex: fileindex}
-				});
-			})
-
-
-			$deletesoundfilebutton.click(function () {
-				let temp = $soundfiles.val();
-				let fileindex =  JSON.stringify(temp);
-				$.ajax({method: "POST", url: '/soundfiles',data: {action: 'delete', fileindex: fileindex}
-				});
-			})
-
-			//socket actions
-			socket.on('toeditor', function (data) {
-				editor.setValue(data);
+		$deletescfilebutton.click(function () {
+			let temp = $supercolliderfiles.val();
+			let fileindex =  JSON.stringify(temp);
+			$.ajax({method: "POST", url: '/supercolliderfiles',data: {action: 'delete', fileindex: fileindex}
 			});
+		})
 
-			socket.on('toconsole', function (data) {
-				$consoleTextarea.append(data);
-				$consoleTextarea.scrollTop($consoleTextarea[0].scrollHeight);
+
+		$deletesoundfilebutton.click(function () {
+			let temp = $soundfiles.val();
+			let fileindex =  JSON.stringify(temp);
+			$.ajax({method: "POST", url: '/soundfiles',data: {action: 'delete', fileindex: fileindex}
 			});
+		})
 
-			socket.on('tosupercolliderfiles', function (data) {
-				$supercolliderfiles[0].options.length = 0;
-				$.each(data, function(key, value) {
-					$supercolliderfiles
-						.append($('<option>', { value : key })
-                        	.text(value));
-				});
+		//socket actions
+		socket.on('toeditor', function (data) {
+			editor.setValue(data);
+		});
+
+		socket.on('toconsole', function (data) {
+			$consoleTextarea.append(data);
+			$consoleTextarea.scrollTop($consoleTextarea[0].scrollHeight);
+		});
+
+		socket.on('tosupercolliderfiles', function (data) {
+			$supercolliderfiles[0].options.length = 0;
+			$.each(data, function(key, value) {
+				$supercolliderfiles
+					.append($('<option>', { value : key })
+						.text(value));
 			});
+		});
 
-			socket.on('tosoundfiles', function (data) {
-				$soundfiles[0].options.length = 0;
-				$.each(data, function(key, value) {
-					$soundfiles
-						.append($('<option>', { value : key })
-							.text(value));
-				});
+		socket.on('tosoundfiles', function (data) {
+			$soundfiles[0].options.length = 0;
+			$.each(data, function(key, value) {
+				$soundfiles
+					.append($('<option>', { value : key })
+						.text(value));
 			});
+		});
 
-			//receive systeminfo
-			socket.on('systeminfo', function (data) {
-				if ($heartlabel.html() === '\u2665') {$heartlabel.html('\u2764');} else {$heartlabel.html('\u2665');}
+		//receive systeminfo
+		socket.on('systeminfo', function (data) {
+			if ($heartlabel.html() === '\u2665') {$heartlabel.html('\u2764');} else {$heartlabel.html('\u2665');}
 
 //				$clock.html(data.tick +' s');
 //				$hostname.html(data.hostname);
@@ -281,15 +277,15 @@
 //				$wirelessip.html(data.wirelessip);
 //				$cpu.html(data.cpu + ' %');
 //				$freemem.html(data.freemem + ' Mb' );
-			})
-
-
-			//close socket when closing client
-			$(window).on('beforeunload', function(){
-				socket.close();
-			});
 		})
-	</script>
+
+
+		//close socket when closing client
+		$(window).on('beforeunload', function(){
+			socket.close();
+		});
+	})
+</script>
 
 </body>
 </html>
