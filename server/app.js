@@ -19,7 +19,7 @@ let serial2osc;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var settings = require('./routes/settings');
+var system = require('./routes/system');
 
 var app = express();
 
@@ -62,7 +62,7 @@ app.use(function(req, res, next){
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/settings', settings);
+app.use('/system', system);
 
 
 // catch 404 and forward to error handler

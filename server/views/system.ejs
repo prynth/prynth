@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Settings</title>
+	<title>System</title>
 	<link rel='stylesheet' href='/stylesheets/style.css' />
 
 	<!--Jquery-->
@@ -22,19 +22,19 @@
 <div style="width: 1000px; height: 800px;">
 
 
-	<div class="PrynthPanel SettingsPanel">
-		<h3 class="PrynthPanelLabel">System Info</h3>
-		Uptime: <span id="clock" class="panel"></span><br>
-		Hostname: <span id="hostname" class="panel"></span><br>
-		Ethernet IP: <span id="ethernetip" class="panel"></span><br>
-		Wireless IP: <span id="wirelessip" class="panel"></span><br>
-		CPU usage: <span id="cpu" class="panel"></span><br>
-		Free memory: <span id="freemem" class="panel"></span><br>
-		<form>
-			<button type="button" id="rebootButton">Reboot</button>
-			<button type="button" id="shutdownButton">Shutdown</button>
-		</form>
-	</div>
+	<!--<div class="PrynthPanel SettingsPanel">-->
+		<!--<h3 class="PrynthPanelLabel">System Info</h3>-->
+		<!--Uptime: <span id="clock" class="panel"></span><br>-->
+		<!--Hostname: <span id="hostname" class="panel"></span><br>-->
+		<!--Ethernet IP: <span id="ethernetip" class="panel"></span><br>-->
+		<!--Wireless IP: <span id="wirelessip" class="panel"></span><br>-->
+		<!--CPU usage: <span id="cpu" class="panel"></span><br>-->
+		<!--Free memory: <span id="freemem" class="panel"></span><br>-->
+		<!--<form>-->
+			<!--<button type="button" id="rebootButton">Reboot</button>-->
+			<!--<button type="button" id="shutdownButton">Shutdown</button>-->
+		<!--</form>-->
+	<!--</div>-->
 
 
 	<div class="PrynthPanel SettingsPanel">
@@ -108,19 +108,26 @@
 		</form>
 	</div>
 
+	<div style="width: 100vw; float: left">
+		<footer>
+            <% include footer %>
+		</footer>
+	</div>
 </div>
+
+
 
 <script>
 	$(document).ready(function () {
 
 		let socket = io.connect();
 
-		let $clock = $('#clock');
-		let $hostname = $('#hostname');
-		let $ethernetip = $('#ethernetip');
-		let $wirelessip = $('#wirelessip');
-		let $cpu = $('#cpu');
-		let $freemem = $('#freemem');
+//		let $clock = $('#clock');
+//		let $hostname = $('#hostname');
+//		let $ethernetip = $('#ethernetip');
+//		let $wirelessip = $('#wirelessip');
+//		let $cpu = $('#cpu');
+//		let $freemem = $('#freemem');
 
 		let $networkSSIDTextarea = $('#networkSSIDTextarea');
 		let $networkPasswordTextarea = $('#networkPasswordTextarea');
@@ -140,8 +147,8 @@
 		let $jackSampleRate = $('#jackSampleRate');
 		let $audioDeviceSubmit = $('#audioDeviceButton');
 
-		let $rebootSubmit = $('#rebootButton');
-		let $shutdownSubmit = $('#shutdownButton');
+//		let $rebootSubmit = $('#rebootButton');
+//		let $shutdownSubmit = $('#shutdownButton');
 
 
 		$sensorDataTargetSelect.val('<%=sensordatatarget%>');
@@ -149,15 +156,15 @@
 		$jackVectorSize.val('<%=vectorsize%>');
 		$jackSampleRate.val('<%=samplerate%>');
 
-		$rebootSubmit.click(function () {
-			$.ajax({method: "POST", url: 'settings/reboot'});
-			alert('Rebooting...');
-		});
-
-		$shutdownSubmit.click(function () {
-			$.ajax({method: "POST", url: 'settings/shutdown'});
-			alert('Shutting down...')
-		});
+//		$rebootSubmit.click(function () {
+//			$.ajax({method: "POST", url: 'settings/reboot'});
+//			alert('Rebooting...');
+//		});
+//
+//		$shutdownSubmit.click(function () {
+//			$.ajax({method: "POST", url: 'settings/shutdown'});
+//			alert('Shutting down...')
+//		});
 
 		$networkSubmit.click(function () {
 			let networkName = $networkSSIDTextarea.val();
@@ -193,15 +200,15 @@
 			alert('Jack settings updated. Needs reboot.');
 		})
 
-		//receive systeminfo
-		socket.on('systeminfo', function (data) {
-			$clock.html(data.tick +' s');
-			$hostname.html(data.hostname);
-			$ethernetip.html(data.ethernetip);
-			$wirelessip.html(data.wirelessip);
-			$cpu.html(data.cpu + ' %');
-			$freemem.html(data.freemem + ' Mb' );
-		})
+//		//receive systeminfo
+//		socket.on('systeminfo', function (data) {
+//			$clock.html(data.tick +' s');
+//			$hostname.html(data.hostname);
+//			$ethernetip.html(data.ethernetip);
+//			$wirelessip.html(data.wirelessip);
+//			$cpu.html(data.cpu + ' %');
+//			$freemem.html(data.freemem + ' Mb' );
+//		})
 
 		//close socket when closing client
 		$(window).on('beforeunload', function(){

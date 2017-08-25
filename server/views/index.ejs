@@ -29,7 +29,7 @@
 <body>
 <div style="width: 100vw;">
 	<a href="http://prynth.github.io" target="_blank" style="text-decoration: none"><img src="/images/prynth_logo.png" style="width: 30px;"> <span style="font-size:2em;"> Prynth</span> </a>
-	<label id="heartLabel"></label>
+	<!--<label id="heartLabel"></label>-->
 </div>
 
 
@@ -40,7 +40,7 @@
 		<button type="button" id="runButton">Run</button>
 		<button type="button" id="killButton">Kill</button>
 		<a href="/schelp/index.html" target="_blank"><button type="button">Help</button></a>
-		<a href="/settings" target="_blank"><button type="button">Settings</button></a>
+		<a href="/system" target="_blank"><button type="button">System</button></a>
 
 		<br>
 		<br>
@@ -53,6 +53,22 @@
 </div>
 
 <div style="float: right; width: 25vw">
+
+	<div style="width: 200px;" class="PrynthPanel">
+		<h2 class="PrynthPanelLabel">System Info</h2>
+		Uptime: <span id="clock" class="panel"></span><br>
+		Hostname: <span id="hostname" class="panel"></span><br>
+		Ethernet IP: <span id="ethernetip" class="panel"></span><br>
+		Wireless IP: <span id="wirelessip" class="panel"></span><br>
+		CPU usage: <span id="cpu" class="panel"></span><br>
+		Free memory: <span id="freemem" class="panel"></span><br>
+		<form>
+			<button type="button" id="rebootButton">Reboot</button>
+			<button type="button" id="shutdownButton">Shutdown</button>
+		</form>
+	</div>
+
+
 	<div style="width: 200px;" class="PrynthPanel">
 		<h2 class="PrynthPanelLabel">SC files</h2>
 		<select id="supercolliderfiles" multiple style="width:200px; height:120px">
@@ -86,11 +102,13 @@
 </div>
 
 
-<div style="width: 100vw; float: left">
-	<footer>
-        <% include footer %>
-	</footer>
-</div>
+<!--<div style="width: 100vw; float: left">-->
+	<!--<br>-->
+	<!--<br>-->
+	<!--<footer>-->
+        <!--<% include footer %>-->
+	<!--</footer>-->
+<!--</div>-->
 
 
 <script>
@@ -107,7 +125,7 @@
 	});
 
 
-	//        editor.setSize(width: "400px", height: "600px");
+	//editor.setSize(width: "400px", height: "600px");
 
 	//post for run button
 	function interpret(data) {
@@ -173,6 +191,8 @@
 
 	$(document).ready(function () {
 
+		let socket = io.connect();
+
 		let $runButton = $('#runButton');
 		let $killButton = $('#killButton');
 		let $clearConsoleButton = $('#clearConsoleButton');
@@ -189,16 +209,26 @@
 		let $heartlabel = $('#heartLabel');
 		let $tempheartlabel = "";
 
-//			let $clock = $('#clock');
-//			let $hostname = $('#hostname');
-//			let $ethernetip = $('#ethernetip');
-//			let $wirelessip = $('#wirelessip');
-//			let $cpu = $('#cpu');
-//			let $freemem = $('#freemem');
+		let $clock = $('#clock');
+		let $hostname = $('#hostname');
+		let $ethernetip = $('#ethernetip');
+		let $wirelessip = $('#wirelessip');
+		let $cpu = $('#cpu');
+		let $freemem = $('#freemem');
 
-		let socket = io.connect();
+		let $rebootSubmit = $('#rebootButton');
+		let $shutdownSubmit = $('#shutdownButton');
+
 		setExtrakeys();
 
+		$rebootSubmit.click(function () {
+			$.ajax({method: "POST", url: 'settings/reboot'});
+			alert('Rebooting...');
+		});
+		$shutdownSubmit.click(function () {
+			$.ajax({method: "POST", url: 'settings/shutdown'});
+			alert('Shutting down...')
+		});
 
 		//run all code in editor window
 		$runButton.click(function () {runtemp(editor.getValue());});
@@ -269,14 +299,13 @@
 
 		//receive systeminfo
 		socket.on('systeminfo', function (data) {
-			if ($heartlabel.html() === '\u2665') {$heartlabel.html('\u2764');} else {$heartlabel.html('\u2665');}
-
-//				$clock.html(data.tick +' s');
-//				$hostname.html(data.hostname);
-//				$ethernetip.html(data.ethernetip);
-//				$wirelessip.html(data.wirelessip);
-//				$cpu.html(data.cpu + ' %');
-//				$freemem.html(data.freemem + ' Mb' );
+//				if ($heartlabel.html() === '\u2665') {$heartlabel.html('\u2764');} else {$heartlabel.html('\u2665');}
+				$clock.html(data.tick +' s');
+				$hostname.html(data.hostname);
+				$ethernetip.html(data.ethernetip);
+				$wirelessip.html(data.wirelessip);
+				$cpu.html(data.cpu + ' %');
+				$freemem.html(data.freemem + ' Mb' );
 		})
 
 

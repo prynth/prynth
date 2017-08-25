@@ -22,7 +22,7 @@ router.get('/', function(req, res, next) {
 	var vectorsize = configData.jack.vectorSize;
 	var samplerate = configData.jack.sampleRate;
 
-	res.render('settings', {
+	res.render('system', {
 		defaultSCFile: defaultSCFile,
 		defaultssid: defaultssid,
 		hostname: hostname,
@@ -70,7 +70,7 @@ router.post('/setwifi', function (req, res) {
 
 	var child = exec(command, function (error, stdout, stderr) {
 		console.log(stdout);
-		res.redirect('/settings');
+		res.redirect('/system');
 	});
 
 })
@@ -93,7 +93,7 @@ router.post('/sethostname', function (req, res) {
 	// TODO: do I need variables here??
 	var child1 =  exec(command1, function (error, stdout, stderr) {
 		var child2 = exec(command2, function (error, stdout, stderr) {
-			res.redirect('/settings');
+			res.redirect('/system');
 		});
 	});
 
