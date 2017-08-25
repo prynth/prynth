@@ -85,62 +85,67 @@ app.use(function(err, req, res, next) {
 
 
 ////////////
-//start jackd
-if(jackd == null){
-	let device = config.jack.device;
-	let vectorSize = config.jack.vectorSize;
-	let sampleRate = config.jack.sampleRate;
 
-	let command = 'jackd -P75 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
-	// console.log('jack command: '+command);
+function startJack() {
+	if(jackd == null){
+		let device = config.jack.device;
+		let vectorSize = config.jack.vectorSize;
+		let sampleRate = config.jack.sampleRate;
 
-	jackd = exec(command, function (error, stdout, stderr) {
-		console.log(stdout);
-	});
+		let command = 'jackd -P75 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
+		// console.log('jack command: '+command);
 
-};
+		jackd = exec(command, function (error, stdout, stderr) {
+			console.log(stdout);
+		});
+	};
+}
 
-//start serial2osc
-if(serial2osc == null){
-	let target = path.join(__dirname, '../serial2osc/serial2osc')+' -'+config.sensorDataTarget;
+function startSerial2osc() {
+	if(serial2osc == null){
+		let target = path.join(__dirname, '../serial2osc/serial2osc')+' -'+config.sensorDataTarget;
 
-	serial2osc = exec(target, function (error, stdout, stderr) {
-		console.log(stdout);
-	});
-};
+		serial2osc = exec(target, function (error, stdout, stderr) {
+			console.log(stdout);
+		});
+	};
+
+}
 
 //start sclang
+function startSclang() {
+	if(sclang == null) {
+		sc.lang.boot({stdin: false, echo: false, debug: false}).then(function (lang) {
+			sclang = lang;
+			sclang.on('stdout', function (text) {
+				io.sockets.emit('toconsole', text);
+			});
+			sclang.on('state', function (text) {
+				io.sockets.emit('toconsole', JSON.stringify(text));
+			});
+			sclang.on('stderror', function (text) {
+				io.sockets.emit('toconsole', JSON.stringify(text));
+			});
+			sclang.on('error', function (text) {
+				io.sockets.emit('toconsole', JSON.stringify(text));
+			});
+		}).then(function () { //TODO: add checking if defaultSCFile exists on config.json, if not skip
+			sclang.executeFile(path.join(supercolliderfiles_path, config.defaultSCFile)).then(
+				function (answer) {
+					io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
+				},
+				function (error) {
+					io.sockets.emit('toconsole', 'cannot run or find default file. Check your settings...\n');
+					io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
+				}
+			)
+		})
+	};
+}
 
-
-if(sclang == null) {
-	sc.lang.boot({stdin: false, echo: false, debug: false}).then(function (lang) {
-		sclang = lang;
-		sclang.on('stdout', function (text) {
-			io.sockets.emit('toconsole', text);
-		});
-		sclang.on('state', function (text) {
-			io.sockets.emit('toconsole', JSON.stringify(text));
-		});
-		sclang.on('stderror', function (text) {
-			io.sockets.emit('toconsole', JSON.stringify(text));
-		});
-		sclang.on('error', function (text) {
-			io.sockets.emit('toconsole', JSON.stringify(text));
-		});
-	}).then(function () {
-		sclang.executeFile(path.join(supercolliderfiles_path, config.defaultSCFile)).then(
-			function (answer) {
-				io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
-			},
-			function (error) {
-				io.sockets.emit('toconsole', 'cannot run or find default file. Check your settings...\n');
-				io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
-			}
-		)
-		// console.log(path.join(supercolliderfiles_path, 'default.scd'));
-	})
-};
-
+startJack();
+startSerial2osc();
+startSclang();
 
 
 //interprets in supercolliderfiles (receives from post via socket and outputs to console via socket)
@@ -154,12 +159,10 @@ app.on('interpret', function (msg) {
 					io.sockets.emit('toconsole', JSON.stringify(error));
 				});
 	};
-
 });
 
 app.on('runtemp', function (msg) {
 	if(sclang !== null){
-
 		fs.writeFile(supercolliderfiles_path + '.temp.scd', msg, function (err) {
 			if (err) {
 				res.send('error saving file');
@@ -183,8 +186,24 @@ app.on('runtemp', function (msg) {
 
 });
 
-var getSystemInfo = function () {
+app.on('restartSclang', function () {
+	if(sclang !== null){
+		sclang.interpret('0.exit', null, true, true, false)
+			.then(function(result) {
+				io.sockets.emit('toconsole', 'sclang quitting...');
+				sclang = null;
+				startSclang();
+			})
+			.catch(function (error) {
+				io.sockets.emit('toconsole', JSON.stringify(error));
+			});
+	};
+});
+
+
+function getSystemInfo() {
 	var wirelessIP, ethernetIP, cpu, hostname, totalmem, freemem;
+
 	if (os.networkInterfaces().wlan0) {wirelessIP = os.networkInterfaces().wlan0[0].address;
 	} else {wirelessIP = 'unavailable';}
 	if (os.networkInterfaces().eth0) {ethernetIP = os.networkInterfaces().eth0[0].address;

@@ -65,6 +65,7 @@
 		<form>
 			<button type="button" id="rebootButton">Reboot</button>
 			<button type="button" id="shutdownButton">Shutdown</button>
+			<button type="button" id="restartSclangButton">Restart SCLang</button>
 		</form>
 	</div>
 
@@ -206,8 +207,8 @@
 		let $supercolliderfiles = $('#supercolliderfiles');
 		let $soundfiles = $('#soundfiles');
 
-		let $heartlabel = $('#heartLabel');
-		let $tempheartlabel = "";
+//		let $heartlabel = $('#heartLabel');
+//		let $tempheartlabel = "";
 
 		let $clock = $('#clock');
 		let $hostname = $('#hostname');
@@ -218,16 +219,21 @@
 
 		let $rebootSubmit = $('#rebootButton');
 		let $shutdownSubmit = $('#shutdownButton');
+		let $restartSclangSubmit = $('#restartSclangButton');
 
 		setExtrakeys();
 
 		$rebootSubmit.click(function () {
-			$.ajax({method: "POST", url: 'settings/reboot'});
+			$.ajax({method: "POST", url: '/reboot'});
 			alert('Rebooting...');
 		});
 		$shutdownSubmit.click(function () {
-			$.ajax({method: "POST", url: 'settings/shutdown'});
+			$.ajax({method: "POST", url: '/shutdown'});
 			alert('Shutting down...')
+		});
+		$restartSclangSubmit.click(function () {
+			$.ajax({method: "POST", url: '/restartsclang'});
+//			alert('Shutting down...')
 		});
 
 		//run all code in editor window

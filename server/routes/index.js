@@ -33,13 +33,31 @@ router.post('/runtemp', function (req, res) {
 });
 
 router.get('/refresh-files', function (req, res) {
-
 	refreshFiles();
 	res.io.emit('tosupercolliderfiles', supercolliderfiles);
 	res.io.emit('tosoundfiles', soundfiles);
-
 	res.redirect('/');
 })
+
+router.post('/shutdown', function (req, res) {
+	// console.log('shutdown received');
+	exec('sudo poweroff', function (error, stdout, stderr) {
+		console.log(stdout);
+	});
+})
+
+router.post('/reboot', function (req, res) {
+	// console.log('reboot received');
+	exec('sudo reboot', function (error, stdout, stderr) {
+		console.log(stdout);
+	});
+})
+
+router.post('/restartsclang', function (req, res) {
+	res.app.emit('restartSclang');
+	res.sendStatus(200);
+});
+
 
 router.post('/supercolliderfiles', function (req, res) {
 

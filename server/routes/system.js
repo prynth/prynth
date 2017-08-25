@@ -34,19 +34,19 @@ router.get('/', function(req, res, next) {
 });
 
 
-router.post('/shutdown', function (req, res) {
-	// console.log('shutdown received');
-	exec('sudo poweroff', function (error, stdout, stderr) {
-		console.log(stdout);
-	});
-})
-
-router.post('/reboot', function (req, res) {
-	// console.log('reboot received');
-	exec('sudo reboot', function (error, stdout, stderr) {
-		console.log(stdout);
-	});
-})
+// router.post('/shutdown', function (req, res) {
+// 	// console.log('shutdown received');
+// 	exec('sudo poweroff', function (error, stdout, stderr) {
+// 		console.log(stdout);
+// 	});
+// })
+//
+// router.post('/reboot', function (req, res) {
+// 	// console.log('reboot received');
+// 	exec('sudo reboot', function (error, stdout, stderr) {
+// 		console.log(stdout);
+// 	});
+// })
 
 router.post('/setwifi', function (req, res) {
 	var networkname = req.body.networkname;
