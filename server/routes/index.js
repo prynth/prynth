@@ -3,6 +3,7 @@ let router = express.Router();
 let multer = require('multer');
 let fs = require('fs');
 let path = require('path');
+let exec = require('child_process').exec;
 
 let storage = multer.diskStorage({
 	destination: function (req, file, callback) {callback(null, (public_path + 'soundfiles'));},
@@ -15,9 +16,9 @@ let supercolliderfiles = [''];
 let public_path = path.join(__dirname, '../public/');
 let tempcode;
 
-refreshFiles();
 
 router.get('/', function(req, res, next) {
+	refreshFiles();
 	res.render('index', {supercolliderfiles: supercolliderfiles, soundfiles: soundfiles, tempcode: tempcode});
 });
 
