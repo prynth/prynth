@@ -144,7 +144,10 @@ function startSclang() {
 
 startJack();
 startSerial2osc();
-startSclang();
+setTimeout(function () {
+	startSclang();
+} , 5000);
+// startSclang();
 
 
 //interprets in supercolliderfiles (receives from post via socket and outputs to console via socket)
