@@ -151,20 +151,20 @@ void sendOSC (lo_address *oscAddress) {
 	int i, j;
 	for (i = 0; i < 10; i++) {
 		for (j = 0; j < 8; j++) {
-			// if (sensorData[i][j] != oscBuffer[i][j] && switchMatrix[i][j] == 1){
-			// 	sprintf(string, "/%i/%i", i, j);
-			// 	sprintf(string2, "/%s", hostname);
-			// 	// printf("%s\n", string);
-			// 	lo_send(*oscAddress, string2, "sf", string, oscBuffer[i][j]);
-			// 	oscBuffer[i][j] = sensorData[i][j];
-			// }
 			if (sensorData[i][j] != oscBuffer[i][j] && switchMatrix[i][j] == 1){
-				sprintf(string, "/%s/%i/%i", hostname, i, j);
-				// sprintf(string2, "/%s", hostname);
+				sprintf(string, "/%i/%i", i, j);
+				sprintf(string2, "/%s", hostname);
 				// printf("%s\n", string);
-				lo_send(*oscAddress, string, "f", oscBuffer[i][j]);
+				lo_send(*oscAddress, string2, "sf", string, oscBuffer[i][j]);
 				oscBuffer[i][j] = sensorData[i][j];
 			}
+			// if (sensorData[i][j] != oscBuffer[i][j] && switchMatrix[i][j] == 1){
+			// 	sprintf(string, "/%s/%i/%i", hostname, i, j);
+			// 	// sprintf(string2, "/%s", hostname);
+			// 	// printf("%s\n", string);
+			// 	lo_send(*oscAddress, string, "f", oscBuffer[i][j]);
+			// 	oscBuffer[i][j] = sensorData[i][j];
+			// }
 		}
 	}
 }

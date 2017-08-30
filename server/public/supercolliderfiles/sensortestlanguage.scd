@@ -12,7 +12,8 @@ fork{
 	s.sync;
 
 	OSCdef(\test, {|msg, time, addr, recvPort|
-		var value = msg[1];
+		var value;
+		if (msg[1] == '/0/0', {value = msg[2]});
 		~testsynth.set(\freq, value.linlin(0, 1, 100, 500));
-	}, '/raspberrypi/0/0', n);
+	}, '/raspberrypi', n);
 };
