@@ -92,6 +92,8 @@ function startJack() {
 		let sampleRate = config.jack.sampleRate;
 
 		let command = 'jackd -P75 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
+		// let command ='jackd -P75 -d dummy -C1 -p256 -r44100 & alsa_in -q1 -d hw:1 & alsa_out -q1 -d hw:1 &';
+
 		// console.log('jack command: '+command);
 
 		jackd = exec(command, function (error, stdout, stderr) {

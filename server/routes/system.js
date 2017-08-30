@@ -130,6 +130,7 @@ router.post('/setjack', function (req, res) {
 	var jackVectorSize = req.body.vectorSize;
 	var jackSampleRate = req.body.sampleRate;
 
+
 	var configFile = fs.readFileSync(private_path +'config.json');
 	var configData = JSON.parse(configFile);
 
