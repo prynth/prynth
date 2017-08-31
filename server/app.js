@@ -152,7 +152,6 @@ function start() {
 	} , 5000);
 }
 
-
 start();
 
 //interprets in supercolliderfiles (receives from post via socket and outputs to console via socket)
