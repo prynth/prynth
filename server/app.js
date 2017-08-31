@@ -144,13 +144,16 @@ function startSclang() {
 	};
 }
 
-startJack();
-startSerial2osc();
-setTimeout(function () {
-	startSclang();
-} , 5000);
-// startSclang();
+function start() {
+	startJack();
+	startSerial2osc();
+	setTimeout(function () {
+		startSclang();
+	} , 5000);
+}
 
+
+start();
 
 //interprets in supercolliderfiles (receives from post via socket and outputs to console via socket)
 app.on('interpret', function (msg) {
@@ -196,7 +199,11 @@ app.on('restartSclang', function () {
 			.then(function(result) {
 				io.sockets.emit('toconsole', 'sclang quitting...');
 				sclang = null;
-				startSclang();
+				exec('sudo pkill jackd');
+				jackd = null;
+				exec('sudo pkill serial2osc');
+				serial2osc = null;
+				start();
 			})
 			.catch(function (error) {
 				io.sockets.emit('toconsole', JSON.stringify(error));
