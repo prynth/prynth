@@ -197,12 +197,12 @@ app.on('restartSclang', function () {
 		sclang.interpret('0.exit', null, true, true, false)
 			.then(function(result) {
 				io.sockets.emit('toconsole', 'sclang quitting...');
-				sclang = null;
-				exec('sudo pkill jackd');
-				jackd = null;
-				exec('sudo pkill serial2osc');
-				serial2osc = null;
-				start();
+				exec('sudo pkill jackd', function () {
+					jackd = null;sclang = null;serial2osc = null;
+					exec('sudo pkill serial2osc', function () {
+						start();
+					});
+				});
 			})
 			.catch(function (error) {
 				io.sockets.emit('toconsole', JSON.stringify(error));
