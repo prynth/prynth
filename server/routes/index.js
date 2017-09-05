@@ -42,7 +42,7 @@ router.get('/refresh-files', function (req, res) {
 
 router.post('/shutdown', function (req, res) {
 	// console.log('shutdown received');
-	exec('sudo poweroff', function (error, stdout, stderr) {
+	exec('sudo shutdown -h now', function (error, stdout, stderr) {
 		console.log(stdout);
 	});
 })
