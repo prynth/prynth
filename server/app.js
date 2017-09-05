@@ -208,7 +208,6 @@ app.on('restartSclang', function () {
 	};
 });
 
-
 function getSystemInfo() {
 	var wirelessIP, ethernetIP, cpu, hostname, totalmem, freemem;
 
