@@ -91,6 +91,7 @@
 			Vector Size:
 			<select id="jackVectorSize">
 				<option selected disabled>Choose:</option>
+				<option value="64">64</option>
 				<option value="128">128</option>
 				<option value="256">256</option>
 				<option value="512">512</option>
@@ -104,6 +105,10 @@
 				<option value="44100">44100</option>
 				<option value="48000">48000</option>
 			</select>
+
+			<br>
+			<br>
+			<input type="checkbox" id="usb1checkbox">Force USB 1.1<br>
 			<br>
 			<button type="button" id="audioDeviceButton">Save</button>
 		</form>
@@ -148,6 +153,8 @@
 		let $jackSampleRate = $('#jackSampleRate');
 		let $audioDeviceSubmit = $('#audioDeviceButton');
 
+		let $usb1Check = $('#usb1checkbox');
+
 //		let $rebootSubmit = $('#rebootButton');
 //		let $shutdownSubmit = $('#shutdownButton');
 
@@ -157,6 +164,7 @@
 		$jackDevice.val('<%=audiodevice%>');
 		$jackVectorSize.val('<%=vectorsize%>');
 		$jackSampleRate.val('<%=samplerate%>');
+		$usb1Check.prop('checked', <%=usb1%>);
 
 //		$rebootSubmit.click(function () {
 //			$.ajax({method: "POST", url: 'settings/reboot'});
@@ -197,8 +205,9 @@
 			let audioDevice = $jackDevice.val();
 			let audioVectorSize = $jackVectorSize.val();
 			let audioSampleRate = $jackSampleRate.val();
+			let usb1 = $usb1Check.is(":checked");
 
-			$.ajax({method: "POST", url: 'system/setjack', data: {device: audioDevice, vectorSize: audioVectorSize, sampleRate: audioSampleRate}});
+			$.ajax({method: "POST", url: 'system/setjack', data: {device: audioDevice, vectorSize: audioVectorSize, sampleRate: audioSampleRate, usb1: usb1}});
 			alert('Jack settings updated. Needs reboot.');
 		})
 

@@ -21,6 +21,7 @@ router.get('/', function(req, res, next) {
 	var audiodevice = configData.jack.device;
 	var vectorsize = configData.jack.vectorSize;
 	var samplerate = configData.jack.sampleRate;
+	var usb1 = configData.jack.usb1;
 
 	res.render('system', {
 		defaultSCFile: defaultSCFile,
@@ -29,7 +30,8 @@ router.get('/', function(req, res, next) {
 		sensordatatarget: sensordatatarget,
 		audiodevice: audiodevice,
 		vectorsize: vectorsize,
-		samplerate: samplerate
+		samplerate: samplerate,
+		usb1: usb1
 	});
 });
 
@@ -129,16 +131,31 @@ router.post('/setjack', function (req, res) {
 	var jackDevice= req.body.device;
 	var jackVectorSize = req.body.vectorSize;
 	var jackSampleRate = req.body.sampleRate;
+	var usb1 = req.body.usb1;
+	var command;
 
 
 	var configFile = fs.readFileSync(private_path +'config.json');
 	var configData = JSON.parse(configFile);
 
-	configData.jack = {"device": jackDevice, "vectorSize": jackVectorSize, "sampleRate": jackSampleRate};
+	configData.jack = {"device": jackDevice, "vectorSize": jackVectorSize, "sampleRate": jackSampleRate, "usb1": usb1};
 
 	var configJSON = JSON.stringify(configData, null, 2);
-
 	fs.writeFileSync(private_path +'config.json', configJSON);
+
+	if (usb1 == 'true'){
+		command = 'echo "dwc_otg.speed=1 dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait" |sudo tee /boot/cmdline.txt';
+		} else
+		{
+		command = 'echo "dwc_otg.lpm_enable=0 console=tty1 root=/dev/mmcblk0p2 rootfstype=ext4 elevator=deadline fsck.repair=yes rootwait" |sudo tee /boot/cmdline.txt';
+		};
+
+	exec(command, function (error, stdout, stderr) {
+		console.log(stdout);
+	});
+
+	// console.log(command);
+
 });
 
 
