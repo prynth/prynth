@@ -131,15 +131,20 @@ function startSclang() {
 				io.sockets.emit('toconsole', JSON.stringify(text));
 			});
 		}).then(function () { //TODO: add checking if defaultSCFile exists on config.json, if not skip
-			sclang.executeFile(path.join(supercolliderfiles_path, config.defaultSCFile)).then(
-				function (answer) {
-					io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
-				},
-				function (error) {
-					io.sockets.emit('toconsole', 'cannot run or find default file. Check your settings...\n');
-					io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
-				}
-			)
+			fs.access(supercolliderfiles_path + config.defaultSCFile, function (err) {
+				if (err){
+					io.sockets.emit('toconsole', 'cannot find default file. Check your settings...\n');
+				} else {
+					sclang.executeFile(path.join(supercolliderfiles_path, config.defaultSCFile)).then(
+						function (answer) {
+							io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
+						},
+						function (error) {
+							io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
+						}
+					)
+				};
+			});
 		})
 	};
 }
