@@ -155,7 +155,7 @@ void sendOSC (lo_address *oscAddress) {
 				sprintf(string, "/%i/%i", i, j);
 				sprintf(string2, "/%s", hostname);
 				// printf("%s\n", string);
-				lo_send(*oscAddress, string2, "sf", string, oscBuffer[i][j]);
+				lo_send(*oscAddress, string2, "sf", string, sensorData[i][j]);
 				oscBuffer[i][j] = sensorData[i][j];
 			}
 			// if (sensorData[i][j] != oscBuffer[i][j] && switchMatrix[i][j] == 1){
