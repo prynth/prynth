@@ -66,7 +66,9 @@ router.post('/supercolliderfiles', function (req, res) {
 		let filetoload = supercolliderfiles[JSON.parse(req.body.fileindex)[0]];
 		let buffer = fs.readFileSync((public_path + 'supercolliderfiles/' + filetoload), 'utf8');
 		tempcode = buffer;
-		res.io.emit('toeditor', buffer);
+        res.io.emit('toprompt', filetoload);
+        res.io.emit('toconsole', filetoload);
+        res.io.emit('toeditor', buffer);
 		res.sendStatus(200);
 	};
 
