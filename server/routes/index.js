@@ -1,212 +1,141 @@
-module.exports = function (io) {
+let express = require('express');
+let router = express.Router();
+let multer = require('multer');
+let fs = require('fs');
+let path = require('path');
+let exec = require('child_process').exec;
+
+let storage = multer.diskStorage({
+	destination: function (req, file, callback) {callback(null, (public_path + 'soundfiles'));},
+	filename: function (req, file, callback) {callback(null, file.originalname);}
+});
+
+let upload = multer({ storage : storage}).array('filename', 10);
+let soundfiles = [''];
+let supercolliderfiles = [''];
+let public_path = path.join(__dirname, '../public/');
+let tempcode;
 
 
-	var express = require('express');
-	var router = express.Router();
-	var os = require('os');
-	var exec = require('child_process').exec;
-// var execSync = require('child_process').execSync;
-	var multer = require('multer');
-	var fs = require('fs');
+router.get('/', function(req, res, next) {
+	refreshFiles();
+	res.render('index', {supercolliderfiles: supercolliderfiles, soundfiles: soundfiles, tempcode: tempcode});
+});
 
+router.post('/interpret', function (req, res) {
+	res.app.emit('interpret', req.body.code);
+	res.sendStatus(200);
+});
 
+router.post('/runtemp', function (req, res) {
+	tempcode = req.body.code;
+	res.app.emit('runtemp', tempcode);
+	res.sendStatus(200);
+});
 
-//Sample pool variables
-	var storage = multer.diskStorage({
-		destination: function (req, file, callback) {callback(null, 'public/sounds');},
-		filename: function (req, file, callback) {callback(null, file.originalname);}
+router.get('/refresh-files', function (req, res) {
+	refreshFiles();
+	res.io.emit('tosupercolliderfiles', supercolliderfiles);
+	res.io.emit('tosoundfiles', soundfiles);
+	res.redirect('/');
+})
+
+router.post('/shutdown', function (req, res) {
+	// console.log('shutdown received');
+	exec('sudo shutdown -h now', function (error, stdout, stderr) {
+		console.log(stdout);
 	});
-	var upload = multer({ storage : storage}).single('filename');
-	var samplesFilenameArray = ['OK'];
-	var patchesFilenameArray = ['OK'];
+})
 
-	var systemInfo;
-	var codeBuffer = 'OK';
-
-	/* GET home page. */
-	router.get('/', function(req, res, next) {
-
-		systemInfo = getSystemInfo();
-		samplesFilenameArray = fs.readdirSync('public/sounds');
-		patchesFilenameArray = fs.readdirSync('public/patches');
-		codeBuffer= fs.readFileSync('../sc/user.scd', 'utf8');
-
-		res.render('index', {
-			hostname: systemInfo[0],
-			ethernetIP: systemInfo[1],
-			wirelessIP: systemInfo[2],
-			cpu: systemInfo[3],
-			totalmem: systemInfo[4],
-			freemem: systemInfo[5],
-			samples: samplesFilenameArray,
-			patches: patchesFilenameArray,
-			code: codeBuffer
-		});
+router.post('/reboot', function (req, res) {
+	// console.log('reboot received');
+	exec('sudo reboot', function (error, stdout, stderr) {
+		console.log(stdout);
 	});
+})
 
-	/* POSTS*/
-	router.post('/start_sc', function (req, res) {
-		var codeBuffer = req.body.code;
-		var child1 = exec('../bin/stopsc.sh');
-		
-		child1.on('close', function () {
-			fs.writeFile("../sc/user.scd", codeBuffer, function (err) {
-				if(err) {
-					res.send('error saving file');
-					return console.log(err);
-				} else {
-					// res.send('file saved');
-					io.sockets.emit('stdout', 'file saved!');
+router.post('/restartsclang', function (req, res) {
+	res.app.emit('restartSclang');
+	res.sendStatus(200);
+});
 
-					var child2 = exec('../bin/startsc.sh');
-					child2.stdout.on('data', function (data) {
-						io.sockets.emit('stdout', data);
 
-					});
-				}
-			});
-		res.redirect('/');
-		});
+router.post('/supercolliderfiles', function (req, res) {
 
-	});
+	if(req.body.action === 'load'){
+		let filetoload = supercolliderfiles[JSON.parse(req.body.fileindex)[0]];
+		let buffer = fs.readFileSync((public_path + 'supercolliderfiles/' + filetoload), 'utf8');
+		tempcode = buffer;
+        res.io.emit('toprompt', filetoload);
+        res.io.emit('toconsole', filetoload);
+        res.io.emit('toeditor', buffer);
+		res.sendStatus(200);
+	};
 
-	router.post('/stop_sc', function (req, res) {
-		var child = exec('../bin/stopsc.sh');
-		// res.send('killed!');
-
-		child.on('close', function (data) {
-			// res.send(data);
-			// res.app.locals.stdoutBuffer = data;
-			io.sockets.emit('stdout', 'finished!');
-			res.redirect('/');
-		});
-		// child.stdout.on('data', function (data) {
-		// 	// res.send(data);
-		// res.app.set('stdoutBuffer', data);
-		// });
-
-	});
-
-	router.post('/save_code', function (req, res) {
-		var codeBuffer = req.body.code;
-
-		fs.writeFile("../sc/user.scd", codeBuffer, function (err) {
+	if(req.body.action === 'save'){
+		tempcode = req.body.code;
+		// console.log(req.body.filename);
+		// console.log(req.body.code);
+		fs.writeFile(public_path + 'supercolliderfiles/' + req.body.filename, tempcode, function (err) {
 			if(err) {
 				res.send('error saving file');
 				return console.log(err);
 			} else {
-				// res.send('file saved');
-				io.sockets.emit('stdout', 'file saved!');
-				res.redirect('/');
+				res.io.emit('toconsole', '\nfile saved');
+				// io.sockets.emit('stdout', 'file saved!');
+				res.redirect('refresh-files');
 			}
 		});
+	};
 
-	});
-
-	router.post('/sample', function (req, res) {
-		if(req.body.action === 'Delete'){
-			// console.log('delete ' + req.body.filename);
-			var samplesToDelete = req.body.sample;
-
-			if (Array.isArray(samplesToDelete)) {
-				for (var i in samplesToDelete) {
-					fs.unlinkSync('public/sounds/' + samplesToDelete[i]);
-				}
-				// console.log('theres too many of them');
-			} else {
-				fs.unlinkSync('public/sounds/' + samplesToDelete);
-				// console.log('alone in this world');
-			}
+	if(req.body.action === 'delete') {
+		let filestodelete = JSON.parse(req.body.fileindex);
+		for (i in filestodelete) {
+			let fullpath = public_path + 'supercolliderfiles/' + supercolliderfiles[filestodelete[i]];
+			fs.unlinkSync(fullpath);
 		}
-		res.redirect('/')
+		res.redirect('/refresh-files');
+	}
+})
 
-	});
+router.post('/soundfiles', function (req, res) {
 
-	router.post('/patch', function (req, res) {
-		if(req.body.action === 'Load'){
-
-			var patchesToLoad = req.body.patch;
-
-			if (Array.isArray(patchesToLoad) == false) {
-				codeBuffer = fs.readFileSync(('public/patches/' + patchesToLoad), 'utf8');
-				fs.writeFileSync("../sc/user.scd", codeBuffer);
-			}
-			res.redirect('/');
-		}
-
-		if(req.body.action === 'Delete'){
-			var patchesToDelete = req.body.patch;
-
-			if (Array.isArray(patchesToDelete)) {
-				for (var i in patchesToDelete) {
-					fs.unlinkSync('public/patches/' + patchesToDelete[i]);
-				}
-			} else {
-				fs.unlinkSync('public/patches/' + patchesToDelete);
-				// console.log('alone in this world');
-			}
-			res.redirect('/');
-		}
-	});
-
-	router.post('/new_patch', function (req, res) {
-		fs.writeFileSync('public/patches/' + req.body.name, req.body.code);
-		patchesFilenameArray = fs.readdirSync('public/patches');
-		console.log(patchesFilenameArray);
-
-		res.send({redirect: '/'})
-
-	});
-
-
-
-	router.post('/upload_sample', function (req, res) {
+	if(req.body.action === 'upload'){
 		upload(req,res,function(err) {
 			if (err) {
 				return res.end("Error uploading file.");
 			}
 		});
-		res.redirect('/')
-	});
-
-//main system routes
-	router.post('/shutdown', function (req, res) {
-		exec('sudo shutdown -h now');
-		// var randomNumber = Math.random();
-		// console.log('shutdown!');
-		// console.log(randomNumber);
-		// set stdoutBuffer which is pooled in app.js
-		// res.app.set('stdoutBuffer', randomNumber);
-		// io.sockets.emit('stdout', randomNumber);
-		res.redirect('/');
-
-	});
-
-	router.post('/reboot', function (req, res) {
-		exec('sudo reboot');
-		// console.log('reboot!');
-		res.redirect('/');
-	});
-
-
-//functions
-	var getSystemInfo = function () {
-		var wirelessIP, ethernetIP, cpu, hostname, totalmem, freemem;
-		if (os.networkInterfaces().wlan0) {wirelessIP = os.networkInterfaces().wlan0[0].address;
-		} else {wirelessIP = 'unavailable';}
-		if (os.networkInterfaces().eth0) {ethernetIP = os.networkInterfaces().eth0[0].address;
-		} else {ethernetIP = 'unavailable';}
-		cpu = (Math.round(os.loadavg()[0]));
-		hostname = os.hostname();
-		totalmem = (Math.round(os.totalmem()/1000000));
-		freemem = (Math.round(os.freemem()/1000000));
-
-		return([hostname, ethernetIP, wirelessIP, cpu,  totalmem, freemem]);
+		res.redirect('/refresh-files');
 	};
 
-	// module.exports = router;
+	if(req.body.action === 'delete'){
+		let filestodelete = JSON.parse(req.body.fileindex);
+		for (i in filestodelete) {
+			let fullpath = public_path + 'soundfiles/' + soundfiles[filestodelete[i]];
+			fs.unlinkSync(fullpath);
+		}
+		res.redirect('/refresh-files');
+	};
+});
 
-	return router;
+router.post('/soundfileupload', function (req, res) {
+	upload(req,res,function(err) {
+		if (err) {
+			return res.end("Error uploading file.");
+		}
+	});
+	res.redirect('/refresh-files');
+})
 
 
-}
+
+function refreshFiles() {
+	soundfiles = fs.readdirSync(public_path + 'soundfiles');
+	soundfiles = soundfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
+
+	supercolliderfiles = fs.readdirSync(public_path + 'supercolliderfiles');
+	supercolliderfiles = supercolliderfiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
+};
+
+module.exports = router;

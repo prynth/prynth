@@ -40,7 +40,7 @@
     dash_comment: [
       { regex: /--\}\}/, pop: true, token: "comment" },
 
-      // Commented code
+      // Commented supercolliderfiles
       { regex: /./, token: "comment"}
     ],
     comment: [

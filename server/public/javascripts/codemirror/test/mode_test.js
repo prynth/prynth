@@ -68,7 +68,6 @@
 
   function esc(str) {
     return str.replace('&', '&amp;').replace('<', '&lt;').replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-;
   }
 
   function compare(text, expected, mode) {
@@ -131,7 +130,7 @@
       }
       var stream = new CodeMirror.StringStream(line);
       if (line == "" && mode.blankLine) mode.blankLine(state);
-      /* Start copied code from CodeMirror.highlight */
+      /* Start copied supercolliderfiles from CodeMirror.highlight */
       while (!stream.eol()) {
         for (var j = 0; j < 10 && stream.start >= stream.pos; j++)
           var compare = mode.token(stream, state);

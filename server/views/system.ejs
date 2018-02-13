@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>System</title>
+	<link rel='stylesheet' href='/stylesheets/style.css' />
+
+	<!--Jquery-->
+	<script src="javascripts/jquery/jquery-3.2.1.min.js"></script>
+
+	<!--socket.io-->
+	<script src="javascripts/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+<div style="width: 1000px; padding-left: 10px; padding-right: 10px;">
+	<a href="http://prynth.github.io" target="_blank" style="text-decoration: none"><img src="/images/prynth_logo.png" style="width: 30px;"> <span style="font-size:2em;"> Prynth</span> </a>
+</div>
+<div class="clearfix"></div>
+
+<h2>Settings</h2>
+
+<div style="width: 1000px; height: 800px;">
+
+
+	<!--<div class="PrynthPanel SettingsPanel">-->
+		<!--<h3 class="PrynthPanelLabel">System Info</h3>-->
+		<!--Uptime: <span id="clock" class="panel"></span><br>-->
+		<!--Hostname: <span id="hostname" class="panel"></span><br>-->
+		<!--Ethernet IP: <span id="ethernetip" class="panel"></span><br>-->
+		<!--Wireless IP: <span id="wirelessip" class="panel"></span><br>-->
+		<!--CPU usage: <span id="cpu" class="panel"></span><br>-->
+		<!--Free memory: <span id="freemem" class="panel"></span><br>-->
+		<!--<form>-->
+			<!--<button type="button" id="rebootButton">Reboot</button>-->
+			<!--<button type="button" id="shutdownButton">Shutdown</button>-->
+		<!--</form>-->
+	<!--</div>-->
+
+
+	<div class="PrynthPanel SettingsPanel">
+		<h3 class="PrynthPanelLabel">WiFi</h3>
+		<form>
+			Network:
+			<input type="text" id="networkSSIDTextarea" style="height: 1em;" value="<%= defaultssid %>"><br>
+			Password:
+			<input type="password" id="networkPasswordTextarea" style="height: 1em;" value=""><br>
+			<button type="button" id="networkButton">Save</button>
+		</form>
+	</div>
+
+	<div class="PrynthPanel SettingsPanel">
+		<h3 class="PrynthPanelLabel">Hostname</h3>
+		<form>
+			<input type="text" id="hostnameTextarea" style="height: 1em;" value="<%= hostname %>"><br>
+			<button type="button" id="hostnameButton">Save</button>
+		</form>
+	</div>
+
+	<div class="PrynthPanel SettingsPanel">
+		<h3 class="PrynthPanelLabel">Default SuperCollider File</h3>
+		<form>
+			<input type="text" id="defaultSCFileTextarea" style="height: 1em;" value="<%= defaultSCFile %>"><br>
+			<button type="button" id="defaultSCFileButton">Save</button>
+		</form>
+	</div>
+
+	<div class="PrynthPanel SettingsPanel">
+		<h3 class="PrynthPanelLabel">Sensor data target</h3>
+		<form>
+			<select id="sensorDataTargetSelect">
+				<option selected disabled>Choose:</option>
+				<option value="l">Language</option>
+				<option value="s">Server</option>
+			</select>
+			<br>
+			<button type="button" id="sensorDataTargetButton">Save</button>
+		</form>
+	</div>
+
+	<div class="PrynthPanel SettingsPanel">
+		<h3 class="PrynthPanelLabel">Audio Device</h3>
+		<form>
+			Device ID number (ALSA):
+			<select id="jackDevice">
+				<option selected disabled>Choose:</option>
+				<option value="0">0</option>
+				<option value="1">1</option>
+			</select>
+			<br>
+			<br>
+			Vector Size:
+			<select id="jackVectorSize">
+				<option selected disabled>Choose:</option>
+				<option value="128">128</option>
+				<option value="256">256</option>
+				<option value="512">512</option>
+				<option value="1024">1024</option>
+			</select>
+			<br>
+			<br>
+			Sample Rate:
+			<select id="jackSampleRate">
+				<option selected disabled>Choose:</option>
+				<option value="44100">44100</option>
+				<option value="48000">48000</option>
+			</select>
+
+			<br>
+			<br>
+			<input type="checkbox" id="usb1checkbox">Force USB 1.1<br>
+			<br>
+			<button type="button" id="audioDeviceButton">Save</button>
+		</form>
+	</div>
+
+	<div style="width: 100vw; float: left">
+		<footer>
+            <% include footer %>
+		</footer>
+	</div>
+</div>
+
+
+
+<script>
+	$(document).ready(function () {
+
+		let socket = io.connect();
+
+//		let $clock = $('#clock');
+//		let $hostname = $('#hostname');
+//		let $ethernetip = $('#ethernetip');
+//		let $wirelessip = $('#wirelessip');
+//		let $cpu = $('#cpu');
+//		let $freemem = $('#freemem');
+
+		let $networkSSIDTextarea = $('#networkSSIDTextarea');
+		let $networkPasswordTextarea = $('#networkPasswordTextarea');
+		let $networkSubmit = $('#networkButton');
+
+		let $hostnameTextarea = $('#hostnameTextarea');
+		let $hostnameSubmit = $('#hostnameButton');
+
+		let $defaultSCFileTextarea = $('#defaultSCFileTextarea');
+		let $defaultSCFileSubmit = $('#defaultSCFileButton');
+
+		let $sensorDataTargetSelect = $('#sensorDataTargetSelect');
+		let $sensorDataTargetButton = $('#sensorDataTargetButton');
+
+		let $jackDevice = $('#jackDevice');
+		let $jackVectorSize = $('#jackVectorSize');
+		let $jackSampleRate = $('#jackSampleRate');
+		let $audioDeviceSubmit = $('#audioDeviceButton');
+
+		let $usb1Check = $('#usb1checkbox');
+
+//		let $rebootSubmit = $('#rebootButton');
+//		let $shutdownSubmit = $('#shutdownButton');
+
+
+		$sensorDataTargetSelect.val('<%=sensordatatarget%>');
+
+		$jackDevice.val('<%=audiodevice%>');
+		$jackVectorSize.val('<%=vectorsize%>');
+		$jackSampleRate.val('<%=samplerate%>');
+		$usb1Check.prop('checked', <%=usb1%>);
+
+//		$rebootSubmit.click(function () {
+//			$.ajax({method: "POST", url: 'settings/reboot'});
+//			alert('Rebooting...');
+//		});
+//
+//		$shutdownSubmit.click(function () {
+//			$.ajax({method: "POST", url: 'settings/shutdown'});
+//			alert('Shutting down...')
+//		});
+
+		$networkSubmit.click(function () {
+			let networkName = $networkSSIDTextarea.val();
+			let networkPass = $networkPasswordTextarea.val();
+			$.ajax({method: "POST", url: '/system/setwifi', data: {networkname: networkName, networkpass: networkPass}});
+			alert('WiFi settings updated. Needs reboot.')
+		});
+
+		$hostnameSubmit.click(function () {
+			let hostname = $hostnameTextarea.val();
+			$.ajax({method: "POST", url: '/system/sethostname', data: {hostname: hostname}});
+			alert('Hostname updadated. Needs reboot.');
+		});
+
+		$defaultSCFileSubmit.click(function () {
+			let defaultSCFile = $defaultSCFileTextarea.val();
+			$.ajax({method: "POST", url: '/system/setdefaultscfile', data: {defaultSCFile: defaultSCFile}});
+			alert('Default file updated. This file will run automatically the next time Prynth is booted.');
+		});
+
+		$sensorDataTargetButton.click(function () {
+			let sensorDataTarget = $sensorDataTargetSelect.val();
+			$.ajax({method: "POST", url: '/system/setsensordatatarget', data: {sensorDataTarget: sensorDataTarget}});
+			alert('Sensor data target updated. Needs reboot.');
+		});
+
+		$audioDeviceSubmit.click(function () {
+			let audioDevice = $jackDevice.val();
+			let audioVectorSize = $jackVectorSize.val();
+			let audioSampleRate = $jackSampleRate.val();
+			let usb1 = $usb1Check.is(":checked");
+
+			$.ajax({method: "POST", url: 'system/setjack', data: {device: audioDevice, vectorSize: audioVectorSize, sampleRate: audioSampleRate, usb1: usb1}});
+			alert('Jack settings updated. Needs reboot.');
+		})
+
+//		//receive systeminfo
+//		socket.on('systeminfo', function (data) {
+//			$clock.html(data.tick +' s');
+//			$hostname.html(data.hostname);
+//			$ethernetip.html(data.ethernetip);
+//			$wirelessip.html(data.wirelessip);
+//			$cpu.html(data.cpu + ' %');
+//			$freemem.html(data.freemem + ' Mb' );
+//		})
+
+		//close socket when closing client
+		$(window).on('beforeunload', function(){
+			socket.close();
+		});
+
+
+	});
+</script>
+
+</body>
+</html>

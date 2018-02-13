@@ -2,7 +2,7 @@
 #include <string.h> //string manipulation for osc
 #include <errno.h> //error catching
 #include <time.h> //clocks
-#include <math.h> //rounding 
+#include <math.h> //rounding
 // #include <wiringPi.h>
 #include <wiringSerial.h>
 #include <lo/lo.h>
@@ -49,7 +49,7 @@ int main (int argc, char *argv[]) {
 	if( argc == 2 ) {
 
 		// printf("The argument supplied is %s\n", argv[1]);
-		
+
 		if ( strcmp(argv[1], "-s") == 0 ){
 			mode = 1;
 		};
@@ -58,7 +58,7 @@ int main (int argc, char *argv[]) {
 		if ( strcmp(argv[1], "-l") == 0 ){
 			mode = 2;
 		};
-		
+
 
 
 	}
@@ -70,7 +70,7 @@ int main (int argc, char *argv[]) {
 	}
 
 	// variable setup
-	int fd ; //serial 
+	int fd ; //serial
 	lo_address oscAddressBroadcast; //osc address
 	lo_address oscAddressServer; //osc address
 	struct timespec timeStart, timeEnd; //clock types
@@ -87,14 +87,14 @@ int main (int argc, char *argv[]) {
 
 	//set oscAddress
 	oscAddressBroadcast = lo_address_new("127.0.0.1", "57120"); //osc address lang
-	oscAddressServer = lo_address_new("127.0.0.1", "57110"); //osc address server		
+	oscAddressServer = lo_address_new("127.0.0.1", "57110"); //osc address server
 
 	//open serial
 	if ((fd = serialOpen ("/dev/ttyAMA0", 57600)) < 0) {
 		fprintf (stderr, "Unable to open serial device: %s\n", strerror (errno)) ;
 		return 1 ;
 	}
-	
+
 	getHostname();
 
 	serialClose(fd);
@@ -103,12 +103,12 @@ int main (int argc, char *argv[]) {
 		fprintf (stderr, "Unable to open serial device: %s\n", strerror (errno)) ;
 		return 1 ;
 	}
-	
+
 
    	// main loop
 	while (1){
 		clock_gettime(CLOCK_MONOTONIC, &timeStart); /* mark start time */
-		
+
 		delay (1); // has to spend some time
 
 		if (timeTotal - serialTimeStamp >= 5) {
@@ -120,12 +120,12 @@ int main (int argc, char *argv[]) {
 			if(mode == 1){
 				sendSCServer(&oscAddressServer);
 			}
-			
+
 			if(mode == 2){
 				sendOSC(&oscAddressBroadcast);
 				// printf("%i\n", mode);
 			}
-			
+
 			oscTimeStamp = timeTotal;
 		}
 
@@ -140,7 +140,7 @@ int main (int argc, char *argv[]) {
 		timeTotal = (timeTotal + timeDiff);
 		showTimeDiff = timeDiff;
 		// printf("%llu\n", (long long unsigned int) showTimeDiff);
-		// printf("total time = %llu miliseconds\n", (long long unsigned int) showTimeDiff);	
+		// printf("total time = %llu miliseconds\n", (long long unsigned int) showTimeDiff);
 	}
 	return 0 ;
 }
@@ -155,9 +155,16 @@ void sendOSC (lo_address *oscAddress) {
 				sprintf(string, "/%i/%i", i, j);
 				sprintf(string2, "/%s", hostname);
 				// printf("%s\n", string);
-				lo_send(*oscAddress, string2, "sf", string, oscBuffer[i][j]);
+				lo_send(*oscAddress, string2, "sf", string, sensorData[i][j]);
 				oscBuffer[i][j] = sensorData[i][j];
 			}
+			// if (sensorData[i][j] != oscBuffer[i][j] && switchMatrix[i][j] == 1){
+			// 	sprintf(string, "/%s/%i/%i", hostname, i, j);
+			// 	// sprintf(string2, "/%s", hostname);
+			// 	// printf("%s\n", string);
+			// 	lo_send(*oscAddress, string, "f", oscBuffer[i][j]);
+			// 	oscBuffer[i][j] = sensorData[i][j];
+			// }
 		}
 	}
 }
@@ -187,7 +194,7 @@ void getSerial(int *fd) {
 	char digitalData[2];
 	char mux;
 	char sensor;
-	
+
 	while (serialDataAvail (*fd)) {
 		inbyte = serialGetchar(*fd);
 		// printf("%i\n", (int) inbyte); //print each byte in the serial stream
@@ -212,9 +219,9 @@ void getSerial(int *fd) {
 			sensorData[mux][sensor] = (digitalData[1]/250.0);
 
 			//print changed values
-			// printf("%i\n", (int) mux); 
-			// printf("%i\n", (int) sensor); 
-			// printf("%i\n", (int) digitalData[1]/250.0); 
+			// printf("%i\n", (int) mux);
+			// printf("%i\n", (int) sensor);
+			// printf("%i\n", (int) digitalData[1]/250.0);
 
 		} else {
 			index = 0;
@@ -243,4 +250,3 @@ void getHostname(){
 	gethostname(hostname, 1023);
 	// printf("%s\n", hostname);
 };
-

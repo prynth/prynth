@@ -5,95 +5,236 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+let os = require('os');
+let exec = require('child_process').exec;
+
+let multer = require('multer');
+let fs = require('fs');
+let sc = require('supercolliderjs');
+
+let sclang;
+let jackd;
+let serial2osc;
+
+var index = require('./routes/index');
+var users = require('./routes/users');
+var system = require('./routes/system');
+
 var app = express();
 
+// create server here and set sockets
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 
-var routes = require('./routes/index')(io); //index expects an input
-var users = require('./routes/users');
+//get config file
+var config = require('./private/config.json');
+
+// poll system info
+var systemTick = 0;
+var systemInfo;
+
+//public path
+let supercolliderfiles_path = path.join(__dirname, 'public/supercolliderfiles/');
+let public_path = path.join(__dirname, '../public/');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.locals.stdoutBuffer = 'foo';
+
+//socket.io setup
+app.set('socketio', io);
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
+//middleware for sockets
+// add socket.io to res in event loop
+app.use(function(req, res, next){
+	res.io = io;
+	next();
+});
 
-// add sockets to res
-// app.use(function(req, res, next){
-// 	res.io = io;
-// 	next();
-// });
+app.use('/', index);
+app.use('/users', users);
+app.use('/system', system);
+
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-	var err = new Error('Not Found');
+app.use(function(req, res, next) {
+	var err = new Error('Not Found')
 	err.status = 404;
 	next(err);
 });
 
-// error handlers
+// error handler
+app.use(function(err, req, res, next) {
+	// set locals, only providing error in development
+	res.locals.message = err.message;
+	res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-	app.use(function (err, req, res, next) {
-		res.status(err.status || 500);
-		res.render('error', {
-			message: err.message,
-			error: err
-		});
-	});
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function (err, req, res, next) {
+	// render the error page
 	res.status(err.status || 500);
-	res.render('error', {
-		message: err.message,
-		error: {}
-	});
+	res.render('error');
 });
 
 
-// send constant tick to client at interval
-var tick = 0;
+////////////
+
+function startJack() {
+	if(jackd == null){
+		let device = config.jack.device;
+		let vectorSize = config.jack.vectorSize;
+		let sampleRate = config.jack.sampleRate;
+
+		let command = 'jackd -P95 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
+		// let command ='jackd -P95 -d dummy -C1 -p256 -r44100 & alsa_in -q1 -d hw:1 & alsa_out -q1 -d hw:1 &';
+
+		// console.log('jack command: '+command);
+
+		jackd = exec(command, function (error, stdout, stderr) {
+			console.log(stdout);
+		});
+	};
+}
+
+function startSerial2osc() {
+	if(serial2osc == null){
+		let target = path.join(__dirname, '../serial2osc/serial2osc')+' -'+config.sensorDataTarget;
+
+		serial2osc = exec(target, function (error, stdout, stderr) {
+			console.log(stdout);
+		});
+	};
+
+}
+
+//start sclang
+function startSclang() {
+	if(sclang == null) {
+		sc.lang.boot({stdin: false, echo: false, debug: false}).then(function (lang) {
+			sclang = lang;
+			sclang.on('stdout', function (text) {
+				io.sockets.emit('toconsole', text);
+			});
+			sclang.on('state', function (text) {
+				io.sockets.emit('toconsole', JSON.stringify(text));
+			});
+			sclang.on('stderror', function (text) {
+				io.sockets.emit('toconsole', JSON.stringify(text));
+			});
+			sclang.on('error', function (text) {
+				io.sockets.emit('toconsole', JSON.stringify(text));
+			});
+		}).then(function () { //TODO: add checking if defaultSCFile exists on config.json, if not skip
+			fs.access(supercolliderfiles_path + config.defaultSCFile, function (err) {
+				if (err){
+					io.sockets.emit('toconsole', 'cannot find default file. Check your settings...\n');
+				} else {
+					sclang.executeFile(path.join(supercolliderfiles_path, config.defaultSCFile)).then(
+						function (answer) {
+							io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
+						},
+						function (error) {
+							io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
+						}
+					)
+				};
+			});
+		})
+	};
+}
+
+function start() {
+	startJack();
+	startSerial2osc();
+	setTimeout(function () {
+		startSclang();
+	} , 5000);
+}
+
+start();
+
+//interprets in supercolliderfiles (receives from post via socket and outputs to console via socket)
+app.on('interpret', function (msg) {
+	if(sclang !== null){
+		sclang.interpret(msg, null, true, true, false)
+				.then(function(result) {
+					io.sockets.emit('toconsole', result);
+					console.log("Result = "+result);
+				})
+				.catch(function (error) {
+					io.sockets.emit('toconsole', JSON.stringify(error));
+				});
+	};
+});
+
+app.on('runtemp', function (msg) {
+	if(sclang !== null){
+		fs.writeFile(supercolliderfiles_path + '.temp.scd', msg, function (err) {
+			if (err) {
+				res.send('error saving file');
+				return console.log(err);
+			} else {
+				io.sockets.emit('toconsole', '\ntemp file saved');
+
+				sclang.executeFile(path.join(supercolliderfiles_path, '.temp.scd')).then(
+					function (answer) {
+						io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
+					},
+					function (error) {
+						io.sockets.emit('toconsole', 'cannot run or find temp file.\n');
+						io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
+					}
+				);
+			}
+			;
+		});
+	};
+
+});
+
+app.on('restartSclang', function () {
+	if(sclang !== null){
+		sclang.interpret('0.exit', null, true, true, false)
+			.then(function(result) {
+				io.sockets.emit('toconsole', 'sclang quitting...');
+				exec('sudo pkill jackd && sudo pkill serial2osc', function () {
+					jackd = null; sclang = null; serial2osc = null;
+					start();
+				});
+			})
+			.catch(function (error) {
+				io.sockets.emit('toconsole', JSON.stringify(error));
+			});
+	};
+});
+
+function getSystemInfo() {
+	var wirelessIP, ethernetIP, cpu, hostname, totalmem, freemem;
+
+	if (os.networkInterfaces().wlan0) {wirelessIP = os.networkInterfaces().wlan0[0].address;
+	} else {wirelessIP = 'unavailable';}
+	if (os.networkInterfaces().eth0) {ethernetIP = os.networkInterfaces().eth0[0].address;
+	} else {ethernetIP = 'unavailable';}
+	cpu = (Math.round(os.loadavg()[0]));
+	hostname = os.hostname();
+	totalmem = (Math.round(os.totalmem()/1000000));
+	freemem = (Math.round(os.freemem()/1000000));
+
+	return([hostname, ethernetIP, wirelessIP, cpu,  totalmem, freemem]);
+};
+
 setInterval(function () {
-
-	// console.log('ticking '+ tick);
-	io.sockets.emit('tick from server', 'Time: '+ tick+ ' s');
-	tick = tick + 1;
-
-	//pooling app.locals example
-	//log stdoutBuffer if it's anything other than empty string, not efficient depends on pooling
-// 	var currentstdoutBuffer = app.locals.stdoutBuffer;
-//
-// 	if (currentstdoutBuffer != ''){
-// 		io.sockets.emit('stdout', currentstdoutBuffer);
-// 		app.locals.stdoutBuffer = '';
-// 	};
-//
-
-
+	systemInfo = getSystemInfo();
+	systemTick = systemTick +1;
+	io.sockets.emit('systeminfo', {tick: systemTick, hostname: systemInfo[0], ethernetip: systemInfo[1], wirelessip: systemInfo[2], cpu: systemInfo[3], totalmem: systemInfo[4], freemem: systemInfo[5]})
 }, 1000);
 
-//chat example
-//responder from action triggered by client
-// io.sockets.on('connection', function (socket) {
-// 	socket.on('request', function (data) {
-// 		io.sockets.emit('response', 'coco ranheta: '+ data);
-// 	})
-// })
+///////////
 
 module.exports = {app: app, server: server};
