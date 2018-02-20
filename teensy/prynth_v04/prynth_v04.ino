@@ -25,7 +25,7 @@ byte adcArrayByte [numAdc][numSensor];
 byte adcArrayByteTemp [numAdc][numSensor];
 
 //Set sampling frequency for sensors (same sampling rate for all sensors)
-int readFrequency = 10; //Hz - Enter the rate at which the sensors need to be sampled. Note: All sensors will be sampled at the same rate.
+int readFrequency = 100; //Hz - Enter the rate at which the sensors need to be sampled. Note: All sensors will be sampled at the same rate.
 float period = pow(10,6) / (numAdc*numSensor*readFrequency) ;
 const int readPeriod = (int)period; // us
 
