@@ -165,7 +165,7 @@ app.on('interpret', function (msg) {
 		sclang.interpret(msg, null, true, true, false)
 				.then(function(result) {
 					io.sockets.emit('toconsole', result);
-					console.log("Result = "+result);
+					// console.log("Result = "+result);
 				})
 				.catch(function (error) {
 					io.sockets.emit('toconsole', JSON.stringify(error));
