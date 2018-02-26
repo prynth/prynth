@@ -103,15 +103,6 @@
 </div>
 
 
-<!--<div style="width: 100vw; float: left">-->
-	<!--<br>-->
-	<!--<br>-->
-	<!--<footer>-->
-        <!--<% include footer %>-->
-	<!--</footer>-->
-<!--</div>-->
-
-
 <script>
 
     //var CodeMirror = require('/codemirror');
@@ -128,13 +119,13 @@
 		indentWithTabs: true,
 		lineWrapping: true,
 		theme: "prynth-cm",
-		autoCloseBrackets: true,
-		extraKeys: {"Ctrl-Q": "toggleComment"}
+		autoCloseBrackets: true
 	});
 
     //editor.on('mousedown', function() {
 
 	var selFlag = 0;
+    var curWord = "";
 
     editor.on("keypress", function(editor) {
         if (selFlag===1){
@@ -145,7 +136,15 @@
 
     editor.on("cursorActivity", function(editor) {
         //alert('Click');
-        console.log("lineNow = "+String(editor.getLine(editor.getCursor().line)));
+		//console.log("lineNow = "+String(editor.getLine(editor.getCursor().line)));
+
+	    var A1 = editor.getCursor().line;
+	    var A2 = editor.getCursor().ch;
+
+	    var B1 = editor.findWordAt({line: A1, ch: A2}).anchor.ch;
+	    var B2 = editor.findWordAt({line: A1, ch: A2}).head.ch;
+
+	    curWord = editor.getRange({line: A1,ch: B1}, {line: A1,ch: B2});
 
 		//-------------
 
@@ -198,24 +197,6 @@
 		}
     });
 
-	//editor.setSize(width: "400px", height: "600px");
-
-	var curWord = "";
-
-
-
-    editor.on('cursorActivity', function() {
-        var A1 = editor.getCursor().line;
-        var A2 = editor.getCursor().ch;
-
-        var B1 = editor.findWordAt({line: A1, ch: A2}).anchor.ch;
-        var B2 = editor.findWordAt({line: A1, ch: A2}).head.ch;
-
-		curWord = editor.getRange({line: A1,ch: B1}, {line: A1,ch: B2});
-		console.log(curWord);
-        //console.log(editor.getRange({line: A1,ch: B1}, {line: A1,ch: B2}));
-    });
-
 	//post for run button
 	function interpret(data) {
 		$.ajax({method: "POST", url: '/interpret', data: {code: data}});
@@ -225,6 +206,90 @@
 		$.ajax({method: "POST", url: '/runtemp', data: {code: data}});
 //			$.ajax({method: "POST", url: '/runtemp'});
 	}
+
+	function runsel() {
+		let selection = editor.getSelection();
+		if (selection !== '') {
+			interpret(selection);
+		} else {
+
+			var openBracket = "(";
+			var closeBracket = ")";
+			var curLine = editor.getCursor().line;
+			var lineNow = curLine;
+			var lineRem = lineNow;
+			var codeBracket = "";
+			var curLineContent;
+			var checkOpen=1;
+			var checkClose=1;
+			var countBrackets=0;
+			var countBracketsClose=0;
+			var bracketFound = 0;
+			// editor.setValue(String(editor.getLine(lineNow-1)));
+
+			//alert(String(lineNow));
+			// editor.setValue(String(editor.getLine(lineNow-1).localeCompare(openBracket)));
+			while (lineNow > 0){
+				lineNow = lineNow - 1;
+				curLineContent = String(editor.getLine(lineNow));
+
+				checkClose = curLineContent.localeCompare(closeBracket);
+				if (checkClose===0){
+					countBracketsClose += 1;
+				}
+
+				checkOpen = curLineContent.localeCompare(openBracket);
+				if (checkOpen===0){
+					bracketFound = 1;
+					if (countBracketsClose === 0) {
+						countBrackets += 1;
+						lineRem = lineNow + 1;
+					}
+					else{
+						countBracketsClose -= 1;
+					}
+				}
+
+
+			}
+			// editor.setValue(String(lineRem));
+			lineNow = lineRem;
+			if (bracketFound!==0 && countBrackets>0) {
+				while (countBrackets !== 0) {
+					checkClose = String(editor.getLine(lineNow)).localeCompare(closeBracket)
+					if (checkClose === 0 && lineNow>=curLine) {
+						countBrackets -= 1;
+					}
+					checkOpen = String(editor.getLine(lineNow)).localeCompare(openBracket)
+					if (checkOpen === 0 && lineNow>=curLine) {
+						countBrackets += 1;
+					}
+					if (countBrackets===0) break;
+
+					codeBracket += String(editor.getLine(lineNow));
+//					console.log(String(lineNow) + " = " + codeBracket);
+					lineNow += 1;
+
+				}
+				//editor.setValue(String(codeBracket));
+				//alert(codeBracket);
+				interpret(codeBracket);
+			}
+			else{
+				interpret(editor.getLine(editor.getCursor().line));
+			}
+
+		}
+	};
+
+	function searchHelp(){
+		var helpLink = "/schelp/Search.html"+"?value="+ curWord;
+		window.open(helpLink);
+	};
+
+//	function foo(){
+//		alert('foo!');
+//	};
 
 	function detectOS() {
 		var OSName='Unknown OS';
@@ -236,141 +301,21 @@
 	}
 
 	function setExtrakeys() {
-
 		var OS = detectOS();
-
-//			var modifierKey = '';
-
-//			if(OS === 'MacOS'){modifierKey = 'Cmd'} else {modifierKey = 'Ctrl'};
-//
-//			var interpret = modifierKey + '-Enter';
-//			var kill = modifierKey + '-.';
-
 		if (OS === 'MacOS'){
 			editor.setOption("extraKeys", {
-				'Cmd-Enter' : function () {
-					let selection = editor.getSelection();
-					if (selection !== '') {
-						interpret(selection);
-					} else {
-
-						var openBracket = "(";
-                        var closeBracket = ")";
-                        var curLine = editor.getCursor().line;
-                        var lineNow = curLine;
-                        var lineRem = lineNow;
-                        var codeBracket = "";
-                        var curLineContent;
-						var checkOpen=1;
-                        var checkClose=1;
-						var countBrackets=0;
-                        var countBracketsClose=0;
-						var bracketFound = 0;
-                        // editor.setValue(String(editor.getLine(lineNow-1)));
-
-						//alert(String(lineNow));
-                        // editor.setValue(String(editor.getLine(lineNow-1).localeCompare(openBracket)));
-						while (lineNow > 0){
-							lineNow = lineNow - 1;
-							curLineContent = String(editor.getLine(lineNow));
-
-                            checkClose = curLineContent.localeCompare(closeBracket);
-                            if (checkClose===0){
-                                countBracketsClose += 1;
-                            }
-
-                            checkOpen = curLineContent.localeCompare(openBracket);
-							if (checkOpen===0){
-							    bracketFound = 1;
-							    if (countBracketsClose === 0) {
-                                    countBrackets += 1;
-                                    lineRem = lineNow + 1;
-								}
-								else{
-                                    countBracketsClose -= 1;
-                                }
-							}
-
-
-                        }
-                        // editor.setValue(String(lineRem));
-						lineNow = lineRem;
-						if (bracketFound!==0 && countBrackets>0) {
-                            while (countBrackets !== 0) {
-                                checkClose = String(editor.getLine(lineNow)).localeCompare(closeBracket)
-                                if (checkClose === 0 && lineNow>=curLine) {
-                                    countBrackets -= 1;
-                                }
-                                checkOpen = String(editor.getLine(lineNow)).localeCompare(openBracket)
-                                if (checkOpen === 0 && lineNow>=curLine) {
-                                    countBrackets += 1;
-                                }
-                                if (countBrackets===0) break;
-
-                                codeBracket += String(editor.getLine(lineNow));
-                                console.log(String(lineNow) + " = " + codeBracket);
-                                lineNow += 1;
-
-                            }
-                            //editor.setValue(String(codeBracket));
-							//alert(codeBracket);
-                            interpret(codeBracket);
-                        }
-                        else{
-                            interpret(editor.getLine(editor.getCursor().line));
-						}
-
-					}
-				},
-				'Cmd-.' : function () {
-					interpret('s.freeAll;');
-					// alert("dot!");
-				},
-
-                'Cmd-;' : function () {
-				   // var helpLink = "/schelp/Classes/" + curWord + ".html";
-                    var helpLink = "/schelp/Search.html"+"?value="+ curWord;
-                    //document.getElementById('search_input').value = curWord;
-
-                    //window.open("/Search.html");
-                    window.open(helpLink);
-
-                    // var http = require('http');
-                    // var fs = require('fs');
-                    //
-                    // const PORT=8080;
-
-                    // fs.readFile('/schelp/Classes/SinOsc.html', function (err, html) {
-                    //
-                    //     if (err) throw err;
-                    //
-                    //     http.createServer(function(request, response) {
-                    //         response.writeHeader(200, {"Content-Type": "text/html"});
-                    //         response.write(html);
-                    //         response.end();
-                    //     }).listen(PORT);
-                    // });
-
-                },
-
-                'Cmd-/' : "toggleComment"
+				'Cmd-Enter': function(){runsel();},
+				'Cmd-.' : function () {interpret('s.freeAll;');},
+				'Cmd-D' : function () {searchHelp();return false},
+				'Cmd-/' : "toggleComment"
 			});
 		} else {
 			editor.setOption("extraKeys", {
-				'Ctrl-Enter' : function () {
-					let selection = editor.getSelection();
-					if (selection !== '') {
-						interpret(selection);
-					} else {
-						interpret(editor.getLine(editor.getCursor().line));
-					}
-				},
-				'Ctrl-.' : function () {
-					interpret('s.freeAll;');
-				},
+				'Ctrl-Enter': function(){runsel();},
+				'Ctrl-.' : function () {interpret('s.freeAll;');},
+				'Ctrl-D' : function () {searchHelp();},
 				'Ctrl-/' : "toggleComment"
 			});
-
 		}
 	}
 
@@ -391,9 +336,6 @@
 		let $consoleTextarea = $('#consoleTextarea');
 		let $supercolliderfiles = $('#supercolliderfiles');
 		let $soundfiles = $('#soundfiles');
-
-//		let $heartlabel = $('#heartLabel');
-//		let $tempheartlabel = "";
 
 		let $clock = $('#clock');
 		let $hostname = $('#hostname');
@@ -421,7 +363,6 @@
 		});
 		$restartSclangSubmit.click(function () {
 			$.ajax({method: "POST", url: '/restartsclang'});
-//			alert('Shutting down...')
 		});
 
 		//run all code in editor window
@@ -484,9 +425,11 @@
             var maxConsoleChar = 1000;
             var sliceChar = -100;
             var tempbuf;
+
             if ($consoleTextarea.val().length >= maxConsoleChar){
-                //console.log("INSIDE SLICE");
+				//slice
                 tempBuf = $consoleTextarea.val().slice(sliceChar);
+                //post
                 $consoleTextarea.html(tempBuf);
             }
 		});
@@ -511,7 +454,6 @@
 
 		//receive systeminfo
 		socket.on('systeminfo', function (data) {
-//				if ($heartlabel.html() === '\u2665') {$heartlabel.html('\u2764');} else {$heartlabel.html('\u2665');}
 				$clock.html(data.tick +' s');
 				$hostname.html(data.hostname);
 				$ethernetip.html(data.ethernetip);
@@ -521,10 +463,17 @@
 		})
 
 
+		$(document).bind('keydown', function(e) {
+			if(((e.metaKey) || (e.ctrlKey)) && (e.which == 68)) {e.preventDefault(); return false;};
+		});
+
 		//close socket when closing client
 		$(window).on('beforeunload', function(){
 			socket.close();
 		});
+
+
+
 	})
 </script>
 
