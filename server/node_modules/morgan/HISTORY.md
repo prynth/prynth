@@ -1,3 +1,13 @@
+1.9.0 / 2017-09-26
+==================
+
+  * Use `res.headersSent` when available
+  * deps: basic-auth@~2.0.0
+     - Use `safe-buffer` for improved Buffer API
+  * deps: debug@2.6.9
+  * deps: depd@~1.1.1
+    - Remove unnecessary `Buffer` loading
+
 1.8.2 / 2017-05-23
 ==================
 
