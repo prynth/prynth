@@ -122,13 +122,13 @@ function startSclang() {
 				io.sockets.emit('toconsole', text);
 			});
 			sclang.on('state', function (text) {
-				io.sockets.emit('toconsole', JSON.stringify(text));
+				// io.sockets.emit('toconsole', JSON.stringify(text));
 			});
 			sclang.on('stderror', function (text) {
-				io.sockets.emit('toconsole', JSON.stringify(text));
+				// io.sockets.emit('toconsole', JSON.stringify(text));
 			});
 			sclang.on('error', function (text) {
-				io.sockets.emit('toconsole', JSON.stringify(text));
+				// io.sockets.emit('toconsole', JSON.stringify(text));
 			});
 		}).then(function () { //TODO: add checking if defaultSCFile exists on config.json, if not skip
 			fs.access(supercolliderfiles_path + config.defaultSCFile, function (err) {
@@ -154,7 +154,8 @@ function start() {
 	startSerial2osc();
 	setTimeout(function () {
 		startSclang();
-	} , 5000);
+	// } , 5000);
+	} , 500);
 }
 
 start();
@@ -165,10 +166,11 @@ app.on('interpret', function (msg) {
 		sclang.interpret(msg, null, true, true, false)
 				.then(function(result) {
 					io.sockets.emit('toconsole', result);
-					// console.log("Result = "+result);
 				})
 				.catch(function (error) {
-					io.sockets.emit('toconsole', JSON.stringify(error));
+					var errorStringArray = JSON.stringify(error.error, null, ' ');
+					io.sockets.emit('toconsole', errorStringArray + '\n\n\n');
+
 				});
 	};
 });
@@ -187,8 +189,11 @@ app.on('runtemp', function (msg) {
 						io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
 					},
 					function (error) {
-						io.sockets.emit('toconsole', 'cannot run or find temp file.\n');
-						io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
+						io.sockets.emit('toconsole',
+							'cannot run or find temp file.\n'
+							+ 'error type:' + JSON.stringify(error.type) + '\n'
+							+ JSON.stringify(error.error, null, ' ') + '\n'
+						);
 					}
 				);
 			}
