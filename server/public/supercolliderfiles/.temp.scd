@@ -15,5 +15,5 @@ fork{
 		if (msg[1] == '/0/0', {
 			~testsynth.set(\freq, msg[2].linlin(0, 1, 100, 500));
 		});
-	}, '/raspberrypi', n);
+	}, '/raspberrypi'n);
 };

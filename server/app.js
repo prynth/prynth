@@ -186,7 +186,7 @@ app.on('runtemp', function (msg) {
 
 				sclang.executeFile(path.join(supercolliderfiles_path, '.temp.scd')).then(
 					function (answer) {
-						io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
+						io.sockets.emit('toconsole', JSON.stringify(answer.string) + '\n');
 					},
 					function (error) {
 						io.sockets.emit('toconsole',
