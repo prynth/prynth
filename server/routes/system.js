@@ -50,32 +50,63 @@ router.get('/', function(req, res, next) {
 // 	});
 // })
 
+// router.post('/setwifi', function (req, res) {
+// 	var networkname = req.body.networkname;
+// 	var networkpass = req.body.networkpass;
+//
+// 	var buffer = "";
+//
+// 	var configFile = fs.readFileSync(private_path +'config.json');
+// 	var configData = JSON.parse(configFile);
+//
+// 	// console.log(configData);
+// 	// configData.wifinetworks.push([networkname, networkpass]);
+// 	configData.wifinetworks = ([networkname, networkpass]);
+// 	var configJSON = JSON.stringify(configData, null, 2);
+//
+// 	// console.log(configJSON);
+// 	fs.writeFileSync(private_path +'config.json', configJSON);
+//
+// 	var command = 'sudo sed -i "/#prynth begin/,/#prynth end/ s/\\(ssid *= *\\).*/\\1\\"'+networkname+'\\"/ ;/#prynth begin/,/#prynth end/ s/\\(psk *= *\\).*/\\1\\"'+networkpass+'\\"/" /etc/wpa_supplicant/wpa_supplicant.conf';
+// 	// console.log(command);
+//
+// 	var child = exec(command, function (error, stdout, stderr) {
+// 		console.log(stdout);
+// 		res.redirect('/system');
+// 	});
+//
+// })
+
 router.post('/setwifi', function (req, res) {
 	var networkname = req.body.networkname;
 	var networkpass = req.body.networkpass;
 
-	var buffer = "";
-
 	var configFile = fs.readFileSync(private_path +'config.json');
 	var configData = JSON.parse(configFile);
 
-	// console.log(configData);
-	// configData.wifinetworks.push([networkname, networkpass]);
 	configData.wifinetworks = ([networkname, networkpass]);
 	var configJSON = JSON.stringify(configData, null, 2);
 
 	// console.log(configJSON);
 	fs.writeFileSync(private_path +'config.json', configJSON);
 
-	var command = 'sudo sed -i "/#prynth begin/,/#prynth end/ s/\\(ssid *= *\\).*/\\1\\"'+networkname+'\\"/ ;/#prynth begin/,/#prynth end/ s/\\(psk *= *\\).*/\\1\\"'+networkpass+'\\"/" /etc/wpa_supplicant/wpa_supplicant.conf';
-	// console.log(command);
+	// var command = 'sudo sed -i "/#prynth begin/,/#prynth end/ s/\\(ssid *= *\\).*/\\1\\"'+networkname+'\\"/ ;/#prynth begin/,/#prynth end/ s/\\(psk *= *\\).*/\\1\\"'+networkpass+'\\"/" /etc/wpa_supplicant/wpa_supplicant.conf';
+
+	var command =
+	'sudo wpa_cli -i wlan0 add_network 0 && sudo wpa_cli -i wlan0 set_network 0 ssid '
+	+'\'\"'+networkname+'\"\''+
+	' && sudo wpa_cli -i wlan0 set_network 0 psk '
+	+'\'\"'+networkpass+'\"\''+
+	' && sudo wpa_cli -i wlan0 enable_network 0 && sudo wpa_cli -i wlan0 save_config'
+	;
 
 	var child = exec(command, function (error, stdout, stderr) {
 		console.log(stdout);
 		res.redirect('/system');
 	});
-
+	
 })
+
 
 router.post('/sethostname', function (req, res) {
 	var hostname = req.body.hostname;
