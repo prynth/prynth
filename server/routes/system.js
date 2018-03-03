@@ -93,11 +93,13 @@ router.post('/setwifi', function (req, res) {
 	// var command = 'sudo sed -i "/#prynth begin/,/#prynth end/ s/\\(ssid *= *\\).*/\\1\\"'+networkname+'\\"/ ;/#prynth begin/,/#prynth end/ s/\\(psk *= *\\).*/\\1\\"'+networkpass+'\\"/" /etc/wpa_supplicant/wpa_supplicant.conf';
 
 	var command =
+	'sudo ip link set wlan0 down && '+
 	'sudo wpa_cli -i wlan0 add_network 0 && sudo wpa_cli -i wlan0 set_network 0 ssid '
 	+'\'\"'+networkname+'\"\''+
 	' && sudo wpa_cli -i wlan0 set_network 0 psk '
-	+'\'\"'+networkpass+'\"\''+
-	' && sudo wpa_cli -i wlan0 enable_network 0 && sudo wpa_cli -i wlan0 save_config'
+	+'\'\"'+networkpass+'\"\''
+	+' && sudo wpa_cli -i wlan0 enable_network 0 && sudo wpa_cli -i wlan0 save_config '
+	+'&& sudo ip link set wlan0 up'
 	;
 
 	var child = exec(command, function (error, stdout, stderr) {
