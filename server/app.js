@@ -85,21 +85,18 @@ app.use(function(err, req, res, next) {
 
 ////////////
 
-function startJack() {
+function startJack(callback) {
 	if(jackd == null){
 		let device = config.jack.device;
 		let vectorSize = config.jack.vectorSize;
 		let sampleRate = config.jack.sampleRate;
 
 		let command = 'jackd -P95 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
-		// let command ='jackd -P95 -d dummy -C1 -p256 -r44100 & alsa_in -q1 -d hw:1 & alsa_out -q1 -d hw:1 &';
-
-		// console.log('jack command: '+command);
-
 		jackd = exec(command, function (error, stdout, stderr) {
 			console.log(stdout);
 		});
 	};
+	callback();
 }
 
 function startSerial2osc() {
@@ -149,13 +146,10 @@ function startSclang() {
 	};
 }
 
-function start() {
-	startJack();
+
+function start(callback) {
 	startSerial2osc();
-	setTimeout(function () {
-		startSclang();
-	} , 2000);
-	// } , 500);
+	startJack(startSclang);
 }
 
 start();
