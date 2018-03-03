@@ -104,7 +104,7 @@ router.post('/setwifi', function (req, res) {
 		console.log(stdout);
 		res.redirect('/system');
 	});
-	
+
 })
 
 
@@ -156,6 +156,14 @@ router.post('/setsensordatatarget', function (req, res) {
 	var configJSON = JSON.stringify(configData, null, 2);
 
 	fs.writeFileSync(private_path +'config.json', configJSON);
+
+	// var command = 'sudo pkill serial2osc & ls';
+	//
+	// var child = exec(command, function (error, stdout, stderr) {
+	// 	console.log(stdout);
+	// 	res.redirect('/system');
+	// });
+
 });
 
 router.post('/setjack', function (req, res) {
