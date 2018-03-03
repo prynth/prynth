@@ -154,8 +154,8 @@ function start() {
 	startSerial2osc();
 	setTimeout(function () {
 		startSclang();
-	// } , 5000);
-	} , 500);
+	} , 2000);
+	// } , 500);
 }
 
 start();
