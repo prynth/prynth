@@ -185,7 +185,9 @@
 		$hostnameSubmit.click(function () {
 			let hostname = $hostnameTextarea.val();
 			$.ajax({method: "POST", url: '/system/sethostname', data: {hostname: hostname}});
-			alert('Hostname updated. Needs reboot.');
+//			alert('Hostname updated. Needs reboot.');
+			var r = confirm("Hostname updated.\nThis setting requires a reboot.\nDo you want to reboot now?");
+			if (r == true) {$.ajax({method: "POST", url: '/reboot'});};
 		});
 
 		$defaultSCFileSubmit.click(function () {
@@ -197,7 +199,8 @@
 		$sensorDataTargetButton.click(function () {
 			let sensorDataTarget = $sensorDataTargetSelect.val();
 			$.ajax({method: "POST", url: '/system/setsensordatatarget', data: {sensorDataTarget: sensorDataTarget}});
-			alert('Sensor data target updated. Needs reboot.');
+			var r = confirm("Sensor data target updated.\nThis setting requires a reboot.\nDo you want to reboot now?");
+			if (r == true) {$.ajax({method: "POST", url: '/reboot'});};
 		});
 
 		$audioDeviceSubmit.click(function () {
@@ -207,7 +210,10 @@
 			let usb1 = $usb1Check.is(":checked");
 
 			$.ajax({method: "POST", url: 'system/setjack', data: {device: audioDevice, vectorSize: audioVectorSize, sampleRate: audioSampleRate, usb1: usb1}});
-			alert('Jack settings updated. Needs reboot.');
+
+			var r = confirm("Jack settings updated.\nThis setting requires a reboot.\nDo you want to reboot now?");
+			if (r == true) {$.ajax({method: "POST", url: '/reboot'});};
+
 		})
 
 //		//receive systeminfo
