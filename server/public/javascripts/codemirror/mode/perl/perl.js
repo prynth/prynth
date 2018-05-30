@@ -293,7 +293,7 @@ CodeMirror.defineMode("perl",function(){
                 endpwent                        :1,     // - be done using passwd file
                 endservent                      :1,     // - be done using services file
                 eof                             :1,     // - test a filehandle for its end
-                'eval'                          :1,     // - catch exceptions or compile and run supercolliderfiles
+                'eval'                          :1,     // - catch exceptions or compile and run code
                 'exec'                          :1,     // - abandon this program to run another
                 exists                          :1,     // - test whether a hash key is present
                 exit                            :1,     // - terminate this program
@@ -333,7 +333,7 @@ CodeMirror.defineMode("perl",function(){
                 given                           :1,     //
                 glob                            :1,     // - expand filenames using wildcards
                 gmtime                          :1,     // - convert UNIX time into record or string using Greenwich time
-                'goto'                          :1,     // - create spaghetti supercolliderfiles
+                'goto'                          :1,     // - create spaghetti code
                 grep                            :1,     // - locate elements in a list test true against a given criterion
                 hex                             :1,     // - convert a string to a hexadecimal number
                 'import'                        :1,     // - patch a module's namespace into your own

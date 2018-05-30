@@ -300,7 +300,7 @@
         state.waitDot = null;
         state.waitPipe = null;
         // If the tag that closes is a block comment tag, we want to mark the
-        // following supercolliderfiles as comment, until the tag closes.
+        // following code as comment, until the tag closes.
         if (state.blockCommentTag) {
           state.blockCommentTag = false;  // Release the "lock"
           state.tokenize = inBlockComment;

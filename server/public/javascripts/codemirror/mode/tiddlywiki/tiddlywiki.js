@@ -12,7 +12,7 @@
     |''License''|[[MIT License|http://www.opensource.org/licenses/mit-license.php]]|
     |''CoreVersion''|2.5.0|
     |''Requires''|codemirror.js|
-    |''Keywords''|syntax highlighting color supercolliderfiles mirror codemirror|
+    |''Keywords''|syntax highlighting color code mirror codemirror|
     ! Info
     CoreVersion parameter is needed for TiddlyWiki only!
 ***/
@@ -66,7 +66,7 @@ CodeMirror.defineMode("tiddlywiki", function () {
   function tokenBase(stream, state) {
     var sol = stream.sol(), ch = stream.peek();
 
-    state.block = false;        // indicates the start of a supercolliderfiles block.
+    state.block = false;        // indicates the start of a code block.
 
     // check start of  blocks
     if (sol && /[<\/\*{}\-]/.test(ch)) {
@@ -202,7 +202,7 @@ CodeMirror.defineMode("tiddlywiki", function () {
     return "strong";
   }
 
-  // tw supercolliderfiles
+  // tw code
   function twTokenCode(stream, state) {
     var sb = state.block;
 

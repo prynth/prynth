@@ -37,7 +37,7 @@ CodeMirror.defineMode("gfm", function(config, modeConfig) {
     token: function(stream, state) {
       state.combineTokens = null;
 
-      // Hack to prevent formatting override inside supercolliderfiles blocks (block and inline)
+      // Hack to prevent formatting override inside code blocks (block and inline)
       if (state.codeBlock) {
         if (stream.match(/^```+/)) {
           state.codeBlock = false;
@@ -81,7 +81,7 @@ CodeMirror.defineMode("gfm", function(config, modeConfig) {
       if (stream.sol() || state.ateSpace) {
         state.ateSpace = false;
         if (modeConfig.gitHubSpice !== false) {
-          if(stream.match(/^(?:[a-zA-Z0-9\-_]+\/)?(?:[a-zA-Z0-9\-_]+@)?(?:[a-f0-9]{7,40}\b)/)) {
+          if(stream.match(/^(?:[a-zA-Z0-9\-_]+\/)?(?:[a-zA-Z0-9\-_]+@)?(?=.{0,6}\d)(?:[a-f0-9]{7,40}\b)/)) {
             // User/Project@SHA
             // User@SHA
             // SHA
@@ -114,8 +114,8 @@ CodeMirror.defineMode("gfm", function(config, modeConfig) {
 
   var markdownConfig = {
     taskLists: true,
-    fencedCodeBlocks: '```',
-    strikethrough: true
+    strikethrough: true,
+    emoji: true
   };
   for (var attr in modeConfig) {
     markdownConfig[attr] = modeConfig[attr];

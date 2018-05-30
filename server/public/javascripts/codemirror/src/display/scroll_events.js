@@ -1,8 +1,8 @@
-import { chrome, gecko, ie, mac, presto, safari, webkit } from "../util/browser"
-import { e_preventDefault } from "../util/event"
+import { chrome, gecko, ie, mac, presto, safari, webkit } from "../util/browser.js"
+import { e_preventDefault } from "../util/event.js"
 
-import { updateDisplaySimple } from "./update_display"
-import { setScrollLeft, updateScrollTop } from "./scrolling"
+import { updateDisplaySimple } from "./update_display.js"
+import { setScrollLeft, updateScrollTop } from "./scrolling.js"
 
 // Since the delta values reported on mouse wheel events are
 // unstandardized between browsers and even browser versions, and
@@ -50,7 +50,7 @@ export function onScrollWheel(cm, e) {
 
   // Webkit browsers on OS X abort momentum scrolls when the target
   // of the scroll event is removed from the scrollable element.
-  // This hack (see related supercolliderfiles in patchDisplay) makes sure the
+  // This hack (see related code in patchDisplay) makes sure the
   // element is kept around.
   if (dy && mac && webkit) {
     outer: for (let cur = e.target, view = display.view; cur != scroll; cur = cur.parentNode) {

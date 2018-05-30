@@ -1,6 +1,6 @@
-import { gecko, ie, ie_version, mobile, webkit } from "../util/browser"
-import { elt, eltP } from "../util/dom"
-import { scrollerGap } from "../util/misc"
+import { gecko, ie, ie_version, mobile, webkit } from "../util/browser.js"
+import { elt, eltP } from "../util/dom.js"
+import { scrollerGap } from "../util/misc.js"
 
 // The display handles the DOM integration, both for input reading
 // and content drawing. It holds references to DOM nodes and
@@ -17,8 +17,8 @@ export function Display(place, doc, input) {
   // and h scrollbar is present.
   d.gutterFiller = elt("div", null, "CodeMirror-gutter-filler")
   d.gutterFiller.setAttribute("cm-not-content", "true")
-  // Will contain the actual supercolliderfiles, positioned to cover the viewport.
-  d.lineDiv = eltP("div", null, "CodeMirror-supercolliderfiles")
+  // Will contain the actual code, positioned to cover the viewport.
+  d.lineDiv = eltP("div", null, "CodeMirror-code")
   // Elements are added to these to represent selection and cursors.
   d.selectionDiv = elt("div", null, null, "position: relative; z-index: 1")
   d.cursorDiv = elt("div", null, "CodeMirror-cursors")
