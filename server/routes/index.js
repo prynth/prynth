@@ -1,20 +1,20 @@
-let express = require('express');
-let router = express.Router();
-let multer = require('multer');
-let fs = require('fs');
-let path = require('path');
-let exec = require('child_process').exec;
+var express = require('express');
+var router = express.Router();
+var multer = require('multer');
+var fs = require('fs');
+var path = require('path');
+var exec = require('child_process').exec;
 
-let storage = multer.diskStorage({
+var storage = multer.diskStorage({
 	destination: function (req, file, callback) {callback(null, (public_path + 'soundfiles'));},
 	filename: function (req, file, callback) {callback(null, file.originalname);}
 });
 
-let upload = multer({ storage : storage}).array('filename', 10);
-let soundfiles = [''];
-let supercolliderfiles = [''];
-let public_path = path.join(__dirname, '../public/');
-let tempcode;
+var upload = multer({ storage : storage}).array('filename', 10);
+var soundfiles = [''];
+var supercolliderfiles = [''];
+var public_path = path.join(__dirname, '../public/');
+var tempcode;
 
 
 router.get('/', function(req, res, next) {
@@ -41,14 +41,12 @@ router.get('/refresh-files', function (req, res) {
 })
 
 router.post('/shutdown', function (req, res) {
-	// console.log('shutdown received');
 	exec('sudo shutdown -h now', function (error, stdout, stderr) {
 		console.log(stdout);
 	});
 })
 
 router.post('/reboot', function (req, res) {
-	// console.log('reboot received');
 	exec('sudo reboot', function (error, stdout, stderr) {
 		console.log(stdout);
 	});
@@ -63,8 +61,8 @@ router.post('/restartsclang', function (req, res) {
 router.post('/supercolliderfiles', function (req, res) {
 
 	if(req.body.action === 'load'){
-		let filetoload = supercolliderfiles[JSON.parse(req.body.fileindex)[0]];
-		let buffer = fs.readFileSync((public_path + 'supercolliderfiles/' + filetoload), 'utf8');
+		var filetoload = supercolliderfiles[JSON.parse(req.body.fileindex)[0]];
+		var buffer = fs.readFileSync((public_path + 'supercolliderfiles/' + filetoload), 'utf8');
 		tempcode = buffer;
         res.io.emit('toprompt', filetoload);
         res.io.emit('toconsole', filetoload);
@@ -74,8 +72,6 @@ router.post('/supercolliderfiles', function (req, res) {
 
 	if(req.body.action === 'save'){
 		tempcode = req.body.code;
-		// console.log(req.body.filename);
-		// console.log(req.body.code);
 		fs.writeFile(public_path + 'supercolliderfiles/' + req.body.filename, tempcode, function (err) {
 			if(err) {
 				res.send('error saving file');
@@ -89,9 +85,9 @@ router.post('/supercolliderfiles', function (req, res) {
 	};
 
 	if(req.body.action === 'delete') {
-		let filestodelete = JSON.parse(req.body.fileindex);
+		var filestodelete = JSON.parse(req.body.fileindex);
 		for (i in filestodelete) {
-			let fullpath = public_path + 'supercolliderfiles/' + supercolliderfiles[filestodelete[i]];
+			var fullpath = public_path + 'supercolliderfiles/' + supercolliderfiles[filestodelete[i]];
 			fs.unlinkSync(fullpath);
 		}
 		res.redirect('/refresh-files');
@@ -110,9 +106,9 @@ router.post('/soundfiles', function (req, res) {
 	};
 
 	if(req.body.action === 'delete'){
-		let filestodelete = JSON.parse(req.body.fileindex);
+		var filestodelete = JSON.parse(req.body.fileindex);
 		for (i in filestodelete) {
-			let fullpath = public_path + 'soundfiles/' + soundfiles[filestodelete[i]];
+			var fullpath = public_path + 'soundfiles/' + soundfiles[filestodelete[i]];
 			fs.unlinkSync(fullpath);
 		}
 		res.redirect('/refresh-files');

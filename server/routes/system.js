@@ -1,13 +1,9 @@
-let express = require('express');
-let router = express.Router();
-let exec = require('child_process').exec;
-let fs = require('fs');
-let os = require('os');
-let path = require('path');
-let private_path = path.join(__dirname, '../private/');
-
-// let configfile = '/Users/if/Desktop/prynthtemp/server/private/config.json';
-// let configbuffer = require(configfile);
+var express = require('express');
+var router = express.Router();
+var exec = require('child_process').exec;
+var fs = require('fs');
+var path = require('path');
+var private_path = path.join(__dirname, '../private/');
 
 router.get('/', function(req, res, next) {
 	var configFile = fs.readFileSync(private_path +'config.json');
@@ -15,8 +11,7 @@ router.get('/', function(req, res, next) {
 
 	var defaultSCFile = configData.defaultSCFile;
 	var defaultssid = configData.wifinetworks[0];
-	var hostname = os.hostname();
-	// var hostname = configData.hostname;
+	var hostname = configData.hostname;
 	var sensordatatarget = configData.sensorDataTarget;
 	var audiodevice = configData.jack.device;
 	var vectorsize = configData.jack.vectorSize;
@@ -35,48 +30,6 @@ router.get('/', function(req, res, next) {
 	});
 });
 
-
-// router.post('/shutdown', function (req, res) {
-// 	// console.log('shutdown received');
-// 	exec('sudo poweroff', function (error, stdout, stderr) {
-// 		console.log(stdout);
-// 	});
-// })
-//
-// router.post('/reboot', function (req, res) {
-// 	// console.log('reboot received');
-// 	exec('sudo reboot', function (error, stdout, stderr) {
-// 		console.log(stdout);
-// 	});
-// })
-
-// router.post('/setwifi', function (req, res) {
-// 	var networkname = req.body.networkname;
-// 	var networkpass = req.body.networkpass;
-//
-// 	var buffer = "";
-//
-// 	var configFile = fs.readFileSync(private_path +'config.json');
-// 	var configData = JSON.parse(configFile);
-//
-// 	// console.log(configData);
-// 	// configData.wifinetworks.push([networkname, networkpass]);
-// 	configData.wifinetworks = ([networkname, networkpass]);
-// 	var configJSON = JSON.stringify(configData, null, 2);
-//
-// 	// console.log(configJSON);
-// 	fs.writeFileSync(private_path +'config.json', configJSON);
-//
-// 	var command = 'sudo sed -i "/#prynth begin/,/#prynth end/ s/\\(ssid *= *\\).*/\\1\\"'+networkname+'\\"/ ;/#prynth begin/,/#prynth end/ s/\\(psk *= *\\).*/\\1\\"'+networkpass+'\\"/" /etc/wpa_supplicant/wpa_supplicant.conf';
-// 	// console.log(command);
-//
-// 	var child = exec(command, function (error, stdout, stderr) {
-// 		console.log(stdout);
-// 		res.redirect('/system');
-// 	});
-//
-// })
-
 router.post('/setwifi', function (req, res) {
 	var networkname = req.body.networkname;
 	var networkpass = req.body.networkpass;
@@ -87,10 +40,7 @@ router.post('/setwifi', function (req, res) {
 	configData.wifinetworks = ([networkname, networkpass]);
 	var configJSON = JSON.stringify(configData, null, 2);
 
-	// console.log(configJSON);
 	fs.writeFileSync(private_path +'config.json', configJSON);
-
-	// var command = 'sudo sed -i "/#prynth begin/,/#prynth end/ s/\\(ssid *= *\\).*/\\1\\"'+networkname+'\\"/ ;/#prynth begin/,/#prynth end/ s/\\(psk *= *\\).*/\\1\\"'+networkpass+'\\"/" /etc/wpa_supplicant/wpa_supplicant.conf';
 
 	var command =
 	'sudo ip link set wlan0 down && '+
@@ -119,13 +69,11 @@ router.post('/sethostname', function (req, res) {
 	configData.hostname = hostname;
 	var configJSON = JSON.stringify(configData, null, 2);
 
-	// console.log(configJSON);
 	fs.writeFileSync(private_path +'config.json', configJSON);
 
 	var command1 = 'sudo sed -i "s/\\(127.0.1.1 *\\).*/\\1\\t'+hostname+'/" /etc/hosts';
 	var command2 = 'sudo sed -i "s/^.*/'+hostname+'/" /etc/hostname';
 
-	// TODO: do I need variables here??
 	var child1 =  exec(command1, function (error, stdout, stderr) {
 		var child2 = exec(command2, function (error, stdout, stderr) {
 			res.redirect('/system');
@@ -136,9 +84,7 @@ router.post('/sethostname', function (req, res) {
 
 router.post('/setdefaultscfile', function (req, res) {
 	var defaultSCFile= req.body.defaultSCFile;
-	// console.log(defaultSCFile);
 
-	//CHANGE TO RELATIVE PATHS!!!
 	var configFile = fs.readFileSync(private_path +'config.json');
 	var configData = JSON.parse(configFile);
 
@@ -159,12 +105,7 @@ router.post('/setsensordatatarget', function (req, res) {
 
 	fs.writeFileSync(private_path +'config.json', configJSON);
 
-	// var command = 'sudo pkill serial2osc & ls';
-	//
-	// var child = exec(command, function (error, stdout, stderr) {
-	// 	console.log(stdout);
-	// 	res.redirect('/system');
-	// });
+	res.redirect('/system');
 
 });
 
@@ -195,9 +136,6 @@ router.post('/setjack', function (req, res) {
 		console.log(stdout);
 	});
 
-	// console.log(command);
-
 });
-
 
 module.exports = router;

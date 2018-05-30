@@ -32,13 +32,11 @@
 <body>
 <div>
 	<a href="http://prynth.github.io" target="_blank" style="text-decoration: none"><img src="/images/prynth_logo.png" style="width: 30px;"> <span style="font-size:2em;"> Prynth</span> </a>
-	<!--<label id="heartLabel"></label>-->
 </div>
-
 
 <div style="width: 70vw; float: left" class="PrynthPanel">
 	<form>
-		<h2 class="PrynthPanelLabel">Editor</h2><span id="loadedFile" class="panel"></span><br>
+		<h2 class="PrynthPanelLabel">Editor</h2><span id="loadedFile" ></span><br>
 		<textarea id="codeTextarea"><%=tempcode%></textarea>
 		<button type="button" id="runButton">Run</button>
 		<button type="button" id="killButton">Kill</button>
@@ -58,16 +56,21 @@
 <div style="float: left; width: 220px">
 	<div style="width: 200px;" class="PrynthPanel">
 		<h2 class="PrynthPanelLabel">System Info</h2>
-		Uptime: <span id="clock" class="panel"></span><br>
-		Hostname: <span id="hostname" class="panel"></span><br>
-		Ethernet IP: <span id="ethernetip" class="panel"></span><br>
-		Wireless IP: <span id="wirelessip" class="panel"></span><br>
-		CPU usage: <span id="cpu" class="panel"></span><br>
-		Free memory: <span id="freemem" class="panel"></span><br>
+		Uptime: <span id="clock"></span><br>
+		Hostname: <span id="hostname"></span><br>
+		Ethernet IP: <span id="ethernetip"></span><br>
+		Wireless IP: <span id="wirelessip"></span><br>
+		CPU usage: <span id="cpu"></span><br>
+		Free memory: <span id="freemem"></span><br>
 		<form>
-            <a href="/system" target="_blank"><button type="button">System</button></a>
-			<button type="button" id="rebootButton">Reboot</button>
-			<button type="button" id="shutdownButton">Shutdown</button>
+			<hr>
+			Power:<br>
+            <button type="button" id="rebootButton">Reboot</button>
+			<button type="button" id="shutdownButton">Shutdown</button><br>
+			<hr>
+			Settings:<br>
+			<a href="/system" target="_blank"><button type="button">System</button></a>
+			<a href="/sensors" target="_blank"><button type="button">Sensors</button></a>
 		</form>
 	</div>
 
@@ -131,21 +134,17 @@
 
 	    curWord = editor.getRange({line: A1,ch: B1}, {line: A1,ch: B2});
 
-		//-------------
-
         var openBracket = "(";
         var closeBracket = ")";
         var curLine = editor.getCursor().line;
         var lineNow = curLine;
         var curLineContent;
         var checkOpen=1;
-        var checkClose=1;
         var bracketCount = 0;
 
         curLineContent = String(editor.getLine(curLine));
         checkClose = curLineContent.localeCompare(closeBracket);
         if (checkClose===0){
-            //alert('found matching bracket');
 			bracketCount += 1;
             while (lineNow > 0){
                 lineNow = lineNow - 1;
@@ -160,9 +159,6 @@
                 }
                 if (bracketCount===0) break;
             }
-            var open = {line: lineNow, ch: 0 };
-            var close = {line: curLine, ch: 1 };
-
 
 			for (var i = lineNow; i<curLine; i++)
 			{
@@ -185,11 +181,10 @@
 
 	function runtemp(data) {
 		$.ajax({method: "POST", url: '/runtemp', data: {code: data}});
-//			$.ajax({method: "POST", url: '/runtemp'});
 	}
 
 	function runsel() {
-		let selection = editor.getSelection();
+		var selection = editor.getSelection();
 		if (selection !== '') {
 			interpret(selection);
 		} else {
@@ -206,10 +201,7 @@
 			var countBrackets=0;
 			var countBracketsClose=0;
 			var bracketFound = 0;
-			// editor.setValue(String(editor.getLine(lineNow-1)));
 
-			//alert(String(lineNow));
-			// editor.setValue(String(editor.getLine(lineNow-1).localeCompare(openBracket)));
 			while (lineNow > 0){
 				lineNow = lineNow - 1;
 				curLineContent = String(editor.getLine(lineNow));
@@ -233,7 +225,7 @@
 
 
 			}
-			// editor.setValue(String(lineRem));
+
 			lineNow = lineRem;
 			if (bracketFound!==0 && countBrackets>0) {
 				while (countBrackets !== 0) {
@@ -248,18 +240,13 @@
 					if (countBrackets===0) break;
 
 					codeBracket += String(editor.getLine(lineNow));
-//					console.log(String(lineNow) + " = " + codeBracket);
 					lineNow += 1;
-
 				}
-				//editor.setValue(String(codeBracket));
-				//alert(codeBracket);
 				interpret(codeBracket);
 			}
 			else{
 				interpret(editor.getLine(editor.getCursor().line));
 			}
-
 		}
 	};
 
@@ -298,34 +285,33 @@
 
 	$(document).ready(function () {
 
-		let socket = io.connect();
+		var socket = io.connect();
 
-		let $runButton = $('#runButton');
-		let $killButton = $('#killButton');
-		let $clearConsoleButton = $('#clearConsoleButton');
+		var $runButton = $('#runButton');
+		var $killButton = $('#killButton');
+		var $clearConsoleButton = $('#clearConsoleButton');
 
-		let $loadscfilebutton = $('#loadscfilebutton');
-		let $savescfilebutton = $('#savescfilebutton');
-		let $deletescfilebutton = $('#deletescfilebutton');
-		let $deletesoundfilebutton = $('#deletesoundfilebutton');
+		var $loadscfilebutton = $('#loadscfilebutton');
+		var $savescfilebutton = $('#savescfilebutton');
+		var $deletescfilebutton = $('#deletescfilebutton');
+		var $deletesoundfilebutton = $('#deletesoundfilebutton');
 
-		let $consoleTextarea = $('#consoleTextarea');
-		let $supercolliderfiles = $('#supercolliderfiles');
-		let $soundfiles = $('#soundfiles');
+		var $consoleTextarea = $('#consoleTextarea');
+		var $supercolliderfiles = $('#supercolliderfiles');
+		var $soundfiles = $('#soundfiles');
 
-		let $clock = $('#clock');
-		let $hostname = $('#hostname');
-		let $ethernetip = $('#ethernetip');
-		let $wirelessip = $('#wirelessip');
-		let $cpu = $('#cpu');
-		let $freemem = $('#freemem');
+		var $clock = $('#clock');
+		var $hostname = $('#hostname');
+		var $ethernetip = $('#ethernetip');
+		var $wirelessip = $('#wirelessip');
+		var $cpu = $('#cpu');
+		var $freemem = $('#freemem');
 
-		let $rebootSubmit = $('#rebootButton');
-		let $shutdownSubmit = $('#shutdownButton');
-		let $restartSclangSubmit = $('#restartSclangButton');
-		let $loadedFile = $('#loadedFile');
+		var $rebootSubmit = $('#rebootButton');
+		var $shutdownSubmit = $('#shutdownButton');
+		var $restartSclangSubmit = $('#restartSclangButton');
+		var $loadedFile = $('#loadedFile');
 		var fileLoaded;
-
 
         setExtrakeys();
 
@@ -345,37 +331,34 @@
 		$runButton.click(function () {runtemp(editor.getValue());});
 		//kill all nodes on server
 		$killButton.click(function () {interpret('CmdPeriod.run;')});
-
 		//clear console textarea
 		$clearConsoleButton.click(function () {$consoleTextarea.html('');});
 
 		//file management buttons
 		$loadscfilebutton.click(function () {
-			let temp = $supercolliderfiles.val();
-			let fileindex =  JSON.stringify(temp);
+			var temp = $supercolliderfiles.val();
+			var fileindex =  JSON.stringify(temp);
 			$.ajax({method: "POST", url: '/supercolliderfiles',data: {action: 'load', fileindex: fileindex}});
 		})
 
 		$savescfilebutton.click(function () {
-			//here we need to implement save function to create new scd files
-			let filename=prompt('Enter new file name', fileLoaded);
+			var filename=prompt('Enter new file name', fileLoaded);
 			if(filename) {
 				$.ajax({method: "POST", url: '/supercolliderfiles',data: {action: 'save', filename: filename, code: editor.getValue()}});
 			}
-
 		})
 
 		$deletescfilebutton.click(function () {
-			let temp = $supercolliderfiles.val();
-			let fileindex =  JSON.stringify(temp);
+			var temp = $supercolliderfiles.val();
+			var fileindex =  JSON.stringify(temp);
 			$.ajax({method: "POST", url: '/supercolliderfiles',data: {action: 'delete', fileindex: fileindex}
 			});
 		})
 
 
 		$deletesoundfilebutton.click(function () {
-			let temp = $soundfiles.val();
-			let fileindex =  JSON.stringify(temp);
+			var temp = $soundfiles.val();
+			var fileindex =  JSON.stringify(temp);
 			$.ajax({method: "POST", url: '/soundfiles',data: {action: 'delete', fileindex: fileindex}
 			});
 		})
@@ -392,9 +375,7 @@
         });
 
 		socket.on('toconsole', function (data) {
-		    // console.log("data-----------"+data);
 
-            // console.log("length is ==== "+String( $consoleTextarea.val().length));
             $consoleTextarea.append(data);
             $consoleTextarea.scrollTop($consoleTextarea[0].scrollHeight);
 
@@ -446,9 +427,6 @@
 		$(window).on('beforeunload', function(){
 			socket.close();
 		});
-
-
-
 	})
 </script>
 

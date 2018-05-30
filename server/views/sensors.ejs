@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Sensor Settings</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+
+    <!--Jquery-->
+    <script src="javascripts/jquery/jquery-3.2.1.min.js"></script>
+
+    <!--socket.io-->
+    <script src="javascripts/socket.io/socket.io.js"></script>
+
+    <style>
+        .sliderLabel {
+            display: inline-block;
+            width: 6em;
+            padding: 2px;
+            text-align: right;
+        }
+        fieldset > * {
+            vertical-align: middle;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div style="width: 98%; padding-left: 10px; padding-right: 10px;">
+    <a href="http://prynth.github.io" target="_blank" style="text-decoration: none"><img src="/images/prynth_logo.png" style="width: 30px;"> <span style="font-size:2em;"> Prynth</span> </a>
+</div>
+<div class="clearfix"></div>
+
+<h2>Sensor Settings</h2>
+
+<div>
+    SAMPLE RATE (Hz):
+    <input class="" id="sampleRateNumber" min="0" max="200" type="number" value="100" step="1" style="width: 8ch; background-color: #232323" onchange="updateJSONFromEvent(this)" />
+</div>
+
+<div id="sensormatrixdiv" style="float: left"></div>
+
+<div id="sensorsettingsdiv" style="float: left; margin-left: 30px;width: 380px">
+    <span style="font-size: larger">SENSOR:</span>
+    <select id="sensorSelectDropdown" style="font-size: larger; width: 20ch" onchange="selectSensorOnDropdown(this.value)">
+    </select><br><br>
+
+    ON/OFF:
+    <input type="checkbox" id="sensorOnOffCheckbox" onclick="updateJSONFromEvent(this)"> <br>
+    <hr>
+
+    <span>MONITOR:</span><input type="checkbox" id="sensorMonitorOnOffCheckbox" onclick="sensorMonitorOnOff(this)">
+    -> <span id="sensorMonitor">0.0000</span>
+    <hr>
+
+    OSC ADDRESS: /<%=hostname%>
+    <input type="text" id="OSCAddressText" placeholder="ex: /mysensor" style="width: 20ch;text-align: left;" onchange="updateJSONFromEvent(this)">
+    <hr>
+
+
+    RESOLUTION:
+    <select id="sensorResolutionSelect" style="width: 80px" onchange="updateJSONFromEvent(this)">
+        <option value="0">Low</option>
+        <option value="1">High</option>
+    </select>
+    <hr>
+
+    FILTER:
+    <select id="filterSelectDropdown" style="width: 80px" onchange="updateJSONFromEvent(this)">
+        <option value="0">None</option>
+        <option value="1">Lowpass</option>
+        <option value="2">One Euro</option>
+        <option value="3">Schmidt Trigger</option>
+    </select>
+    <br>
+
+    <fieldset id="filterFieldset">
+        <legend>Filter Parameters</legend>
+        <label class="sliderLabel" id="cutoffLabel">Cutoff:</label>
+        <input class="inputNumber1" id="cutoffNumber" min="0" max="10" type="number" value="0" step="0.01" style="width: 8ch; background-color: #232323" onchange="updateJSONFromEvent(this)" />
+        <input class="inputRange1" id="cutoffRange" type="range" min="0" max="10" value="0" step="0.01" style="background-color: #232323" onchange="updateJSONFromEvent(this)" /><br>
+        <label class="sliderLabel" id="betaLabel">Beta:</label>
+        <input class="inputNumber2" id="1EBetaNumber" min="0" max="1" type="number" value="0" step="0.01" style="width: 8ch; background-color: #232323" onchange="updateJSONFromEvent(this)" />
+        <input class="inputRange2" id="1EBetaRange" type="range" min="0" max="1" value="0" step="0.01" style="background-color: #232323" onchange="updateJSONFromEvent(this)" /><br>
+        <label class="sliderLabel" id="1EDiffCutoffLabel" >Diff. Cutoff:</label>
+        <input class="inputNumber3" id="1EDiffCutoffNumber" min="0" max="10" type="number" value="0" step="0.01" style="width: 8ch; background-color: #232323" onchange="updateJSONFromEvent(this)" />
+        <input class="inputRange3" id="1EDiffCutoffRange" type="range" min="0" max="10" value="0" step="0.01" style="background-color: #232323" onchange="updateJSONFromEvent(this)" /><br>
+    </fieldset>
+    <hr>
+
+    <button id="saveButton">Save</button>
+    <button id="recallButton">Recall</button>
+    <button id="resetButton">Reset</button>
+</div>
+
+<script>
+	var socket = io.connect();
+
+	var sensorJSON={};
+	var currentlyActiveSensor = '';
+
+	// get json in async
+	$.ajax({
+        url: '/config/sensors.json',
+        async: false,
+        dataType: 'json',
+        success: function (json) {
+	    	sensorJSON = json;
+    	}
+	});
+
+	//update initial sample rate
+	$('#sampleRateNumber').val(sensorJSON.samplerate);
+
+    //create sensor grid
+    for (i = 0; i < sensorJSON.mask.length; i++) {
+        console.log(String(sensorJSON.mask.length));
+	    var multiplexer = Math.floor(i / 8);
+	    var sensor = (i % 8);
+
+	    if (sensor == 0) {
+
+		    var z = document.createElement("div");
+		    z.setAttribute('style', 'content: ""; clear: both; display: table;');
+		    var y = document.createElement("hr");
+		    document.getElementById("sensormatrixdiv").appendChild(z);
+		    document.getElementById("sensormatrixdiv").appendChild(y);
+
+            if (multiplexer == 0) {
+			    var w = document.createElement("br");
+			    var r = document.createElement("span");
+			    r.innerHTML = "Analog Sensors";
+			    document.getElementById("sensormatrixdiv").appendChild(r);
+			    document.getElementById("sensormatrixdiv").appendChild(w);
+		    };
+
+		    if (multiplexer == 10) {
+			    var w = document.createElement("br");
+			    var r = document.createElement("span");
+			    r.innerHTML = "Digital Sensors";
+			    document.getElementById("sensormatrixdiv").appendChild(r);
+			    document.getElementById("sensormatrixdiv").appendChild(w);
+		    };
+
+		    var z = document.createElement("div");
+		    z.setAttribute('style', 'float: left; width: 80px; font-size: 12px; margin: 8px 20px 3px 3px;');
+		    z.innerHTML = 'channel: ' + String(multiplexer);
+		    document.getElementById("sensormatrixdiv").appendChild(z);
+	    }
+
+
+	    var a = document.createElement("div");
+        a.setAttribute('id', "div" + i);
+        a.setAttribute('style', "text-align: center; vertical-align: middle; line-height: 16px; float: left; width: 16px; border-style: solid; border-width: 1px; padding: 3px 3px 3px 3px;margin: 3px 3px 3px 3px;");
+        a.setAttribute('onclick', 'selectSensorOnGrid(this)');
+
+        a.innerHTML = sensor;
+
+        document.getElementById("sensormatrixdiv").appendChild(a);
+
+        var b = document.createElement("option")
+        b.setAttribute('value', i);
+        b.innerHTML = "channel: " + String(multiplexer) + " / " +  "sensor " + String(sensor);
+        document.getElementById("sensorSelectDropdown").appendChild(b);
+
+    };
+
+    //update JSON
+    function updateJSONFromEvent(input) {
+
+	    if ($('#sensorOnOffCheckbox').prop('checked')) {
+		    sensorJSON.mask[currentlyActiveSensor] = 1;
+        } else {
+		    sensorJSON.mask[currentlyActiveSensor] = 0;
+        };
+
+	    sensorJSON.samplerate = parseInt($('#sampleRateNumber').val());
+	    sensorJSON.OSCaddress[currentlyActiveSensor] = $('#OSCAddressText').val();
+	    sensorJSON.resolution[currentlyActiveSensor] = $('#sensorResolutionSelect').prop('selectedIndex');
+	    sensorJSON.filtertype[currentlyActiveSensor] = $('#filterSelectDropdown').prop('selectedIndex');
+	    sensorJSON.filterparam1[currentlyActiveSensor] = parseFloat($('#cutoffNumber').val());
+	    sensorJSON.filterparam2[currentlyActiveSensor] = parseFloat($('#1EBetaNumber').val());
+	    sensorJSON.filterparam3[currentlyActiveSensor] = parseFloat($('#1EDiffCutoffNumber').val());
+
+        updateGrid();
+        updateFormValues();
+
+        var multiplexer = currentlyActiveSensor / 8;
+        var sensor = currentlyActiveSensor % 8;
+        var sensorAddress = '/'+ Math.floor(multiplexer)+'/'+sensor
+        var messageType;
+        var value;
+
+        function createFilterObject (currentlyActiveSensor){
+	        return {
+		        filtertype: sensorJSON.filtertype[currentlyActiveSensor],
+		        filterparam1: sensorJSON.filterparam1[currentlyActiveSensor],
+		        filterparam2 : sensorJSON.filterparam2[currentlyActiveSensor],
+		        filterparam3: sensorJSON.filterparam3[currentlyActiveSensor]
+	        };
+        }
+
+	    switch (input.id) {
+            case 'sampleRateNumber':
+            	 messageType = "/sampleRate";
+            	 value = sensorJSON.samplerate;
+            	break;
+		    case 'OSCAddressText':
+			     messageType = "/sensorName";
+			     value = sensorJSON.OSCaddress[currentlyActiveSensor];
+			    break;
+		    case 'sensorOnOffCheckbox':
+			     messageType = "/sensorActive";
+			     value = sensorJSON.mask[currentlyActiveSensor];
+			    break;
+		    case 'sensorResolutionSelect':
+			     messageType = "/sensorResolution";
+			     value = sensorJSON.resolution[currentlyActiveSensor];
+			    break;
+		    case 'filterSelectDropdown':
+			     messageType = "/sensorFilter";
+			     value = createFilterObject(currentlyActiveSensor);
+			    break;
+		    case 'cutoffNumber':
+			     messageType = "/sensorFilter";
+			    value = createFilterObject(currentlyActiveSensor);
+			    break;
+		    case 'cutoffRange':
+			     messageType = "/sensorFilter";
+			    value = createFilterObject(currentlyActiveSensor);
+			    break;
+		    case '1EBetaNumber':
+			     messageType = "/sensorFilter";
+			    value = createFilterObject(currentlyActiveSensor);
+			    break;
+		    case '1EBetaRange':
+			     messageType = "/sensorFilter";
+			    value = createFilterObject(currentlyActiveSensor);
+			    break;
+		    case '1EDiffCutoffNumber':
+			     messageType = "/sensorFilter";
+			    value = createFilterObject(currentlyActiveSensor);
+			    break;
+		    case '1EDiffCutoffRange':
+			     messageType = "/sensorFilter";
+			    value = createFilterObject(currentlyActiveSensor);
+	    };
+
+        if (messageType == '/sampleRate'){
+	        var msg = {type: messageType, param: value};
+	        socket.emit('sensorSampleRateConfig', msg);
+        } else {
+	        var msg = {type: messageType, address: sensorAddress, param: value};
+	        socket.emit('OSCSensorConfig', msg);
+
+             if ($('#sensorMonitorOnOffCheckbox').checked){
+            	    socket.emit('sensorselected', currentlyActiveSensor);
+            }
+        }
+    }
+
+    function updateFormValues() {
+    	$('#sampleRateNumber').val(sensorJSON.samplerate);
+    	$('#sensorSelectDropdown').val(currentlyActiveSensor);
+	    $('#sensorOnOffCheckbox').prop('checked', sensorJSON.mask[currentlyActiveSensor]);
+	    $('#sensorResolutionSelect').val(sensorJSON.resolution[currentlyActiveSensor]);
+	    $('#filterSelectDropdown').val(sensorJSON.filtertype[currentlyActiveSensor]);
+	    filterShow(sensorJSON.filtertype[currentlyActiveSensor]);
+
+	    $('#cutoffNumber').val(sensorJSON.filterparam1[currentlyActiveSensor]);
+	    $('#cutoffRange').val(sensorJSON.filterparam1[currentlyActiveSensor]);
+
+	    $('#1EBetaNumber').val(sensorJSON.filterparam2[currentlyActiveSensor]);
+	    $('#1EBetaRange').val(sensorJSON.filterparam2[currentlyActiveSensor]);
+
+	    $('#1EDiffCutoffNumber').val(sensorJSON.filterparam3[currentlyActiveSensor]);
+	    $('#1EDiffCutoffRange').val(sensorJSON.filterparam3[currentlyActiveSensor]);
+
+        $('#OSCAddressText').val(sensorJSON.OSCaddress[currentlyActiveSensor]);
+    }
+
+    function updateGrid() {
+		for (i = 0; i < sensorJSON.mask.length; i++) {
+			if (sensorJSON.mask[i] == 1) {
+				// if (sensorJSON.mask[i] == 1) {
+				$('#div' + i).css('background', '#c95e04');
+			} else {
+				$('#div' + i).css('background', '#232323');
+			};
+
+			$('#div' + i).css('border-color', '');
+		};
+	    $('#div' + currentlyActiveSensor).css('border-color', 'red');
+    };
+
+    function sensorMonitorOnOff(data) {
+    	if ($('#sensorMonitorOnOffCheckbox').prop('checked')) {
+	     	socket.emit('sensorselected', currentlyActiveSensor);
+	    } else {
+	     	socket.emit('sensorselected', -1);
+	    };
+    };
+
+
+    function filterShow(filterType) {
+    	//none
+	    if (filterType == 0) {
+		    $('#filterFieldset').hide();
+	    }
+	    //lowpass
+	    if (filterType == 1) {
+		    $('#filterFieldset').show();
+		    $('#cutoffLabel').show();
+		    $('#cutoffNumber').show();
+		    $('#cutoffRange').show();
+		    $('#betaLabel').hide();
+		    $('#1EBetaNumber').hide();
+		    $('#1EBetaRange').hide();
+		    $('#1EDiffCutoffLabel').hide();
+		    $('#1EDiffCutoffNumber').hide();
+		    $('#1EDiffCutoffRange').hide();
+	    }
+	    //1E
+	    if (filterType == 2) {
+		    $('#filterFieldset').show();
+		    $('#cutoffLabel').show();
+		    $('#cutoffNumber').show();
+		    $('#cutoffRange').show();
+		    $('#betaLabel').show();
+		    $('#1EBetaNumber').show();
+		    $('#1EBetaRange').show();
+		    $('#1EDiffCutoffLabel').show();
+		    $('#1EDiffCutoffNumber').show();
+		    $('#1EDiffCutoffRange').show();
+	    }
+	}
+
+	//show or hide extra filter options for 1E
+	$('#filterSelectDropdown').bind('change', function (event) {
+		var filtertype = $('#filterSelect').val();
+		filterShow(filtertype);
+	});
+
+    //function to update based on grid click
+    function selectSensorOnGrid(div) {
+        var id = div.getAttribute('id');
+        currentlyActiveSensor = id.substr(3);
+	    updateFormValues();
+        updateGrid();
+	    if ($('#sensorMonitorOnOffCheckbox').prop('checked')){
+		    socket.emit('sensorselected', currentlyActiveSensor);
+	    };
+    }
+
+    //select sensor from dropdown
+    function selectSensorOnDropdown(val){
+        currentlyActiveSensor = val;
+        updateFormValues();
+        updateGrid();
+	    if ($('#sensorMonitorOnOffCheckbox').prop('checked')){
+		    socket.emit('sensorselected', currentlyActiveSensor);
+	    };
+    }
+
+    // Range and number binders
+    $('.inputRange1, .inputNumber1').on('input', function () {
+        $(this).siblings('.inputRange1, .inputNumber1').val(this.value);
+    });
+    $('.inputRange2, .inputNumber2').on('input', function () {
+        $(this).siblings('.inputRange2, .inputNumber2').val(this.value);
+    });
+    $('.inputRange3, .inputNumber3').on('input', function () {
+        $(this).siblings('.inputRange3, .inputNumber3').val(this.value);
+    });
+
+    //Reset forms
+    function resetForms(){
+	    $('#filterFieldset').hide();
+	    $('#sensorSelectDropdown').val('');
+	    $('#filterSelectDropdown').val('');
+	    $('#sensorResolutionSelect').val('');
+	    updateGrid();
+    }
+    resetForms();
+
+	$('#resetButton').click(function () {
+		$.ajax({
+            method: "POST",
+            url: '/sensors/resetsensors',
+            success: function () {
+                $.ajax({
+                    url: '/config/sensors_reset.json',
+                    // async: false,
+                    dataType: 'json',
+                    success: function (json) {
+                        sensorJSON = json;
+                        resetForms();
+                        updateFormValues();
+                        updateGrid();
+                    }
+            	});
+            }
+		});
+	});
+
+	$('#recallButton').click(function () {
+		$.ajax({
+			method: "POST",
+			url: '/sensors/recallsensors',
+			success: function () {
+				$.ajax({
+					url: '/config/sensors.json',
+					// async: false,
+					dataType: 'json',
+					success: function (json) {
+						sensorJSON = json;
+						resetForms();
+						updateFormValues();
+						updateGrid();
+					}
+				});
+			}
+		});
+	});
+
+	//send new JSON to server and generate OSC message for serial
+	$('#saveButton').click(function () {
+		var json2string = JSON.stringify(sensorJSON);
+		console.log(json2string);
+		$.ajax({method: "POST", url: '/sensors/savesensors', data: {json: json2string}});
+    });
+
+    //socket responder for sensor value monitoring
+	socket.on('sensormonitorvalue', function (msg) {
+        $('#sensorMonitor').html(msg.data.toFixed(5));
+	});
+
+	//close socket when closing client
+	$(window).on('beforeunload', function(){
+		socket.emit('sensorselected', -1);
+		socket.close();
+	});
+
+</script>
+
+</body>
+</html>
