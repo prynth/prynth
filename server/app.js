@@ -20,6 +20,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var system = require('./routes/system');
 var sensors = require('./routes/sensors');
+var gui = require('./routes/gui');
 
 var app = express();
 
@@ -61,6 +62,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/system', system);
 app.use('/sensors', sensors);
+app.use('/gui',gui);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -141,7 +143,7 @@ function startSclang() {
 
 function start() {
 	startPbridge();
-	startJack();
+	// startJack();
 	startSclang();
 	setTimeout(function(){sendSensorConfigOSC('recall')}, 4);
 }
@@ -242,6 +244,10 @@ var osc = new OSC({
 	plugin: new OSC.DatagramPlugin({ send: { port: 57100, host: '127.0.0.1' }, open: { port: 57101, host:'127.0.0.1'}})
 });
 
+const oscSC = new OSC({
+	plugin: new OSC.DatagramPlugin({ send: { port: 57120, host: '127.0.0.1' }, open: { port: 57142, host:'127.0.0.1'}})
+});
+
 osc.open();
 
 //set sensor parameters via OSC from client socket message
@@ -285,6 +291,14 @@ io.sockets.on('connection', function(client){
 		osc.send(message);
 	});
 
+	client.on('gui', function(data){
+
+		// console.log(data[0]);
+		// console.log(data[1]);
+		message = new OSC.Message(data[0], data[1]);
+		oscSC.send(message);
+	});
+	
 });
 
 //receive OSC with sensor values that is being monitored from pbridge and relayed to client via socket

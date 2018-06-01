@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+    <link rel = 'stylesheet' href = '/stylesheets/style.css'/>
+    <link rel = 'stylesheet' href = '/stylesheets/nexus.css'/>
+
+    <script src="javascripts/jquery/jquery-3.2.1.min.js"></script>
+    <script src= "javascripts/nexusui/dist/NexusUI.js"></script>
+    <script src = "javascripts/draggabilly/draggabilly.pkgd.min.js"></script>
+    <script src="javascripts/socket.io/socket.io.js"></script>
+
+
+</head>
+
+<div id = "canvas" style = "width: 70%;"></div>
+
+<div id = "controPanel" style="float:right; display: inline-block">
+   <p style = "text-align: right;"> PLAY :
+    <label class="switch" style = "float: right;">
+        <input type="checkbox" id="editSwitch" onclick="mode(this)">
+        <span class="checkboxSlider"></span>
+    </label>
+   </p>
+
+    <div class = "PrynthPanel SettingsPanel" id="options">
+        <h2 class="PrynthPanelLabel">Options</h2>
+        <button type = "button" id = "enablegridbutton">Enable Grid</button>
+        <button type = "button" id = "clear" >Clear</button>
+        <button type = "button" id = "delete">Delete object</button>
+    </div>
+
+    <div class="PrynthPanel" id = "files">
+        <h2 class="PrynthPanelLabel">GUI Files</h2>
+        <select id="guifiles" multiple style="height:120px">
+            <% for (var i = 0; i < guifiles.length; i++) { %>
+            <option value="<%=i%>"><%=guifiles[i]%>
+                <% } %>
+        </select>
+        <br>
+
+        <button type="button" id="saveguifilebutton">Save</button>
+        <button type="button" id="loadguifilebutton">Load</button>
+        <button type="button" id="deleteguifilebutton">Delete</button>
+    </div>
+
+    <div class = "GUIProperties PrynthPanel SettingsPanel" id = "GUIProperties">
+        <h2 class="PrynthPanelLabel" id="GUIPropertiesLabelText" >Properties</h2>
+        <span>Name:</span>
+        <input type = "text" id = "setName" style="width: auto;" onchange = rename(this) style = "background-color: #2f2f1e">
+        <br>
+        <span>Value:</span>
+        <input type = "text" id = "setValue" style="width: auto;" onchange = setvalue(this)>
+        <br>
+        <span id = "posx">X:</span>
+        <input type = "text" id = "setposx" style="width: 25%;" onchange = setposx(this)>
+        <!--<br>-->
+        <span id ="posy">Y:</span>
+        <input type = "text" id = "setposy" style="width: 25%;" onchange = setposy(this)>
+        <br>
+        <span id = "h">Height:</span>
+        <input type = "text" id = "seth" style="width: 25%;" onchange = seth(this)>
+        <!--<br>-->
+        <span id ="w">Width:</span>
+        <input type = "text" id = "setw" style="width: 25%;" onchange = setw(this)>
+        <br>
+        <span id = "color">Color:</span>
+        <input type = "text" id = "setcolor" style="width: 12ch;" onchange = setcolor(this)>
+        <br>
+        <h2 class="PrynthPanelLabel">Add Objects</h2>
+        <button type ="button" id = "slider">Slider</button>
+        <button type ="button" id = "knob">Knob</button>
+        <button type ="button" id = "switch">Switch</button>
+        <button type ="button" id="button">Button</button>
+        <button type = "button" id="label">Label</button>
+    </div>
+
+    <!--div class = "PrynthPanel" id = "toEditor">
+        <h2 class = "PrynthPanelLabel">Editor</h2>
+        <button type = "button" id = "toEditor">Editor</button>
+    </div-->
+
+</div>
+
+
+</body>
+<script>
+
+
+	var socket = io.connect();
+
+	let $slider = $('#slider');
+	let $knob = $('#knob');
+	let $switch = $('#switch');
+	let $button = $('#button');
+	let $label = $('#label');
+
+	let $setValue = $('#setValue');
+	let $setName = $('#setName');
+	let $setposx = $('#setposx');
+	let $setposy = $('#setposy');
+	let $setcolor = $('#setcolor');
+	let $seth = $('#seth');
+	let $setw = $('#setw');
+
+	let $clearbutton = $('#clear');
+	let $enabgridbutton = $('#enablegridbutton');
+	let $deletebutton = $('#delete');
+    let $guifiles = $('#guifiles');
+    let $saveguifilebutton = $('#saveguifilebutton');
+	let $loadguifilebutton = $('#loadguifilebutton');
+	let $deleteguifilebutton = $('#deleteguifilebutton');
+
+	//let $toEditorButton = $('#toEditor');
+
+	let n_slider = 0;
+	let n_knob = 0;
+	let n_switch = 0;
+	let n_button = 0;
+    let n_label = 0;
+
+	let drag = [];
+	let draggie = [];
+	let mousePos = { "x" : 0, "y" : 0 };
+
+	let listobj = [];
+
+	let guijson = { "objects" : [] };
+
+	let currentlySelectedObject = -1;
+
+	let grid = false;
+	let playMode = false;
+
+	$(document).ready(function() {
+
+
+
+		//Drag border on the webpage
+		$('.GUIProperties').draggabilly();
+
+		//Object creation
+		$slider.click(function() {
+			addObj("slider");
+		})
+
+		$knob.click(function(){
+			addObj("knob");
+		})
+
+		$switch.click(function() {
+			addObj("switch");
+		})
+
+		$button.click(function(){
+			addObj("button");
+		})
+
+        $label.click(function(){
+            addObj('label');
+        })
+
+		//file management buttons
+		$loadguifilebutton.click(function () {
+			var temp = $guifiles.val();
+			var fileindex =  JSON.stringify(temp);
+			$.ajax({
+                method: "POST",
+                url: '/gui/guifiles',
+                data: {action: 'load', fileindex: fileindex},
+            });
+		})
+
+		$saveguifilebutton.click(function () {
+			//here we need to implement save function to create new scd files
+			var filename=prompt('Enter new file name');
+			if(filename) {
+				$.ajax({method: "POST", url: '/gui/guifiles',data: {action: 'save', filename: filename, gui: JSON.stringify(guijson) }});
+			}
+		})
+
+		$deleteguifilebutton.click(function () {
+			var temp = $guifiles.val();
+			var fileindex =  JSON.stringify(temp);
+			$.ajax({method: "POST", url: '/gui/guifiles',data: {action: 'delete', fileindex: fileindex}
+			});
+		})
+
+
+		$clearbutton.click(function() {
+			clear();
+		})
+
+		//Get mouse position
+		window.onmousemove = function(e) {
+			e = e || window.event;
+			mousePos.x  = e.clientX;
+			mousePos.y = e.clientY;
+		}
+
+		//Grid
+		$enabgridbutton.click(function() {
+			if(grid == false) {
+				drag = $('.objdrag').draggabilly({
+					handle : '.handle',
+					grid : [20,20]
+				})
+				document.getElementById("enablegridbutton").firstChild.data = "Disable Grid";
+			}
+			else {
+				drag = $('.objdrag').draggabilly({
+					handle : '.handle',
+					grid : [1,1]
+				})
+				document.getElementById("enablegridbutton").firstChild.data = "Enable Grid";
+			}
+			grid = !grid;
+			// console.log("draggie : ", draggie);
+		})
+
+		//Delete
+		$deletebutton.click(function() {
+			del();
+		})
+
+		//Shortcuts
+		document.onkeydown = function(e) {
+
+		    if(!playMode) {
+                if(e.which == 46){ //del
+                    e.preventDefault();
+                    del();
+                }
+                if((e.metakey || e.ctrlKey) && e.which == 49) { //ctrl 1 for slider
+                    e.preventDefault();
+                    shortcuts("slider");
+                }
+                if((e.metakey || e.ctrlKey) && e.which == 50) { //ctrl 2 for knob
+                    e.preventDefault();
+                    shortcuts("knob");
+                }
+                if((e.metaKey || e.ctrlKey) && e.which == 51) { //ctrl 3 for toggle switch
+                    e.preventDefault();
+                    shortcuts("switch");
+                }
+                if((e.metaKey || e.ctrlKey) && e.which == 52) { // ctrl 4 for button
+                    e.preventDefault();
+                    shortcuts("button");
+                }
+                if((e.metaKey || e.ctrlKey) && e.which == 53) { // ctrl 5 for label
+                    e.preventDefault();
+                    shortcuts("label");
+                }
+            }
+            else {
+                if(e.which == 46){ //del
+                    e.preventDefault();
+                    //del();
+                }
+                if((e.metakey || e.ctrlKey) && e.which == 49) { //ctrl 1 for slider
+                    e.preventDefault();
+                    //shortcuts("slider");
+                }
+                if((e.metakey || e.ctrlKey) && e.which == 50) { //ctrl 2 for knob
+                    e.preventDefault();
+                    //shortcuts("knob");
+                }
+                if((e.metaKey || e.ctrlKey) && e.which == 51) { //ctrl 3 for toggle switch
+                    e.preventDefault();
+                    //shortcuts("switch");
+                }
+                if((e.metaKey || e.ctrlKey) && e.which == 52) { // ctrl 4 for button
+                    e.preventDefault();
+                    //shortcuts("button");
+                }
+                if((e.metaKey || e.ctrlKey) && e.which == 53) { // ctrl 5 for label
+                    e.preventDefault();
+                    //shortcuts("label");
+                }
+            }
+			
+			if((e.metakey || e.ctrlKey) && e.which == 32) { //Ctrl + spacebar
+				e.preventDefault();
+				currentlySelectedObject = (currentlySelectedObject+1)%guijson.objects.length;
+				setborder();
+				// console.log(currentlySelectedObject);
+				$setValue.val(guijson.objects[currentlySelectedObject].value);
+				$setName.val(guijson.objects[currentlySelectedObject].name);
+				$setposx.val(guijson.objects[currentlySelectedObject].posx);
+				$setposy.val(guijson.objects[currentlySelectedObject].posy);
+				$setcolor.val(guijson.objects[currentlySelectedObject].color);
+				$seth.val(guijson.objects[currentlySelectedObject].height);
+				$setw.val(guijson.objects[currentlySelectedObject].width);
+			}
+			if(e.which == 27) { //esc
+				e.preventDefault();
+				currentlySelectedObject = -1;
+				setborder();
+                clearPropertiesFields();
+			}
+
+
+        }
+
+        /*
+		$toEditorButton.click(function(){
+		    window.open('/');
+        })
+        */
+		socket.on('guidraw', function (data) {
+            clear();
+            // console.log(data);
+            draw(data);
+		})
+
+		socket.on('guifiles', function (data) {
+			$guifiles[0].options.length = 0;
+			$.each(data, function(key, value) {
+				$guifiles
+					.append($('<option>', { value : key })
+						.text(value));
+			});
+		});
+	})
+
+
+	/////////////////////////////////////// function ////////////////////////////////////////////
+
+
+	function addObj(type) {
+
+		var n_obj= guijson.objects.length;
+
+
+		// document.getElementById("containerDiv").setAttribute("id", "containerDiv" + n_obj);
+		// $('#containerDiv'+n_obj).css('zIndex', n_obj);
+
+		//guijson initialization
+		guijson.objects[guijson.objects.length] = {
+			"type": "default",
+			"name": "default",
+			"posx": 30,
+			"posy": 30,
+			"value": -1,
+			"color" : "none",
+			"height" : -1,
+			"width" : -1
+		};
+
+		switch (type) {
+            case "slider" :
+                $('#canvas').append('<div class = "objdrag" id = "containerDiv" style = "display: inline-block; position: absolute"><div class = "handle"></div><div id ="obj"></div></div>');
+                document.getElementById("obj").setAttribute("id", "obj" + n_obj);
+                //slider creation
+                let wSlider = 30;
+                let hSlider = 130;
+                listobj[n_obj] = Nexus.Add.Slider("obj" + n_obj, {
+                    'size': [wSlider, hSlider],
+                    'mode': 'absolute',
+                    'min': 0,
+                    'max': 1,
+                    'step': 0.01
+                });
+                listobj[n_obj].colorize("accent", "orange");
+                listobj[n_obj].colorize("fill", "grey");
+                //json
+                let nameBoolSlider = NameConflict("slider" + n_slider);
+                if (nameBoolSlider) {
+                    guijson.objects[n_obj].name = RandomStr();
+                } else {
+                    guijson.objects[n_obj].name = "slider" + n_slider;
+                }
+                guijson.objects[n_obj].type = "slider";
+                guijson.objects[n_obj].value = listobj[n_obj].min;
+                guijson.objects[n_obj].color = "orange";
+                guijson.objects[n_obj].height = hSlider;
+                guijson.objects[n_obj].width = wSlider;
+
+                //Incrementation
+                n_slider++;
+                break;
+            case "knob" :
+                $('#canvas').append('<div class = "objdrag" id = "containerDiv" style = "display: inline-block; position: absolute"><div class = "handle"></div><div id ="obj"></div></div>');
+                document.getElementById("obj").setAttribute("id", "obj" + n_obj);
+                //dial creation
+                var wDial = 60;
+                var hDial = 60;
+                listobj[n_obj] = Nexus.Add.Dial("obj" + n_obj, {
+                    'size': [wDial, hDial],
+                    'mode': 'absolute',
+                    'min': 0,
+                    'max': 1,
+                    'step': 0.01
+                });
+                listobj[n_obj].colorize("accent", "orange");
+                //json
+                let nameBoolKnob = NameConflict("knob" + n_knob);
+                if (nameBoolKnob) {
+                    guijson.objects[n_obj].name = RandomStr();
+                } else {
+                    guijson.objects[n_obj].name = "knob" + n_knob;
+                }
+                guijson.objects[n_obj].type = "knob";
+                guijson.objects[n_obj].value = listobj[n_obj].min;
+                guijson.objects[n_obj].color = "orange";
+                guijson.objects[n_obj].height = hDial;
+                guijson.objects[n_obj].width = wDial;
+
+                //Incrementation
+                n_knob++;
+                break;
+            case "switch" :
+                $('#canvas').append('<div class = "objdrag" id = "containerDiv" style = "display: inline-block; position: absolute"><div class = "handle"></div><div id ="obj"></div></div>');
+                document.getElementById("obj").setAttribute("id", "obj" + n_obj);
+                //switch creation
+                let wSwitch = 45;
+                let hSwitch = 45;
+                listobj[n_obj] = Nexus.Add.Toggle("obj" + n_obj, {
+                    'size': [wSwitch, hSwitch]
+                });
+                listobj[n_obj].colorize("accent", "orange");
+                //json
+                let nameBoolSwitch = NameConflict("switch" + n_switch);
+                if (nameBoolSwitch) {
+                    guijson.objects[n_obj].name = RandomStr();
+                } else {
+                    guijson.objects[n_obj].name = "switch" + n_switch;
+                }
+                guijson.objects[n_obj].type = "switch";
+                guijson.objects[n_obj].value = listobj[n_obj].state;
+                guijson.objects[n_obj].color = "orange";
+                guijson.objects[n_obj].height = hSwitch;
+                guijson.objects[n_obj].width = wSwitch;
+
+                //Incrementation
+                n_switch++;
+                break;
+
+            case "button" :
+                $('#canvas').append('<div class = "objdrag" id = "containerDiv" style = "display: inline-block; position: absolute"><div class = "handle"></div><div id ="obj"></div></div>');
+                document.getElementById("obj").setAttribute("id", "obj" + n_obj);
+                //button creation
+                let wButton = 50;
+                let hButton = 50;
+                listobj[n_obj] = Nexus.Add.Button("obj" + n_obj, {
+                    'size': [wButton, hButton]
+                });
+                listobj[n_obj].mode = 'impulse';
+                listobj[n_obj].colorize("accent", "orange");
+                //json
+                let nameBoolButton = NameConflict("button" + n_button);
+                if (nameBoolButton) {
+                    guijson.objects[n_obj].name = RandomStr();
+                } else {
+                    guijson.objects[n_obj].name = "button" + n_button;
+                }
+                guijson.objects[n_obj].type = "button";
+                guijson.objects[n_obj].value = listobj[n_obj].state;
+                guijson.objects[n_obj].color = "orange";
+                guijson.objects[n_obj].height = hButton;
+                guijson.objects[n_obj].width = wButton;
+
+                //Incrementation
+                n_button++;
+                break;
+
+            case "label" :
+                $('#canvas').append('<textarea class = "area" id = "area" onchange = changeText(this) style = "display: inline-block; position: absolute; width : 100px; height: 100px; color : black; background-color: grey;">Comments</textarea>');
+                document.getElementById('area').setAttribute('id','area'+n_obj);
+                listobj[n_obj] = document.getElementById('area'+n_obj);
+                let nameBoolLabel = NameConflict("label" + n_label);
+                if (nameBoolLabel) {
+                    guijson.objects[n_obj].name = RandomStr();
+                } else {
+                    guijson.objects[n_obj].name = "label" + n_label;
+                }
+                guijson.objects[n_obj].type = "label";
+                guijson.objects[n_obj].value = document.getElementById('area'+n_obj).innerHTML;
+                guijson.objects[n_obj].color = document.getElementById('area'+n_obj).style.backgroundColor;
+                let hLabel = 100;
+                let wLabel = 100;
+                guijson.objects[n_obj].height = hLabel
+                guijson.objects[n_obj].width = wLabel;
+
+                //Inc
+                n_label ++;
+                break;
+        }
+
+		//Panel set
+		$setValue.val(guijson.objects[n_obj].value);
+		$setName.val(guijson.objects[n_obj].name);
+		$setposx.val(guijson.objects[n_obj].posx);
+		$setposy.val(guijson.objects[n_obj].posy);
+		$setcolor.val(guijson.objects[n_obj].color);
+		$seth.val(guijson.objects[n_obj].height);
+		$setw.val(guijson.objects[n_obj].width);
+		//get idx
+		currentlySelectedObject = n_obj;
+		setborder();
+
+
+		//Drag Init
+
+
+		if(guijson.objects[n_obj].type != 'label') {
+
+            let listdrag = $('.objdrag');
+
+            if(grid) {
+                drag = listdrag.draggabilly({
+                    handle : '.handle',
+                    grid : [20,20]
+                })
+            }
+            else {
+                drag = listdrag.draggabilly({
+                    handle : '.handle'
+                })
+            }
+
+        }
+        else {
+
+
+		    let listdrag = $('.area');
+
+            if(grid) {
+                drag = listdrag.draggabilly({
+                    grid : [20,20]
+                });
+            }
+            else {
+                drag = listdrag.draggabilly();
+            }
+
+        }
+
+		draggie[n_obj] = drag.last().data('draggabilly');
+
+
+		let initx = 30;
+		let inity = 30;
+		draggie[n_obj].setPosition(initx,inity);
+		guijson.objects[n_obj].posx = initx;
+		guijson.objects[n_obj].posy = inity;
+
+
+		// console.log(listobj);
+		//Value
+
+        if(guijson.objects[n_obj].type != 'label'){
+
+            listobj[n_obj].on('change', function (v) {
+                console.log('old', n_obj);
+                guijson.objects[n_obj].value = v;
+                //set in the control panel
+                $setValue.val(v);
+                $setName.val(guijson.objects[n_obj].name);
+                $setposx.val(guijson.objects[n_obj].posx);
+                $setposy.val(guijson.objects[n_obj].posy);
+                $setcolor.val(guijson.objects[n_obj].color);
+                $seth.val(guijson.objects[n_obj].height);
+                $setw.val(guijson.objects[n_obj].width);
+
+                currentlySelectedObject = n_obj;
+                setborder();
+	            socket.emit('gui',  ['/gui/'+guijson.objects[n_obj].name, v]);
+
+            })
+        }
+
+        else {
+
+        }
+
+            //Drag and click on handle
+
+        draggie[n_obj].on('dragMove', function(){
+            guijson.objects[n_obj].posx = draggie[n_obj].position.x;
+            guijson.objects[n_obj].posy = draggie[n_obj].position.y;
+            //set in the control panel
+            $setValue.val(guijson.objects[n_obj].value);
+            $setName.val(guijson.objects[n_obj].name);
+            $setposx.val(draggie[n_obj].position.x);
+            $setposy.val(draggie[n_obj].position.y);
+            $setcolor.val(guijson.objects[n_obj].color);
+            $seth.val(guijson.objects[n_obj].height);
+            $setw.val(guijson.objects[n_obj].width);
+
+            currentlySelectedObject = n_obj;
+            setborder();
+            // console.log(guijson.objects[n_obj].posx);
+            // console.log(guijson.objects[n_obj].posx);
+            // console.log('---');
+        })
+        //
+        draggie[n_obj].on( 'staticClick', function () {
+            $setposx.val(guijson.objects[n_obj].posx);
+            $setposy.val(guijson.objects[n_obj].posy);
+            $setValue.val(guijson.objects[n_obj].value);
+            $setName.val(guijson.objects[n_obj].name);
+            $setcolor.val(guijson.objects[n_obj].color);
+            $seth.val(guijson.objects[n_obj].height);
+            $setw.val(guijson.objects[n_obj].width);
+
+            currentlySelectedObject = n_obj;
+            setborder();
+        })
+
+
+
+        // console.log(guijson);
+	}
+
+	//edit function
+	function mode (){
+
+		if ($('#editSwitch').prop('checked')) {
+            playMode = true;
+			let elts_hid = document.getElementsByClassName("handle");
+			for(var i = 0; i < elts_hid.length; i++) {
+				elts_hid[i].style.visibility = "hidden";
+			};
+
+			//hide divs
+			$('#create').hide();
+			$('#options').hide();
+			$('#files').hide();
+			$('#GUIProperties').hide();
+
+
+			$('.area').draggabilly('disable');
+
+
+
+		} else {
+		    playMode = false;
+			let elts_dis = document.getElementsByClassName("handle");
+			for (var i = 0; i< elts_dis.length; i++) {
+				elts_dis[i].style.visibility = "visible";
+			};
+
+			//show divs
+			$('#create').show();
+			$('#options').show();
+			$('#files').show();
+			$('#GUIProperties').show();
+
+			//Enable drag
+			$('.GUIProperties').draggabilly('enable');
+
+            $('.area').draggabilly('enable');
+		};
+	}
+
+	//NameConflict
+	function NameConflict(input){
+		var bool = false;
+		for(var i in guijson.objects) {
+			if(input == guijson.objects[i].name) {
+				bool = true;
+			}
+		}
+		return bool;
+	}
+
+	function RandomStr() {
+		var txt = "";
+		for (var i = 0; i < 5; i++)
+    		txt += String.fromCharCode(97+Math.floor(Math.random() * 25));
+		return txt;
+	}
+
+	//#region set stuff
+	//Name
+	function rename(v){
+		let boolComp = NameConflict(v.value);
+		// console.log("val : ", boolComp);
+		if(boolComp) {
+			alert('Please use an non existing name');
+		}
+		else {
+			guijson.objects[currentlySelectedObject].name = v.value;
+		}
+		guijson.objects[currentlySelectedObject].name = v.value;
+	}
+	//set value
+	function setvalue(v) {
+
+		if(guijson.objects[currentlySelectedObject].type == 'slider' || guijson.objects[currentlySelectedObject].type == 'knob') {
+
+			listobj[currentlySelectedObject].value = parseInt(v.value);
+			guijson.objects[currentlySelectedObject].value = parseInt(v.value);
+
+		}
+		if(guijson.objects[currentlySelectedObject].type == 'switch') {
+			if(v.value == "true" || v.value == "false") {
+				let boolValueSwitch = (v.value=="true");
+
+				if(boolValueSwitch && guijson.objects[currentlySelectedObject].value == false ) {
+					listobj[currentlySelectedObject].flip();
+				}
+				else if(!boolValueSwitch && guijson.objects[currentlySelectedObject].value == true ){
+					listobj[currentlySelectedObject].flip();
+				}
+				guijson.objects[currentlySelectedObject].value = boolValueSwitch;
+			}
+			else {
+				alert("This value is not allowed here.");
+			}
+		}
+		if(guijson.objects[currentlySelectedObject].type == 'button') {
+			alert("No value allowed here.");
+		}
+		if(guijson.objects[currentlySelectedObject].type == 'label') {
+		    listobj[currentlySelectedObject].innerHTML = v.value;
+		    guijson.objects[currentlySelectedObject].value = v.value;
+        }
+	}
+	//setborder
+	function setborder(){
+		if(currentlySelectedObject != -1){
+
+		    if(guijson.objects[currentlySelectedObject].type != 'label'){
+		        listobj[currentlySelectedObject].colorize('fill','white');
+            }
+            else {
+		        listobj[currentlySelectedObject].style.backgroundColor = 'white';
+            }
+
+			for(var b in guijson.objects) {
+
+                if(b != currentlySelectedObject) {
+
+			        if(guijson.objects[b].type != 'label') {
+                    //listobj[currentlySelectedObject].colorize('fill',"white");
+                        listobj[b].colorize('fill',"grey");
+                    }
+                    else{
+			            listobj[b].style.backgroundColor = 'grey';
+                    }
+                }
+
+
+			}
+		}
+		else {
+			for(var b in guijson.objects) {
+			    if(guijson.objects[b].type != 'label'){
+                    listobj[b].colorize('fill','grey');
+                }
+                else {
+			        listobj[b].style.backgroundColor = 'grey';
+                }
+			}
+		}
+
+	}
+	//Height
+	function seth(v) {
+
+	    if(parseInt(v.value) > 0) {
+
+            if(guijson.objects[currentlySelectedObject].type != 'label') {
+
+
+                listobj[currentlySelectedObject].resize(guijson.objects[currentlySelectedObject].width, parseInt(v.value));
+                guijson.objects[currentlySelectedObject].height = parseInt(v.value);
+
+            }
+            else {
+                listobj[currentlySelectedObject].style.height = parseInt(v.value)+'px';
+                guijson.objects[currentlySelectedObject].height = parseInt(v.value);
+            }
+        }
+    }
+
+	//Width
+	function setw(v) {
+		if(parseInt(v.value) > 0) {
+		    if(guijson.objects[currentlySelectedObject].type != 'label') {
+                listobj[currentlySelectedObject].resize(parseInt(v.value),guijson.objects[currentlySelectedObject].height);
+                guijson.objects[currentlySelectedObject].width = parseInt(v.value);
+            }
+            else {
+                listobj[currentlySelectedObject].style.width = parseInt(v.value)+'px';
+                guijson.objects[currentlySelectedObject].width = parseInt(v.value);
+            }
+
+		}
+	}
+	//Color
+	function setcolor(v) {
+
+	    if(guijson.objects[currentlySelectedObject].type != 'label') {
+            listobj[currentlySelectedObject].colorize('accent',v.value);
+            guijson.objects[currentlySelectedObject].color = v.value;
+        }
+        else {
+            listobj[currentlySelectedObject].style.backgroundColor = v.value;
+            guijson.objects[currentlySelectedObject].color = v.value;
+        }
+	}
+
+	//Posx
+	function setposx(v) {
+		if(isNaN(v.value) == false) {
+			guijson.objects[currentlySelectedObject].posx = v.value;
+			draggie[currentlySelectedObject].setPosition(v.value, guijson.objects[currentlySelectedObject].posy);
+			// console.log(guijson);
+		}
+		else {
+			alert("value not allowed here");
+		}
+	}
+
+	//Posy
+	function setposy(v) {
+		if(isNaN(v.value) == false) {
+			guijson.objects[currentlySelectedObject].posy = v.value;
+			draggie[currentlySelectedObject].setPosition(guijson.objects[currentlySelectedObject].posx,v.value);
+			// console.log(guijson);
+		}
+		else {
+			alert("value not allowed here");
+		}
+	}
+
+	//#endregion set stuff
+	function shortcuts(type){
+		switch (type) {
+			case "slider" :
+				addObj("slider");
+				break;
+			case "knob" :
+				addObj("knob");
+				break;
+			case "button" :
+				addObj("button");
+				break;
+			case "switch" :
+				addObj("switch");
+				break;
+            case "label" :
+                addObj("label");
+                break;
+		}
+		draggie[guijson.objects.length-1].setPosition(mousePos.x, mousePos.y);
+		guijson.objects[guijson.objects.length-1].posx = draggie[guijson.objects.length-1].position.x;
+		guijson.objects[guijson.objects.length-1].posy = draggie[guijson.objects.length-1].position.y;
+		$setposx.val(draggie[guijson.objects.length-1].position.x);
+		$setposy.val(draggie[guijson.objects.length-1].position.y);
+	}
+
+	//clear
+	function clear(){
+
+		if(guijson.objects.length != 0){
+            do{
+                currentlySelectedObject = guijson.objects.length -1;
+                delClear();
+            }while(guijson.objects.length >0);
+		    clearPropertiesFields();
+		}
+	}
+
+	function clearPropertiesFields() {
+		$setValue.val(null);
+		$setName.val(null);
+		$setposx.val(null);
+		$setposy.val(null);
+		$setcolor.val(null);
+		$seth.val(null);
+		$setw.val(null);
+    };
+
+	function delClear() {
+		if(guijson.objects[currentlySelectedObject].type == "slider") {
+			n_slider --;
+		}
+		if(guijson.objects[currentlySelectedObject].type == "switch") {
+			n_switch --;
+		}
+		if(guijson.objects[currentlySelectedObject].type == "button") {
+			n_button --;
+		}
+		if(guijson.objects[currentlySelectedObject].type == "knob") {
+			n_knob--;
+		}
+		if(guijson.objects[currentlySelectedObject].type == 'label') {
+		    n_label--;
+        }
+
+        if(guijson.objects[currentlySelectedObject].type != "label") {
+            listobj[currentlySelectedObject].destroy();
+        }
+        else {
+            listobj[currentlySelectedObject].remove();
+        }
+
+        $('.objdrag').eq(currentlySelectedObject).remove();
+
+		listobj.splice(currentlySelectedObject,1); //remove elt from listobj array
+		draggie.splice(currentlySelectedObject,1); //remove elt from draggie array
+		guijson.objects.splice(currentlySelectedObject,1); // remove elt from the json
+
+		//updateResponders();
+        clearPropertiesFields();
+        // console.log(listobj);
+	}
+
+	function draw(input){
+        let loadedJson = input;
+        loadedJson.objects.forEach(function (item, index) {
+			switch (loadedJson.objects[index].type){
+						case "slider" :
+							addObj("slider");
+							break;
+						case "knob" :
+							addObj("knob");
+							break;
+						case "switch" :
+							addObj("switch");
+							break;
+						case "button" :
+							addObj("button");
+							break;
+                        case "label" :
+                            addObj("label");
+                            break;
+            }
+			guijson.objects[index] = loadedJson.objects[index];
+			draggie[index].setPosition(loadedJson.objects[index].posx, loadedJson.objects[index].posy);
+
+			if(guijson.objects[index].type != 'label') {
+                listobj[index].value = loadedJson.objects[index].value;
+                listobj[index].resize(loadedJson.objects[index].width, loadedJson.objects[index].height);
+                listobj[index].colorize('accent', loadedJson.objects[index].color);
+            }
+            else {
+                listobj[index].innerHTML = loadedJson.objects[index].value;
+                listobj[index].style.height = loadedJson.objects[index].height+'px';
+                listobj[index].style.width = loadedJson.objects[index].width+'px';
+                listobj[index].style.backgroundColor = loadedJson.objects[index].color;
+            }
+        });
+	}
+
+	//Set pos
+	Draggabilly.prototype.setPosition = function(x,y) {
+		this.position.x = x;
+		this.position.y = y;
+		this.setLeftTop();
+	};
+
+	function del() {
+
+	    var json = jQuery.extend(true,{}, guijson);
+	    json.objects.splice(currentlySelectedObject,1);
+	    clear();
+	    draw(json);
+	    currentlySelectedObject = -1;
+	    setborder();
+	    clearPropertiesFields();
+    }
+
+    function changeText(v) {
+	    for(var n in listobj ) {
+	        if( v == listobj[n])
+            {
+                guijson.objects[n].value = v.value;
+                $setValue.val(guijson.objects[n].value);
+            }
+        }
+    }
+
+
+
+</script>
+
+</html>
