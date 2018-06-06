@@ -92,7 +92,6 @@ function startJack() {
 		var vectorSizeParam = '-p'+vectorSize;
 		var sampleRateParam = '-r'+sampleRate;
 
-		console.log([ '-P95', '-dalsa', deviceParam, vectorSizeParam, '-n3', '-s', sampleRateParam]);
 		jackd = cp.spawn('jackd', ['-P95', '-dalsa', deviceParam, vectorSizeParam, '-n3', '-s', sampleRateParam]);
 }
 
@@ -111,15 +110,15 @@ function startSclang() {
 			sclang.on('stdout', function (text) {
 				io.sockets.emit('toconsole', text);
 			});
-			// sclang.on('state', function (text) {
-			// 	io.sockets.emit('toconsole', JSON.stringify(text));
-			// });
-			// sclang.on('stderror', function (text) {
-			// 	io.sockets.emit('toconsole', JSON.stringify(text));
-			// });
-			// sclang.on('error', function (text) {
-			// 	io.sockets.emit('toconsole', JSON.stringify(text));
-			// });
+			sclang.on('state', function (text) {
+				io.sockets.emit('toconsole', JSON.stringify(text));
+			});
+			sclang.on('stderror', function (text) {
+				io.sockets.emit('toconsole', JSON.stringify(text));
+			});
+			sclang.on('error', function (text) {
+				io.sockets.emit('toconsole', JSON.stringify(text.error.errorString));
+			});
 		}).then(function () {
 			fs.access(supercolliderfiles_path + config.defaultSCFile, function (err) {
 				if (err){
@@ -141,7 +140,7 @@ function startSclang() {
 
 function start() {
 	startPbridge();
-	startJack();
+	// startJack();
 	startSclang();
 	setTimeout(function(){sendSensorConfigOSC('recall')}, 4);
 }
