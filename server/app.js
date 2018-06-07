@@ -140,7 +140,7 @@ function startSclang() {
 
 function start() {
 	startPbridge();
-	// startJack();
+	startJack();
 	startSclang();
 	setTimeout(function(){sendSensorConfigOSC('recall')}, 4);
 }
