@@ -18,12 +18,18 @@
 <div id = "canvas" style = "width: 70%;"></div>
 
 <div id = "controPanel" style="float:right; display: inline-block">
-   <p style = "text-align: right;"> PLAY :
-    <label class="switch" style = "float: right;">
-        <input type="checkbox" id="editSwitch" onclick="mode(this)">
-        <span class="checkboxSlider"></span>
-    </label>
-   </p>
+   <!--<p style = "text-align: middle; font-size: larger "> PLAY : \n-->
+    <!--<h2 class="PrynthPanelLabel" style = "text-align: right;">PLAY:</h2>-->
+    <!--<label class="switch" style = "float: right;">-->
+        <!--<input type="checkbox" id="editSwitch" onclick="mode(this)">-->
+        <!--<span class="checkboxSlider"></span>-->
+    <!--</label>-->
+   <!--</p>-->
+
+    <div class = "PrynthPanel SettingsPanel">
+        <span class="PrynthPanelLabel" style="font-size: 20px;">  <b>Edit / Play</b> </span>
+        <span id="modeSwitch" style="float: right"></span>
+    </div>
 
     <div class = "PrynthPanel SettingsPanel" id="options">
         <h2 class="PrynthPanelLabel">Options</h2>
@@ -104,6 +110,15 @@
 	let $setcolor = $('#setcolor');
 	let $seth = $('#seth');
 	let $setw = $('#setw');
+
+
+	var modeSwitch = new Nexus.Toggle('#modeSwitch', {
+		'size': [40,20],
+		'state': false,
+    });
+
+	modeSwitch.colorize("accent", "orange");
+
 
 	let $clearbutton = $('#clear');
 	let $enabgridbutton = $('#enablegridbutton');
@@ -619,10 +634,53 @@
 	}
 
 	//edit function
-	function mode (){
+	// function mode (){
+    //
+	// 	if ($('#editSwitch').prop('checked')) {
+     //        playMode = true;
+	// 		let elts_hid = document.getElementsByClassName("handle");
+	// 		for(var i = 0; i < elts_hid.length; i++) {
+	// 			elts_hid[i].style.visibility = "hidden";
+	// 		};
+    //
+	// 		//hide divs
+	// 		$('#create').hide();
+	// 		$('#options').hide();
+	// 		$('#files').hide();
+	// 		$('#GUIProperties').hide();
+    //
+    //
+	// 		$('.area').draggabilly('disable');
+    //
+    //
+    //
+	// 	} else {
+	// 	    playMode = false;
+	// 		let elts_dis = document.getElementsByClassName("handle");
+	// 		for (var i = 0; i< elts_dis.length; i++) {
+	// 			elts_dis[i].style.visibility = "visible";
+	// 		};
+    //
+	// 		//show divs
+	// 		$('#create').show();
+	// 		$('#options').show();
+	// 		$('#files').show();
+	// 		$('#GUIProperties').show();
+    //
+	// 		//Enable drag
+	// 		$('.GUIProperties').draggabilly('enable');
+    //
+     //        $('.area').draggabilly('enable');
+	// 	};
+	// }
 
-		if ($('#editSwitch').prop('checked')) {
-            playMode = true;
+
+
+
+	modeSwitch.on('change',function(v) {
+
+		if (v == true) {
+			playMode = true;
 			let elts_hid = document.getElementsByClassName("handle");
 			for(var i = 0; i < elts_hid.length; i++) {
 				elts_hid[i].style.visibility = "hidden";
@@ -640,7 +698,7 @@
 
 
 		} else {
-		    playMode = false;
+			playMode = false;
 			let elts_dis = document.getElementsByClassName("handle");
 			for (var i = 0; i< elts_dis.length; i++) {
 				elts_dis[i].style.visibility = "visible";
@@ -655,9 +713,11 @@
 			//Enable drag
 			$('.GUIProperties').draggabilly('enable');
 
-            $('.area').draggabilly('enable');
+			$('.area').draggabilly('enable');
 		};
-	}
+
+		console.log(v);
+	})
 
 	//NameConflict
 	function NameConflict(input){
