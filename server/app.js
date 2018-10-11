@@ -1,3 +1,5 @@
+// test
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -8,6 +10,7 @@ var OSC = require('osc-js')
 
 var os = require('os');
 var cp = require('child_process');
+// let exec = require('child_process').exec;
 
 var fs = require('fs');
 var sc = require('supercolliderjs');
@@ -85,7 +88,71 @@ app.use(function(err, req, res, next) {
 
 ////////////
 
+
+//
 // function startJack(callback) {
+// 	if(jackd == null){
+// 		let device = config.jack.device;
+// 		let vectorSize = config.jack.vectorSize;
+// 		let sampleRate = config.jack.sampleRate;
+//
+// 		let command = 'jackd -P95 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
+// 		jackd = exec(command, function (error, stdout, stderr) {
+// 			console.log(stdout);
+// 		});
+// 	};
+// 	callback();
+// }
+//
+// function startPbridge() {
+// 	if(pbridge == null){
+// 		let target = path.join(__dirname, '../pbridge/pbridge')+' -'+config.sensorDataTarget;
+//
+// 		pbridge = exec(target, function (error, stdout, stderr) {
+// 			console.log(stdout);
+// 		});
+// 	};
+//
+// }
+//
+// //start sclang
+// function startSclang() {
+// 	if(sclang == null) {
+// 		sc.lang.boot({stdin: false, echo: false, debug: false}).then(function (lang) {
+// 			sclang = lang;
+// 			sclang.on('stdout', function (text) {
+// 				io.sockets.emit('toconsole', text);
+// 			});
+// 			sclang.on('state', function (text) {
+// 				// io.sockets.emit('toconsole', JSON.stringify(text));
+// 			});
+// 			sclang.on('stderror', function (text) {
+// 				// io.sockets.emit('toconsole', JSON.stringify(text));
+// 			});
+// 			sclang.on('error', function (text) {
+// 				io.sockets.emit('toconsole', JSON.stringify(text.error.errorString));
+// 			});
+// 		}).then(function () { //TODO: add checking if defaultSCFile exists on config.json, if not skip
+// 			fs.access(supercolliderfiles_path + config.defaultSCFile, function (err) {
+// 				if (err){
+// 					io.sockets.emit('toconsole', 'cannot find default file. Check your settings...\n');
+// 				} else {
+// 					sclang.executeFile(path.join(supercolliderfiles_path, config.defaultSCFile)).then(
+// 						function (answer) {
+// 							io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
+// 						},
+// 						function (error) {
+// 							io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
+// 						}
+// 					)
+// 				};
+// 			});
+// 		})
+// 	};
+// }
+
+
+
 function startJack() {
 		var device = config.jack.device;
 		var vectorSize = config.jack.vectorSize;
@@ -94,7 +161,6 @@ function startJack() {
 		var vectorSizeParam = '-p'+vectorSize;
 		var sampleRateParam = '-r'+sampleRate;
 
-		console.log([ '-P95', '-dalsa', deviceParam, vectorSizeParam, '-n3', '-s', sampleRateParam]);
 		jackd = cp.spawn('jackd', ['-P95', '-dalsa', deviceParam, vectorSizeParam, '-n3', '-s', sampleRateParam]);
 }
 
@@ -107,21 +173,20 @@ function startPbridge() {
 
 //start sclang
 function startSclang() {
-	// if(sclang == null) {
 		sc.lang.boot({stdin: false, echo: false, debug: false}).then(function (lang) {
 			sclang = lang;
 			sclang.on('stdout', function (text) {
 				io.sockets.emit('toconsole', text);
 			});
-			// sclang.on('state', function (text) {
-			// 	io.sockets.emit('toconsole', JSON.stringify(text));
-			// });
-			// sclang.on('stderror', function (text) {
-			// 	io.sockets.emit('toconsole', JSON.stringify(text));
-			// });
-			// sclang.on('error', function (text) {
-			// 	io.sockets.emit('toconsole', JSON.stringify(text));
-			// });
+			sclang.on('state', function (text) {
+				io.sockets.emit('toconsole', JSON.stringify(text));
+			});
+			sclang.on('stderror', function (text) {
+				io.sockets.emit('toconsole', JSON.stringify(text));
+			});
+			sclang.on('error', function (text) {
+				io.sockets.emit('toconsole', JSON.stringify(text.error.errorString));
+			});
 		}).then(function () {
 			fs.access(supercolliderfiles_path + config.defaultSCFile, function (err) {
 				if (err){
@@ -138,14 +203,14 @@ function startSclang() {
 				};
 			});
 		})
-	// };
 }
 
 function start() {
 	startPbridge();
 	// startJack();
 	startSclang();
-	setTimeout(function(){sendSensorConfigOSC('recall')}, 4);
+	// startJack(startSclang);
+	setTimeout(function(){app.emit('recallsensors');}, 4);
 }
 
 function getSystemInfo() {
@@ -307,13 +372,13 @@ osc.on('/sensorMonitorValue', function (message) {
 });
 
 osc.on('/sendSensorConfig', function (message) {
-	sendSensorConfigOSC('recall');
+	// sendSensorConfigOSC('recall');
+	app.emit('recallsensors');
 });
 
 // function to dump send sensor configuration to bridge via OSC
-function sendSensorConfigOSC (type){
-	if (type == 'reset'){var sensorsConfig = require('./public/config/sensors_reset.json');};
-	if (type == 'recall'){var sensorsConfig = require('./public/config/sensors.json');};
+function sendSensorConfigOSC (json){
+	var sensorsConfig = json;
 
 	var message;
 	var iterator= 0;
@@ -342,13 +407,22 @@ function sendSensorConfigOSC (type){
 
 
 app.on('resetsensors', function () {
-	sendSensorConfigOSC('reset');
+	fs.readFile(path.join(__dirname, 'public/config/sensors_reset.json'), 'utf8', function (err, data) {
+		if (err) throw err; // we'll not consider error handling for now
+		var temp = JSON.parse(data);
+		sendSensorConfigOSC(temp);
+	});
 })
 
 app.on('recallsensors', function () {
-	sendSensorConfigOSC('recall');
-})
+	fs.readFile(path.join(__dirname, 'public/config/sensors.json'), 'utf8', function (err, data) {
+		if (err) throw err; // we'll not consider error handling for now
+		var temp = JSON.parse(data);
+		sendSensorConfigOSC(temp);
+	});
+});
 
 start();
 
 module.exports = {app: app, server: server};
+
