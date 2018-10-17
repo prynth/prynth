@@ -12,17 +12,25 @@ let storage = multer.diskStorage({
 let upload = multer({ storage : storage}).array('filename', 10);
 var guifiles = [''];
 let public_path = path.join(__dirname, '../public/');
-var currentGUI = {"objects":[
-	{
-		"type":"slider",
-		"name":"slider0",
-		"posx":30,"posy":30,
-		"value":0,
-		"color":"orange",
-		"height":130,
-		"width":30
-	}
-	]};
+
+
+
+// var currentGUI = { objects:[
+// 	{
+// 		type: 'slider',
+//         name: 'slider0',
+//         posx: 100,
+//         posy: 100,
+//         value: 0,
+//         color: 'orange',
+//         height: 130,
+//         width: 30
+// 	}
+// ]};
+
+
+var currentGUI;
+// var currentGUI = {"objects":[]};
 
 // var currentGUIString = '{"objects":[]}';
 // var currentGUIString = '{"objects":[{"type":"slider","name":"slider0","posx":30,"posy":30,"value":0,"color":"orange","height":130,"width":30}]}';
@@ -30,21 +38,30 @@ var currentGUI = {"objects":[
 
 router.get('/', function(req,res,next){
 	// refreshFiles();
+
+
 	guifiles = fs.readdirSync(public_path + 'guifiles');
 	guifiles = guifiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
 
-	console.log(currentGUI);
+	// console.log(currentGUI);
 
 	res.render('gui', {
 		guifiles: guifiles,
-		sentguijson:JSON.stringify(currentGUI)
+		// sentguijson:JSON.stringify(currentGUI)
 		// currentGUI
 	});
+
+	let currentGUIString = '{"objects":[{"type":"slider","name":"slider0","posx":30,"posy":30,"value":0,"color":"orange","height":130,"width":30}]}';
+    currentGUI = JSON.parse(currentGUIString);
+    console.log(currentGUIString);
+    // res.io.emit('guidraw', currentGUI);
+
+    setTimeout(function(){res.io.emit('guidraw', currentGUI);}, 4);
+
 
 	// res.render('gui', {guifiles: guifiles});
 
 });
-
 
 
 router.post('/guifiles', function (req, res) {
@@ -52,6 +69,7 @@ router.post('/guifiles', function (req, res) {
 		let filetoload = guifiles[JSON.parse(req.body.fileindex)[0]];
 		let currentGUIString = fs.readFileSync((public_path + 'guifiles/' + filetoload), 'utf8');
 		currentGUI = JSON.parse(currentGUIString);
+		console.log(currentGUIString);
 		res.io.emit('guidraw', currentGUI);
 		// res.redirect('/');
 	};
@@ -81,12 +99,7 @@ router.post('/guifiles', function (req, res) {
 
 router.get('/refresh-files', function (req, res) {
 	refreshFiles();
-	// guifiles = fs.readdirSync(public_path + 'guifiles');
-	// guifiles = guifiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
-	//
-	// console.log('files have been refreshed');
 	res.io.emit('guifiles', guifiles);
-	// res.io.emit('tosoundfiles', soundfiles);
 	res.redirect('/');
 });
 

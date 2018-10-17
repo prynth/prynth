@@ -1,5 +1,3 @@
-// test
-
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -10,8 +8,6 @@ var OSC = require('osc-js')
 
 var os = require('os');
 var cp = require('child_process');
-// let exec = require('child_process').exec;
-
 var fs = require('fs');
 var sc = require('supercolliderjs');
 
@@ -89,70 +85,6 @@ app.use(function(err, req, res, next) {
 ////////////
 
 
-//
-// function startJack(callback) {
-// 	if(jackd == null){
-// 		let device = config.jack.device;
-// 		let vectorSize = config.jack.vectorSize;
-// 		let sampleRate = config.jack.sampleRate;
-//
-// 		let command = 'jackd -P95 -dalsa -dhw:'+device+' -p'+vectorSize+' -n3 -s -r'+sampleRate;
-// 		jackd = exec(command, function (error, stdout, stderr) {
-// 			console.log(stdout);
-// 		});
-// 	};
-// 	callback();
-// }
-//
-// function startPbridge() {
-// 	if(pbridge == null){
-// 		let target = path.join(__dirname, '../pbridge/pbridge')+' -'+config.sensorDataTarget;
-//
-// 		pbridge = exec(target, function (error, stdout, stderr) {
-// 			console.log(stdout);
-// 		});
-// 	};
-//
-// }
-//
-// //start sclang
-// function startSclang() {
-// 	if(sclang == null) {
-// 		sc.lang.boot({stdin: false, echo: false, debug: false}).then(function (lang) {
-// 			sclang = lang;
-// 			sclang.on('stdout', function (text) {
-// 				io.sockets.emit('toconsole', text);
-// 			});
-// 			sclang.on('state', function (text) {
-// 				// io.sockets.emit('toconsole', JSON.stringify(text));
-// 			});
-// 			sclang.on('stderror', function (text) {
-// 				// io.sockets.emit('toconsole', JSON.stringify(text));
-// 			});
-// 			sclang.on('error', function (text) {
-// 				io.sockets.emit('toconsole', JSON.stringify(text.error.errorString));
-// 			});
-// 		}).then(function () { //TODO: add checking if defaultSCFile exists on config.json, if not skip
-// 			fs.access(supercolliderfiles_path + config.defaultSCFile, function (err) {
-// 				if (err){
-// 					io.sockets.emit('toconsole', 'cannot find default file. Check your settings...\n');
-// 				} else {
-// 					sclang.executeFile(path.join(supercolliderfiles_path, config.defaultSCFile)).then(
-// 						function (answer) {
-// 							io.sockets.emit('toconsole', JSON.stringify(answer) + '\n');
-// 						},
-// 						function (error) {
-// 							io.sockets.emit('toconsole', 'error type:' + JSON.stringify(error.type) + '\n');
-// 						}
-// 					)
-// 				};
-// 			});
-// 		})
-// 	};
-// }
-
-
-
 function startJack() {
 		var device = config.jack.device;
 		var vectorSize = config.jack.vectorSize;
@@ -207,25 +139,39 @@ function startSclang() {
 
 function start() {
 	startPbridge();
-	// startJack();
+	startJack();
 	startSclang();
-	// startJack(startSclang);
 	setTimeout(function(){app.emit('recallsensors');}, 4);
 }
 
-function getSystemInfo() {
-	var wirelessIP, ethernetIP, cpu, hostname, totalmem, freemem;
+function getCpuUsage(cmd) {
+    try {
+        return cp.execSync(cmd).toString();
+    }
+    catch (error) {
+        error.status;  // Might be 127 in your example.
+        error.message; // Holds the message you typically want.
+        error.stderr;  // Holds the stderr output. Use `.toString()`.
+        error.stdout;  // Holds the stdout output. Use `.toString()`.
+    }
+};
 
-	if (os.networkInterfaces().wlan0) {wirelessIP = os.networkInterfaces().wlan0[0].address;
+
+
+function getSystemInfo() {
+	var wirelessIP, ethernetIP, hostname, freemem, cpuSclang, cpuScsynth;
+
+    if (os.networkInterfaces().wlan0) {wirelessIP = os.networkInterfaces().wlan0[0].address;
 	} else {wirelessIP = 'unavailable';}
 	if (os.networkInterfaces().eth0) {ethernetIP = os.networkInterfaces().eth0[0].address;
 	} else {ethernetIP = 'unavailable';}
-	cpu = (os.loadavg()[0]).toFixed(1);
+    cpuSclang = getCpuUsage('ps --no-headers -C sclang -o %cpu');
+    cpuScsynth = getCpuUsage('ps --no-headers -C scsynth -o %cpu');
 	hostname = os.hostname();
-	totalmem = (Math.round(os.totalmem()/1000000));
 	freemem = (Math.round(os.freemem()/1000000));
 
-	return([hostname, ethernetIP, wirelessIP, cpu,  totalmem, freemem]);
+	return([hostname, ethernetIP, wirelessIP, cpuSclang, cpuScsynth, freemem]);
+
 };
 
 setInterval(function () {
@@ -236,11 +182,13 @@ setInterval(function () {
 		hostname: systemInfo[0],
 		ethernetip: systemInfo[1],
 		wirelessip: systemInfo[2],
-		cpu: systemInfo[3],
-		totalmem: systemInfo[4],
+		cpusclang: systemInfo[3],
+        cpuscsynth: systemInfo[4],
 		freemem: systemInfo[5]
 	})
 }, 1000);
+
+
 
 
 //interprets in supercollider code (receives from post via socket and outputs to console via socket)
@@ -357,7 +305,7 @@ io.sockets.on('connection', function(client){
 	});
 
 	client.on('gui', function(data){
-
+		// console.log(data);
 		// console.log(data[0]);
 		// console.log(data[1]);
 		message = new OSC.Message(data[0], data[1]);
