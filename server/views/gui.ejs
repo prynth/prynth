@@ -519,7 +519,6 @@
 
 		//Drag Init
 
-
 		if(guijson.objects[n_obj].type != 'label') {
 
             let listdrag = $('.objdrag');
@@ -567,7 +566,7 @@
 		//Value
 
         if(guijson.objects[n_obj].type != 'label'){
-
+            var hostname = '<%= hostname %>';
             listobj[n_obj].on('change', function (v) {
                 // console.log('old', n_obj);
                 guijson.objects[n_obj].value = v;
@@ -585,8 +584,9 @@
                 if (typeof v == 'boolean' && v == true){v = 1};
                 if (typeof v == 'boolean' && v == false){v = 0};
 	            console.log(v);
-	            socket.emit('gui',  ['/gui/'+guijson.objects[n_obj].name, v]);
-
+	            <!--socket.emit('gui',  ['/'+<%=hostname%>+'/gui/'+guijson.objects[n_obj].name, v]);-->
+                socket.emit('gui',  ['/'+hostname+'/gui/'+guijson.objects[n_obj].name, v]);
+                // console.log(hostname);
             })
         }
 
@@ -716,7 +716,7 @@
 			$('.area').draggabilly('enable');
 		};
 
-		console.log(v);
+		// console.log(v);
 	})
 
 	//NameConflict

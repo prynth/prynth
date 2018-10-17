@@ -78,8 +78,8 @@ router.post('/supercolliderfiles', function (req, res) {
 				return console.log(err);
 			} else {
 				res.io.emit('toconsole', '\nfile saved');
-				// io.sockets.emit('stdout', 'file saved!');
-				res.redirect('refresh-files');
+                res.io.emit('toprompt', req.body.filename);
+                res.redirect('refresh-files');
 			}
 		});
 	};

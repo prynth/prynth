@@ -4,7 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var OSC = require('osc-js')
+var OSC = require('osc-js');
+// var serveIndex = require('serve-index');
 
 var os = require('os');
 var cp = require('child_process');
@@ -49,7 +50,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
+
 
 //middleware for sockets
 app.use(function(req, res, next){
@@ -62,6 +64,8 @@ app.use('/users', users);
 app.use('/system', system);
 app.use('/sensors', sensors);
 app.use('/gui',gui);
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

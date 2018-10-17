@@ -10,7 +10,9 @@ let storage = multer.diskStorage({
 });
 
 let upload = multer({ storage : storage}).array('filename', 10);
+
 var guifiles = [''];
+var private_path = path.join(__dirname, '../private/');
 let public_path = path.join(__dirname, '../public/');
 
 
@@ -29,7 +31,7 @@ let public_path = path.join(__dirname, '../public/');
 // ]};
 
 
-var currentGUI;
+// var currentGUI;
 // var currentGUI = {"objects":[]};
 
 // var currentGUIString = '{"objects":[]}';
@@ -39,6 +41,9 @@ var currentGUI;
 router.get('/', function(req,res,next){
 	// refreshFiles();
 
+    var configFile = fs.readFileSync(private_path +'config.json');
+    var configData = JSON.parse(configFile);
+    var hostname = configData.hostname;
 
 	guifiles = fs.readdirSync(public_path + 'guifiles');
 	guifiles = guifiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
@@ -47,6 +52,7 @@ router.get('/', function(req,res,next){
 
 	res.render('gui', {
 		guifiles: guifiles,
+		hostname: hostname
 		// sentguijson:JSON.stringify(currentGUI)
 		// currentGUI
 	});
