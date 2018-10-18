@@ -11,23 +11,13 @@
     <script src= "javascripts/nexusui/dist/NexusUI.js"></script>
     <script src = "javascripts/draggabilly/draggabilly.pkgd.min.js"></script>
     <script src="javascripts/socket.io/socket.io.js"></script>
-
-
 </head>
 
 <div id = "canvas" style = "width: 70%;"></div>
 
 <div id = "controPanel" style="float:right; display: inline-block">
-   <!--<p style = "text-align: middle; font-size: larger "> PLAY : \n-->
-    <!--<h2 class="PrynthPanelLabel" style = "text-align: right;">PLAY:</h2>-->
-    <!--<label class="switch" style = "float: right;">-->
-        <!--<input type="checkbox" id="editSwitch" onclick="mode(this)">-->
-        <!--<span class="checkboxSlider"></span>-->
-    <!--</label>-->
-   <!--</p>-->
-
     <div class = "PrynthPanel SettingsPanel">
-        <span class="PrynthPanelLabel" style="font-size: 20px;">  <b>Edit / Play</b> </span>
+        <span class="PrynthPanelLabel" style="font-size: 20px;">  <b>Edit/Play</b> </span>
         <span id="modeSwitch" style="float: right"></span>
     </div>
 
@@ -82,19 +72,11 @@
         <button type ="button" id="button">Button</button>
         <button type = "button" id="label">Label</button>
     </div>
-
-    <!--div class = "PrynthPanel" id = "toEditor">
-        <h2 class = "PrynthPanelLabel">Editor</h2>
-        <button type = "button" id = "toEditor">Editor</button>
-    </div-->
-
 </div>
 
 
 </body>
 <script>
-
-
 	var socket = io.connect();
 
 	let $slider = $('#slider');
@@ -111,15 +93,6 @@
 	let $seth = $('#seth');
 	let $setw = $('#setw');
 
-
-	var modeSwitch = new Nexus.Toggle('#modeSwitch', {
-		'size': [40,20],
-		'state': false,
-    });
-
-	modeSwitch.colorize("accent", "orange");
-
-
 	let $clearbutton = $('#clear');
 	let $enabgridbutton = $('#enablegridbutton');
 	let $deletebutton = $('#delete');
@@ -127,8 +100,6 @@
     let $saveguifilebutton = $('#saveguifilebutton');
 	let $loadguifilebutton = $('#loadguifilebutton');
 	let $deleteguifilebutton = $('#deleteguifilebutton');
-
-	//let $toEditorButton = $('#toEditor');
 
 	let n_slider = 0;
 	let n_knob = 0;
@@ -149,10 +120,14 @@
 	let grid = false;
 	let playMode = false;
 
+    //initialize play/edit toggle
+    var modeSwitch = new Nexus.Toggle('#modeSwitch', {
+        'size': [40,20],
+        'state': false,
+    });
+    modeSwitch.colorize("accent", "orange");
+
 	$(document).ready(function() {
-
-
-
 		//Drag border on the webpage
 		$('.GUIProperties').draggabilly();
 
@@ -242,7 +217,6 @@
 
 		//Shortcuts
 		document.onkeydown = function(e) {
-
 		    if(!playMode) {
                 if(e.which == 46){ //del
                     e.preventDefault();
@@ -309,14 +283,13 @@
 				$seth.val(guijson.objects[currentlySelectedObject].height);
 				$setw.val(guijson.objects[currentlySelectedObject].width);
 			}
+
 			if(e.which == 27) { //esc
 				e.preventDefault();
 				currentlySelectedObject = -1;
 				setborder();
                 clearPropertiesFields();
 			}
-
-
         }
 
         /*
@@ -324,6 +297,7 @@
 		    window.open('/');
         })
         */
+
 		socket.on('guidraw', function (data) {
             clear();
             // console.log(data);
@@ -341,13 +315,11 @@
 	})
 
 
-	/////////////////////////////////////// function ////////////////////////////////////////////
+	/////////////////////////////////////// functions ////////////////////////////////////////////
 
 
 	function addObj(type) {
-
 		var n_obj= guijson.objects.length;
-
 
 		// document.getElementById("containerDiv").setAttribute("id", "containerDiv" + n_obj);
 		// $('#containerDiv'+n_obj).css('zIndex', n_obj);
@@ -393,9 +365,10 @@
                 guijson.objects[n_obj].height = hSlider;
                 guijson.objects[n_obj].width = wSlider;
 
-                //Incrementation
+                //Increment
                 n_slider++;
                 break;
+
             case "knob" :
                 $('#canvas').append('<div class = "objdrag" id = "containerDiv" style = "display: inline-block; position: absolute"><div class = "handle"></div><div id ="obj"></div></div>');
                 document.getElementById("obj").setAttribute("id", "obj" + n_obj);
@@ -423,9 +396,10 @@
                 guijson.objects[n_obj].height = hDial;
                 guijson.objects[n_obj].width = wDial;
 
-                //Incrementation
+                //Increment
                 n_knob++;
                 break;
+
             case "switch" :
                 $('#canvas').append('<div class = "objdrag" id = "containerDiv" style = "display: inline-block; position: absolute"><div class = "handle"></div><div id ="obj"></div></div>');
                 document.getElementById("obj").setAttribute("id", "obj" + n_obj);
@@ -449,7 +423,7 @@
                 guijson.objects[n_obj].height = hSwitch;
                 guijson.objects[n_obj].width = wSwitch;
 
-                //Incrementation
+                //Increment
                 n_switch++;
                 break;
 
@@ -477,7 +451,7 @@
                 guijson.objects[n_obj].height = hButton;
                 guijson.objects[n_obj].width = wButton;
 
-                //Incrementation
+                //Increment
                 n_button++;
                 break;
 
@@ -499,7 +473,7 @@
                 guijson.objects[n_obj].height = hLabel
                 guijson.objects[n_obj].width = wLabel;
 
-                //Inc
+                //Increment
                 n_label ++;
                 break;
         }
@@ -512,6 +486,7 @@
 		$setcolor.val(guijson.objects[n_obj].color);
 		$seth.val(guijson.objects[n_obj].height);
 		$setw.val(guijson.objects[n_obj].width);
+
 		//get idx
 		currentlySelectedObject = n_obj;
 		setborder();
@@ -520,7 +495,6 @@
 		//Drag Init
 
 		if(guijson.objects[n_obj].type != 'label') {
-
             let listdrag = $('.objdrag');
 
             if(grid) {
@@ -534,11 +508,8 @@
                     handle : '.handle'
                 })
             }
-
         }
         else {
-
-
 		    let listdrag = $('.area');
 
             if(grid) {
@@ -549,11 +520,9 @@
             else {
                 drag = listdrag.draggabilly();
             }
-
         }
 
 		draggie[n_obj] = drag.last().data('draggabilly');
-
 
 		let initx = 30;
 		let inity = 30;
@@ -561,10 +530,9 @@
 		guijson.objects[n_obj].posx = initx;
 		guijson.objects[n_obj].posy = inity;
 
-
 		// console.log(listobj);
-		//Value
 
+		//Value
         if(guijson.objects[n_obj].type != 'label'){
             var hostname = '<%= hostname %>';
             listobj[n_obj].on('change', function (v) {
@@ -583,10 +551,12 @@
                 setborder();
                 if (typeof v == 'boolean' && v == true){v = 1};
                 if (typeof v == 'boolean' && v == false){v = 0};
-	            console.log(v);
-	            <!--socket.emit('gui',  ['/'+<%=hostname%>+'/gui/'+guijson.objects[n_obj].name, v]);-->
+
+                console.log(v);
+
+                //Send value via socket for OSC relay
                 socket.emit('gui',  ['/'+hostname+'/gui/'+guijson.objects[n_obj].name, v]);
-                // console.log(hostname);
+
             })
         }
 
@@ -614,7 +584,7 @@
             // console.log(guijson.objects[n_obj].posx);
             // console.log('---');
         })
-        //
+
         draggie[n_obj].on( 'staticClick', function () {
             $setposx.val(guijson.objects[n_obj].posx);
             $setposy.val(guijson.objects[n_obj].posy);
@@ -627,56 +597,10 @@
             currentlySelectedObject = n_obj;
             setborder();
         })
-
-
-
         // console.log(guijson);
 	}
 
-	//edit function
-	// function mode (){
-    //
-	// 	if ($('#editSwitch').prop('checked')) {
-     //        playMode = true;
-	// 		let elts_hid = document.getElementsByClassName("handle");
-	// 		for(var i = 0; i < elts_hid.length; i++) {
-	// 			elts_hid[i].style.visibility = "hidden";
-	// 		};
-    //
-	// 		//hide divs
-	// 		$('#create').hide();
-	// 		$('#options').hide();
-	// 		$('#files').hide();
-	// 		$('#GUIProperties').hide();
-    //
-    //
-	// 		$('.area').draggabilly('disable');
-    //
-    //
-    //
-	// 	} else {
-	// 	    playMode = false;
-	// 		let elts_dis = document.getElementsByClassName("handle");
-	// 		for (var i = 0; i< elts_dis.length; i++) {
-	// 			elts_dis[i].style.visibility = "visible";
-	// 		};
-    //
-	// 		//show divs
-	// 		$('#create').show();
-	// 		$('#options').show();
-	// 		$('#files').show();
-	// 		$('#GUIProperties').show();
-    //
-	// 		//Enable drag
-	// 		$('.GUIProperties').draggabilly('enable');
-    //
-     //        $('.area').draggabilly('enable');
-	// 	};
-	// }
-
-
-
-
+	//play/edit toggle
 	modeSwitch.on('change',function(v) {
 
 		if (v == true) {
@@ -692,11 +616,7 @@
 			$('#files').hide();
 			$('#GUIProperties').hide();
 
-
 			$('.area').draggabilly('disable');
-
-
-
 		} else {
 			playMode = false;
 			let elts_dis = document.getElementsByClassName("handle");
@@ -730,6 +650,7 @@
 		return bool;
 	}
 
+    //Random Name
 	function RandomStr() {
 		var txt = "";
 		for (var i = 0; i < 5; i++)
@@ -738,7 +659,7 @@
 	}
 
 	//#region set stuff
-	//Name
+    //Name
 	function rename(v){
 		let boolComp = NameConflict(v.value);
 		// console.log("val : ", boolComp);
@@ -750,14 +671,12 @@
 		}
 		guijson.objects[currentlySelectedObject].name = v.value;
 	}
-	//set value
+
+	//Value
 	function setvalue(v) {
-
 		if(guijson.objects[currentlySelectedObject].type == 'slider' || guijson.objects[currentlySelectedObject].type == 'knob') {
-
 			listobj[currentlySelectedObject].value = parseInt(v.value);
 			guijson.objects[currentlySelectedObject].value = parseInt(v.value);
-
 		}
 		if(guijson.objects[currentlySelectedObject].type == 'switch') {
 			if(v.value == "true" || v.value == "false") {
@@ -783,10 +702,10 @@
 		    guijson.objects[currentlySelectedObject].value = v.value;
         }
 	}
+
 	//setborder
 	function setborder(){
 		if(currentlySelectedObject != -1){
-
 		    if(guijson.objects[currentlySelectedObject].type != 'label'){
 		        listobj[currentlySelectedObject].colorize('fill','white');
             }
@@ -806,8 +725,6 @@
 			            listobj[b].style.backgroundColor = 'grey';
                     }
                 }
-
-
 			}
 		}
 		else {
@@ -820,19 +737,14 @@
                 }
 			}
 		}
-
 	}
+
 	//Height
 	function seth(v) {
-
 	    if(parseInt(v.value) > 0) {
-
             if(guijson.objects[currentlySelectedObject].type != 'label') {
-
-
                 listobj[currentlySelectedObject].resize(guijson.objects[currentlySelectedObject].width, parseInt(v.value));
                 guijson.objects[currentlySelectedObject].height = parseInt(v.value);
-
             }
             else {
                 listobj[currentlySelectedObject].style.height = parseInt(v.value)+'px';
@@ -852,12 +764,11 @@
                 listobj[currentlySelectedObject].style.width = parseInt(v.value)+'px';
                 guijson.objects[currentlySelectedObject].width = parseInt(v.value);
             }
-
 		}
 	}
+
 	//Color
 	function setcolor(v) {
-
 	    if(guijson.objects[currentlySelectedObject].type != 'label') {
             listobj[currentlySelectedObject].colorize('accent',v.value);
             guijson.objects[currentlySelectedObject].color = v.value;
@@ -888,11 +799,13 @@
 			// console.log(guijson);
 		}
 		else {
-			alert("value not allowed here");
+			alert("value not allowed");
 		}
 	}
+    //#region set stuff
 
-	//#endregion set stuff
+
+	//Shortcuts
 	function shortcuts(type){
 		switch (type) {
 			case "slider" :
@@ -920,7 +833,6 @@
 
 	//clear
 	function clear(){
-
 		if(guijson.objects.length != 0){
             do{
                 currentlySelectedObject = guijson.objects.length -1;
@@ -938,7 +850,7 @@
 		$setcolor.val(null);
 		$seth.val(null);
 		$setw.val(null);
-    };
+    }
 
 	function delClear() {
 		if(guijson.objects[currentlySelectedObject].type == "slider") {
@@ -1020,7 +932,6 @@
 	};
 
 	function del() {
-
 	    var json = jQuery.extend(true,{}, guijson);
 	    json.objects.splice(currentlySelectedObject,1);
 	    clear();
@@ -1029,18 +940,6 @@
 	    setborder();
 	    clearPropertiesFields();
     }
-
-    function changeText(v) {
-	    for(var n in listobj ) {
-	        if( v == listobj[n])
-            {
-                guijson.objects[n].value = v.value;
-                $setValue.val(guijson.objects[n].value);
-            }
-        }
-    }
-
-
 
 </script>
 

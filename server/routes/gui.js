@@ -44,6 +44,7 @@ router.get('/', function(req,res,next){
     var configFile = fs.readFileSync(private_path +'config.json');
     var configData = JSON.parse(configFile);
     var hostname = configData.hostname;
+    let currentGUIString = '{"objects":[{"type":"slider","name":"slider0","posx":30,"posy":30,"value":0,"color":"orange","height":130,"width":30}]}';
 
 	guifiles = fs.readdirSync(public_path + 'guifiles');
 	guifiles = guifiles.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
@@ -57,16 +58,10 @@ router.get('/', function(req,res,next){
 		// currentGUI
 	});
 
-	let currentGUIString = '{"objects":[{"type":"slider","name":"slider0","posx":30,"posy":30,"value":0,"color":"orange","height":130,"width":30}]}';
     currentGUI = JSON.parse(currentGUIString);
     console.log(currentGUIString);
-    // res.io.emit('guidraw', currentGUI);
 
-    setTimeout(function(){res.io.emit('guidraw', currentGUI);}, 4);
-
-
-	// res.render('gui', {guifiles: guifiles});
-
+    res.io.emit('guidraw', currentGUI);
 });
 
 
