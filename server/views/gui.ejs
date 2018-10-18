@@ -115,7 +115,7 @@
 
 	let guijson = { "objects" : [] };
 
-	let currentlySelectedObject = -1;
+    let currentlySelectedObject = -1;
 
 	let grid = false;
 	let playMode = false;
@@ -128,6 +128,7 @@
     modeSwitch.colorize("accent", "orange");
 
 	$(document).ready(function() {
+
 		//Drag border on the webpage
 		$('.GUIProperties').draggabilly();
 
@@ -312,11 +313,21 @@
 						.text(value));
 			});
 		});
-	})
+
+        // draw last saved
+        setTimeout(function () {
+            console.log('timedout!')
+            $.ajax({
+                method: "POST",
+                url: '/gui/guifiles',
+                data: {action: 'loadlastGUI'}
+            });
+        }, 1000)
+
+    })
 
 
 	/////////////////////////////////////// functions ////////////////////////////////////////////
-
 
 	function addObj(type) {
 		var n_obj= guijson.objects.length;
@@ -940,6 +951,7 @@
 	    setborder();
 	    clearPropertiesFields();
     }
+
 
 </script>
 
