@@ -315,18 +315,22 @@
 		});
 
         // draw last saved
-        // setTimeout(function () {
-            $.ajax({
-                method: "POST",
-                url: '/gui/guifiles',
-                data: {action: 'loadlastGUI'}
-            });
-        // }, 1000)
+
+        $.ajax({
+            method: "POST",
+            url: '/gui/guifiles',
+            data: {action: 'loadlastGUI'},
+            // success: function () {
+            //    setTimeout(function () {
+            //        modeSwitch.state = true;
+            //    },200)
+            // }
+        });
 
     })
 
 
-	/////////////////////////////////////// functions ////////////////////////////////////////////
+    /////////////////////////////////////// functions ////////////////////////////////////////////
 
 	function addObj(type) {
 		var n_obj= guijson.objects.length;
@@ -548,14 +552,14 @@
             listobj[n_obj].on('change', function (v) {
 
                 let value = 0;
-                
+
                 if (typeof v != 'boolean' ){
                     value = +(v.toFixed(2));
                 };
                 if (typeof v == 'boolean' && v == true){value = 1};
                 if (typeof v == 'boolean' && v == false){value = 0};
 
-                console.log(value);
+                // console.log(value);
 
                 guijson.objects[n_obj].value = value;
 
@@ -575,10 +579,6 @@
                 socket.emit('gui',  ['/'+hostname+'/gui/'+guijson.objects[n_obj].name, value]);
 
             })
-        }
-
-        else {
-
         }
 
             //Drag and click on handle
