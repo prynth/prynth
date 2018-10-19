@@ -148,7 +148,7 @@ function start() {
 	setTimeout(function(){app.emit('recallsensors');}, 4);
 }
 
-function getCpuUsage(cmd) {
+function execCommand(cmd) {
     try {
         return cp.execSync(cmd).toString();
     }
@@ -169,8 +169,8 @@ function getSystemInfo() {
 	} else {wirelessIP = 'unavailable';}
 	if (os.networkInterfaces().eth0) {ethernetIP = os.networkInterfaces().eth0[0].address;
 	} else {ethernetIP = 'unavailable';}
-    cpuSclang = getCpuUsage('ps --no-headers -C sclang -o %cpu');
-    cpuScsynth = getCpuUsage('ps --no-headers -C scsynth -o %cpu');
+    cpuSclang = execCommand('ps --no-headers -C sclang -o %cpu');
+    cpuScsynth = execCommand('ps --no-headers -C scsynth -o %cpu');
 	hostname = os.hostname();
 	freemem = (Math.round(os.freemem()/1000000));
 
