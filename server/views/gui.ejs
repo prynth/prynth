@@ -546,10 +546,21 @@
         if(guijson.objects[n_obj].type != 'label'){
             var hostname = '<%= hostname %>';
             listobj[n_obj].on('change', function (v) {
-                // console.log('old', n_obj);
-                guijson.objects[n_obj].value = v;
+
+                let value = 0;
+                
+                if (typeof v != 'boolean' ){
+                    value = +(v.toFixed(2));
+                };
+                if (typeof v == 'boolean' && v == true){value = 1};
+                if (typeof v == 'boolean' && v == false){value = 0};
+
+                console.log(value);
+
+                guijson.objects[n_obj].value = value;
+
                 //set in the control panel
-                $setValue.val(v);
+                $setValue.val(value);
                 $setName.val(guijson.objects[n_obj].name);
                 $setposx.val(guijson.objects[n_obj].posx);
                 $setposy.val(guijson.objects[n_obj].posy);
@@ -559,13 +570,9 @@
 
                 currentlySelectedObject = n_obj;
                 setborder();
-                if (typeof v == 'boolean' && v == true){v = 1};
-                if (typeof v == 'boolean' && v == false){v = 0};
-
-                console.log(v);
 
                 //Send value via socket for OSC relay
-                socket.emit('gui',  ['/'+hostname+'/gui/'+guijson.objects[n_obj].name, v]);
+                socket.emit('gui',  ['/'+hostname+'/gui/'+guijson.objects[n_obj].name, value]);
 
             })
         }
@@ -685,8 +692,10 @@
 	//Value
 	function setvalue(v) {
 		if(guijson.objects[currentlySelectedObject].type == 'slider' || guijson.objects[currentlySelectedObject].type == 'knob') {
-			listobj[currentlySelectedObject].value = parseInt(v.value);
-			guijson.objects[currentlySelectedObject].value = parseInt(v.value);
+		    let value = parseInt(v.value);
+			listobj[currentlySelectedObject].value = value;
+			guijson.objects[currentlySelectedObject].value = value;
+
 		}
 		if(guijson.objects[currentlySelectedObject].type == 'switch') {
 			if(v.value == "true" || v.value == "false") {
