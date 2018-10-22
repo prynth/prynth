@@ -69,9 +69,11 @@
 		<h2 class="PrynthPanelLabel">Add Objects</h2>
 		<button type ="button" id = "slider">Slider</button>
 		<button type ="button" id = "knob">Knob</button>
+		<button type = "button" id="number">Number</button>
 		<button type ="button" id = "switch">Switch</button>
 		<button type ="button" id="button">Button</button>
 		<button type = "button" id="label">Label</button>
+
 	</div>
 </div>
 </body>
@@ -84,6 +86,7 @@
 	var $switch = $('#switch');
 	var $button = $('#button');
 	var $label = $('#label');
+	var $number = $('#number'); //ADDED
 
 	var $setValue = $('#setValue');
 	var $setName = $('#setName');
@@ -106,6 +109,7 @@
 	var n_switch = 0;
 	var n_button = 0;
 	var n_label = 0;
+	var n_number = 0; //ADDED
 
 	var drag = [];
 	var draggie = [];
@@ -152,6 +156,10 @@
 
 		$label.click(function(){
 			addObj('label');
+		})
+
+		$number.click(function(){ //ADDED
+			addObj('number');
 		})
 
 		//file management buttons
@@ -244,6 +252,7 @@
 				e.preventDefault();
 				shortcuts("label");
 			}
+			//TODO: add shortcuts for additional objects
 		}
 		else {
 			e.preventDefault();
@@ -463,6 +472,40 @@ function addObj(type) {
 		//Increment
 		n_label ++;
 		break;
+
+		//Todo: number //ADDED
+		case "number" :
+			$('#canvas').append('<div class = "objdrag" id = "containerDiv" style = "display: inline-block; position: absolute"><div class = "handle"></div><div id ="obj"></div></div>');
+			document.getElementById("obj").setAttribute("id", "obj" + n_obj);
+			//slider creation
+			let wNumber = 50;
+			let hNumber = 30;
+			listobj[n_obj] = Nexus.Add.Number("obj" + n_obj, {
+				'size': [wNumber, hNumber],
+				'value': 0,
+				'min': -1,
+				'max': 1,
+				'step': 0.01
+			});
+			listobj[n_obj].colorize("accent", "orange");
+			listobj[n_obj].colorize("fill", "grey");
+			//json
+			let nameBoolNumber = NameConflict("number" + n_number);
+			if (nameBoolNumber) {
+				guijson.objects[n_obj].name = RandomStr();
+			} else {
+				guijson.objects[n_obj].name = "number" + n_number;
+			}
+			guijson.objects[n_obj].type = "number";
+			guijson.objects[n_obj].value = listobj[n_obj].min;
+			guijson.objects[n_obj].color = "orange";
+			guijson.objects[n_obj].height = hNumber;
+			guijson.objects[n_obj].width = wNumber;
+
+			//Increment
+			n_number++;
+			break;
+
 	}
 
 	//Panel set
@@ -663,7 +706,7 @@ function rename(v){
 
 //Value
 function setvalue(v) {
-	if(guijson.objects[currentlySelectedObject].type == 'slider' || guijson.objects[currentlySelectedObject].type == 'knob') {
+	if(guijson.objects[currentlySelectedObject].type == 'slider' || guijson.objects[currentlySelectedObject].type == 'knob' || guijson.objects[currentlySelectedObject].type == 'number') { //ADDED
 		let value = parseInt(v.value);
 		listobj[currentlySelectedObject].value = value;
 		guijson.objects[currentlySelectedObject].value = value;
@@ -692,6 +735,7 @@ function setvalue(v) {
 		listobj[currentlySelectedObject].innerHTML = v.value;
 		guijson.objects[currentlySelectedObject].value = v.value;
 	}
+
 }
 
 //setborder
@@ -796,7 +840,7 @@ function setposy(v) {
 //#region set stuff
 
 
-//Shortcuts
+//Shortcuts todo: add additional shortcuts
 function shortcuts(type){
 	switch (type) {
 		case "slider" :
@@ -849,6 +893,7 @@ function delClear() {
 	if(guijson.objects[currentlySelectedObject].type == "button") {n_button --}
 	if(guijson.objects[currentlySelectedObject].type == "knob") {n_knob--}
 	if(guijson.objects[currentlySelectedObject].type == 'label') {n_label--}
+	if(guijson.objects[currentlySelectedObject].type == 'number') {n_number--} //ADDED
 
 	if(guijson.objects[currentlySelectedObject].type != "label") {
 		listobj[currentlySelectedObject].destroy();
@@ -886,6 +931,9 @@ function draw(input){
 			break;
 			case "label" :
 			addObj("label");
+			break;
+			case "number" : //ADDED
+			addObj("number");
 			break;
 		}
 		guijson.objects[index] = loadedJson.objects[index];
