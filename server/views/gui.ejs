@@ -17,31 +17,14 @@
 <div id = "canvas" style = "width: 70%;"></div>
 
 <div id = "controPanel" style="float:right; display: inline-block">
-	<div class = "PrynthPanel SettingsPanel">
-		<span class="PrynthPanelLabel" style="font-size: 20px;">  <b>Edit/Play</b> </span>
-		<span id="modeSwitch" style="float: right"></span>
+	<div style="text-align: right;">
+		<span class="PrynthPanelLabel" style="font-size: 20px"><b>Edit/Play</b></span>
+		<span id="modeSwitch"></span>
 	</div>
 
-	<div class = "PrynthPanel SettingsPanel" id="options">
-		<h2 class="PrynthPanelLabel">Options</h2>
-		<button type = "button" id = "enablegridbutton">Enable Grid</button>
-		<button type = "button" id = "clear" >Clear</button>
-		<button type = "button" id = "delete">Delete object</button>
-	</div>
+	<!--<div class = "PrynthPanel SettingsPanel" id="options">-->
+	<!--</div>-->
 
-	<div class="PrynthPanel" id = "files">
-		<h2 class="PrynthPanelLabel">GUI Files</h2>
-		<select id="guifiles" multiple style="height:120px">
-			<% for (var i = 0; i < guifiles.length; i++) { %>
-				<option value="<%=i%>"><%=guifiles[i]%>
-					<% } %>
-				</select>
-				<br>
-
-				<button type="button" id="saveguifilebutton">Save</button>
-				<button type="button" id="loadguifilebutton">Load</button>
-				<button type="button" id="deleteguifilebutton">Delete</button>
-	</div>
 
 	<div class = "GUIProperties PrynthPanel SettingsPanel" id = "GUIProperties">
 		<h2 class="PrynthPanelLabel" id="GUIPropertiesLabelText" >Properties</h2>
@@ -73,8 +56,28 @@
 		<button type ="button" id = "switch">Switch</button>
 		<button type ="button" id="button">Button</button>
 		<button type = "button" id="label">Label</button>
-
+		<h2 class="PrynthPanelLabel">Delete Objects</h2>
+		<button type = "button" id = "delete">Delete Selected</button>
+		<button type = "button" id = "clear" >Clear All</button>
+		<h2 class="PrynthPanelLabel">Options</h2>
+		<button type = "button" id = "enablegridbutton">Enable Grid</button>
 	</div>
+
+	<div class="PrynthPanel" id = "files">
+		<h2 class="PrynthPanelLabel">GUI Files</h2>
+		<select id="guifiles" multiple style="height:80px">
+			<% for (var i = 0; i < guifiles.length; i++) { %>
+			<option value="<%=i%>"><%=guifiles[i]%>
+				<% } %>
+		</select>
+		<br>
+
+		<button type="button" id="saveguifilebutton">Save</button>
+		<button type="button" id="loadguifilebutton">Load</button>
+		<button type="button" id="deleteguifilebutton">Delete</button>
+	</div>
+
+
 </div>
 </body>
 
@@ -191,7 +194,8 @@
 
 
 	$clearbutton.click(function() {
-		clear();
+		let r = confirm("Do you want to clear the whole canvas?");
+		if (r == true) {clear();};
 	})
 
 	//Get mouse position
@@ -649,7 +653,7 @@ modeSwitch.on('change',function(v) {
 
 		//hide divs
 		$('#create').hide();
-		$('#options').hide();
+		// $('#options').hide();
 		$('#files').hide();
 		$('#GUIProperties').hide();
 
@@ -663,7 +667,7 @@ modeSwitch.on('change',function(v) {
 
 		//show divs
 		$('#create').show();
-		$('#options').show();
+		// $('#options').show();
 		$('#files').show();
 		$('#GUIProperties').show();
 
@@ -897,11 +901,12 @@ function clearPropertiesFields() {
 
 function delClear() {
 	if(guijson.objects[currentlySelectedObject].type == "slider") {n_slider --}
-	if(guijson.objects[currentlySelectedObject].type == "switch") {n_switch --}
-	if(guijson.objects[currentlySelectedObject].type == "button") {n_button --}
 	if(guijson.objects[currentlySelectedObject].type == "knob") {n_knob--}
-	if(guijson.objects[currentlySelectedObject].type == 'label') {n_label--}
 	if(guijson.objects[currentlySelectedObject].type == 'number') {n_number--} //ADDED
+	if(guijson.objects[currentlySelectedObject].type == "button") {n_button --}
+	if(guijson.objects[currentlySelectedObject].type == "switch") {n_switch --}
+	if(guijson.objects[currentlySelectedObject].type == 'label') {n_label--}
+
 
 	if(guijson.objects[currentlySelectedObject].type != "label") {
 		listobj[currentlySelectedObject].destroy();

@@ -13,5 +13,5 @@ fork{
 
 	OSCdef(\test, {|msg, time, addr, recvPort|
 		~testsynth.set(\freq, msg[1].linlin(0, 1, 100, 500));
-	}, '/raspberrypi/0/0', n);
+	}, '/raspberrypi/0/0');
 };
