@@ -1,0 +1,243 @@
+<!doctype html><html lang='en'><head><title>Writing Primitives | SuperCollider 3.9.3 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Writing Primitives';
+var scdoc_sc_version = '3.9.3';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC();prettyPrint()'>
+<div id='toc'>
+<div id='toctitle'>Writing Primitives:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Example'>Example</a></li>
+<ul class='toc'><li class='toc2'><a href='#SuperCollider%20code'>SuperCollider code</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Define%20your%20primitive'>Define your primitive</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Write%20your%20primitive'>Write your primitive</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Guidelines'>Guidelines</a></li>
+<ul class='toc'><li class='toc2'><a href='#Creating%20objects%20in%20primitives,%20and%20GC%20safety'>Creating objects in primitives, and GC safety</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Type%20safety'>Type safety</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#FAQ'>FAQ</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Guides</span>
+ | <span id='categories'><a href='./../Browse.html#Internals'>Internals</a></span>
+</div><h1>Writing Primitives</h1>
+<div id='summary'>Writing Primitives</div>
+</div>
+<div class='subheader'>
+</div>
+
+<p>Although much of SuperCollider's functionality is implemented in the SuperCollider language itself, for reasons of efficiency, some functionality is implemented in 'back end' C++ functions called 'primitives'. This document provides guidance to members of the SC development community on writing primitives.<h2><a class='anchor' name='Example'>Example</a></h2>
+<h3><a class='anchor' name='SuperCollider%20code'>SuperCollider code</a></h3>
+
+<p>Primitive calls are preceded with an underscore, so for example _myPrimitiveName. Here is an example call to a primitive in an SC class:<pre class='code prettyprint lang-sc'>Cocoa {
+    prGetPathsDialog { arg returnSlot;
+        _Cocoa_GetPathsDialog
+        ^this.primitiveFailed
+    }
+}</pre>
+
+<p>In the example above the primitive is dispatched at _Cocoa_GetPathsDialog. If it is successful, it will return without executing the code below that. Primitive functions (see below) return an integer, which should be one of the values defined in the file PyrErrors.h:<pre>enum { // primitive errors
+    errReturn = -1,    // not really an error.. primitive executed a non-local return
+    errNone,
+    errFailed = 5000,
+    errBadPrimitive,
+    errWrongType,
+    errIndexNotAnInteger,
+    errIndexOutOfRange,
+    errImmutableObject,
+    errNotAnIndexableObject,
+    errStackOverflow,
+    errOutOfMemory,
+    errCantCallOS,
+    errException,
+    
+    errPropertyNotFound = 6000,
+    
+    errLastError
+};</pre>
+<p>If your primitive can return any value besides <code class='code prettyprint lang-sc'>errNone</code> then you will need to provide handling code after the primitive call. In most cases this will be <code class='code prettyprint lang-sc'>^this.primitiveFailed</code>. This will throw an Error giving the user information about what went wrong.
+<p>In some cases, you may wish to execute fallback SC code instead of throwing an Error. This can be useful in cases where for example a primitive provides an optimised version of a method which is not usable in all instances. Here is an example of how this can be done:<pre class='code prettyprint lang-sc'>flop {
+    _ArrayMultiChannelExpand
+    ^super.flop // this gets executed if the primitive fails
+}</pre>
+
+<p>Note that returning anything besides errNone will result in executing the SC method <em>ignoring</em> the primitive call. For this reason, if you need to do some preparatory work in SC before calling the primitive, it is best practice to do this in a separate method to avoid duplication. For example:<pre class='code prettyprint lang-sc'>// do initial work here
+openUDPPort {|portNum|
+    var result;
+    if(openPorts.includes(portNum), {^true});
+    result = this.prOpenUDPPort(portNum);
+    if(result, { openPorts = openPorts.add(portNum); });
+    ^result;
+}
+
+// this method only calls the primitive, and throws any primitive errors
+prOpenUDPPort {|portNum|
+    _OpenUDPPort
+    ^this.primitiveFailed;
+}</pre>
+<h3><a class='anchor' name='Define%20your%20primitive'>Define your primitive</a></h3>
+
+<p>In your primitive source code define the primitive:<pre>void initCocoaFilePrimitives()
+{
+    int base, index;
+
+    base = nextPrimitiveIndex();
+    index = 0;
+
+    definePrimitive(base, index++, "_Cocoa_GetPathsDialog", prGetPathsDialog, 2, 0);
+    // further primitives can be laid in...
+    //definePrimitive(base, index++, "_Cocoa_SaveAsPlist", prSaveAsPlist, 3, 0);
+}</pre>
+<p>Here is the prototype for definePrimitive:<pre>int definePrimitive(int base, int index, char *name, PrimitiveHandler handler, int numArgs, int varArgs);</pre>
+<p>The numArgs is the number of arguments that were passed into the SuperCollider method that calls the primitive, plus one to include the receiver which is passed in as the first argument.
+<p>(TODO varArgs ...)<h3><a class='anchor' name='Write%20your%20primitive'>Write your primitive</a></h3>
+
+<p><code>g-&gt;sp</code> is the top of the stack and is the last argument pushed. <code>g-&gt;sp - inNumArgsPushed + 1</code> is the receiver and where the result goes.
+<p>In this example, the numArgsPushed will be 2 (as specified in definePrimitive)<pre>int prGetPathsDialog(struct VMGlobals *g, int numArgsPushed)
+{
+    if (!g-&gt;canCallOS) return errCantCallOS; //if its deferred, does this matter ?
+
+    PyrSlot *receiver = g-&gt;sp - 1; // an instance of Cocoa
+    PyrSlot *array = g-&gt;sp; // an array
+
+    // ...  the body
+
+    return errNone;
+}</pre>
+<p>This example does not set the receiver, so the primitive returns the original receiver unchanged (still an instance of Cocoa). Or set the object at <code>receiver</code> which again is at <code>(g-&gt;sp - numArgsPushed + 1)</code>.<h2><a class='anchor' name='Guidelines'>Guidelines</a></h2>
+<h3><a class='anchor' name='Creating%20objects%20in%20primitives,%20and%20GC%20safety'>Creating objects in primitives, and GC safety</a></h3>
+
+<p>SuperCollider uses a garbage collector to manage memory allocation and collection where needed.<a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a>  In order to meet the requirements of good real time performance, a small and bounded amount of garbage collection may be triggered each time an object is created. This consists of incrementally examining all objects and determining if they are reachable (see below) or not. Unreachable objects may have their memory reallocated to new objects.
+<p>The following points are important to understanding how the GC works, and how to avoid bugs:<ul>
+<li>An object is <em>reachable</em> if it has<ul>
+<li>been stored on the stack, or<li>been stored in an sclang variable, or a class variable, or<li>been stored in another object that fulfills one of the above criteria</ul>
+
+<p><li>The GC marks objects as one of the following:<ul>
+<li><strong>White</strong> - To be examined<li><strong>Grey</strong> - Reachable, but containing objects which themselves have not been fully inspected and marked grey or black<li><strong>Black</strong> - Reachable, with any contained objects all fully inspected<li><strong>Free</strong> - Unreachable; memory is available for reuse</ul>
+
+<p><li>If triggered, garbage collection will happen <em>before</em> allocating the new object.<li>The newly created object will be marked as <strong>white</strong> (to be examined).</ul>
+
+<p>SC provides a number of functions which create new objects. These include <code>instantiateObject</code>, <code>newPyrObject</code>, <code>newPyrString</code>, and <code>newPyrArray</code>. Before any calls to such functions it is crucial that all previously created objects have been made reachable. If this is not done, it is possible that such objects will be marked as <strong>free</strong>. Since a freed object's memory may not be immediately reused, problems may not arise at the time your primitive is called, leading to extremely hard to find bugs.
+<p>Alternatively, most object creation functions include a <code>bool runGC</code> argument. If set to false, this will guarantee that the garbage collector does not run on this allocation. While not ideal, as it is best that GC activity is amortised to the extent possible, this option is safe, since the status of any previously created objects will not be changed.
+<p>The following two examples are both safe:<dl>
+<dt>Make the newly created object reachable:<dd><pre>PyrSlot* arg = g-&gt;sp;
+PyrObject *array1 = newPyrArray(g-&gt;gc, 2, 0, true); // runGC = true
+SetObject(arg, array1); // make the array reachable on the stack
+PyrObject *array2 = newPyrArray(g-&gt;gc, 2, 0, true);
+...</pre><dt>Set <code>runGC</code> to false:<dd><pre>PyrSlot* arg = g-&gt;sp;
+// runGC = true
+PyrObject *array1 = newPyrArray(g-&gt;gc, 2, 0, true);
+// runGC = false so GC is not triggered, and array1 can't be freed
+PyrObject *array2 = newPyrArray(g-&gt;gc, 2, 0, false);
+...</pre></dl>
+Care must be taken when writing utility functions which themselves create new objects, since this may happen somewhat opaquely and the calling context may not be known. Functions which may call themselves recursively also need special attention. In such cases setting <code>runGC</code> to false may be the safest option, or including a <code>runGC</code> arg so that GC behaviour is explicit. <code>MsgToInt8Array</code> is one example of such a function.<pre>static PyrInt8Array* MsgToInt8Array ( sc_msg_iter&amp; msg, bool runGC )
+{
+    int size = msg.getbsize() ;
+    VMGlobals *g = gMainVMGlobals ;
+    PyrInt8Array *obj = newPyrInt8Array ( g-&gt;gc , size , 0 , runGC ) ;
+    obj-&gt;size = size ;
+    msg.getb ( (char *)obj-&gt;b , obj-&gt;size ) ;
+    return obj ;
+}</pre>
+<p>Setting an object into another object's internal slot (e.g. with <code>SetObject</code> or <code>slotCopy</code>) also requires care. If the parent object is <em>black</em> (reachable and examined), the GC needs to be notified of the change. For this reason, you must usually call <code>g-&gt;gc-&gt;GCWrite(parentObject, childObject)</code> after using one of these methods. The <em>only</em> exceptions to this rule are cases in which the parent object is known to be white (unexamined). This will be true if:<ul>
+<li>It is the last created object, or<li>Any subsequently created objects were allocated with <code>runGC = false</code> (i.e. the GC cannot have run in the interim), <em>and</em><li>It has not had GCWrite called upon it</ul>
+
+<p>The following two examples are both safe:<dl>
+<dt>Run GCWrite as parent may not be white:<dd><pre>PyrSlot* arg = g-&gt;sp;
+PyrObject *array = newPyrArray(g-&gt;gc, 2, 0, true); // runGC = true
+SetObject(arg, array); // make the array reachable on the stack
+PyrObject *str = newPyrString(g-&gt;gc, "Hello", 0, true); // runGC = true
+SetObject(array-&gt;slots, str);
+// we must call GCWrite, since array may not be white
+g-&gt;gc-&gt;GCWrite(array, str);
+...</pre><dt>We know that parent <em>is</em> white:<dd><pre>PyrObject *array = newPyrArray(g-&gt;gc, 2, 0, true); // runGC = true
+PyrObject *str = newPyrString(g-&gt;gc, "Hello", 0, false); // runGC = false
+SetObject(array-&gt;slots, str);
+// we don't need GCWrite, since array must still be white
+...</pre></dl>
+If you <em>know</em> that the child object is still white, then you can use <code>GCWriteNew</code> instead of <code>GCWrite</code>. The child object will still be white if the GC has not been triggered since it was created, and you have not previously called GCWrite on it.
+<p>If placing an object inside another has modified its size (e.g. adding an object to an array), you must correctly adjust its size by <code>parent-&gt;size = newSize</code>. Both this and calling GCWrite (if necessary) should be done before any further object allocations. It is best practice to do them immediately if possible.<dl>
+<dt>This is safe:<dd><pre>PyrSlot* arg = g-&gt;sp;
+int size = 10;
+PyrObject *array = newPyrArray(g-&gt;gc, size, 0, true); // runGC = true
+SetObject(arg, array);
+for(i=0; i&lt;numLists; ++i) {
+  PyrObject *str = newPyrString(g-&gt;gc, "Hello", 0, true); // runGC = true
+  SetObject(array-&gt;slots + i, str);
+  // str must still be white so we can use GCWriteNew
+  g-&gt;gc-&gt;GCWriteNew(array, str);
+  // increment size immediately
+  //so it is accurate on next allocation
+  array-&gt;size++;
+}
+...</pre><dt>This is <em>not</em> safe:<dd><pre>PyrSlot* arg = g-&gt;sp;
+int size = 10;
+PyrObject *array = newPyrArray(g-&gt;gc, size, 0, true); // runGC = true
+// setting size to final value here means
+// it is *not* accurate on next allocation below
+array-&gt;size = size;
+SetObject(arg, array);
+for(i=0; i&lt;numLists; ++i) {
+  PyrObject *str = newPyrString(g-&gt;gc, "Hello", 0, true); // runGC = true
+  SetObject(array-&gt;slots + i, str);
+  g-&gt;gc-&gt;GCWriteNew(array, str);
+}
+...</pre></dl>
+It is good practice to avoid creating objects in a primitive at all where possible. Primitives are much simpler to write and debug if you pass in an object that you create in SC code and fill in its slots in the primitive.<div class='note'><span class='notelabel'>NOTE:</span> To summarize, before calling any function that might allocate (like <code>newPyr*</code>) you <strong>must</strong> make sure these criteria are fulfilled:<ol>
+<li>All objects previously created must be reachable, which means they must exist<ul>
+<li>on the <code>g-&gt;sp</code> stack<li>or, in a lang-side variable or class variable.<li>or, in a slot of another object that fulfils these criteria.</ul>
+
+<p><li>If any object ( <code>child</code> ) was put inside a slot of another object ( <code>parent</code> ), you must have<ul>
+<li>called <code>g-&gt;gc-&gt;GCWrite(parent, child)</code> afterwards unless you <strong>know</strong> that the parent is still white (unexamined), or GCWriteNew if you also <strong>know</strong> that the child is white<li>and, set <code>parent-&gt;size</code> to the correct value</ul>
+</ol>
+</div>
+<p>Here's an example of how a complete primitive might look:<pre>int prMyPrimitive(struct VMGlobals* g, int numArgsPushed)
+{
+    PyrSlot* arg = g-&gt;sp;
+    float number;
+    int err;
+
+    err = slotFloatVal(arg, &amp;number); // get one float argument
+    if(err) return err;
+
+    PyrObject *array = newPyrArray(g-&gt;gc, 2, 0, true);
+    // array-&gt;size = 0 at creation; max size is 2
+    SetObject(arg, array); // return value
+
+    // NOTE: array is now reachable on the stack, since arg refers to g-&gt;sp
+
+    PyrObject *str1 = newPyrString(g-&gt;gc, "Hello", 0, true);
+    SetObject(array-&gt;slots, str1);
+    array-&gt;size++; // immediately increment array's size
+    // array may not be white, so call GCWrite
+    // but we know str is white, so can use GCWriteNew instead
+    g-&gt;gc-&gt;GCWriteNew(array, str1);
+
+    // NOTE: str1 is now reachable in array, which is reachable on the stack
+
+    SetFloat(array-&gt;slots+1, number);
+    array-&gt;size++;
+    // A float is not an allocated object, so no need for anything special here
+
+    return errNone;
+}</pre>
+<p>If we would have put <code>SetObject(arg, array);</code> at the end of this function, <code>array</code> would <strong>not</strong> have been reachable at the call to <code>newPyrString</code>, and thus may have been marked <code>free</code>, resulting in a hard to track down bug.<div class='warning'><span class='warninglabel'>WARNING:</span> Do not store pointers to PyrObjects in C/C++ variables unless you can absolutely guarantee that they cannot be garbage collected. For example the File and SCWindow classes do this by storing the objects in an array in a classvar. The object has to stay in that array until no C object refers to it. <strong>Failing to observe the above two points can result in very hard to find bugs.</strong></div><h3><a class='anchor' name='Type%20safety'>Type safety</a></h3>
+
+<p>Since SC is dynamically typed, you cannot rely on any of the arguments being of the class you expect. You should check every argument to make sure it is the correct type.
+<p>One way to do this is by using <code>isKindOfSlot</code>. If you just want a numeric value, you can use <code>slotIntVal</code>, <code>slotFloatVal</code>, or <code>slotDoubleVal</code> which will return an error if the value is not a numeric type. Similarly there is <code>slotStringVal</code>.
+<p>It is safe to assume that the receiver will be of the correct type because this is ensured by the method dispatch mechanism.<h2><a class='anchor' name='FAQ'>FAQ</a></h2>
+<dl>
+<dt>Now where do i put the thing to return it?<dd>into <code>g-&gt;sp - inNumArgsPushed + 1</code> (In most primitives this is referred to by the variable <code>a</code>).</dl>
+
+<p><div class='footnotes'>
+<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - Some SC language objects, such as numbers, boolean types, chars, and symbols are stored directly within a PyrSlot, and do not require allocation. (Symbols are a special case: A reference to a location in the global symbol table is stored, where each defined symbol is permanently stored.)</div></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/WritingPrimitives.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/WritingPrimitives.schelp</a><br>link::Guides/WritingPrimitives::<br></div></div></body></html>

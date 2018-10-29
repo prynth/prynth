@@ -1,0 +1,124 @@
+<!doctype html><html lang='en'><head><title>if | SuperCollider 3.9.3 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'if';
+var scdoc_sc_version = '3.9.3';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC();prettyPrint()'>
+<div id='toc'>
+<div id='toctitle'>if:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc3'><a href='#.if'>if</a> </li>
+<li class='toc1'><a href='#example'>example</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#optimization'>optimization</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Reference</span>
+ | <span id='categories'><a href='./../Browse.html#Core'>Core</a> | <a href='./../Browse.html#Common methods'>Common methods</a></span>
+</div><h1>if</h1>
+<div id='summary'>conditional execution</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Reference/Control-Structures.html">Control Structures</a></div>
+</div>
+<h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='if' href='./../Overviews/Methods.html#if'>if</a></h3>
+<div class='method'>
+<p></div><h2><a class='anchor' name='example'>example</a></h2>
+<pre class='code prettyprint lang-sc'>if ( [false, true].choose,                // Boolean expression (chooses one at random)
+    { "expression was true".postln },    // true function
+    { "expression was false".postln }    // false function
+)
+
+(
+var a = 1, z;
+z = if (a &lt; 5, { 100 },{ 200 });
+z.postln;
+)</pre>
+
+<p>UGens can also use if
+<p>the condition ugen is 0 / 1<pre class='code prettyprint lang-sc'>(
+    {
+        if( LFNoise1.kr(1.0,0.5,0.5) , SinOsc.ar, Saw.ar )
+    }.play
+)</pre>
+<h2><a class='anchor' name='optimization'>optimization</a></h2>
+
+<p>the functions will be inlined, which plucks the code from the functions and uses a more efficient jump statement.<pre class='code prettyprint lang-sc'>{
+    if( 6 == 9,{
+        "hello".postln;
+    },{
+        "hello".postln;
+    })
+}.def.dumpByteCodes
+
+BYTECODES: (18)
+  0   FE 06    PushPosInt 6
+  2   FE 09    PushPosInt 9
+  4   E6       SendSpecialBinaryArithMsg '=='
+  5   F8 00 06 JumpIfFalse 6  (14)
+  8   42       PushLiteral "hello"
+  9   A1 00    SendMsg 'postln'
+ 11   FC 00 03 JumpFwd 3  (17)
+ 14   41       PushLiteral "hello"
+ 15   A1 00    SendMsg 'postln'
+ 17   F2       BlockReturn
+a FunctionDef in closed FunctionDef</pre>
+
+<p>failure to inline due to variable declarations<pre class='code prettyprint lang-sc'>{
+
+    if( 6 == 9,{
+        var notHere;
+        "hello".postln;
+    },{
+        "hello".postln;
+    })
+
+}.def.dumpByteCodes
+
+WARNING: FunctionDef contains variable declarations and so will not be inlined.
+   in file 'selected text'
+   line 4 char 14 :
+          var notHere;•
+          "hello".postln;
+-----------------------------------
+BYTECODES: (12)
+  0   FE 06    PushPosInt 6
+  2   FE 09    PushPosInt 9
+  4   E6       SendSpecialBinaryArithMsg '=='
+  5   04 00    PushLiteralX instance of FunctionDef in closed FunctionDef
+  7   04 01    PushLiteralX instance of FunctionDef in closed FunctionDef
+  9   C3 0B    SendSpecialMsg 'if'
+ 11   F2       BlockReturn
+a FunctionDef in closed FunctionDef</pre>
+<pre class='code prettyprint lang-sc'>{
+    if( 6 == 9,{
+        "hello".postln;
+    },{
+        "hello".postln;
+    })
+}.def.dumpByteCodes
+
+BYTECODES: (18)
+  0   FE 06    PushPosInt 6
+  2   FE 09    PushPosInt 9
+  4   E6       SendSpecialBinaryArithMsg '=='
+  5   F8 00 06 JumpIfFalse 6  (14)
+  8   42       PushLiteral "hello"
+  9   A1 00    SendMsg 'postln'
+ 11   FC 00 03 JumpFwd 3  (17)
+ 14   41       PushLiteral "hello"
+ 15   A1 00    SendMsg 'postln'
+ 17   F2       BlockReturn
+a FunctionDef in closed FunctionDef</pre>
+
+<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/if.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/if.schelp</a><br>link::Reference/if::<br></div></div></body></html>

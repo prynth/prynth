@@ -1,36 +1,42 @@
-<html><head><title>Pattern Guide 06d: Parallel Patterns</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide 06d: Parallel Patterns | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = 'Pattern Guide 06d: Parallel Patterns';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Pattern Guide 06d: Parallel Patterns:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Parallelizing%20event%20patterns'>Parallelizing event patterns</a></li>
+<ul class='toc'><li class='toc2'><a href='#Dynamic%20parallelizing'>Dynamic parallelizing</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/A-PRACTICAL-GUIDE</div>
-<div id='categories'><a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>Streams-Patterns-Events>A-Practical-Guide</a></div>
-<h1>Pattern Guide 06d: Parallel Patterns</h1>
+<div id='label'>
+<span id='folder'>Tutorials/A-Practical-Guide</span>
+ | <span id='categories'><a href='./../../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>A-Practical-Guide</a></span>
+</div><h1>Pattern Guide 06d: Parallel Patterns</h1>
 <div id='summary'>Running multiple event patterns simultaneously</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_06c_Composition_of_Patterns.html">Pattern Guide 06c: Composition of Patterns</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_06e_Language_Control.html">Pattern Guide 06e: Language Control</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Parallelizing event patterns'>Parallelizing event patterns</a></li>
-<ul class='toc'><li class='toc2'><a href='#Dynamic parallelizing'>Dynamic parallelizing</a></li>
-<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Parallelizing event patterns'>Parallelizing event patterns</a></h2>
+<h2><a class='anchor' name='Parallelizing%20event%20patterns'>Parallelizing event patterns</a></h2>
 
 <p>There are a couple of different ways to have several patterns playing at the same time. The most obvious is to play them separately. The patterns' events get scheduled independently on their clock(s) and run concurrently. None of these patterns need to have any knowledge of the others. One advantage of this approach is that the patterns can be stopped and started independently.
 <p>The other is to combine them into a parallel stream. The result is a single pattern object that can be played or stopped only as one unit. Some degree of interactive control is lost, but there are times when merging several patterns is necessary -- for instance, converting a pattern into a Score object for NRT rendering.<dl>
 <dt><code class='code prettyprint lang-sc'>Ppar(list, repeats)</code><dd>Start each of the event patterns in the <code class='code prettyprint lang-sc'>list</code> at the same time. When the last one finishes, the <a href="./../../Classes/Ppar.html">Ppar</a> also stops. If <code class='code prettyprint lang-sc'>repeats &gt; 1</code>, all the subpatterns start over again from the beginning.<dt><code class='code prettyprint lang-sc'>Ptpar(list, repeats)</code><dd>Here, the list consists of <code class='code prettyprint lang-sc'>[timeOffset0, pattern0, timeOffset1, pattern1...]</code> . Each pattern starts after the number of beats given as its time offset. The patterns can start at different times relative to each other.<dt><code class='code prettyprint lang-sc'>Pgpar(list, repeats)</code><dd>Like Ppar, but it creates a separate group for each subpattern.<dt><code class='code prettyprint lang-sc'>Pgtpar(list, repeats)</code><dd>This is like Ptpar with separate groups for the subpatterns.</dl>
 
-<p>An excellent example of <a href="./../../Classes/Ppar.html">Ppar</a> and <a href="./../../Classes/Pseq.html">Pseq</a> used together to structure an entire piece (Kraftwerk's "Spacelab") can be found in examples/pieces/spacelab.scd.<h3><a class='anchor' name='Dynamic parallelizing'>Dynamic parallelizing</a></h3>
+<p>An excellent example of <a href="./../../Classes/Ppar.html">Ppar</a> and <a href="./../../Classes/Pseq.html">Pseq</a> used together to structure an entire piece (Kraftwerk's "Spacelab") can be found in examples/pieces/spacelab.scd.<h3><a class='anchor' name='Dynamic%20parallelizing'>Dynamic parallelizing</a></h3>
 
 <p>Ppar and its cousins are good for a fixed set of parallel patterns -- that is, you need to know in advance how many patterns will be parallelized. Once the parallel pattern starts, there is no way to add more streams to it. To keep adding streams, use <a href="./../../Classes/Pspawner.html">Pspawner</a> and <a href="./../../Classes/Pspawn.html">Pspawn</a>. For the purpose of this overview, some basic features will be illustrated in a couple of simple examples. These classes have more capabilities; refer to their help files for specifics.<dl>
 <dt><code class='code prettyprint lang-sc'>Pspawner(routineFunc)</code><dd>The function is run in a Routine. A Spawner object gets passed into this Routine, and this object is used to add or remove streams to/from the parallel stream. New patterns can be added in sequence or in parallel.<dt><code class='code prettyprint lang-sc'>Pspawn(pattern, spawnProtoEvent)</code><dd>Supports most of the features of Pspawner, but uses a pattern to control the Spawner object instead of a Routine function.
@@ -78,4 +84,4 @@ p.stop;</pre>
 </dl>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_06c_Composition_of_Patterns.html">Pattern Guide 06c: Composition of Patterns</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_06e_Language_Control.html">Pattern Guide 06e: Language Control</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06d_Parallel_Patterns.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06d_Parallel_Patterns.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_06d_Parallel_Patterns::<br>sc version: 3.8dev</div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_06e_Language_Control.html">Pattern Guide 06e: Language Control</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_06d_Parallel_Patterns.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_06d_Parallel_Patterns.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_06d_Parallel_Patterns::<br></div></div></body></html>

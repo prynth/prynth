@@ -1,170 +1,238 @@
-<html><head><title>Internal Snooping</title>
+<!doctype html><html lang='en'><head><title>Internal Snooping (Introspection) | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Internal Snooping (Introspection)';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Internal Snooping (Introspection):</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Class%20Definitions,%20Implementations,%20and%20References'>Class Definitions, Implementations, and References</a></li>
+<ul class='toc'><li class='toc2'><a href='#Look%20up%20Implementation'>Look up Implementation</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Look%20up%20References'>Look up References</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Graphical%20Class%20browser'>Graphical Class browser</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Snooping%20in%20Classes'>Snooping in Classes</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Snooping%20in%20Methods'>Snooping in Methods</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Snooping%20in%20GUI%20Windows'>Snooping in GUI Windows</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Snooping%20in%20SynthDefs'>Snooping in SynthDefs</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Snooping%20on%20the%20Server'>Snooping on the Server</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Snooping%20in%20the%20Interpreter'>Snooping in the Interpreter</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider GUIDES</div>
-<div id='categories'><a href='./../Browse.html#Debugging'>Debugging</a></div>
-<h1>Internal Snooping</h1>
+<div id='label'>
+<span id='folder'>Guides</span>
+ | <span id='categories'><a href='./../Browse.html#Debugging'>Debugging</a> | <a href='./../Browse.html#Internals'>Internals</a></span>
+</div><h1>Internal Snooping (Introspection)</h1>
 <div id='summary'>Snooping around SuperCollider</div>
 </div>
 <div class='subheader'>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Class Definitions, Implementations, and References'>Class Definitions, Implementations, and References</a></li>
-<ul class='toc'><li class='toc2'><a href='#Snooping in Classes'>Snooping in Classes</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Snooping in Methods'>Snooping in Methods</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Snooping in Windows'>Snooping in Windows</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Snooping in SynthDefs'>Snooping in SynthDefs</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Snooping in the Interpreter'>Snooping in the Interpreter</a></li>
-<ul class='toc'></ul></ul></ul></div>
-<p>You can inspect much of the internal structure of the class library and other data structures. This can often be useful for research and debugging purposes.<div class='warning'><span class='warninglabel'>WARNING:</span> The keyboard shortcuts mentioned here only applies to the Mac SC.app. This document should probably be updated.</div><h2><a class='anchor' name='Class Definitions, Implementations, and References'>Class Definitions, Implementations, and References</a></h2>
 
-<p>Selecting the name of any Class (e.g. Object) and typing cmd-j will open its class definition file.<div class='note'><span class='notelabel'>NOTE:</span> Any keypresses that open files identify the files using SuperCollider strings, which may contain only ASCII characters up to code point 127. If any part of the path to your SuperCollider installation contains character codes greater than 127 (such as the old Mac convention of identifying program folders with option-F), automatic file opening will fail.</div>
-<p>Selecting the name of any method (e.g. play) and typing cmd-y will open a window showing all implementations of that method and their arguments. Selecting one of those classes and methods (e.g. Sample:play) and typing cmd-j will open the class definition at that method. (Note that cmd-y only shows implementations, and does not indicate inheritance).
-<p>Selecting any text (e.g. Window or asStream) and typing shift-cmd-y will open a window showing all references to the selected text, i.e. each place it is used within the class library. (This will not find methods calls compiled with special byte codes like 'value'.)
+<p>You can inspect much of the internal structure of the class library and other data structures. This can be useful for research and debugging purposes.<div class='note'><span class='notelabel'>NOTE:</span> The keyboard shortcuts mentioned here only apply to the standard SuperCollider IDE.</div><h2><a class='anchor' name='Class%20Definitions,%20Implementations,%20and%20References'>Class Definitions, Implementations, and References</a></h2>
+<h3><a class='anchor' name='Look%20up%20Implementation'>Look up Implementation</a></h3>
+
+<p>Selecting the name of any method (e.g. play) and then the menu item <code>Language&gt;Look up Implementation</code> will open a window showing all implementations of that method and their arguments. Selecting one of those classes and methods (e.g. Sample:play) and typing enter will open the class definition at that method. Note that this only shows implementations, and does not indicate inheritance.
+<p>(see <a href="./../Reference/KeyboardShortcuts.html">Keyboard Shortcuts</a>)<h3><a class='anchor' name='Look%20up%20References'>Look up References</a></h3>
+
+<p>Selecting any text (e.g. Window or asStream) and then the menu item <code>Language&gt;Look up References</code> will open a window showing all references to the selected text, i.e. each place it is used within the class library. Note that this will not find methods calls compiled with special byte codes like 'value'.
+<p>(see <a href="./../Reference/KeyboardShortcuts.html">Keyboard Shortcuts</a>)<h3><a class='anchor' name='Graphical%20Class%20browser'>Graphical Class browser</a></h3>
+
 <p>SC has a graphical Class browser which will show all methods, arguments, subclasses, instance variables and class variables. Using the browser's buttons you can easily navigate to the class' superclass, subclasses, class source, method source, helpfile (if there is one), check references or implementation of methods.<pre class='code prettyprint lang-sc'>SequenceableCollection.browse;</pre>
-<h3><a class='anchor' name='Snooping in Classes'>Snooping in Classes</a></h3>
+<h3><a class='anchor' name='Snooping%20in%20Classes'>Snooping in Classes</a></h3>
+<pre class='code prettyprint lang-sc'>// print all instance methods defined for this class
+Collection.dumpInterface;
 
-<p>The <a href="./../Classes/Class.html">Class</a> help file documents some of these snooping methods. Even though you may access these data structures, if you store things into them, you may break something.<pre class='code prettyprint lang-sc'>Collection.dumpInterface;       // print all instance methods defined for this class
+// print all class methods defined for this class
+Collection.class.dumpInterface;
 
-Collection.class.dumpInterface; // print all class methods defined for this class
 
 
-// The following three include inherited methods
+// print all instance methods that instances of this class respond to
+Collection.methods.collect(_.name);
 
-Collection.methods.collect(_.name); // print all instance methods that instances of this class respond to
+// print all class methods that this class responds to
+// includes inherited methods
+Collection.class.methods.collect(_.name);
 
-Collection.class.methods.collect(_.name); // print all class methods that this class responds to
+// print all instance and class methods that this class responds to
+// includes inherited methods
+Collection.dumpFullInterface;
 
-Collection.dumpFullInterface; // print all instance and class methods that this class responds to
+// print instance methods of this class and superclasses, in alpha order
+// also shows from which class the method is inherited
+// does not include Object or Class methods
+// for class methods, do Meta_Collection.dumpMethodList
+Collection.dumpMethodList;
 
-Collection.dumpMethodList; // print instance methods of this class and superclasses, in alpha order
-                           // also shows from which class the method is inherited
-                           // does not include Object or Class methods
-                           // for class methods, do Meta_Collection.dumpMethodList
+// dump all subclasses of this class
+Collection.dumpClassSubtree;
 
-Collection.dumpClassSubtree;    // dump all subclasses of this class
+// dump all subclasses, in alphabetical order
+Collection.dumpSubclassList;
 
-Collection.dumpSubclassList;    // dump all subclasses, in alphabetical order
+// dump all instance variable names of this class
+Server.instVarNames.dump;
 
-Server.instVarNames.dump;     // dump all instance variable names of this class
+// dump all class variable names of this class
+Server.classVarNames.dump;
 
-Server.classVarNames.dump;    // dump all class variable names of this class
-
-Server.filenameSymbol.postln; // the path to the file that defined this class
+// the path to the file that defines this class
+// Note that there might be extensions to this class in other files
+Server.filenameSymbol.postln;
 
 (
 // print all classes whose names start with 'F'
-Class.allClasses.do({ arg class;
-    if (class.name.asString.at(0) == $F, { class.name.postln; });
-})
+Class.allClasses.do { | class |
+    if (class.name.asString.beginsWith("F")) {
+        class.name.postln
+    }
+}
 )
 
 (
 // find and print all class variable names defined in the system
-Class.allClasses.do({ arg class;
-    if (class.classVarNames.notNil, {
+Class.allClasses.do { | class |
+    if (class.classVarNames.notNil) {
         // classVarNames is an Array of Symbols
-        class.classVarNames.do({ arg varname;
-            (class.name.asString ++ " " ++ varname.asString).postln;
-        })
-    });
-});
+        class.classVarNames.do { | varname |
+            (class.name.asString ++ " " ++ varname.asString).postln
+        }
+    }
+}
 )
 
 (
 // find and print all methods that contain "ascii"
-Class.allClasses.do({ arg class;
-       class.methods.do({ arg sel;
+Class.allClasses.do { | class |
+       class.methods.do { | sel |
                if(sel.name.asString.find("ascii").notNil) {
-                    (class.name.asString + "-" + sel.name).postln;
+                    (class.name.asString + "-" + sel.name).postln
             }
-      });
-}); ""
+    }
+}
 )</pre>
-<h3><a class='anchor' name='Snooping in Methods'>Snooping in Methods</a></h3>
+<h3><a class='anchor' name='Snooping%20in%20Methods'>Snooping in Methods</a></h3>
+<pre class='code prettyprint lang-sc'>// does the class implement this method?
+Collection.findMethod('select');
+// -&gt; Collection:select
 
-<p>Same thing goes here, if you store things into Methods, you may break something.<pre class='code prettyprint lang-sc'>Collection.findMethod('select'); // does it have this method?
+// this class doesn't
+Array.findMethod('select');
+// -&gt; nil
 
-Array.findMethod('select'); // this class doesn't
+// but a superclass might implement it, so
+// climb the class tree to check
+Array.findRespondingMethodFor('select');
+// -&gt; Collection:select
 
-Array.findRespondingMethodFor('select'); // climb the class tree to find the method
 
-Collection.findMethod('select').dump; // find a method object
+// find a method object and dump its argument names and
+// its local variable names
+Collection.findMethod('select').dump;
+Collection.findMethod('select').argNames.dump;
+Collection.findMethod('select').varNames.dump;
+// -&gt; nil // doesn't have any varNames
 
-Collection.findMethod('select').argNames.dump; // dump its argument names
-
-Collection.findMethod('select').varNames.dump; // dump its local variable names
 
 // dump its code. mostly for debugging the compiler.
 Collection.findMethod('select').dumpByteCodes;
 
-Collection.dumpByteCodes('select');    // a shorter version of the above
+// a shorter version of the above
+Collection.dumpByteCodes('select');
 
-{ 1 + 2 }.dump; // this is a Function
 
-{ 1 + 2 }.def.dump;    // get its FunctionDef
-
-{ 1 + 2 }.def.dumpByteCodes;    // dump its code.</pre>
-<h3><a class='anchor' name='Snooping in Windows'>Snooping in Windows</a></h3>
+{ 1 + 2 }.dump;              // this is a Function
+{ 1 + 2 }.def.dump;          // dump its FunctionDef
+{ 1 + 2 }.asCompileString;   // show its implementation
+{ 1 + 2 }.def.dumpByteCodes; // dump its code.</pre>
+<h3><a class='anchor' name='Snooping%20in%20GUI%20Windows'>Snooping in GUI Windows</a></h3>
 <pre class='code prettyprint lang-sc'>(
 // create some windows to snoop in
-5.do({ arg i;
+5.do { | i |
     var w, b;
     w = Window.new("snoop " ++ i.asString,
         Rect.new( 200 + 400.rand, 69 + 300.rand, 172, 90 ));
     w.front;
     b = Button.new( w, Rect.new( 23, 28, 127, 25 ));
     b.states = [["BLAM-O", Color.red]];
-}))
+}
+)
 
 Window.allWindows.dump;    // dump a list of all open SCWindows
 
 // a little more helpful, dump their names
-Window.allWindows.collect({ arg w; w.name }).postln;
+Window.allWindows.collect { | w | w.name }.postln;
 
 (
 // change background colors of all open windows
-Window.allWindows.do({ arg window;
+Window.allWindows.do { | window |
     window.view.background = Color.new(0.5 + 0.5.rand, 0.5 + 0.5.rand, 0.5 + 0.5.rand);
-}))
-
-Window.closeAll; // close all the windows (This will close the server windows)</pre>
-<h3><a class='anchor' name='Snooping in SynthDefs'>Snooping in SynthDefs</a></h3>
-<pre class='code prettyprint lang-sc'>// First execute this:
-(
-f = SynthDef("Help-SnoopSynthDef",
-    { arg out=0;
-        Out.ar(out, PinkNoise.ar(0.1))
-    });
+}
 )
 
-f.dumpUGens;    // get the ugens, listed in order of execution, with rate, index and
-                // inputs</pre>
-<h3><a class='anchor' name='Snooping in the Interpreter'>Snooping in the Interpreter</a></h3>
+Window.closeAll; // close all the windows</pre>
+<h3><a class='anchor' name='Snooping%20in%20SynthDefs'>Snooping in SynthDefs</a></h3>
+<pre class='code prettyprint lang-sc'>// a synthdef to snoop in
+(
+f = SynthDef(\snoop, { | out=0 |
+        Out.ar(out, PinkNoise.ar(0.1))
+});
+)
 
-<p>When evaluating text in the interpreter, the variable 'this' always refers to the interpreter.<pre class='code prettyprint lang-sc'>this.dump;    // display the values of all the interpreter variables a-z
+// get the ugens, listed in order of execution, with rate,
+// index and inputs
+f.dumpUGens;</pre>
+<h3><a class='anchor' name='Snooping%20on%20the%20Server'>Snooping on the Server</a></h3>
 
-this.clearAll;    // set all variables a-z to nil
+<p>Lots of information on server-related snooping can be found in the <a href="./../Classes/Server.html">Server</a> helpfile under "Information and debugging".
+<p>Some examples<pre class='code prettyprint lang-sc'>s.boot;
 
-g = this.compile("(1 + 2).postln");    // compile some text into a Function
+f = { PinkNoise.ar(0.1) * SinOsc.ar }; // a function
+x = f.play;
 
-g.postln;        // see, g is a Function
+// look at all the nodes on the server
+s.queryAllNodes;
 
+// parsed contents
+s.dumpOSC(1);
+x.free;
+x = f.play;
+
+// contents in hexadecimal
+// status messages are not filtered
+s.dumpOSC(2);
+x.free;
+x = f.play;
+
+// turn off
+s.dumpOSC(0);</pre>
+<h3><a class='anchor' name='Snooping%20in%20the%20Interpreter'>Snooping in the Interpreter</a></h3>
+
+<p>When evaluating text in the interpreter, the variable 'this' always refers to the interpreter.<pre class='code prettyprint lang-sc'>// display the values of all the interpreter variables a-z
+this.dump;
+
+// set all variables a-z to nil
+this.clearAll;
+
+
+// compile some text into a Function
+g = this.compile("(1 + 2).postln");
+g.postln;   // g is a Function
 g.value;    // evaluate g
 
-this.interpret("(1 + 2).postln");    // interpret some text
+// interpret some text
+this.interpret("(1 + 2).postln");
 
-this.interpretPrint("1 + 2");    // interpret some text and print the result</pre>
-<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/Internal-Snooping.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/Internal-Snooping.schelp</a><br>link::Guides/Internal-Snooping::<br>sc version: 3.8dev</div></div></body></html>
+// interpret some text and print the result
+this.interpretPrint("1 + 2");</pre>
+<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Internal-Snooping.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Internal-Snooping.schelp</a><br>link::Guides/Internal-Snooping::<br></div></div></body></html>

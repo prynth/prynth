@@ -1,0 +1,196 @@
+<!doctype html><html lang='en'><head><title>11 | SuperCollider 3.9.3 Help</title>
+<link rel='stylesheet' href='./../../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../../..';
+var scdoc_title = '11';
+var scdoc_sc_version = '3.9.3';
+</script>
+<script src='./../../../scdoc.js' type='text/javascript'></script>
+<script src='./../../../docmap.js' type='text/javascript'></script>
+<script src='./../../../prettify.js' type='text/javascript'></script>
+<script src='./../../../lang-sc.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC();prettyPrint()'>
+<div id='toc'>
+<div id='toctitle'>11:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#複数のSynthDef'>複数のSynthDef</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Groupはリンク・リスト'>Groupはリンク・リスト</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#ルートノード'>ルートノード</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Tutorials/Mark_Polishook_tutorial/Japanese_version</span>
+ | <span id='categories'><a href='./../../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Mark_Polishook_tutorial</a>&#8201;&gt;&#8201;<a href='./../../../Browse.html#Tutorials>Mark_Polishook_tutorial>Japanese_version'>Japanese_version</a></span>
+</div><h1>11</h1>
+<div id='summary'>Mark Polishook tutorial (JP)</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
+</div>
+<h2><a class='anchor' name='複数のSynthDef'>複数のSynthDef</a></h2>
+
+<p>ほとんど全てのシンセシス・プロセスは単独のSynthDefの中で指定することができます。しかしながら、複雑な場合には、コンポーネントの部分部分に分解することもできます。
+<p>SuperColliderでは、groupがシンセを組み合わせるメカニズムを提供します。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='Groupはリンク・リスト'>Groupはリンク・リスト</a></h2>
+
+<p>groupの最も重要なアスペクトは、それが参照するノードが順序づけられるということです。順序づけるという考え方は重要です。なぜなら、SuperColliderでは、１つのシンセシスのプロセスが他よりも先に起きるということを保証するということを意味するからです。
+<p>SuperColliderは、ノードを順番に並べるために、リンク・リストというメカニズムを使います。リンク・リストはダイナミックなデータ構造で、簡単にノードを移動することができます。例えば最初のノードを最後にするという様なことができるのです。または、リストの中のある位置にあるノードをリストの中の任意の位置に置くこともできます。リンク・リストの最初のアイテムは常に".head"です。リンク・リストの最後のアイテムは常に".tail"です。
+<p>置きたいと思うところにノードを置くことができるというのは、ディレイやリバーブの様に、ソースをフィルターに送る時には重要です。こうした場合には、ソースのシンセシス・プロセスが亜エフェクトよりも先に行われるというのが重要なのです。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='ルートノード'>ルートノード</a></h2>
+
+<p>ルートノードはいつもサーバーに存在するグループです。全てのノードは、それがシンセであってもグループであっても、木の葉や枝の様にそれに接続されます。
+<p>１つのシンセしか実行されていない場合、それは次の様にルートノード・グループに接続されています。<pre class='code prettyprint lang-sc'>    Group (RootNode, ID 0)
+      /
+     /
+Synth (ID 1000)</pre>
+
+<p>この図の状態を生成するためのコードは<pre class='code prettyprint lang-sc'>(
+SynthDef("ringModulation", {
+    Out.ar(
+        0,
+        Mix.ar(
+            SinOsc.ar([440.067, 441.013], 0, 1)
+            *
+            SinOsc.ar([111, 109], 0, 0.2)
+        )
+    )
+}).add;
+)
+
+Synth("ringModulation");</pre>
+
+<p>です。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>ルートノードに二つのシンセが接続されている図は次の様になります。<pre class='code prettyprint lang-sc'>    Group (RootNode, ID 0)
+      /\
+     /  \
+Synth    Synth
+(ID 1000) (ID 1001)</pre>
+
+<p>この図の状態を生成するためのコードは<pre class='code prettyprint lang-sc'>(
+SynthDef("pitchFromNoise", { arg out = 0;
+    Out.ar(
+        out,
+        Resonz.ar(
+            WhiteNoise.ar(15),
+            LFNoise0.kr(2, 110, 660),
+            0.005
+        )
+    )
+}).add;
+)
+
+
+(
+Synth("ringModulation");
+Synth("pitchFromNoise", [\out, 1]);
+)</pre>
+
+<p>です。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>ノードが確実に正しい順序に並べられる様にするというのはユーザーの責任です。そういうわけで、２つのシンセは与えられた順序で評価されなければならないのです。<pre class='code prettyprint lang-sc'>(
+SynthDef("firstNode-source", {
+    Out.ar(
+        0,
+        Saw.ar([200, 201], 0.05)
+    )
+}).add;
+
+SynthDef("secondNode-filter", {
+    ReplaceOut.ar(
+        0,
+        LPF.ar(
+            In.ar(0, 2),
+            Lag.kr(
+                LFNoise0.kr([4, 4.001], 500, 1000),
+                0.1
+            )
+        )
+    )
+}).add;
+)
+
+// "firstNode-source"は最初に実行されなければならない
+//  もし "secondNode-filter"が先に評価されれば、"firstNode-source"はそれを通して処理されなくなってしまう
+(
+Synth("firstNode-source");
+Synth("secondNode-filter")
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>この２つのシンセを記述するための安全な方法は次の様になります。<pre class='code prettyprint lang-sc'>(
+Synth.head(s, "firstNode-source");
+Synth.tail(s, "secondNode-filter");
+)</pre>
+
+<p>この例では、適切な順序でシンセを配置するのに.headメッセージと.tailメッセージに頼っています。ここでの適切な順序とは、"firstNode-source"がルートノード・グループの先頭に、"secondNode-filter"がルートノード・グループの最後に、ということです。
+<p>それゆえ、"firstNode-source"はリンクリストの中で第1番のアイテムになり、"secondNode-filter"は第2のアイテムになります。この順序付けは２つのシンセの評価順序が変更されたとしても同じです。<pre class='code prettyprint lang-sc'>(
+Synth.tail(s, "secondNode-filter");
+Synth.head(s, "firstNode-source");
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>先の例を記述するためのよりよい方法は、２つのシンセをそれぞれのグループに配置するということです。<pre class='code prettyprint lang-sc'>    Group (RootNode, ID 0)
+      /\
+     /  \
+Group    Group
+  |        |
+  |        |
+Synth    Synth</pre>
+<pre class='code prettyprint lang-sc'>(
+~source = Group.head(s);    // グループをルートノードの先頭に加える
+~effect = Group.tail(s);    // グループをルートノードの最後に加える
+)
+
+(
+// シンセを適切なグループに追加する
+Synth.head(~effect, "secondNode-filter");
+Synth.head(~source, "firstNode-source");
+)</pre>
+
+<p>この考え方は、ルートノードに対してシンセではなくグループを求められる順序で結びつけるということです。一度グループがルートノードに求められる順序で結びつけられると、それによってシンセはしかるべきグループに結びつけられるようにできます。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>グループは、シンセを確実に適切な順序で実行するようにするという以外の目的にも用いることができます。例えば、個々のシンセに対してではなく、グループに対して１つのメッセージを送ることで、グループの中の全てのシンセに対して１つのコントロールをセットすることができます。<pre class='code prettyprint lang-sc'>// 以下のSynthDefは全て共通のコントロール名（mul）を持つ
+(
+// 3つのSynthDefとグループを作成する
+SynthDef("synthNumber1", { arg mul = 0.2;
+    Out.ar(
+        0,
+        BrownNoise.ar(mul) * LFNoise0.kr([1, 1.01])
+    )
+    }, [0.1]).add;
+SynthDef("synthNumber2", { arg mul = 0.2;
+    Out.ar(
+        0,
+        WhiteNoise.ar(mul) * LFNoise1.kr([2.99, 3])
+    )
+    }, [0.1]).add;
+SynthDef("synthNumber3", { arg mul = 0.2;
+    Out.ar(
+        0,
+        PinkNoise.ar(mul) * LFNoise2.kr([0.79, 0.67])
+    )
+}, [0.1]).add;
+)
+
+(
+// グループを作成する
+~myGroup = Group.new;
+)
+
+(
+// 3つのシンセを加える
+Synth.head(~myGroup, "synthNumber1");
+Synth.head(~myGroup, "synthNumber2");
+Synth.head(~myGroup, "synthNumber3");
+)
+
+// 3つのシンセのそれぞれの\mulコントロール、新しい（そして同じ）値にセットする
+~myGroup.set(\mul, 0.05)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>go to <a href="./../../../Tutorials/Mark_Polishook_tutorial/Japanese_version/12.html">12</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/11.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/11.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/Japanese_version/11::<br></div></div></body></html>

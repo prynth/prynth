@@ -1,37 +1,43 @@
-<html><head><title>Understanding Streams, Patterns and Events - Part 4</title>
+<!doctype html><html lang='en'><head><title>Understanding Streams, Patterns and Events - Part 4 | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Understanding Streams, Patterns and Events - Part 4';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Understanding Streams, Patterns and Events - Part 4:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Environment'>Environment</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Making%20an%20Environment'>Making an Environment</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Using%20an%20Environment'>Using an Environment</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Calling%20Functions%20with%20arguments%20from%20the%20current%20Environment'>Calling Functions with arguments from the current Environment</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Event'>Event</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Value%20Patterns,%20Event%20Patterns%20and%20Pbind'>Value Patterns, Event Patterns and Pbind</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#EventStreamPlayer'>EventStreamPlayer</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Changes%20in%20SC3'>Changes in SC3</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS</div>
-<div id='categories'><a href='./../Browse.html#Tutorials>Streams-Patterns-Events'>Tutorials>Streams-Patterns-Events</a></div>
-<h1>Understanding Streams, Patterns and Events - Part 4</h1>
+<div id='label'>
+<span id='folder'>Tutorials</span>
+ | <span id='categories'><a href='./../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Tutorials>Streams-Patterns-Events'>Streams-Patterns-Events</a></span>
+</div><h1>Understanding Streams, Patterns and Events - Part 4</h1>
 <div id='summary'>Environment &amp; Event</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../Tutorials/Streams-Patterns-Events1.html">Understanding Streams, Patterns and Events - Part 1</a>, <a href="./../Tutorials/Streams-Patterns-Events2.html">Understanding Streams, Patterns and Events - Part 2</a>, <a href="./../Tutorials/Streams-Patterns-Events3.html">Understanding Streams, Patterns and Events - Part 3</a>, <a href="./../Tutorials/Streams-Patterns-Events5.html">Understanding Streams, Patterns and Events - Part 5</a>, <a href="./../Tutorials/Streams-Patterns-Events6.html">Understanding Streams, Patterns and Events - Part 6</a>, <a href="./../Tutorials/Streams-Patterns-Events7.html">Understanding Streams, Patterns and Events - Part 7</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Environment'>Environment</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Making an Environment'>Making an Environment</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Using an Environment'>Using an Environment</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Calling Functions with arguments from the current Environment'>Calling Functions with arguments from the current Environment</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Event'>Event</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Value Patterns, Event Patterns and Pbind'>Value Patterns, Event Patterns and Pbind</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#EventStreamPlayer'>EventStreamPlayer</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Changes in SC3'>Changes in SC3</a></li>
-<ul class='toc'></ul></ul></div>
-<p>The preceeding sections showed how to use Streams and Patterns to generate complex sequences of values for a single parameter at a time.
+
+<p>The preceding sections showed how to use Streams and Patterns to generate complex sequences of values for a single parameter at a time.
 <p>This section covers Environments and Events, which are used to build a symbolic event framework for patterns, allowing you to control all aspects of a composition using patterns.<h2><a class='anchor' name='Environment'>Environment</a></h2>
 
 <p>An <a href="./../Classes/Environment.html">Environment</a> is an <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> mapping <a href="./../Classes/Symbol.html">Symbol</a>s to values. There is always one current Environment which is stored in the <code class='code prettyprint lang-sc'>currentEnvironment</code> class variable of class <a href="./../Classes/Object.html">Object</a>.
@@ -46,7 +52,7 @@
 <p>and:<pre class='code prettyprint lang-sc'>~myvariable.postln;</pre>
 
 <p>is equivalent to:<pre class='code prettyprint lang-sc'>currentEnvironment.at(\myvariable).postln;</pre>
-<h2><a class='anchor' name='Making an Environment'>Making an Environment</a></h2>
+<h2><a class='anchor' name='Making%20an%20Environment'>Making an Environment</a></h2>
 
 <p>Environment has a class method <strong>make</strong> which can be used to create an <a href="./../Classes/Environment.html">Environment</a> and fill it with values. What <strong>make</strong> does is temporarily replace the current Environment with a new one, call your function where you fill the Environment with values, then it replaces the previous current Environment and returns you the new one.<pre class='code prettyprint lang-sc'>(
 var a;
@@ -57,7 +63,7 @@ a = Environment.make({
 });
 a.postln;
 )</pre>
-<h2><a class='anchor' name='Using an Environment'>Using an Environment</a></h2>
+<h2><a class='anchor' name='Using%20an%20Environment'>Using an Environment</a></h2>
 
 <p>The instance method <strong>use</strong> lets you temporarily replace the current <a href="./../Classes/Environment.html">Environment</a> with one you have made. The <strong>use</strong> method returns the result of your function instead of the Environment like <strong>make</strong> does.<pre class='code prettyprint lang-sc'>(
 var a;
@@ -80,7 +86,7 @@ a = Environment.use({
     ~a + ~b + ~c
 }).postln;
 )</pre>
-<h2><a class='anchor' name='Calling Functions with arguments from the current Environment'>Calling Functions with arguments from the current Environment</a></h2>
+<h2><a class='anchor' name='Calling%20Functions%20with%20arguments%20from%20the%20current%20Environment'>Calling Functions with arguments from the current Environment</a></h2>
 
 <p>It is possible to call a <a href="./../Classes/Function.html">Function</a> and have it look up any unspecified argument values from the current Environment. This is done with the <strong>valueEnvir</strong> and <strong>valueArrayEnvir</strong> methods. These methods will, for any unspecified argument value, look in the current Environment for a symbol with the same name as the argument. If the argument is not found then whatever the function defines as the default value for that argument is used.<pre class='code prettyprint lang-sc'>(
 var f;
@@ -117,8 +123,8 @@ c = { arg pan, freq, amp;
 
 Task({
     n.do({ arg i;
-        SynthDef("Help-SPE4-EnvirDef-" ++ i.asString, {
-            var out;
+        SynthDef("Help-SPE4-EnvirDef-" ++ i.asString, { |out|
+            var sound;
             Environment.use({
                     // set values in the environment
                 ~freq = exprand(80, 600);
@@ -127,13 +133,13 @@ Task({
 
                     // call a randomly chosen instrument function
                     // with values from the environment
-                out = [a,b,c].choose.valueEnvir;
+                sound = [a,b,c].choose.valueEnvir;
             });
-            out = CombC.ar(out, 0.2, 0.2, 3, 1, out);
-            out = out * EnvGen.kr(
-                Env.sine, doneAction: 2, timeScale: 1.0 + 6.0.rand, levelScale: 0.3
+            sound = CombC.ar(sound, 0.2, 0.2, 3, 1, out);
+            sound = sound * EnvGen.kr(
+                Env.sine, doneAction: Done.freeSelf, timeScale: 1.0 + 6.0.rand, levelScale: 0.3
             );
-            Out.ar( 0, out );
+            Out.ar(out, sound);
         }).send(s);
         0.02.wait;
     });
@@ -148,7 +154,7 @@ Task({
 <p>The class <a href="./../Classes/Event.html">Event</a> is a subclass of <a href="./../Classes/Environment.html">Environment</a>. Events are mappings of Symbols representing names of parameters for a musical event to their value. This lets you put any information you want into an event.
 <p>The class getter method <strong>default</strong> retrieves the default prototype event which has been initialized with values for many useful parameters. It represents only one possible event model. You are free to create your own, however it would be good to understand the one provided first so that you can see what can be done.
 <p>A prototype event is a default event which will be transformed by the streams returned by patterns. Compositions produced by event patterns are created entirely from transformations of copies of a single protoEvent.
-<p><a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> <h2><a class='anchor' name='Value Patterns, Event Patterns and Pbind'>Value Patterns, Event Patterns and Pbind</a></h2>
+<p><a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> <h2><a class='anchor' name='Value%20Patterns,%20Event%20Patterns%20and%20Pbind'>Value Patterns, Event Patterns and Pbind</a></h2>
 
 <p>The patterns discussed in parts 2 and 3 are known as "value patterns" because their streams return a single value for each call to <strong>next</strong>. Here we introduce "event patterns" which once turned into streams, return an <a href="./../Classes/Event.html">Event</a> for each call to <strong>next</strong>.
 <p>The class <a href="./../Classes/Pbind.html">Pbind</a> provides a bridge between value patterns and event patterns. It binds symbols in each event to values obtained from a pattern. Pbind takes arguments in pairs, the first of a pair being a <a href="./../Classes/Symbol.html">Symbol</a> and the second being a value <a href="./../Classes/Pattern.html">Pattern</a>. Any object can act as a Pattern, so you can use constants as the pattern ( see <code class='code prettyprint lang-sc'>\amp</code> in the example below ).
@@ -163,7 +169,7 @@ t.next(Event.default);</pre>
 
 <p>The class <a href="./../Classes/EventStreamPlayer.html">EventStreamPlayer</a> is a subclass of <a href="./../Classes/PauseStream.html">PauseStream</a>. A PauseStream is just a wrapper for a stream allowing to play, stop, start it, etc...
 <p>EventStreamPlayers are initialized using the event stream returned by Pbind-asStream, as well as with a protoEvent. The EventStreamPlayer passes in a <strong>protoEvent</strong>, at each call to <strong>next</strong> on the Pbind stream. The Pbind stream copies the event to pass down and back up the tree of pattern streams so that each stream can modify it.
-<p>An EventStreamPlayer is itself a stream which returns scalars (numbers) which are used by the clock to schedule its next invocation. At every call to EventStreamPlayer-next by the clock, the player gets its delta values by querying the Event after it has been returned by the Pbind stream traversal.<h2><a class='anchor' name='Changes in SC3'>Changes in SC3</a></h2>
+<p>An EventStreamPlayer is itself a stream which returns scalars (numbers) which are used by the clock to schedule its next invocation. At every call to EventStreamPlayer-next by the clock, the player gets its delta values by querying the Event after it has been returned by the Pbind stream traversal.<h2><a class='anchor' name='Changes%20in%20SC3'>Changes in SC3</a></h2>
 
 <p>In SC2, you called asEventStream on an Pattern and you'd get a stream which actually returned events.
 <p>In SC3, if you want an event stream proper you call asStream on the Event Pattern. This will give you a stream of events which you can then use to initialize an EventStreamPlayer object. You don't however need to worry about that because it is usually done for you in Pattern's play method. Also changed is that you do not pass in your protoEvent through the asStream method. It is passed in for you by the EventStreamPlayer at each call to next on the stream.
@@ -222,4 +228,4 @@ stream = pattern.asStream;
 )</pre>
 
 <p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events5.html">Understanding Streams, Patterns and Events - Part 5</a><div class='footnotes'>
-<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - It's all a part of the Big Note, but don't tell the pigs and ponies.</div></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events4.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events4.schelp</a><br>link::Tutorials/Streams-Patterns-Events4::<br>sc version: 3.8dev</div></div></body></html>
+<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - It's all a part of the Big Note, but don't tell the pigs and ponies.</div></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events4.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events4.schelp</a><br>link::Tutorials/Streams-Patterns-Events4::<br></div></div></body></html>

@@ -1,32 +1,38 @@
-<html><head><title>Pattern Guide Cookbook 06: Phrase Network</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide Cookbook 06: Phrase Network | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = 'Pattern Guide Cookbook 06: Phrase Network';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Pattern Guide Cookbook 06: Phrase Network:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Sequencing%20by%20a%20network%20of%20phrases'>Sequencing by a network of phrases</a></li>
+<li class='toc1'><a href='#Articulating%20notes%20with%20PmonoArtic'>Articulating notes with PmonoArtic</a></li>
+<ul class='toc'><li class='toc2'><a href='#Example'>Example</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/A-PRACTICAL-GUIDE</div>
-<div id='categories'><a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>Streams-Patterns-Events>A-Practical-Guide</a></div>
-<h1>Pattern Guide Cookbook 06: Phrase Network</h1>
+<div id='label'>
+<span id='folder'>Tutorials/A-Practical-Guide</span>
+ | <span id='categories'><a href='./../../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>A-Practical-Guide</a></span>
+</div><h1>Pattern Guide Cookbook 06: Phrase Network</h1>
 <div id='summary'>Sequencing by a network of phrases, Articulating notes with PmonoArtic</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook05_Using_Samples.html">Pattern Guide Cookbook 05: Using Samples</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations.html">Pattern Guide Cookbook 07: Rhythmic Variations</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Sequencing by a network of phrases'>Sequencing by a network of phrases</a></li>
-<li class='toc1'><a href='#Articulating notes with PmonoArtic'>Articulating notes with PmonoArtic</a></li>
-<ul class='toc'><li class='toc2'><a href='#Example'>Example</a></li>
-<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Sequencing by a network of phrases'>Sequencing by a network of phrases</a></h2>
-<h2><a class='anchor' name='Articulating notes with PmonoArtic'>Articulating notes with PmonoArtic</a></h2>
+<h2><a class='anchor' name='Sequencing%20by%20a%20network%20of%20phrases'>Sequencing by a network of phrases</a></h2>
+<h2><a class='anchor' name='Articulating%20notes%20with%20PmonoArtic'>Articulating notes with PmonoArtic</a></h2>
 
 <p>Two for one here!
 <p>Most conventional synthesizers have a mode where playing a note while the previous note is still sustaining slides from one note to the other. The <a href="./../../Classes/PmonoArtic.html">PmonoArtic</a> pattern does this based on the event's sustain value. The delta value is the number of beats until the next event; sustain is the number of beats until the note releases. If sustain is shorter than delta, the note should cut off early and the next event should produce a new synth.
@@ -49,7 +55,7 @@ SynthDef(\sawpulse, { |out, freq = 440, gate = 0.5, plfofreq = 6, mw = 0, ffreq 
     fcurve = (fcurve - 1).madd(0.7, 1) * ffreq;
     sig = Mix.ar([Pulse.ar(freq, 0.9), Saw.ar(freq*1.007)]);
     sig = RLPF.ar(sig, fcurve, rq)
-        * EnvGen.kr(Env.adsr(0.04, 0.2, 0.6, 0.1), gate, doneAction:2)
+        * EnvGen.kr(Env.adsr(0.04, 0.2, 0.6, 0.1), gate, doneAction: Done.freeSelf)
         * amp;
     Out.ar(out, sig ! 2)
 }).add;
@@ -192,4 +198,4 @@ p = Pmul(\amp, 0.4, Pfsm([
 p.stop;</pre>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook05_Using_Samples.html">Pattern Guide Cookbook 05: Using Samples</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations.html">Pattern Guide Cookbook 07: Rhythmic Variations</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network::<br>sc version: 3.8dev</div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations.html">Pattern Guide Cookbook 07: Rhythmic Variations</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network::<br></div></div></body></html>

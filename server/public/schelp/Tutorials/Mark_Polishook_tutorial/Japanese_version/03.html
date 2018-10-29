@@ -1,0 +1,82 @@
+<!doctype html><html lang='en'><head><title>03 | SuperCollider 3.9.3 Help</title>
+<link rel='stylesheet' href='./../../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../../..';
+var scdoc_title = '03';
+var scdoc_sc_version = '3.9.3';
+</script>
+<script src='./../../../scdoc.js' type='text/javascript'></script>
+<script src='./../../../docmap.js' type='text/javascript'></script>
+<script src='./../../../prettify.js' type='text/javascript'></script>
+<script src='./../../../lang-sc.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC();prettyPrint()'>
+<div id='toc'>
+<div id='toctitle'>03:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#SynthDefsには2つの重要な部分がある'>SynthDefsには2つの重要な部分がある</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#SynthDefブラウザー'>SynthDefブラウザー</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#ugenGraphFuncのコンポーネント'>ugenGraphFuncのコンポーネント</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Tutorials/Mark_Polishook_tutorial/Japanese_version</span>
+ | <span id='categories'><a href='./../../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Mark_Polishook_tutorial</a>&#8201;&gt;&#8201;<a href='./../../../Browse.html#Tutorials>Mark_Polishook_tutorial>Japanese_version'>Japanese_version</a></span>
+</div><h1>03</h1>
+<div id='summary'>Mark Polishook tutorial (JP)</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
+</div>
+<h2><a class='anchor' name='SynthDefsには2つの重要な部分がある'>SynthDefsには2つの重要な部分がある</a></h2>
+
+<p>SynthDefsは、SuperColliderでシンセサイザーのエンジンを作るのに使うクラスです。
+<p>SynthDefsには2つの重要な部分があります。それは、名前と関数です。SuperColliderの用語では、関数はしばしばugenGraphFuncと呼ばれます。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>ugenGraphFuncという言葉は、ユニット・ジェネレータを、一種のデータ構造であるグラフの形式で記述する関数、という考え方から来ています。SuperColliderは、関数の中に見つけたコードに基づいてグラフを生成します。これは、実際には、グラフという考え方がどのように機能するのかということに関しては、それを使う場合には知らなくてもいいということを意味します。
+<p>しかし、グラフに関するさらなる背景を説明するために、<a href="http://www.nist.gov/dads/HTML/graph.htmlでのグラフに関する議論を引用します。">http://www.nist.gov/dads/HTML/graph.htmlでのグラフに関する議論を引用します。</a>
+<p>「グラフはロードマップの様なものです。都市は頂点です。都市から都市への道路はエッジです。（道路のジャンクションや分岐はどうでしょう？ジャンクションもまた頂点と見なすことができます。もしそれらを頂点としてカウントしたくないのであれば、道路は２つ以上の都市を結ぶでしょう。つまり、厳密にいえば、ハイパーグループにはハイパーエッジがあるのです。もしそれぞれの１組の都市の間に１本以上の道路を許可したいのであれば、代わりにマルチグラフがあります。これはあなたがどのように定義したいのか次第です）。
+<p>グラフに関する他の考え方とは、線によって接続された点の集まりというものです。かなり昔に数学者は普通の人々に話しかけるのを辞めてしまったため、グラフの中の点は頂点と呼ばれ、点に接続された線はエッジと呼ばれます。重要なのはエッジと頂点、つまり、点とそれらの間の接続です。与えられた点の位置や与えられた線の真直度は問題ではありません。かくして、点はどこにもなることができ、それらをつなぐ線は無限に伸縮性があります。さらに、数学的なグラフは、比較表や、xとy軸のある図や、株価のレポートのくねった線ではありません。グラフとは単純に点とそれらの間の線なのです。すみません、頂点とエッジです。」
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<pre class='code prettyprint lang-sc'>// synthdefのテンプレート ... 疑似コードを含む
+SynthDef(
+    "i am a synthdef",            // 第１アーギュメントは名前
+    { .... i am a ugenGraphFunc ... }    // 第２アーギュメントはUGen
+)</pre>
+
+<p>次の数行のコードは実際のSuperColliderのコードのテンプレートを示します。synthdefの第１アーギュメントは名前で、第２アーギュメントが関数です。<pre class='code prettyprint lang-sc'>(
+SynthDef(
+    "aSynthDef",                 // SynthDefの名前
+    {                     // ugenGraphFunc
+        arg freq;
+        Out.ar(
+            0,
+            SinOsc.ar(freq, 0, 0.1)
+        )
+    }
+).load(s);
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='SynthDefブラウザー'>SynthDefブラウザー</a></h2>
+
+<p>典型的には、ugenGraphFuncは2、3の重要なコンポーネントを含みます。これらにはugen（ユニット・ジェネレータ）、control（コントロール）、input（入力）そしてoutput（出力）が含まれます。
+<p>ブラウザー・ウィンドウでそのようなことを見るためには、次のコードを実行してみて下さい。<pre class='code prettyprint lang-sc'>(
+SynthDescLib.global.read;
+SynthDescLib.global.browse;
+)</pre>
+
+<p>このコードによって作られるブラウザー・ウィンドウは６つのボックスを含み、全ての以前に定義されたSynthDefの名前を示します。それぞれの名前を選択して、それに関連づけられたugenGraphFunc ugen、control、inputとoutputを表示することができます。
+<p>あらかじめ定義されたSynthDefとは、以前に.loadメッセージが送られたものということです。この結果、SuperColliderはあらかじめロードされたSynthDefを起動時に読み込むます。
+<p>.loadメッセージによってSynthDefはディスクに書き込まれ、アクティブなサーバーに送られます。これに対して、.sendメッセージは、最初に定義をディスクに書き込むことなしに、ネットワークを通じてサーバーにSynthDefを送ります。
+<p>ニュース速報！：つい最近、新しいメッセージー.storeが定義されました。.storeメッセージは.loadまたは.sendよりも望ましい場合があります。SynthDefをディスクに書き込むことに加えて、SynthDefブラウザー・ウィンドウとかつ／またはパターン・クラスからアクセスできるライブラリに配置します。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='ugenGraphFuncのコンポーネント'>ugenGraphFuncのコンポーネント</a></h2>
+
+<p>SynthDefブラウザーは定義されたSynthDefを表示します。先ほどの「aSynthDef」は4つのugenから構成されています。それには1つのcontrolがあります。それにはinputがありません。そしてそれには1つのoutputがあります。
+<p>ブラウザーで表示される様に、4つのugenはControl、SinOsc、BinaryOpUGenそしてOutそれぞれのインスタンスを含みます。この例では、このSynthDefを完全に機能する様にするために、SuperColliderはControlとBinaryOpUGenのインスタンスをインストールしています。他の全てのugenは指定したときだけ存在します。
+<p>このSynthDefの1つのコントロールは「freq」で、これはシンセが生成される時、あるいはサーバー上にある時であればいつでも使うことのできるアーギュメントです。ブラウザーは「aSynth」には入力が無いことを示しています。これが意味するのは、このSynthDefがInクラスのインスタンスを使っていないということです。
+<p>ブラウザーは、このSynthDefがチャンネル0に1チャンネル分の出力を指定しているということをも示します。
+<p>ブラウザーで表示されている他のSynthDefに関して、どのように構築されているのか調べてみて下さい。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>go to <a href="./../../../Tutorials/Mark_Polishook_tutorial/Japanese_version/04.html">04</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/03.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/03.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/Japanese_version/03::<br></div></div></body></html>

@@ -1,143 +1,140 @@
-<html><head><title>PartConv</title>
+<!doctype html><html lang='en'><head><title>PartConv | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'PartConv';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
-<div class='header'>
-<div id='label'>SuperCollider CLASSES</div>
-<div id='categories'><a href='./../Browse.html#UGens>FFT'>UGens>FFT</a>, <a href='./../Browse.html#UGens>Convolution'>UGens>Convolution</a></div>
-<h1>PartConv</h1>
-<div id='summary'>Real-time partitioned convolution</div>
-</div>
-<div class='subheader'>
-<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/PartConv.sc'>PartConv.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
-<div id='related'>See also: <a href="./../Classes/Convolution.html">Convolution</a>, <a href="./../Classes/Convolution2.html">Convolution2</a>, <a href="./../Classes/Convolution2L.html">Convolution2L</a>, <a href="./../Classes/Convolution3.html">Convolution3</a></div>
-</div>
 <div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<div id='toctitle'>PartConv:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
-<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
-<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*calcBufSize'>calcBufSize</a> </li>
 <li class='toc3'><a href='#*calcNumPartitions'>calcNumPartitions</a> </li>
 </ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
-<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>FFT'>FFT</a> | <a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Convolution'>Convolution</a></span>
+</div><h1>PartConv<span id='superclasses'> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
+<div id='summary'>Real-time partitioned convolution</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/PartConv.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/PartConv.sc'>PartConv.sc</a></div><div id='related'>See also: <a href="./../Classes/Convolution.html">Convolution</a>, <a href="./../Classes/Convolution2.html">Convolution2</a>, <a href="./../Classes/Convolution2L.html">Convolution2L</a>, <a href="./../Classes/Convolution3.html">Convolution3</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>Partitioned convolution. Various additional buffers must be supplied.
 <p>Mono impulse response only! If inputting multiple channels, you'll need independent PartConvs, one for each channel.
 <p>But the charm is: impulse response can be as large as you like (CPU load increases with IR size. Various tradeoffs based on fftsize choice, due to rarer but larger FFTs. This plug-in uses amortisation to spread processing and avoid spikes).
 <p>Normalisation factors difficult to anticipate; convolution piles up multiple copies of the input on top of itself, so can easily overload.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>in</span>, <span class='argstr'>fftsize</span>, <span class='argstr'>irbufnum</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>PartConv.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>in</span>, <span class='argstr'>fftsize</span>, <span class='argstr'>irbufnum</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
 <div class='method'>
 <p><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>in<td class='argumentdesc'>
 <p>processing target.<tr><td class='argumentname'>fftsize<td class='argumentdesc'>
 <p>spectral convolution partition size (twice partition size). You must ensure that the blocksize divides the partition size and there are at least two blocks per partition (to allow for amortisation).<tr><td class='argumentname'>irbufnum<td class='argumentdesc'>
-<p>prepared buffer of spectra for each partition of the inpulse response.<tr><td class='argumentname'>mul<td class='argumentdesc'><tr><td class='argumentname'>add<td class='argumentdesc'></table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
-<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*calcBufSize' href='./../Overviews/Methods.html#calcBufSize'>calcBufSize</a> (<span class='argstr'>fftsize</span>, <span class='argstr'>irbuffer</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*calcNumPartitions' href='./../Overviews/Methods.html#calcNumPartitions'>calcNumPartitions</a> (<span class='argstr'>fftsize</span>, <span class='argstr'>irbuffer</span>)</h3>
+<p>prepared buffer of spectra for each partition of the inpulse response.<tr><td class='argumentname'>mul<td class='argumentdesc'><tr><td class='argumentname'>add<td class='argumentdesc'></table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>PartConv.</span><a class='method-name' name='*calcBufSize' href='./../Overviews/Methods.html#calcBufSize'>calcBufSize</a>(<span class='argstr'>fftsize</span>, <span class='argstr'>irbuffer</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>PartConv.</span><a class='method-name' name='*calcNumPartitions' href='./../Overviews/Methods.html#calcNumPartitions'>calcNumPartitions</a>(<span class='argstr'>fftsize</span>, <span class='argstr'>irbuffer</span>)</h3>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
-<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>// preparation; essentially, allocate an impulse response buffer, then follow a special buffer preparation step to set up the data the plugin needs. Different options are provided commented out for loading impulse responses from soundfiles.
+<pre class='code prettyprint lang-sc'>// preparation; essentially, allocate an impulse response buffer, then
+// follow a special buffer preparation step to set up the data the plugin needs.
+// Different options are provided commented out for loading impulse responses from soundfiles.
 (
-~fftsize=2048; // also 4096 works on my machine; 1024 too often and amortisation too pushed, 8192 more high load FFT
 
-s.waitForBoot({
+ // also 4096 works on my machine; 1024 too often and amortisation too pushed, 8192 more high load FFT
+~fftsize = 2048;
 
-{
-var ir, irbuffer, bufsize;
+s.waitForBoot {
 
-    // // MONO ONLY
-    // pre-existing impulse response sound files
-    // (could also use any general soundfile too for cross-synthesis effects)
-    // irbuffer= Buffer.read(s, "/Volumes/data/audio/ir/ir2.wav");
-    // irbuffer= Buffer.read(s, "/Volumes/data/audio/ir/ir.wav");
-    // this is a two second long hall IR
-    // irbuffer= Buffer.read(s, "/Volumes/data/audio/ir/bighall2.wav");
+    {
+        var ir, irbuffer, bufsize;
 
+        // // MONO ONLY
+        // pre-existing impulse response sound files
+        // (could also use any general soundfile too for cross-synthesis effects)
+        // irbuffer = Buffer.read(s, "/Volumes/data/audio/ir/ir2.wav");
 
-    // synthesise the honourable 'Dan Stowell' impulse response
+        // synthesise the honourable 'Dan Stowell' impulse response
 
-    ir = ([1] ++0.dup(100) ++ ((1, 0.99998 .. 0).collect{|f| f =
-    f.squared.squared; f = if(f.coin){0}{f.squared}; f =
-    if(0.5.coin){0-f}{f} } * 0.1)).normalizeSum;
-    // ir.plot;
+        ir = [1] ++ 0.dup(100) ++ (
+            (1, 0.99998 .. 0)
+            .collect {|f|
+                f = f.squared.squared;
+                f = if(f.coin) { 0 }{ f.squared };
+                f = if(0.5.coin) { 0 - f } { f }
+            } * 0.1
+        );
+        ir = ir.normalizeSum;
 
-    irbuffer = Buffer.loadCollection(s, ir);
+        irbuffer = Buffer.loadCollection(s, ir);
 
-    s.sync;
+        s.sync;
 
-    bufsize= PartConv.calcBufSize(~fftsize, irbuffer);
+        bufsize = PartConv.calcBufSize(~fftsize, irbuffer);
 
-    // ~numpartitions= PartConv.calcNumPartitions(~fftsize, irbuffer);
+        // ~numpartitions= PartConv.calcNumPartitions(~fftsize, irbuffer);
 
-    ~irspectrum= Buffer.alloc(s, bufsize, 1);
+        ~irspectrum = Buffer.alloc(s, bufsize, 1);
+        ~irspectrum.preparePartConv(irbuffer, ~fftsize);
 
-    ~irspectrum.preparePartConv(irbuffer, ~fftsize);
+        s.sync;
 
-    s.sync;
+        irbuffer.free; // don't need time domain data anymore, just needed spectral version
+    }.fork;
 
-    irbuffer.free; // don't need time domain data anymore, just needed spectral version
-}.fork;
-
-});
-
+}
 )
 
 
 
-~target= Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
-// ~target= Buffer.read(s, "sounds/break");
+~target = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
 
 (
-
-{ var input, kernel;
-
-input= PlayBuf.ar(1, ~target, loop:1);
-
-Out.ar(0, PartConv.ar(input, ~fftsize, ~irspectrum.bufnum, 0.5));
- }.play;
-
+{
+    var input = PlayBuf.ar(1, ~target, loop:1);
+    PartConv.ar(input, ~fftsize, ~irspectrum.bufnum, 0.5)
+}.play
 )
 
 
 // convolve with live input
 (
-
-{ var input, kernel;
-
-input= SoundIn.ar(0);
-
-Out.ar(0, PartConv.ar(input, ~fftsize, ~irspectrum.bufnum));
-}.play;
+{
+    var input = SoundIn.ar(0);
+    PartConv.ar(input, ~fftsize, ~irspectrum.bufnum)
+}.play
 )
 
 
 // should get back original impulse response (once every four seconds)
 (
-
-{ var input, kernel;
-
-input= Impulse.ar(0.25);
-
-Out.ar(0, PartConv.ar(input, ~fftsize, ~irspectrum.bufnum));
- }.play;
-
+{
+    var input = Impulse.ar(0.25);
+    PartConv.ar(input, ~fftsize, ~irspectrum.bufnum)
+}.play
 )
 
 
@@ -149,4 +146,4 @@ Out.ar(0, PartConv.ar(input, ~fftsize, ~irspectrum.bufnum));
 currentEnvironment.clear;
 )</pre>
 
-<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/PartConv.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/PartConv.schelp</a><br>link::Classes/PartConv::<br>sc version: 3.8dev</div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/PartConv.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/PartConv.schelp</a><br>link::Classes/PartConv::<br></div></div></body></html>

@@ -1,30 +1,23 @@
-<html><head><title>MIDIIn</title>
+<!doctype html><html lang='en'><head><title>MIDIIn | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'MIDIIn';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
-<div class='header'>
-<div id='label'>SuperCollider CLASSES</div>
-<div id='categories'><a href='./../Browse.html#External Control>MIDI'>External Control>MIDI</a></div>
-<h1>MIDIIn</h1>
-<div id='summary'>receive MIDI messages</div>
-</div>
-<div class='subheader'>
-<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/MIDIOut.sc'>MIDIOut.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
-<div id='related'>See also: <a href="./../Classes/MIDIClient.html">MIDIClient</a>, <a href="./../Classes/MIDIOut.html">MIDIOut</a>, <a href="./../Classes/MIDIFunc.html">MIDIFunc</a>, <a href="./../Classes/MIDIdef.html">MIDIdef</a>, <a href="./../Guides/MIDI.html">MIDI</a>, <a href="./../Guides/UsingMIDI.html">Using MIDI</a></div>
-</div>
 <div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
-<ul class='toc'><li class='toc2'><a href='#The MIDIIn class'>The MIDIIn class</a></li>
+<div id='toctitle'>MIDIIn:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#The%20MIDIIn%20class'>The MIDIIn class</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*findPort'>findPort</a> </li>
 <li class='toc3'><a href='#*addFuncTo'>addFuncTo</a> </li>
@@ -33,7 +26,7 @@
 <li class='toc3'><a href='#*noteOnZeroAsNoteOff'>noteOnZeroAsNoteOff</a> </li>
 <li class='toc3'><a href='#*connectAll'>connectAll</a> </li>
 <li class='toc3'><a href='#*disconnectAll'>disconnectAll</a> </li>
-<li class='toc2'><a href='#Getter/Setters for Specific Message Types'>Getter/Setters for Specific Message Types</a></li>
+<li class='toc2'><a href='#Getter/Setters%20for%20Specific%20Message%20Types'>Getter/Setters for Specific Message Types</a></li>
 <ul class='toc'><li class='toc3'><a href='#*noteOn'>noteOn</a> </li>
 <li class='toc3'><a href='#*noteOff'>noteOff</a> </li>
 <li class='toc3'><a href='#*polytouch'>polytouch</a> </li>
@@ -44,8 +37,8 @@
 <li class='toc3'><a href='#*sysex'>sysex</a> </li>
 <li class='toc3'><a href='#*sysrt'>sysrt</a> </li>
 <li class='toc3'><a href='#*smpte'>smpte</a> </li>
-</ul><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
-<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+</ul><li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*action'>action</a> </li>
 <li class='toc3'><a href='#*bendList'>bendList</a> </li>
 <li class='toc3'><a href='#*connect'>connect</a> </li>
@@ -77,119 +70,131 @@
 <li class='toc3'><a href='#*waitProgram'>waitProgram</a> </li>
 <li class='toc3'><a href='#*waitTouch'>waitTouch</a> </li>
 </ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
-<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'><li class='toc2'><a href='#Quick start for 1 port'>Quick start for 1 port</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Quick start for 2 or more ports'>Quick start for 2 or more ports</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#example with sound'>example with sound</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#writing to the bus rather than directly to the synth'>writing to the bus rather than directly to the synth</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Keyboard Split for two voices'>Keyboard Split for two voices</a></li>
-<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<ul class='toc'><li class='toc2'><a href='#Quick%20start%20for%201%20port'>Quick start for 1 port</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Quick%20start%20for%202%20or%20more%20ports'>Quick start for 2 or more ports</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#example%20with%20sound'>example with sound</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#writing%20to%20the%20bus%20rather%20than%20directly%20to%20the%20synth'>writing to the bus rather than directly to the synth</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Keyboard%20Split%20for%20two%20voices'>Keyboard Split for two voices</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#External Control'>External Control</a>&#8201;&gt;&#8201;<a href='./../Browse.html#External Control>MIDI'>MIDI</a></span>
+</div><h1>MIDIIn<span id='superclasses'> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
+<div id='summary'>receive MIDI messages</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/MIDIOut.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/MIDIOut.sc'>MIDIOut.sc</a></div><div id='related'>See also: <a href="./../Classes/MIDIClient.html">MIDIClient</a>, <a href="./../Classes/MIDIOut.html">MIDIOut</a>, <a href="./../Classes/MIDIFunc.html">MIDIFunc</a>, <a href="./../Classes/MIDIdef.html">MIDIdef</a>, <a href="./../Guides/MIDI.html">MIDI</a>, <a href="./../Guides/UsingMIDI.html">Using MIDI</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>This document explains technical details of the MIDI hardware interface class, MIDIIn.
-<p>MIDIIn is a simple and direct interface. When MIDI events come into Super Collider, MIDIIn evaluates simple handler functions.<div class='note'><span class='notelabel'>NOTE:</span> For general programming, <strong>users should not use the MIDIIn class directly</strong>. See the <a href="./../Classes/MIDIFunc.html">MIDIFunc</a> and <a href="./../Classes/MIDIdef.html">MIDIdef</a> classes for higher level event matching and more flexible handling of event handlers.</div>
+<p>MIDIIn is a simple and direct interface. When MIDI events come into SuperCollider, MIDIIn evaluates simple handler functions.<div class='note'><span class='notelabel'>NOTE:</span> For general programming, <strong>users should not use the MIDIIn class directly</strong>. See the <a href="./../Classes/MIDIFunc.html">MIDIFunc</a> and <a href="./../Classes/MIDIdef.html">MIDIdef</a> classes for higher level event matching and more flexible handling of event handlers.</div>
 <p>Certain MIDI messages are supported only through MIDIIn. These are: sysex, sysrt, smpte.
-<p>See the <a href="./../Guides/UsingMIDI.html">Using MIDI</a> helpfile for practical considerations and techniques for using MIDI in SC.<h3><a class='anchor' name='The MIDIIn class'>The MIDIIn class</a></h3>
+<p>See the <a href="./../Guides/UsingMIDI.html">Using MIDI</a> helpfile for practical considerations and techniques for using MIDI in SC.<h3><a class='anchor' name='The%20MIDIIn%20class'>The MIDIIn class</a></h3>
 
 <p>MIDIIn links MIDI input received from the operating system to a set of user defined functions. Only one set of MIDI input handling functions can be active at a time, they are stored in the following class variables:
 <p> noteOff, noteOn, polytouch, control, program, touch, bend, sysex, sysrt, smpte
 <p>The first argument these functions receive is an unique identifier that specifies the source of the data.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*findPort' href='./../Overviews/Methods.html#findPort'>findPort</a> (<span class='argstr'>deviceName</span>, <span class='argstr'>portName</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*findPort' href='./../Overviews/Methods.html#findPort'>findPort</a>(<span class='argstr'>deviceName</span>, <span class='argstr'>portName</span>)</h3>
 <div class='method'>
 <p>searches for a connected <a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a> by name.<pre class='code prettyprint lang-sc'>//list connected ins:
 MIDIClient.init;
 MIDIClient.sources;</pre>
-</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*addFuncTo' href='./../Overviews/Methods.html#addFuncTo'>addFuncTo</a> (<span class='argstr'>what</span>, <span class='argstr'>func</span>)</h3>
+</div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*addFuncTo' href='./../Overviews/Methods.html#addFuncTo'>addFuncTo</a>(<span class='argstr'>what</span>, <span class='argstr'>func</span>)</h3>
 <div class='method'>
 <p>Add a <a href="./../Classes/Function.html">Function</a> or similar object to be evaluated whenever a particular MIDI message is received. This method is preferable to the setters below, since it will not overwrite any existing functions.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>what<td class='argumentdesc'>
 <p>A <a href="./../Classes/Symbol.html">Symbol</a> indicating the message type to wait for, one of <code class='code prettyprint lang-sc'>'noteOn'</code> <code class='code prettyprint lang-sc'>'noteOff'</code>, <code class='code prettyprint lang-sc'>'polytouch'</code>, <code class='code prettyprint lang-sc'>'control'</code>, <code class='code prettyprint lang-sc'>'program'</code>, <code class='code prettyprint lang-sc'>'touch'</code>, <code class='code prettyprint lang-sc'>'bend'</code>, <code class='code prettyprint lang-sc'>'sysex'</code>, <code class='code prettyprint lang-sc'>'sysrt'</code>, <code class='code prettyprint lang-sc'>'smpte'</code>, or <code class='code prettyprint lang-sc'>'invalid'</code> (for invalid sysex messages).<tr><td class='argumentname'>func<td class='argumentdesc'>
-<p>A <a href="./../Classes/Function.html">Function</a> or similar object to be evaluated when a message of the specified type is received. See the setters below for the arguments which will be passed at evaluation time.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*removeFuncFrom' href='./../Overviews/Methods.html#removeFuncFrom'>removeFuncFrom</a> (<span class='argstr'>what</span>, <span class='argstr'>func</span>)</h3>
+<p>A <a href="./../Classes/Function.html">Function</a> or similar object to be evaluated when a message of the specified type is received. See the setters below for the arguments which will be passed at evaluation time.</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*removeFuncFrom' href='./../Overviews/Methods.html#removeFuncFrom'>removeFuncFrom</a>(<span class='argstr'>what</span>, <span class='argstr'>func</span>)</h3>
 <div class='method'>
 <p>Remove a <a href="./../Classes/Function.html">Function</a> or similar object from the list of those to be evaluated whenever a particular MIDI message is received. This method is preferable to the setters below, since it will leave any existing functions in place.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>what<td class='argumentdesc'>
 <p>A <a href="./../Classes/Symbol.html">Symbol</a> indicating the message type, one of <code class='code prettyprint lang-sc'>'noteOn'</code> <code class='code prettyprint lang-sc'>'noteOff'</code>, <code class='code prettyprint lang-sc'>'polytouch'</code>, <code class='code prettyprint lang-sc'>'control'</code>, <code class='code prettyprint lang-sc'>'program'</code>, <code class='code prettyprint lang-sc'>'touch'</code>, <code class='code prettyprint lang-sc'>'bend'</code>, <code class='code prettyprint lang-sc'>'sysex'</code>, <code class='code prettyprint lang-sc'>'sysrt'</code>, <code class='code prettyprint lang-sc'>'smpte'</code>, or <code class='code prettyprint lang-sc'>'invalid'</code> (for invalid sysex messages).<tr><td class='argumentname'>func<td class='argumentdesc'>
-<p>The <a href="./../Classes/Function.html">Function</a> or similar object to be removed.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*replaceFuncTo' href='./../Overviews/Methods.html#replaceFuncTo'>replaceFuncTo</a> (<span class='argstr'>what</span>, <span class='argstr'>func</span>, <span class='argstr'>newFunc</span>)</h3>
+<p>The <a href="./../Classes/Function.html">Function</a> or similar object to be removed.</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*replaceFuncTo' href='./../Overviews/Methods.html#replaceFuncTo'>replaceFuncTo</a>(<span class='argstr'>what</span>, <span class='argstr'>func</span>, <span class='argstr'>newFunc</span>)</h3>
 <div class='method'>
 <p>Replace a <a href="./../Classes/Function.html">Function</a> or similar object in the list to be evaluated whenever a particular MIDI message is received with another one. This method is preferable to the setters below, since it will not overwrite any existing functions.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>what<td class='argumentdesc'>
 <p>A <a href="./../Classes/Symbol.html">Symbol</a> indicating the message type to wait for, one of <code class='code prettyprint lang-sc'>'noteOn'</code> <code class='code prettyprint lang-sc'>'noteOff'</code>, <code class='code prettyprint lang-sc'>'polytouch'</code>, <code class='code prettyprint lang-sc'>'control'</code>, <code class='code prettyprint lang-sc'>'program'</code>, <code class='code prettyprint lang-sc'>'touch'</code>, <code class='code prettyprint lang-sc'>'bend'</code>, <code class='code prettyprint lang-sc'>'sysex'</code>, <code class='code prettyprint lang-sc'>'sysrt'</code>, <code class='code prettyprint lang-sc'>'smpte'</code>, or <code class='code prettyprint lang-sc'>'invalid'</code> (for invalid sysex messages).<tr><td class='argumentname'>func<td class='argumentdesc'>
 <p>The <a href="./../Classes/Function.html">Function</a> or similar object to be replaced.<tr><td class='argumentname'>newFunc<td class='argumentdesc'>
-<p>A <a href="./../Classes/Function.html">Function</a> or similar object to be evaluated when a message of the specified type is received. See the setters below for the arguments which will be passed at evaluation time.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*noteOnZeroAsNoteOff' href='./../Overviews/Methods.html#noteOnZeroAsNoteOff'>noteOnZeroAsNoteOff</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*noteOnZeroAsNoteOff' href='./../Overviews/Methods.html#noteOnZeroAsNoteOff'>noteOnZeroAsNoteOff</a> = value</h3>
+<p>A <a href="./../Classes/Function.html">Function</a> or similar object to be evaluated when a message of the specified type is received. See the setters below for the arguments which will be passed at evaluation time.</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*noteOnZeroAsNoteOff' href='./../Overviews/Methods.html#noteOnZeroAsNoteOff'>noteOnZeroAsNoteOff</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*noteOnZeroAsNoteOff' href='./../Overviews/Methods.html#noteOnZeroAsNoteOff'>noteOnZeroAsNoteOff</a> = value</h3>
 <div class='method'>
-<p>By default this flag is <code class='code prettyprint lang-sc'>true</code> and SuperCollider interprets incoming MIDI noteOn message with velocity 0 as noteOff messages. In case you do not want this automatic translation, you can set this flag to <code class='code prettyprint lang-sc'>false</code></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*connectAll' href='./../Overviews/Methods.html#connectAll'>connectAll</a> (<span class='argstr'>verbose: true</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Platform/linux/extMIDIOut.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Platform/linux/extMIDIOut.sc</a></div>
+<p>By default this flag is <code class='code prettyprint lang-sc'>true</code> and SuperCollider interprets incoming MIDI noteOn message with velocity 0 as noteOff messages. In case you do not want this automatic translation, you can set this flag to <code class='code prettyprint lang-sc'>false</code></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*connectAll' href='./../Overviews/Methods.html#connectAll'>connectAll</a>(<span class='argstr'>verbose: true</span>)</h3>
 <div class='method'>
 <p>Connect to all possible MIDI inputs.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>verbose<td class='argumentdesc'>
-<p>If set to true (default) it will print out the ports found in MIDIClient.init.</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*disconnectAll' href='./../Overviews/Methods.html#disconnectAll'>disconnectAll</a> </h3>
+<p>If set to true (default) it will print out the ports found in MIDIClient.init.</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*disconnectAll' href='./../Overviews/Methods.html#disconnectAll'>disconnectAll</a></h3>
 <div class='method'>
-<p>Disconnect from all MIDI inputs.</div><h3><a class='anchor' name='Getter/Setters for Specific Message Types'>Getter/Setters for Specific Message Types</a></h3>
+<p>Disconnect from all MIDI inputs.</div><h3><a class='anchor' name='Getter/Setters%20for%20Specific%20Message%20Types'>Getter/Setters for Specific Message Types</a></h3>
 
-<p>The methods below allow you to register a function to respond to a particular message type.<div class='note'><span class='notelabel'>NOTE:</span> It is preferable to use the <a href="#*addFuncTo">*addFuncTo</a>, <a href="#*removeFuncFrom">*removeFuncFrom</a> and <a href="#*replaceFuncTo">*replaceFuncTo</a> methods above instead of these methods, as they will not overwrite any functions added by system objects.</div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*noteOn' href='./../Overviews/Methods.html#noteOn'>noteOn</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*noteOn' href='./../Overviews/Methods.html#noteOn'>noteOn</a> = value</h3>
+<p>The methods below allow you to register a function to respond to a particular message type.<div class='note'><span class='notelabel'>NOTE:</span> It is preferable to use the <a href="#*addFuncTo">*addFuncTo</a>, <a href="#*removeFuncFrom">*removeFuncFrom</a> and <a href="#*replaceFuncTo">*replaceFuncTo</a> methods above instead of these methods, as they will not overwrite any functions added by system objects.</div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*noteOn' href='./../Overviews/Methods.html#noteOn'>noteOn</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*noteOn' href='./../Overviews/Methods.html#noteOn'>noteOn</a> = value</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>(value)<td class='argumentdesc'>
 <p>a <a href="./../Classes/Function.html">Function</a> evaluated whenever a MIDI noteOn message is received. It is passed the following arguments:<dl>
 <dt>uid<dd>unique identifier of the MIDI port<dt>MIDIchannel<dd>ranges from 0 to 15<dt>keyNumber<dd>0 - 127<dt>velocity<dd>0 - 127</dl>
-</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*noteOff' href='./../Overviews/Methods.html#noteOff'>noteOff</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*noteOff' href='./../Overviews/Methods.html#noteOff'>noteOff</a> = value</h3>
+</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*noteOff' href='./../Overviews/Methods.html#noteOff'>noteOff</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*noteOff' href='./../Overviews/Methods.html#noteOff'>noteOff</a> = value</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>(value)<td class='argumentdesc'>
 <p>a <a href="./../Classes/Function.html">Function</a> evaluated whenever a MIDI noteOff message is received. It is passed the following arguments:<dl>
 <dt>uid<dd>unique identifier of the MIDI port<dt>MIDIchannel<dd>ranges from 0 to 15<dt>keyNumber<dd>0 - 127<dt>velocity<dd>0 - 127 (typically 64 unless noteOff velocity is supported)</dl>
-</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*polytouch' href='./../Overviews/Methods.html#polytouch'>polytouch</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*polytouch' href='./../Overviews/Methods.html#polytouch'>polytouch</a> = value</h3>
+</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*polytouch' href='./../Overviews/Methods.html#polytouch'>polytouch</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*polytouch' href='./../Overviews/Methods.html#polytouch'>polytouch</a> = value</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>(value)<td class='argumentdesc'>
 <p>a <a href="./../Classes/Function.html">Function</a> evaluated whenever a MIDI polytouch message is received. It is passed the following arguments:<dl>
 <dt>uid<dd>unique identifier of the MIDI port<dt>MIDIchannel<dd>ranges from 0 to 15<dt>keyNumber<dd>0 - 127<dt>pressure<dd>0 - 127</dl>
-</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*control' href='./../Overviews/Methods.html#control'>control</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*control' href='./../Overviews/Methods.html#control'>control</a> = value</h3>
+</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*control' href='./../Overviews/Methods.html#control'>control</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*control' href='./../Overviews/Methods.html#control'>control</a> = value</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>(value)<td class='argumentdesc'>
 <p>a <a href="./../Classes/Function.html">Function</a> evaluated whenever a MIDI control change message (CC) is received. It is passed the following arguments:<dl>
 <dt>uid<dd>unique identifier of the MIDI port<dt>MIDIchannel<dd>ranges from 0 to 15<dt>controllerNumber<dd>0 - 127<dt>value<dd>0 - 127</dl>
-</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*program' href='./../Overviews/Methods.html#program'>program</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*program' href='./../Overviews/Methods.html#program'>program</a> = value</h3>
+</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*program' href='./../Overviews/Methods.html#program'>program</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*program' href='./../Overviews/Methods.html#program'>program</a> = value</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>(value)<td class='argumentdesc'>
 <p>a <a href="./../Classes/Function.html">Function</a> evaluated whenever a MIDI program change message is received. It is passed the following arguments:<dl>
 <dt>uid<dd>unique identifier of the MIDI port<dt>MIDIchannel<dd>ranges from 0 to 15<dt>programNumber<dd>0 - 127</dl>
-</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*touch' href='./../Overviews/Methods.html#touch'>touch</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*touch' href='./../Overviews/Methods.html#touch'>touch</a> = value</h3>
+</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*touch' href='./../Overviews/Methods.html#touch'>touch</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*touch' href='./../Overviews/Methods.html#touch'>touch</a> = value</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>(value)<td class='argumentdesc'>
 <p>a <a href="./../Classes/Function.html">Function</a> evaluated whenever a MIDI after-touch message is received. It is passed the following arguments:<dl>
 <dt>uid<dd>unique identifier of the MIDI port<dt>MIDIchannel<dd>ranges from 0 to 15<dt>pressure<dd>0 - 127</dl>
-</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*bend' href='./../Overviews/Methods.html#bend'>bend</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*bend' href='./../Overviews/Methods.html#bend'>bend</a> = value</h3>
+</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*bend' href='./../Overviews/Methods.html#bend'>bend</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*bend' href='./../Overviews/Methods.html#bend'>bend</a> = value</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>(value)<td class='argumentdesc'>
 <p>a <a href="./../Classes/Function.html">Function</a> evaluated whenever a MIDI pitch wheel change message is received. It is passed the following arguments:<dl>
 <dt>uid<dd>unique identifier of the MIDI port<dt>MIDIchannel<dd>ranges from 0 to 15<dt>bend<dd>0 - 16383 (14bits, the midpoint is 8192)</dl>
-</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*sysex' href='./../Overviews/Methods.html#sysex'>sysex</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*sysex' href='./../Overviews/Methods.html#sysex'>sysex</a> = value</h3>
+</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*sysex' href='./../Overviews/Methods.html#sysex'>sysex</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*sysex' href='./../Overviews/Methods.html#sysex'>sysex</a> = value</h3>
 <div class='method'><div class='note'><span class='notelabel'>NOTE:</span> The current implementation assembles a complete system exclusive packet before evaluating the function.</div>
 <p><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>(value)<td class='argumentdesc'>
 <p>a <a href="./../Classes/Function.html">Function</a> evaluated whenever a MIDI System Exclusive message is received. It is passed the following arguments:<dl>
 <dt>uid<dd>unique identifier of the MIDI port<dt>data<dd>an <a href="./../Classes/Int8Array.html">Int8Array</a> (includes f0 and f7). See manufacturer references for details.</dl>
-</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*sysrt' href='./../Overviews/Methods.html#sysrt'>sysrt</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*sysrt' href='./../Overviews/Methods.html#sysrt'>sysrt</a> = value</h3>
+</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*sysrt' href='./../Overviews/Methods.html#sysrt'>sysrt</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*sysrt' href='./../Overviews/Methods.html#sysrt'>sysrt</a> = value</h3>
 <div class='method'><table>
 <tr><td><strong>index</strong><td><strong>data</strong><td><strong>message</strong><tr><td>2<td>14bits<td>song pointer<tr><td>3<td>7bits<td>song select<tr><td>8<td><td>midiclock<tr><td>10<td><td>start<tr><td>11<td><td>continue<tr><td>12<td><td>stop</table>
 
@@ -198,8 +203,8 @@ MIDIClient.sources;</pre>
 <tr><td class='argumentname'>(value)<td class='argumentdesc'>
 <p>a <a href="./../Classes/Function.html">Function</a> evaluated whenever a MIDI System Real-Time message is received. It is passed the following arguments:<dl>
 <dt>uid<dd>unique identifier of the MIDI port<dt>index<dd>ranges from 0 to 15<dt>data<dd></dl>
-</table></div><h3 class='cmethodname'><span class='methprefix'>*</span><a name='*smpte' href='./../Overviews/Methods.html#smpte'>smpte</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*smpte' href='./../Overviews/Methods.html#smpte'>smpte</a> = value</h3>
+</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*smpte' href='./../Overviews/Methods.html#smpte'>smpte</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*smpte' href='./../Overviews/Methods.html#smpte'>smpte</a> = value</h3>
 <div class='method'>Over MIDI, SMPTE is transmitted at 1/4 frame intervals four times faster than the frame rate.<table>
 <tr><td><strong>index</strong><td><strong>data</strong><tr><td>0<td>frames low nibble<tr><td>1<td>frames hi nibble<tr><td>2<td>seconds low nibble<tr><td>3<td>seconds hi nibble<tr><td>4<td>minutes low nibble<tr><td>5<td>minutes hi nibble<tr><td>6<td>hours low nibble<tr><td>7<td>hours hi <em>bit</em> OR'ed with frameRate<ul>
 <li>0 -&gt; 24 fps<li>2 -&gt; 25 fps<li>4 -&gt; 30 fps drop frame<li>6 -&gt; 30 fps</ul>
@@ -210,51 +215,51 @@ MIDIClient.sources;</pre>
 <tr><td class='argumentname'>(value)<td class='argumentdesc'>
 <p>a <a href="./../Classes/Function.html">Function</a> evaluated whenever a MIDI smpte message is received. It is passed the following arguments:<dl>
 <dt>uid<dd>unique identifier of the MIDI port<dt>index<dd>ranges from 0 to 7<dt>data<dd>0 - 15 (4bits)</dl>
-</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
-<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*action' href='./../Overviews/Methods.html#action'>action</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*action' href='./../Overviews/Methods.html#action'>action</a> = value</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*bendList' href='./../Overviews/Methods.html#bendList'>bendList</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*bendList' href='./../Overviews/Methods.html#bendList'>bendList</a> = value</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*connect' href='./../Overviews/Methods.html#connect'>connect</a> (<span class='argstr'>inport: 0</span>, <span class='argstr'>device: 0</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*controlList' href='./../Overviews/Methods.html#controlList'>controlList</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*controlList' href='./../Overviews/Methods.html#controlList'>controlList</a> = value</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*disconnect' href='./../Overviews/Methods.html#disconnect'>disconnect</a> (<span class='argstr'>inport: 0</span>, <span class='argstr'>device: 0</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doAction' href='./../Overviews/Methods.html#doAction'>doAction</a> (<span class='argstr'>src</span>, <span class='argstr'>status</span>, <span class='argstr'>a</span>, <span class='argstr'>b</span>, <span class='argstr'>c</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doBendAction' href='./../Overviews/Methods.html#doBendAction'>doBendAction</a> (<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>val</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doControlAction' href='./../Overviews/Methods.html#doControlAction'>doControlAction</a> (<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>, <span class='argstr'>val</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doInvalidSysexAction' href='./../Overviews/Methods.html#doInvalidSysexAction'>doInvalidSysexAction</a> (<span class='argstr'>src</span>, <span class='argstr'>packet</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doNoteOffAction' href='./../Overviews/Methods.html#doNoteOffAction'>doNoteOffAction</a> (<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>, <span class='argstr'>veloc</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doNoteOnAction' href='./../Overviews/Methods.html#doNoteOnAction'>doNoteOnAction</a> (<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>, <span class='argstr'>veloc</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doPolyTouchAction' href='./../Overviews/Methods.html#doPolyTouchAction'>doPolyTouchAction</a> (<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>, <span class='argstr'>val</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doProgramAction' href='./../Overviews/Methods.html#doProgramAction'>doProgramAction</a> (<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>val</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doSMPTEaction' href='./../Overviews/Methods.html#doSMPTEaction'>doSMPTEaction</a> (<span class='argstr'>src</span>, <span class='argstr'>frameRate</span>, <span class='argstr'>timecode</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doSysexAction' href='./../Overviews/Methods.html#doSysexAction'>doSysexAction</a> (<span class='argstr'>src</span>, <span class='argstr'>packet</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doSysrtAction' href='./../Overviews/Methods.html#doSysrtAction'>doSysrtAction</a> (<span class='argstr'>src</span>, <span class='argstr'>index</span>, <span class='argstr'>val</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*doTouchAction' href='./../Overviews/Methods.html#doTouchAction'>doTouchAction</a> (<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>val</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*invalid' href='./../Overviews/Methods.html#invalid'>invalid</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*invalid' href='./../Overviews/Methods.html#invalid'>invalid</a> = value</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*noteOffList' href='./../Overviews/Methods.html#noteOffList'>noteOffList</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*noteOffList' href='./../Overviews/Methods.html#noteOffList'>noteOffList</a> = value</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*noteOnList' href='./../Overviews/Methods.html#noteOnList'>noteOnList</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*noteOnList' href='./../Overviews/Methods.html#noteOnList'>noteOnList</a> = value</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*polyList' href='./../Overviews/Methods.html#polyList'>polyList</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*polyList' href='./../Overviews/Methods.html#polyList'>polyList</a> = value</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*programList' href='./../Overviews/Methods.html#programList'>programList</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*programList' href='./../Overviews/Methods.html#programList'>programList</a> = value</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*touchList' href='./../Overviews/Methods.html#touchList'>touchList</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*touchList' href='./../Overviews/Methods.html#touchList'>touchList</a> = value</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*waitBend' href='./../Overviews/Methods.html#waitBend'>waitBend</a> (<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>val</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*waitControl' href='./../Overviews/Methods.html#waitControl'>waitControl</a> (<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>, <span class='argstr'>val</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*waitNoteOff' href='./../Overviews/Methods.html#waitNoteOff'>waitNoteOff</a> (<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>note</span>, <span class='argstr'>veloc</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*waitNoteOn' href='./../Overviews/Methods.html#waitNoteOn'>waitNoteOn</a> (<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>note</span>, <span class='argstr'>veloc</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*waitPoly' href='./../Overviews/Methods.html#waitPoly'>waitPoly</a> (<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>note</span>, <span class='argstr'>veloc</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*waitProgram' href='./../Overviews/Methods.html#waitProgram'>waitProgram</a> (<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*waitTouch' href='./../Overviews/Methods.html#waitTouch'>waitTouch</a> (<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>val</span>)</h3>
+</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*action' href='./../Overviews/Methods.html#action'>action</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*action' href='./../Overviews/Methods.html#action'>action</a> = value</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*bendList' href='./../Overviews/Methods.html#bendList'>bendList</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*bendList' href='./../Overviews/Methods.html#bendList'>bendList</a> = value</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*connect' href='./../Overviews/Methods.html#connect'>connect</a>(<span class='argstr'>inport: 0</span>, <span class='argstr'>device: 0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*controlList' href='./../Overviews/Methods.html#controlList'>controlList</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*controlList' href='./../Overviews/Methods.html#controlList'>controlList</a> = value</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*disconnect' href='./../Overviews/Methods.html#disconnect'>disconnect</a>(<span class='argstr'>inport: 0</span>, <span class='argstr'>device: 0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*doAction' href='./../Overviews/Methods.html#doAction'>doAction</a>(<span class='argstr'>src</span>, <span class='argstr'>status</span>, <span class='argstr'>a</span>, <span class='argstr'>b</span>, <span class='argstr'>c</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*doBendAction' href='./../Overviews/Methods.html#doBendAction'>doBendAction</a>(<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>val</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*doControlAction' href='./../Overviews/Methods.html#doControlAction'>doControlAction</a>(<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>, <span class='argstr'>val</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*doInvalidSysexAction' href='./../Overviews/Methods.html#doInvalidSysexAction'>doInvalidSysexAction</a>(<span class='argstr'>src</span>, <span class='argstr'>packet</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*doNoteOffAction' href='./../Overviews/Methods.html#doNoteOffAction'>doNoteOffAction</a>(<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>, <span class='argstr'>veloc</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*doNoteOnAction' href='./../Overviews/Methods.html#doNoteOnAction'>doNoteOnAction</a>(<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>, <span class='argstr'>veloc</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*doPolyTouchAction' href='./../Overviews/Methods.html#doPolyTouchAction'>doPolyTouchAction</a>(<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>, <span class='argstr'>val</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*doProgramAction' href='./../Overviews/Methods.html#doProgramAction'>doProgramAction</a>(<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>val</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*doSMPTEaction' href='./../Overviews/Methods.html#doSMPTEaction'>doSMPTEaction</a>(<span class='argstr'>src</span>, <span class='argstr'>frameRate</span>, <span class='argstr'>timecode</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*doSysexAction' href='./../Overviews/Methods.html#doSysexAction'>doSysexAction</a>(<span class='argstr'>src</span>, <span class='argstr'>packet</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*doSysrtAction' href='./../Overviews/Methods.html#doSysrtAction'>doSysrtAction</a>(<span class='argstr'>src</span>, <span class='argstr'>index</span>, <span class='argstr'>val</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*doTouchAction' href='./../Overviews/Methods.html#doTouchAction'>doTouchAction</a>(<span class='argstr'>src</span>, <span class='argstr'>chan</span>, <span class='argstr'>val</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*invalid' href='./../Overviews/Methods.html#invalid'>invalid</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*invalid' href='./../Overviews/Methods.html#invalid'>invalid</a> = value</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*noteOffList' href='./../Overviews/Methods.html#noteOffList'>noteOffList</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*noteOffList' href='./../Overviews/Methods.html#noteOffList'>noteOffList</a> = value</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*noteOnList' href='./../Overviews/Methods.html#noteOnList'>noteOnList</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*noteOnList' href='./../Overviews/Methods.html#noteOnList'>noteOnList</a> = value</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*polyList' href='./../Overviews/Methods.html#polyList'>polyList</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*polyList' href='./../Overviews/Methods.html#polyList'>polyList</a> = value</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*programList' href='./../Overviews/Methods.html#programList'>programList</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*programList' href='./../Overviews/Methods.html#programList'>programList</a> = value</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*touchList' href='./../Overviews/Methods.html#touchList'>touchList</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*touchList' href='./../Overviews/Methods.html#touchList'>touchList</a> = value</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*waitBend' href='./../Overviews/Methods.html#waitBend'>waitBend</a>(<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>val</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*waitControl' href='./../Overviews/Methods.html#waitControl'>waitControl</a>(<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>, <span class='argstr'>val</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*waitNoteOff' href='./../Overviews/Methods.html#waitNoteOff'>waitNoteOff</a>(<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>note</span>, <span class='argstr'>veloc</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*waitNoteOn' href='./../Overviews/Methods.html#waitNoteOn'>waitNoteOn</a>(<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>note</span>, <span class='argstr'>veloc</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*waitPoly' href='./../Overviews/Methods.html#waitPoly'>waitPoly</a>(<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>note</span>, <span class='argstr'>veloc</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*waitProgram' href='./../Overviews/Methods.html#waitProgram'>waitProgram</a>(<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>num</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*waitTouch' href='./../Overviews/Methods.html#waitTouch'>waitTouch</a>(<span class='argstr'>port</span>, <span class='argstr'>chan</span>, <span class='argstr'>val</span>)</h3>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
-<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
-<h3><a class='anchor' name='Quick start for 1 port'>Quick start for 1 port</a></h3>
+<h3><a class='anchor' name='Quick%20start%20for%201%20port'>Quick start for 1 port</a></h3>
 <pre class='code prettyprint lang-sc'>(
 MIDIIn.connect;    // init for one port midi interface
 // register functions:
@@ -293,7 +298,7 @@ MIDIIn.removeFuncFrom(\sysex, ~sysex);
 MIDIIn.removeFuncFrom(\sysrt, ~sysrt);
 MIDIIn.removeFuncFrom(\smpte, ~smpte);
 )</pre>
-<h3><a class='anchor' name='Quick start for 2 or more ports'>Quick start for 2 or more ports</a></h3>
+<h3><a class='anchor' name='Quick%20start%20for%202%20or%20more%20ports'>Quick start for 2 or more ports</a></h3>
 <pre class='code prettyprint lang-sc'>(
     var inPorts = 2;
     var outPorts = 2;
@@ -302,20 +307,20 @@ MIDIIn.removeFuncFrom(\smpte, ~smpte);
         MIDIIn.connect(i, MIDIClient.sources.at(i));
     });
 )</pre>
-<h3><a class='anchor' name='example with sound'>example with sound</a></h3>
+<h3><a class='anchor' name='example%20with%20sound'>example with sound</a></h3>
 <pre class='code prettyprint lang-sc'>MIDIIn.connect;
 s.boot;
 
 (
-SynthDef("sik-goo", { arg freq=440,formfreq=100,gate=0.0,bwfreq=800;
+SynthDef("sik-goo", { |out, freq = 440, formfreq = 100, gate = 0.0, bwfreq = 800|
     var x;
     x = Formant.ar(
         SinOsc.kr(0.02, 0, 10, freq),
         formfreq,
         bwfreq
     );
-    x = EnvGen.kr(Env.adsr, gate,Latch.kr(gate,gate)) * x;
-    Out.ar(0, x);
+    x = EnvGen.kr(Env.adsr, gate, Latch.kr(gate, gate)) * x;
+    Out.ar(out, x);
 }).add;
 )
 
@@ -346,7 +351,7 @@ MIDIIn.addFuncTo(\bend, ~bend);
 MIDIIn.removeFuncFrom(\noteOn, ~noteOn);
 MIDIIn.removeFuncFrom(\noteOff, ~noteOff);
 MIDIIn.removeFuncFrom(\bend, ~bend);</pre>
-<h3><a class='anchor' name='writing to the bus rather than directly to the synth'>writing to the bus rather than directly to the synth</a></h3>
+<h3><a class='anchor' name='writing%20to%20the%20bus%20rather%20than%20directly%20to%20the%20synth'>writing to the bus rather than directly to the synth</a></h3>
 <pre class='code prettyprint lang-sc'>//i used this and got acceptable latency for triggering synths live.
 //The latency might actually be less than sc2, but i haven't used it enough
 //to tell for sure yet.
@@ -356,12 +361,17 @@ MIDIIn.removeFuncFrom(\bend, ~bend);</pre>
 s.boot;
 
 (
-SynthDef("moto-rev", { arg ffreq=100;
+SynthDef("moto-rev", { |out, ffreq = 100|
     var x;
-    x = RLPF.ar(LFPulse.ar(SinOsc.kr(0.2, 0, 10, 21), [0,0.1], 0.1),
-        ffreq, 0.1)
-        .clip2(0.4);
-    Out.ar(0, x);
+    x = RLPF.ar(
+        LFPulse.ar(
+            SinOsc.kr(0.2, 0, 10, 21),
+            [0, 0.1],
+            0.1
+        ),
+        ffreq, 0.1
+    ).clip2(0.4);
+    Out.ar(out, x);
 }).add;
 )
 
@@ -399,16 +409,16 @@ b.free;
 MIDIIn.removeFuncFrom(\noteOn, ~noteOn);
 MIDIIn.removeFuncFrom(\control, ~control);
 MIDIIn.removeFuncFrom(\bend, ~bend);</pre>
-<h3><a class='anchor' name='Keyboard Split for two voices'>Keyboard Split for two voices</a></h3>
+<h3><a class='anchor' name='Keyboard%20Split%20for%20two%20voices'>Keyboard Split for two voices</a></h3>
 <pre class='code prettyprint lang-sc'>//pbend to cutoff, mod to rez, 7 to amp
 //- matrix6k@somahq.com
 
 s.boot;
 (
-SynthDef("funk",{ arg freq = 700, amp = 0.2, gate = 1, cutoff = 20000, rez = 1, lfospeed=0;
-    var e,x,env,range,filterfreq;
+SynthDef("funk",{ | out, freq = 700, amp = 0.2, gate = 1, cutoff = 20000, rez = 1, lfospeed = 0 |
+    var e, x, env, range, filterfreq;
     e = Env.new([0, 0.1, 0.1, 0], [0, 0.1, 0.1], 'linear', 2);
-    env=Env.adsr(0.3,1,1,1);
+    env = Env.adsr(0.3,1,1,1);
     range = cutoff -1;
     filterfreq = SinOsc.kr(lfospeed,0, range, cutoff).abs;
     x = RLPF.ar(Mix.ar([
@@ -417,18 +427,18 @@ SynthDef("funk",{ arg freq = 700, amp = 0.2, gate = 1, cutoff = 20000, rez = 1, 
         ]),
         EnvGen.kr(env,gate)*filterfreq,
         rez);
-    Out.ar([0,1],x * EnvGen.kr(e, gate, doneAction: 2))
+    Out.ar(out, x * EnvGen.kr(e, gate, doneAction: Done.freeSelf))
 }).add;
 
-SynthDef("strings",{ arg freq = 700, amp = 0.2, gate = 1;
-    var x,enve;
+SynthDef("strings", { |out, freq = 700, amp = 0.2, gate = 1|
+    var x, enve;
     enve = Env.new([0, 0.1, 0.1, 0], [2, 0.1, 1], 'linear', 2);
     x = RLPF.ar(Mix.ar([
             Mix.arFill(2, {Saw.ar(freq +2.rand2,0.6)}),
             Mix.arFill(2, {Saw.ar(freq *0.5 + 2.rand2,0.6)})
         ]),
         6000,1);
-    Out.ar([0,1],x * EnvGen.kr(enve, gate, doneAction: 2))
+    Out.ar(out, x * EnvGen.kr(enve, gate, doneAction: Done.freeSelf))
 }).add;
 )
 
@@ -503,4 +513,4 @@ MIDIIn.removeFuncFrom(\noteOn, ~noteOn);
 MIDIIn.removeFuncFrom(\control, ~control);
 MIDIIn.removeFuncFrom(\bend, ~bend);</pre>
 
-<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/MIDIIn.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/MIDIIn.schelp</a><br>link::Classes/MIDIIn::<br>sc version: 3.8dev</div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/MIDIIn.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/MIDIIn.schelp</a><br>link::Classes/MIDIIn::<br></div></div></body></html>

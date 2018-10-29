@@ -1,32 +1,38 @@
-<html><head><title>19_Scheduling</title>
+<!doctype html><html lang='en'><head><title>19_Scheduling | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = '19_Scheduling';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>19_Scheduling:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Routines%20and%20clocks'>Routines and clocks</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Scheduling%20routines'>Scheduling routines</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Clocks%20and%20the%20convenience%20of%20.play'>Clocks and the convenience of .play</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Scheduling%20synths%20with%20routines'>Scheduling synths with routines</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/MARK_POLISHOOK_TUTORIAL</div>
-<div id='categories'><a href='./../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Tutorials>Mark_Polishook_tutorial</a></div>
-<h1>19_Scheduling</h1>
+<div id='label'>
+<span id='folder'>Tutorials/Mark_Polishook_tutorial</span>
+ | <span id='categories'><a href='./../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Mark_Polishook_tutorial</a></span>
+</div><h1>19_Scheduling</h1>
 <div id='summary'>Mark Polishook tutorial</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Routines and clocks'>Routines and clocks</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Scheduling routines'>Scheduling routines</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Clocks and the convenience of .play'>Clocks and the convenience of .play</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Scheduling synths with routines'>Scheduling synths with routines</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Routines and clocks'>Routines and clocks</a></h2>
+<h2><a class='anchor' name='Routines%20and%20clocks'>Routines and clocks</a></h2>
 
 <p>Use clocks to create automated, algorithmic scheduling. Among the things that clocks "play" are routines, tasks, and patterns.
 <p>To see how a clock "plays" a routine, first examine how a function works in a routine.
@@ -81,7 +87,7 @@ r = Routine({
 
 <p>Evaluate the routine one more time than the loop in the routine allows.<pre class='code prettyprint lang-sc'>4.do({ r.next.postln });</pre>
 
-<p>The routine returned three strings followed by nil.<h2><a class='anchor' name='Scheduling routines'>Scheduling routines</a></h2>
+<p>The routine returned three strings followed by nil.<h2><a class='anchor' name='Scheduling%20routines'>Scheduling routines</a></h2>
 
 <p>Rewrite the routine so that it includes a .wait message.<pre class='code prettyprint lang-sc'>(
 r = Routine({
@@ -100,7 +106,7 @@ r = Routine({
 <p>Then "play" the routine, eg, send it a .play message.<pre class='code prettyprint lang-sc'>r.play;</pre>
 
 <p>Append a .reset message to the routine so that it can start over.<pre class='code prettyprint lang-sc'>r.reset.play;</pre>
-<h2><a class='anchor' name='Clocks and the convenience of .play'>Clocks and the convenience of .play</a></h2>
+<h2><a class='anchor' name='Clocks%20and%20the%20convenience%20of%20.play'>Clocks and the convenience of .play</a></h2>
 
 <p>When a routine receives a .play message, control (of the routine) is redirected to a clock. The clock uses the receiver of the .wait message as a unit of time to schedule ("play") the routine.
 <p>SuperCollider has three clocks, each of which has a help file.<pre class='code prettyprint lang-sc'>SystemClock        // the most accurate
@@ -110,7 +116,7 @@ TempoClock        // to schedule in beats</pre>
 <p>The .play message is a convenience that allows one to write<pre class='code prettyprint lang-sc'>r.reset.play;        // reset the routine before playing it</pre>
 
 <p>instead of<pre class='code prettyprint lang-sc'>SystemClock.play(r)</pre>
-<h2><a class='anchor' name='Scheduling synths with routines'>Scheduling synths with routines</a></h2>
+<h2><a class='anchor' name='Scheduling%20synths%20with%20routines'>Scheduling synths with routines</a></h2>
 
 <p>Enclose synths within routines. It's often the case that the synthdef used by the synth in routines should have an envelope with a doneAction parameter set to 2 (to deallocate the memory needed for the synth after its envelope has finished playing).<pre class='code prettyprint lang-sc'>(
 // DEFINE A SYNTHDEF
@@ -137,7 +143,7 @@ SynthDef("fm2", {
 
     Out.ar(
         bus,
-        car * EnvGen.kr(Env.sine(1), doneAction: 2, timeScale: ts)
+        car * EnvGen.kr(Env.sine(1), doneAction: Done.freeSelf, timeScale: ts)
     )
 }).add;
 )
@@ -212,4 +218,4 @@ Synth.tail(~effect, "echoplex");
 r.reset.play;</pre>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/20_Debugging.html">20_Debugging</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/19_Scheduling.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/19_Scheduling.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/19_Scheduling::<br>sc version: 3.8dev</div></div></body></html>
+<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/20_Debugging.html">20_Debugging</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/19_Scheduling.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/19_Scheduling.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/19_Scheduling::<br></div></div></body></html>

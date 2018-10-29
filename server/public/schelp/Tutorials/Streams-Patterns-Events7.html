@@ -1,33 +1,39 @@
-<html><head><title>Understanding Streams, Patterns and Events - Part 7</title>
+<!doctype html><html lang='en'><head><title>Understanding Streams, Patterns and Events - Part 7 | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Understanding Streams, Patterns and Events - Part 7';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Understanding Streams, Patterns and Events - Part 7:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Practical%20Considerations'>Practical Considerations</a></li>
+<ul class='toc'><li class='toc2'><a href='#Using%20your%20own%20~instrument'>Using your own ~instrument</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Defining%20your%20own%20message%20bindings'>Defining your own message bindings</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Manipulating%20an%20EventStreamPlayer%20in%20Realtime'>Manipulating an EventStreamPlayer in Realtime</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS</div>
-<div id='categories'><a href='./../Browse.html#Tutorials>Streams-Patterns-Events'>Tutorials>Streams-Patterns-Events</a></div>
-<h1>Understanding Streams, Patterns and Events - Part 7</h1>
+<div id='label'>
+<span id='folder'>Tutorials</span>
+ | <span id='categories'><a href='./../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Tutorials>Streams-Patterns-Events'>Streams-Patterns-Events</a></span>
+</div><h1>Understanding Streams, Patterns and Events - Part 7</h1>
 <div id='summary'>Practical Considerations</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../Tutorials/Streams-Patterns-Events1.html">Understanding Streams, Patterns and Events - Part 1</a>, <a href="./../Tutorials/Streams-Patterns-Events2.html">Understanding Streams, Patterns and Events - Part 2</a>, <a href="./../Tutorials/Streams-Patterns-Events3.html">Understanding Streams, Patterns and Events - Part 3</a>, <a href="./../Tutorials/Streams-Patterns-Events4.html">Understanding Streams, Patterns and Events - Part 4</a>, <a href="./../Tutorials/Streams-Patterns-Events5.html">Understanding Streams, Patterns and Events - Part 5</a>, <a href="./../Tutorials/Streams-Patterns-Events6.html">Understanding Streams, Patterns and Events - Part 6</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Practical Considerations'>Practical Considerations</a></li>
-<ul class='toc'><li class='toc2'><a href='#Using your own ~instrument'>Using your own ~instrument</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Defining your own message bindings'>Defining your own message bindings</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Manipulating an EventStreamPlayer in Realtime'>Manipulating an EventStreamPlayer in Realtime</a></li>
-<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Practical Considerations'>Practical Considerations</a></h2>
-<h3><a class='anchor' name='Using your own ~instrument'>Using your own ~instrument</a></h3>
+<h2><a class='anchor' name='Practical%20Considerations'>Practical Considerations</a></h2>
+<h3><a class='anchor' name='Using%20your%20own%20~instrument'>Using your own ~instrument</a></h3>
 <pre class='code prettyprint lang-sc'>(
 SynthDef(\help_SPE7_BerlinB, { arg i_out=0, freq = 80, amp = 0.2, pan=0;
     var out, a, b;
@@ -38,7 +44,7 @@ SynthDef(\help_SPE7_BerlinB, { arg i_out=0, freq = 80, amp = 0.2, pan=0;
         0.07
     );
     #a, b = out;
-    DetectSilence.ar(a, 0.0001, doneAction: 2);
+    DetectSilence.ar(a, 0.0001, doneAction: Done.freeSelf);
     Out.ar(i_out, Mix.ar(PanAz.ar(4, [a, b], [pan, pan+1])));
 }).add;
 
@@ -46,7 +52,7 @@ SynthDef(\help_SPE7_CFString1, { arg i_out, freq = 360, gate = 1, pan, amp=0.1;
     var out, eg, fc, osc, a, b, w;
     fc = LinExp.kr(LFNoise1.kr(Rand(0.25,0.4)), -1,1,500,2000);
     osc = Mix.fill(8, { LFSaw.ar(freq * [Rand(0.99,1.01),Rand(0.99,1.01)], 0, amp) }).distort * 0.2;
-    eg = EnvGen.kr(Env.asr(1,1,1), gate, doneAction:2);
+    eg = EnvGen.kr(Env.asr(1,1,1), gate, doneAction: Done.freeSelf);
     out = eg * RLPF.ar(osc, fc, 0.1);
     #a, b = out;
     Out.ar(i_out, Mix.ar(PanAz.ar(4, [a, b], [pan, pan+0.3])));
@@ -62,7 +68,7 @@ Pbind(
     \amp, 0.03
 ).play; // this returns an EventStreamPlayer
 )</pre>
-<h3><a class='anchor' name='Defining your own message bindings'>Defining your own message bindings</a></h3>
+<h3><a class='anchor' name='Defining%20your%20own%20message%20bindings'>Defining your own message bindings</a></h3>
 
 <p>The default event prototype uses a <code class='code prettyprint lang-sc'>msgFunc</code> to determine which bindings to pass to the server. Synthdefs that have been stored in a <a href="./../Classes/SynthDescLib.html">SynthDescLib</a> ("synth description library") construct the <code class='code prettyprint lang-sc'>msgFunc</code> automatically. The default event looks up the instrument name in a SynthDescLib of your choosing (using the <code class='code prettyprint lang-sc'>\synthLib</code> key). Normally only the global SynthDescLib is used; if <code class='code prettyprint lang-sc'>\synthLib</code> is empty, the global library is the default.
 <p>You should not send or load synthdefs that you plan to use with patterns. Instead, store them in a SynthDescLib.<pre class='code prettyprint lang-sc'>// saves .scsyndef file on disk (like .load), and adds description to the global library
@@ -76,7 +82,7 @@ SynthDef(\help_SPE4_CFString2, { arg i_out, freq = 360, gate = 1, pan, amp=0.1, 
     var out, eg, fc, osc, a, b, w;
     fc = LinExp.kr(LFNoise1.kr(Rand(0.25,0.4)), -1,1,500,2000);
     osc = Mix.fill(8, { LFSaw.ar(freq * [Rand(0.99,1.01),Rand(0.99,1.01)], 0, amp * dorkarg ) }).distort * 0.2;
-    eg = EnvGen.kr(Env.asr(1,1,1), gate, doneAction:2);
+    eg = EnvGen.kr(Env.asr(1,1,1), gate, doneAction: Done.freeSelf);
     out = eg * RLPF.ar(osc, fc, 0.1);
     #a, b = out;
     Out.ar(i_out, Mix.ar(PanAz.ar(4, [a, b], [pan, pan+0.3])));
@@ -112,7 +118,7 @@ Pbind(
 )</pre>
 
 <p>But this is quite clumsy. It is strongly recommended to get into the habit of using <code class='code prettyprint lang-sc'>.add</code> for all SynthDefs intended for use with Patterns.
-<p>The other option you have if you will be using unspecified bindings, is of course to define an event with the appropriate <code class='code prettyprint lang-sc'>msgFunc</code> as default. Have a look at Event's source, it's easy, and it's cleaner than passing in the <code class='code prettyprint lang-sc'>msgFunc</code> every time.<h3><a class='anchor' name='Manipulating an EventStreamPlayer in Realtime'>Manipulating an EventStreamPlayer in Realtime</a></h3>
+<p>The other option you have if you will be using unspecified bindings, is of course to define an event with the appropriate <code class='code prettyprint lang-sc'>msgFunc</code> as default. Have a look at Event's source, it's easy, and it's cleaner than passing in the <code class='code prettyprint lang-sc'>msgFunc</code> every time.<h3><a class='anchor' name='Manipulating%20an%20EventStreamPlayer%20in%20Realtime'>Manipulating an EventStreamPlayer in Realtime</a></h3>
 <pre class='code prettyprint lang-sc'>(
 p = Pbind(
     \degree, Pwhite(0,12),
@@ -164,4 +170,4 @@ e.stop;        // will reset before resume.
 
 e.resume;</pre>
 
-<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events7.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events7.schelp</a><br>link::Tutorials/Streams-Patterns-Events7::<br>sc version: 3.8dev</div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events7.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events7.schelp</a><br>link::Tutorials/Streams-Patterns-Events7::<br></div></div></body></html>

@@ -1,74 +1,80 @@
-<html><head><title>Client vs Server</title>
+<!doctype html><html lang='en'><head><title>Client vs Server | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Client vs Server';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Client vs Server:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Pros/Cons'>Pros/Cons</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#A%20final%20remark%20for%20the%20advanced%20reader'>A final remark for the advanced reader</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider GUIDES</div>
-<div id='categories'><a href='./../Browse.html#Server>Architecture'>Server>Architecture</a>, <a href='./../Browse.html#External Control>OSC'>External Control>OSC</a></div>
-<h1>Client vs Server</h1>
+<div id='label'>
+<span id='folder'>Guides</span>
+ | <span id='categories'><a href='./../Browse.html#Server'>Server</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Server>Architecture'>Architecture</a> | <a href='./../Browse.html#External Control'>External Control</a>&#8201;&gt;&#8201;<a href='./../Browse.html#External Control>OSC'>OSC</a></span>
+</div><h1>Client vs Server</h1>
 <div id='summary'>Client versus Server Architecture and Operations</div>
 </div>
 <div class='subheader'>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Description'>Description</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Pros/Cons'>Pros/Cons</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#A final remark for the advanced reader'>A final remark for the advanced reader</a></li>
-<ul class='toc'></ul></ul></div>
+
 <p>The name "SuperCollider" is in fact used to indicate five different things (Figure 1):<ol>
 <li>an audio server<li>an audio programming language<li>an interpreter for the language, i.e. a program able to interpret it<li>the interpreter program as a client for the server<li>the application including the two programs and providing mentioned functionalities</ol>
 <div class='image'><img src='structureEn.png'/><br><b>Figure 1. Structure of the SuperCollider application</b></div>
 
-<p>The SuperCollider application is thus made up of two distinct, autonomous, components, a server and a client. The first is named scsynth (SC-synthesizer), the second sclang (SC-language).<h2><a class='anchor' name='Description'>Description</a></h2>
+<p>The SuperCollider application is thus made up of two distinct, autonomous, components, a server and a client. For the first we have a choice between scsynth (SC-synthesizer) and supernova, and for the second we have sclang (SC-language).<h2><a class='anchor' name='Description'>Description</a></h2>
 
 <p>The SuperCollider application makes use of client/server architecture which separates two functions, respectively one providing and the other requesting services. The client and the server communicate through a network.<div class='image'><img src='s8kfFC-clientServerEn.png'/><br><b>Figure 2. Client/Server architecture</b></div>
 
 <p>In Figure 2 a generic network architecture is depicted: A number of clients communicating with a server by exchanging messages through a network. In SuperCollider the client and the server make use of a specific subset of CNMAT's Open Sound Control (OSC) protocol in order to communicate (over TCP or UDP). As a consequence, you will see many references to "OSC messages" in the help files.
-<p>To avoid any possible confusion: The network is defined at an abstract level. This means that the client(s) and the server(s) can be in execution on the same physical machine. This is what normally happens when you use the SuperCollider application: two programs will run on your machine, scsynth and sclang.
-<p>The server app, <em>scsynth</em>, is a lean and efficient command line program dedicated to audio synthesis and processing. It knows nothing about SC code, objects, Object Oriented Programming, or anything else to do with the SC language.
+<p>To avoid any possible confusion: The network is defined at an abstract level. This means that the client(s) and the server(s) can be in execution on the same physical machine. This is what normally happens when you use the SuperCollider application: two programs will run on your machine, scsynth (or supernova) and sclang.
+<p>The server app, <em>scsynth</em> or <em>supernova</em>, is a lean and efficient command line program dedicated to audio synthesis and processing. It knows nothing about SC code, objects, Object Oriented Programming, or anything else to do with the SC language.
 <p>The client of this server is <em>sclang</em>. Sclang performs two distinct tasks:<dl>
 <dt>Client<dd>it is the <em>client</em> for the server, i.e. it sends OSC messages to the server. In order to write a letter to server, you need a paper sheet and a mailer: sclang is both.<dt>Interpreter<dd>it is the <em>interpreter</em> for the SuperCollider programming language, i.e. it allows to the user to write code in the aforementioned language and interactively execute the resulting commands, e.g. to control the audio server. In particular OSC messages can be cumbersome to write, as they share with the server its low-level perspective. The SuperCollider language is a high-level, fully featured object oriented language, allowing the user to gain a much more expressive power than OSC messages. Typically, the interpreter translates the code in SuperCollider language in OSC messages for the server. The user writes poetry (so to speak) in the SuperCollider language which is then paraphrased in OSC prose by the sclang interpreter, to be sent to the server.</dl>
 
 <p>From inside sclang, starting a server app can be accomplished by:<pre class='code prettyprint lang-sc'>s = Server.default; // create a new Server object and assign it to variable s
 s.boot;             // boot the server app, i.e. tell the server to be ready to work</pre>
 
-<p>The sclang interpreter can send OSC messages to scsynth in two fashions:<dl>
+<p>The sclang interpreter can send OSC messages to the server in two fashions:<dl>
 <dt>directly<dd>in this case, sclang offers a thin syntax layer which allows one to deal with raw OSC messages. All the server's functionality is in this case available "by hand" using the .sendMsg method of <a href="./../Classes/Server.html">Server</a>, and other similar messages.<pre class='code prettyprint lang-sc'>n = s.nextNodeID;                   // get an available nodeID from the server and assign it to n
 s.sendMsg("/s_new", "default", n);  // use the SynthDef "default" to create a synth with ID n
 s.sendMsg("/n_free", n);            // release the synth n</pre>
 
-<p><dt>indirectly<dd>the language app provides you with convienent OOP functionality to keep track of and manipulate things on the server. The high-level syntax is translated into low-level OSC messages by sclang and sent to the server (language wrapping).<pre class='code prettyprint lang-sc'>x = Synth("default");   // create a synth on the default server (s) and allocate an ID for it
+<p><dt>indirectly<dd>the language app provides you with convenient OOP functionality to keep track of and manipulate things on the server. The high-level syntax is translated into low-level OSC messages by sclang and sent to the server (language wrapping).<pre class='code prettyprint lang-sc'>x = Synth("default");   // create a synth on the default server (s) and allocate an ID for it
 x.free;                 // free the synth, its ID and resources</pre>
 </dl>
 
-<p>Working this way you have gained certain functionality. It provides a node ID for you automatically, it allows you to control the Synth in syntactically elegant and efficient ways (see the <a href="./../Classes/Synth.html">Synth</a> and <a href="./../Classes/Node.html">Node</a> helpfiles), and to access all the advantages of object oriented programming while doing so. Encapsulating the complexities and bookeeping greatly reduces the chance of bugs in your own code.<div class='image'><img src='scEn.png'/><br><b>Figure 3. Sclang as a high-level client</b></div>
+<p>Working this way you have gained certain functionality. It provides a node ID for you automatically, it allows you to control the Synth in syntactically elegant and efficient ways (see the <a href="./../Classes/Synth.html">Synth</a> and <a href="./../Classes/Node.html">Node</a> helpfiles), and to access all the advantages of object oriented programming while doing so. Encapsulating the complexities and bookkeeping greatly reduces the chance of bugs in your own code.<div class='image'><img src='scEn.png'/><br><b>Figure 3. Sclang as a high-level client</b></div>
 
 <p>Language wrapping allows the user to access complex behaviours from very little code. Figure 3 (ignore for the moment that sclang is represented as a client among other possible ones, see later) schematically represents what happens when you evaluate an audio function like this:<pre class='code prettyprint lang-sc'>// assuming the server is already booted
 {SinOsc.ar}.play ;</pre>
 
-<p>In this case many server operations are hidden. To understand the passages inolved in the evalutation of this code see <a href="./../Tutorials/Getting-Started/04-Functions-and-Other-Functionality.html">04. Functions and Other Functionality</a> and <a href="./../Tutorials/Getting-Started/10-SynthDefs-and-Synths.html">10. SynthDefs and Synths</a> (part of Scott Wilson's tutorial).
+<p>In this case many server operations are hidden. To understand the passages involved in the evaluation of this code see <a href="./../Tutorials/Getting-Started/04-Functions-and-Other-Functionality.html">04. Functions and Other Functionality</a> and <a href="./../Tutorials/Getting-Started/10-SynthDefs-and-Synths.html">10. SynthDefs and Synths</a> (part of Scott Wilson's tutorial).
 <p>The OOP-style also has a small amount of overhead. It requires clientside CPU cycles and memory to create and manipulate an object. Normally this is not significant, but there may be times when you would prefer to use the less elegant, and less expensive first method, for instance when creating large numbers of grains which will simply play and then deallocate themselves.
 <p>Thus it is possible to create synth nodes on the server without actually creating Synth objects, providing you are willing to do the required housekeeping yourself. The same is true of group nodes, buffers, and buses. A more detailed discussion of these concepts can be found in the <a href="./../Guides/NodeMessaging.html">Node Messaging</a> helpfile.
 <p>In conclusion, the crucial thing to remember is the distinction between things like nodes, busses, buffers, and servers and the objects that represent them in the language app (i.e. instances of <a href="./../Classes/Node.html">Node</a>, <a href="./../Classes/Bus.html">Bus</a>, <a href="./../Classes/Buffer.html">Buffer</a>, and <a href="./../Classes/Server.html">Server</a>; these are referred to as 'Server Abstraction Objects'). Keeping these conceptually distinct will help avoid much confusion.<h2><a class='anchor' name='Pros/Cons'>Pros/Cons</a></h2>
 
 <p>The client/server architecture provides three main advantages:<dl>
-<dt>stability<dd>if the client crashes, the server keeps on working, i.e. the audio does not stop. This is intuitively relevant for a live situation. Vice versa, the server can crash letting you still manage the situation from the client.<dt>modularity<dd>synthesis is one thing, control another. Separating the two aspects allows one to (for example) control scsynth from applications besides sclang. The only important thing is that they are able to send the right OSC messages to the server.<dt>remote control<dd>the client/server network can be external to your computer, e.g. over the Internet. This allows one to control an audio server in Alaska from a client (sclang or other) in India, for example.</dl>
+<dt>stability<dd>if the client crashes, the server keeps on working, i.e. the audio does not stop. This is intuitively relevant for a live situation. Vice versa, the server can crash letting you still manage the situation from the client.<dt>modularity<dd>synthesis is one thing, control another. Separating the two aspects allows one to (for example) control the server from applications other than sclang. The only important thing is that they are able to send the right OSC messages to the server.<dt>remote control<dd>the client/server network can be external to your computer, e.g. over the Internet. This allows one to control an audio server in Alaska from a client (sclang or other) in India, for example.</dl>
 
 <p>There are two notable drawbacks:<dl>
-<dt>latency<dd>The messaging process introduces a small amount of latency. This should not be confused with audio latency which can be quite low. It only means that there is a small, usually insignificant delay between the one side sending a message and the other receiving it and acting upon it. (This can be minimized by using the 'internal' server. See <a href="./../Classes/Server.html">Server</a> for more detail.)<dt>asynchronous execution<dd>In some cases the client might need to know that a task on the server (for instance processing a large sound file) has been completed before continuing with another task. Since some tasks take an arbitrary length of time to complete, a reply mechanism is necessary. This can add some complexity to your code, but is in principle not an issue. (See <a href="./../Classes/OSCresponder.html">OSCresponder</a> and <a href="./../Classes/OSCresponderNode.html">OSCresponderNode</a>.) Some server abstraction objects such as <a href="./../Classes/Buffer.html">Buffer</a> provide for this automatically through 'action' functions which wait for completion before executing.</dl>
-<h2><a class='anchor' name='A final remark for the advanced reader'>A final remark for the advanced reader</a></h2>
+<dt>latency<dd>The messaging process introduces a small amount of latency. This should not be confused with audio latency which can be quite low. It only means that there is a small, usually insignificant delay between the one side sending a message and the other receiving it and acting upon it. (This can be minimized by using the 'internal' server. See <a href="./../Classes/Server.html">Server</a> for more detail.)<dt>asynchronous execution<dd>In some cases the client might need to know that a task on the server (for instance processing a large sound file) has been completed before continuing with another task. Since some tasks take an arbitrary length of time to complete, a reply mechanism is necessary. This can add some complexity to your code, but is in principle not an issue. (See <a href="./../Classes/OSCFunc.html">OSCFunc</a> and <a href="./../Classes/OSCdef.html">OSCdef</a>.) Some server abstraction objects such as <a href="./../Classes/Buffer.html">Buffer</a> provide for this automatically through 'action' functions which wait for completion before executing.</dl>
+<h2><a class='anchor' name='A%20final%20remark%20for%20the%20advanced%20reader'>A final remark for the advanced reader</a></h2>
 
-<p>Apart from sclang, it is possible to control scsynth from any other client which provides for OSC messaging (e.g. from Java, Python, Max/MSP, etc.). For networking, see <a href="./../Reference/Server-Architecture.html">Server Architecture</a>, <a href="./../Classes/NetAddr.html">NetAddr</a>, <a href="./../Classes/OSCFunc.html">OSCFunc</a>.
-<p>In general however, sclang is the preferable way to communicate with scsynth for three reasons:<ul>
-<li>it gives you the expressive power of the SuperCollider language;<li>the language is explicitly fitted to scsynth's needs (and, more importantly, to musician's ones)<li>it allows one to create and load SynthDefs onto scsynth (see <a href="./../Classes/SynthDef.html">SynthDef</a>), which is a not such an easy task to accomplished in another client app.</ul>
-<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/ClientVsServer.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/ClientVsServer.schelp</a><br>link::Guides/ClientVsServer::<br>sc version: 3.8dev</div></div></body></html>
+<p>Apart from sclang, it is possible to control the server from any other client which provides for OSC messaging (e.g. from Java, Python, Max/MSP, etc.). For networking, see <a href="./../Reference/Server-Architecture.html">Server Architecture</a>, <a href="./../Classes/NetAddr.html">NetAddr</a>, <a href="./../Classes/OSCFunc.html">OSCFunc</a>.
+<p>In general however, sclang is the preferable way to communicate with the server for three reasons:<ul>
+<li>it gives you the expressive power of the SuperCollider language;<li>the language is explicitly fitted to the server's needs (and, more importantly, to musician's ones)<li>it allows one to create and load SynthDefs onto the server (see <a href="./../Classes/SynthDef.html">SynthDef</a>), which not all client apps are able to do</ul>
+<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/ClientVsServer.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/ClientVsServer.schelp</a><br>link::Guides/ClientVsServer::<br></div></div></body></html>

@@ -1,32 +1,38 @@
-<html><head><title>16. Sequencing with Patterns</title>
+<!doctype html><html lang='en'><head><title>16. Sequencing with Patterns | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = '16. Sequencing with Patterns';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>16. Sequencing with Patterns:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#What%20else%20can%20patterns%20do?'>What else can patterns do?</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Playing%20notes%20with%20a%20pattern:%20Pbind'>Playing notes with a pattern: Pbind</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Further%20reading'>Further reading</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Suggested%20exercises'>Suggested exercises</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/GETTING-STARTED</div>
-<div id='categories'><a href='./../../Browse.html#Tutorials>Getting-Started'>Tutorials>Getting-Started</a></div>
-<h1>16. Sequencing with Patterns</h1>
+<div id='label'>
+<span id='folder'>Tutorials/Getting-Started</span>
+ | <span id='categories'><a href='./../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Tutorials>Getting-Started'>Getting-Started</a></span>
+</div><h1>16. Sequencing with Patterns</h1>
 <div id='summary'>Getting Started With SuperCollider</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#What else can patterns do?'>What else can patterns do?</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Playing notes with a pattern: Pbind'>Playing notes with a pattern: Pbind</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Further reading'>Further reading</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Suggested exercises'>Suggested exercises</a></li>
-<ul class='toc'></ul></ul></div>
+
 <p>The previous section demonstrated how to use data routines to generate sequences of synthesis parameters. However, writing a routine with explicit yields is not a very convenient syntax. Since this is an essential part of creating computer music, we really need an easier way.
 <p>Patterns greatly simplify the use of data streams. A pattern is essentially a factory for a stream. The pattern objects includes the data you want to come out of the stream, and the type of pattern determines how the data will be streamed.
 <p>For example, we used this routine to output MIDI note numbers to play a couple of phrases from 'Over the Rainbow.'<pre class='code prettyprint lang-sc'>r = Routine({
@@ -46,10 +52,10 @@ var midi, dur;
 midi = Pseq([60, 72, 71, 67, 69, 71, 72, 60, 69, 67], 1).asStream;
 dur = Pseq([2, 2, 1, 0.5, 0.5, 1, 1, 2, 2, 3], 1).asStream;
 
-SynthDef(\smooth, { |freq = 440, sustain = 1, amp = 0.5|
+SynthDef(\smooth, { |out, freq = 440, sustain = 1, amp = 0.5|
     var sig;
-    sig = SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.linen(0.05, sustain, 0.1), doneAction: 2);
-    Out.ar(0, sig ! 2)
+    sig = SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.linen(0.05, sustain, 0.1), doneAction: Done.freeSelf);
+    Out.ar(out, sig ! 2)
 }).add;
 
 r = Task({
@@ -63,17 +69,17 @@ r = Task({
     }
 }).play(quant: TempoClock.default.beats + 1.0);
 )</pre>
-<h2><a class='anchor' name='What else can patterns do?'>What else can patterns do?</a></h2>
+<h2><a class='anchor' name='What%20else%20can%20patterns%20do?'>What else can patterns do?</a></h2>
 
 <p>The SuperCollider pattern library is large (over 120 classes, not including extension libraries), obviously beyond the scope of a tutorial to cover in depth. But some patterns you'll come back to again and again.
 <p>Many patterns take lists of values and return them in some order.<dl>
-<dt>Pseq(list, repeats, offset)<dd>return the list's values in order<dt>Pshuf(list, repeats)<dd>scramble the list into random order<dt>Prand(list, repeats)<dd>choose from the list's values randomly<dt>Pxrand(list, repeats)<dd>choose randomly, but never return the same list item twice in a row<dt>Pwrand(list, weights, repeats)<dd>like Prand, but chooses values according to a list of probabilities/weights</dl>
+<dt><a href="./../../Classes/Pseq.html">Pseq</a>(list, repeats, offset)<dd>return the list's values in order<dt><a href="./../../Classes/Pshuf.html">Pshuf</a>(list, repeats)<dd>scramble the list into random order<dt><a href="./../../Classes/Prand.html">Prand</a>(list, repeats)<dd>choose from the list's values randomly<dt><a href="./../../Classes/Pxrand.html">Pxrand</a>(list, repeats)<dd>choose randomly, but never return the same list item twice in a row<dt><a href="./../../Classes/Pwrand.html">Pwrand</a>(list, weights, repeats)<dd>like Prand, but chooses values according to a list of probabilities/weights</dl>
 
 <p>Other patterns generate values according to various parameters. In addition to these basic patterns, there is a whole set of random number generators that produce specific distributions, and also chaotic functions.<dl>
-<dt>Pseries(start, step, length)<dd>arithmetic series, e.g., 1, 2, 3, 4, 5<dt>Pgeom(start, grow, length)<dd>geometric series, e.g., 1, 2, 4, 8, 16<dt>Pwhite(lo, hi, length)<dd>random number generator, uses rrand(lo, hi) -- equal distribution<dt>Pexprand(lo, hi, length)<dd>random number generator, uses exprand(lo, hi) -- exponential distribution</dl>
+<dt><a href="./../../Classes/Pseries.html">Pseries</a>(start, step, length)<dd>arithmetic series, e.g., 1, 2, 3, 4, 5<dt><a href="./../../Classes/Pgeom.html">Pgeom</a>(start, grow, length)<dd>geometric series, e.g., 1, 2, 4, 8, 16<dt><a href="./../../Classes/Pwhite.html">Pwhite</a>(lo, hi, length)<dd>random number generator, uses rrand(lo, hi) -- equal distribution<dt><a href="./../../Classes/Pexprand.html">Pexprand</a>(lo, hi, length)<dd>random number generator, uses exprand(lo, hi) -- exponential distribution</dl>
 
 <p>Other patterns modify the output of value patterns. These are called FilterPatterns.<dl>
-<dt>Pn(pattern, repeats)<dd>repeat the pattern as many times as repeats indicates<dt>Pstutter(n, pattern)<dd>repeat individual values from a pattern <em>n</em> times. <em>n</em> may be a numeric pattern itself.</dl>
+<dt><a href="./../../Classes/Pn.html">Pn</a>(pattern, repeats)<dd>repeat the pattern as many times as repeats indicates<dt><a href="./../../Classes/Pstutter.html">Pstutter</a>(n, pattern)<dd>repeat individual values from a pattern <em>n</em> times. <em>n</em> may be a numeric pattern itself.</dl>
 
 <p>You can use patterns inside of other patterns. Here, we generate random numbers over a gradually increasing range. The upper bound on the random number generator is a stream that starts at 0.01, then proceeds to 0.02, 0.03 and so on, as the plot shows clearly.<pre class='code prettyprint lang-sc'>p = Pwhite(0.0, Pseries(0.01, 0.01, inf), 100).asStream;
     // .all pulls from the stream until it returns nil
@@ -83,13 +89,13 @@ p.all.plot;</pre>
 <p>Or, for another example, if you want to order a set of numbers randomly so that all numbers come out before a new order is chosen, use Pn to repeat a Pshuf.<pre class='code prettyprint lang-sc'>p = Pn(Pshuf([1, 2, 3, 4, 5], 1), inf).asStream;
 p.nextN(15);    // get 15 values from the pattern's stream</pre>
 
-<p>This is just a taste, meant to illustrate the kinds of flexibility you can get with patterns. As with any rich and adaptable structure, the best way is to start with simple cases and gradually extend into more complicated setups.<h2><a class='anchor' name='Playing notes with a pattern: Pbind'>Playing notes with a pattern: Pbind</a></h2>
+<p>This is just a taste, meant to illustrate the kinds of flexibility you can get with patterns. As with any rich and adaptable structure, the best way is to start with simple cases and gradually extend into more complicated setups.<h2><a class='anchor' name='Playing%20notes%20with%20a%20pattern:%20Pbind'>Playing notes with a pattern: Pbind</a></h2>
 
 <p>Not only can patterns produce data for notes, but they can also play the notes themselves. 'Over the Rainbow' again.<pre class='code prettyprint lang-sc'>(
-SynthDef(\smooth, { |freq = 440, sustain = 1, amp = 0.5|
+SynthDef(\smooth, { |out, freq = 440, sustain = 1, amp = 0.5|
     var sig;
-    sig = SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.linen(0.05, sustain, 0.1), doneAction: 2);
-    Out.ar(0, sig ! 2)
+    sig = SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.linen(0.05, sustain, 0.1), doneAction: Done.freeSelf);
+    Out.ar(out, sig ! 2)
 }).add;
 )
 
@@ -114,15 +120,15 @@ p = Pbind(
 <p>An introductory tutorial cannot cover all the possibilities. Learning a set of core pattern classes is important; the <a href="./../../Tutorials/A-Practical-Guide/PG_01_Introduction.html">Practical Guide to Patterns</a> help file series is a more comprehensive introduction. Pattern manipulations, and ways to combine or nest patterns, open up the field to nearly every compositional need.
 <p>For example, we can generate a rhythmic (but not necessarily metric) bassline by choosing randomly from a set of Pbind sequences. (Some of these will use Pmono, which is a variant of Pbind designed to play monophonic synth lines.) While this is a bigger block of code, its structure is fairly simple and it brings together several concepts introduced in the sequencing tutorials. Note that the quant argument to play is used to keep a couple of distinct sequences together on the beat.
 <p>Don't be intimidated by the bassline pattern. At a higher level, it reduces to <strong>Pxrand([a, b, c, d], inf)</strong>, which simply chooses items randomly without repeating any of them twice in a row. It happens that each item is an event pattern that plays a series of notes, but this doesn't matter to Pxrand. It just chooses an item, plays it through to the end, and then chooses the next, and so forth. Viewed this way, the pattern is an elegant expression of the idea of selecting phrases. The code representation is straightforward to relate to a musical conception.<pre class='code prettyprint lang-sc'>(
-SynthDef(\bass, { |freq = 440, gate = 1, amp = 0.5, slideTime = 0.17, ffreq = 1100, width = 0.15,
+SynthDef(\bass, { |out, freq = 440, gate = 1, amp = 0.5, slideTime = 0.17, ffreq = 1100, width = 0.15,
         detune = 1.005, preamp = 4|
     var    sig,
         env = Env.adsr(0.01, 0.3, 0.4, 0.1);
     freq = Lag.kr(freq, slideTime);
     sig = Mix(VarSaw.ar([freq, freq * detune], 0, width, preamp)).distort * amp
-        * EnvGen.kr(env, gate, doneAction: 2);
+        * EnvGen.kr(env, gate, doneAction: Done.freeSelf);
     sig = LPF.ar(sig, ffreq);
-    Out.ar(0, sig ! 2)
+    Out.ar(out, sig ! 2)
 }).add;
 
 TempoClock.default.tempo = 132/60;
@@ -155,11 +161,11 @@ p = Pxrand([
 
 // totally cheesy, but who could resist?
 (
-SynthDef(\kik, { |preamp = 1, amp = 1|
+SynthDef(\kik, { |out, preamp = 1, amp = 1|
     var    freq = EnvGen.kr(Env([400, 66], [0.08], -3)),
         sig = SinOsc.ar(freq, 0.5pi, preamp).distort * amp
-            * EnvGen.kr(Env([0, 1, 0.8, 0], [0.01, 0.1, 0.2]), doneAction: 2);
-    Out.ar(0, sig ! 2);
+            * EnvGen.kr(Env([0, 1, 0.8, 0], [0.01, 0.1, 0.2]), doneAction: Done.freeSelf);
+    Out.ar(out, sig ! 2);
 }).add;
 
 // before you play:
@@ -169,12 +175,12 @@ k = Pbind(\instrument, \kik, \delta, 1, \preamp, 4.5, \amp, 0.32).play(quant: 1)
 
 p.stop;
 k.stop;</pre>
-<h2><a class='anchor' name='Further reading'>Further reading</a></h2>
+<h2><a class='anchor' name='Further%20reading'>Further reading</a></h2>
 
-<p><a href="./../../Overviews/Streams.html">Streams</a>, <a href="./../../Tutorials/Streams-Patterns-Events1.html">Streams-Patterns-Events</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_01_Introduction.html">Practical Guide to Patterns</a><h2><a class='anchor' name='Suggested exercises'>Suggested exercises</a></h2>
+<p><a href="./../../Overviews/Streams.html">Streams</a>, <a href="./../../Tutorials/Streams-Patterns-Events1.html">Streams-Patterns-Events</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_01_Introduction.html">Practical Guide to Patterns</a><h2><a class='anchor' name='Suggested%20exercises'>Suggested exercises</a></h2>
 <ul>
 <li>Choose a familiar tune and write a Pbind for it, using any synthdef you like.<li>Add as many phrases as you wish to the bassline sequence in the previous example.</ul>
 
 <p>____________________
 <p>This document is part of the tutorial <strong>Getting Started With SuperCollider</strong>.
-<p>Click here to return to the table of Contents: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/16-Sequencing-with-Patterns.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/16-Sequencing-with-Patterns.schelp</a><br>link::Tutorials/Getting-Started/16-Sequencing-with-Patterns::<br>sc version: 3.8dev</div></div></body></html>
+<p>Click here to return to the table of Contents: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Getting-Started/16-Sequencing-with-Patterns.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Getting-Started/16-Sequencing-with-Patterns.schelp</a><br>link::Tutorials/Getting-Started/16-Sequencing-with-Patterns::<br></div></div></body></html>

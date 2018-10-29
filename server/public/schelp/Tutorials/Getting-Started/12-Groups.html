@@ -1,35 +1,41 @@
-<html><head><title>12. Groups</title>
+<!doctype html><html lang='en'><head><title>12. Groups | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = '12. Groups';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>12. Groups:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Groups%20as%20Ordering%20Tools'>Groups as Ordering Tools</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#All%20the%20addActions'>All the addActions</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#'queryAllNodes'%20and%20node%20IDs'>'queryAllNodes' and node IDs</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#The%20Root%20Node%20and%20the%20Default%20Group'>The Root Node and the Default Group</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Groups%20as,%20well,%20groups...'>Groups as, well, groups...</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Groups,%20their%20Inheritance,%20and%20More%20on%20Tracking%20Down%20Help'>Groups, their Inheritance, and More on Tracking Down Help</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/GETTING-STARTED</div>
-<div id='categories'><a href='./../../Browse.html#Tutorials>Getting-Started'>Tutorials>Getting-Started</a></div>
-<h1>12. Groups</h1>
+<div id='label'>
+<span id='folder'>Tutorials/Getting-Started</span>
+ | <span id='categories'><a href='./../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Tutorials>Getting-Started'>Getting-Started</a></span>
+</div><h1>12. Groups</h1>
 <div id='summary'>Getting Started With SuperCollider</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Groups as Ordering Tools'>Groups as Ordering Tools</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#All the addActions'>All the addActions</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#'queryAllNodes' and node IDs'>'queryAllNodes' and node IDs</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#The Root Node and the Default Group'>The Root Node and the Default Group</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Groups as, well, groups...'>Groups as, well, groups...</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Groups, their Inheritance, and More on Tracking Down Help'>Groups, their Inheritance, and More on Tracking Down Help</a></li>
-<ul class='toc'></ul></ul></div>
-<p>Our discussion about the order of synths on the server brings us to the topic of groups. Synths on the server are a type of what are called <em>nodes</em>. There's one other type of node: groups. Groups are simply collections of nodes, and can contain synths, other groups, or combinations of both. They are mostly useful in two ways: First they are very helpful in controlling order, second, they allow you to easily group together nodes and send them messages all at once. As you've probably guessed, there's a handy Server abstraction object to represent group nodes in the client app: Group.<h2><a class='anchor' name='Groups as Ordering Tools'>Groups as Ordering Tools</a></h2>
+
+<p>Our discussion about the order of synths on the server brings us to the topic of groups. Synths on the server are a type of what are called <em>nodes</em>. There's one other type of node: groups. Groups are simply collections of nodes, and can contain synths, other groups, or combinations of both. They are mostly useful in two ways: First they are very helpful in controlling order, second, they allow you to easily group together nodes and send them messages all at once. As you've probably guessed, there's a handy Server abstraction object to represent group nodes in the client app: Group.<h2><a class='anchor' name='Groups%20as%20Ordering%20Tools'>Groups as Ordering Tools</a></h2>
 
 <p>Groups can be quite helpful in terms of controlling order. Like synths they take targets and addActions as arguments, which makes it easy to put them in position.<pre class='code prettyprint lang-sc'>g = Group.new;
 h = Group.before(g);
@@ -63,7 +69,7 @@ SynthDef(\tutorial_Reverb2, { arg outBus = 0, inBus;
 
 // now synths in the groups. The default addAction is \addToHead
 (
-x = Synth(\tutorial_Reverb2, [\inBus, b], ~effects);
+x = Synth(\tutorial_Reverb2, [\inBus, ~bus], ~effects);
 y = Synth(\tutorial_DecaySin2, [\effectBus, ~bus, \outBus, 0], ~sources);
 z = Synth(\tutorial_DecaySin2, [\effectBus, ~bus, \outBus, 0, \freq, 660], ~sources);
 )
@@ -84,14 +90,14 @@ Environment.new.push;
 
 // restore old environment
 currentEnvironment.pop;</pre>
-<h2><a class='anchor' name='All the addActions'>All the addActions</a></h2>
+<h2><a class='anchor' name='All%20the%20addActions'>All the addActions</a></h2>
 
 <p>At this point it's probably good to cover the remaining add actions. In addition to \addBefore and \addAfter, there is also the (rarely) used \addReplace, and two add actions which apply to Groups: \addToHead and \addToTail. The former adds the receiver to the beginning of the group, so that it will execute first, the latter to the end of the group, so that it will execute last. Like the other addActions, \addToHead and \addToTail have convenience methods called 'head' and 'tail'.<pre class='code prettyprint lang-sc'>g = Group.new;
 h = Group.head(g);        // add h to the head of g
 x = Synth.tail(h, \default);    // add x to the tail of h
 s.queryAllNodes;        // this will post a representation of the node hierarchy
 x.free; h.free; g.free;</pre>
-<h2><a class='anchor' name=''queryAllNodes' and node IDs'>'queryAllNodes' and node IDs</a></h2>
+<h2><a class='anchor' name=''queryAllNodes'%20and%20node%20IDs'>'queryAllNodes' and node IDs</a></h2>
 
 <p>Server has a method called 'queryAllNodes' which will post a representation of the server's node tree. You should have seen something like the following in the post window when executing the example above:<pre class='code prettyprint lang-sc'>nodes on localhost:
 a Server
@@ -102,7 +108,7 @@ Group(0)
                                 Synth 1002</pre>
 
 <p>When you see a Group printed here, anything below it and indented to the right is contained within it. The order of nodes is from top to bottom. The numbers you see are what are called node IDs, which are how the server keeps track of nodes. Normally when working with Server abstraction objects you won't need to deal with node IDs as the objects keep track of them, assigning and freeing them when appropriate.
-<p>You may have been wondering why there were four groups posted above when we only created two. The first two, with the IDs 0 and 1, are special groups, called the RootNode and the 'default group'.<h2><a class='anchor' name='The Root Node and the Default Group'>The Root Node and the Default Group</a></h2>
+<p>You may have been wondering why there were four groups posted above when we only created two. The first two, with the IDs 0 and 1, are special groups, called the RootNode and the 'default group'.<h2><a class='anchor' name='The%20Root%20Node%20and%20the%20Default%20Group'>The Root Node and the Default Group</a></h2>
 
 <p>When a server app is booted there is a special group created with a node ID of 0. This represents the top of the server's node tree. There is a special server abstraction object to represent this, called RootNode. In addition there is another group created with an ID of 1, called the default group. This is the default target for all Nodes and is what you will get if you supply a Server as a target. If you don't specify a target or pass in nil, you will get the default group of the default Server.<pre class='code prettyprint lang-sc'>s.boot;
 a = Synth.new(\default); // creates a synth in the default group of the default Server
@@ -124,7 +130,7 @@ s.queryAllNodes;
     effects synth
 ]
 recording synth</pre>
-<h2><a class='anchor' name='Groups as, well, groups...'>Groups as, well, groups...</a></h2>
+<h2><a class='anchor' name='Groups%20as,%20well,%20groups...'>Groups as, well, groups...</a></h2>
 
 <p>The other major use of groups is to allow you to easily treat a number of synths as a whole. If you send a 'set' message to a group, it will apply that message to all nodes contained within it.<pre class='code prettyprint lang-sc'>g = Group.new;
 
@@ -135,7 +141,7 @@ recording synth</pre>
 g.set(\amp, 0.005); // turn them all down
 
 g.free;</pre>
-<h2><a class='anchor' name='Groups, their Inheritance, and More on Tracking Down Help'>Groups, their Inheritance, and More on Tracking Down Help</a></h2>
+<h2><a class='anchor' name='Groups,%20their%20Inheritance,%20and%20More%20on%20Tracking%20Down%20Help'>Groups, their Inheritance, and More on Tracking Down Help</a></h2>
 
 <p>Now for a little more OOP theory. Both Group and Synth are examples of what are called <em>subclasses</em>. You can think of subclasses as being children of a parent class, called their <em>superclass</em>. All subclasses inherit the methods of their superclass. They may <em>override</em> some methods with their own implementation (taking advantage of <em>polymorphism</em>), but in general subclasses respond to all the methods of their superclass, and some other ones of their own. Some classes are <em>abstract classes</em>, which means that you don't actually make instances of them, they just exist to provide a common set of methods and variables to their subclasses.
 <p>We might for instance imagine an abstract class called Dog, which has a number of subclasses, such as Terrier, BassetHound, etc. These might all have a 'run' method, but not all would need a 'herdSheep' method.
@@ -149,8 +155,8 @@ Group.findRespondingMethodFor('postln');    // Object-postln;
 Group.helpFileForMethod('postln');         // opens class Object help file</pre>
 
 <p>For more information see:
-<p><a href="./../../Classes/Group.html">Group</a>, <a href="./../../Classes/Node.html">Node</a>, <a href="./../../Reference/default_group.html">default_group</a>, <a href="./../../Classes/RootNode.html">RootNode</a>, <a href="./../../Guides/Intro-to-Objects.html">Introduction to Objects</a>, <a href="./../../Guides/Order-of-execution.html">Order of execution</a>, <a href="./../../Classes/Synth.html">Synth</a>, <a href="./../../Guides/More-On-Getting-Help.html">More on Getting Help</a>, <a href="./../../Guides/Internal-Snooping.html">Internal Snooping</a>
+<p><a href="./../../Classes/Group.html">Group</a>, <a href="./../../Classes/Node.html">Node</a>, <a href="./../../Reference/default_group.html">Default Group</a>, <a href="./../../Classes/RootNode.html">RootNode</a>, <a href="./../../Guides/Intro-to-Objects.html">Introduction to Objects</a>, <a href="./../../Guides/Order-of-execution.html">Order of execution</a>, <a href="./../../Classes/Synth.html">Synth</a>, <a href="./../../Guides/More-On-Getting-Help.html">More on Getting Help</a>, <a href="./../../Guides/Internal-Snooping.html">Internal Snooping (Introspection)</a>
 <p>____________________
 <p>This document is part of the tutorial <strong>Getting Started With SuperCollider</strong>.
 <p>Click here to go on to the next section: <a href="./../../Tutorials/Getting-Started/13-Buffers.html">13. Buffers</a>
-<p>Click here to return to the table of Contents: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/12-Groups.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/12-Groups.schelp</a><br>link::Tutorials/Getting-Started/12-Groups::<br>sc version: 3.8dev</div></div></body></html>
+<p>Click here to return to the table of Contents: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Getting-Started/12-Groups.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Getting-Started/12-Groups.schelp</a><br>link::Tutorials/Getting-Started/12-Groups::<br></div></div></body></html>

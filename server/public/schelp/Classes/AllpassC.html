@@ -1,41 +1,52 @@
-<html><head><title>AllpassC</title>
+<!doctype html><html lang='en'><head><title>AllpassC | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'AllpassC';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
-<div class='header'>
-<div id='label'>SuperCollider CLASSES</div>
-<div id='categories'><a href='./../Browse.html#UGens>Delays'>UGens>Delays</a></div>
-<h1>AllpassC</h1>
-<div id='summary'>All pass delay line with cubic interpolation.</div>
-</div>
-<div class='subheader'>
-<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Delays.sc'>Delays.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/CombN.html">CombN</a> : <a href="../Classes/PureUGen.html">PureUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
-<div id='related'>See also: <a href="./../Classes/AllpassL.html">AllpassL</a>, <a href="./../Classes/AllpassN.html">AllpassN</a>, <a href="./../Classes/BufAllpassC.html">BufAllpassC</a></div>
-</div>
 <div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<div id='toctitle'>AllpassC:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
-<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
 </ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
-<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Delays'>Delays</a></span>
+</div><h1>AllpassC<span id='superclasses'> : <a href="../Classes/CombN.html">CombN</a> : <a href="../Classes/PureUGen.html">PureUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
+<div id='summary'>Schroeder allpass delay line with cubic interpolation.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/Delays.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/Delays.sc'>Delays.sc</a></div><div id='related'>See also: <a href="./../Classes/AllpassL.html">AllpassL</a>, <a href="./../Classes/AllpassN.html">AllpassN</a>, <a href="./../Classes/BufAllpassC.html">BufAllpassC</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>All pass delay line with cubic interpolation. See also <a href="./../Classes/AllpassN.html">AllpassN</a> which uses no interpolation, and <a href="./../Classes/AllpassL.html">AllpassL</a> which uses linear interpolation. Cubic interpolation is more computationally expensive than linear, but more accurate.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>in: 0</span>, <span class='argstr'>maxdelaytime: 0.2</span>, <span class='argstr'>delaytime: 0.2</span>, <span class='argstr'>decaytime: 1</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<p>A Schroeder allpass filter is given by the difference equations<pre class='code prettyprint lang-sc'>s(t) = x(t) + k * s(t - D)
+y(t) = -k * s(t) + s(t - D)</pre>
+
+<p>where <code class='code prettyprint lang-sc'>x(t)</code> is the input signal, <code class='code prettyprint lang-sc'>y(t)</code> is the output signal, <code class='code prettyprint lang-sc'>D</code> is the delay time, and <code class='code prettyprint lang-sc'>k</code> is the allpass coefficient.
+<p>In this UGen, <code class='code prettyprint lang-sc'>k</code> is computed as <code class='code prettyprint lang-sc'>k == 0.001 ** (delay / decay.abs) * decay.sign</code> (0.001 is -60 dBFS).
+<p>See also <a href="./../Classes/AllpassN.html">AllpassN</a> which uses no interpolation, and <a href="./../Classes/AllpassL.html">AllpassL</a> which uses linear interpolation. Cubic interpolation is more computationally expensive than linear, but more accurate.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>AllpassC.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>in: 0</span>, <span class='argstr'>maxdelaytime: 0.2</span>, <span class='argstr'>delaytime: 0.2</span>, <span class='argstr'>decaytime: 1</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/CombN.html'>CombN</a></div>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>in: 0</span>, <span class='argstr'>maxdelaytime: 0.2</span>, <span class='argstr'>delaytime: 0.2</span>, <span class='argstr'>decaytime: 1</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>AllpassC.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a>(<span class='argstr'>in: 0</span>, <span class='argstr'>maxdelaytime: 0.2</span>, <span class='argstr'>delaytime: 0.2</span>, <span class='argstr'>decaytime: 1</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/CombN.html'>CombN</a></div>
 <div class='method'>
 <p><h4>Arguments:</h4>
@@ -46,9 +57,9 @@
 <p>Delay time in seconds.<tr><td class='argumentname'>decaytime<td class='argumentdesc'>
 <p>Time for the echoes to decay by 60 decibels. If this time is negative then the feedback coefficient will be negative, thus emphasizing only odd harmonics at an octave lower.<tr><td class='argumentname'>mul<td class='argumentdesc'>
 <p>Output will be multiplied by this value.<tr><td class='argumentname'>add<td class='argumentdesc'>
-<p>This value will be added to the output.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<p>This value will be added to the output.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
-<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
 <pre class='code prettyprint lang-sc'>// Since the allpass delay has no audible effect as a resonator on
 // steady state sound ...
@@ -81,4 +92,4 @@
 // but it outputs the input signal immediately (inverted) and the echoes
 // are lower in amplitude.
 { AllpassC.ar(Decay.ar(Dust.ar(1,0.5), 0.2, WhiteNoise.ar), 0.2, 0.2, 3) }.play;</pre>
-<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/AllpassC.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/AllpassC.schelp</a><br>link::Classes/AllpassC::<br>sc version: 3.8dev</div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/AllpassC.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/AllpassC.schelp</a><br>link::Classes/AllpassC::<br></div></div></body></html>

@@ -1,40 +1,46 @@
-<html><head><title>Layout Management</title>
+<!doctype html><html lang='en'><head><title>Layout Management | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Layout Management';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Layout Management:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#How%20a%20layout%20does%20its%20job'>How a layout does its job</a></li>
+<ul class='toc'><li class='toc2'><a href='#Intrinsic%20view%20sizes'>Intrinsic view sizes</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Automatic%20and%20dynamic%20space%20distribution'>Automatic and dynamic space distribution</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#User%20customization'>User customization</a></li>
+<ul class='toc'><li class='toc2'><a href='#Stretch%20factors'>Stretch factors</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Size%20constraints'>Size constraints</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Alignment'>Alignment</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#View%20vs.%20layout%20hierarchies'>View vs. layout hierarchies</a></li>
+<ul class='toc'><li class='toc2'><a href='#View%20constructed%20with%20a%20parent'>View constructed with a parent</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#View%20explicitly%20inserted%20into%20a%20layout'>View explicitly inserted into a layout</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider GUIDES</div>
-<div id='categories'><a href='./../Browse.html#GUI>Layout'>GUI>Layout</a></div>
-<h1>Layout Management</h1>
+<div id='label'>
+<span id='folder'>Guides</span>
+ | <span id='categories'><a href='./../Browse.html#GUI'>GUI</a>&#8201;&gt;&#8201;<a href='./../Browse.html#GUI>Layout'>Layout</a></span>
+</div><h1>Layout Management</h1>
 <div id='summary'>Using layout classes to manage distribution of child views within parents</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../Classes/HLayout.html">HLayout</a>, <a href="./../Classes/VLayout.html">VLayout</a>, <a href="./../Classes/GridLayout.html">GridLayout</a>, <a href="./../Classes/StackLayout.html">StackLayout</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#How a layout does its job'>How a layout does its job</a></li>
-<ul class='toc'><li class='toc2'><a href='#Intrinsic view sizes'>Intrinsic view sizes</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Automatic and dynamic space distribution'>Automatic and dynamic space distribution</a></li>
-<ul class='toc'></ul></ul><li class='toc1'><a href='#User customization'>User customization</a></li>
-<ul class='toc'><li class='toc2'><a href='#Stretch factors'>Stretch factors</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Size constraints'>Size constraints</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Alignment'>Alignment</a></li>
-<ul class='toc'></ul></ul><li class='toc1'><a href='#View vs. layout hierachies'>View vs. layout hierachies</a></li>
-<ul class='toc'><li class='toc2'><a href='#View constructed with a parent'>View constructed with a parent</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#View explicitely inserted into a layout'>View explicitely inserted into a layout</a></li>
-<ul class='toc'></ul></ul></ul></div>
+
 <p>The purpose of layouts is to distribute the amount of space given to the view on which they are installed among the children of that view. Each subclass of Layout has a specific pattern of space distribution (a line, a 2D grid, etc.). See their documentation for details.
-<p>A layout is installed on a view to manage the space the view occupies and distribute it among its child views. These child views can in turn have other layouts installed, managing the space given to them. But a layout can also manage other layouts directly - one layout can directly occupy a place in another layout's distribution pattern. A basic unit on which a layout operates is therefore abstractly called an item and can be a view or another layout.<div class='note'><span class='notelabel'>NOTE:</span> While layouts can form a hierachy on their own, in terms of view hierarchy all views managed by those layouts are direct children of the view on which the top layout is installed.</div>
+<p>A layout is installed on a view to manage the space the view occupies and distribute it among its child views. These child views can in turn have other layouts installed, managing the space given to them. But a layout can also manage other layouts directly - one layout can directly occupy a place in another layout's distribution pattern. A basic unit on which a layout operates is therefore abstractly called an item and can be a view or another layout.<div class='note'><span class='notelabel'>NOTE:</span> While layouts can form a hierarchy on their own, in terms of view hierarchy all views managed by those layouts are direct children of the view on which the top layout is installed.</div>
 <p>The following is an example of a VLayout, organizing a series of TextFields in a vertical line, and its last item is a HLayout, organizing a series of Buttons in a horizontal line.<pre class='code prettyprint lang-sc'>(
 w = Window(bounds:Rect(200,200,200,200)).layout_(
     VLayout(
@@ -43,10 +49,10 @@ w = Window(bounds:Rect(200,200,200,200)).layout_(
     )
 ).front;
 )</pre>
-<h2><a class='anchor' name='How a layout does its job'>How a layout does its job</a></h2>
+<h2><a class='anchor' name='How%20a%20layout%20does%20its%20job'>How a layout does its job</a></h2>
 
 <p>A layout does its job by resizing and moving items within the parent view to form a specific distribution pattern, in accord with items' own size preferences and constraints, and with the common sense of what makes the GUI useful.
-<p>To explain how the layout operates, let's first take a look at intrinsic size preferences and constraints of views:<h3><a class='anchor' name='Intrinsic view sizes'>Intrinsic view sizes</a></h3>
+<p>To explain how the layout operates, let's first take a look at intrinsic size preferences and constraints of views:<h3><a class='anchor' name='Intrinsic%20view%20sizes'>Intrinsic view sizes</a></h3>
 
 <p>Every view intrinsically has a <strong>preferred size</strong> and a <strong>minimum size</strong>, returned by <a href="./../Classes/View.html#-sizeHint">View: -sizeHint</a> and <a href="./../Classes/View.html#-minSizeHint">View: -minSizeHint</a>, respectively. The preferred size is a suitable size for the view to comfortably draw itself, display its contents and allow interaction, while the minimum size is the absolute minimum that the view needs to properly draw itself (including its contents). Both may change when the view's contents change; for example, most views that display some text will report a different <code class='code prettyprint lang-sc'>sizeHint</code> when the text changes (unless the text is scrollable).
 <p>A view takes on its preferred size at construction, if the 'bounds' argument is omitted. However, there is usually no way to set the text on a view at construction, so the size it automatically gets will not reflect the changes in text done after construction. You can remedy that by resizing the view to its <code class='code prettyprint lang-sc'>sizeHint</code> after the text has been set - but the <strong>purpose of layouts</strong> (explained below) is exactly to do that automatically for you. Here is an example of manually using the <code class='code prettyprint lang-sc'>sizeHint</code>:<pre class='code prettyprint lang-sc'>// Create a Window with a StaticText
@@ -78,12 +84,12 @@ x.minSize = Size(200,200);
 x.resizeTo(100,100);
 
 // The view did not allow a smaller size than minSize.</pre>
-<h3><a class='anchor' name='Automatic and dynamic space distribution'>Automatic and dynamic space distribution</a></h3>
+<h3><a class='anchor' name='Automatic%20and%20dynamic%20space%20distribution'>Automatic and dynamic space distribution</a></h3>
 
 <p>A layout <strong>automatically</strong> distributes its space among its items, possibly in <strong>unequal</strong> parts, based on the intrinsic preferences and constraints of views described above. Moreover, views also have intrinsic preferences as to whether they profit from being extended horizontally or vertically, or whether they prefer their size to be fixed in a certain direction. This is also taken into account by a layout.
 <p>A layout works <strong>dynamically</strong>, meaning that it redistributes the space whenever the amount of it changes (the view on which it is installed or the parent layout is resized), whenever items are added or removed, and whenever the size constraints and preferences of items change. The latter may happen for instance when a property of a view that affects its appearance is changed.
 <p>A layout will affect space distribution <strong>up the layout hierarchy</strong> - it will define its own constraints and preferences according to its distribution pattern as well as the sum of constraints and preferences of its items. Ultimately, this means that the user's ability to resize a window will be limited by size constraints determined on the basis of window's contents.
-<p>For example: in a HLayout (a layout organizing items in a horizontal line) containing a Button and a TextField, the Button will be given a fixed amount of width according to the text it displays, while the TextField will be given all the width that is left. The other Button in the example code below will occupy all the width of the window, since there is no other item competing for that particular space. Note that both Button and TextField have an instrinsically fixed height and so their height never changes when resizing the window. The size constraints also limit the minimum size that the window can be resized to.<pre class='code prettyprint lang-sc'>(
+<p>For example: in a HLayout (a layout organizing items in a horizontal line) containing a Button and a TextField, the Button will be given a fixed amount of width according to the text it displays, while the TextField will be given all the width that is left. The other Button in the example code below will occupy all the width of the window, since there is no other item competing for that particular space. Note that both Button and TextField have an intrinsically fixed height and so their height never changes when resizing the window. The size constraints also limit the minimum size that the window can be resized to.<pre class='code prettyprint lang-sc'>(
 w = Window.new(bounds:Rect(100,100,300,80)).layout_(
     VLayout (
         HLayout(
@@ -94,8 +100,8 @@ w = Window.new(bounds:Rect(100,100,300,80)).layout_(
     )
 ).front;
 )</pre>
-<h2><a class='anchor' name='User customization'>User customization</a></h2>
-<h3><a class='anchor' name='Stretch factors'>Stretch factors</a></h3>
+<h2><a class='anchor' name='User%20customization'>User customization</a></h2>
+<h3><a class='anchor' name='Stretch%20factors'>Stretch factors</a></h3>
 
 <p>Layouts typically allow the user to override their default distribution policy by assigning stretch factors to items or aspects of the layout's distribution pattern.<pre class='code prettyprint lang-sc'>(
 w = Window.new(bounds:Rect(100,100,400,80)).layout_(
@@ -105,7 +111,7 @@ w = Window.new(bounds:Rect(100,100,400,80)).layout_(
     )
 ).front;
 )</pre>
-<h3><a class='anchor' name='Size constraints'>Size constraints</a></h3>
+<h3><a class='anchor' name='Size%20constraints'>Size constraints</a></h3>
 
 <p>The user can override a view's intrinsic size constraints and preferences that the layout will take into account, by placing a hard-limit on a view's size, as described above.<pre class='code prettyprint lang-sc'>(
 w = Window.new(bounds:Rect(100,100,300,300)).layout_(
@@ -137,10 +143,10 @@ w = Window.new.layout_(
     )
 ).front;
 )</pre>
-<h2><a class='anchor' name='View vs. layout hierachies'>View vs. layout hierachies</a></h2>
+<h2><a class='anchor' name='View%20vs.%20layout%20hierarchies'>View vs. layout hierarchies</a></h2>
 
-<p>A layout starts to operate on the space that a view occupies from the moment it is installed on that view on. However, it will not automatically affect child views that where created before the layout was. For views to be managed by a layout they have to be created as children of a view after the layout has been installed on it, or they have to be explicitely inserted into the layout via layout's constructor or its instance methods for this purpose.<h3><a class='anchor' name='View constructed with a parent'>View constructed with a parent</a></h3>
+<p>A layout starts to operate on the space that a view occupies from the moment it is installed on that view on. However, it will not automatically affect child views that where created before the layout was. For views to be managed by a layout they have to be created as children of a view after the layout has been installed on it, or they have to be explicitly inserted into the layout via layout's constructor or its instance methods for this purpose.<h3><a class='anchor' name='View%20constructed%20with%20a%20parent'>View constructed with a parent</a></h3>
 
-<p>When a view is created with another view as parent it will implicitely become subject to the management of the parent's layout - it will be inserted into the layout in some default way. However, layouts like <a href="./../Classes/GridLayout.html">GridLayout</a> have a complex space distribution pattern and so you will need to use their dedicated methods to specify exactly what place in the layout's distribution pattern a view will occupy.<h3><a class='anchor' name='View explicitely inserted into a layout'>View explicitely inserted into a layout</a></h3>
+<p>When a view is created with another view as parent it will implicitly become subject to the management of the parent's layout - it will be inserted into the layout in some default way. However, layouts like <a href="./../Classes/GridLayout.html">GridLayout</a> have a complex space distribution pattern and so you will need to use their dedicated methods to specify exactly what place in the layout's distribution pattern a view will occupy.<h3><a class='anchor' name='View%20explicitly%20inserted%20into%20a%20layout'>View explicitly inserted into a layout</a></h3>
 
-<p>A view can also be constructed with no parent given; after it is explicitely inserted into a layout via the layout's constructor or an instance method, it will automatically become a child of the view on which the layout is or will be installed. In case the layout occupies place directly in another layout, the view will become a child of the view on wich the topmost layout is installed.<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/GUI-Layout-Management.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/GUI-Layout-Management.schelp</a><br>link::Guides/GUI-Layout-Management::<br>sc version: 3.8dev</div></div></body></html>
+<p>A view can also be constructed with no parent given; after it is explicitly inserted into a layout via the layout's constructor or an instance method, it will automatically become a child of the view on which the layout is or will be installed. In case the layout occupies place directly in another layout, the view will become a child of the view on which the topmost layout is installed.<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/GUI-Layout-Management.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/GUI-Layout-Management.schelp</a><br>link::Guides/GUI-Layout-Management::<br></div></div></body></html>

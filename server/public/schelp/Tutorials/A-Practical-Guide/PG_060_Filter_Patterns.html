@@ -1,69 +1,75 @@
-<html><head><title>Pattern Guide 060: Filter Patterns</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide 060: Filter Patterns | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = 'Pattern Guide 060: Filter Patterns';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Pattern Guide 060: Filter Patterns:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Filter%20patterns'>Filter patterns</a></li>
+<ul class='toc'><li class='toc2'><a href='#Repetition%20and%20Constraint%20patterns'>Repetition and Constraint patterns</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Time-based%20patterns'>Time-based patterns</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Adding%20values%20into%20event%20patterns%20(Or,%20"Pattern%20Composition")'>Adding values into event patterns (Or, "Pattern Composition")</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Parallelizing%20event%20patterns'>Parallelizing event patterns</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Language%20control%20methods'>Language control methods</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Server%20control%20methods'>Server control methods</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Data%20sharing'>Data sharing</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/A-PRACTICAL-GUIDE</div>
-<div id='categories'><a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>Streams-Patterns-Events>A-Practical-Guide</a></div>
-<h1>Pattern Guide 060: Filter Patterns</h1>
+<div id='label'>
+<span id='folder'>Tutorials/A-Practical-Guide</span>
+ | <span id='categories'><a href='./../../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>A-Practical-Guide</a></span>
+</div><h1>Pattern Guide 060: Filter Patterns</h1>
 <div id='summary'>Overview of patterns that modify the behavior of other patterns</div>
 </div>
 <div class='subheader'>
-<div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_05_Math_on_Patterns.html">Pattern Guide 05: Math on Patterns</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns.html">Pattern Guide 06a: Repetition Contraint Patterns</a></div>
+<div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_05_Math_on_Patterns.html">Pattern Guide 05: Math on Patterns</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns.html">Pattern Guide 06a: Repetition Constraint Patterns</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Filter patterns'>Filter patterns</a></li>
-<ul class='toc'><li class='toc2'><a href='#Repetition and Constraint patterns'>Repetition and Constraint patterns</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Time-based patterns'>Time-based patterns</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Adding values into event patterns (Or, "Pattern Composition")'>Adding values into event patterns (Or, "Pattern Composition")</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Parallelizing event patterns'>Parallelizing event patterns</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Language control methods'>Language control methods</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Server control methods'>Server control methods</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Data sharing'>Data sharing</a></li>
-<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Filter patterns'>Filter patterns</a></h2>
+<h2><a class='anchor' name='Filter%20patterns'>Filter patterns</a></h2>
 
 <p>Just like filter UGens modify an input signal, filter patterns modify the stream of values coming from a pattern.
 <p>We have already seen some operations that modify a stream of values: math operators (which render as <a href="./../../Classes/Punop.html">Punop</a>, <a href="./../../Classes/Pbinop.html">Pbinop</a> or <a href="./../../Classes/Pnaryop.html">Pnaryop</a> patterns) and certain collection methods (mainly <code class='code prettyprint lang-sc'>collect</code>, <code class='code prettyprint lang-sc'>select</code> and <code class='code prettyprint lang-sc'>reject</code>). Filter pattern classes can do some other surprising and useful things.
 <p>All filter patterns take at least one source pattern, providing the values/events to be filtered. Some filter patterns are designed for value patterns, others for event patterns. A handful work equally well with both single values and events.
-<p>Following is a categorized overview. See the separate category documents for more detail.<h3><a class='anchor' name='Repetition and Constraint patterns'>Repetition and Constraint patterns</a></h3>
+<p>Following is a categorized overview. See the separate category documents for more detail.<h3><a class='anchor' name='Repetition%20and%20Constraint%20patterns'>Repetition and Constraint patterns</a></h3>
 
-<p><a href="./../../Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns.html">Pattern Guide 06a: Repetition Contraint Patterns</a><dl>
+<p><a href="./../../Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns.html">Pattern Guide 06a: Repetition Constraint Patterns</a><dl>
 <dt><code class='code prettyprint lang-sc'>Pclutch(pattern, connected)</code><dd>If the <code class='code prettyprint lang-sc'>connected</code> pattern is true, Pclutch returns the next value from <code class='code prettyprint lang-sc'>pattern</code>. If <code class='code prettyprint lang-sc'>connected</code> is false, the previous pattern value is repeated. It's like a clutch in a car: when engaged, the pattern moves forward; when disconnected, it stays where it is.<dt><code class='code prettyprint lang-sc'>Pn(pattern, repeats)</code><dd>Embeds the source pattern <code class='code prettyprint lang-sc'>repeats</code> times: simple repetition. This also works on single values: <code class='code prettyprint lang-sc'>Pn(1, 5)</code> outputs the number 1 5 times.<dt><code class='code prettyprint lang-sc'>Pstutter(n, pattern)</code><dd><code class='code prettyprint lang-sc'>n</code> and <code class='code prettyprint lang-sc'>pattern</code> are both patterns. Each value from <code class='code prettyprint lang-sc'>pattern</code> is repeated <code class='code prettyprint lang-sc'>n</code> times. If <code class='code prettyprint lang-sc'>n</code> is a pattern, each value can be repeated a different number of times.<dt><code class='code prettyprint lang-sc'>PdurStutter(n, pattern)</code><dd>Like Pstutter, except the pattern value is divided by the number of repeats (so that the total time for the repeat cycle is the duration value from the source pattern).<dt><code class='code prettyprint lang-sc'>Pfin(count, pattern)</code><dd>Returns exactly <code class='code prettyprint lang-sc'>count</code> values from the source pattern, then stops.<dt><code class='code prettyprint lang-sc'>Pconst(sum, pattern, tolerance)</code><dd>Output numbers until the sum reaches a predefined limit. The last output value is adjusted so that the sum matches the limit exactly.<dt><code class='code prettyprint lang-sc'>Pfindur(dur, pattern, tolerance)</code><dd>Like Pconst, but applying the "constrain" behavior to the event's rhythmic values. The source pattern runs up to the specified duration, then stops. This is very useful if you know how long a musical behavior should go on, but the number of events to fill up that time is not known.<dt><code class='code prettyprint lang-sc'>Psync(pattern, quant, maxdur, tolerance)</code><dd>Like Pfindur, but does not have a fixed duration limit. Instead, it plays until either it reaches <code class='code prettyprint lang-sc'>maxdur</code> (in which case it behaves like Pfindur, adjusting the last event so the total duration matches <code class='code prettyprint lang-sc'>maxdur</code>), or the pattern stops early and the last event is rounded up to the next integer multiple of quant.</dl>
-<h3><a class='anchor' name='Time-based patterns'>Time-based patterns</a></h3>
+<h3><a class='anchor' name='Time-based%20patterns'>Time-based patterns</a></h3>
 
 <p><a href="./../../Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns.html">Pattern Guide 06b: Time Based Patterns</a><dl>
 <dt><code class='code prettyprint lang-sc'>Ptime(repeats)</code><dd>Returns the amount of time elapsed since embedding.<dt><code class='code prettyprint lang-sc'>Pstep(levels, durs, repeats)</code><dd>Repeat a <code class='code prettyprint lang-sc'>level</code> value for its corresponding duration, then move to the next.<dt><code class='code prettyprint lang-sc'>Pseg(levels, durs, curves, repeats)</code><dd>Similar to Pstep, but interpolates to the next value instead of stepping abruptly at the end of the duration. Interpolation is linear by default, but any envelope segment curve can be used. <code class='code prettyprint lang-sc'>levels</code>, <code class='code prettyprint lang-sc'>durs</code> and <code class='code prettyprint lang-sc'>curves</code> should be patterns. Related: Use of <a href="./../../Classes/Env.html">Env</a> as a pattern.</dl>
-<h3><a class='anchor' name='Adding values into event patterns (Or, "Pattern Composition")'>Adding values into event patterns (Or, "Pattern Composition")</a></h3>
+<h3><a class='anchor' name='Adding%20values%20into%20event%20patterns%20(Or,%20"Pattern%20Composition")'>Adding values into event patterns (Or, "Pattern Composition")</a></h3>
 
 <p><a href="./../../Tutorials/A-Practical-Guide/PG_06c_Composition_of_Patterns.html">Pattern Guide 06c: Composition of Patterns</a><dl>
 <dt><code class='code prettyprint lang-sc'>Pbindf(pattern, pairs)</code><dd>Adds new key-value pairs onto a pre-existing Pbind-style pattern.<dt><code class='code prettyprint lang-sc'>Pchain(patterns)</code><dd>Chains separate Pbind-style patterns together, so that all their key-value pairs go into the same event.</dl>
-<h3><a class='anchor' name='Parallelizing event patterns'>Parallelizing event patterns</a></h3>
+<h3><a class='anchor' name='Parallelizing%20event%20patterns'>Parallelizing event patterns</a></h3>
 
 <p><a href="./../../Tutorials/A-Practical-Guide/PG_06d_Parallel_Patterns.html">Pattern Guide 06d: Parallel Patterns</a><dl>
 <dt><code class='code prettyprint lang-sc'>Ppar(list, repeats)</code><dd>Start each of the event patterns in the <code class='code prettyprint lang-sc'>list</code> at the same time. When the last one finishes, the Ppar also stops. If <code class='code prettyprint lang-sc'>repeats</code> &gt; 1, all the subpatterns start over again from the beginning.<dt><code class='code prettyprint lang-sc'>Ptpar(list, repeats)</code><dd>Here, the list consists of <code class='code prettyprint lang-sc'>[timeOffset0, pattern0, timeOffset1, pattern1...]</code> . Each pattern starts after the number of beats given as its time offset. The patterns can start at different times relative to each other.<dt><code class='code prettyprint lang-sc'>Pgpar(list, repeats)</code><dd>Like Ppar, but it creates a separate group for each subpattern.<dt><code class='code prettyprint lang-sc'>Pgtpar(list, repeats)</code><dd>This is supposed to be like Ptpar with separate groups for the sub patterns, but the class is currently broken.<dt><code class='code prettyprint lang-sc'>Pspawner(routineFunc)</code><dd>The function is used to make a routine. A Spawner object gets passed into this routine, and this object is used to add or remove streams to/from the parallel stream. New patterns can be added in sequence or in parallel.<dt><code class='code prettyprint lang-sc'>Pspawn(pattern, spawnProtoEvent)</code><dd>Supports most of the features of Pspawner, but uses a pattern to control the <a href="./../../Classes/Spawner.html">Spawner</a> object instead of a routine function.</dl>
-<h3><a class='anchor' name='Language control methods'>Language control methods</a></h3>
+<h3><a class='anchor' name='Language%20control%20methods'>Language control methods</a></h3>
 
 <p><a href="./../../Tutorials/A-Practical-Guide/PG_06e_Language_Control.html">Pattern Guide 06e: Language Control</a>
 <p>Some patterns mimic language-style control methods: conditionals ( <a href="./../../Classes/Pif.html">Pif</a> ), loops ( <a href="./../../Classes/Pwhile.html">Pwhile</a> ) and error cleanup ( <a href="./../../Classes/Pprotect.html">Pprotect</a> ).<dl>
 <dt><code class='code prettyprint lang-sc'>Pif(condition, iftrue, iffalse, default)</code><dd>Evaluates a pattern <code class='code prettyprint lang-sc'>condition</code> that returns true or false. Then, one value is taken from the true or false branch before going back to evaluate the condition again. The <code class='code prettyprint lang-sc'>default</code> value or pattern comes into play when the true or false branch stops producing values (returns nil). If the <code class='code prettyprint lang-sc'>default</code> is not given, Pif returns control to the parent upon nil from either branch.<dt><code class='code prettyprint lang-sc'>Pseed(randSeed, pattern)</code><dd>Random number generators depend on seed values; setting a specific seed produces a repeatable stream of pseudorandom numbers. Pseed sets the random seed before embedding <code class='code prettyprint lang-sc'>pattern</code>, effectively restarting the random number generator at the start of the pattern.<dt><code class='code prettyprint lang-sc'>Pprotect(pattern, func)</code><dd>Like the <code class='code prettyprint lang-sc'>protect</code> error handling method, if an error occurs while getting the next value from the pattern, the function will be evaluated before the error interrupts execution.<dt><code class='code prettyprint lang-sc'>Ptrace(pattern, key, printStream, prefix)</code><dd>For debugging, Ptrace prints every return value. Is your pattern really doing what you think? This will tell you. A Ptrace is created automatically by the <code class='code prettyprint lang-sc'>trace</code> message: <code class='code prettyprint lang-sc'>aPattern.trace(key, printStream, prefix)</code> --&gt; <code class='code prettyprint lang-sc'>Ptrace(aPattern, key, printStream, prefix)</code>.<dt><code class='code prettyprint lang-sc'>Pwhile(func, pattern)</code><dd>Like <a href="./../../Reference/Control-Structures.html">while</a> as long as the function evaluates to true, the pattern is embedded. The function is checked once at the beginning and thereafter when the pattern comes to an end. If it's applied to an infinite pattern, there's no looping because the pattern never gives control back.</dl>
-<h3><a class='anchor' name='Server control methods'>Server control methods</a></h3>
+<h3><a class='anchor' name='Server%20control%20methods'>Server control methods</a></h3>
 
 <p><a href="./../../Tutorials/A-Practical-Guide/PG_06f_Server_Control.html">Pattern Guide 06f: Server Control</a><dl>
 <dt><code class='code prettyprint lang-sc'>Pbus(pattern, dur, fadeTime, numChannels, rate)</code><dd>Creates a private group and bus for the synths played by the pattern. The group and bus are released when the pattern stops. Useful for isolating signals from different patterns.<dt><code class='code prettyprint lang-sc'>Pgroup(pattern)</code><dd>Creates a private group (without private bus) for the pattern's synths.<dt><code class='code prettyprint lang-sc'>Pfx(pattern, fxname, pairs)</code><dd><dt><code class='code prettyprint lang-sc'>Pfxb(pattern, fxname, pairs)</code><dd>Both of these patterns play an effect synth at the tail of the target group. This synth should read from the bus identified by the <code class='code prettyprint lang-sc'>out</code> argument, and write the processed signal onto the same bus using either <a href="./../../Classes/ReplaceOut.html">ReplaceOut</a> or <a href="./../../Classes/XOut.html">XOut</a>. Pfx uses whatever bus and group are specified in the incoming event. Pfxb allocates a separate bus and group for the effect and the pattern.<dt><code class='code prettyprint lang-sc'>Pproto(makeFunction, pattern, cleanupFunc)</code><dd>Allocate resources on the server and add references to them into the event prototype used to play <code class='code prettyprint lang-sc'>pattern</code>. When the pattern stops (or is stopped), the resources can be removed automatically.</dl>
-<h3><a class='anchor' name='Data sharing'>Data sharing</a></h3>
+<h3><a class='anchor' name='Data%20sharing'>Data sharing</a></h3>
 
 <p><a href="./../../Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.html">Pattern Guide 06g: Data Sharing</a><dl>
 <dt><code class='code prettyprint lang-sc'>Pkey(key)</code><dd>Read the <code class='code prettyprint lang-sc'>key</code> in the input event, making previously-calculated values available for other streams.<dt><code class='code prettyprint lang-sc'>Penvir(envir, pattern, independent)</code><dd>Run the pattern inside a given environment.<dt><code class='code prettyprint lang-sc'>Pfset(func, pattern)</code><dd>Assign default values into the input event before getting each result event out of the given pattern.<dt><code class='code prettyprint lang-sc'>Plambda(pattern, scope)</code><dd>Creates a "function scope" into which values are assigned using <a href="./../../Classes/Plet.html">Plet</a>, and from which values are retrieved with <a href="./../../Classes/Pget.html">Pget</a>. Pget is somewhat like <a href="./../../Classes/Pkey.html">Pkey</a>, except that its scope is strictly internal, hidden from the caller. With Pkey, the source values remain present in the event returned to the caller.</dl>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_05_Math_on_Patterns.html">Pattern Guide 05: Math on Patterns</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns.html">Pattern Guide 06a: Repetition Contraint Patterns</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_060_Filter_Patterns.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_060_Filter_Patterns.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_060_Filter_Patterns::<br>sc version: 3.8dev</div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns.html">Pattern Guide 06a: Repetition Constraint Patterns</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_060_Filter_Patterns.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_060_Filter_Patterns.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_060_Filter_Patterns::<br></div></div></body></html>

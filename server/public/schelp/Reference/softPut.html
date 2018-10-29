@@ -1,0 +1,126 @@
+<!doctype html><html lang='en'><head><title>softPut | SuperCollider 3.9.3 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'softPut';
+var scdoc_sc_version = '3.9.3';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC();prettyPrint()'>
+<div id='toc'>
+<div id='toctitle'>softPut:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc3'><a href='#.softPut'>softPut</a> </li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Reference</span>
+ | <span id='categories'><a href='./../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib>GUI'>GUI</a></span>
+</div><h1>softPut</h1>
+<div id='summary'>set a (number) parameter in an environment conditionally</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Reference/softSet.html">softSet</a>, <a href="./../Reference/softVol_.html">softVol_</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p><code class='code prettyprint lang-sc'>softPut</code> is an extension method to <a href="./../Classes/Dictionary.html">Dictionary</a> that changes an existing numerical value for key in a dictionary only in two conditions:<ul>
+<li>if the new value is close enough to the current value at that key;<li>or if the setting controller knows the previous value and sends it along. the idea here is that if the controller knows it did the last value change, it has authority to jump now.</ul>
+
+<p>Typical uses would be switching to a new preset, then using a faderbox, and avoiding sudden controller jumps that could occur (soft takeover).<h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='softPut' href='./../Overviews/Methods.html#softPut'>softPut</a>(param, val, within = 0.025, lastVal, mapped = true, spec)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>param<td class='argumentdesc'>
+<p>the name of the parameter (key) to set<tr><td class='argumentname'>val<td class='argumentdesc'>
+<p>the value to set the param to (can be mapped or unmapped)<tr><td class='argumentname'>within<td class='argumentdesc'>
+<p>the normalized range within which the set is accepted - default is 0.025<tr><td class='argumentname'>mapped<td class='argumentdesc'>
+<p>a flag whether <strong>val</strong> is mapped (within the range of param.asSpec) or unmapped (0.0-1.0)<tr><td class='argumentname'>lastVal<td class='argumentdesc'>
+<p>the previous value that a control has set - see last examples.<tr><td class='argumentname'>spec<td class='argumentdesc'>
+<p>a <a href="./../Classes/ControlSpec.html">ControlSpec</a> can be passed in. if nil, param.asSpec is used.<div class='note'><span class='notelabel'>NOTE:</span> if no spec is given, or no value exists yet, softSet simply allows setting.</div></table></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>(
+e = (amp: 0.1, dur: 0.2);
+Tdef(\test, {
+    var dur;
+    loop {
+        dur = e.dur;
+        (amp: e.amp, dur: dur, degree: 7.rand).play;
+        dur.wait;
+    };
+}).play;
+)
+
+e.put(\amp, 0.03);    // just set it
+e.put(\amp, 0.1);
+e.softPut(\amp, 0.11);    // small change, OK to set
+e.put(\amp, 0.1);
+e.softPut(\amp, 0.15);    // no bigger change
+e.softPut(\amp, 0.15, 0.1);    // bigger change is OK with larger within value
+
+e.softPut(\amp, 0.01);    // no
+e.softPut(\amp, 0.01, lastVal: 0.15);    // can make big jumps when lastVal is close to current.
+
+    // no spec for dur exists by default:
+    \dur.asSpec
+
+e.softPut(\dur, 0.05);    // so this always really sets.</pre>
+<pre class='code prettyprint lang-sc'>    // PatternProxies ( e.g. Tdefs, Pdefs) have a softSet method, which
+    // forwards softPut to their envirs:
+
+Pdef(\test, Pbind(\degree, Pseq((0..7), inf))).play;
+
+Pdef(\test).set(\amp, 0.03)
+Pdef(\test).envir.softPut(\amp, 0.06); // no, too big
+Pdef(\test).envir.softPut(\amp, 0.06, 0.1); // ok with wider range
+
+    // equivalent:
+Pdef(\test).set(\amp, 0.03)
+Pdef(\test).softSet(\amp, 0.1); // no, too big
+Pdef(\test).softSet(\amp, 0.06, 0.1); // ok with wider "within"
+Pdef(\test).get(\amp)
+
+Pdef(\test).softSet(\amp, 0.5); // no!
+Pdef(\test).softSet(\amp, 0.5, lastVal: 0.06); // ok!
+Pdef(\test).softSet(\amp, 0.05, lastVal: 0.5); // ok
+
+Pdef(\test).softSet(\dur, 0.05); // alsways ok, no spec for dur.
+Pdef(\test).softSet(\dur, 0.1); // ok
+
+Pdef(\test).softSet(\dur, 0.05, spec: [0.03, 3, \exp]); // not OK with that spec</pre>
+<pre class='code prettyprint lang-sc'>    // softPut and softSet can be risky - one can lose a parameter when moving a controller
+    // too quickly. So, if we know the last value (e.g. because the same controller
+    // knows it has set to that value), it is OK to jump:
+
+    // example of softSet, softSet which knows lastVal,
+    // softVol_ and softVol_ which knows lastVol:
+(
+w = Window("softSet, softVol", Rect(500, 200, 400, 240)).front;
+w.view.addFlowLayout;
+PdefGui(Pdef(\test), 2, w, 340@80);
+
+    // can lose control if wiggled too fast
+EZSlider(w, 340@30, \softSetDur, [0.03, 3, \exp], { |sl|
+    Pdef(\test).softSet(\dur, sl.value, 0.05)
+});
+
+    // knows it was in control
+EZSlider(w, 340@30, \knowsLast, [0.03, 3, \exp], Routine { |sl|
+    var newVal, lastVal;
+    loop {
+        newVal = sl.value;
+        Pdef(\test).softSet(\dur, newVal, 0.05, lastVal: lastVal);
+        lastVal = newVal;
+        \dummy.yield;
+    }
+});
+)</pre>
+
+<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/softPut.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/softPut.schelp</a><br>link::Reference/softPut::<br></div></div></body></html>

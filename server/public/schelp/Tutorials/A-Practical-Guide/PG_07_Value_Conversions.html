@@ -1,46 +1,52 @@
-<html><head><title>Pattern Guide 07: Value Conversions</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide 07: Value Conversions | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = 'Pattern Guide 07: Value Conversions';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Pattern Guide 07: Value Conversions:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Pitch%20and%20rhythm%20conversions%20in%20the%20default%20event'>Pitch and rhythm conversions in the default event</a></li>
+<ul class='toc'><li class='toc2'><a href='#Timing%20conversions'>Timing conversions</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Pitch%20conversions'>Pitch conversions</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Amplitude%20conversion'>Amplitude conversion</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/A-PRACTICAL-GUIDE</div>
-<div id='categories'><a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>Streams-Patterns-Events>A-Practical-Guide</a></div>
-<h1>Pattern Guide 07: Value Conversions</h1>
+<div id='label'>
+<span id='folder'>Tutorials/A-Practical-Guide</span>
+ | <span id='categories'><a href='./../../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>A-Practical-Guide</a></span>
+</div><h1>Pattern Guide 07: Value Conversions</h1>
 <div id='summary'>Describes the default event's conversions for pitch, rhythm and amplitude</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.html">Pattern Guide 06g: Data Sharing</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.html">Pattern Guide 08: Event Types and Parameters</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Pitch and rhythm conversions in the default event'>Pitch and rhythm conversions in the default event</a></li>
-<ul class='toc'><li class='toc2'><a href='#Timing conversions'>Timing conversions</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Pitch conversions'>Pitch conversions</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Amplitude conversion'>Amplitude conversion</a></li>
-<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Pitch and rhythm conversions in the default event'>Pitch and rhythm conversions in the default event</a></h2>
+<h2><a class='anchor' name='Pitch%20and%20rhythm%20conversions%20in%20the%20default%20event'>Pitch and rhythm conversions in the default event</a></h2>
 
 <p>Using the default event prototype, pitch and rhythm can be specified in Pbind at different levels depending on the musical requirement. The default event prototype includes logic to convert higher-level abstractions into the physical parameters that are useful for synthesis.
 <p>The descriptions below start with the ending value that will actually be used, following up with the other values that are used in the calculations: e.g., \delta is based on \dur and \stretch. The calculations may be bypassed by providing another value for the calculated item. If your pattern specifies <code class='code prettyprint lang-sc'>\delta</code> directly, <code class='code prettyprint lang-sc'>\dur</code> and <code class='code prettyprint lang-sc'>\stretch</code> are ignored.
-<p>Note also that there is no obligation to use these constructs. The default event prototype is not meant to enforce one model of pitch or rhythm over any other; it simply provides these options, which you may use if they suit the task, or ignore or override if your task calls for something else entirely.<h3><a class='anchor' name='Timing conversions'>Timing conversions</a></h3>
+<p>Note also that there is no obligation to use these constructs. The default event prototype is not meant to enforce one model of pitch or rhythm over any other; it simply provides these options, which you may use if they suit the task, or ignore or override if your task calls for something else entirely.<h3><a class='anchor' name='Timing%20conversions'>Timing conversions</a></h3>
 
 <p>Rhythm is based on <code class='code prettyprint lang-sc'>\delta</code> and <code class='code prettyprint lang-sc'>\sustain</code> event keys. Both of these can be calculated from higher-level abstractions: <code class='code prettyprint lang-sc'>\dur</code>, <code class='code prettyprint lang-sc'>\stretch</code> and <code class='code prettyprint lang-sc'>\legato</code>.<dl>
 <dt>delta<dd>The number of beats until the next event. You can give the delta pattern directly, or the default event prototype can calculate it for you based on other values:<dl>
 <dt>dur<dd>Duration of this event.<dt>stretch<dd>A multiplier for duration: <code class='code prettyprint lang-sc'>delta = dur * stretch</code>.</dl>
 </dl>
 <dl>
-<dt>sustain<dd>How many beats to hold this note. After <code class='code prettyprint lang-sc'>\sustain</code> beats, a release message will be sent to the synth node setting its <code class='code prettyprint lang-sc'>gate</code> control to <code class='code prettyprint lang-sc'>0</code>. Your SynthDef should use <code class='code prettyprint lang-sc'>gate</code> in an <a href="./../../Classes/EnvGen.html">EnvGen</a> based on a sustaining envelope (see <a href="./../../Classes/Env.html">Env</a>), and the EnvGen should have a <code class='code prettyprint lang-sc'>doneAction</code> ( <a href="./../../Reference/UGen-doneActions.html">UGen done-actions</a> ) that releases the synth at the end. You can give the sustain pattern directly, or the default event prototype can calculate it for you based on:<dl>
+<dt>sustain<dd>How many beats to hold this note. After <code class='code prettyprint lang-sc'>\sustain</code> beats, a release message will be sent to the synth node setting its <code class='code prettyprint lang-sc'>gate</code> control to <code class='code prettyprint lang-sc'>0</code>. Your SynthDef should use <code class='code prettyprint lang-sc'>gate</code> in an <a href="./../../Classes/EnvGen.html">EnvGen</a> based on a sustaining envelope (see <a href="./../../Classes/Env.html">Env</a>), and the EnvGen should have a <code class='code prettyprint lang-sc'>doneAction</code> ( <a href="./../../Classes/Done.html">Done</a> ) that releases the synth at the end. You can give the sustain pattern directly, or the default event prototype can calculate it for you based on:<dl>
 <dt>legato<dd>A fraction of the event's duration for which the synth should sustain. <code class='code prettyprint lang-sc'>1.0</code> means this synth will release exactly at the onset of the next; <code class='code prettyprint lang-sc'>0.5</code> means the last half of the duration will be a rest. Values greater than <code class='code prettyprint lang-sc'>1.0</code> produce overlapping notes. <code class='code prettyprint lang-sc'>sustain = dur * legato * stretch</code>.</dl>
 </dl>
-<h3><a class='anchor' name='Pitch conversions'>Pitch conversions</a></h3>
+<h3><a class='anchor' name='Pitch%20conversions'>Pitch conversions</a></h3>
 
 <p>Pitch handling in the default event is rich, with a large number of options. To use events, it is not necessary to understand all of those options. As the examples have shown, a note-playing pattern produces sensible results even specifying only <code class='code prettyprint lang-sc'>\degree</code>. The other parameters allow you to control how the event gets from <code class='code prettyprint lang-sc'>\degree</code> to the frequency that is finally passed to the new synth. The default event prototype includes reasonable defaults for all of these.
 <p>To go from the highest level of abstraction down:<dl>
@@ -74,8 +80,8 @@ p = Pbind(
 )
 
 p.stop;</pre>
-<h3><a class='anchor' name='Amplitude conversion'>Amplitude conversion</a></h3>
+<h3><a class='anchor' name='Amplitude%20conversion'>Amplitude conversion</a></h3>
 
 <p>Finally, you can specify amplitude as <code class='code prettyprint lang-sc'>\db</code> or <code class='code prettyprint lang-sc'>\amp</code>. If it's given as <code class='code prettyprint lang-sc'>\db</code>, the amplitude will be calculated automatically using <code class='code prettyprint lang-sc'>.dbamp</code>.
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.html">Pattern Guide 06g: Data Sharing</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.html">Pattern Guide 08: Event Types and Parameters</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_07_Value_Conversions.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_07_Value_Conversions.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_07_Value_Conversions::<br>sc version: 3.8dev</div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.html">Pattern Guide 08: Event Types and Parameters</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_07_Value_Conversions.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_07_Value_Conversions.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_07_Value_Conversions::<br></div></div></body></html>

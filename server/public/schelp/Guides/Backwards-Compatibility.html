@@ -1,0 +1,53 @@
+<!doctype html><html lang='en'><head><title>Backwards Compatibility | SuperCollider 3.9.3 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Backwards Compatibility';
+var scdoc_sc_version = '3.9.3';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC();prettyPrint()'>
+<div id='toc'>
+<div id='toctitle'>Backwards Compatibility:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Guides</span>
+ | <span id='categories'><a href='./../Browse.html#SC3 vs SC2'>SC3 vs SC2</a></span>
+</div><h1>Backwards Compatibility</h1>
+<div id='summary'>Classes and methods that improve backwards compatibility with SC2 code</div>
+</div>
+<div class='subheader'>
+</div>
+
+<p>There are a number of classes and methods that have been added to allow for backwards compatibility with SC2 code. The most notable of these is <code class='code prettyprint lang-sc'>Synth.play</code>, which is basically a wrapper for <code class='code prettyprint lang-sc'>Function.play</code>.<pre class='code prettyprint lang-sc'>{ SinOsc.ar(440, 0, 0.5) }.play; // creates an arbitrarily named SynthDef and a Synth to play it
+Synth.play({ SinOsc.ar(440, 0, 0.5) }); // in SC3 just a wrapper for Function.play with fewer args</pre>
+
+<p>Both of these will create synth nodes on the default server. Note that neither requires the use of an <code class='code prettyprint lang-sc'>Out.ar</code> <a href="./../Classes/UGen.html">UGen</a>; they simply output to the first audio bus. One can however add an <a href="./../Classes/Out.html">Out</a> to Function.play in order to specify.<pre class='code prettyprint lang-sc'>Synth.play({ Out.ar(1, SinOsc.ar(440, 0, 0.5)) });</pre>
+
+<p>In general, one should be aware of this distinction when using this code. When copying such code for reuse with other SC3 classes (for example in a reusable <a href="./../Classes/SynthDef.html">SynthDef</a>), it will usually be necessary to add an <code class='code prettyprint lang-sc'>Out.ar</code>. Although useful for quick testing these methods are generally inferior to <code class='code prettyprint lang-sc'>SynthDef.play</code>, as the latter is more direct, requires no modifications for general reuse, has greater general flexibility and has slightly less overhead. (Although this is insignificant in most cases, it could be relevant when large numbers of defs or nodes are being created.)
+<p>Like <code class='code prettyprint lang-sc'>SynthDef.play</code>, <code class='code prettyprint lang-sc'>Function.play</code> returns a <a href="./../Classes/Synth.html">Synth</a> object which can then be messaged, etc. However, since <code class='code prettyprint lang-sc'>Function.play</code> creates an arbitrarily named <a href="./../Classes/SynthDef.html">SynthDef</a>, one cannot reuse the resulting def, at least not without reading its name from the post window, or getting it from the <a href="./../Classes/Synth.html">Synth</a> object.<pre class='code prettyprint lang-sc'>//The following examples are functionally equivalent
+x = { arg freq = 440; Out.ar(1, SinOsc.ar(freq, 0, 0.5)) }.play(fadeTime: 0);
+x.set(\freq, 880);        // you can set arguments
+y = Synth.new(x.defName);    // get the arbitrary defname from x
+x.free;
+y.free;
+
+x = SynthDef("backcompat-sine", { arg freq = 440; Out.ar(1, SinOsc.ar(freq, 0, 0.5)) }).play;
+x.set(\freq, 880);
+y = Synth.new("backcompat-sine");
+x.free;
+y.free;</pre>
+
+<p><code class='code prettyprint lang-sc'>Function.play</code> is in general superior to both its SC2 equivalent and <code class='code prettyprint lang-sc'>Synth.play</code>. It has a number of significant features such as the ability to specify the output bus and fade times as arguments. See the <a href="./../Classes/Function.html">Function</a> helpfile for a more in-depth discussion.
+<p>A number of other classes and methods have also been added to improve compatibility. These are listed below. In general there are equivalent or better ways of doing the same things in SC3.<table>
+<tr><td>Synth *play<td>use Function.play or SynthDef.play<tr><td>GetFileDialog<td>use <a href="./../Classes/Dialog.html">Dialog</a><tr><td>GetStringDialog<td><tr><td>Synth *stop<td>use Server.freeAll<tr><td>Synth *isPlaying<td>Server.numSynths (this will include non-running nodes)<tr><td>Mix *ar *arFill<td>use Mix *new and *fill<tr><td>SimpleNumber.rgb<td><tr><td>Rawarray.write<td></table>
+<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Backwards-Compatibility.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Backwards-Compatibility.schelp</a><br>link::Guides/Backwards-Compatibility::<br></div></div></body></html>

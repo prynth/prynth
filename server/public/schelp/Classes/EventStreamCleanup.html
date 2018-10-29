@@ -1,31 +1,25 @@
-<html><head><title>EventStreamCleanup</title>
+<!doctype html><html lang='en'><head><title>EventStreamCleanup | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'EventStreamCleanup';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
-<div class='header'>
-<div id='label'>SuperCollider CLASSES</div>
-<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a></div>
-<h1>EventStreamCleanup</h1>
-<div id='summary'>Helper class that collects information about internal state of streams that needs to be released</div>
-</div>
-<div class='subheader'>
-<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/EventStreamCleanup.sc'>EventStreamCleanup.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
-</div>
 <div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<div id='toctitle'>EventStreamCleanup:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
-<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
 </ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-addFunction'>addFunction</a> </li>
 <li class='toc3'><a href='#-update'>update</a> </li>
@@ -33,11 +27,23 @@
 <li class='toc3'><a href='#-functions'>functions</a> </li>
 <li class='toc3'><a href='#-clear'>clear</a> </li>
 <li class='toc3'><a href='#-terminate'>terminate</a> </li>
-<li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
-<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-addNodeCleanup'>addNodeCleanup</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a></span>
+</div><h1>EventStreamCleanup<span id='superclasses'> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
+<div id='summary'>Helper class that collects information about internal state of streams that needs to be released</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/EventStreamCleanup.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/EventStreamCleanup.sc'>EventStreamCleanup.sc</a></div></div>
+<h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>Event streams created by objects like <a href="./../Classes/Pmono.html">Pmono</a> or <a href="./../Classes/Pfx.html">Pfx</a> are special: when they start, they create some state (like a new synth) that is present over the whole period of the stream, or at least over several events. When such a stream ends, it releases this state. There are other streams, however, <strong>that may stop their input stream at any time</strong> (e.g. <a href="./../Classes/Pfindur.html">Pfindur</a> or <a href="./../Classes/Pdef.html">Pdef</a>). Them the state of any stream buried in the hierarchy of input streams must be released by them. EventStreamCleanup collects the cleanup functions and can run them when the stream is cut.<div class='note'><span class='notelabel'>NOTE:</span> So all event patterns that can end a subpattern (and streams respectively) have to use an EventStreamCleanup.</div>
 <p>Some examples of patterns that may stop an input stream and update an EventStreamCleanup:<ul>
@@ -68,22 +74,22 @@ x = f.(p, { |outval| outval[\note] &lt; 20 }); // always stop at 20
 Pn(x).play; // loop it.
 );</pre>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> </h3>
+<h3 class='method-code'><span class='method-prefix'>EventStreamCleanup.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a></h3>
 <div class='method'>
-<p>Create a new instance.</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<p>Create a new instance.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-addFunction' href='./../Overviews/Methods.html#addFunction'>addFunction</a> (<span class='argstr'>event</span>, <span class='argstr'>function</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-addFunction' href='./../Overviews/Methods.html#addFunction'>addFunction</a>(<span class='argstr'>event</span>, <span class='argstr'>function</span>)</h3>
 <div class='method'>
 <p>Add a new cleanup function which will be called when the stream is made to end somewhere downstreams. This is called only in patterns that create resources that need to be released (e.g. <a href="./../Classes/Pmono.html">Pmono</a> or <a href="./../Classes/Pfx.html">Pfx</a>).<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>event<td class='argumentdesc'>
 <p>The outevent that is passed on downstreams and which communicates to any stream-ending pattern what needs to be done to release the resources. <strong>It must be yielded after update!</strong><tr><td class='argumentname'>function<td class='argumentdesc'>
-<p>The function that is called for cleanup. E.g. <code class='code prettyprint lang-sc'>{ group.free }</code>.</table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-update' href='./../Overviews/Methods.html#update'>update</a> (<span class='argstr'>event</span>)</h3>
+<p>The function that is called for cleanup. E.g. <code class='code prettyprint lang-sc'>{ group.free }</code>.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-update' href='./../Overviews/Methods.html#update'>update</a>(<span class='argstr'>event</span>)</h3>
 <div class='method'>
 <p>For every new event, the cleanup must be updated to receive information from any input stream further up. This method is called from all streams that may stop early (e.g. <a href="./../Classes/Pmono.html">Pmono</a> or <a href="./../Classes/Pfindur.html">Pfindur</a>).<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>event<td class='argumentdesc'>
-<p>The outevent from the input stream. <strong>It must be yielded after update!</strong></table></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-exit' href='./../Overviews/Methods.html#exit'>exit</a> (<span class='argstr'>event</span>, <span class='argstr'>freeNodes: true</span>)</h3>
+<p>The outevent from the input stream. <strong>It must be yielded after update!</strong></table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-exit' href='./../Overviews/Methods.html#exit'>exit</a>(<span class='argstr'>event</span>, <span class='argstr'>freeNodes: true</span>)</h3>
 <div class='method'>
 <p>Run all functions that have been collected over time, adding appropriate information to the event, in case it is passed on as an inevent.<h4>Arguments:</h4>
 <table class='arguments'>
@@ -91,19 +97,19 @@ Pn(x).play; // loop it.
 <p>The inevent that is passed through to the outer stream<tr><td class='argumentname'>freeNodes<td class='argumentdesc'>
 <p>Used internally.</table><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>An event. In embedInStream, this event must be returned (<code class='code prettyprint lang-sc'>^cleanup.exit(inevent)</code>)</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-functions' href='./../Overviews/Methods.html#functions'>functions</a></h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-functions' href='./../Overviews/Methods.html#functions'>functions</a> = value</h3>
+<p>An event. In embedInStream, this event must be returned (<code class='code prettyprint lang-sc'>^cleanup.exit(inevent)</code>)</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-functions' href='./../Overviews/Methods.html#functions'>functions</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-functions' href='./../Overviews/Methods.html#functions'>functions</a> = value</h3>
 <div class='method'>
-<p>A collections of cleanup functions.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-clear' href='./../Overviews/Methods.html#clear'>clear</a> </h3>
+<p>A collections of cleanup functions.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clear' href='./../Overviews/Methods.html#clear'>clear</a></h3>
 <div class='method'>
-<p>Empty the cleanup functions, without evaluating them.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-terminate' href='./../Overviews/Methods.html#terminate'>terminate</a> (<span class='argstr'>freeNodes: true</span>)</h3>
+<p>Empty the cleanup functions, without evaluating them.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-terminate' href='./../Overviews/Methods.html#terminate'>terminate</a>(<span class='argstr'>freeNodes: true</span>)</h3>
 <div class='method'>
 <p>Run all functions that have been collected over time without adding information to an event.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>freeNodes<td class='argumentdesc'>
-<p>Used internally.</table></div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
-<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-addNodeCleanup' href='./../Overviews/Methods.html#addNodeCleanup'>addNodeCleanup</a> (<span class='argstr'>event</span>, <span class='argstr'>function</span>)</h3>
+<p>Used internally.</table></div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-addNodeCleanup' href='./../Overviews/Methods.html#addNodeCleanup'>addNodeCleanup</a>(<span class='argstr'>event</span>, <span class='argstr'>function</span>)</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 <pre class='code prettyprint lang-sc'>// some code from the class library
 
@@ -191,7 +197,7 @@ Pbus : FilterPattern {
         cleanup.addFunction(event, { defer({ freeBus.value;}, fadeTime.abs + dur) });
 
         // doneAction = 3;
-        // remove and deallocate both this synth and the preceeding node
+        // remove and deallocate both this synth and the preceding node
         // (which is the group).
         inevent = event.yield;
 
@@ -204,4 +210,4 @@ Pbus : FilterPattern {
         }
     }
 }</pre>
-<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/EventStreamCleanup.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/EventStreamCleanup.schelp</a><br>link::Classes/EventStreamCleanup::<br>sc version: 3.8dev</div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/EventStreamCleanup.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/EventStreamCleanup.schelp</a><br>link::Classes/EventStreamCleanup::<br></div></div></body></html>

@@ -1,63 +1,68 @@
-<html><head><title>SCDoc Syntax</title>
+<!doctype html><html lang='en'><head><title>SCDoc Syntax | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'SCDoc Syntax';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>SCDoc Syntax:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Specification'>Specification</a></li>
+<ul class='toc'><li class='toc2'><a href='#Header%20tags'>Header tags</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Section%20tags'>Section tags</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Method%20tags'>Method tags</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Modal%20tags'>Modal tags</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Lists%20and%20tables'>Lists and tables</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Notes%20and%20warnings'>Notes and warnings</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Other%20tags'>Other tags</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Grammar'>Grammar</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider REFERENCE</div>
-<div id='categories'><a href='./../Browse.html#HelpSystem'>HelpSystem</a></div>
-<h1>SCDoc Syntax</h1>
+<div id='label'>
+<span id='folder'>Reference</span>
+ | <span id='categories'><a href='./../Browse.html#HelpSystem'>HelpSystem</a></span>
+</div><h1>SCDoc Syntax</h1>
 <div id='summary'>SCDoc markup language syntax</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../Guides/WritingHelp.html">Writing Help</a>, <a href="./../Classes/SCDoc.html">SCDoc</a>, <a href="./../Classes/SCDocHTMLRenderer.html">SCDocHTMLRenderer</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Specification'>Specification</a></li>
-<ul class='toc'><li class='toc2'><a href='#Header tags'>Header tags</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Section tags'>Section tags</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Method tags'>Method tags</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Modal tags'>Modal tags</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Lists and tables'>Lists and tables</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Notes and warnings'>Notes and warnings</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Other tags'>Other tags</a></li>
-<ul class='toc'></ul></ul><li class='toc1'><a href='#Grammar'>Grammar</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Introduction'>Introduction</a></h2>
+<h2><a class='anchor' name='Introduction'>Introduction</a></h2>
 
-<p>This document specifies the syntax and <a href="#Grammar">Grammar</a> of the <a href="./../Classes/SCDoc.html">SCDoc</a> markup language, used in SuperCollider for writing documents with semantic annotations, in a manner which does not target a specific layout or output format.
-<p>A guide to writing help can be found here: <a href="./../Guides/WritingHelp.html">Writing Help</a>.<h2><a class='anchor' name='Specification'>Specification</a></h2>
+<p>This document specifies the syntax and <a href="#Grammar">Grammar</a> of the <a href="./../Classes/SCDoc.html">SCDoc</a> markup language. <code class='code prettyprint lang-sc'>SCDoc Markup</code> is used in SuperCollider mainly for helpfiles. It is a syntax that features semantic a semantic level specific to the requirements of SuperCollider.<div class='note'><span class='notelabel'>NOTE:</span> A guide to writing help can be found at <a href="./../Guides/WritingHelp.html">Writing Help</a>.</div><h2><a class='anchor' name='Specification'>Specification</a></h2>
 
-<p>SCDoc documents consists of tags and text.
-<p>Tags consists of single words ending with <code>::</code> (double-colon). They are case-insensitive, so <code>TITLE::</code>, <code>Title::</code> and <code>title::</code> all mean the same thing. Some tags take the remaining text on the same line, while others enclose the following text until a single end-tag (double-colon <code>::</code>). Some of these can be nested, while others are modal and ignores any tag until the end-tag.
-<p>Untagged text becomes plain prose. Paragraphs are separated by one or more empty lines.
-<p>A document has a header section and a body. The header has only header tags, and these tags are not allowed in the document body.<h3><a class='anchor' name='Header tags'>Header tags</a></h3>
+<p>A document is split into a header section and a body. The header contains only header tags, which are not allowed in the document body.
+<p>SCDoc documents consist of <em>tags</em> and <em>text</em>.<ul>
+<li>Tags consists of single words ending with <code>::</code> (double-colon).<li>Untagged text becomes plain prose.<li>Paragraphs are separated by one or more empty lines.<li>Tags are case-insensitive: <code>TITLE::</code>, <code>Title::</code> and <code>title::</code> are interepreted equally.<li>Some tags take the remaining text on the same line as their argument<li>Some tags enclose the following text until a single end-tag (double-colon <code>::</code>).<li>Some enclosing tags can be nested, while others are modal and ignore any tag until an end-tag.</ul>
+<h3><a class='anchor' name='Header%20tags'>Header tags</a></h3>
 
-<p>All header tags take the remaining line of text as input. There is no end-tag other than a newline.<dl>
-<dt><a class='anchor' name='kw_title::'>&nbsp;</a><code>TITLE::</code> name<dd>Title of document. Must equal classname for class reference docs. Example:<pre>title:: SCDoc</pre><dt><a class='anchor' name='kw_class::'>&nbsp;</a><code>CLASS::</code> name<dd>Deprecated, use TITLE instead.<dt><a class='anchor' name='kw_categories::'>&nbsp;</a><code>CATEGORIES::</code> list<dd>A comma-separated list of document categories. Mainly used by the <a href="./../Browse.html">Browse</a> page.
-<p>Categories can be hierarchical, where levels are denoted with <code>&gt;</code>. Example:<pre>categories:: External Control&gt;OSC, Scheduling&gt;Clocks</pre><dt><a class='anchor' name='kw_related::'>&nbsp;</a><code>RELATED::</code> link(s)<dd>A comma-separated list of related docs. Example:<pre>related:: Classes/SCDoc, Reference/SCDocSyntax</pre><dt><a class='anchor' name='kw_summary::'>&nbsp;</a><code>SUMMARY::</code> text<dd>A short summary of this document. Example:<pre>summary:: SCDoc markup language syntax</pre><dt><a class='anchor' name='kw_redirect::'>&nbsp;</a><code>REDIRECT::</code> name<dd>For class redirect systems, specify the name of the instance variable holding the implementing class. Example:<pre>redirect:: implClass</pre></dl>
-<h3><a class='anchor' name='Section tags'>Section tags</a></h3>
+<p>Header tags take the remaining text in their definition line as their argument. They expect no end-tag.<dl>
+<dt><a class='anchor' name='kw_title::'>&nbsp;</a><code>TITLE::</code> name<dd>Title of the document. For class reference documents, this must be the same as the classname.<pre>title:: SCDoc</pre><dt><a class='anchor' name='kw_categories::'>&nbsp;</a><code>CATEGORIES::</code> list<dd>A comma-separated list of document categories. Mainly used by the <a href="./../Browse.html">Browse</a> page.
+<p>Categories can be hierarchical, where levels are denoted with <code>&gt;</code>.<pre>categories:: External Control&gt;OSC, Scheduling&gt;Clocks</pre><dt><a class='anchor' name='kw_related::'>&nbsp;</a><code>RELATED::</code> link(s)<dd>A comma-separated list of related docs.<pre>related:: Classes/SCDoc, Reference/SCDocSyntax</pre><dt><a class='anchor' name='kw_summary::'>&nbsp;</a><code>SUMMARY::</code> text<dd>A short summary of this document.<pre>summary:: SCDoc markup language syntax</pre><dt><a class='anchor' name='kw_redirect::'>&nbsp;</a><code>REDIRECT::</code> name<dd>For class redirect systems, specify the name of the instance variable holding the implementing class. Example:<pre>redirect:: implClass</pre><dt><a class='anchor' name='kw_class::'>&nbsp;</a><code>CLASS::</code> name<dd>Deprecated, use TITLE instead.</dl>
+<h3><a class='anchor' name='Section%20tags'>Section tags</a></h3>
 
-<p>A document is divided in sections and subsections. The section body consists of everything following the section tag until there is another section tag with the same or higher level.
-<p>All kinds of sections automatically creates a link anchor with the same name as the section. Methods also creates an anchor, with the methodname prefixed with <code>*</code> for class methods and <code>-</code> for instance methods.
-<p>Structural tags at the same level in the hierarchy may be functionally equivalent, but treated differently for rendering or querying purposes. For example <code>examples::</code> is equivalent to <code>section::</code> but imply particular formatting or specially identify the examples section for customised uses like concatenating all examples for classes with a given parent class.
-<p>All structural tags has children elements, for example the items in a list or the subsections and prose in a section.
+<p>A document can be divided into sections and subsections. Section bodies consist of everything that follows its section tag until another section tag of same or higher level.
+<p>Sections have a link anchor with the same name as the section.<div class='note'><span class='notelabel'>NOTE:</span> Method tags also create such anchors. The methodname then is prefixed with <code>*</code> (class methods) or <code>-</code> (instance methods).</div>
+<p>Structural tags at the same level in the hierarchy may be functionally equivalent but treated differently for rendering or querying purposes. For example <code>examples::</code> is equivalent to <code>section::</code> but imply particular formatting or specially identify the examples section for customised uses like concatenating all examples for classes with a given parent class.
+<p>Structural tags can have child elements, for example the items in a list or the subsections and prose in a section.
 <p>Level 1 (highest):<dl>
-<dt><a class='anchor' name='kw_section::'>&nbsp;</a><code>SECTION::</code> name<dd>A named section. The name should be plain text and can not contain any tags. Example:<pre>section:: Introduction</pre>
+<dt><a class='anchor' name='kw_section::'>&nbsp;</a><code>SECTION::</code> name<dd>A named section. The name should be plain text and can not contain any tags.<pre>section:: Introduction</pre>
 <p><dt><a class='anchor' name='kw_description::'>&nbsp;</a><code>DESCRIPTION::</code><dt><a class='anchor' name='kw_classmethods::'>&nbsp;</a><code>CLASSMETHODS::</code><dt><a class='anchor' name='kw_instancemethods::'>&nbsp;</a><code>INSTANCEMETHODS::</code><dt><a class='anchor' name='kw_examples::'>&nbsp;</a><code>EXAMPLES::</code><dd>These tags starts standard sections of a class reference. CLASSMETHODS and INSTANCEMETHODS have special meaning, in that they specify if a documented method is a classmethod or instancemethod.</dl>
 
 <p>Level 2:<dl>
 <dt><a class='anchor' name='kw_subsection::'>&nbsp;</a><code>SUBSECTION::</code> name<dd>A named subsection. The name should be plain text and can not contain any tags. Example:<pre>subsection:: Some more info</pre></dl>
-<h3><a class='anchor' name='Method tags'>Method tags</a></h3>
+<h3><a class='anchor' name='Method%20tags'>Method tags</a></h3>
 
 <p>These are level 3 subsections:<dl>
 <dt><a class='anchor' name='kw_method::'>&nbsp;</a><code>METHOD::</code> methodname(s) [argstring]<dd>Document one or more methods, given as a comma-separated list of methodnames.<div class='note'><span class='notelabel'>NOTE:</span> If multiple methods are documented as a group, the methods must have the same argument name signature for existing arguments. For example, grouping the following methods would be ok:<pre>foo (a, b)
@@ -66,45 +71,44 @@ zoo (a)</pre>
 <p>But not:<pre>foo (a, x)
 bar (a, b, c)
 zoo (y)</pre></div>
-<p>Following the method tag should come a short description of the method, and optional description of the arguments and return value. See the <a href="#tags allowed inside a method">tags allowed inside a method</a> section below.
+<p>Following the method tag should come a short description of the method, and optional description of the arguments and return value. See the <a href="#tags%20allowed%20inside%20a%20method">tags allowed inside a method</a> section below.
 <p>SCDoc regards getter and setter methods as read/write interfaces for a single <em>property</em>. This means that you should not write the trailing underscore for setters. Instead, document it as a single property without the underscore, as if there was only a getter, and describe the property that can be set/gotten.
 <p>The METHOD tag is normally used inside CLASSMETHODS and INSTANCEMETHODS, but can also be used outside of these sections. In those cases, it documents a generic interface not bound to a specific class, and the arguments and default values should then be given in the optional <strong>argstring</strong>
-<p>For real methods, the argstring is not allowed, instead the argument names and default values will be auto-filled in.<dt><a class='anchor' name='kw_private::'>&nbsp;</a><code>PRIVATE::</code> methodname(s)<dd>This tag behaves like a section but does not have a section body. It marks one or more methods as private, so that it does not show up under the auto-generated <em>Undocumented Methods</em> sections.<dt><a class='anchor' name='kw_copymethod::'>&nbsp;</a><code>COPYMETHOD::</code> classname methodname<dd>This tag behaves like a section but does not have a section body. Copy a method documentation from a class reference and insert it here as if the method was documented in this document. The methodname must be prefixed with <code>*</code> for classmethods and <code>-</code> for instancemethods. Example:<pre>copymethod:: SinOsc *ar</pre></dl>
+<p>For real methods, the argstring is not allowed, instead the argument names and default values will be auto-filled in.<dt><a class='anchor' name='kw_private::'>&nbsp;</a><code>PRIVATE::</code> methodname(s)<dd>This tag behaves like a section but does not have a section body. It marks one or more methods as private, so that it does not show up under the auto-generated <em>Undocumented Methods</em> sections. Expects a comma-separated list of methodnames.<dt><a class='anchor' name='kw_copymethod::'>&nbsp;</a><code>COPYMETHOD::</code> classname methodname<dd>This tag behaves like a section but does not have a section body. Copy a method documentation from a class reference and insert it here as if the method was documented in this document. The methodname must be prefixed with <code>*</code> for classmethods and <code>-</code> for instancemethods.<pre>copymethod:: SinOsc *ar</pre></dl>
 
-<p><a class='anchor' name='tags allowed inside a method'>&nbsp;</a>Inside a method section, the following optional tags are allowed, in the order given below. These tags are level 4 subsections.<dl>
+<p><a class='anchor' name='tags%20allowed%20inside%20a%20method'>&nbsp;</a>Inside a method section, the following optional tags are allowed, in the order given below. These tags are level 4 subsections.<dl>
 <dt><a class='anchor' name='kw_argument::'>&nbsp;</a><code>ARGUMENT::</code> [argname]<dd>One for each argument. The argument section body should contain a description of the given argument. The <strong>argname</strong> is optional, and will be auto-filled in if not given. If given, it must match the real name of the argument at this position.
 <p>If the method has varargs, the argname for the varargs (if given) should be prefixed with three dots and a space (<code>"... "</code>)<dt><a class='anchor' name='kw_returns::'>&nbsp;</a><code>RETURNS::</code><dd>This section should contain a description of the return value, especially the type.<dt><a class='anchor' name='kw_discussion::'>&nbsp;</a><code>DISCUSSION::</code><dd>This optional section can contain a more detailed discussion and code examples related to this method.</dl>
-
-<p>Example:<pre>method:: ar, kr
+<pre>method:: ar, kr
 This is a nice method, try it out!
 argument:: freq
 The frequency of this thing as a floating point value.
 argument:: amp
 The amplitude, be careful. Goes to 11.
 returns::
-An UGen.</pre><h3><a class='anchor' name='Modal tags'>Modal tags</a></h3>
+An UGen.</pre><h3><a class='anchor' name='Modal%20tags'>Modal tags</a></h3>
 
 <p>These tags enclose a text and ends with a single <code>::</code> (double-colon) end-tag. The enclosed text can not contain any other tags.<dl>
 <dt><a class='anchor' name='kw_strong::'>&nbsp;</a><code>STRONG::</code><dd>Render text in bold font.<dt><a class='anchor' name='kw_emphasis::'>&nbsp;</a><code>EMPHASIS::</code><dd>Render text in emphasized font, typically italics.<dt><a class='anchor' name='kw_soft::'>&nbsp;</a><code>SOFT::</code><dd>Render text in a soft shade.<dt><a class='anchor' name='kw_link::'>&nbsp;</a><code>LINK::</code><dd>Create a link to another document. The text should be the document key, which is the path relative the Help folder and without extension, like <code>Classes/SinOsc</code> or <code>Reference/SCDocSyntax</code>
 <p>Optionally, the path can be followed by <code>#anchor</code> to jump to a specific place in the document, and <code>#label</code> to specify another label for the link.
 <p>All kinds of sections automatically creates an anchor with the same name as the section. Methods also creates an anchor, with the methodname prefixed with <code>*</code> for class methods and <code>-</code> for instance methods.
-<p>The path can be empty for linking to an anchor inside the current document, and the anchor can be empty to only specify the link label. Example:<pre>See section link::#Introduction:: in this document.
+<p>The path can be empty for linking to an anchor inside the current document, and the anchor can be empty to only specify the link label.<pre>See section link::#Introduction:: in this document.
 Take a look at link::Classes/SCDoc#*indexAllDocuments::
 Try link::Search#scdoc#Searching for SCDoc::,
 or perhaps link::Classes/SinOsc##go make some music::</pre>
-<p>URL's are automagically turned into links, but can be explicitly created with this tag, if one wants to use another link label.<dt><a class='anchor' name='kw_anchor::'>&nbsp;</a><code>ANCHOR::</code><dd>Manually create an anchor at this position in the document.<dt><a class='anchor' name='kw_image::'>&nbsp;</a><code>IMAGE::</code><dd>Insert image, the text should be the relative path to the image. Example:<pre>image::foo.png::</pre>
+<p>URL's are automagically turned into links, but can be explicitly created with this tag, if one wants to use another link label.<dt><a class='anchor' name='kw_anchor::'>&nbsp;</a><code>ANCHOR::</code><dd>Manually create an anchor at this position in the document.<dt><a class='anchor' name='kw_image::'>&nbsp;</a><code>IMAGE::</code><dd>Insert image, the text should be the relative path to the image.<pre>image::foo.png::</pre>
 <p>Optionally an image caption can be given:<pre>image::foo.png#Figure 1::</pre>
 <p>And, the image can be clickable and link to another page:<pre>image::foo.png#click this image#Classes/SinOsc::</pre>
 <p>Just leave the caption empty if you want a link but no caption.</dl>
 
-<p>The following tags (CODE and TELETYPE) can be written in two forms, either inline or block. <strong>Inline</strong> form has the end-tag on the same line, and need any enclosed double-colons that should be part of the text to be escaped with backslash (<code>\</code>). <strong>Block</strong> form has the tag and end-tag on lines by themselves, and can take multi-line text. In block form, only a single end-tag on its own line counts and any end-tags inside the text should not be escaped (except if it's on a single line). Example:<pre>code:: inline form ::
+<p>The following tags (CODE and TELETYPE) can be written in two forms, either inline or block. <strong>Inline</strong> form has the end-tag on the same line, and need any enclosed double-colons that should be part of the text to be escaped with backslash (<code>\</code>). <strong>Block</strong> form has the tag and end-tag on lines by themselves, and can take multi-line text. In block form, only a single end-tag on its own line counts and any end-tags inside the text should not be escaped (except if it's on a single line).<pre>code:: inline form ::
 
 code::
 block form :: &lt;- needs no escaping
 can span multiple lines
 ::</pre><dl>
 <dt><a class='anchor' name='kw_code::'>&nbsp;</a><code>CODE::</code><dd>Render syntax-colored SuperCollider code.<dt><a class='anchor' name='kw_teletype::'>&nbsp;</a><code>TELETYPE::</code><dd>Render monospace text.</dl>
-<h3><a class='anchor' name='Lists and tables'>Lists and tables</a></h3>
+<h3><a class='anchor' name='Lists%20and%20tables'>Lists and tables</a></h3>
 
 <p>List items, table rows and definition terms are denoted with <code>##</code> (double-hash). Table cells and definition descriptions are denoted with <code>||</code> (double-bar). Lists and tables can be nested, and ends with the end-tag.<dl>
 <dt><a class='anchor' name='kw_table::'>&nbsp;</a><code>TABLE::</code><dd>Create a table. Example:<pre>table::
@@ -122,7 +126,7 @@ can span multiple lines
      || A very nice computer software.
 ::</pre>
 <p><dt><a class='anchor' name='kw_list::'>&nbsp;</a><code>LIST::</code><dd>Create a simple bulleted list. Items are prefixed with <code>##</code><dt><a class='anchor' name='kw_numberedlist::'>&nbsp;</a><code>NUMBEREDLIST::</code><dd>Create a numbered list. Items are prefixed with <code>##</code><dt><a class='anchor' name='kw_tree::'>&nbsp;</a><code>TREE::</code><dd>Create a tree structure. Typically nested with more TREE tags. Items are prefixed with <code>##</code></dl>
-<h3><a class='anchor' name='Notes and warnings'>Notes and warnings</a></h3>
+<h3><a class='anchor' name='Notes%20and%20warnings'>Notes and warnings</a></h3>
 
 <p>These can have other tags in them, and ends with the end-tag.<dl>
 <dt><a class='anchor' name='kw_note::'>&nbsp;</a><code>NOTE::</code><dd>Create a NOTE box with important content.<div class='note'><span class='notelabel'>NOTE:</span> like this</div>
@@ -133,7 +137,7 @@ meanings ranging from "a computer expert or enthusiast" to "a carnival performer
 sensationally morbid or disgusting acts"
 ::</pre>
 <p>The result looks like this: Hello I'm a geek<a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> </dl>
-<h3><a class='anchor' name='Other tags'>Other tags</a></h3>
+<h3><a class='anchor' name='Other%20tags'>Other tags</a></h3>
 <dl>
 <dt><a class='anchor' name='kw_keyword::'>&nbsp;</a><code>KEYWORD::</code> keyword(s)<dd>Specify one or more searchable keywords for this document. An anchor named the keyword prefixed with <code>kw_</code> will be created at the position of this tag.<dt><a class='anchor' name='kw_classtree::'>&nbsp;</a><code>CLASSTREE::</code> classname<dd>Render a class tree of subclasses starting from the given class.</dl>
 <h2><a class='anchor' name='Grammar'>Grammar</a></h2>
@@ -235,4 +239,4 @@ nocommawords      ::= nocommawords TEXT
                     | TEXT
                     | URL
 commalist         ::= { nocommawords COMMA } nocommawords</pre><div class='footnotes'>
-<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - According to <a href="http://en.wikipedia.org/wiki/Geek">http://en.wikipedia.org/wiki/Geek</a> the word geek is a slang term, with different meanings ranging from "a computer expert or enthusiast" to "a carnival performer who performs sensationally morbid or disgusting acts"</div></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/SCDocSyntax.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/SCDocSyntax.schelp</a><br>link::Reference/SCDocSyntax::<br>sc version: 3.8dev</div></div></body></html>
+<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - According to <a href="http://en.wikipedia.org/wiki/Geek">http://en.wikipedia.org/wiki/Geek</a> the word geek is a slang term, with different meanings ranging from "a computer expert or enthusiast" to "a carnival performer who performs sensationally morbid or disgusting acts"</div></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/SCDocSyntax.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/SCDocSyntax.schelp</a><br>link::Reference/SCDocSyntax::<br></div></div></body></html>

@@ -1,87 +1,93 @@
-<html><head><title>Task</title>
+<!doctype html><html lang='en'><head><title>Task | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Task';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
-<div class='header'>
-<div id='label'>SuperCollider CLASSES</div>
-<div id='categories'><a href='./../Browse.html#Scheduling'>Scheduling</a></div>
-<h1>Task</h1>
-<div id='summary'>a pauseable process</div>
-</div>
-<div class='subheader'>
-<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Stream.sc'>Stream.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/PauseStream.html">PauseStream</a> : <a href="../Classes/Stream.html">Stream</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
-<div id='related'>See also: <a href="./../Classes/Routine.html">Routine</a></div>
-</div>
 <div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<div id='toctitle'>Task:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
-<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
 </ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-play'>play</a> </li>
-<li class='toc2'><a href='#Other control methods'>Other control methods</a></li>
+<li class='toc2'><a href='#Other%20control%20methods'>Other control methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-start'>start</a> </li>
 <li class='toc3'><a href='#-resume'>resume</a> </li>
 <li class='toc3'><a href='#-pause'>pause</a> </li>
 <li class='toc3'><a href='#-stop'>stop</a> </li>
 <li class='toc3'><a href='#-reset'>reset</a> </li>
 </ul><li class='toc2'><a href='#Notifications'>Notifications</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'><li class='toc2'><a href='#What happens if you stop and start the task too quickly?'>What happens if you stop and start the task too quickly?</a></li>
-<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<ul class='toc'><li class='toc2'><a href='#What%20happens%20if%20you%20stop%20and%20start%20the%20task%20too%20quickly?'>What happens if you stop and start the task too quickly?</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#Scheduling'>Scheduling</a></span>
+</div><h1>Task<span id='superclasses'> : <a href="../Classes/PauseStream.html">PauseStream</a> : <a href="../Classes/Stream.html">Stream</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
+<div id='summary'>a pauseable process</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Stream.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Stream.sc'>Stream.sc</a></div><div id='related'>See also: <a href="./../Classes/Routine.html">Routine</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>Task is a pauseable process. It is implemented by wrapping a <a href="./../Classes/PauseStream.html">PauseStream</a> around a <a href="./../Classes/Routine.html">Routine</a>. Most of its methods (start, stop, reset) are inherited from PauseStream.
 <p>Tasks are not 100% interchangeable with Routines.<ul>
 <li>Condition does not work properly inside of a Task.<li>Stopping a task and restarting it quickly may yield surprising results (see example below), but this is necessary to prevent tasks from becoming unstable if they are started and/or stopped in rapid succession.</ul>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*new' href='./../Overviews/Methods.html#new'>new</a> (<span class='argstr'>func</span>, <span class='argstr'>clock</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>Task.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>func</span>, <span class='argstr'>clock</span>)</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>func<td class='argumentdesc'>
 <p>A Function to be evaluated.<tr><td class='argumentname'>clock<td class='argumentdesc'>
-<p>A Clock in which to play the <a href="./../Classes/Routine.html">Routine</a>. If you do not provide a Clock the default is an instance of <a href="./../Classes/TempoClock.html">TempoClock</a>. Remember that methods which call Cocoa primitives (i.e. GUI functions) must be played in <a href="./../Classes/AppClock.html">AppClock</a>.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<p>A Clock in which to play the <a href="./../Classes/Routine.html">Routine</a>. If you do not provide a Clock the default is an instance of <a href="./../Classes/TempoClock.html">TempoClock</a>. Remember that methods which call Cocoa primitives (i.e. GUI functions) must be played in <a href="./../Classes/AppClock.html">AppClock</a>.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-play' href='./../Overviews/Methods.html#play'>play</a> (<span class='argstr'>argClock</span>, <span class='argstr'>doReset: false</span>, <span class='argstr'>quant</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-play' href='./../Overviews/Methods.html#play'>play</a>(<span class='argstr'>argClock</span>, <span class='argstr'>doReset: false</span>, <span class='argstr'>quant</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/PauseStream.html'>PauseStream</a></div>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>argClock<td class='argumentdesc'>
 <p>(optional) Override the clock assigned in Task.new.<tr><td class='argumentname'>doReset<td class='argumentdesc'>
 <p>If true, the task will start over from the beginning. Default is false (task will resume where it was when it was last stopped).<tr><td class='argumentname'>quant<td class='argumentdesc'>
-<p>See the <a href="./../Classes/Quant.html">Quant</a> helpfile.</table></div><h3><a class='anchor' name='Other control methods'>Other control methods</a></h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-start' href='./../Overviews/Methods.html#start'>start</a> (<span class='argstr'>argClock</span>, <span class='argstr'>quant</span>)</h3>
+<p>See the <a href="./../Classes/Quant.html">Quant</a> helpfile.</table></div><h3><a class='anchor' name='Other%20control%20methods'>Other control methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-start' href='./../Overviews/Methods.html#start'>start</a>(<span class='argstr'>argClock</span>, <span class='argstr'>quant</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/PauseStream.html'>PauseStream</a></div>
 <div class='method'>
-<p>Restart the task from the beginning.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-resume' href='./../Overviews/Methods.html#resume'>resume</a> (<span class='argstr'>argClock</span>, <span class='argstr'>quant</span>)</h3>
+<p>Restart the task from the beginning.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-resume' href='./../Overviews/Methods.html#resume'>resume</a>(<span class='argstr'>argClock</span>, <span class='argstr'>quant</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/PauseStream.html'>PauseStream</a></div>
 <div class='method'>
-<p>Resume the task where it left off.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-pause' href='./../Overviews/Methods.html#pause'>pause</a> </h3>
+<p>Resume the task where it left off.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pause' href='./../Overviews/Methods.html#pause'>pause</a></h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/PauseStream.html'>PauseStream</a></div>
 <div class='method'>
-<p>Stop playing now.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-stop' href='./../Overviews/Methods.html#stop'>stop</a> </h3>
+<p>Stop playing now.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-stop' href='./../Overviews/Methods.html#stop'>stop</a></h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/PauseStream.html'>PauseStream</a></div>
 <div class='method'>
-<p>Stop playing now. (Pause and stop have the same implementation.)</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-reset' href='./../Overviews/Methods.html#reset'>reset</a> </h3>
+<p>Stop playing now. (Pause and stop have the same implementation.)</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-reset' href='./../Overviews/Methods.html#reset'>reset</a></h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/PauseStream.html'>PauseStream</a></div>
 <div class='method'>
 <p>Set the stream to restart from the beginning the next time it's played.</div><h3><a class='anchor' name='Notifications'>Notifications</a></h3>
 
 <p>Other objects might need to be aware of changes in the state of a task. The following notifications are broadcast to dependents registered with the Task object.<ul>
 <li><strong>\userPlayed</strong> - Sent at the time the user calls play, start or resume.<li><strong>\playing</strong> - Sent at the time the task begins playing on the clock (corresponding to quant).<li><strong>\userStopped</strong> - Sent at the time the user calls pause or stop.<li><strong>\stopped</strong> - Sent at the time the task is finally removed from the clock (this is the time when the next event would have occurred if the task had not been stopped). If the task function completes on its own, this notification is sent without 'userStopped' being sent previously.</ul>
-<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
-<h3><a class='anchor' name='What happens if you stop and start the task too quickly?'>What happens if you stop and start the task too quickly?</a></h3>
+<h3><a class='anchor' name='What%20happens%20if%20you%20stop%20and%20start%20the%20task%20too%20quickly?'>What happens if you stop and start the task too quickly?</a></h3>
 <pre class='code prettyprint lang-sc'>(
 t = Task({
     50.do({ arg i;
@@ -122,4 +128,4 @@ fork {
 [ go, 1704.114411906 ]</pre>
 
 <p>Based on the forked thread, you would expect the second "go" line of output to occur 0.2 seconds after the first, but in fact it happens two seconds later (the same amount of time the task waits between iterations). This is because the task must not schedule itself on the clock more than once. When the task is stopped, it remains scheduled until it wakes up again (based on its wait time). If, during this interval, the task were restarted, there would be two references to the task in the scheduler queue -- a situation that is irrecoverable short of stopping everything with command-period.
-<p>As a result, Task should be used for processes that need to start and stop relatively infrequently, but for which maximum stability is required. If you need fine-grained control over when and how the process stops and resumes (as is the case, for instance, with condition), <a href="./../Classes/Routine.html">Routine</a> is preferred.<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Task.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Task.schelp</a><br>link::Classes/Task::<br>sc version: 3.8dev</div></div></body></html>
+<p>As a result, Task should be used for processes that need to start and stop relatively infrequently, but for which maximum stability is required. If you need fine-grained control over when and how the process stops and resumes (as is the case, for instance, with condition), <a href="./../Classes/Routine.html">Routine</a> is preferred.<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Task.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Task.schelp</a><br>link::Classes/Task::<br></div></div></body></html>

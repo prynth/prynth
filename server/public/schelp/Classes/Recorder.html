@@ -1,0 +1,181 @@
+<!doctype html><html lang='en'><head><title>Recorder | SuperCollider 3.9.3 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Recorder';
+var scdoc_sc_version = '3.9.3';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC();prettyPrint()'>
+<div id='toc'>
+<div id='toctitle'>Recorder:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-prepareForRecord'>prepareForRecord</a> </li>
+<li class='toc3'><a href='#-record'>record</a> </li>
+<li class='toc3'><a href='#-pauseRecording'>pauseRecording</a> </li>
+<li class='toc3'><a href='#-resumeRecording'>resumeRecording</a> </li>
+<li class='toc3'><a href='#-stopRecording'>stopRecording</a> </li>
+<li class='toc3'><a href='#-filePrefix'>filePrefix</a> </li>
+<li class='toc3'><a href='#-numChannels'>numChannels</a> </li>
+<li class='toc3'><a href='#-recHeaderFormat'>recHeaderFormat</a> </li>
+<li class='toc3'><a href='#-recSampleFormat'>recSampleFormat</a> </li>
+<li class='toc3'><a href='#-recBufSize'>recBufSize</a> </li>
+<li class='toc3'><a href='#-isRecording'>isRecording</a> </li>
+<li class='toc3'><a href='#-paused'>paused</a> </li>
+<li class='toc3'><a href='#-duration'>duration</a> </li>
+<li class='toc3'><a href='#-path'>path</a> </li>
+<li class='toc3'><a href='#-numFrames'>numFrames</a> </li>
+<li class='toc3'><a href='#-notifyServer'>notifyServer</a> </li>
+<li class='toc3'><a href='#-server'>server</a> </li>
+<li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-recordBus'>recordBus</a> </li>
+</ul></ul><li class='toc1'><a href='#Examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#Server'>Server</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Server>Abstractions'>Abstractions</a></span>
+</div><h1>Recorder<span id='superclasses'> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
+<div id='summary'>Write Audio to Harddisk</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Recorder.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Recorder.sc'>Recorder.sc</a></div><div id='related'>See also: <a href="./../Classes/Server.html">Server</a>, <a href="./../Classes/DiskOut.html">DiskOut</a>, <a href="./../Guides/Non-Realtime-Synthesis.html">Non-Realtime Synthesis (NRT)</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A Recorder allows you to write audio to harddisk, reading from a given bus and a certain number of channels, relative to a given node. A <a href="./../Classes/Server.html">Server</a> has one instance, which is accessible also through the <a href="./../Classes/ScIDE.html">ScIDE</a>. You can use the server directly to record its output<pre class='code prettyprint lang-sc'>(
+{ SinOsc.ar(
+    SinOsc.ar(
+        XLine.kr(1, 100, 5)).exprange(*XLine.kr([20, 800], [7000, 200], 10)
+    )
+   ) * 0.1
+
+}.play;
+s.record(duration: 10);
+)</pre>
+
+<p>This functionality is also available through the recording button on the server windows. Pressing it once calls record, and pressing it again calls stopRecording (see below). When doing so the file created will be in your recordings folder and be named for the current date and time. The default location of the recordings folder varies from platform to platform. Setting this variable allows you to change the default.<pre class='code prettyprint lang-sc'>// find where the recordings are written to
+thisProcess.platform.recordingsDir</pre>
+<div class='note'><span class='notelabel'>NOTE:</span> By default, record creates the recording synth after the Server's default group and uses In.ar. Thus if you add nodes after the recording synth their output will not be captured. To avoid this, either use Node objects (which use the default node as their target) or (when using messaging style) use a target nodeID of 1.<pre class='code prettyprint lang-sc'>s.sendMsg("/s_new", "default", s.nextNodeID, 1, 1);</pre>
+</div>
+<p>For more detail on this subject see <a href="./../Guides/Order-of-execution.html">Order of execution</a>, <a href="./../Reference/default_group.html">Default Group</a>, and <a href="./../Guides/NodeMessaging.html">Node Messaging</a>.
+<p>See <a href="./../Classes/SoundFile.html">SoundFile</a> for information on the various sample and header formats. Not all sample and header formats are compatible. Note that the sampling rate of the output file will be the same as that of the server app. This can be set using the Server's <a href="./../Classes/ServerOptions.html">ServerOptions</a>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>Recorder.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>server</span>)</h3>
+<div class='method'>
+<p>Create a new instance for a given server.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>server<td class='argumentdesc'></table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-prepareForRecord' href='./../Overviews/Methods.html#prepareForRecord'>prepareForRecord</a>(<span class='argstr'>path</span>, <span class='argstr'>numChannels</span>)</h3>
+<div class='method'>
+<p>Allocates the necessary buffer, etc. for recording the server's output. (See <code class='code prettyprint lang-sc'>record</code> below.)<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>path<td class='argumentdesc'>
+<p>a <a href="./../Classes/String.html">String</a> representing the path and name of the output file.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>The number of output channels to record.</table><h4>Discussion:</h4>
+
+<p>If you do not specify a path than a file will be created in your recordings folder (see the note above on this) called <code class='code prettyprint lang-sc'>SC_thisDateAndTime</code>. Changes to the header or sample format, or to the number of channels must be made <strong>before</strong> calling this.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-record' href='./../Overviews/Methods.html#record'>record</a>(<span class='argstr'>path</span>, <span class='argstr'>bus</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>node</span>, <span class='argstr'>duration</span>)</h3>
+<div class='method'>
+<p>Starts or resumes recording the output.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>path<td class='argumentdesc'>
+<p>this is optional, and is passed to <code class='code prettyprint lang-sc'>prepareForRecord</code> (above).<tr><td class='argumentname'>bus<td class='argumentdesc'>
+<p>The bus (<a href="./../Classes/Bus.html">Bus</a> object or integer bus index), the offset at which to start to count the number of channels. You can record any adjacent number of bus channels.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>The number of output channels to record.<tr><td class='argumentname'>node<td class='argumentdesc'>
+<p>The <a href="./../Classes/Node.html">Node</a> to record immediately after. By default, this is the default group 1.<tr><td class='argumentname'>duration<td class='argumentdesc'>
+<p>If set, this limits recording to a given time in seconds.<div class='note'><span class='notelabel'>NOTE:</span> The recording starts when the buffer has been allocated, and after the usually very short network latency. It will last for the <code class='code prettyprint lang-sc'>duration</code> exactly down to one server block size (64 samples). For scheduling the starting point of a recording precisely, call <a href="#-prepareForRecord">-prepareForRecord</a> first, and then call <a href="#-record">-record</a> a bundle (see <a href="./../Classes/Server.html#-bind">Server: -bind</a> and <a href="./../Classes/Server.html#-sync">Server: -sync</a>).</div></table><h4>Discussion:</h4>
+
+<p>If you have not called prepareForRecord first (see above) then it will be invoked for you (but that adds a slight delay before recording starts for real).<pre class='code prettyprint lang-sc'>r = Recorder(s);
+{ GVerb.ar(Dust.ar(4)) }.play; // play on bus 64
+r.record(numChannels:2);
+r.stopRecording;</pre>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pauseRecording' href='./../Overviews/Methods.html#pauseRecording'>pauseRecording</a></h3>
+<div class='method'>
+<p>Pauses recording. Can be resumed by executing record again, or by calling resumeRecording.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-resumeRecording' href='./../Overviews/Methods.html#resumeRecording'>resumeRecording</a></h3>
+<div class='method'>
+<p>Start recording again.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-stopRecording' href='./../Overviews/Methods.html#stopRecording'>stopRecording</a></h3>
+<div class='method'>
+<p>Stops recording, closes the file, and frees the associated resources.<h4>Discussion:</h4>
+
+<p>You must call this when finished recording or the output file will be unusable. Cmd-. while recording has the same effect.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-filePrefix' href='./../Overviews/Methods.html#filePrefix'>filePrefix</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-filePrefix' href='./../Overviews/Methods.html#filePrefix'>filePrefix</a> = value</h3>
+<div class='method'>
+<p>a string used as prefix for the path when recording. This can be used to separate the outputs of several recorders. The default is <code class='code prettyprint lang-sc'>"SC_"</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numChannels' href='./../Overviews/Methods.html#numChannels'>numChannels</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numChannels' href='./../Overviews/Methods.html#numChannels'>numChannels</a> = value</h3>
+<div class='method'>
+<p>a number of sound file channels that is used always when using this recorder, unless a different one is specified in the <a href="#-record">-record</a> method. When not set, we use <a href="./../Classes/Server.html#-recChannels">Server: -recChannels</a>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recHeaderFormat' href='./../Overviews/Methods.html#recHeaderFormat'>recHeaderFormat</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recHeaderFormat' href='./../Overviews/Methods.html#recHeaderFormat'>recHeaderFormat</a> = value</h3>
+<div class='method'>
+<p>Get/set the header format (string) of the output file. The default is "aiff". Must be called <strong>before</strong> prepareForRecord.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recSampleFormat' href='./../Overviews/Methods.html#recSampleFormat'>recSampleFormat</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recSampleFormat' href='./../Overviews/Methods.html#recSampleFormat'>recSampleFormat</a> = value</h3>
+<div class='method'>
+<p>Get/set the sample format (string) of the output file. The default is "float". Must be called <strong>before</strong> prepareForRecord.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recBufSize' href='./../Overviews/Methods.html#recBufSize'>recBufSize</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recBufSize' href='./../Overviews/Methods.html#recBufSize'>recBufSize</a> = value</h3>
+<div class='method'>
+<p>Get/set the size of the <a href="./../Classes/Buffer.html">Buffer</a> to use with the <a href="./../Classes/DiskOut.html">DiskOut</a> UGen. This must be a power of two. The default is the <code class='code prettyprint lang-sc'>sampleRate.nextPowerOfTwo</code> or the first power of two number of samples longer than one second. Must be called <strong>before</strong> prepareForRecord.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isRecording' href='./../Overviews/Methods.html#isRecording'>isRecording</a></h3>
+<div class='method'>
+<p>returns true if we are in the process of recording</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-paused' href='./../Overviews/Methods.html#paused'>paused</a></h3>
+<div class='method'>
+<p>returns true if recording is paused</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-duration' href='./../Overviews/Methods.html#duration'>duration</a></h3>
+<div class='method'>
+<p>returns the number of seconds we have been recording so far</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-path' href='./../Overviews/Methods.html#path'>path</a></h3>
+<div class='method'>
+<p>returns the path of the current recording</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numFrames' href='./../Overviews/Methods.html#numFrames'>numFrames</a></h3>
+<div class='method'>
+<p>returns the number of frames of the recording buffer</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-notifyServer' href='./../Overviews/Methods.html#notifyServer'>notifyServer</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-notifyServer' href='./../Overviews/Methods.html#notifyServer'>notifyServer</a> = value</h3>
+<div class='method'>
+<p>if set to true, it will send <code class='code prettyprint lang-sc'>changed</code> notifications to the server instance. This is used internally by the <a href="./../Classes/Server.html">Server</a> class.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-server' href='./../Overviews/Methods.html#server'>server</a></h3>
+<div class='method'>
+<p>server to record from</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recordBus' href='./../Overviews/Methods.html#recordBus'>recordBus</a>(<span class='argstr'>bus</span>, <span class='argstr'>duration</span>, <span class='argstr'>path</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>node</span>)</h3>
+<h2><a class='anchor' name='Examples'>Examples</a></h2>
+<pre class='code prettyprint lang-sc'>s.boot; // start the server
+
+// something to record
+(
+SynthDef("bubbles", { |out|
+    var f, sound;
+    f = LFSaw.kr(0.4, 0, 24, LFSaw.kr([8, 7.23], 0, 3, 80)).midicps; // glissando function
+    sound = CombN.ar(SinOsc.ar(f, 0, 0.04), 0.2, 0.2, 4); // echoing sine wave
+    Out.ar(out, sound);
+}).add;
+
+SynthDef("tpulse", { |out = 0, freq = 700, sawFreq = 440.0|
+    Out.ar(out, SyncSaw.ar(freq, sawFreq, 0.1))
+}).add;
+
+)
+
+x = Synth.new("bubbles");
+
+s.prepareForRecord; // if you want to start recording on a precise moment in time, you have to call this first.
+
+s.record; // start recording. This can also be called directly, if it isn't imprtant when precisely you need to start.
+
+s.pauseRecording; // pausable
+
+s.record // start again
+
+s.stopRecording; // this closes the file and deallocates the buffer recording node, etc.
+
+x.free; // stop the synths
+
+// look in your recordings folder and you'll find a file named for this date and time</pre>
+
+<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Recorder.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Recorder.schelp</a><br>link::Classes/Recorder::<br></div></div></body></html>

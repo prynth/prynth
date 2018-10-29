@@ -1,33 +1,39 @@
-<html><head><title>Pattern Guide Cookbook 01: Basic Sequencing</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide Cookbook 01: Basic Sequencing | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = 'Pattern Guide Cookbook 01: Basic Sequencing';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Pattern Guide Cookbook 01: Basic Sequencing:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Cookbook:%20Sequencing%20basics'>Cookbook: Sequencing basics</a></li>
+<ul class='toc'><li class='toc2'><a href='#Playing%20a%20predefined%20note%20sequence'>Playing a predefined note sequence</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#"Multichannel"%20expansion'>"Multichannel" expansion</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Using%20custom%20SynthDefs%20(including%20unpitched%20SynthDefs)'>Using custom SynthDefs (including unpitched SynthDefs)</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/A-PRACTICAL-GUIDE</div>
-<div id='categories'><a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>Streams-Patterns-Events>A-Practical-Guide</a></div>
-<h1>Pattern Guide Cookbook 01: Basic Sequencing</h1>
+<div id='label'>
+<span id='folder'>Tutorials/A-Practical-Guide</span>
+ | <span id='categories'><a href='./../../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>A-Practical-Guide</a></span>
+</div><h1>Pattern Guide Cookbook 01: Basic Sequencing</h1>
 <div id='summary'>Sequencing basics</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.html">Pattern Guide 08: Event Types and Parameters</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook02_Manipulating_Patterns.html">Pattern Guide Cookbook 02: Manipulating Patterns</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Cookbook: Sequencing basics'>Cookbook: Sequencing basics</a></li>
-<ul class='toc'><li class='toc2'><a href='#Playing a predefined note sequence'>Playing a predefined note sequence</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#"Multichannel" expansion'>"Multichannel" expansion</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Using custom SynthDefs (including unpitched SynthDefs)'>Using custom SynthDefs (including unpitched SynthDefs)</a></li>
-<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Cookbook: Sequencing basics'>Cookbook: Sequencing basics</a></h2>
-<h3><a class='anchor' name='Playing a predefined note sequence'>Playing a predefined note sequence</a></h3>
+<h2><a class='anchor' name='Cookbook:%20Sequencing%20basics'>Cookbook: Sequencing basics</a></h2>
+<h3><a class='anchor' name='Playing%20a%20predefined%20note%20sequence'>Playing a predefined note sequence</a></h3>
 
 <p>The following are three different ways of playing the same famous fugue subject.
 <p>The first is brute force, listing all the scale degrees mechanically in order. The second and third recognize the A pedal point and use interlacing operations to insert the pedal notes in between the changing notes.
@@ -62,7 +68,7 @@ p = Pbind(
     \dur, 0.25
 ).play;
 )</pre>
-<h3><a class='anchor' name='"Multichannel" expansion'>"Multichannel" expansion</a></h3>
+<h3><a class='anchor' name='"Multichannel"%20expansion'>"Multichannel" expansion</a></h3>
 
 <p>In a SynthDef, using an array as the input to a UGen expands the UGen into an array of UGens (see <a href="./../../Guides/Multichannel-Expansion.html">Multichannel Expansion</a>). Something similar happens in patterns. Normally a value sent to a Synth node should be a single number, but if it's an array instead, the pattern expands the event to produce <em>multiple synth nodes instead</em> of just one.
 <p>The <code class='code prettyprint lang-sc'>\degree</code> pattern applies a set of chord intervals to a melody that's always on top. It's a compound pattern, Pseries(...) + Prand(...), where Pseries returns a single number and Prand returns an array. As with regular math operations, a number plus an array is an array. If the current Pseries value is 7 and Prand returns [0, -3, -5], the result is [7, 4, 2] and you would hear a C major triad in first inversion.<pre class='code prettyprint lang-sc'>(
@@ -74,7 +80,7 @@ p = Pbind(
 )
 
 p.stop;</pre>
-<h3><a class='anchor' name='Using custom SynthDefs (including unpitched SynthDefs)'>Using custom SynthDefs (including unpitched SynthDefs)</a></h3>
+<h3><a class='anchor' name='Using%20custom%20SynthDefs%20(including%20unpitched%20SynthDefs)'>Using custom SynthDefs (including unpitched SynthDefs)</a></h3>
 
 <p>Patterns have special features to support several styles of pitch organization, but those features are strictly optional. Here we play a SynthDef that has no frequency argument whatsoever.
 <p>Note the use of <code class='code prettyprint lang-sc'>add</code> to prepare the SynthDef. Without it, most of the SynthDef inputs would not be recognized and the pattern would not send values to them.
@@ -85,7 +91,7 @@ b = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
 SynthDef(\stretchedFragments, { |out, bufnum, start, time = 1, stretch = 1, amp = 1, attack = 0.01, decay = 0.05|
     var sig = PlayBuf.ar(1, bufnum, rate: stretch.reciprocal, startPos: start), eg;
     sig = PitchShift.ar(sig, pitchRatio: stretch);
-    eg = EnvGen.kr(Env.linen(attack, time, decay), sig.abs &gt; 0, doneAction: 2);
+    eg = EnvGen.kr(Env.linen(attack, time, decay), sig.abs &gt; 0, doneAction: Done.freeSelf);
     Out.ar(out, (sig * eg) ! 2)
 }).add; // note add! Without this, arguments won't work
 )
@@ -110,4 +116,4 @@ p.stop;
 b.free;    // be tidy! remember to clean up your Buffer</pre>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.html">Pattern Guide 08: Event Types and Parameters</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook02_Manipulating_Patterns.html">Pattern Guide Cookbook 02: Manipulating Patterns</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook01_Basic_Sequencing.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook01_Basic_Sequencing.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook01_Basic_Sequencing::<br>sc version: 3.8dev</div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook02_Manipulating_Patterns.html">Pattern Guide Cookbook 02: Manipulating Patterns</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook01_Basic_Sequencing.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook01_Basic_Sequencing.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook01_Basic_Sequencing::<br></div></div></body></html>

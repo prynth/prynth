@@ -1,0 +1,238 @@
+<!doctype html><html lang='en'><head><title>09 | SuperCollider 3.9.3 Help</title>
+<link rel='stylesheet' href='./../../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../../..';
+var scdoc_title = '09';
+var scdoc_sc_version = '3.9.3';
+</script>
+<script src='./../../../scdoc.js' type='text/javascript'></script>
+<script src='./../../../docmap.js' type='text/javascript'></script>
+<script src='./../../../prettify.js' type='text/javascript'></script>
+<script src='./../../../lang-sc.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC();prettyPrint()'>
+<div id='toc'>
+<div id='toctitle'>09:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#2項演算'>2項演算</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#ミキシング＝加算'>ミキシング＝加算</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#スケーリング＝掛算'>スケーリング＝掛算</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#エンベロープ'>エンベロープ</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#加算合成'>加算合成</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#それぞれのコンポーネントにエンベロープを与える'>それぞれのコンポーネントにエンベロープを与える</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#リング変調'>リング変調</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#振幅変調'>振幅変調</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Tutorials/Mark_Polishook_tutorial/Japanese_version</span>
+ | <span id='categories'><a href='./../../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Mark_Polishook_tutorial</a>&#8201;&gt;&#8201;<a href='./../../../Browse.html#Tutorials>Mark_Polishook_tutorial>Japanese_version'>Japanese_version</a></span>
+</div><h1>09</h1>
+<div id='summary'>Mark Polishook tutorial (JP)</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
+</div>
+<h2><a class='anchor' name='2項演算'>2項演算</a></h2>
+
+<p>1つのUGenの後にオペレータとオペランドが続く2項演算は、通常は、単項演算によって生成されるよりもより複雑なシンセシス・プロセスを作り出します。
+<p>2項演算の例としては、ほんのいくつか例を挙げると、加算、乗算、減算、割算といったものがあります。
+<p>一般的なパターンは<table>
+<tr><td>OBJECT<td>OPERATOR<td>OPERAND</table>
+
+<p>オブジェクト　オペレータ　オペランド
+<p>であり、例えば次の様に<pre class='code prettyprint lang-sc'>2 * 3</pre>
+
+<p>オブジェクト、2項演算子、オペランド、となります。
+<p>UGenに対して適用することのできる2項演算の多くのリストを見るには、SuperColliderのヘルプ・システムでHelp/BinaryOpsを参照して下さい。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='ミキシング＝加算'>ミキシング＝加算</a></h2>
+
+<p>2つ、またはそれ以上のUGenをミックスするには加算します。<pre class='code prettyprint lang-sc'>(
+    // 2つのノコギリ波をミックスする
+    {
+        Saw.ar(500, 0.05)    // オブジェクト
+        +            // オペレータ
+        Saw.ar(600, 0.06)    // オペランド
+    }.scope;
+)</pre>
+
+<p>加算の結果は1つのBinaryOpUGenになります。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>次の例は、3つのUGenが加算を通して合体することによって何が起きるのかを示します。最初に、2つのUGenが1つのBinarOpUGenに合体します。その結果に加算演算子ともう1つのUGen（オペランド）が続き、もう1つのBinaryOpUGenを生成します。<pre class='code prettyprint lang-sc'>(
+{
+    // 最初の2つのUGenは1つのBinaryOpUGenに合体する
+    Saw.ar(500, 0.05)
+    +
+    Saw.ar(600, 0.06)
+    +
+    // このUGenはBinaryOpUGenに対するオペランドと‘+’オペレータ
+    Saw.ar(700, 0.07)
+}.scope;
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>MixというUGenを用いることで前の例と同じ結果になります。<pre class='code prettyprint lang-sc'>(
+{
+    // ミックスしたいUGenを配列の中に入れる
+    Mix.ar(
+        [
+            Saw.ar(500, 0.05),
+            Saw.ar(600, 0.06),
+            Saw.ar(700, 0.06)
+        ]
+    )
+}.scope
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>もしくは、Mix.arFillを使って似た様な結果を生成することもできます。この関数が実行される時には毎回、アーギュメントiはインクリメントされます。つまり、1回目に関数が実行される時にはiは0に等しく、2回目には1、3回目には２、という様になります。<pre class='code prettyprint lang-sc'>{ Mix.arFill(3, { arg i; Saw.ar(500 + ((i+1) * 100), 0.05) }) }.scope;</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='スケーリング＝掛算'>スケーリング＝掛算</a></h2>
+
+<p>低い周波数のオシレータを用いる次の例は、WhiteNoiseジェネレータに対してエンベロープを適用します。これは、1つのUGenを他のUGenと掛算することにより、双方をスケーリングするということをデモするものです。<pre class='code prettyprint lang-sc'>{ WhiteNoise.ar(0.1) * SinOsc.kr(1, 1) }.scope;</pre>
+
+<p>次の例は、2つのノイズを生成するUgenがサイン波でスケーリングされてBinaryOpUGenを生成し、それがまた別のBinaryOpUGenに加算されるというものです。<pre class='code prettyprint lang-sc'>(
+    // ... 汽車のまね？
+    {
+        (WhiteNoise.ar(0.1) * SinOsc.kr(1, 1))
+        +
+        (BrownNoise.ar(0.1) * SinOsc.kr(2, 1))
+    }.scope;
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='エンベロープ'>エンベロープ</a></h2>
+
+<p>UGenの任意のアスペクト、例えば、周波数、位相、振幅といったものをダイナミックに変調するにはエンベロープを使います。<pre class='code prettyprint lang-sc'>// 振幅を変調する
+{ SinOsc.ar(440, 0, 0.1) * EnvGen.kr(Env.sine(1), doneAction: Done.freeSelf) }.scope;</pre>
+
+<p>doneActionアーギュメント（コントロール）を2にセットすると、SuperColliderはSinOscとEnvGenのインスタンスを保持するために要求されていたメモリを解放することを確約します。アーギュメントがキーワードのスタイルで与えられていることに注意して下さい。キーワードのスタイルとは、アーギュメントの名前の後にコロン（‘:’）が続き、コロンの後に値が続く、というものです。
+<p>キーワードはコードをより読みやすいものにします。また、これによってアーギュメントを任意の順番で書くことができる様になります。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>EnvGenのtimeScaleアーギュメント（コントロール）は、エンベロープの継続時間を変調します。<pre class='code prettyprint lang-sc'>(
+SynthDef("timeScale", { arg ts = 1;
+    Out.ar(
+        0,
+        SinOsc.ar(440, 0, 0.4) * EnvGen.kr(Env.sine(1), doneAction: Done.freeSelf, timeScale: ts)
+    )
+}).add;
+)
+
+Synth("timeScale", [\ts, 0.1]); // timeScaleコントロールはエンベロープの継続時間</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<pre class='code prettyprint lang-sc'>//  ... エンベロープの時間をシンセが作られるたびに毎回違ったものにスケーリングする
+(
+r = Routine({
+    loop({
+        Synth("timeScale", [\ts, 0.01.rrand(0.3)]);
+        0.5.wait;
+    })
+});
+)
+r.play</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='加算合成'>加算合成</a></h2>
+
+<p>加算合成とはその名が示す通りのものです。コンポーネントはお互いに加えられ（または合計され）ます。<pre class='code prettyprint lang-sc'>(
+{    // 関数を12回実行する
+    var n = 12;
+    Mix.arFill(
+        n,
+        {
+            SinOsc.ar(
+                [67.0.rrand(2000), 67.0.rrand(2000)],
+                0,
+                n.reciprocal * 0.75
+            )
+        }
+    )
+    *
+    EnvGen.kr(Env.perc(11, 6), doneAction: Done.freeSelf)
+}.scope
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='それぞれのコンポーネントにエンベロープを与える'>それぞれのコンポーネントにエンベロープを与える</a></h2>
+
+<p>加算合成に期待されて来たこととは、求められる周波数成分に従ってサイン波を加算することで、想像しうるサウンドを生成または再現することができるということでした。
+<p>加算合成の問題点とは、サウンドの正確な周波数成分を知る必要があるということで、それには必要とされる数のサイン波のそれぞれが理想的なエンベロープで制御されることによって初めて可能になるのです。
+<p>どちらにせよ、前の例のそれぞれのコンポーネントに別々のエンベロープを与えることによって、より微妙なテクスチャーを生成することができます。<pre class='code prettyprint lang-sc'>(
+{    var n = 12;
+
+    Mix.arFill(
+            n,                        // n個のサイン波を生成する
+            {
+            SinOsc.ar(                    // それぞれがlow.rrand(high)の範囲内で起こりうる周波数
+                [67.0.rrand(2000), 67.0.rrand(2000)],    // ... 実数の値
+                0,
+                n.reciprocal                // それぞれのサイン波の振幅をスケーリングする
+                                    // nの値に従って
+            )
+            *
+            EnvGen.kr(                    // サイン波のそれぞれにエンベロープを与える
+                Env.sine(2.0.rrand(17)),
+                doneAction: Done.none                 // サウンド全体が完了した時にだけ
+                                    // エンベロープを解放する（なぜ？）
+            )
+        }
+    )
+    *                                // パッチ全体に対してエンベロープを与える
+    EnvGen.kr(
+        Env.perc(11, 6),
+        doneAction: Done.freeSelf,
+        levelScale: 0.75
+    )
+
+}.scope
+)</pre>
+
+<p>（もしくは<a href="./../../../Classes/Klang.html">Klang</a> ugenを用いることで同じ様な結果が得られます）
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='リング変調'>リング変調</a></h2>
+
+<p>2つのUGenを掛算することでリング変調を生成します。<pre class='code prettyprint lang-sc'>// キャリアの振幅を低周波オシレータ（LFO）で変調
+{ SinOsc.ar(440, 0, 0.571) * SinOsc.kr(2.reciprocal) }.scope
+
+// LFOの周波数を可聴帯域にすることで追加の周波数成分を生成する
+{ SinOsc.ar(440, 0, 0.571) * SinOsc.kr(880) }.scope
+
+// 低周波のオシレータ（lfo）でモジュレータの振幅を変調する
+(
+    {
+        SinOsc.ar(440, 0, 0.571)
+        *
+        (SinOsc.kr(880)                // モジュレータとlfoを括弧の中に包み込む
+        *                     // なぜ？
+        SinOsc.kr([6.99, 8.01].reciprocal)
+        )
+    }.scope
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='振幅変調'>振幅変調</a></h2>
+
+<p>2つのUGenを掛算する際にモジュレータの値を正の値に制限することで、Charles Dodgeが「クラシック」振幅変調と呼ぶものを生成します。
+<p>モジュレーター、もし低周波のオシレータである場合には、その出力が正の値に制限されているか正の値に制限されていないかの違いは、変調の振幅のみに表れます。UGenを正の値のみに制限するために.absメッセージを使っています。<pre class='code prettyprint lang-sc'>// 低周波のオシレータ（lfo）でキャリアの振幅を変調する
+{ SinOsc.ar(440, 0, 0.571) * SinOsc.kr(2.reciprocal).abs }.scope
+
+// lfoを用いてモジュレータの振幅を変調する
+(
+    {
+        SinOsc.ar(440, 0, 0.571)
+        *
+        (SinOsc.kr(880).abs            // モジュレータとlfoを括弧の中に包み込む
+        *                     // なぜ？
+        SinOsc.kr([6.99, 8.01].reciprocal)
+        )
+    }.scope
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>モジュレータの出力を正の値に制限して低周波のオシレータの周波数を上げることにより、（サイドバンドを生成することによって）著しく音色が変化させます。<pre class='code prettyprint lang-sc'>// lfoの周波数を可聴帯域にして.absメッセージをモジュレータに適用する
+{ SinOsc.ar(440, 0, 0.571) * SinOsc.kr(880).abs }.scope
+
+// 前の例をリング変調（.absメッセージの無いもの）と比較せよ
+// ... 何が違うだろう？
+{ SinOsc.ar(440, 0, 0.571) * SinOsc.kr(880) }.scope</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>go to <a href="./../../../Tutorials/Mark_Polishook_tutorial/Japanese_version/10.html">10</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/09.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/09.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/Japanese_version/09::<br></div></div></body></html>

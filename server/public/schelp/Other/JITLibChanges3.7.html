@@ -1,41 +1,47 @@
-<html><head><title>JITLib Changes in 3.7</title>
+<!doctype html><html lang='en'><head><title>JITLib Changes in 3.7 | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'JITLib Changes in 3.7';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>JITLib Changes in 3.7:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Overview'>Overview</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Behavior%20Changes'>Behavior Changes</a></li>
+<ul class='toc'><li class='toc2'><a href='#Changes%20in%20pattern%20proxies%20(Pdef/Pdefn/Tdef%20and%20respective%20parent%20classes)'>Changes in pattern proxies (Pdef/Pdefn/Tdef and respective parent classes)</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Changes%20in%20node%20proxy%20(NodeProxy,%20Ndef,%20BusPlug)'>Changes in node proxy (NodeProxy, Ndef, BusPlug)</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#New%20functionality'>New functionality</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#NodeProxy%20elastic%20behavior%20setting'>NodeProxy elastic behavior setting</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#A%20few%20minor%20changes'>A few minor changes</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Implementation%20Changes'>Implementation Changes</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Bugs%20fixed'>Bugs fixed</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Example:%20Elastic%20NodeProxy'>Example: Elastic NodeProxy</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Tests%20for%20NodeProxy%20and%20Monitor'>Tests for NodeProxy and Monitor</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Tests%20for%20PatternProxy'>Tests for PatternProxy</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider OTHER</div>
-<div id='categories'><a href='./../Browse.html#Libraries>JITLib'>Libraries>JITLib</a>, <a href='./../Browse.html#Live Coding'>Live Coding</a></div>
-<h1>JITLib Changes in 3.7</h1>
+<div id='label'>
+<span id='folder'>Other</span>
+ | <span id='categories'><a href='./../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib'>JITLib</a> | <a href='./../Browse.html#Live Coding'>Live Coding</a></span>
+</div><h1>JITLib Changes in 3.7</h1>
 <div id='summary'>A Changelog for JITLib</div>
 </div>
 <div class='subheader'>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Overview'>Overview</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Behavior Changes'>Behavior Changes</a></li>
-<ul class='toc'><li class='toc2'><a href='#Changes in pattern proxies (Pdef/Pdefn/Tdef and respective parent classes)'>Changes in pattern proxies (Pdef/Pdefn/Tdef and respective parent classes)</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Changes in node proxy (NodeProxy, Ndef, BusPlug)'>Changes in node proxy (NodeProxy, Ndef, BusPlug)</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#New functionality'>New functionality</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#NodeProxy elastic behavior setting'>NodeProxy elastic behavior setting</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#A few minor changes'>A few minor changes</a></li>
-<ul class='toc'></ul></ul><li class='toc1'><a href='#Implementation Changes'>Implementation Changes</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Bugs fixed'>Bugs fixed</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Example: Elastic NodeProxy'>Example: Elastic NodeProxy</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Tests for NodeProxy and Monitor'>Tests for NodeProxy and Monitor</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Tests for PatternProxy'>Tests for PatternProxy</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Overview'>Overview</a></h2>
+<h2><a class='anchor' name='Overview'>Overview</a></h2>
 
-<p>In general, the changes in this version try to to strenghten the ideal of proxies being true placeholders that behave in many ways like their source objects:<ul>
+<p>In general, the changes in this version try to to strengthen the ideal of proxies being true placeholders that behave in many ways like their source objects:<ul>
 <li>Pattern proxies now should behave more like their source pattern<li>Node proxies can adjust their number of channels to the size of the source ugen function if you let them</ul>
 
 <p>This added a little complexity, but for various reasons, other aspects could be simplified, so that there are fewer classes and a bit more readable code. The system is easier to recover from failure. Some lesser known (or unknown) bugs are fixed, too.
@@ -43,33 +49,33 @@
 <p>Classes that have changed:<ul>
 <li><a href="./../Classes/NodeProxy.html">NodeProxy</a>, <a href="./../Classes/BusPlug.html">BusPlug</a>, <a href="./../Classes/Ndef.html">Ndef</a><li><a href="./../Classes/PatternProxy.html">PatternProxy</a>, <a href="./../Classes/Pdefn.html">Pdefn</a>, <a href="./../Classes/EventPatternProxy.html">EventPatternProxy</a>, <a href="./../Classes/Pdef.html">Pdef</a>, <a href="./../Classes/ProxySpace.html">ProxySpace</a><li><a href="./../Classes/Monitor.html">Monitor</a>, <a href="./../Classes/NodeMap.html">NodeMap</a></ul>
 <div class='note'><span class='notelabel'>NOTE:</span> examples are given with Ndef, but apply to ProxySpace and NodeProxy: <code class='code prettyprint lang-sc'>Ndef(\x, 5);</code> is the same as <code class='code prettyprint lang-sc'>~x = 5;</code> in ProxySpace.</div>
-<p>Perhaps one of the greatest chages in terms of behavior is the elastic <strong>reshaping</strong> of node proxies (See: <a href="#NodeProxy elastic behavior setting">NodeProxy elastic behavior setting</a>). By default it is off. If you want to test it as a default, you can add this to your startup file:<pre class='code prettyprint lang-sc'>BusPlug.defaultReshaping = \elastic;</pre>
-<h2><a class='anchor' name='Behavior Changes'>Behavior Changes</a></h2>
-<h3><a class='anchor' name='Changes in pattern proxies (Pdef/Pdefn/Tdef and respective parent classes)'>Changes in pattern proxies (Pdef/Pdefn/Tdef and respective parent classes)</a></h3>
+<p>Perhaps one of the greatest chages in terms of behavior is the elastic <strong>reshaping</strong> of node proxies (See: <a href="#NodeProxy%20elastic%20behavior%20setting">NodeProxy elastic behavior setting</a>). By default it is off. If you want to test it as a default, you can add this to your startup file:<pre class='code prettyprint lang-sc'>BusPlug.defaultReshaping = \elastic;</pre>
+<h2><a class='anchor' name='Behavior%20Changes'>Behavior Changes</a></h2>
+<h3><a class='anchor' name='Changes%20in%20pattern%20proxies%20(Pdef/Pdefn/Tdef%20and%20respective%20parent%20classes)'>Changes in pattern proxies (Pdef/Pdefn/Tdef and respective parent classes)</a></h3>
 <ul>
 <li>When a none-stream/non-pattern object is the source of the proxy, return the object only once per stream (do not loop by default)<li>In the pattern system, the role of a non-pattern object is ambiguous: in some cases, when used as an input of a pattern, it will return itself endlessly (e.g. in a <a href="./../Classes/Pbind.html">Pbind</a> value). In other cases (e.g. as an element of a <a href="./../Classes/Pseq.html">Pseq</a> list), they are used only once and give way to the next element. Pattern proxies should actually behave the same dependent on their input. This means that asStream and embedInStream have to be implemented slightly differently: all pattern proxies now behave to asStream and embedInStream like their respective source objects. E.g. <code class='code prettyprint lang-sc'>Pdefn(\x, 800); Pbindef(\freq, Pdefn(\x))</code> will loop 800, while <code class='code prettyprint lang-sc'>Pseq([Pdefn(\x), 900])</code> will return first 800, then 900.</ul>
-<h3><a class='anchor' name='Changes in node proxy (NodeProxy, Ndef, BusPlug)'>Changes in node proxy (NodeProxy, Ndef, BusPlug)</a></h3>
+<h3><a class='anchor' name='Changes%20in%20node%20proxy%20(NodeProxy,%20Ndef,%20BusPlug)'>Changes in node proxy (NodeProxy, Ndef, BusPlug)</a></h3>
 <ul>
-<li>controls are now set at synth creation time, not in an extra set message. This means that i-rate controls can be set in the nodemap.<li>send and spawn extraArgs now override any existing nodeMap settings for each synth<li>when setting the source of a node proxy to a number or an array of numbers, the bus is set by a precompiled synth def, which is much more efficient and consistent than build ing one. This means the source can be now set to a number/array librally at higher rates (e.g. Ndef(\x, [100, 200])).<li>For implementation reasons, it is now not possible anymore to add up numbers in a single node proxy. One slot will overwrite the next. E.g. <code class='code prettyprint lang-sc'>Ndef(\x)[0] = 100; Ndef(\x)[1] = 200;</code> the output will be 200 and not (as ist used to be) 300.<li>play (Monitor) can now map from any number of channels to any number of channels<li>play and playN (Monitor) previously passed arguments are kept and can be partially overridden by new ones (the message clear removes them).<li>nodeProxy.value(n) (e.g. <code class='code prettyprint lang-sc'>SinOsc.ar(Ndef(\x)</code>) will keep the rate the proxy already has).<li>using <code class='code prettyprint lang-sc'>x.ar(n)</code> and <code class='code prettyprint lang-sc'>x.kr(n)</code> will automatically expand when <code class='code prettyprint lang-sc'>n</code> is nil. It remains fixed if n is given.<li><code class='code prettyprint lang-sc'>nodeProxy.ar(n)</code> / <code class='code prettyprint lang-sc'>nodeProxy.kr(n)</code> if no <code class='code prettyprint lang-sc'>n</code> is given, they will now always return an array, <code class='code prettyprint lang-sc'>nodeProxy.value(x)</code> returns an array, if no input is given. This is for general consistency: a few ugens expect an array as an input, and as the numChannels of a proxy can change now, this has to be specified. In order to have a UGen and not an array, use <code class='code prettyprint lang-sc'>nodeProxy.ar(1)</code>, or <code class='code prettyprint lang-sc'>nodeProxy.kr(1)</code>, respectively.<li>unlike it was before, <code class='code prettyprint lang-sc'>x.ar(n, offset)</code> will now wrap around the avaliable proxy bus channels. There is a third argument (wrap), when set to false, it will clip instead<li>a third argument, clip, was added to ar/kr: <code class='code prettyprint lang-sc'>x.ar(n, offset, clip)</code>. When set to \wrap it will extend the output size of the existing channels by wrapping (the default is \wrap). Set it to \clip if you want to keep it in range by repeating the last value.<li>InBus is more flexible and logical in terms of multichannel expansion now and has a helpfile</ul>
-<h3><a class='anchor' name='New functionality'>New functionality</a></h3>
+<li>controls are now set at synth creation time, not in an extra set message. This means that i-rate controls can be set in the nodemap.<li>send and spawn extraArgs now override any existing nodeMap settings for each synth<li>when setting the source of a node proxy to a number or an array of numbers, the bus is set by a precompiled synth def, which is much more efficient and consistent than building one. This means the source can be now set to a number/array liberally at higher rates (e.g. Ndef(\x, [100, 200])).<li>For implementation reasons, it is now not possible anymore to add up numbers in a single node proxy. One slot will overwrite the next. E.g. <code class='code prettyprint lang-sc'>Ndef(\x)[0] = 100; Ndef(\x)[1] = 200;</code> the output will be 200 and not (as ist used to be) 300.<li>play (Monitor) can now map from any number of channels to any number of channels<li>play and playN (Monitor) previously passed arguments are kept and can be partially overridden by new ones (the message clear removes them).<li>nodeProxy.value(n) (e.g. <code class='code prettyprint lang-sc'>SinOsc.ar(Ndef(\x)</code>) will keep the rate the proxy already has).<li>using <code class='code prettyprint lang-sc'>x.ar(n)</code> and <code class='code prettyprint lang-sc'>x.kr(n)</code> will automatically expand when <code class='code prettyprint lang-sc'>n</code> is nil. It remains fixed if n is given.<li><code class='code prettyprint lang-sc'>nodeProxy.ar(n)</code> / <code class='code prettyprint lang-sc'>nodeProxy.kr(n)</code> if no <code class='code prettyprint lang-sc'>n</code> is given, they will now always return an array, <code class='code prettyprint lang-sc'>nodeProxy.value(x)</code> returns an array, if no input is given. This is for general consistency: a few ugens expect an array as an input, and as the numChannels of a proxy can change now, this has to be specified. In order to have a UGen and not an array, use <code class='code prettyprint lang-sc'>nodeProxy.ar(1)</code>, or <code class='code prettyprint lang-sc'>nodeProxy.kr(1)</code>, respectively.<li>unlike it was before, <code class='code prettyprint lang-sc'>x.ar(n, offset)</code> will now wrap around the available proxy bus channels. There is a third argument (wrap), when set to false, it will clip instead<li>a third argument, clip, was added to ar/kr: <code class='code prettyprint lang-sc'>x.ar(n, offset, clip)</code>. When set to \wrap it will extend the output size of the existing channels by wrapping (the default is \wrap). Set it to \clip if you want to keep it in range by repeating the last value.<li>InBus is more flexible and logical in terms of multichannel expansion now and has a helpfile</ul>
+<h3><a class='anchor' name='New%20functionality'>New functionality</a></h3>
 <ul>
 <li>the message <a href="./../Classes/NodeProxy.html#-mold">NodeProxy: -mold</a> allows you to change the number of channels and rate of the proxy at runtime. The proxy's children are automatically remapped, both source and monitor will crossfade between the respective states.<li>Note that when rebuilding children, the timing (clock, quant and fadeTime) of the parent is used for all others. If you need different time bases of related proxies, mold dosn't keep their timing. Set the molded proxy's quant to a smallest common multiple of the two quants in this case.<li>You can now use NodeMap directly as arguments in Synth objects.<li>NodeProxy can be used as argument in a Synth directly, it will either return its bus index or by asMap its bus mapping argument. Note that when reshaping is allowed, the synth won't update automatically. You can register a dependency on \bus.<li>node proxies and pattern proxies can be copied now: this will copy the hidden internal state to make the copy independent, but will keep the reference to the source object. In NodeProxy, the rendered SynthDef is cached, which makes the copy efficient. A ProxySpace or LazyEnvir can be copied and then modified independently.</ul>
-<h3><a class='anchor' name='NodeProxy elastic behavior setting'>NodeProxy elastic behavior setting</a></h3>
+<h3><a class='anchor' name='NodeProxy%20elastic%20behavior%20setting'>NodeProxy elastic behavior setting</a></h3>
 <ul>
 <li>NodeProxy is now able to reshape according to its source. When doing so, it recursively updates all other node proxies that depend on it. Both source and monitor will crossfade between the respective states.<li>reshaping can be set on three levels:<ul>
 <li>as a global default, e.g.: <code class='code prettyprint lang-sc'>BusPlug.defaultReshaping = \elastic</code>.<li>for a ProxySpace, e.g.: <code class='code prettyprint lang-sc'>p = ProxySpace.push; p.reshaping = \elastic</code>.<li>for an individual NodeProxy/BusPlug e.g.: <code class='code prettyprint lang-sc'>Ndef(\x).reshaping = \elastic</code>.</ul>
 
 <p><li>by default, reshaping is <code class='code prettyprint lang-sc'>nil</code> (no automatic reshaping). Apart from this, currently, there is <code class='code prettyprint lang-sc'>\elastic</code>: both shrink and grow and change rate, and <code class='code prettyprint lang-sc'>\expanding</code>: only grow, but also adjust rate.</ul>
-<h3><a class='anchor' name='A few minor changes'>A few minor changes</a></h3>
+<h3><a class='anchor' name='A%20few%20minor%20changes'>A few minor changes</a></h3>
 <ul>
 <li>An empty function / or a function returning nil to a node proxy will not fail, but simply play a synth without output<li>when trying to play control rate proxy, just warn and don't throw an error<li>the source of a proxy is built when it is inserted, not only when the server is running. This allows to know its number of channels independently of the server running.<li>bus is freed after fadeTime as to avoid a too early reuse.<li>proxy is passed into events produced by event streams (<code class='code prettyprint lang-sc'>~proxy</code>).</ul>
-<h2><a class='anchor' name='Implementation Changes'>Implementation Changes</a></h2>
+<h2><a class='anchor' name='Implementation%20Changes'>Implementation Changes</a></h2>
 <ul>
 <li>NodeProxy and BusPlug code has been refactored to make it easier to read and more consistent in behavior (see below).<li>NodeMap is now simply a Dictionary (NodeMapSetting classes have been removed). You can use NodeMap for many purposes.<li>A node proxy keeps track of any other node proxies that use its output so that it can rebuild them if the bus changes ("children").<li>Some methods, like setSourceLikeInPbind and prFadeTime were not necessary anymore.</ul>
-<h2><a class='anchor' name='Bugs fixed'>Bugs fixed</a></h2>
+<h2><a class='anchor' name='Bugs%20fixed'>Bugs fixed</a></h2>
 <ul>
 <li>Pattern Proxies sometimes didn't embed correctly when quant was not nil (fixed)<li>The node order of node proxies relative to each other was wrong when starting them from each other (fixed)<li>setting the source of a NodeProxy many times at once failed to release the respective synths (fixed)<li>using group-dependent event patterns (like Pfxb) in NodeProxy assigned them the wrong group (fixed)<li>Cleanup sometimes didn't work in Pdef. Fixes issue #107.</ul>
-<h2><a class='anchor' name='Example: Elastic NodeProxy'>Example: Elastic NodeProxy</a></h2>
+<h2><a class='anchor' name='Example:%20Elastic%20NodeProxy'>Example: Elastic NodeProxy</a></h2>
 <pre class='code prettyprint lang-sc'>s.boot;
 Ndef.clear;
 Ndef.defaultReshaping = \elastic;
@@ -100,7 +106,7 @@ Ndef(\y, { Impulse.ar([1, 2/3, 4/6, 2, 3] * 100 * DelayC.ar(Ndef.ar(\aa) + 1, 0.
 Ndef(\y, { Impulse.ar([1, 2/3, 4/6, 2, 9/8] * 100 * DelayC.ar(Ndef.ar(\aa) + 1, 0.5, LFNoise1.kr(3 ! 2).range(0, 0.5), 1, Ndef(\aa)), [0.1, 0.1]/2) });
 
 Ndef(\x, { Splay.ar(Resonz.ar(SplayAz.ar(4, Ndef.ar(\y)), [600, 720, 320, 780] * (Ndef.ar(\aa).lag(0.01) * 0.3 + 1), 0.01, 100)).distort });</pre>
-<h2><a class='anchor' name='Tests for NodeProxy and Monitor'>Tests for NodeProxy and Monitor</a></h2>
+<h2><a class='anchor' name='Tests%20for%20NodeProxy%20and%20Monitor'>Tests for NodeProxy and Monitor</a></h2>
 <pre class='code prettyprint lang-sc'>// some tests for node proxy.
 // equalities should always hold true
 
@@ -609,7 +615,7 @@ Ndef(\x)[0] = { "rebuild two".postln; [1, 2] };
 Ndef(\x)[1] = { "rebuild four".postln; [1, 2, 3, 4] }
 Ndef(\x)[2] = { "rebuild one".postln; 1 };
 Ndef(\x).rate == \control;
-Ndef(\x).mold; // shouln't do anything either. Well, I suppose that in this case it has to, unless we check the max rate of the whole set to sources. This is impossible if the sources themselves initialise the proxy.
+Ndef(\x).mold; // shouldn't do anything either. Well, I suppose that in this case it has to, unless we check the max rate of the whole set to sources. This is impossible if the sources themselves initialise the proxy.
 Ndef(\x).isNeutral.not;
 Ndef(\x).mold(4); // this should
 Ndef(\x).numChannels == 4;
@@ -1027,7 +1033,7 @@ Ndef(\x, { |freq = 100| SinOsc.ar(freq) * 0.1 }).play;
 Ndef(\x).send([\freq, b.asMap]);
 
 // proxies as arguments of synths
-SynthDef(\x, { |z=440| Out.ar(0, Blip.ar(z) * 0.1) }).add;
+SynthDef(\x, { |z=440, out| Out.ar(out, Blip.ar(z) * 0.1) }).add;
 Ndef(\f, { MouseX.kr(400, 700) });
 (instrument: \x, z: Ndef(\f)).play;
 
@@ -1140,7 +1146,7 @@ Instr(\sin, { arg freq, amp; SinOsc.ar(freq, BrownNoise.ar(1 ! 2), amp) });
 Ndef(\x, Instr(\sin));// not correct yet, should be 2.
 
 //Ndef(\c, StreamKrDur(Pseq([Prand([530, 600],1), 700, 400, 800, 500].scramble, inf) / 3, 0.2)); // still fails</pre>
-<h2><a class='anchor' name='Tests for PatternProxy'>Tests for PatternProxy</a></h2>
+<h2><a class='anchor' name='Tests%20for%20PatternProxy'>Tests for PatternProxy</a></h2>
 <pre class='code prettyprint lang-sc'>// general rule: proxy should behave (in streams and patterns) like the object it holds
 (
 g = { |f, source, firstSource|
@@ -1546,4 +1552,4 @@ f.(a) != f.(b);
 b.source = Pbind(\note, 7);
 f.(a) == f.(b);</pre>
 
-<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Other/JITLibChanges3.7.schelp'>/usr/local/share/SuperCollider/HelpSource/Other/JITLibChanges3.7.schelp</a><br>link::Other/JITLibChanges3.7::<br>sc version: 3.8dev</div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Other/JITLibChanges3.7.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Other/JITLibChanges3.7.schelp</a><br>link::Other/JITLibChanges3.7::<br></div></div></body></html>

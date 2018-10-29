@@ -1,44 +1,53 @@
-<html><head><title>DetectSilence</title>
+<!doctype html><html lang='en'><head><title>DetectSilence | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'DetectSilence';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
-<div class='header'>
-<div id='label'>SuperCollider CLASSES</div>
-<div id='categories'><a href='./../Browse.html#UGens>Synth control'>UGens>Synth control</a>, <a href='./../Browse.html#UGens>Analysis>Amplitude'>UGens>Analysis>Amplitude</a></div>
-<h1>DetectSilence</h1>
-<div id='summary'>When input falls below a threshhold, evaluate doneAction.</div>
-</div>
-<div class='subheader'>
-<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/Filter.sc'>Filter.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Filter.html">Filter</a> : <a href="../Classes/PureUGen.html">PureUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
-</div>
 <div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<div id='toctitle'>DetectSilence:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
-<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
 </ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
-<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
-<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-canFreeSynth'>canFreeSynth</a> </li>
 <li class='toc3'><a href='#-optimizeGraph'>optimizeGraph</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<ul class='toc'></ul><li class='toc1'><a href='#DetectSilence%20and%20multiple%20inputs'>DetectSilence and multiple inputs</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Synth control'>Synth control</a> | <a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Analysis'>Analysis</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Analysis>Amplitude'>Amplitude</a></span>
+</div><h1>DetectSilence<span id='superclasses'> : <a href="../Classes/Filter.html">Filter</a> : <a href="../Classes/PureUGen.html">PureUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
+<div id='summary'>Detect when input falls below an amplitude threshold</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/Filter.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/Filter.sc'>Filter.sc</a></div></div>
+<h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>When input falls below a threshhold, evaluate doneAction.<pre class='code prettyprint lang-sc'>// this frees after the Decay has become quiet enough for a long enough time
-{ var signal = Decay.ar(Impulse.ar(0), 2, PinkNoise.ar(0.2)); DetectSilence.ar(signal, doneAction:2); signal }.play;</pre>
-<div class='note'><span class='notelabel'>NOTE:</span> If the input signal starts with silence at the beginning of the synth's duration, then DetectSilence will wait indefinitely until the first sound before starting to monitor for silence. To avoid a hanging silent sound where the input may remain zero, you can add an envelope to its input</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>in: 0</span>, <span class='argstr'>amp: 0.0001</span>, <span class='argstr'>time: 0.1</span>, <span class='argstr'>doneAction: 0</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> (<span class='argstr'>in: 0</span>, <span class='argstr'>amp: 0.0001</span>, <span class='argstr'>time: 0.1</span>, <span class='argstr'>doneAction: 0</span>)</h3>
+<p>When the absolute value of the input signal remains below the threshold for a given window of time, output 1. Otherwise, output 0. If the output transitions from 0 to 1, doneAction is also evaluated.<pre class='code prettyprint lang-sc'>// this frees after the Decay has become quiet enough for a long enough time
+{ var signal = Decay.ar(Impulse.ar(0), 2, PinkNoise.ar(0.2)); DetectSilence.ar(signal, doneAction: Done.freeSelf); signal }.play;</pre>
+
+<p>If the input signal starts with silence at the beginning of the synth's duration, then DetectSilence will wait indefinitely until the first sound before starting to monitor for silence. To avoid a hanging silent sound where the input may remain zero, you can add an <code class='code prettyprint lang-sc'>Impulse.ar(0)</code> to its input.
+<p>DetectSilence does not distinguish a DC-biased signal from a loud signal. If your signal has DC bias, you should wrap it in <a href="./../Classes/LeakDC.html">LeakDC</a>.<div class='warning'><span class='warninglabel'>WARNING:</span> DetectSilence can be tricky with multi-channel input! See below.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>DetectSilence.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>in: 0</span>, <span class='argstr'>amp: 0.0001</span>, <span class='argstr'>time: 0.1</span>, <span class='argstr'>doneAction: 0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>DetectSilence.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a>(<span class='argstr'>in: 0</span>, <span class='argstr'>amp: 0.0001</span>, <span class='argstr'>time: 0.1</span>, <span class='argstr'>doneAction: 0</span>)</h3>
 <div class='method'>
 <p><h4>Arguments:</h4>
 <table class='arguments'>
@@ -49,21 +58,21 @@
 <p>The minimum duration for which input must fall below
 <p><code class='code prettyprint lang-sc'>amp</code> before this triggers.<tr><td class='argumentname'>doneAction<td class='argumentdesc'>
 <p>An integer representing the doneAction. See
-<p><a href="./../Reference/UGen-doneActions.html">UGen done-actions</a> for more detail.</table><h4>Returns:</h4>
+<p><a href="./../Classes/Done.html">Done</a> for more detail.</table><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>This UGen outputs 1 if silence is detected, otherwise 0.</div></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
+<p>This UGen outputs 1 if silence is detected, otherwise 0.</div></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
-<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
-<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-canFreeSynth' href='./../Overviews/Methods.html#canFreeSynth'>canFreeSynth</a> </h3>
-<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc</a></div>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-optimizeGraph' href='./../Overviews/Methods.html#optimizeGraph'>optimizeGraph</a> </h3>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-canFreeSynth' href='./../Overviews/Methods.html#canFreeSynth'>canFreeSynth</a></h3>
+<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/canFreeSynth.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/canFreeSynth.sc</a></div>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-optimizeGraph' href='./../Overviews/Methods.html#optimizeGraph'>optimizeGraph</a></h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 <pre class='code prettyprint lang-sc'>(
 SynthDef("detectSilence-help", { arg out;
     var z;
     z = SinOsc.ar(Rand(400, 700), 0, LFDNoise3.kr(8).max(0)).softclip * 0.3;
-    DetectSilence.ar(z, doneAction:2);
+    DetectSilence.ar(z, doneAction: Done.freeSelf);
     Out.ar(out, z);
 }).add;
 )
@@ -81,5 +90,11 @@ Task({
     })
 }).play;
 )</pre>
+<h2><a class='anchor' name='DetectSilence%20and%20multiple%20inputs'>DetectSilence and multiple inputs</a></h2>
 
-<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/DetectSilence.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/DetectSilence.schelp</a><br>link::Classes/DetectSilence::<br>sc version: 3.8dev</div></div></body></html>
+<p>Be careful feeding multiple inputs into DetectSilence, since multichannel expansion can lead to confusing behavior. This code
+<p><code class='code prettyprint lang-sc'>DetectSilence.ar([left, right] + Impulse.ar(0), doneAction: 2)</code>
+<p>spawns <strong>two</strong> DetectSilences, and the enclosing Synth frees itself when left OR right becomes silent. (The <code class='code prettyprint lang-sc'>Impulse.ar(0)</code> is there to ensure that DetectSilence starts detecting silence right away rather than waiting for non-silence.)
+<p>Usually you want to detect silence for both inputs, so what's a good way to change that OR into an AND? The solution is <strong>not</strong> to sum <code class='code prettyprint lang-sc'>(left + right) / 2.sqrt</code>, because there may be phase cancellation in that sum. Instead, use DetectSilence's output instead of its doneAction, and use FreeSelf to do the freeing. Recall that DetectSilence outputs 1 if silence is detected, and 0 otherwise. Taking the product of multiple DetectSilences will return 1 only if all the DetectSilences are 1. So here is the correct solution to freeing a Synth when both <code class='code prettyprint lang-sc'>left</code> and <code class='code prettyprint lang-sc'>right</code> first fall silent:
+<p><code class='code prettyprint lang-sc'>FreeSelf.kr(DetectSilence.ar([left, right] + Impulse.ar(0)).product)</code>
+<p>It's also possible to mix the signals with full-wave rectification to avert phase cancellation issues (<code class='code prettyprint lang-sc'>[left, right].abs.sum / 2.sqrt</code>).<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/DetectSilence.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/DetectSilence.schelp</a><br>link::Classes/DetectSilence::<br></div></div></body></html>

@@ -1,31 +1,37 @@
-<html><head><title>15_Groups</title>
+<!doctype html><html lang='en'><head><title>15_Groups | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = '15_Groups';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>15_Groups:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Groups%20are%20linked%20lists'>Groups are linked lists</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Nodes,%20linked%20lists,%20trees'>Nodes, linked lists, trees</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#RootNode%20and%20default_group'>RootNode and default_group</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/MARK_POLISHOOK_TUTORIAL</div>
-<div id='categories'><a href='./../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Tutorials>Mark_Polishook_tutorial</a></div>
-<h1>15_Groups</h1>
+<div id='label'>
+<span id='folder'>Tutorials/Mark_Polishook_tutorial</span>
+ | <span id='categories'><a href='./../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Mark_Polishook_tutorial</a></span>
+</div><h1>15_Groups</h1>
 <div id='summary'>Mark Polishook tutorial</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Groups are linked lists'>Groups are linked lists</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Nodes, linked lists, trees'>Nodes, linked lists, trees</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#RootNode and default_group'>RootNode and default_group</a></li>
-<ul class='toc'></ul></ul></div>
+
 <p>The simplest synthesis processes use a single ugen.<pre class='code prettyprint lang-sc'>{ Saw.ar(500, 0.1) }.scope;</pre>
 
 <p>or<pre class='code prettyprint lang-sc'>{ Formlet.ar(Saw.ar(22), 400, 0.01, 0.11, 0.022) }.scope</pre>
@@ -33,18 +39,18 @@
 <p>Most of the SuperCollider help documents for the UGens show other such examples.
 <p><a href="./../../Browse.html#UGens">Browse: UGens</a>
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>Many synthesis processes, because they use more than a few ugens, are often best divided into component parts. This can make code modular, resusable, and easier to read.
-<p>The <a href="./../../Classes/Group.html">Group</a> class, which is the means to specify a collection of nodes, provides a mechanism through which to control several synths at once.<h2><a class='anchor' name='Groups are linked lists'>Groups are linked lists</a></h2>
+<p>Many synthesis processes, because they use more than a few ugens, are often best divided into component parts. This can make code modular, reusable, and easier to read.
+<p>The <a href="./../../Classes/Group.html">Group</a> class, which is the means to specify a collection of nodes, provides a mechanism through which to control several synths at once.<h2><a class='anchor' name='Groups%20are%20linked%20lists'>Groups are linked lists</a></h2>
 
 <p>The important technical feature of groups is that the nodes they contain are items in a linked list. A linked list is a data structure that makes it easy to order and reorder nodes. The first item in a linked list is the "head" and the last item is the "tail."
 <p>Groups, through their head and tail mechanisms, allow synths to be placed in order so one synth verifiably executes before another, eg, the head synth runs before the tail synth. The ability to order synths is essential when sending source audio through an effect, such as a reverb or a filter.
-<p>Another feature of groups is they allow synths to receive messages from a single point of control, eg, one message to the group goes to all of nodes that belong to the group.<h2><a class='anchor' name='Nodes, linked lists, trees'>Nodes, linked lists, trees</a></h2>
+<p>Another feature of groups is they allow synths to receive messages from a single point of control, eg, one message to the group goes to all of nodes that belong to the group.<h2><a class='anchor' name='Nodes,%20linked%20lists,%20trees'>Nodes, linked lists, trees</a></h2>
 
 <p>See the <a href="./../../Reference/Server-Architecture.html">Server Architecture</a> document for a definition of a node in SuperCollider or look to the Wikipedia for a general discussion of nodes, linked lists, and trees.<ul>
 <li><a href="http://en.wikipedia.org/wiki/Node">http://en.wikipedia.org/wiki/Node</a><li><a href="http://en.wikipedia.org/wiki/Linked_list">http://en.wikipedia.org/wiki/Linked_list</a><li><a href="http://en.wikipedia.org/wiki/Tree_data_structure">http://en.wikipedia.org/wiki/Tree_data_structure</a></ul>
-<h2><a class='anchor' name='RootNode and default_group'>RootNode and default_group</a></h2>
+<h2><a class='anchor' name='RootNode%20and%20default_group'>RootNode and default_group</a></h2>
 
-<p>By default, the localhost and internal servers each boot with two predefined groups: the <a href="./../../Classes/RootNode.html">RootNode</a> and the <a href="./../../Reference/default_group.html">default_group</a> (see their help files). To see this, start the localhost server and then evaluate<pre class='code prettyprint lang-sc'>s.queryAllNodes;</pre>
+<p>By default, the localhost and internal servers each boot with two predefined groups: the <a href="./../../Classes/RootNode.html">RootNode</a> and the <a href="./../../Reference/default_group.html">Default Group</a> (see their help files). To see this, start the localhost server and then evaluate<pre class='code prettyprint lang-sc'>s.queryAllNodes;</pre>
 
 <p>The next two lines<pre class='code prettyprint lang-sc'>Group(0)
         Group(1)</pre>
@@ -244,4 +250,4 @@ s.queryAllNodes;
 )</pre>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/16_Playbuf.html">16_Playbuf</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/15_Groups.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/15_Groups.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/15_Groups::<br>sc version: 3.8dev</div></div></body></html>
+<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/16_Playbuf.html">16_Playbuf</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/15_Groups.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/15_Groups.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/15_Groups::<br></div></div></body></html>

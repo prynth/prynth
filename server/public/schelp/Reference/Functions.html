@@ -1,33 +1,39 @@
-<html><head><title>Functions</title>
+<!doctype html><html lang='en'><head><title>Functions | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Functions';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Functions:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Arguments'>Arguments</a></li>
+<ul class='toc'><li class='toc2'><a href='#[1]%20Literal%20argument%20defaults'>[1] Literal argument defaults</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#[2]%20Expression%20argument%20defaults'>[2] Expression argument defaults</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Variables'>Variables</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider REFERENCE</div>
-<div id='categories'><a href='./../Browse.html#Language'>Language</a></div>
-<h1>Functions</h1>
+<div id='label'>
+<span id='folder'>Reference</span>
+ | <span id='categories'><a href='./../Browse.html#Language'>Language</a></span>
+</div><h1>Functions</h1>
 <div id='summary'>lambda expressions</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../Classes/Function.html">Function</a>, <a href="./../Classes/AbstractFunction.html">AbstractFunction</a>, <a href="./../Classes/FunctionDef.html">FunctionDef</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Arguments'>Arguments</a></li>
-<ul class='toc'><li class='toc2'><a href='#[1] Literal argument defaults'>[1] Literal argument defaults</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#[2] Expression argument defaults'>[2] Expression argument defaults</a></li>
-<ul class='toc'></ul></ul><li class='toc1'><a href='#Variables'>Variables</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Introduction'>Introduction</a></h2>
+<h2><a class='anchor' name='Introduction'>Introduction</a></h2>
 
 <p>A <a href="./../Classes/Function.html">Function</a> is an expression which defines operations to be performed when it is sent the <code class='code prettyprint lang-sc'>value</code> message. In functional languages, a function would be known as a lambda expression. Function definitions are enclosed in curly brackets <code class='code prettyprint lang-sc'>{}</code>. Argument declarations, if any, follow the open bracket. Variable declarations follow argument declarations. An expression follows the declarations.<pre class='code prettyprint lang-sc'>{ arg a, b, c;  var d;   d = a * b; c + d }</pre>
 
@@ -49,7 +55,7 @@ f.value(10, 200).postln;</pre>
 <p>"arg" style, default value is a literal but you want to treat it like an expression: <code class='code prettyprint lang-sc'>{ arg x = (2); ... }</code> <a href="#[2]">[2]</a>
 <p>Pipe style, default value is a literal: <code class='code prettyprint lang-sc'>{ |x = 1| ... }</code> <a href="#[1]">[1]</a>
 <p>Pipe style, default value is an expression: <code class='code prettyprint lang-sc'>{ |x = (10.rand)| ... }</code> <a href="#[2]">[2]</a>
-<p>If the last argument in the list is preceeded by three dots (an ellipsis), then all the remaining arguments that were passed will be assigned to that variable as an <a href="./../Classes/Array.html">Array</a>. Arguments must be separated by commas.
+<p>If the last argument in the list is preceded by three dots (an ellipsis), then all the remaining arguments that were passed will be assigned to that variable as an <a href="./../Classes/Array.html">Array</a>. Arguments must be separated by commas.
 <p>examples:<pre class='code prettyprint lang-sc'>{ arg a, b, c=3; } // is equivalent to:
 
 { |a, b, c=3| }
@@ -72,7 +78,7 @@ f.value(10, 200).postln;</pre>
 { arg freq =  #[ 100, 300, 900, 2700 ]; Mix(SinOsc.ar(freq, 0, 0.1)) }.play; // silence</pre>
 
 <p>See <a href="./../Reference/Literals.html">Literals</a> for more information.
-<p><a class='anchor' name='[1]'>&nbsp;</a><h3><a class='anchor' name='[1] Literal argument defaults'>[1] Literal argument defaults</a></h3>
+<p><a class='anchor' name='[1]'>&nbsp;</a><h3><a class='anchor' name='[1]%20Literal%20argument%20defaults'>[1] Literal argument defaults</a></h3>
 
 <p>Argument defaults that are literals are stored as part of the <a href="./../Classes/FunctionDef.html">FunctionDef</a>. Arguments passed at runtime -- including nil -- always override the defaults:<pre class='code prettyprint lang-sc'>f = { arg x = 1; x };
 f.value(2);  // prints 2
@@ -81,7 +87,7 @@ f.value;   // prints 1
 
 f.value(nil);  // prints nil</pre>
 
-<p><a class='anchor' name='[2]'>&nbsp;</a><h3><a class='anchor' name='[2] Expression argument defaults'>[2] Expression argument defaults</a></h3>
+<p><a class='anchor' name='[2]'>&nbsp;</a><h3><a class='anchor' name='[2]%20Expression%20argument%20defaults'>[2] Expression argument defaults</a></h3>
 
 <p>Since expressions are evaluated when the function is called, they cannot be stored in the <a href="./../Classes/FunctionDef.html">FunctionDef</a>. They are executed only if the passed-in value is nil.<pre class='code prettyprint lang-sc'>f = { arg x = 10.rand; x };
 f.value(100);  // prints 100
@@ -129,5 +135,5 @@ var abc = 2;
 };</pre>
 <h2><a class='anchor' name='Variables'>Variables</a></h2>
 
-<p>Following the argument declarations are the variable declarations. These may be declared in any order. Variable lists are preceeded by the reserved word <code class='code prettyprint lang-sc'>var</code>. There can be multiple var declaration lists if necessary. Variables may be initialized to default values in the same way as arguments. Variable declarations lists may not contain an ellipsis.<pre class='code prettyprint lang-sc'>var level=0, slope=1, curve=1;</pre>
-<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/Functions.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/Functions.schelp</a><br>link::Reference/Functions::<br>sc version: 3.8dev</div></div></body></html>
+<p>Following the argument declarations are the variable declarations. These may be declared in any order. Variable lists are preceded by the reserved word <code class='code prettyprint lang-sc'>var</code>. There can be multiple var declaration lists if necessary. Variables may be initialized to default values in the same way as arguments. Variable declarations lists may not contain an ellipsis.<pre class='code prettyprint lang-sc'>var level=0, slope=1, curve=1;</pre>
+<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Functions.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Functions.schelp</a><br>link::Reference/Functions::<br></div></div></body></html>

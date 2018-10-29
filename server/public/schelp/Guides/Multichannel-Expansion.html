@@ -1,34 +1,40 @@
-<html><head><title>Multichannel Expansion</title>
+<!doctype html><html lang='en'><head><title>Multichannel Expansion | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Multichannel Expansion';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Multichannel Expansion:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Multiple%20channels%20as%20Arrays'>Multiple channels as Arrays</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Multichannel%20expansion'>Multichannel expansion</a></li>
+<ul class='toc'><li class='toc2'><a href='#Expanding%20methods%20and%20operators'>Expanding methods and operators</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Using%20flop%20for%20multichannel%20expansion'>Using flop for multichannel expansion</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Pitfalls'>Pitfalls</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Protecting%20arrays%20against%20expansion'>Protecting arrays against expansion</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Reducing%20channel%20expansion%20with%20Mix'>Reducing channel expansion with Mix</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider GUIDES</div>
-<div id='categories'><a href='./../Browse.html#Server>Nodes'>Server>Nodes</a>, <a href='./../Browse.html#UGens>Multichannel'>UGens>Multichannel</a></div>
-<h1>Multichannel Expansion</h1>
+<div id='label'>
+<span id='folder'>Guides</span>
+ | <span id='categories'><a href='./../Browse.html#Server'>Server</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Server>Nodes'>Nodes</a> | <a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Multichannel'>Multichannel</a></span>
+</div><h1>Multichannel Expansion</h1>
 <div id='summary'>Explaining multichannel expansion and representation</div>
 </div>
 <div class='subheader'>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Multiple channels as Arrays'>Multiple channels as Arrays</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Multichannel expansion'>Multichannel expansion</a></li>
-<ul class='toc'><li class='toc2'><a href='#Expanding methods and operators'>Expanding methods and operators</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Using flop for multichannel expansion'>Using flop for multichannel expansion</a></li>
-<ul class='toc'></ul></ul><li class='toc1'><a href='#Pitfalls'>Pitfalls</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Protecting arrays against expansion'>Protecting arrays against expansion</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Reducing channel expansion with Mix'>Reducing channel expansion with Mix</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Multiple channels as Arrays'>Multiple channels as Arrays</a></h2>
+<h2><a class='anchor' name='Multiple%20channels%20as%20Arrays'>Multiple channels as Arrays</a></h2>
 
 <p>Multiple channels of audio are represented as <a href="./../Classes/Array.html">Array</a>s.<pre class='code prettyprint lang-sc'>s.boot;
 // one channel
@@ -43,7 +49,7 @@
 Pan2.ar(PinkNoise.ar(0.1), FSinOsc.kr(3)).dump;
 
 play({ Pan2.ar(PinkNoise.ar(0.1), FSinOsc.kr(1)); });</pre>
-<h2><a class='anchor' name='Multichannel expansion'>Multichannel expansion</a></h2>
+<h2><a class='anchor' name='Multichannel%20expansion'>Multichannel expansion</a></h2>
 
 <p>When an <a href="./../Classes/Array.html">Array</a> is given as an input to a unit generator it causes an array of multiple copies of that unit generator to be made, each with a different value from the input array. This is called multichannel expansion. All but a few special unit generators perform multichannel expansion. Only Arrays are expanded, no other type of Collection, not even subclasses of Array.<pre class='code prettyprint lang-sc'>{ Blip.ar(500,8,0.1) }.play // one channel
 
@@ -66,7 +72,7 @@ Blip.ar([500,601],8,0.1).postln // two unit generators created.</pre>
 <p>is equivalent to:<pre class='code prettyprint lang-sc'>[ Pulse.ar(400,0.5,0.2), Pulse.ar(500,0.1,0.2), Pulse.ar(600,0.5,0.2) ]</pre>
 
 <p>A more complex example based on the Saw example above is given below. In this example, the <a href="./../Classes/XLine.html">XLine</a> is expanded to two instances, one going from 8000 Hz to 400 Hz and the other going in the opposite direction from 500 Hz to 7000 Hz. These two XLines are 'married' to the two Saw oscillators and used to parameterize two copies of <a href="./../Classes/RLPF.html">RLPF</a>. So on the left channel a 100 Hz Saw is filtered from 8000 Hz to 400 Hz and on the right channel a 250 Hz Saw is filtered from 500 Hz to 7000 Hz.<pre class='code prettyprint lang-sc'>{ RLPF.ar(Saw.ar([100,250],0.05), XLine.kr([8000,500],[400,7000],5), 0.05) }.play;</pre>
-<h3><a class='anchor' name='Expanding methods and operators'>Expanding methods and operators</a></h3>
+<h3><a class='anchor' name='Expanding%20methods%20and%20operators'>Expanding methods and operators</a></h3>
 
 <p>Many operators and methods also multichannel expand. For example all common math operators:<pre class='code prettyprint lang-sc'>{ Saw.ar([100,250]) * [0.5,0.8] }.play;
 { Saw.ar(LFNoise1.kr(1).range(0,100) + [100,250]) }.play;</pre>
@@ -78,7 +84,7 @@ Blip.ar([500,601],8,0.1).postln // two unit generators created.</pre>
 <p>You can use <a href="./../Classes/Object.html#-multiChannelPerform">Object: -multiChannelPerform</a> to do multichannel expansion with any method on any kind of object:<pre class='code prettyprint lang-sc'>["foo","bar"].multiChannelPerform(\toUpper);</pre>
 
 <p>The shorter arrays wrap:<pre class='code prettyprint lang-sc'>["foo","bar","zoo"].multiChannelPerform('++', ["l","ba"])</pre>
-<h3><a class='anchor' name='Using flop for multichannel expansion'>Using flop for multichannel expansion</a></h3>
+<h3><a class='anchor' name='Using%20flop%20for%20multichannel%20expansion'>Using flop for multichannel expansion</a></h3>
 
 <p>The method flop swaps columns and rows, allowing to derive series of argument sets:<pre class='code prettyprint lang-sc'>(
 SynthDef("help_multichannel", { |out=0, freq=440, mod=0.1, modrange=20|
@@ -107,8 +113,11 @@ fork {
 )</pre>
 
 <p>Similarly, <a href="./../Classes/Function.html#flop">Function:flop</a> returns an unevaluated function that will expand to its arguments when evaluated:<pre class='code prettyprint lang-sc'>(
-SynthDef("blip", { |freq| Out.ar(0, Line.ar(0.1, 0, 0.05, 1, 0, 2)
-    * Pulse.ar(freq * [1, 1.02])) }).send(s);
+SynthDef("blip", { |out, freq|
+    Out.ar(out,
+        Line.ar(0.1, 0, 0.05, 1, 0, 2) * Pulse.ar(freq * [1, 1.02])
+    )
+}).add;
 
 a = { |dur=1, x=1, n=10, freq=400|
     fork { n.do {
@@ -142,7 +151,7 @@ a.value(5, [0.3, 0.3, 0.2], [12, 32, 64], [1000, 710, 700]);</pre>
 // [ 5_+, audio, [ 2_Pan2[0], 4_Pan2[0] ] ]
 // [ 6_+, audio, [ 2_Pan2[1], 4_Pan2[1] ] ]
 // [ 7_Out, audio, [ 0_Control[0], 5_+, 6_+ ] ]</pre>
-<h2><a class='anchor' name='Protecting arrays against expansion'>Protecting arrays against expansion</a></h2>
+<h2><a class='anchor' name='Protecting%20arrays%20against%20expansion'>Protecting arrays against expansion</a></h2>
 
 <p>Some unit generators such as <a href="./../Classes/Klank.html">Klank</a> require arrays of values as inputs. Since all arrays are expanded, you need to protect some arrays by a <a href="./../Classes/Ref.html">Ref</a> object. A Ref instance is an object with a single slot named 'value' that serves as a holder of an object. <code class='code prettyprint lang-sc'>Ref.new(object)</code> is one way to create a Ref, but there is a syntactic shortcut. The backquote <code class='code prettyprint lang-sc'>`</code> is a unary operator that is equivalent to calling <code class='code prettyprint lang-sc'>Ref.new(something)</code>. So to protect arrays that are inputs to a Klank or similar UGens you write:<pre class='code prettyprint lang-sc'>Klank.ar(`[[400,500,600],[1,2,1]], z)</pre>
 
@@ -153,7 +162,7 @@ a.value(5, [0.3, 0.3, 0.2], [12, 32, 64], [1000, 710, 700]);</pre>
 <p>Also the Refs multichannelExpand when passed to a Klank:<pre class='code prettyprint lang-sc'>Klank.ar(`[[[400,500,600], [700,800,900]],[1,2,1]], z)</pre>
 
 <p>, which is is equivalent to:<pre class='code prettyprint lang-sc'>[ Klank.ar(`[[400,500,600],[1,2,1]], z),  Klank.ar(`[[700,800,900],[1,2,1]], z)]</pre>
-<h2><a class='anchor' name='Reducing channel expansion with Mix'>Reducing channel expansion with Mix</a></h2>
+<h2><a class='anchor' name='Reducing%20channel%20expansion%20with%20Mix'>Reducing channel expansion with Mix</a></h2>
 
 <p>The <a href="./../Classes/Mix.html">Mix</a> object provides the means for reducing multichannel arrays to a single channel.<pre class='code prettyprint lang-sc'>Mix.new([a, b, c]) // array of channels</pre>
 
@@ -193,4 +202,4 @@ a.value(5, [0.3, 0.3, 0.2], [12, 32, 64], [1000, 710, 700]);</pre>
     )
 }.play;
 )</pre>
-<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/Multichannel-Expansion.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/Multichannel-Expansion.schelp</a><br>link::Guides/Multichannel-Expansion::<br>sc version: 3.8dev</div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Multichannel-Expansion.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Multichannel-Expansion.schelp</a><br>link::Guides/Multichannel-Expansion::<br></div></div></body></html>

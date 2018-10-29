@@ -580,16 +580,18 @@ The address number 134 would correspond to the fourth multiplexer and the fifth 
 
 #GUI
 Prynth includes a GUI editor for the creation of custom virtual controls.
-The GUI editor is launched using the corresponding button on Prynth's main page or directly by visiting the url [http://raspberrypi.local:3000/gui](http://raspberrypi.local:3000/gui).
+The GUI editor is launched using the corresponding button on Prynth's main page or by visiting the url [http://raspberrypi.local:3000/gui](http://raspberrypi.local:3000/gui).
 
 [![GUI button](images/gui_button.png)](images/gui_button.png)
 
 The GUI editor should look like:
 [![GUI button](images/gui_1.png)](images/gui_1.png)
 
-In the above example we see the different types of objects to build GUIs (slider,  knob, number, switch, button and label). Objects can be freely added and distributed on the canvas. To move an object, use the little square on the upper left corner. The square can also used to select an object, which will become highlighted for easier visual recognition.
+In the above example we see the different types of objects that can be used to build GUIs (slider,  knob, number, switch, button and label). Objects can be freely added and distributed on the canvas. To move an object, use the little square on the upper left corner.
 
-When an object is selected, its properties will be displayed on the Properties panel to the right. These include a name, the value of the control, positioning coordinates, dimensions and color. All properties can be edited directly on the panel and will update the object in realtime. The Properties control panel can also be dragged and located near to the objects of interest.
+The square can also used to select an object, which will become highlighted for easier visual recognition. The shortcut "Ctrl+Space" can also be used to cycle between objects.
+
+When an object is selected, its properties will be displayed on the Properties panel to the right. These include a name, the control value, positioning coordinates, dimensions and color. All properties can be edited directly on the panel, updating the object in realtime. The Properties control panel can also be dragged and relocated closer to the objects of interest.
 
 New objects are created using the corresponding buttons on the "Add Objects" panel or using the following keyboard shortcuts:
 
@@ -600,13 +602,13 @@ Ctrl + 4 - switch
 Ctrl + 5 - button
 Ctrl + 6 - label
 
-When an object is created using buttons, it will appear on the upper left corner of the canvas and will need to be dragged into its intended position. On the other hand, object creation via shortcut will place the object at the mouse pointer location.
+When an object is created using buttons, it will appear on the upper left corner of the canvas and will need to be dragged to its intended position. Objects created via shortcut will be placed at the current position of the mouse pointer.
 
-The currently selected object can be deleted using the "Delete Selected" button or using the "delete" key. The "Clear All" will delete all objects in the canvas.
+The currently selected object can be deleted using the "Delete Selected" button or using the "delete" key. The "Clear All" button will delete all objects in the canvas.
 
-The Options panel includes a "Grid" options, which imposes a bigger step on the dragging operations.
+The Options panel includes a "Grid" option that increases the step of dragging.
 
-GUIs can be saved, loaded and deleted using the GUI Files panel.
+GUIs can be saved, loaded and deleted using the "GUI Files" panel.
 
 Finally, the "Edit/Play" switch is used to toggle between the two states. Play mode will lock the interface and hide the control panels.
 
@@ -615,6 +617,8 @@ Each object will send an exclusive OSC message with an address composed from the
 ~~~
 /raspberrypi/gui/slider0
 ~~~
+
+Make sure to check the included GUI example.
 
 ---
 

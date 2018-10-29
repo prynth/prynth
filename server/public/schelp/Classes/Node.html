@@ -1,48 +1,40 @@
-<html><head><title>Node</title>
+<!doctype html><html lang='en'><head><title>Node | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Node';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
-<div class='header'>
-<div id='label'>SuperCollider CLASSES</div>
-<div id='categories'><a href='./../Browse.html#Server>Nodes'>Server>Nodes</a>, <a href='./../Browse.html#Server>Abstractions'>Server>Abstractions</a></div>
-<h1>Node</h1>
-<div id='summary'>Abstract superclass of Synth and Group</div>
-</div>
-<div class='subheader'>
-<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Control/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/Node.sc'>Node.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Object.html">Object</a></div>
-<div id='subclasses'>Subclasses: <a href="../Classes/AbstractGroup.html">AbstractGroup</a>, <a href="../Classes/Synth.html">Synth</a></div>
-<div id='related'>See also: <a href="./../Reference/Server-Architecture.html">Server Architecture</a>, <a href="./../Classes/Synth.html">Synth</a>, <a href="./../Classes/Group.html">Group</a>, <a href="./../Classes/RootNode.html">RootNode</a></div>
-</div>
 <div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
-<ul class='toc'><li class='toc2'><a href='#Freed Nodes and Node Status'>Freed Nodes and Node Status</a></li>
+<div id='toctitle'>Node:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Freed%20Nodes%20and%20Node%20Status'>Freed Nodes and Node Status</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Bundling'>Bundling</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*addActions'>addActions</a> </li>
-<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
-<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*actionNumberFor'>actionNumberFor</a> </li>
 <li class='toc3'><a href='#*basicNew'>basicNew</a> </li>
 <li class='toc3'><a href='#*orderNodesMsg'>orderNodesMsg</a> </li>
 <li class='toc3'><a href='#*setnMsgArgs'>setnMsgArgs</a> </li>
 </ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
-<ul class='toc'><li class='toc2'><a href='#Instance Variables'>Instance Variables</a></li>
+<ul class='toc'><li class='toc2'><a href='#Instance%20Variables'>Instance Variables</a></li>
 <ul class='toc'><li class='toc3'><a href='#-nodeID'>nodeID</a> </li>
 <li class='toc3'><a href='#-group'>group</a> </li>
 <li class='toc3'><a href='#-server'>server</a> </li>
 <li class='toc3'><a href='#-isPlaying'>isPlaying</a> </li>
 <li class='toc3'><a href='#-isRunning'>isRunning</a> </li>
-</ul><li class='toc2'><a href='#Node Commands'>Node Commands</a></li>
+</ul><li class='toc2'><a href='#Node%20Commands'>Node Commands</a></li>
 <ul class='toc'><li class='toc3'><a href='#-free'>free</a>  <a href='#-freeMsg'>freeMsg</a> </li>
 <li class='toc3'><a href='#-run'>run</a>  <a href='#-runMsg'>runMsg</a> </li>
 <li class='toc3'><a href='#-set'>set</a>  <a href='#-setMsg'>setMsg</a> </li>
@@ -54,32 +46,47 @@
 <li class='toc3'><a href='#-query'>query</a> </li>
 <li class='toc3'><a href='#-trace'>trace</a> </li>
 <li class='toc3'><a href='#-register'>register</a> </li>
-</ul><li class='toc2'><a href='#Changing the order of execution'>Changing the order of execution</a></li>
+</ul><li class='toc2'><a href='#Changing%20the%20order%20of%20execution'>Changing the order of execution</a></li>
 <ul class='toc'><li class='toc3'><a href='#-moveAfter'>moveAfter</a>  <a href='#-moveAfterMsg'>moveAfterMsg</a> </li>
 <li class='toc3'><a href='#-moveBefore'>moveBefore</a>  <a href='#-moveBeforeMsg'>moveBeforeMsg</a> </li>
 <li class='toc3'><a href='#-moveToHead'>moveToHead</a>  <a href='#-moveToHeadMsg'>moveToHeadMsg</a> </li>
 <li class='toc3'><a href='#-moveToTail'>moveToTail</a>  <a href='#-moveToTailMsg'>moveToTailMsg</a> </li>
-</ul><li class='toc2'><a href='#Other Methods'>Other Methods</a></li>
+</ul><li class='toc2'><a href='#Other%20Methods'>Other Methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-asTarget'>asTarget</a> </li>
 <li class='toc3'><a href='#-printOn'>printOn</a> </li>
 <li class='toc3'><a href='#-hash'>hash</a> </li>
 <li class='toc3'><a href='#-=='>==</a> </li>
 <li class='toc3'><a href='#-onFree'>onFree</a> </li>
 <li class='toc3'><a href='#-waitForFree'>waitForFree</a> </li>
-</ul><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
-<li class='toc2'><a href='#Undocumented instance methods'>Undocumented instance methods</a></li>
+</ul><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+<li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-asControlInput'>asControlInput</a> </li>
 <li class='toc3'><a href='#-asNodeID'>asNodeID</a> </li>
 <li class='toc3'><a href='#-asUGenInput'>asUGenInput</a> </li>
-</ul></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<li class='toc3'><a href='#-unregister'>unregister</a> </li>
+</ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#Server'>Server</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Server>Nodes'>Nodes</a> | <a href='./../Browse.html#Server'>Server</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Server>Abstractions'>Abstractions</a></span>
+</div><h1>Node<span id='superclasses'> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
+<div id='summary'>Abstract superclass of Synth and Group</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Node.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Node.sc'>Node.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/AbstractGroup.html">AbstractGroup</a>, <a href="../Classes/Synth.html">Synth</a></div>
+<div id='related'>See also: <a href="./../Reference/Server-Architecture.html">Server Architecture</a>, <a href="./../Classes/Synth.html">Synth</a>, <a href="./../Classes/Group.html">Group</a>, <a href="./../Classes/RootNode.html">RootNode</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>This class is the abstract super class of Synth and Group, which represent synth and group nodes on the server. Node objects are not made explicitly, but Synth and Group are subclasses, and inherit the methods documented below.<h3><a class='anchor' name='Freed Nodes and Node Status'>Freed Nodes and Node Status</a></h3>
+<p>This class is the abstract super class of Synth and Group, which represent synth and group nodes on the server. Node objects are not made explicitly, but Synth and Group are subclasses, and inherit the methods documented below.<h3><a class='anchor' name='Freed%20Nodes%20and%20Node%20Status'>Freed Nodes and Node Status</a></h3>
 
 <p>Nodes which you explicitly free using the methods free or release will have their group instance variable set to nil. However Nodes which are automatically freed after a certain time (for instance by an <a href="./../Classes/EnvGen.html">EnvGen</a> with a doneAction of 2) will not. This keeps the implementation of the classes simple and lightweight.
 <p>To have the current state of a Node tracked you can register it with an instance of <a href="./../Classes/NodeWatcher.html">NodeWatcher</a>, either by calling register on the Node instance or on the NodeWatcher singleton. This will enable two variables, isPlaying and isRunning, which you can use for checking purposes.<h3><a class='anchor' name='Bundling'>Bundling</a></h3>
 
 <p>Many of the methods below have two versions: a regular one which sends its corresponding message to the server immediately, and one which returns the message in an <a href="./../Classes/Array.html">Array</a> so that it can be added to a bundle. It is also possible to capture the messages generated by the regular methods using Server's automated bundling capabilities. See <a href="./../Classes/Server.html">Server</a> and <a href="./../Guides/Bundled-Messages.html">Bundled Server Messages</a> for more details.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*addActions' href='./../Overviews/Methods.html#addActions'>addActions</a> </h3>
+<h3 class='method-code'><span class='method-prefix'>Node.</span><a class='method-name' name='*addActions' href='./../Overviews/Methods.html#addActions'>addActions</a></h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
 <p>the list of addActions as an event.</div><h4>Discussion:</h4>
@@ -88,45 +95,45 @@
 Node.addActions.at(\addToTail)
 );
 // returns 1</pre>
-</div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
-<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*actionNumberFor' href='./../Overviews/Methods.html#actionNumberFor'>actionNumberFor</a> (<span class='argstr'>addAction: 'addToHead'</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*basicNew' href='./../Overviews/Methods.html#basicNew'>basicNew</a> (<span class='argstr'>server</span>, <span class='argstr'>nodeID</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*orderNodesMsg' href='./../Overviews/Methods.html#orderNodesMsg'>orderNodesMsg</a> (<span class='argstr'>nodes</span>)</h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*setnMsgArgs' href='./../Overviews/Methods.html#setnMsgArgs'>setnMsgArgs</a> ( <span class='argstr'>... args</span>)</h3>
+</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>Node.</span><a class='method-name' name='*actionNumberFor' href='./../Overviews/Methods.html#actionNumberFor'>actionNumberFor</a>(<span class='argstr'>addAction: 'addToHead'</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>Node.</span><a class='method-name' name='*basicNew' href='./../Overviews/Methods.html#basicNew'>basicNew</a>(<span class='argstr'>server</span>, <span class='argstr'>nodeID</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>Node.</span><a class='method-name' name='*orderNodesMsg' href='./../Overviews/Methods.html#orderNodesMsg'>orderNodesMsg</a>(<span class='argstr'>nodes</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>Node.</span><a class='method-name' name='*setnMsgArgs' href='./../Overviews/Methods.html#setnMsgArgs'>setnMsgArgs</a>( <span class='argstr'>... args</span>)</h3>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
-<h3><a class='anchor' name='Instance Variables'>Instance Variables</a></h3>
+<h3><a class='anchor' name='Instance%20Variables'>Instance Variables</a></h3>
 
-<p>The following getter methods also have corresponding setters, but they should be used with extreme care and only if you are sure you know what you're doing.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nodeID' href='./../Overviews/Methods.html#nodeID'>nodeID</a></h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-nodeID' href='./../Overviews/Methods.html#nodeID'>nodeID</a> = value</h3>
+<p>The following getter methods also have corresponding setters, but they should be used with extreme care and only if you are sure you know what you're doing.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nodeID' href='./../Overviews/Methods.html#nodeID'>nodeID</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nodeID' href='./../Overviews/Methods.html#nodeID'>nodeID</a> = value</h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
 <p>the Node's node ID number.</div><h4>Discussion:</h4>
 
-<p>Normally you should not need to access this since instances of Node can be passed directly as <a href="./../Classes/UGen.html">UGen</a> inputs or <a href="./../Classes/Synth.html">Synth</a> args.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-group' href='./../Overviews/Methods.html#group'>group</a></h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-group' href='./../Overviews/Methods.html#group'>group</a> = value</h3>
+<p>Normally you should not need to access this since instances of Node can be passed directly as <a href="./../Classes/UGen.html">UGen</a> inputs or <a href="./../Classes/Synth.html">Synth</a> args.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-group' href='./../Overviews/Methods.html#group'>group</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-group' href='./../Overviews/Methods.html#group'>group</a> = value</h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>an instance of Group or RootNode corresponding to this Node's group on the server.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-server' href='./../Overviews/Methods.html#server'>server</a></h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-server' href='./../Overviews/Methods.html#server'>server</a> = value</h3>
+<p>an instance of Group or RootNode corresponding to this Node's group on the server.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-server' href='./../Overviews/Methods.html#server'>server</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-server' href='./../Overviews/Methods.html#server'>server</a> = value</h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>an instance of Server corresponding to this Node's server app.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-isPlaying' href='./../Overviews/Methods.html#isPlaying'>isPlaying</a></h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isPlaying' href='./../Overviews/Methods.html#isPlaying'>isPlaying</a> = value</h3>
-<div class='method'><h4>Returns:</h4>
-<div class='returnvalue'>
-<p>a boolean indicating if this node is currently on the server, providing this Node has been registered with a <a href="./../Classes/NodeWatcher.html">NodeWatcher</a>.</div><h4>Discussion:</h4>
-
-<p>N.B. If this Node has not been registered this will likely be false in any case.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-isRunning' href='./../Overviews/Methods.html#isRunning'>isRunning</a></h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-isRunning' href='./../Overviews/Methods.html#isRunning'>isRunning</a> = value</h3>
+<p>an instance of Server corresponding to this Node's server app.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isPlaying' href='./../Overviews/Methods.html#isPlaying'>isPlaying</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isPlaying' href='./../Overviews/Methods.html#isPlaying'>isPlaying</a> = value</h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
 <p>a boolean indicating if this node is currently on the server, providing this Node has been registered with a <a href="./../Classes/NodeWatcher.html">NodeWatcher</a>.</div><h4>Discussion:</h4>
 
-<p>N.B. If this Node has not been registered this will likely be false in any case.</div><h3><a class='anchor' name='Node Commands'>Node Commands</a></h3>
+<p>N.B. If this Node has not been registered this will likely be false in any case.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isRunning' href='./../Overviews/Methods.html#isRunning'>isRunning</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isRunning' href='./../Overviews/Methods.html#isRunning'>isRunning</a> = value</h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a boolean indicating if this node is currently on the server, providing this Node has been registered with a <a href="./../Classes/NodeWatcher.html">NodeWatcher</a>.</div><h4>Discussion:</h4>
 
-<p>See the Node Commands section in <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a> for the OSC equivalents of the methods outlined below.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-free' href='./../Overviews/Methods.html#free'>free</a> (<span class='argstr'>sendFlag: true</span>)</h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-freeMsg' href='./../Overviews/Methods.html#freeMsg'>freeMsg</a> </h3>
+<p>N.B. If this Node has not been registered this will likely be false in any case.</div><h3><a class='anchor' name='Node%20Commands'>Node Commands</a></h3>
+
+<p>See the Node Commands section in <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a> for the OSC equivalents of the methods outlined below.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-free' href='./../Overviews/Methods.html#free'>free</a>(<span class='argstr'>sendFlag: true</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-freeMsg' href='./../Overviews/Methods.html#freeMsg'>freeMsg</a></h3>
 <div class='method'>
 <p>Stop this Node and free it from its parent group on the server. Once a Node has been freed, you cannot restart it.<h4>Arguments:</h4>
 <table class='arguments'>
@@ -136,30 +143,30 @@ Node.addActions.at(\addToTail)
 <p>If this Node is a <a href="./../Classes/Group.html">Group</a> this will free all Nodes within the Group.<pre class='code prettyprint lang-sc'>s.boot;
 x = Synth("default");
 x.free;</pre>
-</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-run' href='./../Overviews/Methods.html#run'>run</a> (<span class='argstr'>flag: true</span>)</h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-runMsg' href='./../Overviews/Methods.html#runMsg'>runMsg</a> (<span class='argstr'>flag: true</span>)</h3>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-run' href='./../Overviews/Methods.html#run'>run</a>(<span class='argstr'>flag: true</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-runMsg' href='./../Overviews/Methods.html#runMsg'>runMsg</a>(<span class='argstr'>flag: true</span>)</h3>
 <div class='method'>
 <p>Set the running state of this Node according to a boolean. False will pause the node without freeing it. The default is true.<h4>Discussion:</h4>
 
 <p>If this Node is a Group this will set the running state of all Nodes within the Group.<pre class='code prettyprint lang-sc'>s.boot;
 (
-x = SynthDef("help-node-set", {arg freq = 440, out = 0;
-    Out.ar(out, SinOsc.ar(freq, 0, 0.1));}).play(s);
+x = SynthDef("help-node-set", { |freq = 440, out = 0|
+    Out.ar(out, SinOsc.ar(freq, 0, 0.1))
+}).play
 )
 x.run(false);
 x.run; // default is true
 x.free;</pre>
-</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-set' href='./../Overviews/Methods.html#set'>set</a> ( <span class='argstr'>... args</span>)</h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setMsg' href='./../Overviews/Methods.html#setMsg'>setMsg</a> ( <span class='argstr'>... args</span>)</h3>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-set' href='./../Overviews/Methods.html#set'>set</a>( <span class='argstr'>... args</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setMsg' href='./../Overviews/Methods.html#setMsg'>setMsg</a>( <span class='argstr'>... args</span>)</h3>
 <div class='method'>
 <p>Set controls in this Node to values.<h4>Discussion:</h4>
 
 <p>Controls are defined in a SynthDef as args or instances of <a href="./../Classes/Control.html">Control</a>. They are specified here using symbols, strings, or indices, and are listed in pairs with values. If this Node is a Group this will set all Nodes within the Group.<pre class='code prettyprint lang-sc'>s.boot;
 (
-x = SynthDef("help-node-set", {| freq = 440, out = 0 |
-    Out.ar(out, SinOsc.ar(freq, 0, 0.1));
-});
-x = x.play(s);
+x = SynthDef("help-node-set", { |freq = 440, out = 0|
+    Out.ar(out, SinOsc.ar(freq, 0, 0.1))
+}).play
 )
 x.set(\freq, 880, \out, 1); // two pairs
 x.set(0, 660, 1, 0); // freq is the first argument, so it's index is 0. out is index 1.
@@ -167,36 +174,36 @@ x.free;</pre>
 
 <p>Values that are arrays are sent using the OSC array type-tags ($[ and $]). These values will be assigned to subsequent controls in the manner of setn.<pre class='code prettyprint lang-sc'>s.boot;
 (
-x = SynthDef("help-node-set", {| freq = #[440, 450, 460], out = 0 |
-    Out.ar(out, Mix(SinOsc.ar(freq, 0, 0.1)));
-});
-x = x.play(s);
+x = SynthDef("help-node-set", { |freq = #[440, 450, 460], out = 0|
+    Out.ar(out, Mix(SinOsc.ar(freq, 0, 0.1)))
+}).play
 )
-x.set(\freq, [1,2,3] * 400 + [1,2,3], \out, 1); // two pairs
-x.set(\freq, [3] * 400 + [1,2,3], \out, 1); // two pairs
+x.set(\freq, [1,2,3] * 400 + [1, 2, 3], \out, 1); // two pairs
+x.set(\freq, [3] * 400 + [1, 2, 3], \out, 1); // two pairs
 x.set(0, [660, 680, 720], 1, 0); // freq is the first argument, so it's index is 0. out is index 1.
 x.free;</pre>
-</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-setn' href='./../Overviews/Methods.html#setn'>setn</a> ( <span class='argstr'>... args</span>)</h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-setnMsg' href='./../Overviews/Methods.html#setnMsg'>setnMsg</a> ( <span class='argstr'>... args</span>)</h3>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setn' href='./../Overviews/Methods.html#setn'>setn</a>( <span class='argstr'>... args</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setnMsg' href='./../Overviews/Methods.html#setnMsg'>setnMsg</a>( <span class='argstr'>... args</span>)</h3>
 <div class='method'>
 <p>Set sequential ranges of controls in this Node to values.<h4>Discussion:</h4>
 
 <p>Controls are defined in a SynthDef as args or instances of <a href="./../Classes/Control.html">Control</a>. They are specified here using symbols, strings, or indices, and are listed in pairs with arrays of values. If this Node is a Group this will setn all Nodes within the Group.<pre class='code prettyprint lang-sc'>s.boot;
 (
 x = SynthDef("help-node-setn", {
-    arg freq1 = 440, freq2 = 440, freq3 = 440, amp1 = 0.05, amp2 = 0.05, amp3 = 0.05;
-    Out.ar(0, Mix(SinOsc.ar([freq1, freq2, freq3], 0, [amp1, amp2, amp3])));}).play(s);
+    arg out, freq1 = 440, freq2 = 440, freq3 = 440, amp1 = 0.05, amp2 = 0.05, amp3 = 0.05;
+    Out.ar(out, Mix(SinOsc.ar([freq1, freq2, freq3], 0, [amp1, amp2, amp3])))
+}).play;
 )
 // set 3 controls starting from \freq1, and 3 controls starting from \amp1
 x.setn(\freq1, [440, 880, 441], \amp1, [0.3, 0.1, 0.3]);
 x.free;</pre>
-</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-fill' href='./../Overviews/Methods.html#fill'>fill</a> (<span class='argstr'>controlName</span>, <span class='argstr'>numControls</span>, <span class='argstr'>value</span> <span class='argstr'>... args</span>)</h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-fillMsg' href='./../Overviews/Methods.html#fillMsg'>fillMsg</a> (<span class='argstr'>controlName</span>, <span class='argstr'>numControls</span>, <span class='argstr'>value</span> <span class='argstr'>... args</span>)</h3>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-fill' href='./../Overviews/Methods.html#fill'>fill</a>(<span class='argstr'>controlName</span>, <span class='argstr'>numControls</span>, <span class='argstr'>value</span> <span class='argstr'>... args</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-fillMsg' href='./../Overviews/Methods.html#fillMsg'>fillMsg</a>(<span class='argstr'>controlName</span>, <span class='argstr'>numControls</span>, <span class='argstr'>value</span> <span class='argstr'>... args</span>)</h3>
 <div class='method'>
 <p>Set sequential ranges of controls in this Node to a single value.<h4>Discussion:</h4>
 
-<p>Controls are defined in a SynthDef as args or instances of <a href="./../Classes/Control.html">Control</a>. They are specified here using symbols, strings, or indices, and are listed in groups of three along with an integer indicating the number of controls to set, and the value to set them to. If this Node is a Group this will fill all Nodes within the Group.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-map' href='./../Overviews/Methods.html#map'>map</a> ( <span class='argstr'>... args</span>)</h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mapMsg' href='./../Overviews/Methods.html#mapMsg'>mapMsg</a> ( <span class='argstr'>... args</span>)</h3>
+<p>Controls are defined in a SynthDef as args or instances of <a href="./../Classes/Control.html">Control</a>. They are specified here using symbols, strings, or indices, and are listed in groups of three along with an integer indicating the number of controls to set, and the value to set them to. If this Node is a Group this will fill all Nodes within the Group.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-map' href='./../Overviews/Methods.html#map'>map</a>( <span class='argstr'>... args</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-mapMsg' href='./../Overviews/Methods.html#mapMsg'>mapMsg</a>( <span class='argstr'>... args</span>)</h3>
 <div class='method'>
 <p>Map controls in this Node to read from control or audio rate <a href="./../Classes/Bus.html">Bus</a>es.<h4>Discussion:</h4>
 
@@ -206,36 +213,40 @@ x.free;</pre>
 (
 b = Bus.control(s, 1); b.set(880);
 c = Bus.control(s, 1);    c.set(884);
-x = SynthDef("help-Node-map", { arg freq1 = 440, freq2 = 440;
-    Out.ar(0, SinOsc.ar([freq1, freq2], 0, 0.1));
-}).play(s);)
+x = SynthDef("help-Node-map", { |out, freq1 = 440, freq2 = 440|
+    Out.ar(out, SinOsc.ar([freq1, freq2], 0, 0.1));
+}).play
+)
 x.map(\freq1, b, \freq2, c);
 x.free; b.free; c.free;
 
 // same as above with a multichannel Bus and Control
 (
-b = Bus.control(s, 2); b.set(880, 884);
-x = SynthDef("help-Node-map2", { arg freqs = #[440, 440];
-    Out.ar(0, SinOsc.ar(freqs, 0, 0.1));
-}).play(s);)
+b = Bus.control(s, 2); 
+b.set(880, 884);
+x = SynthDef("help-Node-map2", { |out, freqs = #[440, 440]|
+    Out.ar(out, SinOsc.ar(freqs, 0, 0.1));
+}).play
+)
+
 x.map(\freqs, b);
 x.free; b.free;</pre>
-</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-mapn' href='./../Overviews/Methods.html#mapn'>mapn</a> ( <span class='argstr'>... args</span>)</h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-mapnMsg' href='./../Overviews/Methods.html#mapnMsg'>mapnMsg</a> ( <span class='argstr'>... args</span>)</h3>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-mapn' href='./../Overviews/Methods.html#mapn'>mapn</a>( <span class='argstr'>... args</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-mapnMsg' href='./../Overviews/Methods.html#mapnMsg'>mapnMsg</a>( <span class='argstr'>... args</span>)</h3>
 <div class='method'>
 <p>Map sequential ranges of controls in this Node to read from control rate Buses.<h4>Discussion:</h4>
 
-<p>This is similar to map above, but you specify the number of sequential Controls to map. If this Node is a Group this will mapn all Nodes within the Group.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-release' href='./../Overviews/Methods.html#release'>release</a> (<span class='argstr'>releaseTime</span>)</h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-releaseMsg' href='./../Overviews/Methods.html#releaseMsg'>releaseMsg</a> (<span class='argstr'>releaseTime</span>)</h3>
+<p>This is similar to map above, but you specify the number of sequential Controls to map. If this Node is a Group this will mapn all Nodes within the Group.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-release' href='./../Overviews/Methods.html#release'>release</a>(<span class='argstr'>releaseTime</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-releaseMsg' href='./../Overviews/Methods.html#releaseMsg'>releaseMsg</a>(<span class='argstr'>releaseTime</span>)</h3>
 <div class='method'>
 <p>This is a convenience method which assumes that the synth contains an envelope generator (an EnvGen, Linen, or similar UGen) running a sustaining envelope (see Env) and that it's gate argument is set to a control called \gate. This method will cause the envelope to release.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>releaseTime<td class='argumentdesc'>
 <p>if not nil, it will override the envelope's decay or release time.</table><h4>Discussion:</h4>
 
-<p>If this Node is a Group this will release all Nodes within the Group.<pre class='code prettyprint lang-sc'>x = { arg gate=1; BrownNoise.ar(0.5) * EnvGen.kr(Env.cutoff(1), gate, doneAction:2) }.play;
-x.release(5); // overide the Env's specified 1 second release time</pre>
-</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-query' href='./../Overviews/Methods.html#query'>query</a> </h3>
+<p>If this Node is a Group this will release all Nodes within the Group.<pre class='code prettyprint lang-sc'>x = { arg gate=1; BrownNoise.ar(0.5) * EnvGen.kr(Env.cutoff(1), gate, doneAction: Done.freeSelf) }.play;
+x.release(5); // override the Env's specified 1 second release time</pre>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-query' href='./../Overviews/Methods.html#query'>query</a></h3>
 <div class='method'>
 <p>Sends an n_query message to the server, which will reply with a message containing information about this node and its place in the server's node tree.<h4>Discussion:</h4>
 
@@ -245,23 +256,24 @@ x.query;
 g.query;
 s.queryAllNodes; // Note the RootNode (ID 0) and the default Group (ID 1)
 x.free; g.free;</pre>
-</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-trace' href='./../Overviews/Methods.html#trace'>trace</a> </h3>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-trace' href='./../Overviews/Methods.html#trace'>trace</a></h3>
 <div class='method'>
 <p>Causes a synth to print out the values of the inputs and outputs of its unit generators for one control period to the post window. Causes a group to print the node IDs and names of each node in the group for one control period.<pre class='code prettyprint lang-sc'>g = Group.new;
-x = Synth.head(g, "default");
+x = Synth.head(g, \default);
 x.trace;
 g.trace;
 x.free; g.free;</pre>
-</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-register' href='./../Overviews/Methods.html#register'>register</a> (<span class='argstr'>assumePlaying: false</span>)</h3>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-register' href='./../Overviews/Methods.html#register'>register</a>(<span class='argstr'>assumePlaying: false</span>)</h3>
 <div class='method'>
 <p>Registers the node at the <a href="./../Classes/NodeWatcher.html">NodeWatcher</a> object.<h4>Discussion:</h4>
 
 <p>This will enable two variables, isPlaying and isRunning, which you can use for checking purposes.<pre class='code prettyprint lang-sc'>(
 b = s.makeBundle(false, {
     a = Group.new(s); //create a node object
-    a.register; // register before creating on the server
-});
+    a.register // register before creating on the server
+})
 )
+
 a.isPlaying;
 s.listSendBundle(nil, b); //start the node on the server
 a.isPlaying;
@@ -271,31 +283,31 @@ a.isRunning;
 s.freeAll; //free all nodes
 a.isPlaying;
 a.isRunning;</pre>
-</div><h3><a class='anchor' name='Changing the order of execution'>Changing the order of execution</a></h3>
+</div><h3><a class='anchor' name='Changing%20the%20order%20of%20execution'>Changing the order of execution</a></h3>
 
-<p>The following methods can be used to change the Node's place in the order of execution. See the <a href="./../Guides/Order-of-execution.html">Order of execution</a> help file for more information on this important topic. See <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a> for the OSC equivalents of these methods.<h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveAfter' href='./../Overviews/Methods.html#moveAfter'>moveAfter</a> (<span class='argstr'>aNode</span>)</h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveAfterMsg' href='./../Overviews/Methods.html#moveAfterMsg'>moveAfterMsg</a> (<span class='argstr'>aNode</span>)</h3>
+<p>The following methods can be used to change the Node's place in the order of execution. See the <a href="./../Guides/Order-of-execution.html">Order of execution</a> help file for more information on this important topic. See <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a> for the OSC equivalents of these methods.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-moveAfter' href='./../Overviews/Methods.html#moveAfter'>moveAfter</a>(<span class='argstr'>aNode</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-moveAfterMsg' href='./../Overviews/Methods.html#moveAfterMsg'>moveAfterMsg</a>(<span class='argstr'>aNode</span>)</h3>
 <div class='method'>
-<p>Move this Node to be directly after aNode. N.B. n_after, the OSC message which this method encapsulates, allows already freed nodes as targets. This is so that one may attempt a series of moves, with the last successful one taking effect. For this reason this method will fail silently if either the target or this node have already been freed. If you will need to check, you may register the relevant nodes with a NodeWatcher.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveBefore' href='./../Overviews/Methods.html#moveBefore'>moveBefore</a> (<span class='argstr'>aNode</span>)</h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveBeforeMsg' href='./../Overviews/Methods.html#moveBeforeMsg'>moveBeforeMsg</a> (<span class='argstr'>aNode</span>)</h3>
+<p>Move this Node to be directly after aNode. N.B. n_after, the OSC message which this method encapsulates, allows already freed nodes as targets. This is so that one may attempt a series of moves, with the last successful one taking effect. For this reason this method will fail silently if either the target or this node have already been freed. If you will need to check, you may register the relevant nodes with a NodeWatcher.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-moveBefore' href='./../Overviews/Methods.html#moveBefore'>moveBefore</a>(<span class='argstr'>aNode</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-moveBeforeMsg' href='./../Overviews/Methods.html#moveBeforeMsg'>moveBeforeMsg</a>(<span class='argstr'>aNode</span>)</h3>
 <div class='method'>
-<p>Move this Node to be directly before aNode. N.B. n_before, the OSC message which this method encapsulates, allows already freed nodes as targets. This is so that one may attempt a series of moves, with the last successful one taking effect. For this reason this method will fail silently if either the target or this node have already been freed. If you will need to check, you may register the relevant nodes with a NodeWatcher.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveToHead' href='./../Overviews/Methods.html#moveToHead'>moveToHead</a> (<span class='argstr'>aGroup</span>)</h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveToHeadMsg' href='./../Overviews/Methods.html#moveToHeadMsg'>moveToHeadMsg</a> (<span class='argstr'>aGroup</span>)</h3>
+<p>Move this Node to be directly before aNode. N.B. n_before, the OSC message which this method encapsulates, allows already freed nodes as targets. This is so that one may attempt a series of moves, with the last successful one taking effect. For this reason this method will fail silently if either the target or this node have already been freed. If you will need to check, you may register the relevant nodes with a NodeWatcher.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-moveToHead' href='./../Overviews/Methods.html#moveToHead'>moveToHead</a>(<span class='argstr'>aGroup</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-moveToHeadMsg' href='./../Overviews/Methods.html#moveToHeadMsg'>moveToHeadMsg</a>(<span class='argstr'>aGroup</span>)</h3>
 <div class='method'>
-<p>If aGroup is a Group then this method will move this Node to the head of that Group. If it is nil this will move this Node to the head of the default_group of this Node's Server.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveToTail' href='./../Overviews/Methods.html#moveToTail'>moveToTail</a> (<span class='argstr'>aGroup</span>)</h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-moveToTailMsg' href='./../Overviews/Methods.html#moveToTailMsg'>moveToTailMsg</a> (<span class='argstr'>aGroup</span>)</h3>
+<p>If aGroup is a Group then this method will move this Node to the head of that Group. If it is nil this will move this Node to the head of the default_group of this Node's Server.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-moveToTail' href='./../Overviews/Methods.html#moveToTail'>moveToTail</a>(<span class='argstr'>aGroup</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-moveToTailMsg' href='./../Overviews/Methods.html#moveToTailMsg'>moveToTailMsg</a>(<span class='argstr'>aGroup</span>)</h3>
 <div class='method'>
-<p>If aGroup is a Group then this method will move this Node to the tail of that Group. If it is nil this will move this Node to the tail of the default_group of this Node's Server.</div><h3><a class='anchor' name='Other Methods'>Other Methods</a></h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asTarget' href='./../Overviews/Methods.html#asTarget'>asTarget</a> </h3>
-<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/asTarget.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Control/asTarget.sc</a></div>
+<p>If aGroup is a Group then this method will move this Node to the tail of that Group. If it is nil this will move this Node to the tail of the default_group of this Node's Server.</div><h3><a class='anchor' name='Other%20Methods'>Other Methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asTarget' href='./../Overviews/Methods.html#asTarget'>asTarget</a></h3>
+<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asTarget.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asTarget.sc</a></div>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>this Node. See the <a href="./../Reference/asTarget.html">asTarget</a> help file for more details.</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-printOn' href='./../Overviews/Methods.html#printOn'>printOn</a> (<span class='argstr'>stream</span>)</h3>
+<p>this Node. See the <a href="./../Reference/asTarget.html">asTarget</a> help file for more details.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-printOn' href='./../Overviews/Methods.html#printOn'>printOn</a>(<span class='argstr'>stream</span>)</h3>
 <div class='method'>
-<p>Prints this Node's <a href="./../Classes/Class.html">Class</a> (<a href="./../Classes/Synth.html">Synth</a> or <a href="./../Classes/Group.html">Group</a>) and nodeID on stream.</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-hash' href='./../Overviews/Methods.html#hash'>hash</a> </h3>
+<p>Prints this Node's <a href="./../Classes/Class.html">Class</a> (<a href="./../Classes/Synth.html">Synth</a> or <a href="./../Classes/Group.html">Group</a>) and nodeID on stream.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hash' href='./../Overviews/Methods.html#hash'>hash</a></h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>server.hash bitXor: nodeID.hash</div></div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-==' href='./../Overviews/Methods.html#=='>==</a> (<span class='argstr'>that</span>)</h3>
+<p>server.hash bitXor: nodeID.hash</div></div><h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-==' href='./../Overviews/Methods.html#=='>==</a>(<span class='argstr'>that</span>)</h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
 <p>true if this Node and aNode have the same nodeID and the same Server object, otherwise returns false.</div><h4>Discussion:</h4>
@@ -304,24 +316,24 @@ a.isRunning;</pre>
 h = Group.basicNew(s, 1); // and again
 g == h;     // true
 g === h;    // false</pre>
-</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-onFree' href='./../Overviews/Methods.html#onFree'>onFree</a> (<span class='argstr'>func</span>)</h3>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-onFree' href='./../Overviews/Methods.html#onFree'>onFree</a>(<span class='argstr'>func</span>)</h3>
 <div class='method'>
 <p>Evaluate function when this Node is freed.<h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>{PinkNoise.ar(1) * Line.kr(1,0,2,doneAction:2)}.play.onFree {"done".postln};</pre>
-</div><h3 class='imethodname'><span class='methprefix'>-</span><a name='-waitForFree' href='./../Overviews/Methods.html#waitForFree'>waitForFree</a> </h3>
+<pre class='code prettyprint lang-sc'>{PinkNoise.ar(1) * Line.kr(1,0,2,doneAction: Done.freeSelf)}.play.onFree {"done".postln};</pre>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-waitForFree' href='./../Overviews/Methods.html#waitForFree'>waitForFree</a></h3>
 <div class='method'>
 <p>Wait until this Node is freed. Should be used inside a Routine or similar.<h4>Discussion:</h4>
 <pre class='code prettyprint lang-sc'>(
 fork {
-    {SinOsc.ar(440!2) * Line.kr(0,1,5,doneAction:2)}.play.waitForFree;
-    {PinkNoise.ar(1) * Line.kr(1,0,2,doneAction:2)}.play.onFree {"done".postln};
+    { SinOsc.ar(440 ! 2) * Line.kr(0, 1, 5, doneAction: Done.freeSelf) }.play.waitForFree;
+    { PinkNoise.ar(1) * Line.kr(1, 0, 2, doneAction: Done.freeSelf) }.play.onFree {"done".postln};
 }
 )</pre>
 <pre class='code prettyprint lang-sc'>(
-SynthDef(\help, {
+SynthDef(\help, { |out|
     var mod = LFNoise2.kr(Rand(1, 6)) * 0.2;
     var snd = mod * Blip.ar(Rand(200, 800) * (mod + 1));
-    Out.ar(0, snd);
+    Out.ar(out, snd);
     FreeSelf.kr(mod &lt; 0);
 }).add;
 )
@@ -337,10 +349,11 @@ fork {
     "This is it.".postln;
 }
 );</pre>
-</div><h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
-<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented instance methods'>Undocumented instance methods</a></h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asControlInput' href='./../Overviews/Methods.html#asControlInput'>asControlInput</a> </h3>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asNodeID' href='./../Overviews/Methods.html#asNodeID'>asNodeID</a> </h3>
-<div class='extmethod'>From extension in <a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Control/asTarget.sc'>/usr/local/share/SuperCollider/SCClassLibrary/Common/Control/asTarget.sc</a></div>
-<h3 class='imethodname'><span class='methprefix'>-</span><a name='-asUGenInput' href='./../Overviews/Methods.html#asUGenInput'>asUGenInput</a> </h3>
-<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Node.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Node.schelp</a><br>link::Classes/Node::<br>sc version: 3.8dev</div></div></body></html>
+</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asControlInput' href='./../Overviews/Methods.html#asControlInput'>asControlInput</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asNodeID' href='./../Overviews/Methods.html#asNodeID'>asNodeID</a></h3>
+<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asTarget.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asTarget.sc</a></div>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asUGenInput' href='./../Overviews/Methods.html#asUGenInput'>asUGenInput</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-unregister' href='./../Overviews/Methods.html#unregister'>unregister</a></h3>
+<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Node.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Node.schelp</a><br>link::Classes/Node::<br></div></div></body></html>

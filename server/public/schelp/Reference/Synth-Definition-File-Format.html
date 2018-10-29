@@ -1,45 +1,51 @@
-<html><head><title>Synth Definition File Format</title>
+<!doctype html><html lang='en'><head><title>Synth Definition File Format | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Synth Definition File Format';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Synth Definition File Format:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Basic%20types'>Basic types</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#File%20Format'>File Format</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#File%20Format%20as%20Tree'>File Format as Tree</a></li>
+<ul class='toc'><li class='toc2'><a href='#synth-definition-file'>synth-definition-file</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Original%20SynthDef%20format'>Original SynthDef format</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Glossary'>Glossary</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Notes'>Notes</a></li>
+<ul class='toc'><li class='toc2'><a href='#For%20greatest%20efficiency:'>For greatest efficiency:</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider REFERENCE</div>
-<div id='categories'><a href='./../Browse.html#Server>Architecture'>Server>Architecture</a></div>
-<h1>Synth Definition File Format</h1>
+<div id='label'>
+<span id='folder'>Reference</span>
+ | <span id='categories'><a href='./../Browse.html#Server'>Server</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Server>Architecture'>Architecture</a></span>
+</div><h1>Synth Definition File Format</h1>
 <div id='summary'>Description of Synth Definition file format used by SC synth server</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../Classes/SynthDef.html">SynthDef</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Basic types'>Basic types</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#File Format'>File Format</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#File Format as Tree'>File Format as Tree</a></li>
-<ul class='toc'><li class='toc2'><a href='#synth-definition-file'>synth-definition-file</a></li>
-<ul class='toc'></ul></ul><li class='toc1'><a href='#Original SynthDef format'>Original SynthDef format</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Glossary'>Glossary</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Notes'>Notes</a></li>
-<ul class='toc'><li class='toc2'><a href='#For greatest efficiency:'>For greatest efficiency:</a></li>
-<ul class='toc'></ul></ul></ul></div>
+
 <p>Synth definition files are read by the synth server and define collections of unit generators and their connections. These files are currently written by the SuperCollider language application, but theoretically could be written by any program. Such a program would need knowledge of the SC unit generators and their characteristics, such as number of inputs and outputs and available calculation rates. The code to write these files is open and available in the SuperCollider language app.
 <p>In the current SuperCollider 3.6 development version, there are two versions of SynthDef:<ul>
 <li><strong>SynthDef</strong> - The original SynthDef file format, backward compatible with .scsyndef files saved using earlier versions of SuperCollider.<li><strong>SynthDef2</strong> - A revised version that extends SynthDef's capacity.</ul>
 
-<p>This document describes SynthDef2's format. See <a href="#Original SynthDef format">Original SynthDef format</a> for the differences between SynthDef and SynthDef2.<h2><a class='anchor' name='Basic types'>Basic types</a></h2>
+<p>This document describes SynthDef2's format. See <a href="#Original%20SynthDef%20format">Original SynthDef format</a> for the differences between SynthDef and SynthDef2.<h2><a class='anchor' name='Basic%20types'>Basic types</a></h2>
 
-<p>All data is stored big endian. All data is packed, not padded or aligned.<dl>
-<dt>int32<dd>a 32 bit integer.<dt>int16<dd>a 16 bit integer.<dt>int8<dd>an 8 bit integer.<dt>float32<dd>a 32 bit IEEE floating point number.<dt>pstring<dd>a pascal format string: a byte giving the length followed by that many bytes.</dl>
-<h2><a class='anchor' name='File Format'>File Format</a></h2>
+<p>All data is stored big endian. All integers, unless otherwise noted, are signed. All data is packed, not padded or aligned.<dl>
+<dt>int32<dd>a 32 bit integer.<dt>int16<dd>a 16 bit integer.<dt>int8<dd>an 8 bit integer.<dt>float32<dd>a 32 bit IEEE floating point number.<dt>pstring<dd>a pascal format string: a byte (an <strong>unsigned</strong> int8) giving the length followed by that many bytes.</dl>
+<h2><a class='anchor' name='File%20Format'>File Format</a></h2>
 
 <p>a <strong>synth-definition-file</strong> is :<ul>
 <li>int32 - four byte file type id containing the ASCII characters: "SCgf"<li>int32 - file version, currently 2.<li>int16 - number of synth definitions in this file (D).<li>[ <strong>synth-definition</strong> ] * D</ul>
@@ -66,7 +72,7 @@
 
 <p>a <strong>variant-spec</strong> is :<ul>
 <li>pstring - the name of the variant<li>[float32] * P - variant initial parameter values</ul>
-<h2><a class='anchor' name='File Format as Tree'>File Format as Tree</a></h2>
+<h2><a class='anchor' name='File%20Format%20as%20Tree'>File Format as Tree</a></h2>
 
 <p><span class='soft'>added by Jonatan Liljedahl</span><h3><a class='anchor' name='synth-definition-file'>synth-definition-file</a></h3>
 <ul class='tree'>
@@ -91,7 +97,7 @@
 <li>pstring - the name of the variant<li>[float32] * P - variant initial parameter values</ul>
 </ul>
 </ul>
-<h2><a class='anchor' name='Original SynthDef format'>Original SynthDef format</a></h2>
+<h2><a class='anchor' name='Original%20SynthDef%20format'>Original SynthDef format</a></h2>
 
 <p>The original SynthDef format differs in that the following items are <code>int16</code> instead of <code>int32</code>.<div class='note'><span class='notelabel'>NOTE:</span> The following list describes what has changed between SynthDef and SynthDef2. It is not a complete description of the the original SynthDef file format.</div><ul>
 <li>int32 - file version, currently 1. (This is <em>2</em> for the new format.)<li>a <strong>synth-definition</strong> is :<ul>
@@ -112,8 +118,8 @@
 <p>Outputs have their own calculation rate. This allows MultiOutUGens to have outputs at different rates. A one output unit generator's calculation rate should match that of its output.<dt>constant<dd>a single floating point value that is used as a unit generator input.<dt>parameter<dd>a value that can be externally controlled using server commands /s.new, /n.set, /n.setn, /n.fill, /n.map .<dt>parameter name<dd>a string naming an index in the the parameter array. This allows one to refer to the same semantic value such as 'freq' or 'pan' in different synths even though they exist at different offsets in their respective parameter arrays.<dt>special index<dd>this value is used by some unit generators for a special purpose. For example, UnaryOpUGen and BinaryOpUGen use it to indicate which operator to perform. If not used it should be set to zero.<dt>synth<dd>a collection of unit generators that execute together. A synth is a type of node.<dt>synth definition<dd>a specification for creating synths.<dt>unit generator<dd>a basic signal processing module with inputs and outputs. unit generators are connected together to form synths.</dl>
 <h2><a class='anchor' name='Notes'>Notes</a></h2>
 
-<p>Unit generators are listed in the order they will be executed. Inputs must refer to constants or previous unit generators. No feedback loops are allowed. Feedback must be accomplished via delay lines or through buses.<h3><a class='anchor' name='For greatest efficiency:'>For greatest efficiency:</a></h3>
+<p>Unit generators are listed in the order they will be executed. Inputs must refer to constants or previous unit generators. No feedback loops are allowed. Feedback must be accomplished via delay lines or through buses.<h3><a class='anchor' name='For%20greatest%20efficiency:'>For greatest efficiency:</a></h3>
 
 <p>Unit generators should be listed in an order that permits efficient reuse of connection buffers, which means that a depth first topological sort of the graph is preferable to breadth first.
 <p>There should be no duplicate values in the constants table.
-<p>copyright © 2002 James McCartney - converted to new help system 2010 by Jonatan Liljedahl, updated for version 2 by Scott Wilson 2011<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/Synth-Definition-File-Format.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/Synth-Definition-File-Format.schelp</a><br>link::Reference/Synth-Definition-File-Format::<br>sc version: 3.8dev</div></div></body></html>
+<p>copyright © 2002 James McCartney - converted to new help system 2010 by Jonatan Liljedahl, updated for version 2 by Scott Wilson 2011<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Synth-Definition-File-Format.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Synth-Definition-File-Format.schelp</a><br>link::Reference/Synth-Definition-File-Format::<br></div></div></body></html>

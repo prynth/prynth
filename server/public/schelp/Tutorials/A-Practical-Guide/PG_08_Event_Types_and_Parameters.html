@@ -1,46 +1,53 @@
-<html><head><title>Pattern Guide 08: Event Types and Parameters</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide 08: Event Types and Parameters | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = 'Pattern Guide 08: Event Types and Parameters';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Pattern Guide 08: Event Types and Parameters:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Event%20types'>Event types</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Common%20parameters'>Common parameters</a></li>
+<ul class='toc'><li class='toc2'><a href='#Timing%20control'>Timing control</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Node%20control'>Node control</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#User%20function%20hooks'>User function hooks</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Event%20Types'>Event Types</a></li>
+<ul class='toc'><li class='toc2'><a href='#Node%20control'>Node control</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Server%20control'>Server control</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Buffer%20control'>Buffer control</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Event%20types%20with%20cleanup'>Event types with cleanup</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#MIDI%20output'>MIDI output</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Miscellaneous'>Miscellaneous</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/A-PRACTICAL-GUIDE</div>
-<div id='categories'><a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>Streams-Patterns-Events>A-Practical-Guide</a></div>
-<h1>Pattern Guide 08: Event Types and Parameters</h1>
+<div id='label'>
+<span id='folder'>Tutorials/A-Practical-Guide</span>
+ | <span id='categories'><a href='./../../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>A-Practical-Guide</a></span>
+</div><h1>Pattern Guide 08: Event Types and Parameters</h1>
 <div id='summary'>Describes the event types defined in the default event, and the parameters they expect</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_07_Value_Conversions.html">Pattern Guide 07: Value Conversions</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook01_Basic_Sequencing.html">Pattern Guide Cookbook 01: Basic Sequencing</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Event types'>Event types</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Common parameters'>Common parameters</a></li>
-<ul class='toc'><li class='toc2'><a href='#Timing control'>Timing control</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Node control'>Node control</a></li>
-<ul class='toc'></ul></ul><li class='toc1'><a href='#Event Types'>Event Types</a></li>
-<ul class='toc'><li class='toc2'><a href='#Node control'>Node control</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Server control'>Server control</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Buffer control'>Buffer control</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Event types with cleanup'>Event types with cleanup</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#MIDI output'>MIDI output</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Miscellaneous'>Miscellaneous</a></li>
-<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Event types'>Event types</a></h2>
+<h2><a class='anchor' name='Event%20types'>Event types</a></h2>
 
 <p>A common question is, "Which parameters have special meanings in Pbind?" Perhaps surprisingly, none of them do! That's because Pbind simply puts data into the result event; it doesn't care what the data are.
 <p>The event prototype used when playing the pattern defines the actions to take, and it is here that parameters are defined. Most patterns will play using the default event prototype ( <code class='code prettyprint lang-sc'>Event.default</code> ), so this is the source of the parameters that will most typically be used.
 <p>The default event prototype defines a number of "event types," each of which performs a different task. The <code class='code prettyprint lang-sc'>\type</code> key determines which action is taken, and the significant parameters depend on the event type.
 <p>There are a lot of event types! However, only a few are commonly used. The <code class='code prettyprint lang-sc'>\note</code> event type is by far the most typical. The others are auxiliary, and most useful when writing patterns to generate a <a href="./../../Classes/Score.html">Score</a> suitable for non-real-time rendering.
-<p>Before looking at the event types themselves, let's go over some standard parameters used across many event types. (Not every common parameter is used in every event type, but these turn up in lots of places.)<h2><a class='anchor' name='Common parameters'>Common parameters</a></h2>
-<h3><a class='anchor' name='Timing control'>Timing control</a></h3>
+<p>Before looking at the event types themselves, let's go over some standard parameters used across many event types. (Not every common parameter is used in every event type, but these turn up in lots of places.)<h2><a class='anchor' name='Common%20parameters'>Common parameters</a></h2>
+<h3><a class='anchor' name='Timing%20control'>Timing control</a></h3>
 <dl>
 <dt>\delta<dd>Number of <strong>beats</strong> until the next event. Calculated from <code class='code prettyprint lang-sc'>~dur * ~stretch</code>, if <code class='code prettyprint lang-sc'>\delta</code> is not given explicitly.<dt>\lag<dd>Number of <strong>seconds</strong> to delay the event's server message(s).<dt>\timingOffset<dd>Number of <strong>beats</strong> to delay the event's server message(s). In conjunction with <a href="./../../Classes/Quant.html">Quant</a>, this allows control over the order of event preparation between different patterns in the client, without desynchronizing sonic events that should play together. <a href="./../../Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.html">Pattern Guide 06g: Data Sharing</a> has an example of its use to pass data from a bass pattern to a chord pattern.<dt>\sustain<dd>Number of beats to wait before releasing a Synth node on the server. The SynthDef must have a <code class='code prettyprint lang-sc'>gate</code> argument for the explicit release to be sent; otherwise, the pattern assumes the note will release itself using a timed envelope. <code class='code prettyprint lang-sc'>\sustain</code> is calculated from <code class='code prettyprint lang-sc'>~dur * ~legato * ~stretch</code> if not given directly.<dt>\sendGate<dd>The default behavior for releasing a note is to look in the <a href="./../../Classes/SynthDesc.html">SynthDesc</a> for an argument called \gate. If it's present, the event will send a <code class='code prettyprint lang-sc'>node.set(\gate, 0)</code> message to the server. If not, no release will be sent; it's assumed that the SynthDef will release itself after a given length of time. <code class='code prettyprint lang-sc'>\sendGate</code> overrides this behavior: <code class='code prettyprint lang-sc'>true</code> means to force the release message to be sent, whether or not the argument exists, while <code class='code prettyprint lang-sc'>false</code> means to suppress the release message.
 <p>It isn't typical use to override; nonetheless, for some special cases, it may be useful.<dt>\tempo<dd>Optional. If a value is given (in beats per second), it will change the tempo of the TempoClock playing the pattern. Here, the note duration is constant but the clock's speed changes.<div class='note'><span class='notelabel'>NOTE:</span> Changing the tempo will affect all patterns playing on the same clock.</div><pre class='code prettyprint lang-sc'>Pbind(
@@ -50,11 +57,14 @@
     \tempo, Pkey(\curve).linlin(0, 1, 1, 10)
 ).play;</pre>
 </dl>
-<h3><a class='anchor' name='Node control'>Node control</a></h3>
+<h3><a class='anchor' name='Node%20control'>Node control</a></h3>
 <dl>
 <dt>\addAction<dd>How to add a synth or group node relative to the given <code class='code prettyprint lang-sc'>\group</code> in the event. See <a href="./../../Classes/Synth.html">Synth</a>.<dt>\amp<dd>Not formally defined as a special parameter, but this is typically used for Synth amplitude. The SynthDef should have an <code class='code prettyprint lang-sc'>amp</code> argument and use it to control volume. <code class='code prettyprint lang-sc'>\amp</code> is optionally calculated from <code class='code prettyprint lang-sc'>\db</code>.<dt>\id<dd>The desired id(s) for newly created Nodes in this event. Normally this is <code class='code prettyprint lang-sc'>nil</code>, in which case the IDs will be obtained from <code class='code prettyprint lang-sc'>server.nextNodeID</code>.<dt>\instrument<dd>The <a href="./../../Classes/SynthDef.html">SynthDef</a> name for which nodes will be created. Only one name should be given (unlike other arguments, which "multichannel expand" to create multiple nodes).<dt>\group<dd>The target node relative to which new node(s) will be created. Similar to <code class='code prettyprint lang-sc'>target</code> in <code class='code prettyprint lang-sc'>Synth(defName, args, target, addAction)</code>.<dt>\out<dd>Generally used for the output bus of a <a href="./../../Classes/Synth.html">Synth</a>. When using <a href="./../../Classes/Pbus.html">Pbus</a> or <a href="./../../Classes/Pfxb.html">Pfxb</a>, an audio bus is allocated to isolate the pattern's signal. All events from the pattern receive the new bus number in the <code class='code prettyprint lang-sc'>\out</code> slot, and SynthDefs being played should use an <code class='code prettyprint lang-sc'>out</code> argument for the target of output UGens, e.g., <code class='code prettyprint lang-sc'>Out.ar(out, ...)</code> .</dl>
-<h2><a class='anchor' name='Event Types'>Event Types</a></h2>
-<h3><a class='anchor' name='Node control'>Node control</a></h3>
+<h3><a class='anchor' name='User%20function%20hooks'>User function hooks</a></h3>
+<dl>
+<dt>\finish<dd>A function that will be executed after <code class='code prettyprint lang-sc'>play</code> has been called, but before event type processing. Use this to manipulate event data.<dt>\callback<dd>A function that will be executed after the Event has finished all its work. The <code class='code prettyprint lang-sc'>callback</code> may be used for bookkeeping. Finished Events are expected to store new node IDs under <code class='code prettyprint lang-sc'>~id</code>; with the IDs, you can register functions to watch node status or set node controls, for instance. The function receives the finished event as its argument.</dl>
+<h2><a class='anchor' name='Event%20Types'>Event Types</a></h2>
+<h3><a class='anchor' name='Node%20control'>Node control</a></h3>
 <dl>
 <dt>rest<dd>As one would expect, a <code class='code prettyprint lang-sc'>\rest</code> does nothing except wait the required amount of time until the next event.<dt>note<dd>This is the default event type, used when <code class='code prettyprint lang-sc'>\type</code> is not specified. It plays one or more Synth nodes on the server, with an automatic release after <code class='code prettyprint lang-sc'>\sustain</code> beats if the SynthDef has a <code class='code prettyprint lang-sc'>gate</code> argument.<dl>
 <dt>Standard Timing and Node control arguments<dd><dt>sendGate<dd>Override SynthDef behavior for the <code class='code prettyprint lang-sc'>gate</code> argument. If the SynthDef as <code class='code prettyprint lang-sc'>gate</code>, setting <code class='code prettyprint lang-sc'>sendGate = false</code> prevents the release message from being sent. Rarely used.<dt>strum<dd>If multiple notes are produced (usually a chord, given by providing an array to one of the pitch parameters), <code class='code prettyprint lang-sc'>\strum</code> is the number of beats to delay each successive note onset. When using <code class='code prettyprint lang-sc'>\strum</code>, another key is active, <code class='code prettyprint lang-sc'>\strumEndsTogether</code>. If false (the default), each strummed node will play for its full duration and the releases will be staggered. If true, the releases will occur at the same time.<pre class='code prettyprint lang-sc'>p = Pbind(
@@ -70,7 +80,7 @@
 p.stop;</pre>
 </dl>
 <dt>on<dd>Start a Synth node (or nodes) without releasing. The node ID(s) are in the event's <code class='code prettyprint lang-sc'>~id</code> variable. Those IDs can be used with the off, set and kill event types.<dl>
-<dt>Standard Timing and Node control arguments<dd><dt>callback<dd>A function that will be executed after creating the nodes. Use this for bookkeeping, to keep track of the node IDs for later use. The function receives the finished event as its argument.<dt>(sendGate and strum parameters are not used)<dd></dl>
+<dt>Standard Timing and Node control arguments<dd><dt>(sendGate and strum parameters are not used)<dd></dl>
 <dt>off<dd>Release server nodes nicely if possible. If the SynthDef has a <code class='code prettyprint lang-sc'>gate</code> argument, the gate will be set to <code class='code prettyprint lang-sc'>0</code> or a user-specified value. Otherwise, the nodes are brutally killed with <code class='code prettyprint lang-sc'>n_free</code>.<dl>
 <dt>Standard Timing control arguments<dd><dt>hasGate<dd>True or false, telling the event whether the SynthDef has a <code class='code prettyprint lang-sc'>gate</code> argument or not. The default is assumed true.<dt>id<dd>The node ID(s) must be given explicitly.<dt>gate<dd>By default, the gate will be set to <code class='code prettyprint lang-sc'>0</code>. Negative values trigger a "forced release" in EnvGen. See the <a href="./../../Classes/EnvGen.html">EnvGen</a> help file for details.</dl>
 <dt>kill<dd>Immediately remove nodes using <code class='code prettyprint lang-sc'>n_free</code>.<dl>
@@ -85,7 +95,7 @@ p.stop;</pre>
 SynthDef(\event_set, { |freq = 440, gate = 1, amp = 0.1, lagTime = 0.1,
         ffreq = 2000, detune = 1.005, out = 0|
     var    sig = Saw.ar(Lag.kr(freq, lagTime) * [1, detune]).sum * amp
-            * EnvGen.kr(Env.adsr, gate, doneAction: 2);
+            * EnvGen.kr(Env.adsr, gate, doneAction: Done.freeSelf);
     Out.ar(out, sig ! 2);
 }).add;
 )
@@ -125,16 +135,16 @@ a.free;</pre>
 </dl>
 <dl>
 <dt>monoNote<dd><dt>monoOff<dd><dt>monoSet<dd>These event types are used internally by Pmono and PmonoArtic. They should not be used directly.</dl>
-<h3><a class='anchor' name='Server control'>Server control</a></h3>
+<h3><a class='anchor' name='Server%20control'>Server control</a></h3>
 <dl>
 <dt>group<dd>Create a new group (or groups).<dl>
 <dt>Standard Timing and Node control arguments<dd><dt>id<dd>(Optional) IDs for the new groups. If not specified, the new ID (for one group only) can be found in the event after <code class='code prettyprint lang-sc'>.play</code>. To create multiple groups, you must provide an array of IDs.</dl>
 <dt>bus<dd>Set the value of a control bus, or contiguous control buses. This assumes that you already have the bus index.<dl>
 <dt>Standard Timing control arguments<dd><dt>array<dd>The value(s) to send to the bus(es). If it's only one value, it doesn't have to be an array.<dt>out<dd>The first bus index to be set. A Bus object can be used.</dl>
 </dl>
-<h3><a class='anchor' name='Buffer control'>Buffer control</a></h3>
+<h3><a class='anchor' name='Buffer%20control'>Buffer control</a></h3>
 
-<p>All of these buffer event types expect the buffer number to be provided. They will not automatically get a buffer number from the server's buffer allocator. A Buffer object is allowed -- you could create the Buffer first using <code class='code prettyprint lang-sc'>Buffer.alloc</code> or <code class='code prettyprint lang-sc'>Buffer.new</code> and then use this object in the control events. See also <a href="#Event types with cleanup">Event types with cleanup</a> below for other, user-friendlier Buffer control options.<dl>
+<p>All of these buffer event types expect the buffer number to be provided. They will not automatically get a buffer number from the server's buffer allocator. A Buffer object is allowed -- you could create the Buffer first using <code class='code prettyprint lang-sc'>Buffer.alloc</code> or <code class='code prettyprint lang-sc'>Buffer.new</code> and then use this object in the control events. See also <a href="#Event%20types%20with%20cleanup">Event types with cleanup</a> below for other, user-friendlier Buffer control options.<dl>
 <dt>alloc<dd>Allocate memory for a buffer on the server. Only one buffer may be allocated per event.<dl>
 <dt>Standard Timing control arguments<dd><dt>bufnum, numchannels, numframes<dd>See the <a href="./../../Classes/Buffer.html">Buffer</a> help file.</dl>
 <dt>free<dd>Deallocate the buffer's memory on the server.<dl>
@@ -146,12 +156,12 @@ a.free;</pre>
 <dt>read<dd>Read a sound file into a buffer already allocated on the server. This event type is good to cue a sound file for use with DiskIn.<dl>
 <dt>Standard Timing control arguments<dd><dt>bufnum<dd><dt>filename<dd>Path to disk file.<dt>frame<dd>Starting soundfile frame to read (default <code class='code prettyprint lang-sc'>0</code>).<dt>numframes<dd>Number of frames to read (default <code class='code prettyprint lang-sc'>0</code>, which loads the entire file).<dt>bufpos<dd>Starting buffer frame (default <code class='code prettyprint lang-sc'>0</code>).<dt>leaveOpen<dd><code class='code prettyprint lang-sc'>1</code> = leave the file open (for <a href="./../../Classes/DiskIn.html">DiskIn</a> use). <code class='code prettyprint lang-sc'>0</code> = close the disk file after reading. Default = <code class='code prettyprint lang-sc'>0</code>.</dl>
 </dl>
-<h3><a class='anchor' name='Event types with cleanup'>Event types with cleanup</a></h3>
+<h3><a class='anchor' name='Event%20types%20with%20cleanup'>Event types with cleanup</a></h3>
 
 <p>These event types uniquely have automatic cleanup event types associated with them. Playing one of these event types allocates a server resource. Later, the resource may be freed by changing the event type to the corresponding cleanup type and playing the event again. While the resource is active, the event can be used as a reference to the resource in other events or Synth messaging.<pre class='code prettyprint lang-sc'>// create a buffer
 b = (type: \allocRead, path: Platform.resourceDir +/+ "sounds/a11wlk01.wav").play;
 
-a = { PlayBuf.ar(1, b, doneAction: 2) }.play;
+a = { PlayBuf.ar(1, b, doneAction: Done.freeSelf) }.play;
 
 // remove buffer
 EventTypesWithCleanup.cleanup(b);</pre>
@@ -178,7 +188,7 @@ EventTypesWithCleanup.cleanup(b);</pre>
 <dt>sine3<dd>Like <strong>sine2</strong>, but the phase of each partial may also be provided.<dl>
 <dt>Same arguments as sine1, plus:<dd><dt>phases<dd>Array of phases for each partial, given in radians (0.0 - 2pi).</dl>
 </dl>
-<h3><a class='anchor' name='MIDI output'>MIDI output</a></h3>
+<h3><a class='anchor' name='MIDI%20output'>MIDI output</a></h3>
 <dl>
 <dt>midi<dd>Sends one of several types of MIDI messages to a MIDIOut object.<dl>
 <dt>Standard Timing control arguments (except timingOffset, which is not used)<dd><dt>midicmd<dd>The type of MIDI message to send. This also determines other arguments that should be present in the event.<dt>midiout<dd>The MIDI out object, which connects to one of the MIDI devices listed in <code class='code prettyprint lang-sc'>MIDIClient.destinations</code>.<dt>chan<dd>The MIDI channel number (0-15) on the device that should receive the message. This applies to all midicmds except the global ones ( <strong>smpte</strong>, <strong>songPtr</strong>, <strong>sysex</strong> ).</dl>
@@ -232,4 +242,4 @@ p.stop;</pre>
 </dl>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_07_Value_Conversions.html">Pattern Guide 07: Value Conversions</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook01_Basic_Sequencing.html">Pattern Guide Cookbook 01: Basic Sequencing</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters::<br>sc version: 3.8dev</div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook01_Basic_Sequencing.html">Pattern Guide Cookbook 01: Basic Sequencing</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters::<br></div></div></body></html>

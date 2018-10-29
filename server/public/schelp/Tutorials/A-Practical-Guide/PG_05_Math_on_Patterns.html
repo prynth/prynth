@@ -1,33 +1,39 @@
-<html><head><title>Pattern Guide 05: Math on Patterns</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide 05: Math on Patterns | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = 'Pattern Guide 05: Math on Patterns';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Pattern Guide 05: Math on Patterns:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Math%20on%20patterns'>Math on patterns</a></li>
+<ul class='toc'><li class='toc2'><a href='#Math%20on%20patterns'>Math on patterns</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Collection%20operations%20on%20patterns'>Collection operations on patterns</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Miscellaneous%20calculation%20patterns'>Miscellaneous calculation patterns</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Calculations%20based%20on%20other%20event%20values'>Calculations based on other event values</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/A-PRACTICAL-GUIDE</div>
-<div id='categories'><a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>Streams-Patterns-Events>A-Practical-Guide</a></div>
-<h1>Pattern Guide 05: Math on Patterns</h1>
+<div id='label'>
+<span id='folder'>Tutorials/A-Practical-Guide</span>
+ | <span id='categories'><a href='./../../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>A-Practical-Guide</a></span>
+</div><h1>Pattern Guide 05: Math on Patterns</h1>
 <div id='summary'>Performing math and collection operations on patterns</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_04_Words_to_Phrases.html">Pattern Guide 04: Words to Phrases</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_060_Filter_Patterns.html">Pattern Guide 060: Filter Patterns</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Math on patterns'>Math on patterns</a></li>
-<ul class='toc'><li class='toc2'><a href='#Math on patterns'>Math on patterns</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Collection operations on patterns'>Collection operations on patterns</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Miscellaneous calculation patterns'>Miscellaneous calculation patterns</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Calculations based on other event values'>Calculations based on other event values</a></li>
-<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Math on patterns'>Math on patterns</a></h2>
+<h2><a class='anchor' name='Math%20on%20patterns'>Math on patterns</a></h2>
 
 <p>Often, there is not a pattern that delivers exactly the desired result by itself. But, other operations can be applied to patterns, to manipulate one pattern's output and turn it into something else.
 <p>Some of these operations look like things you would do to an array, but there is a critical difference. Doing math on an array performs the operation on every array item all at once. By contrast, patterns are "lazy" -- they evaluate one value at the time, only when asked, and they only do as much as they need to do to deliver the next value. An operation on a pattern produces another pattern that remembers the work that is to be done. Making a stream out of the composite pattern creates the structure to perform the operation upon request.
@@ -37,7 +43,7 @@ p.operator    // == '*'
 p.a        // == a Pwhite
 p.b        // == 2</pre>
 
-<p>In other words, the multiplication here produces not the result of a single multiplication, but a template for an infinite stream of multiplications to follow.<h3><a class='anchor' name='Math on patterns'>Math on patterns</a></h3>
+<p>In other words, the multiplication here produces not the result of a single multiplication, but a template for an infinite stream of multiplications to follow.<h3><a class='anchor' name='Math%20on%20patterns'>Math on patterns</a></h3>
 
 <p>Not only can patterns generate numbers, but they also support all the standard math operators: unary (abs, reciprocal, etc.), binary (+, -, *, /, **, min, max, etc.) and n-ary (clip, wrap, fold, linlin, linexp, etc.) operators are all valid with patterns.<pre class='code prettyprint lang-sc'>// Random integers, 1-5
 Pwhite(1, 5, inf).asStream.nextN(10);
@@ -65,7 +71,7 @@ p = Pbind(
 )
 
 p.stop;</pre>
-<h3><a class='anchor' name='Collection operations on patterns'>Collection operations on patterns</a></h3>
+<h3><a class='anchor' name='Collection%20operations%20on%20patterns'>Collection operations on patterns</a></h3>
 
 <p>Some of the things you can do to arrays also work with patterns.<dl>
 <dt><code class='code prettyprint lang-sc'>collect(func)</code><dd>Applies the function to each return value from the pattern. Good for generic transformations.<dt><code class='code prettyprint lang-sc'>select(func)</code><dd>Preserve values from the output stream that pass the Boolean test; discard the rest.<dt><code class='code prettyprint lang-sc'>reject(func)</code><dd>Discard values from the output stream that pass the test; return the rest to the user.<pre class='code prettyprint lang-sc'>// Arbitrary/custom operation: Turn each number into a two-digit hex string
@@ -94,7 +100,7 @@ p.flatten.do { |x| x.postln };</pre>
 <dt><code class='code prettyprint lang-sc'>differentiate</code><dd>Return the difference between successive values: second - first, third - second, and so on.<pre class='code prettyprint lang-sc'>Array.geom(20, 1, 1.01).differentiate;
 Pgeom(1, 1.01, 20).differentiate.do { |x| x.postln };</pre>
 </dl>
-<h3><a class='anchor' name='Miscellaneous calculation patterns'>Miscellaneous calculation patterns</a></h3>
+<h3><a class='anchor' name='Miscellaneous%20calculation%20patterns'>Miscellaneous calculation patterns</a></h3>
 
 <p>These are some other numeric calculations that don't exactly fall in the category of math operators.<dl>
 <dt><code class='code prettyprint lang-sc'>Pavaroh(pattern, aroh, avaroh, stepsPerOctave)</code><dd>Convert scale degrees to note numbers, with separate ascending and descending scale patterns. Originally written for Indian ragas, it also works well for the western melodic minor scale.<dt><code class='code prettyprint lang-sc'>PdegreeToKey(pattern, scale, stepsPerOctave)</code><dd>Given a pattern yielding scale degrees, convert the degrees into note numbers according to the provided scale and steps per octave. This is done automatically when you use the <code class='code prettyprint lang-sc'>'degree'</code> event key, but there might be cases where you would want to do some further math on the note numbers, and it might be necessary to make the conversion explicit.<dt><code class='code prettyprint lang-sc'>Pdiff(pattern)</code><dd>Returns the difference between the source stream's latest and previous values. Among other uses, this can measure whether a stream is ascending or descending. This is the underlying implementation of the <code class='code prettyprint lang-sc'>differentiate</code> method discussed just above.<dt><code class='code prettyprint lang-sc'>Prorate(proportion, pattern)</code><dd>Splits up a number from <code class='code prettyprint lang-sc'>pattern</code> according to proportion(s) given by the <code class='code prettyprint lang-sc'>proportion</code> pattern. This is tricky to explain briefly; see the help file for some good examples.<pre class='code prettyprint lang-sc'>// Swing notes with Prorate
@@ -107,8 +113,8 @@ p = Pbind(
 
 p.stop;</pre>
 </dl>
-<h3><a class='anchor' name='Calculations based on other event values'>Calculations based on other event values</a></h3>
+<h3><a class='anchor' name='Calculations%20based%20on%20other%20event%20values'>Calculations based on other event values</a></h3>
 
 <p>In a Pbind, normally the patterns for the various keys calculate independently. But it's possible for one or more child patterns to depend on the result of another pattern inside the same Pbind. This is done with <a href="./../../Classes/Pkey.html">Pkey</a>, described in <a href="./../../Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.html">Pattern Guide 06g: Data Sharing</a>.
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_04_Words_to_Phrases.html">Pattern Guide 04: Words to Phrases</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_060_Filter_Patterns.html">Pattern Guide 060: Filter Patterns</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_05_Math_on_Patterns.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_05_Math_on_Patterns.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_05_Math_on_Patterns::<br>sc version: 3.8dev</div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_060_Filter_Patterns.html">Pattern Guide 060: Filter Patterns</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_05_Math_on_Patterns.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_05_Math_on_Patterns.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_05_Math_on_Patterns::<br></div></div></body></html>

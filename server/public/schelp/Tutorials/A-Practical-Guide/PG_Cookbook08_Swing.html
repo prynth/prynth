@@ -1,38 +1,44 @@
-<html><head><title>Pattern Guide Cookbook 08: Swing</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide Cookbook 08: Swing | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = 'Pattern Guide Cookbook 08: Swing';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Pattern Guide Cookbook 08: Swing:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Converting%20equal%20divisions%20into%20"swing"'>Converting equal divisions into "swing"</a></li>
+<ul class='toc'><li class='toc2'><a href='#Requirements'>Requirements</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Implementation'>Implementation</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Examples'>Examples</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Explanation'>Explanation</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/A-PRACTICAL-GUIDE</div>
-<div id='categories'><a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>Streams-Patterns-Events>A-Practical-Guide</a></div>
-<h1>Pattern Guide Cookbook 08: Swing</h1>
+<div id='label'>
+<span id='folder'>Tutorials/A-Practical-Guide</span>
+ | <span id='categories'><a href='./../../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>A-Practical-Guide</a></span>
+</div><h1>Pattern Guide Cookbook 08: Swing</h1>
 <div id='summary'>A filter pattern that turns equal rhythmic divisions into swung notes</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations.html">Pattern Guide Cookbook 07: Rhythmic Variations</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_Ref01_Pattern_Internals.html">Pattern Guide Reference 01: Pattern Internals</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Converting equal divisions into "swing"'>Converting equal divisions into "swing"</a></li>
-<ul class='toc'><li class='toc2'><a href='#Requirements'>Requirements</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Implementation'>Implementation</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Examples'>Examples</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Explanation'>Explanation</a></li>
-<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Converting equal divisions into "swing"'>Converting equal divisions into "swing"</a></h2>
+<h2><a class='anchor' name='Converting%20equal%20divisions%20into%20"swing"'>Converting equal divisions into "swing"</a></h2>
 
 <p>Most MIDI sequencers have a "swing" feature, which handles a note's timing differently depending on its metric position. A note in a stronger metric position is played on time; a note in a weaker position is delayed by some fraction of the beat.
 <p>In SuperCollider patterns, it's more convenient to express rhythm in terms of equal note durations. To mimic the swing-quantize behavior of conventional sequencers, it's helpful to have a way to modify the output events from a pattern so that the metrically-weaker notes sound later, without requiring the original pattern to be aware of the notes' metric positions.<h3><a class='anchor' name='Requirements'>Requirements</a></h3>
 <dl>
-<dt>Parameter: Base rhythmic value<dd>You should be able to swing any subdivision of the beat: 8th-, 16th-, quarter-notes. If this is 0.5 (8th-notes), then quarter notes will play unchanged.<dt>Parameter: Swing amount<dd>Fraction of the base rhythm to delay the weaker notes. The actual delay time will be <code class='code prettyprint lang-sc'>base_value * swing_amount</code>.<dt>Weaker-positioned notes<dd>The attack needs to be moved later, using the event's timingOffset (see <a href="./../../Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.html#Timing control">Pattern Guide 08: Event Types and Parameters: Timing control</a>). Also, if the next note is in a stronger position, this note needs to be shorter by the same amount.<dt>Stronger-positioned notes<dd>The attack will not be moved in time; but, if the next note is in a weaker position, this note needs to be slightly longer to compensate for the additional time between note onsets.<dt>Non-duple subdivisions<dd>Swing typically assumes a beat will be divided into two notes. Treating triplets, quintuplets or other divisions by the same algorithm would produce confusing rhythms. So, we may also want a parameter <code>swingThreshold</code> to disable swing for notes that are too far away from the base rhythmic value.</dl>
+<dt>Parameter: Base rhythmic value<dd>You should be able to swing any subdivision of the beat: 8th-, 16th-, quarter-notes. If this is 0.5 (8th-notes), then quarter notes will play unchanged.<dt>Parameter: Swing amount<dd>Fraction of the base rhythm to delay the weaker notes. The actual delay time will be <code class='code prettyprint lang-sc'>base_value * swing_amount</code>.<dt>Weaker-positioned notes<dd>The attack needs to be moved later, using the event's timingOffset (see <a href="./../../Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.html#Timing%20control">Pattern Guide 08: Event Types and Parameters: Timing control</a>). Also, if the next note is in a stronger position, this note needs to be shorter by the same amount.<dt>Stronger-positioned notes<dd>The attack will not be moved in time; but, if the next note is in a weaker position, this note needs to be slightly longer to compensate for the additional time between note onsets.<dt>Non-duple subdivisions<dd>Swing typically assumes a beat will be divided into two notes. Treating triplets, quintuplets or other divisions by the same algorithm would produce confusing rhythms. So, we may also want a parameter <code>swingThreshold</code> to disable swing for notes that are too far away from the base rhythmic value.</dl>
 <h3><a class='anchor' name='Implementation'>Implementation</a></h3>
 
 <p><a href="./../../Classes/Pchain.html">Pchain</a> applies one pattern to the result of another pattern. So, if we can write a pattern that will modify the events coming from the source, Pchain will be an easy way to combine them.
@@ -170,4 +176,4 @@ Pchain(
 )</pre>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations.html">Pattern Guide Cookbook 07: Rhythmic Variations</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Ref01_Pattern_Internals.html">Pattern Guide Reference 01: Pattern Internals</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook08_Swing.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook08_Swing.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook08_Swing::<br>sc version: 3.8dev</div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Ref01_Pattern_Internals.html">Pattern Guide Reference 01: Pattern Internals</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook08_Swing.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook08_Swing.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook08_Swing::<br></div></div></body></html>

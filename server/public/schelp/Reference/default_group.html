@@ -1,35 +1,47 @@
-<html><head><title>default_group</title>
+<!doctype html><html lang='en'><head><title>Default Group | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Default Group';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Default Group:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Default%20groups%20in%20multi-client%20setups'>Default groups in multi-client setups</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider REFERENCE</div>
-<div id='categories'><a href='./../Browse.html#Server>Nodes'>Server>Nodes</a></div>
-<h1>default_group</h1>
-<div id='summary'>The default Group</div>
+<div id='label'>
+<span id='folder'>Reference</span>
+ | <span id='categories'><a href='./../Browse.html#Server'>Server</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Server>Nodes'>Nodes</a></span>
+</div><h1>Default Group</h1>
+<div id='summary'>An automatically created Group in sclang</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../Classes/Group.html">Group</a>, <a href="./../Classes/RootNode.html">RootNode</a>, <a href="./../Classes/Node.html">Node</a>, <a href="./../Guides/NodeMessaging.html">Node Messaging</a>, <a href="./../Guides/Order-of-execution.html">Order of execution</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'></ul></div><ul class='tree'>
+<ul class='tree'>
 <li>root node (id:0)<ul class='tree'>
 <li>default group (id:1)</ul>
 </ul>
 
-<p>When a Server is booted there is a top level group with an ID of 0 that defines the root of the node tree. (This is represented by a subclass of Group: <a href="./../Classes/RootNode.html">RootNode</a>.) If the Server was booted from within SCLang (as opposed to from the command line) a default group with an ID of 1 will be automatically created.<a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> This is the default target for all Nodes when using object style and is what you will get if you supply a <a href="./../Classes/Server.html">Server</a> as a target. If you don't specify a target or pass in nil, you will get the default group of the default Server.<pre class='code prettyprint lang-sc'>s.boot;
+<p>When a Server is booted, there is a top level group with an ID of 0 that defines the root of the tree. This is represented by a subclass of Group: <a href="./../Classes/RootNode.html">RootNode</a>.
+<p>Separate from the root group is sclang's notion of a "default group," which is automatically created when the server is booted. You can access it with the method <a href="./../Classes/Server.html#-defaultGroup">Server: -defaultGroup</a>. This group is the default enclosing group for all Nodes, i.e. it's what you get if you don't specify. In general, you should create new Nodes within the default group of a Server rather than in its RootNode. In a single-client setup, the default group will have an ID of 1.
+<p>Keep in mind that default groups are a client-side concept, and you are responsible for creating them if you're running scsynth from the command line or NRT mode, or developing an alternate client.<a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> 
+<p>This is the default target for all Nodes when using object style and is what you will get if you supply a <a href="./../Classes/Server.html">Server</a> as a target. If you don't specify a target or pass in nil, you will get the default group of the default Server.<pre class='code prettyprint lang-sc'>s.boot;
 a = Synth.new(\default); // creates a synth in the default group of the default Server
-a.group; // note the Group ID</pre>
+a.group; // note the Group ID
+a.group == Server.default.defaultGroup;
+// -&gt; true</pre>
 
 <p>The default group serves an important purpose: It provides a predictable basic Node tree so that methods such as Server-scope, Server-record, etc. can function without running into order of execution problems. In the example below the scoping node will come after the default group.<pre class='code prettyprint lang-sc'>s.boot;
 
@@ -62,6 +74,10 @@ s.quit;</pre>
 <p><li>effects synth</ul>
 
 <p><li>recording synth</ul>
-<div class='footnotes'>
+<h2><a class='anchor' name='Default%20groups%20in%20multi-client%20setups'>Default groups in multi-client setups</a></h2>
+
+<p>See <a href="./../Guides/MultiClient_Setups.html">Multi-client Setups</a> for more info.
+<p>The default group mechanism is also used to separate clients in a multi-client setup. Every client registering with a server has its own individual default group. All nodes belonging to one client are in its default group and can be specifically addressed.
+<p>This keeps nodes cleanly separated by default, but a client also knows the default groups of all other clients. This is accessible via the method <a href="./../Classes/Server.html#-defaultGroups">Server: -defaultGroups</a>, which is an array mapping client IDs to default groups.<div class='footnotes'>
 <a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - When booting the server from the command line, you can create the default group manually with:<pre class='code prettyprint lang-sc'>s.initTree;</pre>
-</div></div><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Reference/default_group.schelp'>/usr/local/share/SuperCollider/HelpSource/Reference/default_group.schelp</a><br>link::Reference/default_group::<br>sc version: 3.8dev</div></div></body></html>
+</div></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/default_group.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/default_group.schelp</a><br>link::Reference/default_group::<br></div></div></body></html>

@@ -1,0 +1,66 @@
+<!doctype html><html lang='en'><head><title>08 | SuperCollider 3.9.3 Help</title>
+<link rel='stylesheet' href='./../../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../../..';
+var scdoc_title = '08';
+var scdoc_sc_version = '3.9.3';
+</script>
+<script src='./../../../scdoc.js' type='text/javascript'></script>
+<script src='./../../../docmap.js' type='text/javascript'></script>
+<script src='./../../../prettify.js' type='text/javascript'></script>
+<script src='./../../../lang-sc.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC();prettyPrint()'>
+<div id='toc'>
+<div id='toctitle'>08:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#1つの、ただ1つのUGen'>1つの、ただ1つのUGen</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#マルチ・チャンネルへの拡張'>マルチ・チャンネルへの拡張</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#UnaryOpUGenの探求'>UnaryOpUGenの探求</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Tutorials/Mark_Polishook_tutorial/Japanese_version</span>
+ | <span id='categories'><a href='./../../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Mark_Polishook_tutorial</a>&#8201;&gt;&#8201;<a href='./../../../Browse.html#Tutorials>Mark_Polishook_tutorial>Japanese_version'>Japanese_version</a></span>
+</div><h1>08</h1>
+<div id='summary'>Mark Polishook tutorial (JP)</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
+</div>
+<h2><a class='anchor' name='1つの、ただ1つのUGen'>1つの、ただ1つのUGen</a></h2>
+
+<p>最も簡単なシンセシスのプロセスはただ1つのUGenを実行するものです。例えば、<pre class='code prettyprint lang-sc'>{ Saw.ar(500, 0.1) }.scope;</pre>
+
+<p>または<pre class='code prettyprint lang-sc'>{ Formlet.ar(Saw.ar(22), 400, 0.01, 0.11, 0.022) }.scope</pre>
+
+<p>です。
+<p>様々なUGenのためのSuperColliderのヘルプ・ドキュメントのほとんどがそのような例を示してくれるでしょう。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='マルチ・チャンネルへの拡張'>マルチ・チャンネルへの拡張</a></h2>
+
+<p>任意のアーギュメント（コントロール）スロットに配列を与えることで、1つのUGenを2チャンネルに拡張できます。<pre class='code prettyprint lang-sc'>{ Saw.ar([500, 933], 0.1) }.scope;</pre>
+
+<p>同じことを他の（長い）書き方で書くと次の様になります。<pre class='code prettyprint lang-sc'>{ [ Saw.ar(500, 0.1), Saw.ar(933, 0.1)] }.scope;</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='UnaryOpUGenの探求'>UnaryOpUGenの探求</a></h2>
+
+<p>UGenにメッセージを送ることで、多くのシンセシス・プロセスを生成することができます。UnaryOpsフォルダの中のSuperColliderヘルプ・システムの中に、多くの単項演算に関するヘルプファイルがあります。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>これを<pre class='code prettyprint lang-sc'>{ SinOsc.ar(500, 0, 0.5) }.scope;</pre>
+
+<p>次のものと比較してみて下さい。<pre class='code prettyprint lang-sc'>{ SinOsc.ar(500, 0, 0.5).distort }.scope;</pre>
+
+<p>.distortメッセージ（UGenに送られたメッセージ）は単項演算です。.distortメッセージがSinOsc UGenの出力を変調しているのが聞こえるでしょう。これによってより多くのパーシャルが生まれます。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>質問：.distortメッセージはどこから来ているのでしょうか？
+<p>答え：それはAbstractFunctionの中で定義されています。UGenクラスはAbstractFunctionのサブクラスです。原理的には、AbstractFunctionの中で定義されている全てのメソッドがUGenに適用できるはずです。
+<p>以下のものを<pre class='code prettyprint lang-sc'>{ SinOsc.ar(500, 0, 0.5) }.scope;</pre>
+
+<p>次のものと比較してみて下さい。<pre class='code prettyprint lang-sc'>// .cubedは単項演算の一つ
+{ SinOsc.ar(500, 0, 0.5).cubed }.scope;</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>go to <a href="./../../../Tutorials/Mark_Polishook_tutorial/Japanese_version/09.html">09</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/08.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/08.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/Japanese_version/08::<br></div></div></body></html>

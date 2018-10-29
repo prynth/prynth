@@ -1,45 +1,50 @@
-<html><head><title>Understanding Streams, Patterns and Events - Part 3</title>
+<!doctype html><html lang='en'><head><title>Understanding Streams, Patterns and Events - Part 3 | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Understanding Streams, Patterns and Events - Part 3';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Understanding Streams, Patterns and Events - Part 3:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#ListPatterns'>ListPatterns</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Nesting%20Patterns'>Nesting Patterns</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Math%20operations%20on%20ListPatterns'>Math operations on ListPatterns</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Making%20Music%20with%20ListPatterns'>Making Music with ListPatterns</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS</div>
-<div id='categories'><a href='./../Browse.html#Tutorials>Streams-Patterns-Events'>Tutorials>Streams-Patterns-Events</a></div>
-<h1>Understanding Streams, Patterns and Events - Part 3</h1>
+<div id='label'>
+<span id='folder'>Tutorials</span>
+ | <span id='categories'><a href='./../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Tutorials>Streams-Patterns-Events'>Streams-Patterns-Events</a></span>
+</div><h1>Understanding Streams, Patterns and Events - Part 3</h1>
 <div id='summary'>ListPatterns</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../Tutorials/Streams-Patterns-Events1.html">Understanding Streams, Patterns and Events - Part 1</a>, <a href="./../Tutorials/Streams-Patterns-Events2.html">Understanding Streams, Patterns and Events - Part 2</a>, <a href="./../Tutorials/Streams-Patterns-Events4.html">Understanding Streams, Patterns and Events - Part 4</a>, <a href="./../Tutorials/Streams-Patterns-Events5.html">Understanding Streams, Patterns and Events - Part 5</a>, <a href="./../Tutorials/Streams-Patterns-Events6.html">Understanding Streams, Patterns and Events - Part 6</a>, <a href="./../Tutorials/Streams-Patterns-Events7.html">Understanding Streams, Patterns and Events - Part 7</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#ListPatterns'>ListPatterns</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Nesting Patterns'>Nesting Patterns</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Math operations on ListPatterns'>Math operations on ListPatterns</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Making Music with ListPatterns'>Making Music with ListPatterns</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='ListPatterns'>ListPatterns</a></h2>
+<h2><a class='anchor' name='ListPatterns'>ListPatterns</a></h2>
 
 <p>ListPatterns are <a href="./../Classes/Pattern.html">Pattern</a>s that iterate over arrays of objects in some fashion. All ListPatterns have in common the instance variables list and repeats. The list variable is some <a href="./../Classes/Array.html">Array</a> to be iterated over. The repeats variable is some measure of the number of times to do something, whose meaning varies from subclass to subclass. The default value for repeats is 1.
 <p>A <a href="./../Classes/Pseq.html">Pseq</a> is a Pattern that cycles over a list of values. The repeats variable gives the number of times to repeat the entire list.<pre class='code prettyprint lang-sc'>//////////////////////////////////////////////////////////////
 // Note: This SynthDef used throughout this document
 (
-s = Server.local;
-SynthDef( \help_SPE3_SimpleSine, {
-    arg freq, sustain=1.0;
+SynthDef(\help_SPE3_SimpleSine, { |out, freq=440, sustain=1.0|
     var osc;
-    osc = SinOsc.ar( [freq,freq+0.05.rand] ) * EnvGen.ar(
-        Env.perc, doneAction: 2, levelScale: 0.3, timeScale: sustain
+    osc = SinOsc.ar( [freq, freq+0.05.rand], 0.5pi )
+    * EnvGen.ar(
+        Env.perc, doneAction: Done.freeSelf, levelScale: 0.3, timeScale: sustain
     );
-    Out.ar(0,osc);
+    Out.ar(out, osc);
 }).add;
 )
 //////////////////////////////////////////////////////////////
@@ -142,12 +147,12 @@ var a, b;
 a = Pshuf(#[60, 61, 65, 67], inf).midicps.asStream;
 Task({
     12.do({
-        Synth(\help_SPE3_SimpleSine,[\freq, a.next]);
+        Synth(\help_SPE3_SimpleSine, [\freq, a.next]);
         0.5.wait;
     });
 }).play;
 )</pre>
-<h2><a class='anchor' name='Nesting Patterns'>Nesting Patterns</a></h2>
+<h2><a class='anchor' name='Nesting%20Patterns'>Nesting Patterns</a></h2>
 
 <p>If a <a href="./../Classes/Pattern.html">Pattern</a> encounters another Pattern in its list, it embeds that pattern in its output. That is, it creates a stream on that pattern and iterates that pattern until it ends before moving on.
 <p>For example here is one pattern nested in another.<pre class='code prettyprint lang-sc'>(
@@ -183,7 +188,7 @@ Task({
     });
 }).play;
 )</pre>
-<h2><a class='anchor' name='Math operations on ListPatterns'>Math operations on ListPatterns</a></h2>
+<h2><a class='anchor' name='Math%20operations%20on%20ListPatterns'>Math operations on ListPatterns</a></h2>
 
 <p>Pattern <code class='code prettyprint lang-sc'>b</code> plays pattern a once normally, once transposed up a fifth and once transposed up a fourth.<pre class='code prettyprint lang-sc'>(
 var a, b;
@@ -203,18 +208,18 @@ a = Pseq(#[60, 62, 63, 65, 67, 63], inf) + Pseq(#[0, 0, 0, 0, -12], inf);
 a = a.asStream.midicps;
 Task({
     25.do({
-        Synth(\help_SPE3_SimpleSine,[\freq, a.next]);
+        Synth(\help_SPE3_SimpleSine, [\freq, a.next]);
         0.3.wait;
     });
 }).play;
 )</pre>
-<h2><a class='anchor' name='Making Music with ListPatterns'>Making Music with ListPatterns</a></h2>
+<h2><a class='anchor' name='Making%20Music%20with%20ListPatterns'>Making Music with ListPatterns</a></h2>
 
 <p>Here is the same example given in part 2 rewritten to use ListPatterns. It uses nested patterns and results in much more concise code. SuperCollider allows you to write <code class='code prettyprint lang-sc'>SomeClass.new(params)</code> as <code class='code prettyprint lang-sc'>SomeClass(params)</code> eliminating the ".new". This can make code like the pattern examples below, which create a lot of objects, more readable.<pre class='code prettyprint lang-sc'>(
 SynthDef( \help_SPE3_Allpass6, { arg freq;
     var out, env;
     out = RLPF.ar(
-        LFSaw.ar( freq, mul: EnvGen.kr( Env.perc, levelScale: 0.3, doneAction: 2 ) ),
+        LFSaw.ar( freq, mul: EnvGen.kr( Env.perc, levelScale: 0.3, doneAction: Done.freeSelf ) ),
         LFNoise1.kr(1, 36, 110).midicps,
         0.1
     );
@@ -244,30 +249,30 @@ Task({
 )</pre>
 
 <p>Here is an example that uses a Pattern to create a rhythmic solo. The values in the pattern specify the amplitudes of impulses fed to the <a href="./../Classes/Decay2.html">Decay2</a> generator.<pre class='code prettyprint lang-sc'>(
-SynthDef( \help_SPE3_Mridangam, { arg t_amp;
-    var out;
+SynthDef( \help_SPE3_Mridangam, { |out, t_amp|
+    var sound;
 
-    out = Resonz.ar(
+    sound = Resonz.ar(
         WhiteNoise.ar(70) * Decay2.kr( t_amp, 0.002, 0.1 ),
         60.midicps,
         0.02,
         4
     ).distort * 0.4;
 
-    Out.ar( 0, out );
-    DetectSilence.ar( out, doneAction: 2 );
+    Out.ar(out, sound);
+    DetectSilence.ar(sound, doneAction: Done.freeSelf);
 }).add;
 
-SynthDef( \help_SPE3_Drone, {
-    var out;
-    out = LPF.ar(
+SynthDef( \help_SPE3_Drone, { |out|
+    var sound;
+    sound = LPF.ar(
         Saw.ar([60, 60.04].midicps)
         +
         Saw.ar([67, 67.04].midicps),
         108.midicps,
         0.007
     );
-    Out.ar( 0, out );
+    Out.ar(out, sound);
 }).add;
 )
 
@@ -330,4 +335,4 @@ Task({
 }).play
 )</pre>
 
-<p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events4.html">Understanding Streams, Patterns and Events - Part 4</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events3.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events3.schelp</a><br>link::Tutorials/Streams-Patterns-Events3::<br>sc version: 3.8dev</div></div></body></html>
+<p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events4.html">Understanding Streams, Patterns and Events - Part 4</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events3.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events3.schelp</a><br>link::Tutorials/Streams-Patterns-Events3::<br></div></div></body></html>

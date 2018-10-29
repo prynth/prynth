@@ -1,37 +1,43 @@
-<html><head><title>Non-Realtime Synthesis</title>
+<!doctype html><html lang='en'><head><title>Non-Realtime Synthesis (NRT) | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Non-Realtime Synthesis (NRT)';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Non-Realtime Synthesis (NRT):</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Non-Realtime%20Synthesis'>Non-Realtime Synthesis</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Analysis%20using%20a%20Non-Realtime%20server'>Analysis using a Non-Realtime server</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider GUIDES</div>
-<div id='categories'><a href='./../Browse.html#Server>NRT'>Server>NRT</a>, <a href='./../Browse.html#External Control>OSC'>External Control>OSC</a></div>
-<h1>Non-Realtime Synthesis</h1>
+<div id='label'>
+<span id='folder'>Guides</span>
+ | <span id='categories'><a href='./../Browse.html#Server'>Server</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Server>NRT'>NRT</a> | <a href='./../Browse.html#External Control'>External Control</a>&#8201;&gt;&#8201;<a href='./../Browse.html#External Control>OSC'>OSC</a></span>
+</div><h1>Non-Realtime Synthesis (NRT)</h1>
 <div id='summary'>Non-realtime synthesis with binary files of OSC commands</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../Classes/Score.html">Score</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Non-Realtime Synthesis'>Non-Realtime Synthesis</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Analysis using a Non-Realtime server'>Analysis using a Non-Realtime server</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Non-Realtime Synthesis'>Non-Realtime Synthesis</a></h2>
+<h2><a class='anchor' name='Non-Realtime%20Synthesis'>Non-Realtime Synthesis</a></h2>
 
 <p>SuperCollider 3 supports non-realtime synthesis through the use of binary files of OSC commands.
 <p>First create an OSC command file (i.e. a score)<pre class='code prettyprint lang-sc'>f = File("Cmds.osc","w");
 
 // start a sine oscillator at 0.2 seconds.
 c = [ 0.2, [\s_new, \NRTsine, 1001, 0, 0]].asRawOSC;
-f.write(c.size); // each bundle is preceeded by a 32 bit size.
+f.write(c.size); // each bundle is preceded by a 32 bit size.
 f.write(c); // write the bundle data.
 
 // stop sine oscillator at 3.0 seconds.
@@ -49,8 +55,8 @@ f.close;
 
 // the 'NRTsine' SynthDef
 (
-SynthDef("NRTsine",{ arg freq = 440;
-    Out.ar(0,
+SynthDef("NRTsine", { |out, freq = 440|
+    Out.ar(out,
          SinOsc.ar(freq, 0, 0.2)
     )
 }).writeDefFile;
@@ -106,10 +112,10 @@ g = [
 o = ServerOptions.new.numOutputBusChannels = 1; // mono output
 Score.recordNRT(g, "help-oscFile.osc", "helpNRT.aiff", options: o); // synthesize
 )</pre>
-<h2><a class='anchor' name='Analysis using a Non-Realtime server'>Analysis using a Non-Realtime server</a></h2>
+<h2><a class='anchor' name='Analysis%20using%20a%20Non-Realtime%20server'>Analysis using a Non-Realtime server</a></h2>
 
 <p>An NRT server may also be used to extract analytical data from a sound file. The main issues are:<dl>
-<dt>Suppressing audio file output<dd>In OSX and Linux environments, use <code>/dev/null</code> for the output file path. In Windows, use <code>NUL</code>.<dt>Retrieving analytical data.<dd>The easiest way is to allocate a buffer at the beginning of the NRT score, and use BufWr to fill the buffer. At the end of the score, write the buffer into a temporary file. Then you can use SoundFile on the language side to access the data. See the example.</dl>
+<dt>Suppressing audio file output<dd>In macOS and Linux environments, use <code>/dev/null</code> for the output file path. In Windows, use <code>NUL</code>.<dt>Retrieving analytical data.<dd>The easiest way is to allocate a buffer at the beginning of the NRT score, and use BufWr to fill the buffer. At the end of the score, write the buffer into a temporary file. Then you can use SoundFile on the language side to access the data. See the example.</dl>
 <pre class='code prettyprint lang-sc'>// Example: Extract onsets into a buffer.
 
 (
@@ -168,4 +174,5 @@ fork {
     data.postln;  // these are your onsets!
 };
 )</pre>
-<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/Non-Realtime-Synthesis.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/Non-Realtime-Synthesis.schelp</a><br>link::Guides/Non-Realtime-Synthesis::<br>sc version: 3.8dev</div></div></body></html>
+
+<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Non-Realtime-Synthesis.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Non-Realtime-Synthesis.schelp</a><br>link::Guides/Non-Realtime-Synthesis::<br></div></div></body></html>

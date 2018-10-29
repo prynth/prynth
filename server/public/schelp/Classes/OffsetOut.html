@@ -1,67 +1,73 @@
-<html><head><title>OffsetOut</title>
+<!doctype html><html lang='en'><head><title>OffsetOut | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'OffsetOut';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>OffsetOut:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider CLASSES</div>
-<div id='categories'><a href='./../Browse.html#UGens>InOut'>UGens>InOut</a></div>
-<h1>OffsetOut</h1>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>InOut'>InOut</a></span>
+</div><h1>OffsetOut<span id='superclasses'> : <a href="../Classes/Out.html">Out</a> : <a href="../Classes/AbstractOut.html">AbstractOut</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
 <div id='summary'>Write a signal to a bus with sample accurate timing.</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Audio/InOut.sc'>InOut.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/Out.html">Out</a> : <a href="../Classes/AbstractOut.html">AbstractOut</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
-<div id='related'>See also: <a href="./../Classes/Out.html">Out</a>, <a href="./../Classes/ReplaceOut.html">ReplaceOut</a>, <a href="./../Classes/XOut.html">XOut</a></div>
+<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/InOut.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/InOut.sc'>InOut.sc</a></div><div id='related'>See also: <a href="./../Classes/Out.html">Out</a>, <a href="./../Classes/ReplaceOut.html">ReplaceOut</a>, <a href="./../Classes/XOut.html">XOut</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
-<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
-<li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
-<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
-<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
-</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
-<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
-</ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>Output signal to a bus,  the sample offset within the bus is kept exactly; i.e. if the synth is scheduled to be started part way through a control cycle, OffsetOut will maintain the correct offset by buffering the output and delaying it until the exact time that the synth was scheduled for.
 <p>For achieving subsample accuracy see <a href="./../Classes/SubsampleOffset.html">SubsampleOffset</a><div class='note'><span class='notelabel'>NOTE:</span> Note that if you have an input to the synth, it will be coming in and its normal time, then mixed in your synth, and then delayed with the output. So you shouldn't use OffsetOut for effects or gating.</div>
 <p>See the <a href="./../Reference/Server-Architecture.html">Server Architecture</a> and <a href="./../Classes/Bus.html">Bus</a> helpfiles for more information on buses and how they are used.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*ar' href='./../Overviews/Methods.html#ar'>ar</a> (<span class='argstr'>bus</span>, <span class='argstr'>channelsArray</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>OffsetOut.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>bus</span>, <span class='argstr'>channelsArray</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/Out.html'>Out</a></div>
 <div class='method'>
 <p><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>bus<td class='argumentdesc'>
 <p>The index of the bus to write out to. The lowest numbers are written to the audio hardware.<tr><td class='argumentname'>channelsArray<td class='argumentdesc'>
-<p>An Array of channels or single output to write out. You cannot change the size of this once a SynthDef has been built.</table></div><h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
-<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*kr' href='./../Overviews/Methods.html#kr'>kr</a> </h3>
+<p>An Array of channels or single output to write out. You cannot change the size of this once a SynthDef has been built.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>OffsetOut.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a></h3>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
-<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
 <pre class='code prettyprint lang-sc'>(
 SynthDef("help-OffsetOut",
     { arg out=0, freq=440, dur=0.05;
         var env;
-        env = EnvGen.kr(Env.perc(0.01, dur, 0.2), doneAction:2);
+        env = EnvGen.kr(Env.perc(0.01, dur, 0.2), doneAction: Done.freeSelf);
         OffsetOut.ar(out, SinOsc.ar(freq, 0, env))
 }).send(s);
 
 SynthDef("help-Out",
     { arg out=0, freq=440, dur=0.05;
         var env;
-        env = EnvGen.kr(Env.perc(0.01, dur, 0.2), doneAction:2);
+        env = EnvGen.kr(Env.perc(0.01, dur, 0.2), doneAction: Done.freeSelf);
         //compare to Out:
         Out.ar(out, SinOsc.ar(freq, 0, env))
 }).send(s);
@@ -98,8 +104,8 @@ SynthDef("trig1",{
     OffsetOut.ar(0,
         tone * EnvGen.ar(
                 Env([0,0.1,0.1,0],[0.01,1.0,0.01],[-4,4],2),
-                gate,doneAction: 2
+                gate,doneAction: Done.freeSelf
             )
     )
 })</pre>
-<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/OffsetOut.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/OffsetOut.schelp</a><br>link::Classes/OffsetOut::<br>sc version: 3.8dev</div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/OffsetOut.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/OffsetOut.schelp</a><br>link::Classes/OffsetOut::<br></div></div></body></html>

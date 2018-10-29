@@ -1,0 +1,170 @@
+<!doctype html><html lang='en'><head><title>10 | SuperCollider 3.9.3 Help</title>
+<link rel='stylesheet' href='./../../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../../..';
+var scdoc_title = '10';
+var scdoc_sc_version = '3.9.3';
+</script>
+<script src='./../../../scdoc.js' type='text/javascript'></script>
+<script src='./../../../docmap.js' type='text/javascript'></script>
+<script src='./../../../prettify.js' type='text/javascript'></script>
+<script src='./../../../lang-sc.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC();prettyPrint()'>
+<div id='toc'>
+<div id='toctitle'>10:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#減算合成とフィルターの使用'>減算合成とフィルターの使用</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Tutorials/Mark_Polishook_tutorial/Japanese_version</span>
+ | <span id='categories'><a href='./../../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Mark_Polishook_tutorial</a>&#8201;&gt;&#8201;<a href='./../../../Browse.html#Tutorials>Mark_Polishook_tutorial>Japanese_version'>Japanese_version</a></span>
+</div><h1>10</h1>
+<div id='summary'>Mark Polishook tutorial (JP)</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
+</div>
+<h2><a class='anchor' name='減算合成とフィルターの使用'>減算合成とフィルターの使用</a></h2>
+
+<p>減算合成の基本的な考え方はコーヒーをいれることに似ています。つまり、最終的に必要ない成分をフィルターを通じて取り除くということです。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>次の様に.dumpClassSubtreeメッセージをFilterクラスに送ることで、SuperCollider 3のほとんど全てのフィルターのリストが得られます。<pre class='code prettyprint lang-sc'>Filter.dumpClassSubtree;</pre>
+<ul class='tree'><li> <a href='./../../../Classes/Filter.html'>Filter</a> - Base class for filter UGens
+<ul class='tree'>
+<li> <a href='./../../../Classes/BEQSuite.html'>BEQSuite</a> - Base class for B Equalization Suite
+<ul class='tree'>
+<li> <a href='./../../../Classes/BAllPass.html'>BAllPass</a> - All Pass Filter
+<li> <a href='./../../../Classes/BBandPass.html'>BBandPass</a> - Band Pass Filter
+<li> <a href='./../../../Classes/BBandStop.html'>BBandStop</a> - Band reject filter
+<li> <a href='./../../../Classes/BHiPass.html'>BHiPass</a> - 12db/oct rolloff - 2nd order resonant  Hi Pass Filter
+<li> <a href='./../../../Classes/BHiShelf.html'>BHiShelf</a> - Hi Shelf
+<li> <a href='./../../../Classes/BLowPass.html'>BLowPass</a> - 12db/oct rolloff - 2nd order resonant Low Pass Filter
+<li> <a href='./../../../Classes/BLowShelf.html'>BLowShelf</a> - Low Shelf
+<li> <a href='./../../../Classes/BPeakEQ.html'>BPeakEQ</a> - Parametric equalizer
+</ul>
+<li> <a href='./../../../Classes/BPF.html'>BPF</a> - 2nd order Butterworth bandpass filter.
+<ul class='tree'>
+<li> <a href='./../../../Classes/BRF.html'>BRF</a> - 2nd order Butterworth band reject filter.
+</ul>
+<li> <a href='./../../../Classes/Changed.html'>Changed</a> - Triggers when a value changes
+<li> <a href='./../../../Classes/Decay.html'>Decay</a> - Exponential decay
+<li> <a href='./../../../Classes/Decay2.html'>Decay2</a> - Exponential decay
+<li> <a href='./../../../Classes/DetectSilence.html'>DetectSilence</a> - Detect when input falls below an amplitude threshold
+<li> <a href='./../../../Classes/FOS.html'>FOS</a> - First order filter section.
+<li> <a href='./../../../Classes/Formlet.html'>Formlet</a> - FOF-like filter.
+<li> <a href='./../../../Classes/FreeVerb.html'>FreeVerb</a> - A reverb
+<li> <a href='./../../../Classes/Integrator.html'>Integrator</a> - A leaky integrator.
+<li> <a href='./../../../Classes/LPF.html'>LPF</a> - 2nd order Butterworth lowpass filter
+<ul class='tree'>
+<li> <a href='./../../../Classes/HPF.html'>HPF</a> - 2nd order Butterworth highpass filter.
+</ul>
+<li> <a href='./../../../Classes/LPZ1.html'>LPZ1</a> - Two point average filter
+<ul class='tree'>
+<li> <a href='./../../../Classes/HPZ1.html'>HPZ1</a> - Two point difference filter
+</ul>
+<li> <a href='./../../../Classes/LPZ2.html'>LPZ2</a> - Two zero fixed lowpass
+<ul class='tree'>
+<li> <a href='./../../../Classes/BPZ2.html'>BPZ2</a> - Two zero fixed midpass.
+<li> <a href='./../../../Classes/BRZ2.html'>BRZ2</a> - Two zero fixed midcut.
+<li> <a href='./../../../Classes/HPZ2.html'>HPZ2</a> - Two zero fixed midcut.
+</ul>
+<li> <a href='./../../../Classes/Lag.html'>Lag</a> - Exponential lag
+<ul class='tree'>
+<li> <a href='./../../../Classes/Lag2.html'>Lag2</a> - Exponential lag
+<li> <a href='./../../../Classes/Lag3.html'>Lag3</a> - Exponential lag
+<li> <a href='./../../../Classes/Ramp.html'>Ramp</a> - Break a continuous signal into line segments
+</ul>
+<li> <a href='./../../../Classes/LagUD.html'>LagUD</a> - Exponential lag
+<ul class='tree'>
+<li> <a href='./../../../Classes/Lag2UD.html'>Lag2UD</a> - Exponential lag
+<li> <a href='./../../../Classes/Lag3UD.html'>Lag3UD</a> - Exponential lag
+</ul>
+<li> <a href='./../../../Classes/LeakDC.html'>LeakDC</a> - Remove DC
+<li> <a href='./../../../Classes/Median.html'>Median</a> - Median filter.
+<li> <a href='./../../../Classes/MidEQ.html'>MidEQ</a> - Parametric filter.
+<li> <a href='./../../../Classes/MoogFF.html'>MoogFF</a> - Moog VCF implementation, designed by Federico Fontana
+<li> <a href='./../../../Classes/OnePole.html'>OnePole</a> - One pole filter.
+<ul class='tree'>
+<li> <a href='./../../../Classes/OneZero.html'>OneZero</a> - One zero filter.
+</ul>
+<li> <a href='./../../../Classes/RLPF.html'>RLPF</a> - A resonant low pass filter.
+<ul class='tree'>
+<li> <a href='./../../../Classes/RHPF.html'>RHPF</a> - A resonant high pass filter.
+</ul>
+<li> <a href='./../../../Classes/Resonz.html'>Resonz</a> - Resonant filter.
+<li> <a href='./../../../Classes/Ringz.html'>Ringz</a> - Ringing filter.
+<li> <a href='./../../../Classes/SOS.html'>SOS</a> - Second order filter section (biquad).
+<li> <a href='./../../../Classes/Slew.html'>Slew</a> - Slew rate limiter.
+<li> <a href='./../../../Classes/Slope.html'>Slope</a> - Slope of signal
+<li> <a href='./../../../Classes/TwoPole.html'>TwoPole</a> - Two pole filter.
+<ul class='tree'>
+<li> <a href='./../../../Classes/APF.html'>APF</a> - FIXME: APF purpose.
+<li> <a href='./../../../Classes/TwoZero.html'>TwoZero</a> - Two zero filter.
+</ul>
+<li> <a href='./../../../Classes/VarLag.html'>VarLag</a> - Variable shaped lag
+</ul>
+</ul>
+<p>SuperColliderのヘルプ・システムでHelp/UGens/Filtersを調べることでもフィルターのヘルプ・ファイルをみることができます。ヘルプ・ファイルの全てにはそれぞれのフィルターがどのように動作するのかを示す素晴らしい例があります。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>ヒント：次の様にObjectクラスに.dumpClassSubtreeメッセージを送ることで<pre class='code prettyprint lang-sc'>Object.dumpClassSubtree;</pre>
+
+<p>SuperColliderのそれぞれの単独のクラスのリストが表示されます。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>LPF（ローパス・フィルター）を使って入力ソースから高い周波数成分を減算します。<pre class='code prettyprint lang-sc'>(
+SynthDef("subtractive", {
+    Out.ar(
+        0,
+        LPF.ar(
+            Pulse.ar(440, 0.5, 0.1),    // フィルターをかけるソース
+            Line.kr(8000, 660, 6)        // フィルターの周波数をLineでコントロールする
+        )
+    )
+}).add;
+)
+
+Synth("subtractive")</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>RLFP（レゾナント・ローパス・フィルター）は、高い周波数成分を取り除き、フィルターの（カットオフ・ポイントの）周波数を強調するためによく使います。<pre class='code prettyprint lang-sc'>(
+SynthDef("passLowFreqs2", {
+    Out.ar(
+        0,
+        RLPF.ar(
+            Saw.ar([220, 221] + LFNoise0.kr(1, 100, 200), 0.2),
+            [LFNoise0.kr(4, 600, 2400), LFNoise0.kr(3, 600, 2400)],
+            0.1
+        )
+    )
+}).add;
+)
+
+Synth("passLowFreqs2")</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>Rezonzはとても、とても、とても強力なフィルターです。特定の周波数帯域を強調する時に使います。
+<p>カットオフが非常にシャープなためにノイズをピッチに変えてしまいます。<pre class='code prettyprint lang-sc'>(
+SynthDef("noiseToPitch", { arg out = 0, mul = 1;
+    Out.ar(
+        out,
+        Resonz.ar(
+            WhiteNoise.ar(mul),
+            LFNoise0.kr(4, 110, 660),
+            [0.005, 0.005]
+        )
+    )
+}).add;
+)
+
+(
+// 左右のチャンネルをアクティブ化する
+Synth("noiseToPitch", [\out, 0\mul, 1]);
+Synth("noiseToPitch", [\out, 1, \mul, 1]);
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>go to <a href="./../../../Tutorials/Mark_Polishook_tutorial/Japanese_version/11.html">11</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/10.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/10.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/Japanese_version/10::<br></div></div></body></html>

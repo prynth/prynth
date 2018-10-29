@@ -1,34 +1,40 @@
-<html><head><title>15. Sequencing with Routines and Tasks</title>
+<!doctype html><html lang='en'><head><title>15. Sequencing with Routines and Tasks | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = '15. Sequencing with Routines and Tasks';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>15. Sequencing with Routines and Tasks:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Scheduling%20routines'>Scheduling routines</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Pause%20and%20resume:%20Task'>Pause and resume: Task</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#When%20do%20you%20want%20to%20start?'>When do you want to start?</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Using%20data%20routines%20in%20note%20sequencing'>Using data routines in note sequencing</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#A%20note%20on%20server%20messaging%20and%20timing'>A note on server messaging and timing</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Suggested%20Exercise'>Suggested Exercise</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/GETTING-STARTED</div>
-<div id='categories'><a href='./../../Browse.html#Tutorials>Getting-Started'>Tutorials>Getting-Started</a></div>
-<h1>15. Sequencing with Routines and Tasks</h1>
+<div id='label'>
+<span id='folder'>Tutorials/Getting-Started</span>
+ | <span id='categories'><a href='./../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Tutorials>Getting-Started'>Getting-Started</a></span>
+</div><h1>15. Sequencing with Routines and Tasks</h1>
 <div id='summary'>Getting Started With SuperCollider</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Scheduling routines'>Scheduling routines</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Pause and resume: Task'>Pause and resume: Task</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#When do you want to start?'>When do you want to start?</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Using data routines in note sequencing'>Using data routines in note sequencing</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#A note on server messaging and timing'>A note on server messaging and timing</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Suggested Exercise'>Suggested Exercise</a></li>
-<ul class='toc'></ul></ul></div>
+
 <p>When you schedule a function (as in the Scheduling Events tutorial), the function always begins at the beginning and runs through to the end. For sequencing, it's more useful to have a control structure that can run part of the way through, return a value, and then pick up where it left off the next time it's needed. In SuperCollider, this is a Routine.
 <p>Routines can be used for data processing, e.g.<pre class='code prettyprint lang-sc'>r = Routine({
     "abcde".yield;
@@ -43,7 +49,7 @@ r.next;    // get the next value from the Routine
 6.do({ r.next.postln });</pre>
 
 <p>The first time you call next, the routine yields <strong>"abcde"</strong>. This yield value becomes the result of r.next, and is printed in the post window. On the second next call, execution picks up just after the first yield and continues with the second string, and so forth. When there is nothing more to yield, r.next returns nil.
-<p>We will come back to the use of routines for data generation. More important for sequencing is what happens when you schedule a routine on a clock, and the routine returns time values.<h2><a class='anchor' name='Scheduling routines'>Scheduling routines</a></h2>
+<p>We will come back to the use of routines for data generation. More important for sequencing is what happens when you schedule a routine on a clock, and the routine returns time values.<h2><a class='anchor' name='Scheduling%20routines'>Scheduling routines</a></h2>
 
 <p>Recall that, when you schedule a function on a clock, numbers returned by the function are treated as time values -- specifically, the amount of time until the function should execute again. The same thing happens with numbers yielded by a routine.<pre class='code prettyprint lang-sc'>r = Routine({
     var delta;
@@ -63,7 +69,7 @@ r.stop;</pre>
 <p>Now let's replace the posting statements with instructions to play a synth. Preparation:<pre class='code prettyprint lang-sc'>(
 SynthDef(\singrain, { |freq = 440, amp = 0.2, sustain = 1|
     var sig;
-    sig = SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.perc(0.01, sustain), doneAction: 2);
+    sig = SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.perc(0.01, sustain), doneAction: Done.freeSelf);
     Out.ar(0, sig ! 2);    // sig ! 2 is the same as [sig, sig]
 }).add;
 
@@ -81,7 +87,7 @@ r = Routine({
 
 r.stop;</pre>
 
-<p>There you go -- our first sequence.<h2><a class='anchor' name='Pause and resume: Task'>Pause and resume: Task</a></h2>
+<p>There you go -- our first sequence.<h2><a class='anchor' name='Pause%20and%20resume:%20Task'>Pause and resume: Task</a></h2>
 
 <p>Routines have one sticky little characteristic that can limit their usefulness as musical objects. Once you stop a routine, you can only start it over again from the beginning. There is no way to replay the routine from the point where it was stopped.
 <p>Task is a variation that can be paused and resumed at will. For example, let's iterate over a C major scale. Note that all of SuperCollider's control structures are valid inside a Routine or Task. Note also that we can use 'wait' as a synonym for 'yield'.<pre class='code prettyprint lang-sc'>(
@@ -102,7 +108,7 @@ t.play;    // should pick up with the next note
 
 t.stop;</pre>
 
-<p>Task will be used for the remainder of this tutorial.<h2><a class='anchor' name='When do you want to start?'>When do you want to start?</a></h2>
+<p>Task will be used for the remainder of this tutorial.<h2><a class='anchor' name='When%20do%20you%20want%20to%20start?'>When do you want to start?</a></h2>
 
 <p>By default, <strong>play</strong> applied to a Task starts the Task immediately. Most of the time, many tasks will be running simultaneously, and they should be synchronized. While there might be a virtuoso out there somewhere who can hit the enter key at just right time for precise sync, most of us would prefer a more reliable mechanism.
 <p>Play takes several arguments to control its behavior.<pre class='code prettyprint lang-sc'>aRoutine.play(clock, quant)
@@ -131,7 +137,7 @@ t = f.value.play(quant: 4);        // start on next 4-beat boundary
 u = f.value.play(quant: [4, 0.5]);    // next 4-beat boundary + a half-beat
 
 t.stop; u.stop;</pre>
-<h2><a class='anchor' name='Using data routines in note sequencing'>Using data routines in note sequencing</a></h2>
+<h2><a class='anchor' name='Using%20data%20routines%20in%20note%20sequencing'>Using data routines in note sequencing</a></h2>
 
 <p>The previous example controls the generation of one parameter (pitch) by looping over an array inside the Task. What if you want to control several parameters?
 <p>Remember that routines can also generate data, in addition to their scheduling capabilities. You can refer to as many data routines as you want in your sequence.<pre class='code prettyprint lang-sc'>(
@@ -145,7 +151,7 @@ dur = Routine({
 
 SynthDef(\smooth, { |freq = 440, sustain = 1, amp = 0.5|
     var sig;
-    sig = SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.linen(0.05, sustain, 0.1), doneAction: 2);
+    sig = SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.linen(0.05, sustain, 0.1), doneAction: Done.freeSelf);
     Out.ar(0, sig ! 2)
 }).add;
 
@@ -163,10 +169,10 @@ r = Task({
 
 <p>Note that routines are used for the data, but task is used for play. Also, unlike the previous infinite sequences, this one stops when it runs out of data. That's the purpose of the while loop -- it continues only as long as the 'dur' data stream keeps pumping out values. (See the <a href="./../../Reference/Control-Structures.html">Control Structures</a> helpfile for more on <strong>while</strong>.)
 <p>There must be an easier way to write the data streams -- repeatedly writing the same do loop is certainly inconvenient. In fact, there is such a way, covered in the next tutorial: sequencing with patterns.
-<p>(Here we use quant simply to delay Task onset by one beat. This is because it takes some time for the synthdef to be ready for use on the server. Without it, the first note would not be heard.)<h2><a class='anchor' name='A note on server messaging and timing'>A note on server messaging and timing</a></h2>
+<p>(Here we use quant simply to delay Task onset by one beat. This is because it takes some time for the synthdef to be ready for use on the server. Without it, the first note would not be heard.)<h2><a class='anchor' name='A%20note%20on%20server%20messaging%20and%20timing'>A note on server messaging and timing</a></h2>
 
 <p>Using Synth as in the preceding examples can result in small but sometimes noticeable timing inaccuracies. This is because it takes a short time to transmit OSC messages from your code to the server, and this time is not always constant. SuperCollider deals with this by giving you the option to send the message with a timestamp telling the server exactly when the message should take effect. A <strong>latency</strong> value is used to calculate the timestamp.
-<p>Latency works by adding itself to the current time on the clock. If all the messages go out with the same latency value, their timing will be precise relative to each other and to the clock. The <a href="./../../Guides/ServerTiming.html">Server OSC timing</a> help file explains in more detail how this works, but you don't really need to know all of that in order to use it. The main point is to use a consistent, small latency value for perfect timing. (A Server object has a latency variable that you can use for consistency.)
+<p>Latency works by adding itself to the current time on the clock. If all the messages go out with the same latency value, their timing will be precise relative to each other and to the clock. The <a href="./../../Guides/ServerTiming.html">Scheduling and Server timing</a> help file explains in more detail how this works, but you don't really need to know all of that in order to use it. The main point is to use a consistent, small latency value for perfect timing. (A Server object has a latency variable that you can use for consistency.)
 <p>Here's an example illustrating the kinds of inaccuracy you might hear. The inaccuracy may be more or less noticeable on different systems. It uses the \singrain SynthDef above and plays 10 notes per second.<pre class='code prettyprint lang-sc'>(
 t = Task({
     loop {
@@ -192,10 +198,10 @@ t = Task({
 t.stop;</pre>
 
 <p>See also:
-<p><a href="./../../Classes/Routine.html">Routine</a>, <a href="./../../Classes/Task.html">Task</a>, <a href="./../../Classes/Quant.html">Quant</a>, <a href="./../../Guides/ServerTiming.html">Server OSC timing</a>, <a href="./../../Guides/Bundled-Messages.html">Bundled Server Messages</a><h2><a class='anchor' name='Suggested Exercise'>Suggested Exercise</a></h2>
+<p><a href="./../../Classes/Routine.html">Routine</a>, <a href="./../../Classes/Task.html">Task</a>, <a href="./../../Classes/Quant.html">Quant</a>, <a href="./../../Guides/ServerTiming.html">Scheduling and Server timing</a>, <a href="./../../Guides/Bundled-Messages.html">Bundled Server Messages</a><h2><a class='anchor' name='Suggested%20Exercise'>Suggested Exercise</a></h2>
 
 <p>Make a more interesting SynthDef to replace the \smooth SynthDef. Use more arguments for greater variability. Then change the data streams in the 'Over the Rainbow' example and add new data streams to play a different tune, more expressively.
 <p>____________________
 <p>This document is part of the tutorial <strong>Getting Started With SuperCollider</strong>.
 <p>Click here to go on to the next section: <a href="./../../Tutorials/Getting-Started/16-Sequencing-with-Patterns.html">16. Sequencing with Patterns</a>
-<p>Click here to return to the table of Contents: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/15-Sequencing-with-Routines-and-Tasks.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/15-Sequencing-with-Routines-and-Tasks.schelp</a><br>link::Tutorials/Getting-Started/15-Sequencing-with-Routines-and-Tasks::<br>sc version: 3.8dev</div></div></body></html>
+<p>Click here to return to the table of Contents: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Getting-Started/15-Sequencing-with-Routines-and-Tasks.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Getting-Started/15-Sequencing-with-Routines-and-Tasks.schelp</a><br>link::Tutorials/Getting-Started/15-Sequencing-with-Routines-and-Tasks::<br></div></div></body></html>

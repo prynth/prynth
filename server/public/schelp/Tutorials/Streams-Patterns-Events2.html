@@ -1,40 +1,46 @@
-<html><head><title>Understanding Streams, Patterns and Events - Part 2</title>
+<!doctype html><html lang='en'><head><title>Understanding Streams, Patterns and Events - Part 2 | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Understanding Streams, Patterns and Events - Part 2';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Understanding Streams, Patterns and Events - Part 2:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Patterns'>Patterns</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Pattern%20and%20its%20subclasses'>Pattern and its subclasses</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Math%20operations%20on%20Patterns'>Math operations on Patterns</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Filtering%20operations%20on%20patterns'>Filtering operations on patterns</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Making%20Music%20with%20Patterns'>Making Music with Patterns</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS</div>
-<div id='categories'><a href='./../Browse.html#Tutorials>Streams-Patterns-Events'>Tutorials>Streams-Patterns-Events</a></div>
-<h1>Understanding Streams, Patterns and Events - Part 2</h1>
+<div id='label'>
+<span id='folder'>Tutorials</span>
+ | <span id='categories'><a href='./../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Tutorials>Streams-Patterns-Events'>Streams-Patterns-Events</a></span>
+</div><h1>Understanding Streams, Patterns and Events - Part 2</h1>
 <div id='summary'>Patterns Introduction</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../Tutorials/Streams-Patterns-Events1.html">Understanding Streams, Patterns and Events - Part 1</a>, <a href="./../Tutorials/Streams-Patterns-Events3.html">Understanding Streams, Patterns and Events - Part 3</a>, <a href="./../Tutorials/Streams-Patterns-Events4.html">Understanding Streams, Patterns and Events - Part 4</a>, <a href="./../Tutorials/Streams-Patterns-Events5.html">Understanding Streams, Patterns and Events - Part 5</a>, <a href="./../Tutorials/Streams-Patterns-Events6.html">Understanding Streams, Patterns and Events - Part 6</a>, <a href="./../Tutorials/Streams-Patterns-Events7.html">Understanding Streams, Patterns and Events - Part 7</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Patterns'>Patterns</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Pattern and its subclasses'>Pattern and its subclasses</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Math operations on Patterns'>Math operations on Patterns</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Filtering operations on patterns'>Filtering operations on patterns</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Making Music with Patterns'>Making Music with Patterns</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Patterns'>Patterns</a></h2>
+<h2><a class='anchor' name='Patterns'>Patterns</a></h2>
 
 <p>Often one wants to be able to create multiple streams from a single stream specification. Patterns are just a way to make multiple Streams from a single specification, like a cookie cutter. A pattern can be any object that responds to the <code class='code prettyprint lang-sc'>asStream</code> message by creating a <a href="./../Classes/Stream.html">Stream</a>. Once again there is a default implementation in class <a href="./../Classes/Object.html">Object</a> of asStream that simply returns the receiver as its own stream. Thus any object is by default a pattern that returns itself as a stream when sent the asStream message.<pre class='code prettyprint lang-sc'>(
 a = 7.asStream;
 a.postln;
 a.next.postln;
 )</pre>
-<h2><a class='anchor' name='Pattern and its subclasses'>Pattern and its subclasses</a></h2>
+<h2><a class='anchor' name='Pattern%20and%20its%20subclasses'>Pattern and its subclasses</a></h2>
 
 <p>There is a class named <a href="./../Classes/Pattern.html">Pattern</a> that provides more functionality for the concept of a pattern.
 <p>A <a href="./../Classes/Pfunc.html">Pfunc</a> is a Pattern that returns a <a href="./../Classes/FuncStream.html">FuncStream</a>. The same function arguments are supplied as are supplied to FuncStream.<pre class='code prettyprint lang-sc'>(
@@ -69,7 +75,7 @@ a = Pgeom.new(10, 3, 8);    // stream starts at 10, steps by factor of 3 and has
 b = a.asStream;
 9.do({ b.next.postln; });    // print 9 values from stream
 )</pre>
-<h2><a class='anchor' name='Math operations on Patterns'>Math operations on Patterns</a></h2>
+<h2><a class='anchor' name='Math%20operations%20on%20Patterns'>Math operations on Patterns</a></h2>
 
 <p>Patterns also respond to math operators by returning patterns that respond to <code class='code prettyprint lang-sc'>asStream</code> with appropriately modified streams.
 <p>Applying a unary operator to a pattern<pre class='code prettyprint lang-sc'>(
@@ -87,7 +93,7 @@ b = a + 100;            // add a constant value to pattern a
 c = b.asStream;
 12.do({ c.next.postln; });
 )</pre>
-<h2><a class='anchor' name='Filtering operations on patterns'>Filtering operations on patterns</a></h2>
+<h2><a class='anchor' name='Filtering%20operations%20on%20patterns'>Filtering operations on patterns</a></h2>
 
 <p>Patterns also respond to the messages <code class='code prettyprint lang-sc'>collect</code>, <code class='code prettyprint lang-sc'>select</code>, and <code class='code prettyprint lang-sc'>reject</code> by returning a new <a href="./../Classes/Pattern.html">Pattern</a>.
 <p>The <code class='code prettyprint lang-sc'>collect</code> message returns a Pattern whose <a href="./../Classes/Stream.html">Stream</a> is modified by a function in the same way as the collect message sent to a Collection returns a modified Collection.<pre class='code prettyprint lang-sc'>(
@@ -119,7 +125,7 @@ b = a.reject({ arg item; item.odd; });
 c = b.asStream;
 6.do({ c.next.postln; });
 )</pre>
-<h2><a class='anchor' name='Making Music with Patterns'>Making Music with Patterns</a></h2>
+<h2><a class='anchor' name='Making%20Music%20with%20Patterns'>Making Music with Patterns</a></h2>
 
 <p>Here is a variation of the example given in part 1 that uses a <a href="./../Classes/Pattern.html">Pattern</a> to create two instances of the random melody stream.<pre class='code prettyprint lang-sc'>(
     s = Server.local;
@@ -130,7 +136,7 @@ c = b.asStream;
             LFNoise1.kr(1, 36, 110).midicps,
             0.1
         ) * EnvGen.kr( Env.perc, levelScale: 0.3,
-            timeScale: sustain, doneAction: 2 );
+            timeScale: sustain, doneAction: Done.freeSelf );
         //out = [out, DelayN.ar(out, 0.04, 0.04) ];
         4.do({ out = AllpassN.ar(out, 0.05, [0.05.rand, 0.05.rand], 4) });
         Out.ar( i_out, out );
@@ -172,4 +178,4 @@ c = b.asStream;
     }).play
 )</pre>
 
-<p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events3.html">Understanding Streams, Patterns and Events - Part 3</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events2.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events2.schelp</a><br>link::Tutorials/Streams-Patterns-Events2::<br>sc version: 3.8dev</div></div></body></html>
+<p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events3.html">Understanding Streams, Patterns and Events - Part 3</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events2.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events2.schelp</a><br>link::Tutorials/Streams-Patterns-Events2::<br></div></div></body></html>

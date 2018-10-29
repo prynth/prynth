@@ -1,44 +1,50 @@
-<html><head><title>13_BinaryOp_synthesis</title>
+<!doctype html><html lang='en'><head><title>13_BinaryOp_synthesis | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = '13_BinaryOp_synthesis';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>13_BinaryOp_synthesis:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Binary%20messages'>Binary messages</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Mixing%20=%20addition'>Mixing = addition</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Scaling%20=%20multiplication'>Scaling = multiplication</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Envelopes'>Envelopes</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Keyword%20arguments'>Keyword arguments</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Additive%20Synthesis'>Additive Synthesis</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Envelopes'>Envelopes</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Ring%20modulation'>Ring modulation</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Amplitude%20modulation'>Amplitude modulation</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/MARK_POLISHOOK_TUTORIAL</div>
-<div id='categories'><a href='./../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Tutorials>Mark_Polishook_tutorial</a></div>
-<h1>13_BinaryOp_synthesis</h1>
+<div id='label'>
+<span id='folder'>Tutorials/Mark_Polishook_tutorial</span>
+ | <span id='categories'><a href='./../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Mark_Polishook_tutorial</a></span>
+</div><h1>13_BinaryOp_synthesis</h1>
 <div id='summary'>Mark Polishook tutorial</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Binary messages'>Binary messages</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Mixing = addition'>Mixing = addition</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Scaling = multiplication'>Scaling = multiplication</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Envelopes'>Envelopes</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Keyword arguments'>Keyword arguments</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Additive Synthesis'>Additive Synthesis</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Envelopes'>Envelopes</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Ring modulation'>Ring modulation</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Amplitude modulation'>Amplitude modulation</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='Binary messages'>Binary messages</a></h2>
+<h2><a class='anchor' name='Binary%20messages'>Binary messages</a></h2>
 
 <p>The pattern for a binary message is<table>
 <tr><td>RECEIVER<td>OPERATOR<td>OPERAND</table>
 
 <p>For example<pre class='code prettyprint lang-sc'>2 * 3</pre>
 
-<p>is a receiver (the object to which a message is sent), a binary operator, and an operand.<h2><a class='anchor' name='Mixing = addition'>Mixing = addition</a></h2>
+<p>is a receiver (the object to which a message is sent), a binary operator, and an operand.<h2><a class='anchor' name='Mixing%20=%20addition'>Mixing = addition</a></h2>
 
 <p>Use addition (a binary operation) to mix two or more ugens.<pre class='code prettyprint lang-sc'>(
     // mix 2 sawtooth waves
@@ -80,7 +86,7 @@
 
 <p>Or use Mix.arFill to create the same result.<pre class='code prettyprint lang-sc'>{ Mix.arFill(3, { arg i; Saw.ar(500 + (i * 100), 0.05) }) }.scope;</pre>
 
-<p>Every time the function is evaluated, the argument i is incremented. So i equals 0 the first time the function is evaluated, i equals 1 the second time, i equals 2, the third time, and so on.<h2><a class='anchor' name='Scaling = multiplication'>Scaling = multiplication</a></h2>
+<p>Every time the function is evaluated, the argument i is incremented. So i equals 0 the first time the function is evaluated, i equals 1 the second time, i equals 2, the third time, and so on.<h2><a class='anchor' name='Scaling%20=%20multiplication'>Scaling = multiplication</a></h2>
 
 <p>Apply an envelope, in the form of a low-frequency sine wave, to a WhiteNoise generator.<pre class='code prettyprint lang-sc'>{ WhiteNoise.ar(0.1) * SinOsc.kr(1, 1) }.scope;
 
@@ -97,9 +103,9 @@
 <h2><a class='anchor' name='Envelopes'>Envelopes</a></h2>
 
 <p>Dynamically modulate any parameter in a ugen (such as frequency, phase, or amplitude) with an envelope.<pre class='code prettyprint lang-sc'>// modulate amplitude
-{ SinOsc.ar(440, 0, 0.1) * EnvGen.kr(Env.sine(1), doneAction: 2) }.scope;</pre>
+{ SinOsc.ar(440, 0, 0.1) * EnvGen.kr(Env.sine(1), doneAction: Done.freeSelf) }.scope;</pre>
 
-<p>Setting the doneAction argument (control) to 2 insures that after the envelope reaches its endpoint, SuperCollider will release the memory it used for the instances of the SinOsc and the EnvGen.<h2><a class='anchor' name='Keyword arguments'>Keyword arguments</a></h2>
+<p>Setting the doneAction argument (control) to 2 insures that after the envelope reaches its endpoint, SuperCollider will release the memory it used for the instances of the SinOsc and the EnvGen.<h2><a class='anchor' name='Keyword%20arguments'>Keyword arguments</a></h2>
 
 <p>Keywords make code easier to read and they allow arguments to be presented in any order. Here, the doneAction and the timeScale arguments are expressed in keyword style.<pre class='code prettyprint lang-sc'>(
 SynthDef("timeScale", { arg ts = 1;
@@ -109,7 +115,7 @@ SynthDef("timeScale", { arg ts = 1;
         *
         EnvGen.kr(
             Env.sine(1),
-            doneAction: 2,
+            doneAction: Done.freeSelf,
             timeScale: ts    // scale the duration of an envelope
         )
     )
@@ -128,7 +134,7 @@ r = Routine({
 });
 )
 r.play</pre>
-<h2><a class='anchor' name='Additive Synthesis'>Additive Synthesis</a></h2>
+<h2><a class='anchor' name='Additive%20Synthesis'>Additive Synthesis</a></h2>
 
 <p>Additive synthesis is as its name says. Components are added (mixed) together.<pre class='code prettyprint lang-sc'>(
 {    // evaluate the function 12 times
@@ -144,7 +150,7 @@ r.play</pre>
         }
     )
     *
-    EnvGen.kr(Env.perc(11, 6), doneAction: 2)
+    EnvGen.kr(Env.perc(11, 6), doneAction: Done.freeSelf)
 }.scope
 )</pre>
 <h2><a class='anchor' name='Envelopes'>Envelopes</a></h2>
@@ -166,7 +172,7 @@ r.play</pre>
             *
             EnvGen.kr(                    // put an envelope on each of the sine waves
                 Env.sine(2.0.rrand(17)),
-                doneAction: 0                 // deallocate envelopes only when the
+                doneAction: Done.none                 // deallocate envelopes only when the
                                     // entire sound is complete (why?)
             )
         }
@@ -174,14 +180,14 @@ r.play</pre>
     *                                // put an envelope over the whole patch
     EnvGen.kr(
         Env.perc(11, 6),
-        doneAction: 2,
+        doneAction: Done.freeSelf,
         levelScale: 0.75
     )
 
 }.scope
 )</pre>
 
-<p>(Or use the <a href="./../../Classes/Klang.html">Klang</a> ugen to produce a similar effect).<h2><a class='anchor' name='Ring modulation'>Ring modulation</a></h2>
+<p>(Or use the <a href="./../../Classes/Klang.html">Klang</a> ugen to produce a similar effect).<h2><a class='anchor' name='Ring%20modulation'>Ring modulation</a></h2>
 
 <p>Multiply two UGens.<pre class='code prettyprint lang-sc'>{ SinOsc.ar(440, 0, 0.571) * SinOsc.kr(880) }.scope
 
@@ -196,7 +202,7 @@ r.play</pre>
         )
     }.scope
 )</pre>
-<h2><a class='anchor' name='Amplitude modulation'>Amplitude modulation</a></h2>
+<h2><a class='anchor' name='Amplitude%20modulation'>Amplitude modulation</a></h2>
 
 <p>Multiply two UGens and restrict the value of the modulator to positive values (use the .abs message to calculate 'absolute' value) to create what Charles Dodge calls "classic" amplitude modulation.<pre class='code prettyprint lang-sc'>// use an lfo to modulate the amplitude of the modulator
 (
@@ -219,4 +225,4 @@ r.play</pre>
 { SinOsc.ar(440, 0, 0.571) * SinOsc.kr(880) }.scope</pre>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/14_Subtractive_synthesis.html">14_Subtractive_synthesis</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/13_BinaryOp_synthesis.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/13_BinaryOp_synthesis.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/13_BinaryOp_synthesis::<br>sc version: 3.8dev</div></div></body></html>
+<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/14_Subtractive_synthesis.html">14_Subtractive_synthesis</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/13_BinaryOp_synthesis.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/13_BinaryOp_synthesis.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/13_BinaryOp_synthesis::<br></div></div></body></html>

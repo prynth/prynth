@@ -1,35 +1,41 @@
-<html><head><title>Pattern Guide 06g: Data Sharing</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide 06g: Data Sharing | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = 'Pattern Guide 06g: Data Sharing';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Pattern Guide 06g: Data Sharing:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Sharing%20data%20between%20patterns'>Sharing data between patterns</a></li>
+<ul class='toc'><li class='toc2'><a href='#Reading%20values%20from%20the%20current%20event'>Reading values from the current event</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Other%20information%20storage%20patterns'>Other information storage patterns</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Communicating%20values%20between%20separate%20event%20patterns'>Communicating values between separate event patterns</a></li>
+<ul class='toc'></ul></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/A-PRACTICAL-GUIDE</div>
-<div id='categories'><a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>Streams-Patterns-Events>A-Practical-Guide</a></div>
-<h1>Pattern Guide 06g: Data Sharing</h1>
+<div id='label'>
+<span id='folder'>Tutorials/A-Practical-Guide</span>
+ | <span id='categories'><a href='./../../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Streams-Patterns-Events>A-Practical-Guide'>A-Practical-Guide</a></span>
+</div><h1>Pattern Guide 06g: Data Sharing</h1>
 <div id='summary'>Writing patterns to use information from other patterns</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/A-Practical-Guide/PG_06f_Server_Control.html">Pattern Guide 06f: Server Control</a>, <a href="./../../Tutorials/A-Practical-Guide/PG_07_Value_Conversions.html">Pattern Guide 07: Value Conversions</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Sharing data between patterns'>Sharing data between patterns</a></li>
-<ul class='toc'><li class='toc2'><a href='#Reading values from the current event'>Reading values from the current event</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Other information storage patterns'>Other information storage patterns</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Communicating values between separate event patterns'>Communicating values between separate event patterns</a></li>
-<ul class='toc'></ul></ul></ul></div><h2><a class='anchor' name='Sharing data between patterns'>Sharing data between patterns</a></h2>
+<h2><a class='anchor' name='Sharing%20data%20between%20patterns'>Sharing data between patterns</a></h2>
 
 <p>So far, we've seen patterns that are independent of each other. A single Pbind works on its own information, which is not available to other Pbinds. Also, for instance, the <code class='code prettyprint lang-sc'>degree</code> pattern in a Pbind is not aware of what the <code class='code prettyprint lang-sc'>dur</code> pattern is doing. Making these data available adds musical intelligence.
-<p>There are a couple of distinct ways to transmit information from one pattern into another. The first, simpler, technique is to read values from the current event that is already being processed. The second is to pass information from one event pattern into a separate event pattern. Since both are event patterns, they produce different result events and the first technique does not apply.<h3><a class='anchor' name='Reading values from the current event'>Reading values from the current event</a></h3>
+<p>There are a couple of distinct ways to transmit information from one pattern into another. The first, simpler, technique is to read values from the current event that is already being processed. The second is to pass information from one event pattern into a separate event pattern. Since both are event patterns, they produce different result events and the first technique does not apply.<h3><a class='anchor' name='Reading%20values%20from%20the%20current%20event'>Reading values from the current event</a></h3>
 
 <p>Within a Pbind, value patterns can easily read from other values that have already been placed into the event. The <a href="./../../Classes/Pkey.html">Pkey</a> pattern looks up the key in the event currently being processed and returns its value. From there, you can do any other pattern-friendly operation on it: filter patterns, math operators, etc.<dl>
 <dt><code class='code prettyprint lang-sc'>Pkey(key)</code><dd>Read the <code class='code prettyprint lang-sc'>key</code> in the input event. Outputs values until the input event doesn't contain the key (i.e., the value is nil). There is no <code class='code prettyprint lang-sc'>repeats</code> argument. If you need to limit the number of values, wrap Pkey in <a href="./../../Classes/Pfin.html">Pfin</a>.<pre class='code prettyprint lang-sc'>p = Pkey(\a).asStream;
@@ -54,14 +60,14 @@ p = Pbind(
 
 p.stop;</pre>
 </dl>
-<h3><a class='anchor' name='Other information storage patterns'>Other information storage patterns</a></h3>
+<h3><a class='anchor' name='Other%20information%20storage%20patterns'>Other information storage patterns</a></h3>
 
 <p>These patterns represent three different strategies to persist information from one pattern and make it available to others.<dl>
 <dt><code class='code prettyprint lang-sc'>Penvir(envir, pattern, independent)</code><dd>The Streams that evaluate patterns are usually Routines, and Routines have the special feature of remembering the Environment that was in force the last time it yielded, and restoring the same environment the next time it's awakened. <a href="./../../Classes/Penvir.html">Penvir</a> establishes an environment in which <code class='code prettyprint lang-sc'>pattern</code> will run. The environment can be initialized with values, or it could be empty at first and populated by elements of its pattern. The environment is separate from the event being processed (actually, the pattern could be either an event or value pattern). Access to the environment depends on function-driven patterns: <a href="./../../Classes/Pfunc.html">Pfunc</a>, <a href="./../../Classes/Pfuncn.html">Pfuncn</a>, <a href="./../../Classes/Prout.html">Prout</a>, <code class='code prettyprint lang-sc'>.collect</code>, <code class='code prettyprint lang-sc'>.select</code>, <code class='code prettyprint lang-sc'>.reject</code>, and similar.
 <p>The <code class='code prettyprint lang-sc'>independent</code> flag specifies whether the environment will be kept separate for each stream made from the Penvir. If true (the default), whenever the Penvir is embedded in a stream, a new environment is created that inherits the initial values provided by <code class='code prettyprint lang-sc'>envir</code>. If false, the same environment is used for every stream. In that case, the same environment could also be used in different Penvir patterns, and modifications of the environment by one Penvir would carry over to all the others -- hence its usefulness for sharing data.<dt><code class='code prettyprint lang-sc'>Pfset(func, pattern, cleanupFunc)</code><dd>When embedded, <a href="./../../Classes/Pfset.html">Pfset</a> creates an environment and populates it using environment variable assignments in the provided function. For every <code class='code prettyprint lang-sc'>next</code> call, the values in the preset environment are inserted into the event prototype before evaluating the child pattern. This is one way to set defaults for the pattern. It could also be used to load objects on the server, although this takes some care because the object would be reloaded every time the Pfset is played and you are responsible for freeing objects created this way in the cleanupFunc. (Pproto is another way; see <a href="./../../Tutorials/A-Practical-Guide/PG_06f_Server_Control.html">Pattern Guide 06f: Server Control</a> .)<pre class='code prettyprint lang-sc'>(
 SynthDef(\playbuf, { |bufnum, start, dur = 1, amp = 0.2, out|
     var    sig = PlayBuf.ar(1, bufnum, BufRateScale.ir(bufnum), 0, start);
-    sig = sig * amp * EnvGen.kr(Env.linen(0.01, dur, 0.01), doneAction: 2);
+    sig = sig * amp * EnvGen.kr(Env.linen(0.01, dur, 0.01), doneAction: Done.freeSelf);
     Out.ar(out, sig ! 2)
 }).add;
 )
@@ -106,7 +112,7 @@ p.next(());</pre>
 
 p.nextN(5, ()).do(_.postln);</pre>
 </dl>
-<h3><a class='anchor' name='Communicating values between separate event patterns'>Communicating values between separate event patterns</a></h3>
+<h3><a class='anchor' name='Communicating%20values%20between%20separate%20event%20patterns'>Communicating values between separate event patterns</a></h3>
 
 <p>Passing values from one Pbind to another takes a couple of little tricks. First is to store completed events in an accessible location. Neither the Pattern nor the EventStreamPlayer save the finished events; but, calling <code class='code prettyprint lang-sc'>collect</code> on the pattern attaches a custom action to perform on every result event. Here, we save the event into an environment variable, but it could go into the global library, a declared variable or any other data structure.
 <p>Second, we have to ensure that the source pattern is evaluated before any client patterns that depend on the source's value. The only way to do this is to schedule the source slightly earlier, because items scheduled at the same time on any clock can execute in any order. (There is no priority mechanism to make one thread always run first.) But, this scheduling requirement should not affect audio timing.
@@ -196,4 +202,4 @@ p = Penvir((), Ptpar([
 p.stop;</pre>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_06f_Server_Control.html">Pattern Guide 06f: Server Control</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_07_Value_Conversions.html">Pattern Guide 07: Value Conversions</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_06g_Data_Sharing::<br>sc version: 3.8dev</div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_07_Value_Conversions.html">Pattern Guide 07: Value Conversions</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_06g_Data_Sharing::<br></div></div></body></html>

@@ -1,0 +1,111 @@
+<!doctype html><html lang='en'><head><title>ReadableNodeIDAllocator | SuperCollider 3.9.3 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'ReadableNodeIDAllocator';
+var scdoc_sc_version = '3.9.3';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='./../prettify.js' type='text/javascript'></script>
+<script src='./../lang-sc.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC();prettyPrint()'>
+<div id='toc'>
+<div id='toctitle'>ReadableNodeIDAllocator:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-clientID'>clientID</a> </li>
+<li class='toc3'><a href='#-numClients'>numClients</a> </li>
+<li class='toc3'><a href='#-lowestTempID'>lowestTempID</a> </li>
+<li class='toc3'><a href='#-idOffset'>idOffset</a> </li>
+<li class='toc3'><a href='#-maxPermID'>maxPermID</a> </li>
+<li class='toc3'><a href='#-numIDs'>numIDs</a> </li>
+<li class='toc3'><a href='#-alloc'>alloc</a> </li>
+<li class='toc3'><a href='#-allocPerm'>allocPerm</a> </li>
+<li class='toc3'><a href='#-freePerm'>freePerm</a> </li>
+<li class='toc3'><a href='#-isPerm'>isPerm</a> </li>
+<li class='toc3'><a href='#-reset'>reset</a> </li>
+<li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#Control'>Control</a></span>
+</div><h1>ReadableNodeIDAllocator<span id='superclasses'> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
+<div id='summary'>an allocator for nodeIDs with human-readable ownership</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/ReadableNodeIDAllocator.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/ReadableNodeIDAllocator.sc'>ReadableNodeIDAllocator.sc</a></div><div id='related'>See also: <a href="./../Classes/Server.html">Server</a>, <a href="./../Guides/MultiClient_Setups.html">Multi-client Setups</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>In multi-client setups, it is useful to know which client created which nodeIDs on a shared server. ReadableNodeIDAllocator provides that facility by using a decimal prefix based on the clientID.<pre class='code prettyprint lang-sc'>// default server uses a ReadableNodeIDAllocator
+s.nodeAllocator;
+s.nodeAllocator.userID; // its userID is
+s.clientID
+
+// which creates this defaultGroup 1
+s.defaultGroup;
+s.defaultGroupID;
+// and temp nodes begin with 1000 ...
+3.do { s.nextNodeID.postln };
+
+
+// make a dummy server with different clientID
+r = Server(\remote4, s.addr, s.options, clientID: 4);
+// defaultGroup begins with 400000 ... prefix and ends with 1
+r.defaultGroup;
+r.defaultGroupID;
+// and temp nodes begin with 400001000 ...
+3.do { r.nextNodeID.postln };</pre>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>ReadableNodeIDAllocator.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>clientID: 0</span>, <span class='argstr'>lowestTempID: 1000</span>, <span class='argstr'>numClients: 32</span>)</h3>
+<div class='method'>
+<p>make a new instance for given clientID, offset for lowest temporary id, and<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>clientID<td class='argumentdesc'>
+<p>the clientID for which to create an offset/prefix<tr><td class='argumentname'>lowestTempID<td class='argumentdesc'>
+<p>the offset for the lowest temporary id<tr><td class='argumentname'>numClients<td class='argumentdesc'>
+<p>the number of clients for which to split the number range<pre class='code prettyprint lang-sc'>// make an allocator with id 11
+a = ReadableNodeIDAllocator(11, 1000, 12);
+// begins with 1100000 ... prefix
+3.do { a.alloc.postln };</pre>
+</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clientID' href='./../Overviews/Methods.html#clientID'>clientID</a></h3>
+<div class='method'>
+<p>the clientID for which to create an offset/prefix</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numClients' href='./../Overviews/Methods.html#numClients'>numClients</a></h3>
+<div class='method'>
+<p>the number of clients for which to split the number range</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-lowestTempID' href='./../Overviews/Methods.html#lowestTempID'>lowestTempID</a></h3>
+<div class='method'>
+<p>the offset from where temporary nodeID begin</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-idOffset' href='./../Overviews/Methods.html#idOffset'>idOffset</a></h3>
+<div class='method'>
+<p>the offset from where nodeID range begins</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-maxPermID' href='./../Overviews/Methods.html#maxPermID'>maxPermID</a></h3>
+<div class='method'>
+<p>the highest permanent nodeID</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numIDs' href='./../Overviews/Methods.html#numIDs'>numIDs</a></h3>
+<div class='method'>
+<p>the number of IDs before the allocator will wrap</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-alloc' href='./../Overviews/Methods.html#alloc'>alloc</a></h3>
+<div class='method'>
+<p>allocate next temporary nodeID</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-allocPerm' href='./../Overviews/Methods.html#allocPerm'>allocPerm</a></h3>
+<div class='method'>
+<p>allocate next permanent nodeID</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-freePerm' href='./../Overviews/Methods.html#freePerm'>freePerm</a>(<span class='argstr'>id</span>)</h3>
+<div class='method'>
+<p>free a permanent nodeID<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>id<td class='argumentdesc'></table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isPerm' href='./../Overviews/Methods.html#isPerm'>isPerm</a>(<span class='argstr'>num</span>)</h3>
+<div class='method'>
+<p>test whether num is in the allocator's range of permanent numbers<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>num<td class='argumentdesc'></table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-reset' href='./../Overviews/Methods.html#reset'>reset</a></h3>
+<div class='method'>
+<p>reset allocator to initial state</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/ReadableNodeIDAllocator.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/ReadableNodeIDAllocator.schelp</a><br>link::Classes/ReadableNodeIDAllocator::<br></div></div></body></html>

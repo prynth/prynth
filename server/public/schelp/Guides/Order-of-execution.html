@@ -1,38 +1,44 @@
-<html><head><title>Order of execution</title>
+<!doctype html><html lang='en'><head><title>Order of execution | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Order of execution';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Order of execution:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Some%20Notes%20about%20Servers%20and%20Targets'>Some Notes about Servers and Targets</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Controlling%20order%20of%20execution'>Controlling order of execution</a></li>
+<ul class='toc'><li class='toc2'><a href='#Add%20actions'>Add actions</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Moving%20nodes'>Moving nodes</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Groups'>Groups</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Parallel%20Groups'>Parallel Groups</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Using%20order%20of%20execution%20to%20your%20advantage'>Using order of execution to your advantage</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Messaging%20Style'>Messaging Style</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Feedback'>Feedback</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider GUIDES</div>
-<div id='categories'><a href='./../Browse.html#Server>Nodes'>Server>Nodes</a></div>
-<h1>Order of execution</h1>
+<div id='label'>
+<span id='folder'>Guides</span>
+ | <span id='categories'><a href='./../Browse.html#Server'>Server</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Server>Nodes'>Nodes</a></span>
+</div><h1>Order of execution</h1>
 <div id='summary'>Understanding order of execution of synths on the server</div>
 </div>
 <div class='subheader'>
-<div id='related'>See also: <a href="./../Classes/Server.html">Server</a>, <a href="./../Classes/Node.html">Node</a>, <a href="./../Classes/Group.html">Group</a>, <a href="./../Classes/ParGroup.html">ParGroup</a>, <a href="./../Reference/default_group.html">default_group</a>, <a href="./../Classes/Bus.html">Bus</a>, <a href="./../Classes/Out.html">Out</a>, <a href="./../Classes/ReplaceOut.html">ReplaceOut</a>, <a href="./../Classes/XOut.html">XOut</a>, <a href="./../Classes/OffsetOut.html">OffsetOut</a>, <a href="./../Classes/In.html">In</a>, <a href="./../Classes/InFeedback.html">InFeedback</a>, <a href="./../Classes/LocalIn.html">LocalIn</a>, <a href="./../Classes/LocalOut.html">LocalOut</a>, <a href="./../Classes/SharedIn.html">SharedIn</a>, <a href="./../Classes/SharedOut.html">SharedOut</a></div>
+<div id='related'>See also: <a href="./../Classes/Server.html">Server</a>, <a href="./../Classes/Node.html">Node</a>, <a href="./../Classes/Group.html">Group</a>, <a href="./../Classes/ParGroup.html">ParGroup</a>, <a href="./../Reference/default_group.html">Default Group</a>, <a href="./../Classes/Bus.html">Bus</a>, <a href="./../Classes/Out.html">Out</a>, <a href="./../Classes/ReplaceOut.html">ReplaceOut</a>, <a href="./../Classes/XOut.html">XOut</a>, <a href="./../Classes/OffsetOut.html">OffsetOut</a>, <a href="./../Classes/In.html">In</a>, <a href="./../Classes/InFeedback.html">InFeedback</a>, <a href="./../Classes/LocalIn.html">LocalIn</a>, <a href="./../Classes/LocalOut.html">LocalOut</a>, <a href="./../Classes/SharedIn.html">SharedIn</a>, <a href="./../Classes/SharedOut.html">SharedOut</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Some Notes about Servers and Targets'>Some Notes about Servers and Targets</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Controlling order of execution'>Controlling order of execution</a></li>
-<ul class='toc'><li class='toc2'><a href='#Add actions'>Add actions</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Moving nodes'>Moving nodes</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Groups'>Groups</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Parallel Groups'>Parallel Groups</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Using order of execution to your advantage'>Using order of execution to your advantage</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#Messaging Style'>Messaging Style</a></li>
-<ul class='toc'></ul></ul><li class='toc1'><a href='#Feedback'>Feedback</a></li>
-<ul class='toc'></ul></ul></div>
+
 <p>Order of execution is one of the most critical and seemingly difficult aspects of using SuperCollider, but in reality it only takes a little thought in the early planning stages to make it work for you.<h2><a class='anchor' name='Introduction'>Introduction</a></h2>
 
 <p>Order of execution in this context doesn't mean the order in which statements are executed in the language (the client). It refers to the ordering of synth nodes on the server, which corresponds to the order in which their output is calculated each control cycle (blockSize). Whether or not you specify the order of execution, each synth and each group goes into a specific place in the chain of execution.
@@ -46,7 +52,7 @@
 
 <p>The effect synth will not hear the source synth, and you won't get the results you want.<div class='image'><img src='server.png'/><br><b>A diagram of a typical server configuration</b></div>
 
-<p>On the server external signals can be received by synths from "public" input busses (one in the represented case), while the different synths must be connected to "public" out audio busses (two in the case) in order to output a signal externally to the soundcard (see Bus). Other busses (both control and audio) are internal. In general, busses can be thought as roughly analogous to sends, busses, or submixes on an analog mixer, or as pipes allowing one to route "flowing" signals. If a synth is connected to a bus at a certain point (thus "flowing" into it) a synth taking the signal from the same bus at a subsequent point will take as input the flowing signal (along with anything else previously output to the bus), just as would occur with a water pipe.<h2><a class='anchor' name='Some Notes about Servers and Targets'>Some Notes about Servers and Targets</a></h2>
+<p>On the server external signals can be received by synths from "public" input busses (one in the represented case), while the different synths must be connected to "public" out audio busses (two in the case) in order to output a signal externally to the soundcard (see Bus). Other busses (both control and audio) are internal. In general, busses can be thought as roughly analogous to sends, busses, or submixes on an analog mixer, or as pipes allowing one to route "flowing" signals. If a synth is connected to a bus at a certain point (thus "flowing" into it) a synth taking the signal from the same bus at a subsequent point will take as input the flowing signal (along with anything else previously output to the bus), just as would occur with a water pipe.<h2><a class='anchor' name='Some%20Notes%20about%20Servers%20and%20Targets'>Some Notes about Servers and Targets</a></h2>
 
 <p>There is always a default Server, which can be accessed or set through the class method Server.default. At startup this is set to be the local Server, and is also assigned to the interpreter variable s.<pre class='code prettyprint lang-sc'>// execute the following and watch the post window
 s === Server.default;
@@ -54,10 +60,10 @@ s === Server.local;
 Server.default = Server.internal; s === Server.default;
 Server.default = Server.local; // return it to the local server</pre>
 
-<p>When a <a href="./../Classes/Server.html">Server</a> is booted there is a top level group with an ID of 0 that defines the root of the node tree. This is represented by a subclass of Group: <a href="./../Classes/RootNode.html">RootNode</a>. There is also a <a href="./../Reference/default_group.html">default_group</a> with an ID of 1. This group is the default group for all Nodes. This is what you will get if you supply a Server as a target. If you don't specify a target or pass in nil, you will get the default group of the default Server.
-<p>The default group serves an important purpose: It provides a predictable basic Node tree so that methods such as Server:scope and Server:record can function without running into order of execution problems. Thus in general one should create new Nodes within the default group rather than in the RootNode. See <a href="./../Reference/default_group.html">default_group</a> and <a href="./../Classes/RootNode.html">RootNode</a> for more detail.<h2><a class='anchor' name='Controlling order of execution'>Controlling order of execution</a></h2>
+<p>When a <a href="./../Classes/Server.html">Server</a> is booted there is a top level group with an ID of 0 that defines the root of the node tree. This is represented by a subclass of Group: <a href="./../Classes/RootNode.html">RootNode</a>. There is also a <a href="./../Reference/default_group.html">Default Group</a> with an ID of 1. This group is the default group for all Nodes. This is what you will get if you supply a Server as a target. If you don't specify a target or pass in nil, you will get the default group of the default Server.
+<p>The default group serves an important purpose: It provides a predictable basic Node tree so that methods such as Server:scope and Server:record can function without running into order of execution problems. Thus in general one should create new Nodes within the default group rather than in the RootNode. See <a href="./../Reference/default_group.html">Default Group</a> and <a href="./../Classes/RootNode.html">RootNode</a> for more detail.<h2><a class='anchor' name='Controlling%20order%20of%20execution'>Controlling order of execution</a></h2>
 
-<p>There are three ways to control the order of execution: using addAction in your synth creation messages, moving nodes, and placing your synths in groups. Using groups is optional, but they are the most effective in helping you organize the order of execution.<h3><a class='anchor' name='Add actions'>Add actions</a></h3>
+<p>There are three ways to control the order of execution: using addAction in your synth creation messages, moving nodes, and placing your synths in groups. Using groups is optional, but they are the most effective in helping you organize the order of execution.<h3><a class='anchor' name='Add%20actions'>Add actions</a></h3>
 
 <p>By specifying an addAction argument for <code class='code prettyprint lang-sc'>Synth.new</code> (or SynthDef.play, Function.play, etc.) one can specify the node's placement relative to a target. The target might be a group node, another synth node, or a server.
 <p>As noted above, the default target is the default_group (the group with nodeID 1) of the default Server.
@@ -73,7 +79,7 @@ Server.default = Server.local; // return it to the local server</pre>
 <li>if aGroup is a synth node, the new synth will be added to the tail of that node's group<li>if target is a Server it will resolve to that Server's default group<li>if target is nil it will resolve to the default group of the default Server</ul>
 <dt><code class='code prettyprint lang-sc'>Synth.before(aNode, defName, args)</code><dd>add the new node just before the node specified by aNode.<dt><code class='code prettyprint lang-sc'>Synth.after(aNode, defName, args)</code><dd>add the new node just after the node specified by aNode.<dt><code class='code prettyprint lang-sc'>Synth.replace(synthToReplace, defName, args)</code><dd>the new node replaces the node specified by synthToReplace. The target node is freed.</dl>
 
-<p>Using Synth.new without an addAction will result in the default addAction. (You can check the default values for the arguments of any method by looking at a class' source code. See Internal-Snooping for more details.) Where order of execution matters, it is important that you specify an addAction, or use one of the convenience methods shown above.<h3><a class='anchor' name='Moving nodes'>Moving nodes</a></h3>
+<p>Using Synth.new without an addAction will result in the default addAction. (You can check the default values for the arguments of any method by looking at a class' source code. See Internal-Snooping for more details.) Where order of execution matters, it is important that you specify an addAction, or use one of the convenience methods shown above.<h3><a class='anchor' name='Moving%20nodes'>Moving nodes</a></h3>
 <pre class='code prettyprint lang-sc'>    .moveBefore
     .moveAfter
     .moveToHead
@@ -87,9 +93,9 @@ Server.default = Server.local; // return it to the local server</pre>
 <p>Groups can be moved in the same way as synths. When you move a group, all the synths in that group move with it. This is why groups are such an important tool for managing order of execution. (See the Group helpfile for details on this and other convenient aspects of Groups.)<pre class='code prettyprint lang-sc'>    Group 1 ---&gt; Group 2</pre>
 
 <p>In the above configuration, all of the synths in group 1 will execute before all of the synths in group 2. This is an easy, easy way to make the order of execution happen the way you want it to.
-<p>Determine your architecture, then make groups to support the architecture.<h3><a class='anchor' name='Parallel Groups'>Parallel Groups</a></h3>
+<p>Determine your architecture, then make groups to support the architecture.<h3><a class='anchor' name='Parallel%20Groups'>Parallel Groups</a></h3>
 
-<p>In some cases, server nodes do not depend on each other. On multiprocessor systems, these nodes could be evaluated on different CPUs. This can be achieved by adding those nodes to a parallel group (see <a href="./../Classes/ParGroup.html">ParGroup</a>). Parallel Groups can be considered as Groups, whose contained nodes are not guaranteed to have a specific order of execution.<div class='note'><span class='notelabel'>NOTE:</span> SuperCollider's default server <strong>scsynth</strong> is not able to distribute the synths to different threads. However the alternative server <strong>supernova</strong> is able to distribute the contents of parallel groups to different CPUs.</div><h3><a class='anchor' name='Using order of execution to your advantage'>Using order of execution to your advantage</a></h3>
+<p>In some cases, server nodes do not depend on each other. On multiprocessor systems, these nodes could be evaluated on different CPUs. This can be achieved by adding those nodes to a parallel group (see <a href="./../Classes/ParGroup.html">ParGroup</a>). Parallel Groups can be considered as Groups, whose contained nodes are not guaranteed to have a specific order of execution.<div class='note'><span class='notelabel'>NOTE:</span> SuperCollider's default server <strong>scsynth</strong> is not able to distribute the synths to different threads. However the alternative server <strong>supernova</strong> is able to distribute the contents of parallel groups to different CPUs.</div><h3><a class='anchor' name='Using%20order%20of%20execution%20to%20your%20advantage'>Using order of execution to your advantage</a></h3>
 
 <p>Before you start coding, plan out what you want and decide where the synths need to go.
 <p>A common configuration is to have a routine playing nodes, all of which need to be processed by a single effect. Plus, you want this effect to be separate from other things running at the same time. To be sure, you should place the synth -&gt; effect chain on a private audio bus, then transfer it to the main output.<pre class='code prettyprint lang-sc'>    [Lots of synths] ----&gt; effect ----&gt; transfer</pre>
@@ -123,7 +129,7 @@ SynthDef("order-of-ex-pulse", { arg freq, bus, ffreq, pan, lfobus;
     noteLen = In.kr(lfobus, 1);
     sig = RLPF.ar(Pulse.ar(freq, 0.2, 0.5), ffreq, 0.3);
     Out.ar(bus, Pan2.ar(sig, pan)
-        * EnvGen.kr(Env.perc(0.1, 1), timeScale: noteLen, doneAction: 2));
+        * EnvGen.kr(Env.perc(0.1, 1), timeScale: noteLen, doneAction: Done.freeSelf));
 }).add;
 
 SynthDef("LFNoise1", { arg freq, mul, add, bus;
@@ -168,7 +174,7 @@ currentEnvironment.clear; // clear all environment variables
 )</pre>
 
 <p>Note that in the routine, using a Group for the source synths allows their order to easily be specified relative to each other (they are added with the .tail method), without worrying about their order relative to the effect synth.
-<p>Note that this arrangement prevents errors in order of execution, through the use of a small amount of organizational code. Although straightforward here, this arrangement could easily be scaled to a larger project.<h3><a class='anchor' name='Messaging Style'>Messaging Style</a></h3>
+<p>Note that this arrangement prevents errors in order of execution, through the use of a small amount of organizational code. Although straightforward here, this arrangement could easily be scaled to a larger project.<h3><a class='anchor' name='Messaging%20Style'>Messaging Style</a></h3>
 
 <p>The above examples are in 'object style'. Should you prefer to work in 'messaging style' there are corresponding messages to all of the methods shown above. See NodeMessaging, and Server-Command-Reference for more details.<h2><a class='anchor' name='Feedback'>Feedback</a></h2>
 
@@ -211,4 +217,4 @@ c = Bus.control(s, 1);
 y.set(\bus, c); x.set(\bus, c);
 
 x.free; y.free; z.free;</pre>
-<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/Order-of-execution.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/Order-of-execution.schelp</a><br>link::Guides/Order-of-execution::<br>sc version: 3.8dev</div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Order-of-execution.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Order-of-execution.schelp</a><br>link::Guides/Order-of-execution::<br></div></div></body></html>

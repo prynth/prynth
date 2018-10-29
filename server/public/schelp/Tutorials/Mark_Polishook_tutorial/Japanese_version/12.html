@@ -1,0 +1,208 @@
+<!doctype html><html lang='en'><head><title>12 | SuperCollider 3.9.3 Help</title>
+<link rel='stylesheet' href='./../../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../../../custom.css' type='text/css' />
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../../..';
+var scdoc_title = '12';
+var scdoc_sc_version = '3.9.3';
+</script>
+<script src='./../../../scdoc.js' type='text/javascript'></script>
+<script src='./../../../docmap.js' type='text/javascript'></script>
+<script src='./../../../prettify.js' type='text/javascript'></script>
+<script src='./../../../lang-sc.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC();prettyPrint()'>
+<div id='toc'>
+<div id='toctitle'>12:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#複数の部分からなるシンセシス'>複数の部分からなるシンセシス</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#どのようにして情報を取得するか'>どのようにして情報を取得するか</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#実行の順序'>実行の順序</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#サンプルをループする'>サンプルをループする</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Tutorials/Mark_Polishook_tutorial/Japanese_version</span>
+ | <span id='categories'><a href='./../../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../../Browse.html#Tutorials>Mark_Polishook_tutorial'>Mark_Polishook_tutorial</a>&#8201;&gt;&#8201;<a href='./../../../Browse.html#Tutorials>Mark_Polishook_tutorial>Japanese_version'>Japanese_version</a></span>
+</div><h1>12</h1>
+<div id='summary'>Mark Polishook tutorial (JP)</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
+</div>
+<h2><a class='anchor' name='複数の部分からなるシンセシス'>複数の部分からなるシンセシス</a></h2>
+
+<p>シンセシスのプロセスを部分に分割することは、モジュラー・デザインとコンポーネントの再利用を促進します。このことが意味するのは、小さく、うまく設計されたタスクを成し遂げる様にSynthDefを作るということには、しばしば〜があるということです。そのようにすることで、複雑なシンセシスのネットワークを構築するためにSynthDefを組み合わせたり、様々な方法で組み替えたりすることが可能になるのです。<pre class='code prettyprint lang-sc'>(
+// ディスクからサウンド・ファイルを読み込む
+b = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+
+// モノのサンプル・プレーヤー ... １チャンネルのみ
+SynthDef("aMonoSamplePlayer", { arg bus = 0, bufnum = 0, rateScale = 1;
+    Out.ar(
+        bus,
+        PlayBuf.ar(
+            1,
+            bufnum,
+            BufRateScale.kr(bufnum) * rateScale
+        )
+        *
+        EnvGen.kr(Env.sine(BufDur.kr(bufnum)))
+    )
+}).add;
+)
+
+(
+// SynthDefをテストする ... 動く？（はい、大丈夫。左チャンネルで再生する。）
+Synth("aMonoSamplePlayer", [\bus, 0, \bufNum, b]);
+)
+
+
+(
+// コンポーネントの再利用の非常にシンプルな例 ...
+// \busアーギュメントを使用して、同じSynthDefから作られたシンセを別のチャンネルにアサインする
+// この場合には、1チャンネルのサウンド・ファイルを2チャンネルで再生する
+// それぞれのチャンネルの再生レートを変えることで効果を明白にする
+Synth("aMonoSamplePlayer", [\bus, 0, \bufNum, b, \rateScale, 0.99]);
+Synth("aMonoSamplePlayer", [\bus, 1, \bufNum, b, \rateScale, 1.01]);
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='どのようにして情報を取得するか'>どのようにして情報を取得するか</a></h2>
+
+<p>前の例ではBufRateScaleとBufDurというUGenを使って、PlayBufがサウンド・ファイルをプレイするレートと、PlayBufに適用されるエンベロープの長さをコントロールしています。
+<p>BufRateScaleはサウンド・ファイルが録音されたときのレートでプレイバックされることを保証します。BufDurはバッファの長さを返します。これら両方のクラスはInfoUGenbaseまたはBufInfoUGenBaseを継承するUGenのファミリーです。
+<p>そのようなUGenの完全なリストを表示するためのコードがこれです。<pre class='code prettyprint lang-sc'>InfoUGenBase.dumpClassSubtree</pre>
+
+<p>このコードを実行すると次の様に表示されます。<pre class='code prettyprint lang-sc'>InfoUGenBase[  NumRunningSynths  NumBuffers  ControlDur  NumControlBuses  SubsampleOffset  RadiansPerSample  SampleDur  ControlRate  NumInputBuses  NumAudioBuses  SampleRate  NumOutputBuses]InfoUGenBase</pre>
+<pre class='code prettyprint lang-sc'>BufInfoUGenBase.dumpClassSubtree</pre>
+
+<p>このコードを実行すると次の様に表示されます。<pre class='code prettyprint lang-sc'>BufInfoUGenBase[  BufChannels  BufSampleRate  BufRateScale  BufFrames  BufDur  BufSamples]BufInfoUGenBase</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='実行の順序'>実行の順序</a></h2>
+
+<p>もう一度、次の例はどのようにしてシンセをソースとエフェクトのグループに配置するのかを示します。２つのグループは２つのシンセが適切な順序で実行されることを保証します。<pre class='code prettyprint lang-sc'>(
+// エンベロープなしのフィルター　ー永遠にとどまる
+SynthDef("soundFileFilter", { arg bus = 0, freq = 440, rq = 0.05;
+    ReplaceOut.ar(
+        bus,
+        BPF.ar(            // a bandpass filter
+            In.ar(0, 2),
+            [freq * 0.99, freq * 1.5],
+            rq
+        )
+    )
+}).add;
+)
+
+// ２つのグループを作成する。１つはソース用、他の１つはエフェクト用
+(
+~source = Group.head(s);
+~effect = Group.tail(s);
+)
+
+// シンセをそれぞれ適切なグループの先頭に追加する
+// シンセを適切なグループの最後に追加しても同じ結果になる
+(
+Synth.head(~effect, "soundFileFilter", [\out, 0, \freq, 500.rrand(1000), \rq, 0.04.rrand(0.1)]);
+Synth.head(~source, "aMonoSamplePlayer", [\bus, 0, \bufNum, b]);
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<h2><a class='anchor' name='サンプルをループする'>サンプルをループする</a></h2>
+
+<p>サウンド・ファイルを何度も何度も繰り返し再生するには、PlayBufのloopアーギュメント（コントロール）を使います。
+<p>しかし、PlayBufのインスタンスのloopアーギュメントに任せてファイル全体をループする代わりに、正確な繰り返しが起きる様にスケジューリングすることで、より細かくコントロールすることもできます。
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>この例は３つのSynthDefを使用しています。第1のSynthDefはサンプル・プレーヤーで、バッファ全体を永遠にループし続けます。第2のSynthDefはその入力をリング変調します。第3のSynthDefはその入力に対してローパス・フィルターを適用します。
+<p>３つのシンセはチェーンを形成します。第1のシンセはソース・シンセです。第2と第3のシンセは、それぞれのソースに対して処理を加えます。つまり、ソースに対して振幅変調を加え、振幅変調を行ったソースに対してローパス・フィルターをかけます。
+<p>処理の順序、つまり振幅変調とローパス・フィルターのどちらが最初でどちらが2番目かは任意です。それはどちらの方法でも定義することができます。<pre class='code prettyprint lang-sc'>(
+// サウンド・ファイルを読み込む
+b = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
+
+// サウンド・ファイル全体をループ再生するサンプル・プレーヤーを定義する
+SynthDef("aLoopingSamplePlayer", { arg outBus = 0, bufnum = 0, rateScale = 1, mul = 1;
+    Out.ar(
+        outBus,
+        PlayBuf.ar(
+            1,
+            bufnum,
+            BufRateScale.kr(bufnum) * rateScale + LFNoise1.kr(2.reciprocal, 0.05),
+            loop: 1    // 停止することなくサウンド・ファイルを繰り返し再生する
+        )
+        *
+        mul
+    )
+}).add;
+
+// オーディオ・ソースに振幅変調を適用する
+SynthDef("ampMod", { arg inBus = 0, outBus = 0, modFreq = 1;
+    Out.ar(
+        outBus,
+        [In.ar(inBus, 1) * SinOsc.kr(modFreq), In.ar(inBus, 1) * SinOsc.kr(modFreq - 0.02)]
+    )
+}).add;
+
+// オーディオ・ソースにローパス・フィルターを適用する
+SynthDef("aLowPassFilter", { arg inBus = 0, outBus = 0, freq = 300, freqDev = 50, boost = 1;
+    Out.ar(
+        outBus,
+        RLPF.ar(
+            In.ar(inBus, 2),
+            Lag.kr(LFNoise0.kr(1, freqDev, freq), 1),
+            0.1
+        )
+        *
+        boost
+    )
+}).add;
+)
+
+// ２つのグループを定義する。１つはソースのためで、他方はエフェクトのため
+(
+~source = Group.head(s);
+~effect = Group.tail(~s);
+)
+
+(
+// ソース・グループにサンプル・プレーヤーを追加する
+Synth.head(
+    ~source,
+    "aLoopingSamplePlayer", [\outBus, 3, \bufNum, b, \rateScale, 1, \mul, 0.051]);
+// エフェクト・グループの先頭に振幅変調シンセを追加する
+Synth.head(
+    ~effect,
+    "ampMod", [\inBus, 3, \outBus, 5, \modFreq, 1]);
+// エフェクト・グループの最後にフィルタリングを追加する
+Synth.tail(
+    ~effect,
+    "aLowPassFilter", [\inBus, 5, \outBus, 0, \boost, 5])
+)</pre>
+
+<p>このシンセシスのネットワークを文字による図で表すと、この様になります。<pre class='code prettyprint lang-sc'>Group (RootNode, ID 0)
+      /\
+     /  \
+~source  ~effects    // ~sourceと~effectsはグループ
+ |        |      \
+ |        |       \
+ synth    synth    synth</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>ここでは、シンセとグループの配置は同じです。一部のアーギュメント（コントロール）を変えることでエフェクトの音色が劇的に変わります。<pre class='code prettyprint lang-sc'>(
+~source = Group.head(s);
+~effect = Group.tail(~s);
+)
+
+(
+Synth.head(
+    ~source,
+    "aLoopingSamplePlayer", [\outBus, 3, \bufNum, b, \rateScale, 1, \mul, 0.051]);
+Synth.head(
+    ~effect,
+    "ampMod", [\inBus, 3, \outBus, 5, \modFreq, 1000]);
+Synth.tail(
+    ~effect,
+    "aLowPassFilter", [\inBus, 5, \outBus, 0, \freq, 500, \freqDev, 200, \boost, 7])
+)</pre>
+
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////
+<p>go to <a href="./../../../Tutorials/Mark_Polishook_tutorial/Japanese_version/13.html">13</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/12.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/12.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/Japanese_version/12::<br></div></div></body></html>

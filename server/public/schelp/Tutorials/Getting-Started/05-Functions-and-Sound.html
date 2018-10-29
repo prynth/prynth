@@ -1,31 +1,37 @@
-<html><head><title>05. Functions and Sound</title>
+<!doctype html><html lang='en'><head><title>05. Functions and Sound | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = '05. Functions and Sound';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>05. Functions and Sound:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#And%20What%20About%20Functions%20and%20Sound?'>And What About Functions and Sound?</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Some%20More%20Fun%20with%20Functions%20and%20UGens'>Some More Fun with Functions and UGens</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Suggested%20Exercise'>Suggested Exercise</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/GETTING-STARTED</div>
-<div id='categories'><a href='./../../Browse.html#Tutorials>Getting-Started'>Tutorials>Getting-Started</a></div>
-<h1>05. Functions and Sound</h1>
+<div id='label'>
+<span id='folder'>Tutorials/Getting-Started</span>
+ | <span id='categories'><a href='./../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Tutorials>Getting-Started'>Getting-Started</a></span>
+</div><h1>05. Functions and Sound</h1>
 <div id='summary'>Getting Started With SuperCollider</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#And What About Functions and Sound?'>And What About Functions and Sound?</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Some More Fun with Functions and UGens'>Some More Fun with Functions and UGens</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Suggested Exercise'>Suggested Exercise</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='And What About Functions and Sound?'>And What About Functions and Sound?</a></h2>
+<h2><a class='anchor' name='And%20What%20About%20Functions%20and%20Sound?'>And What About Functions and Sound?</a></h2>
 
 <p>I've probably bored you enough with technical details, so let's get back to making noise, which I assume is why you're reading this after all. Trust me though, all this work will pay off later, and believe it or not, we've already covered a fair amount of the basics of the language, at least in passing.
 <p>Let's go back to our sound example, or rather a slightly simplified version of it. Check that the localhost server is running, execute the code below and then press Cmd-. when you've had enough.<pre class='code prettyprint lang-sc'>{ SinOsc.ar(440, 0, 0.2) }.play;</pre>
@@ -38,7 +44,7 @@
 <p>All classes begin with upper-case letters, so it's pretty easy to identify them in code.
 <p>Classes are what you use to make objects. They're like a template. You do this through class methods such as 'new', or, in the case of our SinOsc class above, 'ar'. Such methods return an object, an instance, and the arguments affect what its data will be, and how it will behave. Now take another look at the example in question:<pre class='code prettyprint lang-sc'>SinOsc.ar(440, 0, 0.2)</pre>
 
-<p>This tells the class SinOsc to make an instance of itself. All SinOscs are an example of what are called unit generators, or UGens. These are objects which produce audio or control signals. SinOsc is a sine wave oscillator. This means that it will produce a signal consisting of a single frequency. A graph of it's waveform would look like this:<div class='image'><img src='Functions-and-Sound-00.png'/><br><b>(don't worry about the 'index' and 'value' stuff; it's not important just now)</b></div>
+<p>This tells the class SinOsc to make an instance of itself. All SinOscs are an example of what are called unit generators, or UGens. These are objects which produce audio or control signals. SinOsc is a sine wave oscillator. This means that it will produce a signal consisting of a single frequency. A graph of its waveform would look like this:<div class='image'><img src='Functions-and-Sound-00.png'/><br><b>(don't worry about the 'index' and 'value' stuff; it's not important just now)</b></div>
 
 <p>This waveform loops, creating the output signal. 'ar' means make the instance <em>audio rate</em>. SuperCollider calculates audio in groups of samples, called <em>blocks</em>. Audio rate means that the UGen will calculate a value for each sample in the block. There's another method, 'kr', which means <em>control rate</em>. This means calculate a single value for each block of samples. This can save a lot of computing power, and is fine for (you guessed it) signals which control other UGens, but it's not fine enough detail for synthesizing audio signals.
 <p>The three arguments to SinOsc-ar given in the example determine a few things about the resulting instance. I happen to know that the arguments are frequency, phase, and mul. (We'll get to how I know that in a second.) Frequency is just the frequency of the oscillator in Hertz (Hz), or cycles per second (cps). Phase refers to where it will start in the cycle of its waveform. For SinOsc (but not for all UGens) phase is given in radians. If you don't know what radians are, don't worry, just understand that it's a value between 0 and 2 * pi. (You can look at a trigonometry text if you really want more detail.) So if we made a SinOsc with a phase of (pi * 0.5), or one quarter of the way through its cycle, the waveform would look like this:<div class='image'><img src='Functions-and-Sound-01.png'/></div>
@@ -57,7 +63,7 @@
         0.2)     // mul of 0.2
 }.play;            // close the Function and call 'play' on it
 )</pre>
-<h2><a class='anchor' name='Some More Fun with Functions and UGens'>Some More Fun with Functions and UGens</a></h2>
+<h2><a class='anchor' name='Some%20More%20Fun%20with%20Functions%20and%20UGens'>Some More Fun with Functions and UGens</a></h2>
 
 <p>Here's another example of polymorphism, and how powerful it is. When creating Functions of UGens, for many arguments you don't have to use fixed values, you can in fact use other UGens! Below is an example which demonstrates this:<pre class='code prettyprint lang-sc'>(
 { var ampOsc;
@@ -75,10 +81,10 @@
 <p>And what we have in the end is a SinOsc that fades gently in and out. Shifting the phase just means that we start quiet and fade in. We're effectively using ampOsc as what is called an amplitude <em>envelope</em>. There are other ways of doing the same thing, some of them simpler, but this demonstrates the principal.
 <p>Patching together UGens in this way is the basic way that you make sound in SC. For an overview of the various types of UGens available in SC, see <a href="./../../Browse.html#UGens">Browse: UGens</a> or <a href="./../../Guides/Tour_of_UGens.html">Tour of UGens</a>.
 <p>For more information see:
-<p><a href="./../../Reference/Functions.html">Functions</a>, <a href="./../../Classes/Function.html">Function</a>, <a href="./../../Browse.html#UGens">Browse: UGens</a> <a href="./../../Guides/Tour_of_UGens.html">Tour of UGens</a><h2><a class='anchor' name='Suggested Exercise'>Suggested Exercise</a></h2>
+<p><a href="./../../Reference/Functions.html">Functions</a>, <a href="./../../Classes/Function.html">Function</a>, <a href="./../../Browse.html#UGens">Browse: UGens</a> <a href="./../../Guides/Tour_of_UGens.html">Tour of UGens</a><h2><a class='anchor' name='Suggested%20Exercise'>Suggested Exercise</a></h2>
 
 <p>Experiment with altering the Functions in the text above. For instance try changing the frequencies of the SinOsc, or making multi-channel versions of things.
 <p>____________________
 <p>This document is part of the tutorial <strong>Getting Started With SuperCollider</strong>.
 <p>Click here to go on to the next section: <a href="./../../Tutorials/Getting-Started/06-Presented-in-Living-Stereo.html">06. Presented in Living Stereo</a>
-<p>Click here to return to the table of Contents: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/05-Functions-and-Sound.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/05-Functions-and-Sound.schelp</a><br>link::Tutorials/Getting-Started/05-Functions-and-Sound::<br>sc version: 3.8dev</div></div></body></html>
+<p>Click here to return to the table of Contents: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Getting-Started/05-Functions-and-Sound.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Getting-Started/05-Functions-and-Sound.schelp</a><br>link::Tutorials/Getting-Started/05-Functions-and-Sound::<br></div></div></body></html>

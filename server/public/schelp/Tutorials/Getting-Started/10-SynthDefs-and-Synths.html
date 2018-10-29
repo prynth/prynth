@@ -1,41 +1,47 @@
-<html><head><title>10. SynthDefs and Synths</title>
+<!doctype html><html lang='en'><head><title>10. SynthDefs and Synths | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './../..';
+var scdoc_title = '10. SynthDefs and Synths';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
 <script src='./../../prettify.js' type='text/javascript'></script>
 <script src='./../../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./../..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>10. SynthDefs and Synths:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Meet%20the%20SynthDef'>Meet the SynthDef</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#SynthDefs%20vs.%20Functions'>SynthDefs vs. Functions</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Creating%20Variety%20with%20SynthDefs'>Creating Variety with SynthDefs</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#More%20About%20Synth'>More About Synth</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Some%20Notes%20on%20Symbols,%20Strings,%20SynthDef%20and%20Arg%20Names'>Some Notes on Symbols, Strings, SynthDef and Arg Names</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Suggested%20Exercise'>Suggested Exercise</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider TUTORIALS/GETTING-STARTED</div>
-<div id='categories'><a href='./../../Browse.html#Tutorials>Getting-Started'>Tutorials>Getting-Started</a></div>
-<h1>10. SynthDefs and Synths</h1>
+<div id='label'>
+<span id='folder'>Tutorials/Getting-Started</span>
+ | <span id='categories'><a href='./../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Tutorials>Getting-Started'>Getting-Started</a></span>
+</div><h1>10. SynthDefs and Synths</h1>
 <div id='summary'>Getting Started With SuperCollider</div>
 </div>
 <div class='subheader'>
 <div id='related'>See also: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Meet the SynthDef'>Meet the SynthDef</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#SynthDefs vs. Functions'>SynthDefs vs. Functions</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Creating Variety with SynthDefs'>Creating Variety with SynthDefs</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#More About Synth'>More About Synth</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Some Notes on Symbols, Strings, SynthDef and Arg Names'>Some Notes on Symbols, Strings, SynthDef and Arg Names</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Suggested Exercise'>Suggested Exercise</a></li>
-<ul class='toc'></ul></ul></div>
+
 <p>Now that we've covered some basic information we're going to start looking at server abstractions, which are the various classes in the language app which represent things on the server. When looking at these it is important to understand that these objects are just client-side <em>representations</em> of parts of the server's architecture, and should not be confused with those parts themselves. Server abstraction objects are simply conveniences.
 <p>Distinguishing between the two can be a little confusing, so in general I refer herein to the client-side classes with uppercase names, and the corresponding aspects of server architecture with lowercase names, i.e. Synth vs. synth.
 <p>You've already met one kind of server abstraction, class Server itself. The objects referred to by Server.local and Server.internal (and whichever one is stored in the interpreter variable 's' at any given moment) are instances of Server.
-<p>Now it's time to get familiar with the rest of them. The first thing we'll look at is the class SynthDef, which is short for 'synth definition'.<h2><a class='anchor' name='Meet the SynthDef'>Meet the SynthDef</a></h2>
+<p>Now it's time to get familiar with the rest of them. The first thing we'll look at is the class SynthDef, which is short for 'synth definition'.<h2><a class='anchor' name='Meet%20the%20SynthDef'>Meet the SynthDef</a></h2>
 
 <p>Up until now we've been using Functions to generate audio. This way of working is very useful for quick testing, and in cases where maximum flexibility is needed. This is because each time we execute the code, the Function is evaluated anew, which means the results can vary greatly.
-<p>The server, however, doesn't understand Functions, or OOP, or the SC language. It wants information on how to create audio output in a special form called a synth definition. A synth defintion is data about UGens and how they're interconnected. This is sent in a kind of special optimised form, called 'byte code', which the server can deal with very efficiently.
+<p>The server, however, doesn't understand Functions, or OOP, or the SC language. It wants information on how to create audio output in a special form called a synth definition. A synth definition is data about UGens and how they're interconnected. This is sent in a kind of special optimised form, called 'byte code', which the server can deal with very efficiently.
 <p>Once the server has a synth definition, it can very efficiently use it to make a number of synths based on it. Synths on the server are basically just things that make or process sound, or produce control signals to drive other synths.
 <p>This relationship between synth definitions and synths is something like that between classes and instances, in that the former is a template for the latter. But remember that the server app knows nothing about OOP.
 <p>Luckily for us there are classes in the language such as SynthDef, which make is easy to create the necessary byte code and send it to the server, and to deal with synth definitions in an object oriented way.
@@ -46,7 +52,7 @@
 // now here's an equivalent SynthDef
 SynthDef.new("tutorial-SinOsc", { Out.ar(0, SinOsc.ar(440, 0, 0.2)) }).play;</pre>
 
-<p>SynthDef-new takes a number of arguments. The first is a name, usually in the form of a String as above. The second is in fact a Function. This argument is called a UGen Graph Function, as it tells the server how to connect together its various UGens.<h2><a class='anchor' name='SynthDefs vs. Functions'>SynthDefs vs. Functions</a></h2>
+<p>SynthDef-new takes a number of arguments. The first is a name, usually in the form of a String as above. The second is in fact a Function. This argument is called a UGen Graph Function, as it tells the server how to connect together its various UGens.<h2><a class='anchor' name='SynthDefs%20vs.%20Functions'>SynthDefs vs. Functions</a></h2>
 
 <p>This UGen Graph Function we used in the second example above is similar to the Function we used in the first one, but with one notable difference: It has an extra UGen called Out. Out writes out an ar or kr signal to one of the server's busses, which can be thought of as mixer channels or outputs. We'll discuss busses in greater detail later, but for now just be aware that they're used for playing audio out of the computer, and for reading it in from sources such as microphones.
 <p>Out takes two arguments: The first is the index number of the bus to write out on. These start from 0, which on a stereo setup is usually the left output channel. The second is either a UGen or an Array of UGens. If you provide an array (i.e. a multichannel output) then the first channel will be played out on the bus with the indicated index, the second channel on the bus with the indicated index + 1, and so on.
@@ -87,7 +93,7 @@ y = Synth("tutorial-NoRand");
 z = Synth("tutorial-NoRand");
 x.free; y.free; z.free;</pre>
 
-<p>Each time you create a new Synth based on the def, the frequency is the same. This is because the Function (and thus <code class='code prettyprint lang-sc'>200.rand</code>) is only evaluated only once, when the SynthDef is created.<h2><a class='anchor' name='Creating Variety with SynthDefs'>Creating Variety with SynthDefs</a></h2>
+<p>Each time you create a new Synth based on the def, the frequency is the same. This is because the Function (and thus <code class='code prettyprint lang-sc'>200.rand</code>) is only evaluated only once, when the SynthDef is created.<h2><a class='anchor' name='Creating%20Variety%20with%20SynthDefs'>Creating Variety with SynthDefs</a></h2>
 
 <p>There are numerous ways of getting variety out of SynthDefs, however. Some things, such as randomness, can be accomplished with various UGens. One example is <a href="./../../Classes/Rand.html">Rand</a>, which calculates a random number between low and high values when a synth is first created:<pre class='code prettyprint lang-sc'>// With Rand, it works!
 SynthDef("tutorial-Rand", { Out.ar(0, SinOsc.ar(Rand(440, 660), 0, 0.2)) }).add;
@@ -107,7 +113,7 @@ y = Synth("tutorial-args", ["freq", 660]);        // change freq
 z = Synth("tutorial-args", ["freq", 880, "out", 1]);    // change freq and output channel
 x.free; y.free; z.free;</pre>
 
-<p>This combination of args and UGens means that you can get a lot of mileage out of a single def, but in some cases where maximum flexibility is required, you may still need to use Functions, or create multiple defs.<h2><a class='anchor' name='More About Synth'>More About Synth</a></h2>
+<p>This combination of args and UGens means that you can get a lot of mileage out of a single def, but in some cases where maximum flexibility is required, you may still need to use Functions, or create multiple defs.<h2><a class='anchor' name='More%20About%20Synth'>More About Synth</a></h2>
 
 <p>Synth understands some methods which allow you to change the values of args after a synth has been created. For now we'll just look at one, 'set'. Synth-set takes pairs of arg names and values.<pre class='code prettyprint lang-sc'>s.boot;
 (
@@ -120,7 +126,7 @@ x = Synth.new("tutorial-args");
 x.set("freq", 660);
 x.set("freq", 880, "out", 1);
 x.free;</pre>
-<h2><a class='anchor' name='Some Notes on Symbols, Strings, SynthDef and Arg Names'>Some Notes on Symbols, Strings, SynthDef and Arg Names</a></h2>
+<h2><a class='anchor' name='Some%20Notes%20on%20Symbols,%20Strings,%20SynthDef%20and%20Arg%20Names'>Some Notes on Symbols, Strings, SynthDef and Arg Names</a></h2>
 
 <p>SynthDef names and argument names can be either a String, as we've seen above, or another kind of literal called a Symbol. You write symbols in one of two ways, either enclosed in single quotes: <code class='code prettyprint lang-sc'>'tutorial-SinOsc'</code> or preceded by a backslash: <code class='code prettyprint lang-sc'>\tutorial-SinOsc</code>. Like Strings Symbols are made up of alpha-numeric sequences. The difference between Strings and Symbols is that all Symbols with the same text are guaranteed to be identical, i.e. the exact same object, whereas with Strings this might not be the case. You can test for this using '==='. Execute the following and watch the post window.<pre class='code prettyprint lang-sc'>"a String" === "a String";     // this will post false
 \aSymbol === 'aSymbol';        // this will post true</pre>
@@ -128,10 +134,10 @@ x.free;</pre>
 <p>In general in methods which communicate with the server one can use Strings and Symbols interchangeably, but be aware that this is not necessarily true in general code.<pre class='code prettyprint lang-sc'>"this" === \this;     // this will post false</pre>
 
 <p>For more information see:
-<p><a href="./../../Classes/SynthDef.html">SynthDef</a>, <a href="./../../Classes/Synth.html">Synth</a>, <a href="./../../Classes/String.html">String</a>, <a href="./../../Classes/Symbol.html">Symbol</a>, <a href="./../../Reference/Literals.html">Literals</a>, <a href="./../../Guides/Randomness.html">Randomness</a>, <a href="./../../Browse.html#UGens">Browse: UGens</a><h2><a class='anchor' name='Suggested Exercise'>Suggested Exercise</a></h2>
+<p><a href="./../../Classes/SynthDef.html">SynthDef</a>, <a href="./../../Classes/Synth.html">Synth</a>, <a href="./../../Classes/String.html">String</a>, <a href="./../../Classes/Symbol.html">Symbol</a>, <a href="./../../Reference/Literals.html">Literals</a>, <a href="./../../Guides/Randomness.html">Randomness</a>, <a href="./../../Browse.html#UGens">Browse: UGens</a><h2><a class='anchor' name='Suggested%20Exercise'>Suggested Exercise</a></h2>
 
 <p>Try converting some of the earlier Function based examples, or Functions of your own, to SynthDef versions, adding Out UGens. Experiment with adding and changing arguments both when the synths are created, and afterwards using 'set'.
 <p>____________________
 <p>This document is part of the tutorial <strong>Getting Started With SuperCollider</strong>.
 <p>Click here to go on to the next section: <a href="./../../Tutorials/Getting-Started/11-Busses.html">11. Busses</a>
-<p>Click here to return to the table of Contents: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/10-SynthDefs-and-Synths.schelp'>/usr/local/share/SuperCollider/HelpSource/Tutorials/Getting-Started/10-SynthDefs-and-Synths.schelp</a><br>link::Tutorials/Getting-Started/10-SynthDefs-and-Synths::<br>sc version: 3.8dev</div></div></body></html>
+<p>Click here to return to the table of Contents: <a href="./../../Tutorials/Getting-Started/00-Getting-Started-With-SC.html">00. Getting Started With SC</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Getting-Started/10-SynthDefs-and-Synths.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Getting-Started/10-SynthDefs-and-Synths.schelp</a><br>link::Tutorials/Getting-Started/10-SynthDefs-and-Synths::<br></div></div></body></html>

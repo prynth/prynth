@@ -1,45 +1,51 @@
-<html><head><title>Pgroup</title>
+<!doctype html><html lang='en'><head><title>Pgroup | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Pgroup';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Pgroup:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*eventType'>eventType</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider CLASSES</div>
-<div id='categories'><a href='./../Browse.html#Streams-Patterns-Events>Patterns>Server Control'>Streams-Patterns-Events>Patterns>Server Control</a></div>
-<h1>Pgroup</h1>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Streams-Patterns-Events>Patterns'>Patterns</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Streams-Patterns-Events>Patterns>Server Control'>Server Control</a></span>
+</div><h1>Pgroup<span id='superclasses'> : <a href="../Classes/PAbstractGroup.html">PAbstractGroup</a> : <a href="../Classes/FilterPattern.html">FilterPattern</a> : <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
 <div id='summary'>Starts a new Group and plays the pattern in this group</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: /usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/<a href='file:///usr/local/share/SuperCollider/SCClassLibrary/Common/Streams/Pfx.sc'>Pfx.sc</a></div><div id='superclasses'>Inherits from: <a href="../Classes/PAbstractGroup.html">PAbstractGroup</a> : <a href="../Classes/FilterPattern.html">FilterPattern</a> : <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></div>
-<div id='related'>See also: <a href="./../Classes/Group.html">Group</a>, <a href="./../Classes/Pbus.html">Pbus</a></div>
+<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Pfx.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Pfx.sc'>Pfx.sc</a></div><div id='related'>See also: <a href="./../Classes/Group.html">Group</a>, <a href="./../Classes/Pbus.html">Pbus</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
-<ul class='toc'><li class='toc2'><a href='#Inherited class methods'>Inherited class methods</a></li>
-<li class='toc2'><a href='#Undocumented class methods'>Undocumented class methods</a></li>
-<ul class='toc'><li class='toc3'><a href='#*eventType'>eventType</a> </li>
-</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
-<ul class='toc'><li class='toc2'><a href='#Inherited instance methods'>Inherited instance methods</a></li>
-</ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><h2><a class='anchor' name='description'>Description</a></h2>
+<h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>The group is released when the stream has ended. The group's <strong>release</strong> is delayed (default 0.1 beats) until after the last note releases. But, Pgroup does not know how long the synths' envelopes last. You can extend the lag by putting the number of beats into the event prototype's <code class='code prettyprint lang-sc'>\groupReleaseTime</code> key:<pre class='code prettyprint lang-sc'>Pgroup(...).play(protoEvent: Event.default.put(\groupReleaseTime, releaseLag));</pre>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3><a class='anchor' name='Inherited class methods'>Inherited class methods</a></h3>
-<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented class methods'>Undocumented class methods</a></h3>
-<h3 class='cmethodname'><span class='methprefix'>*</span><a name='*eventType' href='./../Overviews/Methods.html#eventType'>eventType</a> </h3>
+<h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>Pgroup.</span><a class='method-name' name='*eventType' href='./../Overviews/Methods.html#eventType'>eventType</a></h3>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
-<h3><a class='anchor' name='Inherited instance methods'>Inherited instance methods</a></h3>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
 <pre class='code prettyprint lang-sc'>p = Pbind(\degree, Prand((0..7), inf), \dur, 0.3, \legato, 0.2);
 
@@ -53,4 +59,4 @@ Pgroup(p).play;
 Pgroup(Pgroup(p)).play;
 Pgroup(Ppar([Pgroup(p), Pgroup(p)])).play;</pre>
 
-<p><div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Classes/Pgroup.schelp'>/usr/local/share/SuperCollider/HelpSource/Classes/Pgroup.schelp</a><br>link::Classes/Pgroup::<br>sc version: 3.8dev</div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Pgroup.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Pgroup.schelp</a><br>link::Classes/Pgroup::<br></div></div></body></html>

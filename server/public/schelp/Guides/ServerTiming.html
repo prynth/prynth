@@ -1,29 +1,35 @@
-<html><head><title>Server OSC timing</title>
+<!doctype html><html lang='en'><head><title>Scheduling and Server timing | SuperCollider 3.9.3 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Scheduling and Server timing';
+var scdoc_sc_version = '3.9.3';
+</script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
 <script src='./../prettify.js' type='text/javascript'></script>
 <script src='./../lang-sc.js' type='text/javascript'></script>
-<script type='text/javascript'>var helpRoot='./..';</script>
 </head>
-<ul id='menubar'></ul>
 <body onload='fixTOC();prettyPrint()'>
-<div class='contents'>
+<div id='toc'>
+<div id='toctitle'>Scheduling and Server timing:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Latency'>Latency</a></li>
+<ul class='toc'></ul></ul></div><div class='contents'>
+<div id='menubar'></div>
 <div class='header'>
-<div id='label'>SuperCollider GUIDES</div>
-<div id='categories'><a href='./../Browse.html#Server>Architecture'>Server>Architecture</a>, <a href='./../Browse.html#External Control>OSC'>External Control>OSC</a>, <a href='./../Browse.html#Scheduling'>Scheduling</a></div>
-<h1>Server OSC timing</h1>
-<div id='summary'>Server bundling latency and OSC timing</div>
+<div id='label'>
+<span id='folder'>Guides</span>
+ | <span id='categories'><a href='./../Browse.html#Server'>Server</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Server>Architecture'>Architecture</a> | <a href='./../Browse.html#External Control'>External Control</a>&#8201;&gt;&#8201;<a href='./../Browse.html#External Control>OSC'>OSC</a> | <a href='./../Browse.html#Scheduling'>Scheduling</a></span>
+</div><h1>Scheduling and Server timing</h1>
+<div id='summary'>Server bundling latency and OSC timing, logical and physical time</div>
 </div>
 <div class='subheader'>
-<div id='related'>See also: <a href="./../Classes/Server.html">Server</a></div>
+<div id='related'>See also: <a href="./../Classes/Server.html">Server</a>, <a href="./../Classes/TempoClock.html">TempoClock</a></div>
 </div>
-<div id='toc'>
-<ul class='toc'><li class='toc1'><a href='#Latency'>Latency</a></li>
-<ul class='toc'></ul></ul></div>
+
 <p>To ensure correct timing of events on the server, OSC messages may be sent with a time stamp, indicating the precise time the sound is expected to hit the hardware output.<h2><a class='anchor' name='Latency'>Latency</a></h2>
 
 <p>In the SuperCollider language, the time stamp is generated behind the scenes based on a parameter called "latency."
@@ -35,7 +41,7 @@
 <p>This sequencing example illustrates the difference. It's written deliberately inefficiently to expose the problem more clearly. Two copies of the same routine get started at the same time. On a theoretically perfect machine, in which operations take no time, we would hear both channels in perfect sync. No such machine exists, and this is obviously not the case when you listen. The routines also print out the logical time (clock.beats) and physical time (clock.elapsedBeats) just before playing a grain.<pre class='code prettyprint lang-sc'>s.boot;
 
 SynthDef(\sinGrain, { |out = 0, freq = 440, amp = 0.5, dur = 1|
-    Out.ar(out, SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.sine(1), timeScale:dur, doneAction:2));
+    Out.ar(out, SinOsc.ar(freq, 0, amp) * EnvGen.kr(Env.sine(1), timeScale:dur, doneAction: Done.freeSelf));
 }).add;
 
 2.do({ |chan|
@@ -95,4 +101,4 @@ s.sendBundle(latency, synth.newMsg(target, arguments, addAction));
 // object style, using automatic bundling
 // like the previous example, when this finishes you'll have the Synth object in the synth variable
 s.makeBundle(latency, { synth = Synth(defName, arguments, target, addAction); });</pre>
-<div class='doclink'>source: <a href='file:///usr/local/share/SuperCollider/HelpSource/Guides/ServerTiming.schelp'>/usr/local/share/SuperCollider/HelpSource/Guides/ServerTiming.schelp</a><br>link::Guides/ServerTiming::<br>sc version: 3.8dev</div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/ServerTiming.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/ServerTiming.schelp</a><br>link::Guides/ServerTiming::<br></div></div></body></html>
