@@ -608,11 +608,11 @@ The currently selected object can be deleted using the "Delete Selected" button 
 
 The Options panel includes a "Grid" option that increases the step of dragging.
 
-GUIs can be saved, loaded and deleted using the "GUI Files" panel.
+GUIs can be saved, loaded and deleted using the "GUI Files" panel. The last saved GUI will be automatically opened when the GUI editor is first accessed.
 
 Finally, the "Edit/Play" switch is used to toggle between the two states. Play mode will lock the interface and hide the control panels.
 
-Each object will send an exclusive OSC message with an address composed from the object's name. For example, "slider0" will send an OSC message on the following address:
+Each object will send an exclusive OSC message with an address composed from the object's name. For example, the object named "slider0" will send an OSC message on the following address:
 
 ~~~
 /raspberrypi/gui/slider0
@@ -665,6 +665,9 @@ Specifies the vector size to be used by Jack. Lower vector sizes have lower late
 
 ## Sample Rate
 Determines the sample rate used by Jack. Currently this option only allows for a choice of 44100 or 48000 sample rates.
+
+## Number of Periods
+Refers to the number of periods used by Jack. Typically a value of 3 for USB soundcards but I2S soundcards can use a value of 2. A lower number of periods will result in lower latencies.
 
 ## Force USB 1.1
 Checking this option will force the Raspberry Pi's USB controller to use a maximum speed according to the USB 1.x specification. This option might be necessary if using USB 1.x speed devices. For more information check the "Audio" section of this manual.
