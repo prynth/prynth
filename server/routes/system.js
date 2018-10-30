@@ -16,6 +16,7 @@ router.get('/', function(req, res, next) {
 	var audiodevice = configData.jack.device;
 	var vectorsize = configData.jack.vectorSize;
 	var samplerate = configData.jack.sampleRate;
+	var periods= configData.jack.periods;
 	var usb1 = configData.jack.usb1;
 
 	res.render('system', {
@@ -26,6 +27,7 @@ router.get('/', function(req, res, next) {
 		audiodevice: audiodevice,
 		vectorsize: vectorsize,
 		samplerate: samplerate,
+		periods: periods,
 		usb1: usb1
 	});
 });
@@ -113,6 +115,7 @@ router.post('/setjack', function (req, res) {
 	var jackDevice= req.body.device;
 	var jackVectorSize = req.body.vectorSize;
 	var jackSampleRate = req.body.sampleRate;
+	var jackPeriods = req.body.periods;
 	var usb1 = req.body.usb1;
 	var command;
 
@@ -120,7 +123,7 @@ router.post('/setjack', function (req, res) {
 	var configFile = fs.readFileSync(private_path +'config.json');
 	var configData = JSON.parse(configFile);
 
-	configData.jack = {"device": jackDevice, "vectorSize": jackVectorSize, "sampleRate": jackSampleRate, "usb1": usb1};
+	configData.jack = {"device": jackDevice, "vectorSize": jackVectorSize, "sampleRate": jackSampleRate, "periods": jackPeriods ,"usb1": usb1};
 
 	var configJSON = JSON.stringify(configData, null, 2);
 	fs.writeFileSync(private_path +'config.json', configJSON);

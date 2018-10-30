@@ -93,11 +93,14 @@ function startJack() {
 		var device = config.jack.device;
 		var vectorSize = config.jack.vectorSize;
 		var sampleRate = config.jack.sampleRate;
+		var periods = config.jack.periods;
+
 		var deviceParam = '-dhw:'+device;
 		var vectorSizeParam = '-p'+vectorSize;
 		var sampleRateParam = '-r'+sampleRate;
+		var periodsParam = '-n'+periods;
 
-		jackd = cp.spawn('jackd', ['-P95', '-dalsa', deviceParam, vectorSizeParam, '-n3', '-s', sampleRateParam]);
+		jackd = cp.spawn('jackd', ['-R', '-P95', '-dalsa', deviceParam, vectorSizeParam, periodsParam, '-s', sampleRateParam]);
 }
 
 function startPbridge() {

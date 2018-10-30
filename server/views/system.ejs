@@ -90,6 +90,15 @@
 
 			<br>
 			<br>
+			Number of periods:
+			<select id="jackPeriods">
+				<option selected disabled>Choose:</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+			</select>
+
+			<br>
+			<br>
 			<input type="checkbox" id="usb1checkbox">Force USB 1.1<br>
 			<br>
 			<button type="button" id="audioDeviceButton">Save</button>
@@ -120,6 +129,7 @@
 		var $jackDevice = $('#jackDevice');
 		var $jackVectorSize = $('#jackVectorSize');
 		var $jackSampleRate = $('#jackSampleRate');
+		var $jackPeriods = $('#jackPeriods');
 		var $audioDeviceSubmit = $('#audioDeviceButton');
 
 		var $usb1Check = $('#usb1checkbox');
@@ -129,6 +139,7 @@
 		$jackDevice.val('<%=audiodevice%>');
 		$jackVectorSize.val('<%=vectorsize%>');
 		$jackSampleRate.val('<%=samplerate%>');
+		$jackPeriods.val('<%=periods%>');
 		$usb1Check.prop('checked', <%=usb1%>);
 
 		$networkSubmit.click(function () {
@@ -162,8 +173,9 @@
 			var audioDevice = $jackDevice.val();
 			var audioVectorSize = $jackVectorSize.val();
 			var audioSampleRate = $jackSampleRate.val();
+			var audioPeriods = $jackPeriods.val();
 			var usb1 = $usb1Check.is(":checked");
-			$.ajax({method: "POST", url: 'system/setjack', data: {device: audioDevice, vectorSize: audioVectorSize, sampleRate: audioSampleRate, usb1: usb1}});
+			$.ajax({method: "POST", url: 'system/setjack', data: {device: audioDevice, vectorSize: audioVectorSize, sampleRate: audioSampleRate, periods: audioPeriods, usb1: usb1}});
 			var r = confirm("Jack settings updated.\nThis setting requires a reboot.\nDo you want to reboot now?");
 			if (r == true) {$.ajax({method: "POST", url: '/reboot'});};
 		})
