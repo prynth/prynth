@@ -9,7 +9,7 @@ For more information please visit the [Prynth website](https://prynth.github.io/
 
 ## Prepare the OS
 
-- Flash the latest Raspbian Lite image (https://www.raspberrypi.org/downloads/raspbian/) to your microSD card.
+- Flash the latest Raspbian Lite image (https://www.raspberrypi.org/software/operating-systems/#raspberry-pi-os-32-bit) to your microSD card.
 - Mount the card on your computer and create an file named ssh located at the root of the boot folder. In Linux:\
 `
 touch ssh

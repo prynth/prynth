@@ -184,10 +184,10 @@ void timer0_callback(void)
         readMux = (readMux + 1) % numAdc;
       }
     }while(sensorActive[readMux][readSensor]!=HIGH);
-//    Serial.print(" Reading: ");
-//    Serial.print(readMux);
-//    Serial.print("\t");
-//    Serial.println(readSensor);
+   Serial.print(" Reading: ");
+   Serial.print(readMux);
+   Serial.print("\t");
+   Serial.println(readSensor);
     sensorReadInit();
   }
 }
@@ -449,11 +449,12 @@ void prynthInit()
   pinMode(4, OUTPUT);// s2
 
   //ADC Init
-  adc->setAveraging(1); // set number of averages
-  adc->setResolution(adcResolution); // set bits of resolution
 
-  adc->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED); // change the conversion speed
-  adc->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED); // change the sampling speed
+  adc->adc0->setAveraging(1); // set number of averages
+  adc->adc0->setResolution(adcResolution); // set bits of resolution
+
+  adc->adc0->setConversionSpeed(ADC_CONVERSION_SPEED::VERY_HIGH_SPEED); // change the conversion speed
+  adc->adc0->setSamplingSpeed(ADC_SAMPLING_SPEED::VERY_HIGH_SPEED); // change the sampling speed
 
   digitalSensorInit();
   // Initialize all sensors to Low resolution and set their masks.
@@ -476,6 +477,6 @@ void prynthInit()
   delayMicroseconds(25); // if we wait less than 36us the timer1 will interrupt the conversion
   Serial.println("Timer started");
 
-  adc->enableInterrupts(ADC_0);
+  adc->adc0->enableInterrupts(adc0_isr);
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
