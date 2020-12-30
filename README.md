@@ -39,8 +39,10 @@ network={
 - Update libraries.
   - `sudo apt-get update`
   - `sudo apt-get upgrade`
+  - `sudo apt-get dist-upgrade`
+
 - Install additional libraries required for Jack and SuperCollider.
-  - `sudo apt-get -y install vim alsa-base libicu-dev libasound2-dev libsamplerate0-dev libsndfile1-dev libreadline-dev libxt-dev libudev-dev libavahi-client-dev libfftw3-dev cmake git libcwiid-dev`
+- `sudo apt-get install libsamplerate0-dev libsndfile1-dev libasound2-dev libavahi-client-dev libreadline-dev libfftw3-dev libudev-dev libncurses5-dev cmake git`
 - Reboot.
 
 ## Compile and install Jack
@@ -53,19 +55,17 @@ network={
 - `cd .. && rm -rf jack2`
 
 ## Set limits.conf
-- `sudo sed -i '/# End of file/ i @audio - memlock 256000\n@audio - rtprio 75\n' /etc/security/limits.conf`
+- `sudo sh -c "echo @audio - memlock 256000 >> /etc/security/limits.conf"`
+- `sudo sh -c "echo @audio - rtprio 75 >> /etc/security/limits.conf"`
+- `exit # and ssh in again to make the limits.conf settings work`
 
 ## Compile and install Supercollider
-- `git clone --recursive git://github.com/supercollider/supercollider`
+- `git clone --recurse-submodules https://github.com/supercollider/supercollider.git`
 - `cd supercollider`
-- `git submodule init && git submodule update`
 - `mkdir build && cd build`
-- `cmake -L -DCMAKE_BUILD_TYPE="Release" -DBUILD_TESTING=OFF -DSSE=OFF -DSSE2=OFF -DSUPERNOVA=OFF -DNATIVE=OFF -DSC_WII=OFF -DSC_IDE=OFF -DSC_QT=OFF -DSC_ED=OFF -DSC_EL=OFF -DSC_VIM=OFF ..`
-- `make -j 4`
-- `sudo make install`
+- `cmake -DCMAKE_BUILD_TYPE=Release -DSUPERNOVA=OFF -DSC_ED=OFF -DSC_EL=OFF -DSC_VIM=ON -DNATIVE=ON -DSC_IDE=OFF -DNO_X11=ON -DSC_QT=OFF ..`
+- `sudo cmake --build . --config Release --target install`
 - `sudo ldconfig`
-- `cd ../.. && rm -rf supercollider`
-- Reboot.
 
 ## Test Jack and SuperCollider
 - Connect your soundcard (USB or I2S)
@@ -91,8 +91,7 @@ network={
 - Reboot.
 - SSH to Raspberry Pi.
 - Additional boot settings (disable Bluetooth and enable overclocking)
-  - `sudo sed -i '$ a dtoverlay=pi3-disable-bt\nforce_turbo=1\n' /boot/config.txt`
-
+  - `sudo sh -c "echo dtoverlay=pi3-disable-bt >> /boot/config.txt"`
 ## Clone prynth in the pi home folder
 - `cd ~`
 - `git clone https://github.com/prynth/prynth.git`  
