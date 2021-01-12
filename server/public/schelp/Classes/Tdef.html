@@ -1,25 +1,31 @@
-<!doctype html><html lang='en'><head><title>Tdef | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Tdef | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Tdef';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Tdef:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
 <ul class='toc'><li class='toc2'><a href='#First%20Example'>First Example</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
-<ul class='toc'><li class='toc2'><a href='#Creation'>Creation</a></li>
+<ul class='toc'><li class='toc3'><a href='#*all'>all</a> </li>
+<li class='toc2'><a href='#Creation'>Creation</a></li>
 <ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
 <li class='toc3'><a href='#*default'>default</a> </li>
 <li class='toc3'><a href='#*removeAll'>removeAll</a> </li>
@@ -33,6 +39,7 @@ var scdoc_sc_version = '3.9.3';
 </ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc2'><a href='#Changing%20the%20definition%20/%20setting%20the%20source'>Changing the definition / setting the source</a></li>
 <ul class='toc'><li class='toc3'><a href='#-quant'>quant</a> </li>
+<li class='toc3'><a href='#-clock'>clock</a> </li>
 <li class='toc3'><a href='#-condition'>condition</a> </li>
 <li class='toc3'><a href='#-count'>count</a> </li>
 <li class='toc3'><a href='#-reset'>reset</a> </li>
@@ -53,6 +60,7 @@ var scdoc_sc_version = '3.9.3';
 </ul><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 <li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-copy'>copy</a> </li>
+<li class='toc3'><a href='#-dup'>dup</a> </li>
 <li class='toc3'><a href='#-gui'>gui</a> </li>
 <li class='toc3'><a href='#-key'>key</a> </li>
 <li class='toc3'><a href='#-prAdd'>prAdd</a> </li>
@@ -60,39 +68,46 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc2'><a href='#Tdef%20as%20a%20Task%20player'>Tdef as a Task player</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Embed%20and%20fork:%20Tdef%20within%20other%20Tasks%20/%20Routines'>Embed and fork: Tdef within other Tasks / Routines</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Tdef%20as%20a%20time%20pattern'>Tdef as a time pattern</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
- | <span id='categories'><a href='./../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib>Patterns'>Patterns</a></span>
+ | <span id='categories'><a href='./../Browse.html#JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#JITLib>Patterns'>Patterns</a></span>
 </div><h1>Tdef<span id='superclasses'> : <a href="../Classes/TaskProxy.html">TaskProxy</a> : <a href="../Classes/PatternProxy.html">PatternProxy</a> : <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
 </h1>
 <div id='summary'>task reference definition</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/Patterns/Pdef.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/Patterns/Pdef.sc'>Pdef.sc</a></div><div id='related'>See also: <a href="./../Classes/TaskProxy.html">TaskProxy</a>, <a href="./../Classes/Task.html">Task</a>, <a href="./../Classes/Routine.html">Routine</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/Patterns/Pdef.sc' title='/usr/share/SuperCollider/SCClassLibrary/JITLib/Patterns/Pdef.sc'>Pdef.sc</a></div><div id='related'>See also: <a href="./../Classes/TaskProxy.html">TaskProxy</a>, <a href="./../Classes/Task.html">Task</a>, <a href="./../Classes/Routine.html">Routine</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>Tdef registers tasks by key. All accesses to the registered tasks go through the Tdef class via that key. Registered tasks can be replaced with other tasks while playing. The old task and its replacement can automatically crossfade and the replacement time can be quantized.
-<p>Tdef provides an interface to its superclass TaskProxy. Tdef keeps a reference to a task ( <strong>time pattern</strong> ) that can be replaced while playing. It continues playing when the old stream ended and a new stream is set and schedules the changes to the beat. One Tdef may be used in many tasks in different places. A change in the task definition Tdef propagates through all tasks.<pre class='code prettyprint lang-sc'>Tdef(key)    //returns the instance
-Tdef(key, func)    //defines the task and returns the instance, like Pdef and Ndef.</pre>
+<p>Tdef provides an interface to its superclass TaskProxy. Tdef keeps a reference to a task ( <strong>time pattern</strong> ) that can be replaced while playing. It continues playing when the old stream ended and a new stream is set and schedules the changes to the beat. One Tdef may be used in many tasks in different places. A change in the task definition Tdef propagates through all tasks.<textarea class='editor'>Tdef(key)    //returns the instance
+Tdef(key, func)    //defines the task and returns the instance, like Pdef and Ndef.</textarea>
 
 <p>Graphical overview over all current Tdefs: <a href="./../Classes/TdefAllGui.html">TdefAllGui</a>. Overview: <a href="./../Overviews/JITLib.html">JITLib</a><h3><a class='anchor' name='First%20Example'>First Example</a></h3>
-<pre class='code prettyprint lang-sc'>Tdef(\x, { loop { 0.5.wait; "aaaaaaaaaaaaaazz".scramble.postln } }).play;
+<textarea class='editor'>Tdef(\x, { loop { 0.5.wait; "aaaaaaaaaaaaaazz".scramble.postln } }).play;
 Tdef(\x, { loop { 0.125.wait; "aazz".scramble.postln } });
 Tdef(\x, { loop { 0.5.wait; (note: 14.rand).play } });
 Tdef(\x, { loop { 0.5.wait; (note: 14.rand + [0, 3, 6, 7].keep(4.rand)).play } });
 Tdef(\x).stop;
 Tdef(\x).play;
-Tdef(\x).clear;</pre>
+Tdef(\x).clear;</textarea>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3><a class='anchor' name='Creation'>Creation</a></h3>
+<h3 class='method-code'><span class='method-prefix'>Tdef.</span><a class='method-name' name='*all' href='./../Overviews/Methods.html#all'>all</a></h3>
+<h3 class='method-code'><span class='method-prefix'>Tdef.</span><a class='method-name' name='*all' href='./../Overviews/Methods.html#all'>all</a> = value</h3>
+<div class='method'>
+<p>A global <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> with all proxies.</div><h3><a class='anchor' name='Creation'>Creation</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Tdef.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>key</span>, <span class='argstr'>item</span>)</h3>
 <div class='method'>
 <p>Store the task in a global dictionary under key, replacing its routine function with the new one.
-<p>Using <strong>*new(key)</strong> you can access the pattern at that key (if none is given, a default task is created)</div><h3 class='method-code'><span class='method-prefix'>Tdef.</span><a class='method-name' name='*default' href='./../Overviews/Methods.html#default'>default</a></h3>
+<p>Using <strong>*new(key)</strong> you can access the pattern at that key (if none is given, a default task is created)<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>key<td class='argumentdesc'>
+<p>An identifier for the proxy. Usually, it is a <a href="./../Classes/Symbol.html">Symbol</a>. The key transparently accesses the global <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a>.<tr><td class='argumentname'>item<td class='argumentdesc'>
+<p>An object for (re)defining the source of the proxy. If <code>nil</code>, the proxy is returned unmodified.</table></div><h3 class='method-code'><span class='method-prefix'>Tdef.</span><a class='method-name' name='*default' href='./../Overviews/Methods.html#default'>default</a></h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/TaskProxy.html'>TaskProxy</a></div>
 <div class='method'>
 <p>Default source, if none is given. The default task has a function that waits in 1.0 beat steps and does nothing.</div><h3 class='method-code'><span class='method-prefix'>Tdef.</span><a class='method-name' name='*removeAll' href='./../Overviews/Methods.html#removeAll'>removeAll</a></h3>
@@ -111,7 +126,7 @@ Tdef(\x).clear;</pre>
 <p>Set the default quantisation for new instances (default: 1.0). This can be an array [quant, phase, timingOffset, outset]</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Tdef.</span><a class='method-name' name='*gui' href='./../Overviews/Methods.html#gui'>gui</a>(<span class='argstr'>numItems</span>, <span class='argstr'>bounds</span>, <span class='argstr'>preset</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extJITgui.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extJITgui.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extJITgui.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extJITgui.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>Tdef.</span><a class='method-name' name='*hasGlobalDictionary' href='./../Overviews/Methods.html#hasGlobalDictionary'>hasGlobalDictionary</a></h3>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Changing%20the%20definition%20/%20setting%20the%20source'>Changing the definition / setting the source</a></h3>
@@ -120,9 +135,13 @@ Tdef(\x).clear;</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quant' href='./../Overviews/Methods.html#quant'>quant</a> = <span class='argstr'>val</span></h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
 <div class='method'>
-<p>Set the quantisation time for beat accurate scheduling.<h4>Arguments:</h4>
+<p>Set the quantisation time for beat accurate scheduling.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clock' href='./../Overviews/Methods.html#clock'>clock</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clock' href='./../Overviews/Methods.html#clock'>clock</a> = value</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
+<div class='method'>
+<p>get or set the instance's default clock, used by <a href="#-play">-play</a> if no other clock is specified. Defaults to TempoClock.default.<h4>Arguments:</h4>
 <table class='arguments'>
-<tr><td class='argumentname'>val<td class='argumentdesc'>
+<tr><td class='argumentname'>(val)<td class='argumentdesc'>
 <p>can be an array <strong>[quant, phase, timingOffset, outset]</strong>, or just <strong>[quant, phase]</strong> etc.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-condition' href='./../Overviews/Methods.html#condition'>condition</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-condition' href='./../Overviews/Methods.html#condition'>condition</a> = value</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
@@ -170,7 +189,7 @@ Tdef(\x).clear;</pre>
 <p>Starts the Tdef and creates a player.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>argClock<td class='argumentdesc'>
-<p>a clock on which to play the Tdef<tr><td class='argumentname'>doReset<td class='argumentdesc'>
+<p>a clock on which to play the Tdef. If nil, uses the instance's <a href="#-clock">-clock</a>, which in turn defaults to TempoClock.default.<tr><td class='argumentname'>doReset<td class='argumentdesc'>
 <p>a flag whether to reset the task if already playing<tr><td class='argumentname'>quant<td class='argumentdesc'>
 <p>can be an array of [quant, phase, offset] or a <a href="./../Classes/Quant.html">Quant</a> value.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-stop' href='./../Overviews/Methods.html#stop'>stop</a></h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/TaskProxy.html'>TaskProxy</a></div>
@@ -191,13 +210,14 @@ Tdef(\x).clear;</pre>
 <p>Returns true if player is running. If a Tdef is playing and its stream ends, it will schedule a stream for playing <strong>as soon as a new one is assigned to it</strong>. If it is stopped by <strong>stop</strong>, it won't.</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-copy' href='./../Overviews/Methods.html#copy'>copy</a>(<span class='argstr'>toKey</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-dup' href='./../Overviews/Methods.html#dup'>dup</a>(<span class='argstr'>n: 2</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gui' href='./../Overviews/Methods.html#gui'>gui</a>(<span class='argstr'>numItems</span>, <span class='argstr'>bounds</span>, <span class='argstr'>preset</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extJITgui.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extJITgui.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extJITgui.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extJITgui.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-key' href='./../Overviews/Methods.html#key'>key</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-prAdd' href='./../Overviews/Methods.html#prAdd'>prAdd</a>(<span class='argstr'>argKey</span>)</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 <h3><a class='anchor' name='Tdef%20as%20a%20Task%20player'>Tdef as a Task player</a></h3>
-<pre class='code prettyprint lang-sc'>Tdef(\x).play; // create an empty Tdef and play it.
+<textarea class='editor'>Tdef(\x).play; // create an empty Tdef and play it.
 
 Tdef(\x, { loop({ "ggggggggggggggggg9999ggg999ggg999gg".scramble.postln; 0.5.wait; }) });
 
@@ -218,8 +238,8 @@ TempoClock.default.tempo = 1;
 Tdef(\x).stop;
 Tdef(\x).play;
 
-Tdef(\x).clear;</pre>
-<pre class='code prettyprint lang-sc'>// sound example
+Tdef(\x).clear;</textarea>
+<textarea class='editor'>// sound example
 
 (
 // load a synthdef
@@ -283,9 +303,9 @@ Tdef(\x, {
 // ... and so on ...
 
 Tdef(\x).stop;
-Tdef.removeAll;</pre>
+Tdef.removeAll;</textarea>
 <h3><a class='anchor' name='Embed%20and%20fork:%20Tdef%20within%20other%20Tasks%20/%20Routines'>Embed and fork: Tdef within other Tasks / Routines</a></h3>
-<pre class='code prettyprint lang-sc'>// embed plays tdefs in sequence within a task.
+<textarea class='editor'>// embed plays tdefs in sequence within a task.
 (
 Tdef(\a, { "one".postln; 1.wait; "two".postln });
 Tdef(\c, { var z; z = Synth(\default); 0.5.wait; z.release });
@@ -344,10 +364,10 @@ Tdef(\d, {
 
     "done.".postln;
 });
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Tdef%20as%20a%20time%20pattern'>Tdef as a time pattern</a></h3>
 
-<p>Instead of using a <a href="./../Classes/Pdefn.html">Pdefn</a> for time values, it can be useful to use a Tdef. When changing its source, it keeps the stream of values synchronized to its clock.<pre class='code prettyprint lang-sc'>(
+<p>Instead of using a <a href="./../Classes/Pdefn.html">Pdefn</a> for time values, it can be useful to use a Tdef. When changing its source, it keeps the stream of values synchronized to its clock.<textarea class='editor'>(
 // load a synthdef
 s.boot;
 SynthDef("pdef_grainlet",
@@ -383,6 +403,7 @@ Pset(\instrument, \pdef_grainlet,
 Tdef(\z, Prand([1, 1, 0.23, 0.5, 0.5], inf)); // exchange time pattern
 Tdef(\z, Pseq([1, 1, 1, 1], inf)); // pattern stays in sync.
 Tdef(\z, Pseq([1, 1, 1, 0.5, 0.5], inf)); // but might be in different order.
-                    // to avoid this, set quant to an appropriate value.</pre>
+                    // to avoid this, set quant to an appropriate value.</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Tdef.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Tdef.schelp</a><br>link::Classes/Tdef::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Tdef.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Tdef.schelp</a><br>link::Classes/Tdef::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Pattern Guide Reference 01: Pattern Internals | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide Reference 01: Pattern Internals | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'Pattern Guide Reference 01: Pattern Internals';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pattern Guide Reference 01: Pattern Internals:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Inner%20workings%20of%20patterns'>Inner workings of patterns</a></li>
@@ -23,8 +28,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Writing%20patterns:%20other%20factors'>Writing patterns: other factors</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Cleaning%20up%20event%20pattern%20resources'>Cleaning up event pattern resources</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#When%20does%20a%20pattern%20need%20an%20EventStreamCleanup?'>When does a pattern need an EventStreamCleanup?</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/A-Practical-Guide</span>
@@ -39,16 +44,16 @@ var scdoc_sc_version = '3.9.3';
 <h3><a class='anchor' name='Patterns%20as%20streams'>Patterns as streams</a></h3>
 
 <p>As noted, patterns by themselves don't do much. They have to be turned into streams first; then, values are requested from a stream, not from the pattern.
-<p>For most patterns, the stream is an instance of <a href="./../../Classes/Routine.html">Routine</a>. Routines (formally known in computer science as "coroutines") are important because they can yield control back to the caller but still remember exactly where they were, so they can resume in the middle on the next call without having to start over. A few exceptional patterns use FuncStream, which is simply a wrapper around a function that allows a function to act like a stream by responding to <code class='code prettyprint lang-sc'>next</code> and other Stream methods.
-<p>Every pattern class must respond to <code class='code prettyprint lang-sc'>asStream</code>; however, most patterns do not directly implement <code class='code prettyprint lang-sc'>asStream</code>. Instead, they use the generic <code class='code prettyprint lang-sc'>asStream</code> implementation from <a href="./../../Classes/Pattern.html">Pattern</a>.<pre class='code prettyprint lang-sc'>    asStream { ^Routine({ arg inval; this.embedInStream(inval) }) }</pre>
+<p>For most patterns, the stream is an instance of <a href="./../../Classes/Routine.html">Routine</a>. Routines (formally known in computer science as "coroutines") are important because they can yield control back to the caller but still remember exactly where they were, so they can resume in the middle on the next call without having to start over. A few exceptional patterns use FuncStream, which is simply a wrapper around a function that allows a function to act like a stream by responding to <code>next</code> and other Stream methods.
+<p>Every pattern class must respond to <code>asStream</code>; however, most patterns do not directly implement <code>asStream</code>. Instead, they use the generic <code>asStream</code> implementation from <a href="./../../Classes/Pattern.html">Pattern</a>.<textarea class='editor'>    asStream { ^Routine({ arg inval; this.embedInStream(inval) }) }</textarea>
 
-<p>This line creates a Routine whose job is simply to embed the pattern into its stream. "Embedding" means for the pattern to do its assigned work, and return control to the parent level when it's finished. When a simple pattern finishes, its parent level is the Routine itself. After <code class='code prettyprint lang-sc'>embedInStream</code> returns, there is nothing else for the Routine to do, so that stream is over; it can only yield nil thereafter.<pre class='code prettyprint lang-sc'>p = Pseries(0, 1, 3).asStream;    // this will yield exactly 3 values
-4.do { p.next.postln };        // 4th value is nil</pre>
+<p>This line creates a Routine whose job is simply to embed the pattern into its stream. "Embedding" means for the pattern to do its assigned work, and return control to the parent level when it's finished. When a simple pattern finishes, its parent level is the Routine itself. After <code>embedInStream</code> returns, there is nothing else for the Routine to do, so that stream is over; it can only yield nil thereafter.<textarea class='editor'>p = Pseries(0, 1, 3).asStream;    // this will yield exactly 3 values
+4.do { p.next.postln };        // 4th value is nil</textarea>
 
-<p>We saw that list patterns can contain other patterns, and that the inner patterns are treated like "subroutines." List patterns do this by calling <code class='code prettyprint lang-sc'>embedInStream</code> on their list items. Most objects are embedded into the stream just by yielding the object:<pre class='code prettyprint lang-sc'>        // in Object
-    embedInStream { ^this.yield; }</pre>
+<p>We saw that list patterns can contain other patterns, and that the inner patterns are treated like "subroutines." List patterns do this by calling <code>embedInStream</code> on their list items. Most objects are embedded into the stream just by yielding the object:<textarea class='editor'>        // in Object
+    embedInStream { ^this.yield; }</textarea>
 
-<p>But if the item is a pattern itself, control enters into the subpattern and stays there until the subpattern ends. Then control goes back to the list pattern to get the next item, which is embedded and so on.<pre class='code prettyprint lang-sc'>p = Pseq([Pseries(0, 1, 3), Pgeom(10, 2, 3)], 1).asStream;
+<p>But if the item is a pattern itself, control enters into the subpattern and stays there until the subpattern ends. Then control goes back to the list pattern to get the next item, which is embedded and so on.<textarea class='editor'>p = Pseq([Pseries(0, 1, 3), Pgeom(10, 2, 3)], 1).asStream;
 
 p.next;    // Pseq is embedded; first item is Pseries(0...), also embedded
         // Control is now in the Pseries
@@ -59,12 +64,12 @@ p.next;    // no more Pseries items; control goes back to Pseq
 p.next;    // second item from Pgeom
 p.next;    // third item from Pgeom
 p.next;    // no more Pgeom items; Pseq has no more items, so it returns to Routine
-        // Routine has nothing left to do, so the result is nil</pre>
+        // Routine has nothing left to do, so the result is nil</textarea>
 
 <p>To write a new pattern class, then, the bare minimum required is:<ul>
-<li><strong>Instance variables</strong> for the pattern's parameters<li>A <code class='code prettyprint lang-sc'>*new</code> method to initialize those variables<li>An <code class='code prettyprint lang-sc'>embedInStream</code> method to do the pattern's work</ul>
+<li><strong>Instance variables</strong> for the pattern's parameters<li>A <code>*new</code> method to initialize those variables<li>An <code>embedInStream</code> method to do the pattern's work</ul>
 
-<p>One of the simpler pattern definitions in the main library is Prand:<pre class='code prettyprint lang-sc'>Prand : ListPattern {
+<p>One of the simpler pattern definitions in the main library is Prand:<textarea class='editor'>Prand : ListPattern {
     embedInStream { arg inval;
         var item;
 
@@ -74,9 +79,9 @@ p.next;    // no more Pgeom items; Pseq has no more items, so it returns to Rout
         });
         ^inval;
     }
-}</pre>
+}</textarea>
 
-<p>This definition doesn't show the instance variables or <code class='code prettyprint lang-sc'>*new</code> method. Where are they? They are inherited from the superclass, ListPattern.<pre class='code prettyprint lang-sc'>ListPattern : Pattern {
+<p>This definition doesn't show the instance variables or <code>*new</code> method. Where are they? They are inherited from the superclass, ListPattern.<textarea class='editor'>ListPattern : Pattern {
     var &lt;&gt;list, &lt;&gt;repeats=1;
 
     *new { arg list, repeats=1;
@@ -88,42 +93,42 @@ p.next;    // no more Pgeom items; Pseq has no more items, so it returns to Rout
         }
     }
     // some misc. methods omitted in this document
-}</pre>
+}</textarea>
 
-<p>Because of this inheritance, Prand simply expresses its behavior as a <code class='code prettyprint lang-sc'>do</code> loop, choosing <code class='code prettyprint lang-sc'>repeats</code> items randomly from the list and embedding them into the stream. When the loop is finished, the method returns the input value (see below).<h3><a class='anchor' name='Streams'%20input%20values%20(inval,%20inevent)'>Streams' input values (inval, inevent)</a></h3>
+<p>Because of this inheritance, Prand simply expresses its behavior as a <code>do</code> loop, choosing <code>repeats</code> items randomly from the list and embedding them into the stream. When the loop is finished, the method returns the input value (see below).<h3><a class='anchor' name='Streams'%20input%20values%20(inval,%20inevent)'>Streams' input values (inval, inevent)</a></h3>
 
 <p>Before discussing input values in patterns, let's take a step back and discuss how it works for Routines.
-<p><a href="./../../Classes/Routine.html">Routine</a>'s <code class='code prettyprint lang-sc'>next</code> method takes one argument, which is passed into the stream (Routine). The catch is that the routine doesn't start over from the beginning -- if it did, it would lose its unique advantage of remembering its position and resuming on demand. So it isn't sufficient to receive the argument using the routine function's argument variable.
-<p>In reality, when a Routine yields a value, its execution is interrupted after calling <code class='code prettyprint lang-sc'>yield</code>, but before <code class='code prettyprint lang-sc'>yield</code> returns. Then, when the Routine is asked for its next value, execution resumes by providing a return value from the <code class='code prettyprint lang-sc'>yield</code> method. (This behavior isn't visible in the SuperCollider code in the class library; <code class='code prettyprint lang-sc'>yield</code> is a primitive in the C++ backend, which is how it's able to do something that is otherwise impossible in the language.)
-<p>For a quick example, consider a routine that is supposed to multiply the input value by two. First, the wrong way, assuming that everything is done by the function argument <code class='code prettyprint lang-sc'>inval</code>. In reality, the first <code class='code prettyprint lang-sc'>inval</code> to come in is <code class='code prettyprint lang-sc'>1</code>. Since nothing in the routine changes the value of <code class='code prettyprint lang-sc'>inval</code>, the routine yields the same value each time.<pre class='code prettyprint lang-sc'>r = Routine({ |inval|
+<p><a href="./../../Classes/Routine.html">Routine</a>'s <code>next</code> method takes one argument, which is passed into the stream (Routine). The catch is that the routine doesn't start over from the beginning -- if it did, it would lose its unique advantage of remembering its position and resuming on demand. So it isn't sufficient to receive the argument using the routine function's argument variable.
+<p>In reality, when a Routine yields a value, its execution is interrupted after calling <code>yield</code>, but before <code>yield</code> returns. Then, when the Routine is asked for its next value, execution resumes by providing a return value from the <code>yield</code> method. (This behavior isn't visible in the SuperCollider code in the class library; <code>yield</code> is a primitive in the C++ backend, which is how it's able to do something that is otherwise impossible in the language.)
+<p>For a quick example, consider a routine that is supposed to multiply the input value by two. First, the wrong way, assuming that everything is done by the function argument <code>inval</code>. In reality, the first <code>inval</code> to come in is <code>1</code>. Since nothing in the routine changes the value of <code>inval</code>, the routine yields the same value each time.<textarea class='editor'>r = Routine({ |inval|
     loop {
         yield(inval * 2)
     }
 });
 
-(1..3).do { |x| r.next(x).postln };</pre>
+(1..3).do { |x| r.next(x).postln };</textarea>
 
-<p>If, instead, the routine saves the result of <code class='code prettyprint lang-sc'>yield</code> into the <code class='code prettyprint lang-sc'>inval</code> variable, the routine becomes aware of the successive input values and returns the expected results.<pre class='code prettyprint lang-sc'>r = Routine({ |inval|
+<p>If, instead, the routine saves the result of <code>yield</code> into the <code>inval</code> variable, the routine becomes aware of the successive input values and returns the expected results.<textarea class='editor'>r = Routine({ |inval|
     loop {
             // here is where the 2nd, 3rd, 4th etc. input values come in
         inval = yield(inval * 2);
     }
 });
 
-(1..3).do { |x| r.next(x).postln };</pre>
+(1..3).do { |x| r.next(x).postln };</textarea>
 
-<p>This convention -- receiving the first input value as an argument, and subsequent input values as a result of a method call -- holds true for the <code class='code prettyprint lang-sc'>embedInStream</code> method in patterns also. The rules are:<ul>
-<li><code class='code prettyprint lang-sc'>embedInStream</code> takes <strong>one argument</strong>, which is the first input value.<li>When the pattern needs to yield a value directly, or embed an item into the stream, it receives the next input value as the result of <code class='code prettyprint lang-sc'>yield</code> or <code class='code prettyprint lang-sc'>embedInStream</code> : <code class='code prettyprint lang-sc'>inval = output.yield</code> or <code class='code prettyprint lang-sc'>output.embedInStream(inval)</code>.<li>When the pattern exits, it must return the last input value, so that the parent pattern will get the input value as the result of its <code class='code prettyprint lang-sc'>embedInStream</code> call: <code class='code prettyprint lang-sc'>^inval</code>.</ul>
+<p>This convention -- receiving the first input value as an argument, and subsequent input values as a result of a method call -- holds true for the <code>embedInStream</code> method in patterns also. The rules are:<ul>
+<li><code>embedInStream</code> takes <strong>one argument</strong>, which is the first input value.<li>When the pattern needs to yield a value directly, or embed an item into the stream, it receives the next input value as the result of <code>yield</code> or <code>embedInStream</code> : <code>inval = output.yield</code> or <code>output.embedInStream(inval)</code>.<li>When the pattern exits, it must return the last input value, so that the parent pattern will get the input value as the result of its <code>embedInStream</code> call: <code>^inval</code>.</ul>
 
-<p>By following these rules, <code class='code prettyprint lang-sc'>embedInStream</code> becomes a near twin of <code class='code prettyprint lang-sc'>yield</code>. Both do essentially the same thing: spit values out to the user, and come back with the next input value. The only difference is that yield can return only one object to the <code class='code prettyprint lang-sc'>next</code> caller, while <code class='code prettyprint lang-sc'>embedInStream</code> can yield several in succession.
-<p>Take a moment to go back and look at how Prand's <code class='code prettyprint lang-sc'>embedInStream</code> method does it.<h3><a class='anchor' name='embedInStream%20vs.%20asStream%20+%20next'>embedInStream vs. asStream + next</a></h3>
+<p>By following these rules, <code>embedInStream</code> becomes a near twin of <code>yield</code>. Both do essentially the same thing: spit values out to the user, and come back with the next input value. The only difference is that yield can return only one object to the <code>next</code> caller, while <code>embedInStream</code> can yield several in succession.
+<p>Take a moment to go back and look at how Prand's <code>embedInStream</code> method does it.<h3><a class='anchor' name='embedInStream%20vs.%20asStream%20+%20next'>embedInStream vs. asStream + next</a></h3>
 
-<p>If a pattern class needs to use values from another pattern, should it evaluate that pattern using <code class='code prettyprint lang-sc'>embedInStream</code>, or should it make a separate stream ( <code class='code prettyprint lang-sc'>asStream</code> ) and pull values from that stream using <code class='code prettyprint lang-sc'>next</code>? Both approaches are used in the class library.
-<p><code class='code prettyprint lang-sc'>embedInStream</code> turns control over to the subpattern completely. The outer pattern is effectively suspended until the subpattern gives control back. This is the intended behavior of most list patterns, for example. There is no opportunity for the parent to do anything to the value yielded back to the caller.
-<p>This pattern demonstrates what it means to give control over to the subpattern. The first pattern in the <a href="./../../Classes/Pseq.html">Pseq</a> list is infinite; consequently, the second subpattern will never execute because the infinite pattern never gives control back to Pseq.<pre class='code prettyprint lang-sc'>p = Pseq([Pwhite(0, 9, inf), Pwhite(100, 109, inf)], 1).asStream;
-p.nextN(20);    // no matter how long you do this, it'll never be &gt; 9!</pre>
+<p>If a pattern class needs to use values from another pattern, should it evaluate that pattern using <code>embedInStream</code>, or should it make a separate stream ( <code>asStream</code> ) and pull values from that stream using <code>next</code>? Both approaches are used in the class library.
+<p><code>embedInStream</code> turns control over to the subpattern completely. The outer pattern is effectively suspended until the subpattern gives control back. This is the intended behavior of most list patterns, for example. There is no opportunity for the parent to do anything to the value yielded back to the caller.
+<p>This pattern demonstrates what it means to give control over to the subpattern. The first pattern in the <a href="./../../Classes/Pseq.html">Pseq</a> list is infinite; consequently, the second subpattern will never execute because the infinite pattern never gives control back to Pseq.<textarea class='editor'>p = Pseq([Pwhite(0, 9, inf), Pwhite(100, 109, inf)], 1).asStream;
+p.nextN(20);    // no matter how long you do this, it'll never be &gt; 9!</textarea>
 
-<p><code class='code prettyprint lang-sc'>asStream</code> should be used if the parent pattern needs to perform some other operation on the yield value before yielding, or if it needs to keep track of multiple child streams at the same time. For instance, <a href="./../../Classes/Pdiff.html">Pdiff</a> takes the difference between the current value and last value. Since the subtraction comes between evaluating the child pattern and yielding the difference, the child pattern must be used as a stream.<pre class='code prettyprint lang-sc'>Pdiff : FilterPattern {
+<p><code>asStream</code> should be used if the parent pattern needs to perform some other operation on the yield value before yielding, or if it needs to keep track of multiple child streams at the same time. For instance, <a href="./../../Classes/Pdiff.html">Pdiff</a> takes the difference between the current value and last value. Since the subtraction comes between evaluating the child pattern and yielding the difference, the child pattern must be used as a stream.<textarea class='editor'>Pdiff : FilterPattern {
     embedInStream { arg event;
             // here is the stream!
         var stream = pattern.asStream;
@@ -138,22 +143,22 @@ p.nextN(20);    // no matter how long you do this, it'll never be &gt; 9!</pre>
         }
         ^event
     }
-}</pre>
+}</textarea>
 <h3><a class='anchor' name='Writing%20patterns:%20other%20factors'>Writing patterns: other factors</a></h3>
 
 <p>Pattern objects are supposed to be <em>stateless</em>, meaning that the pattern object itself should undergo no changes based on any stream running the pattern. (There are some exceptions, such as <a href="./../../Classes/Ppatmod.html">Ppatmod</a>, which exists specifically to perform some modification on a pattern object. But, even this special case makes a separate copy of the pattern to be modified for each stream; the original pattern is insulated from the streams' behavior.) <em>Be very careful if you're thinking about breaking this rule</em>, and before doing so, think about whether there might be another way to accomplish the goal without breaking it.
-<p>Because of this rule, <em>all variables reflecting the state of a particular stream should be local to the embedInStream method</em>. If you look through existing pattern classes for examples, you will see in virtually every case that <code class='code prettyprint lang-sc'>embedInStream</code> does not alter the instance variables defined in the class. It uses them as parameters, but does not change them. Anything that changes while a stream is being evaluated is a local method variable.
-<p>To initialize the pattern's parameters (instance variables), typical practice in the library is to give getter and setter methods to all instance variables, and use the setters in the <code class='code prettyprint lang-sc'>*new</code> method (or, use <code class='code prettyprint lang-sc'>^super.newCopyArgs(...))</code>. It's not typical to have an init method populate the instance variables. E.g.,<pre class='code prettyprint lang-sc'>Pn : FilterPattern {
+<p>Because of this rule, <em>all variables reflecting the state of a particular stream should be local to the embedInStream method</em>. If you look through existing pattern classes for examples, you will see in virtually every case that <code>embedInStream</code> does not alter the instance variables defined in the class. It uses them as parameters, but does not change them. Anything that changes while a stream is being evaluated is a local method variable.
+<p>To initialize the pattern's parameters (instance variables), typical practice in the library is to give getter and setter methods to all instance variables, and use the setters in the <code>*new</code> method (or, use <code>^super.newCopyArgs(...))</code>. It's not typical to have an init method populate the instance variables. E.g.,<textarea class='editor'>Pn : FilterPattern {
     var &lt;&gt;repeats;
     *new { arg pattern, repeats=inf;
             // setter method used here for repeats
         ^super.new(pattern).repeats_(repeats)
     }
 ...
-}</pre>
+}</textarea>
 
-<p>Consider carefully whether a parameter can change in each <code class='code prettyprint lang-sc'>next</code> call. If so, make a stream from that parameter and call <code class='code prettyprint lang-sc'>.next(inval)</code> on it for each iteration. Parameters that should not change, such as number of repeats, should call <code class='code prettyprint lang-sc'>.value(inval)</code> so that a function may be given. <a href="./../../Classes/Pwhite.html">Pwhite</a> demonstrates both of these features.
-<p>- <strong>Exercise for the reader</strong> : Why does <code class='code prettyprint lang-sc'>Pwhite(0.0, 1.0, inf)</code> work, even with the <code class='code prettyprint lang-sc'>asStream</code> and next calls?<pre class='code prettyprint lang-sc'>Pwhite : Pattern {
+<p>Consider carefully whether a parameter can change in each <code>next</code> call. If so, make a stream from that parameter and call <code>.next(inval)</code> on it for each iteration. Parameters that should not change, such as number of repeats, should call <code>.value(inval)</code> so that a function may be given. <a href="./../../Classes/Pwhite.html">Pwhite</a> demonstrates both of these features.
+<p>- <strong>Exercise for the reader</strong> : Why does <code>Pwhite(0.0, 1.0, inf)</code> work, even with the <code>asStream</code> and next calls?<textarea class='editor'>Pwhite : Pattern {
     var &lt;&gt;lo, &lt;&gt;hi, &lt;&gt;length;
     *new { arg lo=0.0, hi=1.0, length=inf;
         ^super.newCopyArgs(lo, hi, length)
@@ -177,11 +182,11 @@ p.nextN(20);    // no matter how long you do this, it'll never be &gt; 9!</pre>
 }
 
 // the plot rises b/c the lo and hi values increase on every 'next' value
-Pwhite(Pseries(0.0, 0.01, inf), Pseries(0.2, 0.01, inf), inf).asStream.nextN(200).plot;</pre>
+Pwhite(Pseries(0.0, 0.01, inf), Pseries(0.2, 0.01, inf), inf).asStream.nextN(200).plot;</textarea>
 <h3><a class='anchor' name='Cleaning%20up%20event%20pattern%20resources'>Cleaning up event pattern resources</a></h3>
 
 <p>Some event patterns create server or other objects that need to be explicitly removed when they come to a stop. This is handled by the <a href="./../../Classes/EventStreamCleanup.html">EventStreamCleanup</a> object. This class stores a set of functions that will run at the pattern's end. It also uses special keys in the current event to communicate cleanup functions upward to parent patterns, and ultimately to the <a href="./../../Classes/EventStreamPlayer.html">EventStreamPlayer</a> that executes the events.
-<p>Basic usage involves 4 stages:<pre class='code prettyprint lang-sc'>    embedInStream { |inval|
+<p>Basic usage involves 4 stages:<textarea class='editor'>    embedInStream { |inval|
         var    outputEvent;
 
         // #1 - make the EventStreamCleanup instance
@@ -206,12 +211,13 @@ Pwhite(Pseries(0.0, 0.01, inf), Pseries(0.2, 0.01, inf), inf).asStream.nextN(200
             cleanup.update(outputEvent);
             inval = outputEvent.yield;
         }
-    }</pre>
+    }</textarea>
 <ol>
-<li>The embedInStream method should create its own instance of EventStreamCleanup. (Alternately, it may receive the cleanup object as the second argument, but it should not assume that the cleanup object will be passed in. It should always check for its existence and create the instance if needed. Note that the pattern should also reimplement <code class='code prettyprint lang-sc'>asStream</code> as shown.) It's much simpler for the pattern just to create its own instance.<li>When the pattern creates the objects that will need to be cleaned up, it should also use the <code class='code prettyprint lang-sc'>addFunction</code> method on the EventStreamCleanup with a function that will remove the resource(s). (The example above is deliberately oversimplified. In practice, attention to the timing of server actions is important. Several pattern classes give good examples of how to do this, e.g., <a href="./../../Classes/Pmono.html">Pmono</a>, <a href="./../../Classes/Pfx.html">Pfx</a>.)
-<p>The flag should be used when removing Synth or Group nodes. Normally the flag is true; but, if the pattern's EventStreamPlayer gets stopped by cmd-., the nodes will already be gone from the server. If your function tries to remove them again, the user will see FAILURE messages from the server and then get confused, thinking that she did something wrong when in fact the error is preventable in the class.<li>Before calling <code class='code prettyprint lang-sc'>.yield</code> with the return event, also call <code class='code prettyprint lang-sc'>cleanup.update(outputEvent)</code>.<li>When <code class='code prettyprint lang-sc'>embedInStream</code> returns control back to the parent, normally this is done with <code class='code prettyprint lang-sc'>^inval</code>. When an EventStreamCleanup is involved, it should be <code class='code prettyprint lang-sc'>^cleanup.exit(inval)</code>. This executes the cleanup functions and also removes them from EventStreamCleanups at any parent level.</ol>
+<li>The embedInStream method should create its own instance of EventStreamCleanup. (Alternately, it may receive the cleanup object as the second argument, but it should not assume that the cleanup object will be passed in. It should always check for its existence and create the instance if needed. Note that the pattern should also reimplement <code>asStream</code> as shown.) It's much simpler for the pattern just to create its own instance.<li>When the pattern creates the objects that will need to be cleaned up, it should also use the <code>addFunction</code> method on the EventStreamCleanup with a function that will remove the resource(s). (The example above is deliberately oversimplified. In practice, attention to the timing of server actions is important. Several pattern classes give good examples of how to do this, e.g., <a href="./../../Classes/Pmono.html">Pmono</a>, <a href="./../../Classes/Pfx.html">Pfx</a>.)
+<p>The flag should be used when removing Synth or Group nodes. Normally the flag is true; but, if the pattern's EventStreamPlayer gets stopped by cmd-., the nodes will already be gone from the server. If your function tries to remove them again, the user will see FAILURE messages from the server and then get confused, thinking that she did something wrong when in fact the error is preventable in the class.<li>Before calling <code>.yield</code> with the return event, also call <code>cleanup.update(outputEvent)</code>.<li>When <code>embedInStream</code> returns control back to the parent, normally this is done with <code>^inval</code>. When an EventStreamCleanup is involved, it should be <code>^cleanup.exit(inval)</code>. This executes the cleanup functions and also removes them from EventStreamCleanups at any parent level.</ol>
 <h3><a class='anchor' name='When%20does%20a%20pattern%20need%20an%20EventStreamCleanup?'>When does a pattern need an EventStreamCleanup?</a></h3>
 
 <p>If the pattern creates something on the server (bus, group, synth, buffer etc.), it must use an EventStreamCleanup as shown to make sure those resources are properly garbage collected.
-<p>Or, if there is a chance of the pattern stopping before one or more child patterns has stopped on its own, EventStreamCleanup is important so that the pattern is aware of cleanup actions from the children. For example, in a construction like <code class='code prettyprint lang-sc'>Pfindur(10, Pmono(name, pairs...))</code> , Pmono may continue for more than 10 beats, in which case Pfindur will cut it off. The Pmono needs to end its synth, but it doesn't know that a pattern higher up in the chain is making it stop. It becomes the parent's responsibility to clean up after the children. As illustrated above, EventStreamCleanup handles this with only minimal intrusion into normal pattern logic.
-<p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook08_Swing.html">Pattern Guide Cookbook 08: Swing</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Ref01_Pattern_Internals.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Ref01_Pattern_Internals.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Ref01_Pattern_Internals::<br></div></div></body></html>
+<p>Or, if there is a chance of the pattern stopping before one or more child patterns has stopped on its own, EventStreamCleanup is important so that the pattern is aware of cleanup actions from the children. For example, in a construction like <code>Pfindur(10, Pmono(name, pairs...))</code> , Pmono may continue for more than 10 beats, in which case Pfindur will cut it off. The Pmono needs to end its synth, but it doesn't know that a pattern higher up in the chain is making it stop. It becomes the parent's responsibility to clean up after the children. As illustrated above, EventStreamCleanup handles this with only minimal intrusion into normal pattern logic.
+<p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook08_Swing.html">Pattern Guide Cookbook 08: Swing</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Ref01_Pattern_Internals.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Ref01_Pattern_Internals.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Ref01_Pattern_Internals::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

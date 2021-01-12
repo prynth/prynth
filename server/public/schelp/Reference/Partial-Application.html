@@ -1,23 +1,28 @@
-<!doctype html><html lang='en'><head><title>Partial Application | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Partial Application | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Partial Application';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Partial Application:</div>
-<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'></ul></div><div class='contents'>
-<div id='menubar'></div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Reference</span>
@@ -29,18 +34,18 @@ var scdoc_sc_version = '3.9.3';
 <div id='related'>See also: <a href="./../Reference/Functions.html">Functions</a></div>
 </div>
 
-<p>Partial application is a way to create a function by passing only some arguments to a method. The <code class='code prettyprint lang-sc'>_</code> character stands in for missing arguments and becomes an argument to the created function. It only applies to a single method, list, or dictionary call, not to a more complex nested expression.
-<p>for example:<pre class='code prettyprint lang-sc'>f = _ + 2;</pre>
+<p>Partial application is a way to create a function by passing only some arguments to a method. The <code>_</code> character stands in for missing arguments and becomes an argument to the created function. It only applies to a single method, list, or dictionary call, not to a more complex nested expression.
+<p>for example:<textarea class='editor'>f = _ + 2;</textarea>
 
-<p>f is now a function of one argument.<pre class='code prettyprint lang-sc'>f.value(7); // returns 9</pre>
+<p>f is now a function of one argument.<textarea class='editor'>f.value(7); // returns 9</textarea>
 
-<p>it is equivalent to having written:<pre class='code prettyprint lang-sc'>f = {|x| x + 2 };</pre>
+<p>it is equivalent to having written:<textarea class='editor'>f = {|x| x + 2 };</textarea>
 
-<p>(except that there is no name 'x' declared)<pre class='code prettyprint lang-sc'>g = Point(_, _);</pre>
+<p>(except that there is no name 'x' declared)<textarea class='editor'>g = Point(_, _);</textarea>
 
-<p>g is a function of two arguments.<pre class='code prettyprint lang-sc'>g.value(3, 4);</pre>
+<p>g is a function of two arguments.<textarea class='editor'>g.value(3, 4);</textarea>
 
-<p>Here are some example usages of this in a collect message. Below each is written the equivalent function.<pre class='code prettyprint lang-sc'>(1..8).collect(_.isPrime);
+<p>Here are some example usages of this in a collect message. Below each is written the equivalent function.<textarea class='editor'>(1..8).collect(_.isPrime);
 (1..8).collect {|x| x.isPrime };
 
 (1..8).collect(_.hash);
@@ -56,18 +61,19 @@ var scdoc_sc_version = '3.9.3';
 (1..8).collect {|x| Polar(x, pi) };
 
 (1..8).collect((1.._));
-(1..8).collect {|x| (1..x) };</pre>
-<pre class='code prettyprint lang-sc'>f = (a:_, b:_); // f is a two argument function
+(1..8).collect {|x| (1..x) };</textarea>
+<textarea class='editor'>f = (a:_, b:_); // f is a two argument function
 g = f.(_, 5);   // g is a partial application of f
 g.(7);          // get the answer
 
 // equivalent to this:
 f = {|x, y| (a:x, b:y) }
 g = {|z| f.(z, 5) };
-g.value(7);</pre>
+g.value(7);</textarea>
 
-<p>An example of what you can't do:<pre class='code prettyprint lang-sc'>(1..8).collect( Point(100 * _, 50) ); // nested expression won't work.
+<p>An example of what you can't do:<textarea class='editor'>(1..8).collect( Point(100 * _, 50) ); // nested expression won't work.
 // only the * gets partially applied, not the surrounding expression.
 
-(1..8).collect {|x| Point(100 * x, 50) }; // need to use a function for this.</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Partial-Application.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Partial-Application.schelp</a><br>link::Reference/Partial-Application::<br></div></div></body></html>
+(1..8).collect {|x| Point(100 * x, 50) }; // need to use a function for this.</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Reference/Partial-Application.schelp'>/usr/share/SuperCollider/HelpSource/Reference/Partial-Application.schelp</a><br>link::Reference/Partial-Application::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

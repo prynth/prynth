@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Pattern Guide Cookbook 03: External Control | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide Cookbook 03: External Control | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'Pattern Guide Cookbook 03: External Control';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pattern Guide Cookbook 03: External Control:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Pattern%20control%20by%20external%20device'>Pattern control by external device</a></li>
@@ -22,8 +27,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Triggering%20a%20pattern%20by%20a%20GUI'>Triggering a pattern by a GUI</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Triggering%20a%20pattern%20by%20MIDI'>Triggering a pattern by MIDI</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Triggering%20a%20pattern%20by%20signal%20amplitude'>Triggering a pattern by signal amplitude</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/A-Practical-Guide</span>
@@ -37,7 +42,7 @@ var scdoc_sc_version = '3.9.3';
 <h2><a class='anchor' name='Pattern%20control%20by%20external%20device'>Pattern control by external device</a></h2>
 <h3><a class='anchor' name='Control%20of%20parameters%20by%20MIDI%20or%20HID'>Control of parameters by MIDI or HID</a></h3>
 
-<p>The best approach is to save an incoming value into a variable, and then use <a href="./../../Classes/Pfunc.html">Pfunc</a> to access the variable for each event.<pre class='code prettyprint lang-sc'>(
+<p>The best approach is to save an incoming value into a variable, and then use <a href="./../../Classes/Pfunc.html">Pfunc</a> to access the variable for each event.<textarea class='editor'>(
 ~legato = 1;
 c = MIDIFunc.cc({ |value, num, chan, src|
     ~legato = value.linlin(0, 127, 0.1, 2.5)
@@ -53,9 +58,9 @@ p = Pbind(
 )
 
 p.stop;
-c.free;</pre>
+c.free;</textarea>
 
-<p>If Pfunc <code class='code prettyprint lang-sc'>{  }</code> is bothersome in the Pbind, a <a href="./../../Classes/PatternProxy.html">PatternProxy</a> or <a href="./../../Classes/Pdefn.html">Pdefn</a> could also serve the purpose.<pre class='code prettyprint lang-sc'>(
+<p>If Pfunc <code>{  }</code> is bothersome in the Pbind, a <a href="./../../Classes/PatternProxy.html">PatternProxy</a> or <a href="./../../Classes/Pdefn.html">Pdefn</a> could also serve the purpose.<textarea class='editor'>(
 ~legato = PatternProxy(1);
 c = MIDIFunc.cc({ |value, num, chan, src|
     ~legato.source = value.linlin(0, 127, 0.1, 2.5)
@@ -71,12 +76,12 @@ p = Pbind(
 )
 
 p.stop;
-c.remove;</pre>
+c.remove;</textarea>
 <h3><a class='anchor' name='Triggering%20patterns%20by%20external%20control'>Triggering patterns by external control</a></h3>
 
-<p>Issuing <code class='code prettyprint lang-sc'>play</code> to a pattern can occur in an action function for many different kinds of objects: GUI, MIDI, OSCFunc, HID actions. This allows triggering patterns from a variety of interfaces.
-<p>It's very unlikely that an action function would be triggered exactly in sync with a clock. If the pattern being played needs to run in time with other patterns, use the <code class='code prettyprint lang-sc'>quant</code> argument to control its starting time (see <a href="./../../Classes/Quant.html">Quant</a>).<h3><a class='anchor' name='Triggering%20a%20pattern%20by%20a%20GUI'>Triggering a pattern by a GUI</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<p>Issuing <code>play</code> to a pattern can occur in an action function for many different kinds of objects: GUI, MIDI, OSCFunc, HID actions. This allows triggering patterns from a variety of interfaces.
+<p>It's very unlikely that an action function would be triggered exactly in sync with a clock. If the pattern being played needs to run in time with other patterns, use the <code>quant</code> argument to control its starting time (see <a href="./../../Classes/Quant.html">Quant</a>).<h3><a class='anchor' name='Triggering%20a%20pattern%20by%20a%20GUI'>Triggering a pattern by a GUI</a></h3>
+<textarea class='editor'>(
 var    pattern = Pbind(
         \degree, Pseries(7, Pwhite(1, 3, inf) * Prand(#[-1, 1], inf), inf).fold(0, 14)
             + Prand(#[[0, -2, -4], [0, -3, -5], [0, -2, -5], [0, -1, -4]], inf),
@@ -102,9 +107,9 @@ Button.new(window, Rect(5, 5, 140, 90))
 window.front;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 <h3><a class='anchor' name='Triggering%20a%20pattern%20by%20MIDI'>Triggering a pattern by MIDI</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 var    pattern = Pbind(
         \degree, Pseries(7, Pwhite(1, 3, inf) * Prand(#[-1, 1], inf), inf).fold(0, 14)
             + Prand(#[[0, -2, -4], [0, -3, -5], [0, -2, -5], [0, -1, -4]], inf),
@@ -124,18 +129,18 @@ var    pattern = Pbind(
 )
 
 // when done
-~noteOnFunc.free;</pre>
+~noteOnFunc.free;</textarea>
 <h3><a class='anchor' name='Triggering%20a%20pattern%20by%20signal%20amplitude'>Triggering a pattern by signal amplitude</a></h3>
 
-<p>Triggering a pattern based on audio amplitude is a bit trickier -- not because it's harder to play the pattern, but because identifying when the trigger should happen is more involved. The most straightforward way in SuperCollider is to use the <a href="./../../Classes/Amplitude.html">Amplitude</a> UGen to get the volume of the input signal and compare it to a threshold. Volume can fluctuate rapidly, so the <code class='code prettyprint lang-sc'>releaseTime</code> argument of Amplitude is set to a high value. This makes the measured amplitude fall more slowly toward the baseline, preventing triggers from being sent too close together.
-<p>The actual threshold depends on the incoming signal, so the example pops up a quick and dirty window to see the measured amplitude and set the threshold and decay accordingly. The synth listens by default to the first hardware input bus, but you can change it the following in the code to use a different input bus:<pre class='code prettyprint lang-sc'>    inbus: s.options.numOutputBusChannels</pre>
+<p>Triggering a pattern based on audio amplitude is a bit trickier -- not because it's harder to play the pattern, but because identifying when the trigger should happen is more involved. The most straightforward way in SuperCollider is to use the <a href="./../../Classes/Amplitude.html">Amplitude</a> UGen to get the volume of the input signal and compare it to a threshold. Volume can fluctuate rapidly, so the <code>releaseTime</code> argument of Amplitude is set to a high value. This makes the measured amplitude fall more slowly toward the baseline, preventing triggers from being sent too close together.
+<p>The actual threshold depends on the incoming signal, so the example pops up a quick and dirty window to see the measured amplitude and set the threshold and decay accordingly. The synth listens by default to the first hardware input bus, but you can change it the following in the code to use a different input bus:<textarea class='editor'>    inbus: s.options.numOutputBusChannels</textarea>
 
-<p>In this configuration, the first trigger starts the pattern and the second trigger stops it. You might want the pattern to play while the input signal is above the threshold, and stop when the signal drops to a quieter level. The comparison <code class='code prettyprint lang-sc'>amp &gt;= thresh</code> can send a trigger only when the signal goes from softer to lower, so if we want the pattern to stop when the signal becomes quiet, we need to send a trigger when crossing the threshold in both directions.<pre class='code prettyprint lang-sc'>    var    amp = Amplitude.kr(In.ar(inbus, 1), attackTime: 0.01, releaseTime: decay),
+<p>In this configuration, the first trigger starts the pattern and the second trigger stops it. You might want the pattern to play while the input signal is above the threshold, and stop when the signal drops to a quieter level. The comparison <code>amp &gt;= thresh</code> can send a trigger only when the signal goes from softer to lower, so if we want the pattern to stop when the signal becomes quiet, we need to send a trigger when crossing the threshold in both directions.<textarea class='editor'>    var    amp = Amplitude.kr(In.ar(inbus, 1), attackTime: 0.01, releaseTime: decay),
         trig = HPZ1.kr(amp &gt;= thresh);
-    SendTrig.kr(trig.abs, 1, trig);</pre>
+    SendTrig.kr(trig.abs, 1, trig);</textarea>
 
 <p><a href="./../../Classes/HPZ1.html">HPZ1</a> is positive if its input rises and negative if it falls. Triggering based on the absolute value, then, sends the trigger on any change. The client responding to the trigger might need to know the direction of change, so we send HPZ1's value back and the client can decide which action to take based on the sign of this value.
-<p>For this example, triggers are measured only when the signal rises above the threshold.<pre class='code prettyprint lang-sc'>(
+<p>For this example, triggers are measured only when the signal rises above the threshold.<textarea class='editor'>(
 var    pattern = Pbind(
         \degree, Pseries(7, Pwhite(1, 3, inf) * Prand(#[-1, 1], inf), inf).fold(0, 14)
             + Prand(#[[0, -2, -4], [0, -3, -5], [0, -2, -5], [0, -1, -4]], inf),
@@ -184,7 +189,8 @@ StaticText(~w, 295@5).background_(Color.gray);
         player.stop;
     };
 }, '/amptrig', s.addr);
-)</pre>
+)</textarea>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook02_Manipulating_Patterns.html">Pattern Guide Cookbook 02: Manipulating Patterns</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook04_Sending_MIDI.html">Pattern Guide Cookbook 04: Sending MIDI</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook03_External_Control.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook03_External_Control.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook03_External_Control::<br></div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook04_Sending_MIDI.html">Pattern Guide Cookbook 04: Sending MIDI</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook03_External_Control.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook03_External_Control.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook03_External_Control::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,31 +1,35 @@
-<!doctype html><html lang='en'><head><title>FileDialog | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>FileDialog | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'FileDialog';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>FileDialog:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
-<li class='toc3'><a href='#*qtClass'>qtClass</a> </li>
 <li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
 </ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -35,44 +39,74 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Operating system interface for Open file, save file, select directory dialogs</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/QDialog.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/QDialog.sc'>QDialog.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/QFileDialog.html">QFileDialog</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QDialog.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QDialog.sc'>QDialog.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/QFileDialog.html">QFileDialog</a></div>
 <div id='related'>See also: <a href="./../Classes/Dialog.html">Dialog</a>, <a href="./../Classes/File.html">File</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>This is the interface for your standard operating system modal file dialogs to open files, save files and select directories.
-<p>See also Dialog which makes it a bit simpler without the need to set fileMode and acceptMode manually.
-<p>At the moment selecting a directory is only possible with FileDialog.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='method-code'><span class='method-prefix'>FileDialog.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>okFunc</span>, <span class='argstr'>cancelFunc</span>, <span class='argstr'>fileMode</span>, <span class='argstr'>acceptMode</span>, <span class='argstr'>stripResult: false</span>)</h3>
+<p><a href="./../Classes/Dialog.html">Dialog</a> has functions built on top of FileDialog that may be more convenient to use. However, selecting a directory is only possible with FileDialog.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>FileDialog.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>okFunc</span>, <span class='argstr'>cancelFunc</span>, <span class='argstr'>fileMode: 1</span>, <span class='argstr'>acceptMode: 0</span>, <span class='argstr'>stripResult: false</span>, <span class='argstr'>path</span>)</h3>
 <div class='method'>
-<p>Open a modal dialog<h4>Arguments:</h4>
+<p>Create and display a dialog.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>okFunc<td class='argumentdesc'>
-<p>handler function for: user selected a file and clicked ok. Argument to the function is either a single path, an array of paths, or multiple paths passed in as separate arguments. This depends on what fileMode and stripResult were specified.<tr><td class='argumentname'>cancelFunc<td class='argumentdesc'>
-<p>handler function for: user cancelled<tr><td class='argumentname'>fileMode<td class='argumentdesc'>
-<p>Integer
-<p>Determines the type of dialog.<ul>
-<li>0 QFileDialog AnyFile The name of a file, whether it exists or not.<li>1 QFileDialog ExistingFile The name of a single existing file.<li>2 QFileDialog Directory The name of a directory. Both files and directories are displayed.<li>3 QFileDialog ExistingFiles The names of zero or more existing files.</ul>
+<p>Handler function evaluated when the user clicks "Open" or "Save". This function receives different arguments depending on the value of <code>stripResult</code>. By default (<code>stripResult: false</code>), <code>okFunc</code> is passed an array of selected paths. Otherwise, the paths are passed as separate arguments, one for each path.<tr><td class='argumentname'>cancelFunc<td class='argumentdesc'>
+<p>Handler function evaluated when the user clicks "Cancel". Receives no arguments.<tr><td class='argumentname'>fileMode<td class='argumentdesc'>
+<p>An integer that determines the type of dialog.
+<p>These values correspond directly to values of QFileDialog::FileMode in the Qt class.<ul>
+<li>0 The name of a file, whether it exists or not.<li>1 The name of a single existing file.<li>2 The name of a directory. Both files and directories are displayed.<li>3 The names of zero or more existing files.</ul>
 
 <p>0 or 3 implies that the user can type in a new file name.<tr><td class='argumentname'>acceptMode<td class='argumentdesc'>
-<p>Integer This determines what the accept button says: "Open" or "Save"<ul>
-<li>0 QFileDialog AcceptOpen<li>1 QFileDialog AcceptSave</ul>
+<p>An integer that determines whether the dialog is for opening or saving files. Note that this doesn't actually open or save a file; you'll need to do that in your <code>okFunc</code>. This only affects appearance of the dialog.
+<p>These values correspond directly to values of QFileDialog::AcceptMode in the Qt class.<ul>
+<li>0 Opening<li>1 Saving</ul>
 <tr><td class='argumentname'>stripResult<td class='argumentdesc'>
-<p>If selecting multiple files (using fileMode 3) then you have the choice of having your okFunc called with a list or with each of the paths as separate items.
-<p>If you want to select only one item then use stripResult = true so that your okFunc will be passed the item instead of a list.<ul>
-<li>true: okFunc(path1, path2, path3)<li>false: okFunc(paths)</ul>
-</table><h4>Returns:</h4>
+<p>A boolean. If <code>true</code>, selected paths are passed individually as arguments to <code>okFunc</code>. Otherwise, they are passed as an array in a single argument (the default).<ul>
+<li>false: okFunc(paths)<li>true: okFunc(path1, path2, path3)</ul>
+<tr><td class='argumentname'>path<td class='argumentdesc'>
+<p>A string. The dialog will initially display the contents of this path. The default is the current user's home directory.</table><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>a FileDialog</div></div><h3 class='method-code'><span class='method-prefix'>FileDialog.</span><a class='method-name' name='*qtClass' href='./../Overviews/Methods.html#qtClass'>qtClass</a></h3>
-<div class='method'>
-<p>private</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<p>a FileDialog</div></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>FileDialog({ |path|
+<textarea class='editor'>// By default, the selected paths are passed to okFunc as an array.
+(
+FileDialog({ |paths|
+    postln("Selected path:" + paths[0]);
+    }, {
+    postln("Dialog was cancelled. Try again.");
+    });
+)
 
-}, {
+// You can change this by passing `stripResult: true`
+(
+FileDialog({ |path|
+    postln("Selected path:" + path);
+    }, {
+    postln("Dialog was cancelled. Try again.");
+    }, stripResult: true);
+)
 
-});</pre>
+// Passing `fileMode: 3` makes it possible to select multiple files.
+(
+FileDialog({ |paths|
+    postln("Selected paths:");
+    paths.do(_.postln);
+    }, fileMode: 3);
+)
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/FileDialog.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/FileDialog.schelp</a><br>link::Classes/FileDialog::<br></div></div></body></html>
+// Passing `fileMode: 0` allows selecting any kind of file.
+// You can start the dialog in a directory other than home by passing `path: "/some/path/"`
+(
+FileDialog({ |path|
+    postln("Selected file:" + path);
+    postln("File type is:" + File.type(path)); },
+    fileMode: 0,
+    stripResult: true,
+    path: Platform.userAppSupportDir);
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/FileDialog.schelp'>/usr/share/SuperCollider/HelpSource/Classes/FileDialog.schelp</a><br>link::Classes/FileDialog::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

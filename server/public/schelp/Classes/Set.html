@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Set | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Set | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Set';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Set:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -25,6 +30,9 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc2'><a href='#Adding%20and%20Removing'>Adding and Removing</a></li>
 <ul class='toc'><li class='toc3'><a href='#-add'>add</a> </li>
 <li class='toc3'><a href='#-remove'>remove</a> </li>
+</ul><li class='toc2'><a href='#Testing'>Testing</a></li>
+<ul class='toc'><li class='toc3'><a href='#-includes'>includes</a> </li>
+<li class='toc3'><a href='#-findMatch'>findMatch</a> </li>
 </ul><li class='toc2'><a href='#Iteration'>Iteration</a></li>
 <ul class='toc'><li class='toc3'><a href='#-do'>do</a> </li>
 <li class='toc3'><a href='#-keyAt'>keyAt</a> </li>
@@ -41,9 +49,7 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-choose'>choose</a> </li>
 <li class='toc3'><a href='#-clear'>clear</a> </li>
 <li class='toc3'><a href='#-copy'>copy</a> </li>
-<li class='toc3'><a href='#-findMatch'>findMatch</a> </li>
 <li class='toc3'><a href='#-fixCollisionsFrom'>fixCollisionsFrom</a> </li>
-<li class='toc3'><a href='#-includes'>includes</a> </li>
 <li class='toc3'><a href='#-makeEmpty'>makeEmpty</a> </li>
 <li class='toc3'><a href='#-pop'>pop</a> </li>
 <li class='toc3'><a href='#-scanFor'>scanFor</a> </li>
@@ -51,8 +57,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-species'>species</a> </li>
 <li class='toc3'><a href='#-unify'>unify</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -62,7 +68,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>a set according to equality</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Collections/Set.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Collections/Set.sc'>Set.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/Dictionary.html">Dictionary</a>, <a href="../Classes/IdentitySet.html">IdentitySet</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Collections/Set.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Collections/Set.sc'>Set.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/Dictionary.html">Dictionary</a>, <a href="../Classes/IdentitySet.html">IdentitySet</a></div>
 <div id='related'>See also: <a href="./../Classes/IdentitySet.html">IdentitySet</a>, <a href="./../Classes/List.html">List</a>, <a href="./../Classes/Dictionary.html">Dictionary</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
@@ -75,49 +81,56 @@ var scdoc_sc_version = '3.9.3';
 <h3><a class='anchor' name='Adding%20and%20Removing'>Adding and Removing</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-add' href='./../Overviews/Methods.html#add'>add</a>(<span class='argstr'>item</span>)</h3>
 <div class='method'>
-<p>Add anObject to the Set. An object which is equal to an object already in the Set will not be added.<pre class='code prettyprint lang-sc'>Set[1, 2, 3].add(4).postln;
+<p>Add an Object to the Set. An object which is equal to an object already in the Set will not be added.<textarea class='editor'>Set[1, 2, 3].add(4).postln;
 Set[1, 2, 3].add(3).postln;
 Set["abc", "def", "ghi"].add("jkl").postln;
-Set["abc", "def", "ghi"].add("def").postln;</pre>
+Set["abc", "def", "ghi"].add("def").postln;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-remove' href='./../Overviews/Methods.html#remove'>remove</a>(<span class='argstr'>item</span>)</h3>
 <div class='method'>
-<p>Remove anObject from the Set.<pre class='code prettyprint lang-sc'>Set[1, 2, 3].remove(3).postln;</pre>
+<p>Remove an Object from the Set. Element is checked for equality (not for identity).<textarea class='editor'>Set[1, 2, 3].remove(3).postln;</textarea>
+</div><h3><a class='anchor' name='Testing'>Testing</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-includes' href='./../Overviews/Methods.html#includes'>includes</a>(<span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Returns true if the specified item is present in the Set. Elements are checked for equality (not for identity).<textarea class='editor'>Set[1, 2, 3].includes(2).postln;</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-findMatch' href='./../Overviews/Methods.html#findMatch'>findMatch</a>(<span class='argstr'>item</span>)</h3>
+<div class='method'>
+<p>Returns the item, if it is present in the set. Otherwise returns nil. Element is checked for equality (not for identity).<textarea class='editor'>Set[1, 2, 3].findMatch(3).postln;</textarea>
 </div><h3><a class='anchor' name='Iteration'>Iteration</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-do' href='./../Overviews/Methods.html#do'>do</a>(<span class='argstr'>function</span>)</h3>
 <div class='method'>
-<p>Evaluates function for each item in the Set. The function is passed two arguments, the item and an integer index.<pre class='code prettyprint lang-sc'>Set[1, 2, 3, 300].do({ arg item, i; item.postln });</pre>
+<p>Evaluates function for each item in the Set. The function is passed two arguments, the item and an integer index.<textarea class='editor'>Set[1, 2, 3, 300].do({ arg item, i; item.postln });</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-keyAt' href='./../Overviews/Methods.html#keyAt'>keyAt</a>(<span class='argstr'>index</span>)</h3>
 <div class='method'>
 <p>Returns the object at the internal <strong>index</strong>. This index is not deterministic.</div><h3><a class='anchor' name='Set%20specific%20operations'>Set specific operations</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sect' href='./../Overviews/Methods.html#sect'>sect</a>(<span class='argstr'>that</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-&' href='./../Overviews/Methods.html#&amp;'>&amp;</a>(<span class='argstr'>that</span>)</h3>
 <div class='method'>
-<p>Return the set theoretical intersection of this and <strong>that</strong>.<pre class='code prettyprint lang-sc'>a = Set[1, 2, 3]; b = Set[2, 3, 4, 5];
+<p>Return the set theoretical intersection of this and <strong>that</strong>. The function will search for objects occurring in both sets and return a new set containing those. Elements are checked for equality (not for identity).<textarea class='editor'>a = Set[1, 2, 3]; b = Set[2, 3, 4, 5];
 sect(a, b);
-a &amp; b // shorter syntax</pre>
+a &amp; b // shorter syntax</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-union' href='./../Overviews/Methods.html#union'>union</a>(<span class='argstr'>that</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-|' href='./../Overviews/Methods.html#|'>|</a>(<span class='argstr'>that</span>)</h3>
 <div class='method'>
-<p>Return the set theoretical union of this and <strong>that</strong>.<pre class='code prettyprint lang-sc'>a = Set[1, 2, 3]; b = Set[2, 3, 4, 5];
+<p>Return the set theoretical union of this and <strong>that</strong>. The function combines the two sets into one without duplicates. Elements are checked for equality (not for identity).<textarea class='editor'>a = Set[1, 2, 3]; b = Set[2, 3, 4, 5];
 union(a, b);
-a | b // shorter syntax</pre>
+a | b // shorter syntax</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-difference' href='./../Overviews/Methods.html#difference'>difference</a>(<span class='argstr'>that</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='--' href='./../Overviews/Methods.html#-'>-</a>(<span class='argstr'>that</span>)</h3>
 <div class='method'>
-<p>Return the set of all items which are elements of this, but not of <strong>that</strong>.<pre class='code prettyprint lang-sc'>a = Set[1, 2, 3]; b = Set[2, 3, 4, 5];
+<p>Return the set of all items which are elements of this, but not of <strong>that</strong>. Elements are checked for equality (not for identity).<textarea class='editor'>a = Set[1, 2, 3]; b = Set[2, 3, 4, 5];
 difference(a, b);
-a - b // shorter syntax</pre>
+a - b // shorter syntax</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-symmetricDifference' href='./../Overviews/Methods.html#symmetricDifference'>symmetricDifference</a>(<span class='argstr'>that</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='---' href='./../Overviews/Methods.html#--'>--</a>(<span class='argstr'>that</span>)</h3>
 <div class='method'>
-<p>Return the set of all items which are not elements of both this and <strong>that</strong>.<pre class='code prettyprint lang-sc'>a = Set[1, 2, 3]; b = Set[2, 3, 4, 5];
+<p>Return the set of all items which are not elements of both this and <strong>that</strong>. Elements are checked for equality (not for identity).<textarea class='editor'>a = Set[1, 2, 3]; b = Set[2, 3, 4, 5];
 symmetricDifference(a, b);
-a -- b // shorter syntax</pre>
+a -- b // shorter syntax</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isSubsetOf' href='./../Overviews/Methods.html#isSubsetOf'>isSubsetOf</a>(<span class='argstr'>that</span>)</h3>
 <div class='method'>
-<p>Returns true if all elements of this are also elements of <strong>that</strong>.<pre class='code prettyprint lang-sc'>a = Set[1, 2, 3, 4];
+<p>Returns true if all elements of this are also elements of <strong>that</strong>. Elements are checked for equality (not for identity). Since Set is an unordered collection, order doesn't matter in this comparison.<textarea class='editor'>a = Set[1, 2, 3, 4];
 Set[1, 2].isSubsetOf(a); // true
-Set[1, 5].isSubsetOf(a); // false</pre>
+Set[1, 5].isSubsetOf(a); // false</textarea>
 </div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-array' href='./../Overviews/Methods.html#array'>array</a></h3>
@@ -126,9 +139,7 @@ Set[1, 5].isSubsetOf(a); // false</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-choose' href='./../Overviews/Methods.html#choose'>choose</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clear' href='./../Overviews/Methods.html#clear'>clear</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-copy' href='./../Overviews/Methods.html#copy'>copy</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-findMatch' href='./../Overviews/Methods.html#findMatch'>findMatch</a>(<span class='argstr'>item</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-fixCollisionsFrom' href='./../Overviews/Methods.html#fixCollisionsFrom'>fixCollisionsFrom</a>(<span class='argstr'>index</span>)</h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-includes' href='./../Overviews/Methods.html#includes'>includes</a>(<span class='argstr'>item</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeEmpty' href='./../Overviews/Methods.html#makeEmpty'>makeEmpty</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pop' href='./../Overviews/Methods.html#pop'>pop</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-scanFor' href='./../Overviews/Methods.html#scanFor'>scanFor</a>(<span class='argstr'>obj</span>)</h3>
@@ -136,15 +147,16 @@ Set[1, 5].isSubsetOf(a); // false</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-species' href='./../Overviews/Methods.html#species'>species</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-unify' href='./../Overviews/Methods.html#unify'>unify</a></h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>a = Set[1, 2, 3, 4];
+<textarea class='editor'>a = Set[1, 2, 3, 4];
 b = a.powerset; // set of all parts
 a.isSubsetOf(b); // false: no set is ever part of itself.
 b.asArray.reduce(\union) == a; // true parts may not contain other elements that original
-b.asArray.reduce(\difference).isEmpty; // true.</pre>
-<pre class='code prettyprint lang-sc'>// you can use Set to efficiently remove duplicates from an array:
+b.asArray.reduce(\difference).isEmpty; // true.</textarea>
+<textarea class='editor'>// you can use Set to efficiently remove duplicates from an array:
 
 a = [1, 2, 3, 4, 3, 5, 5, 2, 2, 1];
 a.as(Set);        // convert to set
-a.as(Set).as(Array);    // and convert back</pre>
+a.as(Set).as(Array);    // and convert back</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Set.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Set.schelp</a><br>link::Classes/Set::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Set.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Set.schelp</a><br>link::Classes/Set::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

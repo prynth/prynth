@@ -1,26 +1,31 @@
-<!doctype html><html lang='en'><head><title>Key Value Pairs | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Key Value Pairs | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Key Value Pairs';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Key Value Pairs:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Motivation'>Motivation</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Examples'>Examples</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Mapping%20Parameters'>Mapping Parameters</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Reference</span>
@@ -34,12 +39,12 @@ var scdoc_sc_version = '3.9.3';
 <h2><a class='anchor' name='Motivation'>Motivation</a></h2>
 
 <p>There are three very similar ways to represent maps between keys and values, each of which have a specific purpose:<table>
-<tr><td>key value pairs<td>common representation of arguments<td><code class='code prettyprint lang-sc'>[\freq, 452, \amp, 0.2]</code><tr><td>collections of associations<td>ordering, array and collection methods<td><code class='code prettyprint lang-sc'>[0 -&gt; [1, 2, 3], 1 -&gt; [2, 1]]</code><tr><td>dictionaries: fast lookup<td>event compatibility<td><code class='code prettyprint lang-sc'>(instrument: \sine, freq: 561)</code></table>
+<tr><td>key value pairs<td>common representation of arguments<td><code>[\freq, 452, \amp, 0.2]</code><tr><td>collections of associations<td>ordering, array and collection methods<td><code>[0 -&gt; [1, 2, 3], 1 -&gt; [2, 1]]</code><tr><td>dictionaries: fast lookup<td>event compatibility<td><code>(instrument: \sine, freq: 561)</code></table>
 
 <p>To make it easy to translate between these purposes and representations, there is a uniform set of methods:<table>
-<tr><td><code class='code prettyprint lang-sc'>asPairs</code><td>returns an array of key value pairs<tr><td><code class='code prettyprint lang-sc'>asAssociations</code><td>returns an array of associations<tr><td><code class='code prettyprint lang-sc'>asDict</code><td>returns an IdentityDictionary.</table>
+<tr><td><code>asPairs</code><td>returns an array of key value pairs<tr><td><code>asAssociations</code><td>returns an array of associations<tr><td><code>asDict</code><td>returns an IdentityDictionary.</table>
 <h2><a class='anchor' name='Examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>// the following all return [\freq, 452, \amp, 0.2]
+<textarea class='editor'>// the following all return [\freq, 452, \amp, 0.2]
 
 [\freq, 452, \amp, 0.2].asPairs
 [\freq -&gt; 452, \amp -&gt; 0.2].asPairs
@@ -56,10 +61,10 @@ var scdoc_sc_version = '3.9.3';
 
 [\freq, 452, \amp, 0.2].asDict
 [\freq -&gt; 452, \amp -&gt; 0.2].asDict
-(freq: 452, amp: 0.2).asDict</pre>
+(freq: 452, amp: 0.2).asDict</textarea>
 <h2><a class='anchor' name='Mapping%20Parameters'>Mapping Parameters</a></h2>
 
-<p>The method <code class='code prettyprint lang-sc'>asDict</code> optionally takes a <code class='code prettyprint lang-sc'>mergeFunc</code> and a <code class='code prettyprint lang-sc'>class</code> argument.<pre class='code prettyprint lang-sc'> // IdentityDictionary[ (a -&gt; 1), (c -&gt; 3), (b -&gt; 2) ]
+<p>The method <code>asDict</code> optionally takes a <code>mergeFunc</code> and a <code>class</code> argument.<textarea class='editor'> // IdentityDictionary[ (a -&gt; 1), (c -&gt; 3), (b -&gt; 2) ]
 [\a, 1, \a, 3, \b, 2, \c, 3, \c, 7].asDict;
 
 //  IdentityDictionary[ (a -&gt; 4), (c -&gt; 10), (b -&gt; 2) ]
@@ -69,14 +74,15 @@ var scdoc_sc_version = '3.9.3';
 ["this", "das", "and", "und", "what", "was", "how", "wie"].asDict(class: Dictionary)
 
 // Environment[ (a -&gt; 1), (b -&gt; 2) ]
-[\a, 1, \b, 2].asDict(class: Environment)</pre>
+[\a, 1, \b, 2].asDict(class: Environment)</textarea>
 
-<p>The method <code class='code prettyprint lang-sc'>asEvent</code> is a shortcut:<pre class='code prettyprint lang-sc'>[\freq, 100, \amp, 0.1].asEvent // ( 'amp': 0.1, 'freq': 100 )</pre>
+<p>The method <code>asEvent</code> is a shortcut:<textarea class='editor'>[\freq, 100, \amp, 0.1].asEvent // ( 'amp': 0.1, 'freq': 100 )</textarea>
 
-<p>The methods <code class='code prettyprint lang-sc'>asAssociations</code> and <code class='code prettyprint lang-sc'>asPairs</code> optionally take a <code class='code prettyprint lang-sc'>class</code> argument.<pre class='code prettyprint lang-sc'>// SortedList[ (a -&gt; 1871), (b -&gt; 1848), (c -&gt; 1789) ]
+<p>The methods <code>asAssociations</code> and <code>asPairs</code> optionally take a <code>class</code> argument.<textarea class='editor'>// SortedList[ (a -&gt; 1871), (b -&gt; 1848), (c -&gt; 1789) ]
 (c:1789, b:1848, a:1871).asAssociations(SortedList);
 
 // LinkedList[ a, 1871, c, 1789, b, 1848 ]
-(c:1789, b:1848, a:1871).asPairs(LinkedList);</pre>
+(c:1789, b:1848, a:1871).asPairs(LinkedList);</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Key-Value-Pairs.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Key-Value-Pairs.schelp</a><br>link::Reference/Key-Value-Pairs::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Reference/Key-Value-Pairs.schelp'>/usr/share/SuperCollider/HelpSource/Reference/Key-Value-Pairs.schelp</a><br>link::Reference/Key-Value-Pairs::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

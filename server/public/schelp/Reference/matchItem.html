@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>matchItem | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>matchItem | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'matchItem';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>matchItem:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc3'><a href='#.matchItem'>matchItem</a> </li>
@@ -21,8 +26,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc1'><a href='#Collection-matchItem'>Collection-matchItem</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Nil-matchItem'>Nil-matchItem</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Function-matchItem'>Function-matchItem</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Reference</span>
@@ -38,23 +43,24 @@ var scdoc_sc_version = '3.9.3';
 <p>matchItem(item) may be passed to different objects that behave as constraints. More Objects may be conceived to implement matchItem to extend the interface.
 <p>See also: <a href="./../Classes/Dictionary.html#-matchAt">Dictionary: -matchAt</a>.</div><h2><a class='anchor' name='Object-matchItem'>Object-matchItem</a></h2>
 
-<p>Test if <strong>item</strong> is identical to <strong>object</strong>.<pre class='code prettyprint lang-sc'>a = [1, 2, 3, "wort", "1", [pi, 2pi]];
+<p>Test if <strong>item</strong> is identical to <strong>object</strong>.<textarea class='editor'>a = [1, 2, 3, "wort", "1", [pi, 2pi]];
 a.any { |x| x.matchItem(3) }; // true
 a.any { |x| x.matchItem(5) }; // false
-a.any { |x| x.matchItem("wort") }; // false, because "wort" == "wort" but not identical.</pre>
+a.any { |x| x.matchItem("wort") }; // false, because "wort" == "wort" but not identical.</textarea>
 <h2><a class='anchor' name='Collection-matchItem'>Collection-matchItem</a></h2>
 
-<p>Test if <strong>item</strong> is included in <strong>collection</strong>.<pre class='code prettyprint lang-sc'>a = [1, 2, 3, "wort", "1", [pi, 2pi]];
-a.any { |x| x.matchItem(pi) }; // true</pre>
+<p>Test if <strong>item</strong> is included in <strong>collection</strong>.<textarea class='editor'>a = [1, 2, 3, "wort", "1", [pi, 2pi]];
+a.any { |x| x.matchItem(pi) }; // true</textarea>
 <h2><a class='anchor' name='Nil-matchItem'>Nil-matchItem</a></h2>
 
-<p>returns true (<a href="./../Classes/Nil.html">Nil</a> serves as a "joker", a stand-in for anything).<pre class='code prettyprint lang-sc'>a = [nil, 1, 2, 3, "wort", "1", [pi, 2pi]];
-a.any { |x| x.matchItem(10000.rand) }; // true always</pre>
+<p>returns true (<a href="./../Classes/Nil.html">Nil</a> serves as a "joker", a stand-in for anything).<textarea class='editor'>a = [nil, 1, 2, 3, "wort", "1", [pi, 2pi]];
+a.any { |x| x.matchItem(10000.rand) }; // true always</textarea>
 <h2><a class='anchor' name='Function-matchItem'>Function-matchItem</a></h2>
 
-<p>Test <strong>item</strong> by passing it to a function which should return a <a href="./../Classes/Boolean.html">Boolean</a>.<pre class='code prettyprint lang-sc'>a = [10, 20, 30, { |item| item.isPrime }];
+<p>Test <strong>item</strong> by passing it to a function which should return a <a href="./../Classes/Boolean.html">Boolean</a>.<textarea class='editor'>a = [10, 20, 30, { |item| item.isPrime }];
 a.any { |x| x.matchItem(3) }; // true
 a.any { |x| x.matchItem(4) }; // false
-a.any { |x| x.matchItem(10) }; // true</pre>
+a.any { |x| x.matchItem(10) }; // true</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/matchItem.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/matchItem.schelp</a><br>link::Reference/matchItem::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Reference/matchItem.schelp'>/usr/share/SuperCollider/HelpSource/Reference/matchItem.schelp</a><br>link::Reference/matchItem::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

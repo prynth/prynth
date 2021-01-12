@@ -1,0 +1,84 @@
+<!doctype html><html lang='en'><head><title>StkGlobals | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'StkGlobals';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>StkGlobals:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>PhysicalModels'>PhysicalModels</a></span>
+</div><h1>StkGlobals<span id='superclasses'> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Wrapping Synthesis toolkit.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/StkInst/classes/StkInst.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/StkInst/classes/StkInst.sc'>StkInst.sc</a></div><div id='related'>See also: <a href="./../Classes/Stk.html">Stk</a>, <a href="./../Classes/StkInst.html">StkInst</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Wrapping of Synthesis toolkit physical model instruments <a href="https://ccrma.stanford.edu/software/stk/index.html">https://ccrma.stanford.edu/software/stk/index.html</a><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>StkGlobals.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>showWarnings</span>, <span class='argstr'>printErrors</span>, <span class='argstr'>rawfilepath</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>showWarnings<td class='argumentdesc'>
+<p>Let Stk showWarnings, 0 for false 1 for true.<tr><td class='argumentname'>printErrors<td class='argumentdesc'>
+<p>Let Stk printErrors, 0 for false 1 for true.<tr><td class='argumentname'>rawfilepath<td class='argumentdesc'>
+<p>Tells Stk where to look for its audio files.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>//a instrument that uses waveforms///////////////////
+//first set rawfilepath to let Stk know where to look
+{StkGlobals.ar(1,1,Platform.userExtensionDir ++"/SC3Plugins/StkInst/rawwaves")}.play;
+
+//Define mandolin synthdef
+(
+SynthDef(\helpMandolin,{arg out=0,freq=220,gate=1,amp=1;
+    var sig,env;
+    env = EnvGen.kr(Env.asr(0,1,0.1),gate,doneAction:2);
+    sig = StkInst.ar(Stk.at("Mandolin"),freq, gate, amp, 0.5)*env;
+    Out.ar(out, sig.dup);
+}).add;
+)
+
+//Use it.
+(
+
+Pbind(
+    \instrument, \helpMandolin,
+    \dur , 0.25,
+    \degree, Pseq([1,5,7+3], inf),
+    \amp , Pseq([0.9,0.7,0.5],inf),
+).play;
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/StkInst/HelpSource/Classes/StkGlobals.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/StkInst/HelpSource/Classes/StkGlobals.schelp</a><br>link::Classes/StkGlobals::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

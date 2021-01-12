@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Node Messaging | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Node Messaging | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Node Messaging';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Node Messaging:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
@@ -22,8 +27,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc2'><a href='#Messaging%20style'>Messaging style</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Object%20style'>Object style</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Event%20style'>Event style</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -37,41 +42,41 @@ var scdoc_sc_version = '3.9.3';
 
 <p>The most direct and fast way to send commands to the server is to send messages to the <a href="./../Classes/Server.html">Server</a> object, if you are within sc-lang. If you are in a shell you can use sendOSC (available from CNMAT).
 <p>this messaging scheme is explained in detail in:<ul>
-<li><a href="./../Reference/Server-Architecture.html">Server Architecture</a><li><a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a><li><a href="./../Tutorials/Tutorial.html">SuperCollider 3 Server Tutorial</a></ul>
+<li><a href="./../Reference/Server-Architecture.html">Server Architecture</a><li><a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a><li><a href="./../Tutorials/Server_Tutorial.html">Server Tutorial</a></ul>
 <h2><a class='anchor' name='Messaging%20nodes'>Messaging nodes</a></h2>
 
 <p>When creating nodes on the server (synths and groups) the only things we need to know are the nodeID and the server (its address to be precise).
 <p>In order to communicate with a synth, one sends messages with its nodeID. If you do not intend to communicate with the node after its creation (and the node will cause itself to end without external messaging), the node id can be set to -1, which is the server's equivalent to nil.
 <p>As soon as you want to pass around the reference to a certain node, assuming that you might not have only one server, it can be useful to create a <a href="./../Classes/Synth.html">Synth</a> or <a href="./../Classes/Group.html">Group</a> object. These objects also respond to messages, and when needed can be used to obtain the state of the server side node.
 <p>see <a href="./../Classes/Node.html">Node</a>, <a href="./../Classes/Synth.html">Synth</a>, and <a href="./../Classes/Group.html">Group</a> help for more detailed helpfiles on node objects.
-<p>the equivalent of<pre class='code prettyprint lang-sc'>n = s.nextNodeID;
+<p>the equivalent of<textarea class='editor'>n = s.nextNodeID;
 s.sendMsg("/s_new", "default", n);
-s.sendMsg("/n_free", n);</pre>
+s.sendMsg("/n_free", n);</textarea>
 
-<p>is<pre class='code prettyprint lang-sc'>n = Synth("default");
-n.free;</pre>
+<p>is<textarea class='editor'>n = Synth("default");
+n.free;</textarea>
 
-<p>when passing arguments:<pre class='code prettyprint lang-sc'>n = s.nextNodeID;
+<p>when passing arguments:<textarea class='editor'>n = s.nextNodeID;
 s.sendMsg("/s_new", "default", n, 0, 0, "freq", 850);
 s.sendMsg("/n_set", n, "freq", 500);
-s.sendMsg("/n_free", n);</pre>
+s.sendMsg("/n_free", n);</textarea>
 
-<p>it is<pre class='code prettyprint lang-sc'>n = Synth("default", [\freq, 850]);
+<p>it is<textarea class='editor'>n = Synth("default", [\freq, 850]);
 n.set(\freq, 500)
-n.free;</pre>
+n.free;</textarea>
 
-<p>note that Symbols may be used instead of Strings:<pre class='code prettyprint lang-sc'>n = s.nextNodeID;
+<p>note that Symbols may be used instead of Strings:<textarea class='editor'>n = s.nextNodeID;
 s.sendMsg(\s_new, \default, n, 0, 0, \freq, 850);
 s.sendMsg(\n_set, n, \freq, 500);
-s.sendMsg(\n_free, n);</pre>
+s.sendMsg(\n_free, n);</textarea>
 
-<p>and:<pre class='code prettyprint lang-sc'>n = Synth(\default, [\freq, 850]);
+<p>and:<textarea class='editor'>n = Synth(\default, [\freq, 850]);
 n.set(\freq, 500)
-n.free;</pre>
+n.free;</textarea>
 
 <p>The answer to the question of whether one should work with node objects or directly with messages depends to some extent on context, and to some extent is a matter of personal taste.
 <p>The encapsulation of node objects results in a certain generalization, meaning that other compound objects can respond to the same messages and thus exploit polymorphism. They also provide a certain level of convenience, keeping track of indexes and IDs, etc.
-<p>In certain cases, such as for granular synthesis it is recommended to use messages directly, because there is no benefit to be gained from the node objects (i.e. no need to message them) and they add cpu load to the client side.<pre class='code prettyprint lang-sc'>(
+<p>In certain cases, such as for granular synthesis it is recommended to use messages directly, because there is no benefit to be gained from the node objects (i.e. no need to message them) and they add cpu load to the client side.<textarea class='editor'>(
 SynthDef("grain", {
     Out.ar(0, Line.kr(0.1, 0, 0.01, doneAction: Done.freeSelf) * FSinOsc.ar(12000))
 }).send(s);
@@ -84,19 +89,19 @@ Routine({
         0.01.wait;
     })
 }).play;
-)</pre>
+)</textarea>
 
 <p>In cases where you need to keep track of the synth's state, it is advisable to use node objects and register them with a <a href="./../Classes/NodeWatcher.html">NodeWatcher</a>. (see helpfile)
-<p>Apart from such cases it is a matter of taste whether you want to use the combination of message and a numerical global representation or an object representation. The two can be mixed, and certain advantages of the object style can be accessed when using messaging style. For instance <code class='code prettyprint lang-sc'>Server.nextNodeID</code> allows one to use dynamically assigned IDs in messaging style. As a gross generalization, it is probably fair to say that object style is more convenient, but messaging style is more efficient, due to reduce client-side CPU load.<div class='note'><span class='notelabel'>NOTE:</span> IMPORTANT: If you wish to have the functionality of the default_group (e.g. problem free use of Server's record and scope functionality) you should treat ID 1 (the default_group) as the root of your node tree rather than ID 0 (the RootNode). See default_group for more details.</div>
-<p>Note that <a href="./../Classes/Function.html#play">Function-play</a> and <a href="./../Classes/SynthDef.html#play">SynthDef-play</a> return a synth object that can be used to send messages to.<pre class='code prettyprint lang-sc'>x = { arg freq=1000; Ringz.ar(Crackle.ar(1.95, 0.1), freq, 0.05) }.play(s);
+<p>Apart from such cases it is a matter of taste whether you want to use the combination of message and a numerical global representation or an object representation. The two can be mixed, and certain advantages of the object style can be accessed when using messaging style. For instance <code>Server.nextNodeID</code> allows one to use dynamically assigned IDs in messaging style. As a gross generalization, it is probably fair to say that object style is more convenient, but messaging style is more efficient, due to reduce client-side CPU load.<div class='note'><span class='notelabel'>NOTE:</span> IMPORTANT: If you wish to have the functionality of the default_group (e.g. problem free use of Server's record and scope functionality) you should treat ID 1 (the default_group) as the root of your node tree rather than ID 0 (the RootNode). See default_group for more details.</div>
+<p>Note that <a href="./../Classes/Function.html#play">Function-play</a> and <a href="./../Classes/SynthDef.html#play">SynthDef-play</a> return a synth object that can be used to send messages to.<textarea class='editor'>x = { arg freq=1000; Ringz.ar(Crackle.ar(1.95, 0.1), freq, 0.05) }.play(s);
 x.set(\freq, 1500);
-x.free;</pre>
+x.free;</textarea>
 <h2><a class='anchor' name='Argument%20lists%20in%20node%20messages'>Argument lists in node messages</a></h2>
 
-<p>Several node messages accept lists of values to map onto the controls of Synth nodes, as in some of the examples already given:<pre class='code prettyprint lang-sc'>s.sendMsg(\s_new, \default, n, 0, 0, \freq, 850);
-n = Synth(\default, [\freq, 850]);</pre>
+<p>Several node messages accept lists of values to map onto the controls of Synth nodes, as in some of the examples already given:<textarea class='editor'>s.sendMsg(\s_new, \default, n, 0, 0, \freq, 850);
+n = Synth(\default, [\freq, 850]);</textarea>
 
-<p>Argument lists generally appear as alternating pairs, with the control identifier preceding the value. Usually the control identifier is a name, as above, but it could also be an integer index. (Using integers is slightly faster for the server, but it makes the code harder to read and can introduce bugs if the SynthDef structure changes.) One way to find out control indices is to .add the SynthDef into a <a href="./../Classes/SynthDescLib.html">SynthDescLib</a>, then get the list of all controls out of the <a href="./../Classes/SynthDesc.html">SynthDesc</a>.<pre class='code prettyprint lang-sc'>    (
+<p>Argument lists generally appear as alternating pairs, with the control identifier preceding the value. Usually the control identifier is a name, as above, but it could also be an integer index. (Using integers is slightly faster for the server, but it makes the code harder to read and can introduce bugs if the SynthDef structure changes.) One way to find out control indices is to .add the SynthDef into a <a href="./../Classes/SynthDescLib.html">SynthDescLib</a>, then get the list of all controls out of the <a href="./../Classes/SynthDesc.html">SynthDesc</a>.<textarea class='editor'>    (
         SynthDef(\controlList, { |out = 0, freq = 440, amp = 0.1, detune = #[0.999, 1.001], gate = 1|
             var    sig = Mix(Saw.ar(freq * (detune ++ [1]), amp)),
             env = EnvGen.kr(Env.adsr, gate, doneAction: Done.freeSelf);
@@ -104,9 +109,9 @@ n = Synth(\default, [\freq, 850]);</pre>
         }).add;
 
         SynthDescLib.global[\controlList]
-    )</pre>
+    )</textarea>
 
-<p>Prints:<pre class='code prettyprint lang-sc'>SynthDesc 'controlList'
+<p>Prints:<textarea class='editor'>SynthDesc 'controlList'
 Controls:
 ControlName  P 0 freq control 440
 ControlName  P 1 amp control 0.10000000149012
@@ -114,22 +119,24 @@ ControlName  P 2 detune control 0.9990000128746
 ControlName  P 3 ? control 1.00100004673
 ControlName  P 4 gate control 1
 ControlName  P 5 out control 0
-   O audio 0 2</pre>
+   O audio 0 2</textarea>
 
 <p>The list shows that the 'freq' control has index 0, 'amp' is 1 and so on. Detune is defined as an "array argument," occupying indices 2-3.
-<p>SynthDefs with a large number of controls may need a little extra code to print the entire list.<pre class='code prettyprint lang-sc'>SynthDescLib.global[\controlList].controls.do(_.postln); ""</pre>
+<p>SynthDefs with a large number of controls may need a little extra code to print the entire list.<textarea class='editor'>SynthDescLib.global[\controlList].controls.do(_.postln); ""</textarea>
 
 <p>Prior to SuperCollider 3.3, the only way to set array arguments by name was using n_setn (or Node's setn method). Beginning in version 3.3, array arguments can be included in s_new or n_set messages transparently.<h3><a class='anchor' name='Messaging%20style'>Messaging style</a></h3>
 
-<p>note the characters $[ and $] delimiting the array in the list:<pre class='code prettyprint lang-sc'>n = s.nextNodeID;
+<p>note the characters $[ and $] delimiting the array in the list:<textarea class='editor'>n = s.nextNodeID;
 s.sendMsg(\s_new, \controlList, n, 0, 0, \detune, $[, 0.95, 1.005, $], \freq, 220);
-s.sendMsg(\n_set, n, \gate, 0);</pre>
+s.sendMsg(\n_set, n, \gate, 0);</textarea>
 <h3><a class='anchor' name='Object%20style'>Object style</a></h3>
 
-<p>the Node object automatically inserts $[ and $] for you:<pre class='code prettyprint lang-sc'>n = Synth(\controlList, [\detune, [0.95, 1.005], \freq, 220]);
+<p>the Node object automatically inserts $[ and $] for you:<textarea class='editor'>n = Synth(\controlList, [\detune, [0.95, 1.005], \freq, 220]);
 n.set(\detune, [0.99, 1.01]);
-n.release;</pre>
+n.release;</textarea>
 <h3><a class='anchor' name='Event%20style'>Event style</a></h3>
 
-<p>Supplying an array for an argument in an event already has another meaning: multichannel expansion, in which a separate node is created for each array item. If all items of the array should be sent to the same node, then the array argument should be enclosed in another array level:<pre class='code prettyprint lang-sc'>(instrument: \controlList, freq: 220, detune: [[0.95, 1.005]], sustain: 2).play;</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/NodeMessaging.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/NodeMessaging.schelp</a><br>link::Guides/NodeMessaging::<br></div></div></body></html>
+<p>Supplying an array for an argument in an event already has another meaning: multichannel expansion, in which a separate node is created for each array item. If all items of the array should be sent to the same node, then the array argument should be enclosed in another array level:<textarea class='editor'>(instrument: \controlList, freq: 220, detune: [[0.95, 1.005]], sustain: 2).play;</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/NodeMessaging.schelp'>/usr/share/SuperCollider/HelpSource/Guides/NodeMessaging.schelp</a><br>link::Guides/NodeMessaging::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

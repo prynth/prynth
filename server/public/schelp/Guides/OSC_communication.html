@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>OSC Communication | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>OSC Communication | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'OSC Communication';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>OSC Communication:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Sending%20OSC%20to%20another%20application'>Sending OSC to another application</a></li>
@@ -22,8 +27,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc1'><a href='#Testing%20incoming%20traffic'>Testing incoming traffic</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Custom%20OSC%20message%20processing'>Custom OSC message processing</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#OSC%20type%20tags%20and%20sclang'>OSC type tags and sclang</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -37,33 +42,33 @@ var scdoc_sc_version = '3.9.3';
 
 <p>OSC communication between programs is often done to send messages from one application to another, possibly with the applications running on different computers. In SuperCollider this communication is done by creating a <a href="./../Classes/NetAddr.html">NetAddr</a> of the target application and creating an <a href="./../Classes/OSCFunc.html">OSCFunc</a> to listen to another application. The underlying protocol of OSC is either UDP or TCP.<h2><a class='anchor' name='Sending%20OSC%20to%20another%20application'>Sending OSC to another application</a></h2>
 
-<p>To establish communication to another application, you need to know on which port that application is listening. For example if an application is listening on port 7771, we can create a NetAddr and send it a message:<pre class='code prettyprint lang-sc'>b = NetAddr.new("127.0.0.1", 7771);    // create the NetAddr
-b.sendMsg("/hello", "there");    // send the application the message "hello" with the parameter "there"</pre>
+<p>To establish communication to another application, you need to know on which port that application is listening. For example if an application is listening on port 7771, we can create a NetAddr and send it a message:<textarea class='editor'>b = NetAddr.new("127.0.0.1", 7771);    // create the NetAddr
+b.sendMsg("/hello", "there");    // send the application the message "hello" with the parameter "there"</textarea>
 <h2><a class='anchor' name='Receiving%20OSC%20from%20another%20application'>Receiving OSC from another application</a></h2>
 
-<p>To listen to another application, that application needs to send a message to the port SuperCollider is listening on. Normally the default port is 57120, but it could be something different if that port was already bound when SC started. The current default port can be retrieved with<pre class='code prettyprint lang-sc'>NetAddr.langPort;    // retrieve the current port SC is listening to</pre>
+<p>To listen to another application, that application needs to send a message to the port SuperCollider is listening on. Normally the default port is 57120, but it could be something different if that port was already bound when SC started. The current default port can be retrieved with<textarea class='editor'>NetAddr.langPort;    // retrieve the current port SC is listening to</textarea>
 
-<p>Or you can retrieve both the IP and the port with:<pre class='code prettyprint lang-sc'>NetAddr.localAddr    // retrieve the current IP and port</pre>
+<p>Or you can retrieve both the IP and the port with:<textarea class='editor'>NetAddr.localAddr    // retrieve the current IP and port</textarea>
 
-<p>You can open additional ports using <a href="./../Classes/Main.html#-openUDPPort">Main: -openUDPPort</a>. This will return a <a href="./../Classes/Boolean.html">Boolean</a> indicating whether SC succeeded in opening the new port. Or you can just pass a custom port as the <strong>recvPort</strong> argument to <a href="./../Classes/OSCFunc.html">OSCFunc</a> and it will open it automatically if not already open.<pre class='code prettyprint lang-sc'>thisProcess.openUDPPort(1121); // attempt to open 1121
-thisProcess.openPorts; // list all open ports</pre>
+<p>You can open additional ports using <a href="./../Classes/Main.html#-openUDPPort">Main: -openUDPPort</a>. This will return a <a href="./../Classes/Boolean.html">Boolean</a> indicating whether SC succeeded in opening the new port. Or you can just pass a custom port as the <strong>recvPort</strong> argument to <a href="./../Classes/OSCFunc.html">OSCFunc</a> and it will open it automatically if not already open.<textarea class='editor'>thisProcess.openUDPPort(1121); // attempt to open 1121
+thisProcess.openPorts; // list all open ports</textarea>
 
-<p>To listen to incoming messages, an <a href="./../Classes/OSCFunc.html">OSCFunc</a> needs to be created in SuperCollider. If the sending application <strong>has a fixed port it sends message from</strong>, you can set the OSCFunc to listen only to messages coming from that IP and port:<pre class='code prettyprint lang-sc'>n = NetAddr.new("127.0.0.1", 7771);    // create the NetAddr
+<p>To listen to incoming messages, an <a href="./../Classes/OSCFunc.html">OSCFunc</a> needs to be created in SuperCollider. If the sending application <strong>has a fixed port it sends message from</strong>, you can set the OSCFunc to listen only to messages coming from that IP and port:<textarea class='editor'>n = NetAddr.new("127.0.0.1", 7771);    // create the NetAddr
 // create the OSCFunc
 o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln; }, '/goodbye', n);
-o.free;    // remove the OSCFunc when you are done.</pre>
+o.free;    // remove the OSCFunc when you are done.</textarea>
 
 <p><div class='note'><span class='notelabel'>NOTE:</span> The port 7771 above is the port the other application is sending <strong>from</strong>, not the port SC is receiving on. See the <strong>recvPort</strong> argument in <a href="./../Classes/OSCFunc.html#*new">OSCFunc: *new</a> if you want to receive on another port than NetAddr.langPort.</div><h2><a class='anchor' name='Receiving%20from%20an%20application%20that%20is%20sending%20from%20a%20variable%20port'>Receiving from an application that is sending from a variable port</a></h2>
 
-<p>Some applications (notably Pd and Max) do not send messages from a fixed port, but instead use a different port each time they send out a message, or each time a patch starts up it picks a random port. In that case the OSCFunc needs to be set up, so that it listens to messages coming from anywhere. You do this by passing nil as the srcID argument.<pre class='code prettyprint lang-sc'>o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln; }, '/goodbye'); // create the OSCFunc
-o.free;    // remove the OSCFunc when you are done.</pre>
+<p>Some applications (notably Pd and Max) do not send messages from a fixed port, but instead use a different port each time they send out a message, or each time a patch starts up it picks a random port. In that case the OSCFunc needs to be set up, so that it listens to messages coming from anywhere. You do this by passing nil as the srcID argument.<textarea class='editor'>o = OSCFunc({ arg msg, time, addr, recvPort; [msg, time, addr, recvPort].postln; }, '/goodbye'); // create the OSCFunc
+o.free;    // remove the OSCFunc when you are done.</textarea>
 <h2><a class='anchor' name='Testing%20incoming%20traffic'>Testing incoming traffic</a></h2>
 
-<p>OSCFunc has a convenience method, <a href="./../Classes/OSCFunc.html#*trace">OSCFunc: *trace</a> which posts all incoming OSC messages:<pre class='code prettyprint lang-sc'>OSCFunc.trace(true); // Turn posting on
-OSCFunc.trace(false); // Turn posting off</pre>
+<p>OSCFunc has a convenience method, <a href="./../Classes/OSCFunc.html#*trace">OSCFunc: *trace</a> which posts all incoming OSC messages:<textarea class='editor'>OSCFunc.trace(true); // Turn posting on
+OSCFunc.trace(false); // Turn posting off</textarea>
 <h2><a class='anchor' name='Custom%20OSC%20message%20processing'>Custom OSC message processing</a></h2>
 
-<p>All incoming OSC messages call the message recvOSCmessage in <a href="./../Classes/Main.html">Main</a>. If needed, one can add a custom <a href="./../Classes/Function.html">Function</a> or other object to Main's recvOSCFunc variable. Although one can do this directly using the corresponding setter, it is better to use the <a href="./../Classes/Main.html#-addOSCRecvFunc">Main: -addOSCRecvFunc</a> and <a href="./../Classes/Main.html#-removeOSCRecvFunc">Main: -removeOSCRecvFunc</a> to avoid overwriting any other functions that may have been added by class code.<pre class='code prettyprint lang-sc'>// this example is basically like OSCFunc.trace but filters out
+<p>All incoming OSC messages call the message recvOSCmessage in <a href="./../Classes/Main.html">Main</a>. If needed, one can add a custom <a href="./../Classes/Function.html">Function</a> or other object to Main's recvOSCFunc variable. Although one can do this directly using the corresponding setter, it is better to use the <a href="./../Classes/Main.html#-addOSCRecvFunc">Main: -addOSCRecvFunc</a> and <a href="./../Classes/Main.html#-removeOSCRecvFunc">Main: -removeOSCRecvFunc</a> to avoid overwriting any other functions that may have been added by class code.<textarea class='editor'>// this example is basically like OSCFunc.trace but filters out
 // /status.reply messages
 (
 f = { |msg, time, addr|
@@ -75,16 +80,17 @@ thisProcess.addOSCRecvFunc(f);
 );
 
 // stop posting.
-thisProcess.removeOSCRecvFunc(f);</pre>
+thisProcess.removeOSCRecvFunc(f);</textarea>
 <h2><a class='anchor' name='OSC%20type%20tags%20and%20sclang'>OSC type tags and sclang</a></h2>
 
 <p>Inbound OSC messages must have type tags, or an error will be thrown.
 <p>The following conversions are supported outbound:<ul>
-<li>Integers become "i". Both OSC and sclang use 32-bit signed integers.<li>Booleans become "i", with true translating to 1 and false translating to 0.<li>Nil becomes "i", translating to value 0.<li>Floats become "f" (32-bit float). sclang's Floats are 64-bit, so the conversion to OSC is lossy.<li>Strings and Symbols become "s" (string).<li>Int8Arrays become "b" (blob).<li>Chars are added as a raw type tag, appending no data to the OSC packet. This is needed to send <code class='code prettyprint lang-sc'>$N</code> (nil), <code class='code prettyprint lang-sc'>$T</code> (true), <code class='code prettyprint lang-sc'>$F</code> (false), <code class='code prettyprint lang-sc'>$I</code> (infinity/impulse). Be careful with this -- if the destination entity doesn't agree that the tag consumes zero bytes, the remaining part of the OSC message may be corrupted!</ul>
+<li>Integers become "i". Both OSC and sclang use 32-bit signed integers.<li>Booleans become "i", with true translating to 1 and false translating to 0.<li>Nil becomes "i", translating to value 0.<li>Floats become "f" (32-bit float). sclang's Floats are 64-bit, so the conversion to OSC is lossy.<li>Strings and Symbols become "s" (string).<li>Int8Arrays become "b" (blob).<li>Chars are added as a raw type tag, appending no data to the OSC packet. This is needed to send <code>$N</code> (nil), <code>$T</code> (true), <code>$F</code> (false), <code>$I</code> (infinity/impulse). Be careful with this -- if the destination entity doesn't agree that the tag consumes zero bytes, the remaining part of the OSC message may be corrupted!</ul>
 
-<p>If <code class='code prettyprint lang-sc'>NetAddr.useDoubles</code> is set to true, then in outbound messages, sclang will use the "d" (double) type tag instead of "f". OSC doubles are 64-bit. It is up to you to ensure that the receiver understands "d".
+<p>If <code>NetAddr.useDoubles</code> is set to true, then in outbound messages, sclang will use the "d" (double) type tag instead of "f". OSC doubles are 64-bit. It is up to you to ensure that the receiver understands "d".
 <p>The following type tags are supported inbound:<ul>
-<li>"i" (32-bit signed integer) becomes Integer<li>"f" (32-bit float) becomes Float<li>"s" (string) becomes Symbol<li>"b" (blob) and "m" (4-byte MIDI message) becomes Int8Array<li>"d" (64-bit float) becomes Float<li>"T" (true) and "F" (false) become Booleans<li>"I" (infinity/impulse) becomes <code class='code prettyprint lang-sc'>+inf</code><li>"N" (nil) becomes <code class='code prettyprint lang-sc'>nil</code><li>"t" (64-bit big-endian fixed-point time tag) becomes Float<li>"c" (character) becomes Char</ul>
+<li>"i" (32-bit signed integer) becomes Integer<li>"f" (32-bit float) becomes Float<li>"s" (string) becomes Symbol<li>"b" (blob) and "m" (4-byte MIDI message) becomes Int8Array<li>"d" (64-bit float) becomes Float<li>"T" (true) and "F" (false) become Booleans<li>"I" (infinity/impulse) becomes <code>+inf</code><li>"N" (nil) becomes <code>nil</code><li>"t" (64-bit big-endian fixed-point time tag) becomes Float<li>"c" (character) becomes Char</ul>
 
 <p>"r" (RGBA color), "S" (symbol), and "[" and "]" (array start and end) are not supported.
-<p>If an unrecognized tag is encountered, sclang will make that unrecognized tag into a Char object and add that to the OSC message. It will then skip ahead in the OSC message as if it were reading a string -- it looks for the next null byte and then skips 0-3 bytes for 4-byte alignment.<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/OSC_communication.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/OSC_communication.schelp</a><br>link::Guides/OSC_communication::<br></div></div></body></html>
+<p>If an unrecognized tag is encountered, sclang will make that unrecognized tag into a Char object and add that to the OSC message. It will then skip ahead in the OSC message as if it were reading a string -- it looks for the next null byte and then skips 0-3 bytes for 4-byte alignment.<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/OSC_communication.schelp'>/usr/share/SuperCollider/HelpSource/Guides/OSC_communication.schelp</a><br>link::Guides/OSC_communication::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Harmonics | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Harmonics | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Harmonics';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Harmonics:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -36,8 +41,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 <li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-size'>size</a> </li>
-</ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -47,17 +52,17 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Convenient factory for filling buffers with harmonics on the server</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Collections/Harmonics.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Collections/Harmonics.sc'>Harmonics.sc</a></div></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Collections/Harmonics.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Collections/Harmonics.sc'>Harmonics.sc</a></div></div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>Harmonics objects are convenient factories for creating Arrays that are used to fill buffers using the b_gen sine fill commands on the server.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>Harmonics.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>size: 32</span>)</h3>
 <div class='method'>
-<p>Create a new Harmonics array of size. Nothing is filled in for you, until instance methods are applied.<pre class='code prettyprint lang-sc'>a = Harmonics.new(16);    // just returns an instance of Harmonics with size</pre>
+<p>Create a new Harmonics array of size. Nothing is filled in for you, until instance methods are applied.<textarea class='editor'>a = Harmonics.new(16);    // just returns an instance of Harmonics with size</textarea>
 </div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ramp' href='./../Overviews/Methods.html#ramp'>ramp</a>(<span class='argstr'>start: 1</span>, <span class='argstr'>step</span>)</h3>
-<div class='method'><pre class='code prettyprint lang-sc'>a.ramp(1.0, 1.0);    // returns a harmonic series
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ramp' href='./../Overviews/Methods.html#ramp'>ramp</a>(<span class='argstr'>start: 1.0</span>, <span class='argstr'>step</span>)</h3>
+<div class='method'><textarea class='editor'>a.ramp(1.0, 1.0);    // returns a harmonic series
 
 b = Buffer.alloc(s, 512, 1);
 // harmonic series for freqs, ramp down for amps
@@ -70,82 +75,83 @@ z = SynthDef("help-Osc",{ arg out=0,bufnum=0;
 });
 )
 y = z.play(s,[\out, 0, \bufnum, b]);
-y.free;</pre>
+y.free;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-decay' href='./../Overviews/Methods.html#decay'>decay</a>(<span class='argstr'>k: 1</span>)</h3>
 <div class='method'>
-<p>Implements the formula: 1 / ((i+1) ** k)<pre class='code prettyprint lang-sc'>a.decay(1.0);
+<p>Implements the formula: 1 / ((i+1) ** k)<textarea class='editor'>a.decay(1.0);
 
 b.sine2(a.ramp(1.0, 1.0).postln, a.decay(1.0).postln, true, true, true);
 y = z.play(s,[\out, 0, \bufnum, b]);
-y.free;</pre>
+y.free;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-geom' href='./../Overviews/Methods.html#geom'>geom</a>(<span class='argstr'>k: 1.2</span>)</h3>
 <div class='method'>
-<p>Implements the formula: 1 / (i ** k)<pre class='code prettyprint lang-sc'>a.geom(1.2);
+<p>Implements the formula: 1 / (i ** k)<textarea class='editor'>a.geom(1.2);
 
 b.sine2(a.ramp(1.0, 1.0).postln, a.geom(1.2).postln, true, true, true);
 y = z.play(s,[\out, 0, \bufnum, b]);
-y.free;</pre>
+y.free;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-formant' href='./../Overviews/Methods.html#formant'>formant</a>(<span class='argstr'>center: 12</span>, <span class='argstr'>width: 3</span>)</h3>
 <div class='method'>
-<p>Create a formant like structure.<pre class='code prettyprint lang-sc'>a.formant(6, 3);
+<p>Create a formant like structure.<textarea class='editor'>a.formant(6, 3);
 
 b.sine2(a.formant(12, 3).postln, a.geom(1.2), true, true, true);
 y = z.play(s,[\out, 0, \bufnum, b]);
-y.free;</pre>
+y.free;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-teeth' href='./../Overviews/Methods.html#teeth'>teeth</a>(<span class='argstr'>spacing: 2</span>, <span class='argstr'>start: 0</span>)</h3>
-<div class='method'><pre class='code prettyprint lang-sc'>a.teeth(6, 3);
+<div class='method'><textarea class='editor'>a.teeth(6, 3);
 
 b.sine2(a.teeth(2, 3).postln, a.geom(1.2), true, true, true);
 y = z.play(s,[\out, 0, \bufnum, b]);
 b.sine2(a.teeth(4, 1).postln, a.geom(1.2), true, true, true);
 b.sine2(a.teeth(1, 3).postln, a.geom(1.2), true, true, true);
 b.sine2(a.teeth(2, 3).postln, a.geom(1.2), true, true, true);
-y.free;</pre>
+y.free;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cutoff' href='./../Overviews/Methods.html#cutoff'>cutoff</a>(<span class='argstr'>n</span>)</h3>
 <div class='method'>
-<p>Returns 1.0 to the nth place, fills the rest with 0.0<pre class='code prettyprint lang-sc'>a.cutoff(3);
+<p>Returns 1.0 to the nth place, fills the rest with 0.0<textarea class='editor'>a.cutoff(3);
 
 b.sine2(a.ramp(1.0, 1.0), a.cutoff(3), true, true, true);
 y = z.play(s,[\out, 0, \bufnum, b]);
 b.sine2(a.ramp(1.0, 1.0), a.cutoff(3), true, true, true);
 b.sine2(a.ramp(1.0, 1.0), a.cutoff(5), true, true, true);
 b.sine2(a.ramp(1.0, 1.0), a.cutoff(1), true, true, true);
-y.free;</pre>
-</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-shelf' href='./../Overviews/Methods.html#shelf'>shelf</a>(<span class='argstr'>start</span>, <span class='argstr'>end</span>, <span class='argstr'>startLevel: 1</span>, <span class='argstr'>endLevel: 0</span>)</h3>
-<div class='method'><pre class='code prettyprint lang-sc'>a.shelf(0, 6, 1, 0);
+y.free;</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-shelf' href='./../Overviews/Methods.html#shelf'>shelf</a>(<span class='argstr'>start</span>, <span class='argstr'>end</span>, <span class='argstr'>startLevel: 1.0</span>, <span class='argstr'>endLevel: 0.0</span>)</h3>
+<div class='method'><textarea class='editor'>a.shelf(0, 6, 1, 0);
 
 b.sine2(a.ramp(1.0, 1.0), a.shelf(0, 6, 1, 0).postln , true, true, true);
 y = z.play(s,[\out, 0, \bufnum, b]);
 b.sine2(a.ramp(1.0, 1.0), a.shelf(0, 11, 1, 0).postln , true, true, true);
 b.sine2(a.ramp(1.0, 1.0), a.shelf(2, 6, 1, 0).postln , true, true, true);
 b.sine2(a.ramp(1.0, 1.0), a.shelf(6, 8, 1, 0).postln , true, true, true);
-y.free;</pre>
-</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sine' href='./../Overviews/Methods.html#sine'>sine</a>(<span class='argstr'>wavelength: 4</span>, <span class='argstr'>iphase: 1.5707963267949</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
-<div class='method'><pre class='code prettyprint lang-sc'>a.sine(8, 0, 1, 0);
+y.free;</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sine' href='./../Overviews/Methods.html#sine'>sine</a>(<span class='argstr'>wavelength: 4</span>, <span class='argstr'>iphase: 1.5707963267949</span>, <span class='argstr'>mul: 1.0</span>, <span class='argstr'>add: 0.0</span>)</h3>
+<div class='method'><textarea class='editor'>a.sine(8, 0, 1, 0);
 
 b.sine2(a.ramp(1.0, 1.0), a.sine(8, 0, 1, 0).postln , true, true, true);
 y = z.play(s,[\out, 0, \bufnum, b]);
 b.sine2(a.ramp(1.0, 1.0), a.sine(4, 0, 1, 0).postln , true, true, true);
 b.sine2(a.ramp(1.0, 1.0), a.sine(2.2, 0.5pi, 0.4, 0.2).postln , true, true, true);
 b.sine2(a.ramp(1.0, 1.0), a.sine(pi, 0.25pi, 0.5, 0).postln , true, true, true);
-y.free;</pre>
-</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pulse' href='./../Overviews/Methods.html#pulse'>pulse</a>(<span class='argstr'>wavelength: 4</span>, <span class='argstr'>iphase: 0</span>, <span class='argstr'>duty: 0.5</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
-<div class='method'><pre class='code prettyprint lang-sc'>a.pulse(8, 0, 2, 1, 0);
+y.free;</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pulse' href='./../Overviews/Methods.html#pulse'>pulse</a>(<span class='argstr'>wavelength: 4</span>, <span class='argstr'>iphase: 0</span>, <span class='argstr'>duty: 0.5</span>, <span class='argstr'>mul: 1.0</span>, <span class='argstr'>add: 0.0</span>)</h3>
+<div class='method'><textarea class='editor'>a.pulse(8, 0, 2, 1, 0);
 
 b.sine2(a.ramp(1.0, 1.0), a.pulse(8, 0, 2, 1, 0).postln , true, true, true);
 y = z.play(s,[\out, 0, \bufnum, b]);
 b.sine2(a.ramp(1.0, 1.0), a.pulse(8, 0, 2, 1, 0).postln , true, true, true);
 b.sine2(a.ramp(1.0, 1.0), a.pulse(4, 0, 2, 0.4, 0.2).postln , true, true, true);
 b.sine2(a.ramp(1.0, 1.0), a.pulse(7, 0.5pi, 3, 0.5, 0.1).postln , true, true, true);
-y.free;</pre>
-</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-rand' href='./../Overviews/Methods.html#rand'>rand</a>(<span class='argstr'>lo: 0</span>, <span class='argstr'>hi: 1</span>)</h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-exprand' href='./../Overviews/Methods.html#exprand'>exprand</a>(<span class='argstr'>lo: 0.01</span>, <span class='argstr'>hi: 1</span>)</h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-linrand' href='./../Overviews/Methods.html#linrand'>linrand</a>(<span class='argstr'>lo: 0</span>, <span class='argstr'>hi: 1</span>)</h3>
-<div class='method'></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-rand2' href='./../Overviews/Methods.html#rand2'>rand2</a>(<span class='argstr'>val: 1</span>)</h3>
+y.free;</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-rand' href='./../Overviews/Methods.html#rand'>rand</a>(<span class='argstr'>lo: 0.0</span>, <span class='argstr'>hi: 1.0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-exprand' href='./../Overviews/Methods.html#exprand'>exprand</a>(<span class='argstr'>lo: 0.01</span>, <span class='argstr'>hi: 1.0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-linrand' href='./../Overviews/Methods.html#linrand'>linrand</a>(<span class='argstr'>lo: 0.0</span>, <span class='argstr'>hi: 1.0</span>)</h3>
+<div class='method'></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-rand2' href='./../Overviews/Methods.html#rand2'>rand2</a>(<span class='argstr'>val: 1.0</span>)</h3>
 <div class='method'></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-coin' href='./../Overviews/Methods.html#coin'>coin</a>(<span class='argstr'>prob: 0.5</span>)</h3>
 <div class='method'>
 <p></div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-size' href='./../Overviews/Methods.html#size'>size</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-size' href='./../Overviews/Methods.html#size'>size</a> = value</h3>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Harmonics.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Harmonics.schelp</a><br>link::Classes/Harmonics::<br></div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Harmonics.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Harmonics.schelp</a><br>link::Classes/Harmonics::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

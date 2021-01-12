@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>What's new in Qt GUI | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>What's new in Qt GUI | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'What\'s new in Qt GUI';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>What's new in Qt GUI:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#View%20hierarchy'>View hierarchy</a></li>
@@ -37,8 +42,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul></ul><li class='toc1'><a href='#New%20views'>New views</a></li>
 <ul class='toc'><li class='toc2'><a href='#TreeView'>TreeView</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#WebView'>WebView</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -50,31 +55,31 @@ var scdoc_sc_version = '3.9.3';
 </div>
 
 <p>This document is intended for those already familiar with graphical user interface programming in SuperCollider. If you are new to this topic, you are suggested to first read the <a href="./../Guides/GUI-Introduction.html">Introduction to GUI</a>.
-<p>For the purpose of this guide, let's switch to the Qt GUI:<pre class='code prettyprint lang-sc'>GUI.qt</pre>
+<p>For the purpose of this guide, let's switch to the Qt GUI:<textarea class='editor'>GUI.qt</textarea>
 <h2><a class='anchor' name='View%20hierarchy'>View hierarchy</a></h2>
 <h3><a class='anchor' name='Every%20view%20can%20be%20a%20window'>Every view can be a window</a></h3>
 
 <p>Every view can be displayed as a window on its own, without the use of the Window class. Hence, most methods that are present in Window, are also present in View.
-<p>For example, you can display any view without embedding it in a Window or another container view using the <a href="./../Classes/View.html#-front">View: -front</a> method. For this reason, it is valid to omit the 'parent' argument at view construction - any view without a parent can be shown as a window:<pre class='code prettyprint lang-sc'>(
+<p>For example, you can display any view without embedding it in a Window or another container view using the <a href="./../Classes/View.html#-front">View: -front</a> method. For this reason, it is valid to omit the 'parent' argument at view construction - any view without a parent can be shown as a window:<textarea class='editor'>(
 x = SoundFileView().front;
 x.load(Platform.resourceDir +/+ "sounds/a11wlk01.wav");
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Every%20view%20can%20be%20a%20container'>Every view can be a container</a></h3>
 
-<p>Every view can contain other views (i.e. act as their parent). For this reason, if you want to group several views together, you can simply use a View as the container:<pre class='code prettyprint lang-sc'>(
+<p>Every view can contain other views (i.e. act as their parent). For this reason, if you want to group several views together, you can simply use a View as the container:<textarea class='editor'>(
 v=View(bounds:300@300);
 5.do { |i|
     Slider(v).moveTo(i * 25 + 10, 10);
 };
 v.front;
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Layout%20management'>Layout management</a></h2>
 
 <p>The Qt layout system allows you to forget about pixels - it manages the size and position of child views in a parent automatically.<h3><a class='anchor' name='Intrinsic%20view%20sizes'>Intrinsic view sizes</a></h3>
 
-<p>You may have noticed in the examples above that, besides omitting the <code class='code prettyprint lang-sc'>parent</code> argument, we sometimes omitted the <code class='code prettyprint lang-sc'>bounds</code> argument as well, at view construction. This is possible because views have intrinsically defined preferred and minimum sizes. See <a href="./../Guides/GUI-Layout-Management.html#Intrinsic%20view%20sizes">Layout Management: Intrinsic view sizes</a> for further explanation.<h3><a class='anchor' name='Layout%20classes'>Layout classes</a></h3>
+<p>You may have noticed in the examples above that, besides omitting the <code>parent</code> argument, we sometimes omitted the <code>bounds</code> argument as well, at view construction. This is possible because views have intrinsically defined preferred and minimum sizes. See <a href="./../Guides/GUI-Layout-Management.html#Intrinsic%20view%20sizes">Layout Management: Intrinsic view sizes</a> for further explanation.<h3><a class='anchor' name='Layout%20classes'>Layout classes</a></h3>
 
-<p>A collection of layout classes allows you to associate one of them with a parent view and several child views, and it will manage positions and sizes of the children automatically according to their size preferences and constraints. It will also do that dynamically, as you resize the window:<pre class='code prettyprint lang-sc'>(
+<p>A collection of layout classes allows you to associate one of them with a parent view and several child views, and it will manage positions and sizes of the children automatically according to their size preferences and constraints. It will also do that dynamically, as you resize the window:<textarea class='editor'>(
 w = Window.new(bounds:Rect(100,100,300,80)).layout_(
     VLayout (
         HLayout(
@@ -84,7 +89,7 @@ w = Window.new(bounds:Rect(100,100,300,80)).layout_(
         Button().states_([["SuperCollider"]])
     )
 ).front;
-)</pre>
+)</textarea>
 
 <p>See the <a href="./../Guides/GUI-Layout-Management.html">Layout Management</a> guide for detailed explanation.<h2><a class='anchor' name='Color%20management'>Color management</a></h2>
 <h3><a class='anchor' name='The%20palette'>The palette</a></h3>
@@ -93,17 +98,17 @@ w = Window.new(bounds:Rect(100,100,300,80)).layout_(
 <p>By default, a window will get the global palette ( <a href="./../Classes/QtGUI.html#*palette">QtGUI: *palette</a> ), and the palette is inherited by child views from their parent. Thus, changing the parent's palette will also affect its children, unless the palette has been overridden on a particular child. You can easily change the appearance of the whole GUI by changing the global palette.<h3><a class='anchor' name='Predefined%20palettes'>Predefined palettes</a></h3>
 
 <p>There are two predefined palettes ( <a href="./../Classes/QPalette.html#*light">QPalette: *light</a> and <a href="./../Classes/QPalette.html#*dark">QPalette: *dark</a> ), and you can also access the native palette of your operating system ( <a href="./../Classes/QPalette.html#*system">QPalette: *system</a> ):
-<p>Try changing the global palette with the code below; if you have the Qt GUI active, this will affect this window as well:<pre class='code prettyprint lang-sc'>QtGUI.palette = QPalette.dark;
+<p>Try changing the global palette with the code below; if you have the Qt GUI active, this will affect this window as well:<textarea class='editor'>QtGUI.palette = QPalette.dark;
 
 QtGUI.palette = QPalette.light;
 
-QtGUI.palette = QPalette.system;</pre>
+QtGUI.palette = QPalette.system;</textarea>
 <h2><a class='anchor' name='View%20actions%20and%20hooks'>View actions and hooks</a></h2>
 <h3><a class='anchor' name='Mouse%20and%20key%20event%20propagation'>Mouse and key event propagation</a></h3>
 
 <p>In addition to key events, mouse events can also propagate to parent views.
 <p>Also, the control over event propagation works differently in Qt. See <a href="./../Classes/View.html#Key%20and%20mouse%20event%20processing">View: Key and mouse event processing</a> for detailed explanation.
-<p>Moreover, you can make a view transparent for mouse events using <a href="./../Classes/View.html#-acceptsMouse">View: -acceptsMouse</a>, which will forward all mouse events to the view under, regardless of whether they are in a parent-child relationship.<pre class='code prettyprint lang-sc'>(
+<p>Moreover, you can make a view transparent for mouse events using <a href="./../Classes/View.html#-acceptsMouse">View: -acceptsMouse</a>, which will forward all mouse events to the view under, regardless of whether they are in a parent-child relationship.<textarea class='editor'>(
 var win, parent, child, sibling1, sibling2;
 win = Window(bounds:Rect(30,30,300,300));
 parent = Slider2D(win, win.bounds.moveTo(0,0).insetBy(50,50));
@@ -130,11 +135,11 @@ sibling2 = StaticText(win, Rect(150,150,150,150))
 win.view.mouseDownAction = { win.background = Color.red(0.6) };
 win.view.mouseUpAction = { win.view.palette = QPalette() };
 win.front;
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Extended%20mouse%20interaction'>Extended mouse interaction</a></h3>
 
 <p>Many Qt views already implement some kind of <strong>mouse wheel</strong> interaction. For example, you can scroll a ScrollView, ListView and TreeView using the mouse wheel. You can also change the value of a Slider or a Knob using the mouse wheel. In addition, you can assign an action of your own to the mouse wheel event using <a href="./../Classes/View.html#-mouseWheelAction">View: -mouseWheelAction</a>:
-<p>There's another two handy new mouse actions triggered when the <strong>mouse enters or leaves</strong> the view: <a href="./../Classes/View.html#-mouseEnterAction">View: -mouseEnterAction</a> and <a href="./../Classes/View.html#-mouseLeaveAction">View: -mouseLeaveAction</a>:.<pre class='code prettyprint lang-sc'>(
+<p>There's another two handy new mouse actions triggered when the <strong>mouse enters or leaves</strong> the view: <a href="./../Classes/View.html#-mouseEnterAction">View: -mouseEnterAction</a> and <a href="./../Classes/View.html#-mouseLeaveAction">View: -mouseLeaveAction</a>:.<textarea class='editor'>(
 var val = 1.0;
 t=StaticText(bounds:Rect(30,30,100,100))
     .font_(Font(size:25))
@@ -151,10 +156,10 @@ t.mouseWheelAction = { |v,x,y,mod,dx,dy|
     t.string = val.asString;
     t.stringColor = Color.red(val);
 };
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Hooks%20for%20position%20and%20size%20change'>Hooks for position and size change</a></h3>
 
-<p>Since views can be automatically repositioned and resized by <a href="#Layout%20management">layouts</a>, or by the user (if they are windows), it may come handy to make your view respond to these changes using <a href="./../Classes/View.html#-onMove">View: -onMove</a> and <a href="./../Classes/View.html#-onResize">View: -onResize</a>.<pre class='code prettyprint lang-sc'>(
+<p>Since views can be automatically repositioned and resized by <a href="#Layout%20management">layouts</a>, or by the user (if they are windows), it may come handy to make your view respond to these changes using <a href="./../Classes/View.html#-onMove">View: -onMove</a> and <a href="./../Classes/View.html#-onResize">View: -onResize</a>.<textarea class='editor'>(
 var view, update;
 update = { |v|
     var bounds = v.bounds;
@@ -172,32 +177,32 @@ x.onResize = update;
 update.(x);
 
 x.front;
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Enhancements'>Enhancements</a></h2>
 <h3><a class='anchor' name='Stethoscope'>Stethoscope</a></h3>
 
 <p>Qt brings a new implementation of <a href="./../Classes/Stethoscope.html">Stethoscope</a> that uses <em>shared memory</em> to allow highly efficient monitoring of buses on any <strong>local server</strong>.
-<p>All the 'scope' methods of various classes (like Server, Bus, Function, etc.) are wired to this new implementation, so you don't need to worry about instantiating a Stethoscope yourself.<pre class='code prettyprint lang-sc'>Server.local.scope;</pre>
+<p>All the 'scope' methods of various classes (like Server, Bus, Function, etc.) are wired to this new implementation, so you don't need to worry about instantiating a Stethoscope yourself.<textarea class='editor'>Server.local.scope;</textarea>
 <h3><a class='anchor' name='SoundFileView'>SoundFileView</a></h3>
 
 <p><a href="./../Classes/SoundFileView.html">SoundFileView</a> has <strong>infinite display resolution</strong>. This means you can always zoom into the waveform until you see a single sound frame.
 <p>It also offers convenient <strong>mouse interaction</strong> for zooming in and scrolling:<ul>
 <li>shift + right-click + mouse-up/down = <strong>zoom</strong><li>right-click + mouse-left/right = <strong>scroll</strong></ul>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 var x = SoundFileView().front;
 x.load(Platform.resourceDir +/+ "sounds/a11wlk01.wav");
-)</pre>
+)</textarea>
 
-<p>Alternatively to displaying a soundfile, you can allocate an empty amount of display frames, and fill it <strong>part by part</strong> with data to display (see documentation of <a href="./../Classes/SoundFileView.html#-alloc">SoundFileView: -alloc</a> and <a href="./../Classes/SoundFileView.html#-set">SoundFileView: -set</a>). This allows, for example, to implement efficient monitoring of recording into a Buffer.<pre class='code prettyprint lang-sc'>(
+<p>Alternatively to displaying a soundfile, you can allocate an empty amount of display frames, and fill it <strong>part by part</strong> with data to display (see documentation of <a href="./../Classes/SoundFileView.html#-alloc">SoundFileView: -alloc</a> and <a href="./../Classes/SoundFileView.html#-set">SoundFileView: -set</a>). This allows, for example, to implement efficient monitoring of recording into a Buffer.<textarea class='editor'>(
 var v, s;
 v = SoundFileView().front;
 s = Signal.sineFill(1000, 1.0/[1,2,3,4]);
 v.alloc(5000, samplerate: 500);
 3.do { |i| v.set( i * 2000, s * (1/(i+1)) ) };
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='EnvelopeView'>EnvelopeView</a></h3>
 
-<p><a href="./../Classes/EnvelopeView.html">EnvelopeView</a> offers two different <strong>display styles</strong>: in addition to traditional style where nodes are drawn as rectangles with labels inside, it can draw nodes as small dots, with labels next to them. See <a href="./../Classes/EnvelopeView.html#-style">EnvelopeView: -style</a>.<pre class='code prettyprint lang-sc'>(
+<p><a href="./../Classes/EnvelopeView.html">EnvelopeView</a> offers two different <strong>display styles</strong>: in addition to traditional style where nodes are drawn as rectangles with labels inside, it can draw nodes as small dots, with labels next to them. See <a href="./../Classes/EnvelopeView.html#-style">EnvelopeView: -style</a>.<textarea class='editor'>(
 var w, e, m;
 e = EnvelopeView()
     .value_([[0,0.4,0.6,1.0],[0,0.7,0.5,0.56]])
@@ -210,11 +215,11 @@ m = PopUpMenu()
 w = Window()
     .layout_(VLayout(m,e))
     .front;
-)</pre>
+)</textarea>
 
 <p>You can enforce a <strong>strict order of nodes</strong> on the time axis. In this case, a node can not move to position before the previous node, or after the next node. See <a href="./../Classes/EnvelopeView.html#-keepHorizontalOrder">EnvelopeView: -keepHorizontalOrder</a> and the example below.
 <p>You can also control how a <strong>selection of nodes</strong> behaves when it is <strong>moved</strong>: it can either keep its form rigidly and block all movement when meeting view edges or other nodes, or it can adjust its form to the obstacles, allowing the movement of those nodes that are not blocked individually. See <a href="./../Classes/EnvelopeView.html#-elasticSelection">EnvelopeView: -elasticSelection</a> and the following example.
-<p>Example: try selecting several nodes (by clicking on them with Shift key pressed) and moving them around, then use the menu to switch the way selection behaves, and repeat:<pre class='code prettyprint lang-sc'>(
+<p>Example: try selecting several nodes (by clicking on them with Shift key pressed) and moving them around, then use the menu to switch the way selection behaves, and repeat:<textarea class='editor'>(
 var w, e, m;
 e = EnvelopeView()
     .value_([
@@ -230,7 +235,7 @@ m = PopUpMenu()
 w = Window()
     .layout_(VLayout(m,e))
     .front;
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='ScrollView'>ScrollView</a></h3>
 
 <p><a href="./../Classes/ScrollView.html">ScrollView</a> allows to <strong>replace the canvas</strong> that holds its child views with an arbitrary view. This allows great flexibility, including using a <a href="#Layout%20management">layout</a> to manage the child views. See <a href="./../Classes/ScrollView.html#-canvas">ScrollView: -canvas</a> for explanation, and this <a href="./../Classes/ScrollView.html#examples">example</a>.<h2><a class='anchor' name='New%20views'>New views</a></h2>
@@ -241,10 +246,11 @@ w = Window()
 <p>Moreover, each data field of an item may also <strong>contain another view</strong>, giving you a great potential for interactivity with items.<h3><a class='anchor' name='WebView'>WebView</a></h3>
 
 <p><a href="./../Classes/WebView.html">WebView</a> is the core component for <strong>web page browsing</strong>. It is also implemented in the Cocoa GUI, but we list it here nonetheless.
-<p>It is a view that displays web pages, with web technology support comparable to widespread desktop web browsers.<div class='note'><span class='notelabel'>NOTE:</span> There may currently be some issues with displaying multimedia content.</div><pre class='code prettyprint lang-sc'>(
+<p>It is a view that displays web pages, with web technology support comparable to widespread desktop web browsers.<div class='note'><span class='notelabel'>NOTE:</span> There may currently be some issues with displaying multimedia content.</div><textarea class='editor'>(
 w = WebView(bounds: Window.screenBounds.insetBy(100,40))
     .url_("http://supercollider.sourceforge.net/")
     .front;
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/News-Qt-GUI.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/News-Qt-GUI.schelp</a><br>link::Guides/News-Qt-GUI::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/News-Qt-GUI.schelp'>/usr/share/SuperCollider/HelpSource/Guides/News-Qt-GUI.schelp</a><br>link::Guides/News-Qt-GUI::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

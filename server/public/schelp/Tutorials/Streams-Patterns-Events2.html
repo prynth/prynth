@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Understanding Streams, Patterns and Events - Part 2 | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Understanding Streams, Patterns and Events - Part 2 | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Understanding Streams, Patterns and Events - Part 2';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Understanding Streams, Patterns and Events - Part 2:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Patterns'>Patterns</a></li>
@@ -21,8 +26,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc1'><a href='#Math%20operations%20on%20Patterns'>Math operations on Patterns</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Filtering%20operations%20on%20patterns'>Filtering operations on patterns</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Making%20Music%20with%20Patterns'>Making Music with Patterns</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials</span>
@@ -35,22 +40,22 @@ var scdoc_sc_version = '3.9.3';
 </div>
 <h2><a class='anchor' name='Patterns'>Patterns</a></h2>
 
-<p>Often one wants to be able to create multiple streams from a single stream specification. Patterns are just a way to make multiple Streams from a single specification, like a cookie cutter. A pattern can be any object that responds to the <code class='code prettyprint lang-sc'>asStream</code> message by creating a <a href="./../Classes/Stream.html">Stream</a>. Once again there is a default implementation in class <a href="./../Classes/Object.html">Object</a> of asStream that simply returns the receiver as its own stream. Thus any object is by default a pattern that returns itself as a stream when sent the asStream message.<pre class='code prettyprint lang-sc'>(
+<p>Often one wants to be able to create multiple streams from a single stream specification. Patterns are just a way to make multiple Streams from a single specification, like a cookie cutter. A pattern can be any object that responds to the <code>asStream</code> message by creating a <a href="./../Classes/Stream.html">Stream</a>. Once again there is a default implementation in class <a href="./../Classes/Object.html">Object</a> of asStream that simply returns the receiver as its own stream. Thus any object is by default a pattern that returns itself as a stream when sent the asStream message.<textarea class='editor'>(
 a = 7.asStream;
 a.postln;
 a.next.postln;
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Pattern%20and%20its%20subclasses'>Pattern and its subclasses</a></h2>
 
 <p>There is a class named <a href="./../Classes/Pattern.html">Pattern</a> that provides more functionality for the concept of a pattern.
-<p>A <a href="./../Classes/Pfunc.html">Pfunc</a> is a Pattern that returns a <a href="./../Classes/FuncStream.html">FuncStream</a>. The same function arguments are supplied as are supplied to FuncStream.<pre class='code prettyprint lang-sc'>(
+<p>A <a href="./../Classes/Pfunc.html">Pfunc</a> is a Pattern that returns a <a href="./../Classes/FuncStream.html">FuncStream</a>. The same function arguments are supplied as are supplied to FuncStream.<textarea class='editor'>(
 var a, b;
 a = Pfunc.new({ #[1, 2, 3, 4].choose });
 b = a.asStream;            // make a stream from the pattern
 5.do({ b.next.postln; });    // print 5 values from the stream
-)</pre>
+)</textarea>
 
-<p>A <a href="./../Classes/Prout.html">Prout</a> is a Pattern that returns a <a href="./../Classes/Routine.html">Routine</a>. The same function argument is supplied as is supplied to Routine.<pre class='code prettyprint lang-sc'>(
+<p>A <a href="./../Classes/Prout.html">Prout</a> is a Pattern that returns a <a href="./../Classes/Routine.html">Routine</a>. The same function argument is supplied as is supplied to Routine.<textarea class='editor'>(
 var a, b, c;
 a = Prout.new({
         3.do({ arg i; 3.rand.yield; })
@@ -60,43 +65,43 @@ b = a.asStream;
 c = a.asStream;
 4.do({ b.next.postln; });    // print 4 values from first stream
 4.do({ c.next.postln; });    // print 4 values from second stream
-)</pre>
+)</textarea>
 
-<p>A <a href="./../Classes/Pseries.html">Pseries</a> is a Pattern that generates an arithmetic series.<pre class='code prettyprint lang-sc'>(
+<p>A <a href="./../Classes/Pseries.html">Pseries</a> is a Pattern that generates an arithmetic series.<textarea class='editor'>(
 var a, b;
 a = Pseries.new(10, 3, 8);    // stream starts at 10, steps by 3 and has length 8
 b = a.asStream;
 9.do({ b.next.postln; });    // print 9 values from stream
-)</pre>
+)</textarea>
 
-<p><a href="./../Classes/Pgeom.html">Pgeom</a> is a Pattern that generates a geometric series.<pre class='code prettyprint lang-sc'>(
+<p><a href="./../Classes/Pgeom.html">Pgeom</a> is a Pattern that generates a geometric series.<textarea class='editor'>(
 var a, b;
 a = Pgeom.new(10, 3, 8);    // stream starts at 10, steps by factor of 3 and has length 8
 b = a.asStream;
 9.do({ b.next.postln; });    // print 9 values from stream
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Math%20operations%20on%20Patterns'>Math operations on Patterns</a></h2>
 
-<p>Patterns also respond to math operators by returning patterns that respond to <code class='code prettyprint lang-sc'>asStream</code> with appropriately modified streams.
-<p>Applying a unary operator to a pattern<pre class='code prettyprint lang-sc'>(
+<p>Patterns also respond to math operators by returning patterns that respond to <code>asStream</code> with appropriately modified streams.
+<p>Applying a unary operator to a pattern<textarea class='editor'>(
 var a, b, c;
 a = Pseries.new(0,1,10);    // a is a pattern whose stream counts from 0 to 9
 b = a.squared;            // pattern b is a square of the pattern a
 c = b.asStream;
 12.do({ c.next.postln; });
-)</pre>
+)</textarea>
 
-<p>Using a binary operator on a pattern<pre class='code prettyprint lang-sc'>(
+<p>Using a binary operator on a pattern<textarea class='editor'>(
 var a, b, c;
 a = Pseries.new(0,1,10);    // a is a pattern whose stream counts from 0 to 9
 b = a + 100;            // add a constant value to pattern a
 c = b.asStream;
 12.do({ c.next.postln; });
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Filtering%20operations%20on%20patterns'>Filtering operations on patterns</a></h2>
 
-<p>Patterns also respond to the messages <code class='code prettyprint lang-sc'>collect</code>, <code class='code prettyprint lang-sc'>select</code>, and <code class='code prettyprint lang-sc'>reject</code> by returning a new <a href="./../Classes/Pattern.html">Pattern</a>.
-<p>The <code class='code prettyprint lang-sc'>collect</code> message returns a Pattern whose <a href="./../Classes/Stream.html">Stream</a> is modified by a function in the same way as the collect message sent to a Collection returns a modified Collection.<pre class='code prettyprint lang-sc'>(
+<p>Patterns also respond to the messages <code>collect</code>, <code>select</code>, and <code>reject</code> by returning a new <a href="./../Classes/Pattern.html">Pattern</a>.
+<p>The <code>collect</code> message returns a Pattern whose <a href="./../Classes/Stream.html">Stream</a> is modified by a function in the same way as the collect message sent to a Collection returns a modified Collection.<textarea class='editor'>(
 var a, b, c;
 // a is a pattern whose stream counts from 0 to 9
 a = Pseries.new(0,1,10);
@@ -104,9 +109,9 @@ a = Pseries.new(0,1,10);
 b = a.collect({ arg item; if (item.even, { item + 100 },{ item }); });
 c = b.asStream;
 6.do({ c.next.postln; });
-)</pre>
+)</textarea>
 
-<p>The <code class='code prettyprint lang-sc'>select</code> message creates a pattern whose stream passes only items that return true from a user supplied function.<pre class='code prettyprint lang-sc'>(
+<p>The <code>select</code> message creates a pattern whose stream passes only items that return true from a user supplied function.<textarea class='editor'>(
 var a, b, c;
 // a is a pattern whose stream counts from 0 to 9
 a = Pseries.new(0,1,10);
@@ -114,9 +119,9 @@ a = Pseries.new(0,1,10);
 b = a.select({ arg item; item.odd; });
 c = b.asStream;
 6.do({ c.next.postln; });
-)</pre>
+)</textarea>
 
-<p>The <code class='code prettyprint lang-sc'>reject</code> message creates a pattern whose stream passes only items that return false from a user supplied function.<pre class='code prettyprint lang-sc'>(
+<p>The <code>reject</code> message creates a pattern whose stream passes only items that return false from a user supplied function.<textarea class='editor'>(
 var a, b, c;
 // a is a pattern whose stream counts from 0 to 9
 a = Pseries.new(0,1,10);
@@ -124,10 +129,10 @@ a = Pseries.new(0,1,10);
 b = a.reject({ arg item; item.odd; });
 c = b.asStream;
 6.do({ c.next.postln; });
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Making%20Music%20with%20Patterns'>Making Music with Patterns</a></h2>
 
-<p>Here is a variation of the example given in part 1 that uses a <a href="./../Classes/Pattern.html">Pattern</a> to create two instances of the random melody stream.<pre class='code prettyprint lang-sc'>(
+<p>Here is a variation of the example given in part 1 that uses a <a href="./../Classes/Pattern.html">Pattern</a> to create two instances of the random melody stream.<textarea class='editor'>(
     s = Server.local;
     SynthDef(\help_SPE2, { arg i_out=0, sustain=1, freq;
         var out;
@@ -176,6 +181,7 @@ c = b.asStream;
             });
         })
     }).play
-)</pre>
+)</textarea>
 
-<p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events3.html">Understanding Streams, Patterns and Events - Part 3</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events2.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events2.schelp</a><br>link::Tutorials/Streams-Patterns-Events2::<br></div></div></body></html>
+<p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events3.html">Understanding Streams, Patterns and Events - Part 3</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events2.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events2.schelp</a><br>link::Tutorials/Streams-Patterns-Events2::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

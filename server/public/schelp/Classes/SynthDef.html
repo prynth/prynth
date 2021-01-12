@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>SynthDef | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>SynthDef | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'SynthDef';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>SynthDef:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -32,6 +37,7 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-func'>func</a> </li>
 <li class='toc3'><a href='#-variants'>variants</a> </li>
 <li class='toc3'><a href='#-allControlNames'>allControlNames</a> </li>
+<li class='toc3'><a href='#-specs'>specs</a> </li>
 <li class='toc2'><a href='#Special%20purpose%20methods'>Special purpose methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-writeDefFile'>writeDefFile</a> </li>
 <li class='toc3'><a href='#-load'>load</a> </li>
@@ -99,8 +105,9 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Literal%20Array%20Arguments'>Literal Array Arguments</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Wrapping%20Example:%20'factory'%20production%20of%20effects%20defs'>Wrapping Example: 'factory' production of effects defs</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#common%20argument%20names:%20out%20and%20gate'>common argument names: out and gate</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul><li class='toc2'><a href='#Inline%20ControlSpec%20definitions'>Inline ControlSpec definitions</a></li>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -110,7 +117,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Client-side representation of a synth definition</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/SynthDef.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/SynthDef.sc'>SynthDef.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/ProxySynthDef.html">ProxySynthDef</a>, <a href="../Classes/SynthDefOld.html">SynthDefOld</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Audio/SynthDef.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Audio/SynthDef.sc'>SynthDef.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/ProxySynthDef.html">ProxySynthDef</a>, <a href="../Classes/SynthDefOld.html">SynthDefOld</a></div>
 <div id='related'>See also: <a href="./../Classes/Synth.html">Synth</a>, <a href="./../Reference/Synth-Definition-File-Format.html">Synth Definition File Format</a>, <a href="./../Classes/SynthDesc.html">SynthDesc</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
@@ -118,15 +125,15 @@ var scdoc_sc_version = '3.9.3';
 <p>The server application uses synth definitions as templates for creating <a href="./../Classes/Synth.html">Synth</a> nodes. (Methods such as <a href="./../Classes/Function.html#play">Function-play</a>, etc. are simply conveniences which automatically create such a def.) The SynthDef class encapsulates the client-side representation of a given def, and provides methods for creating new defs, writing them to disk, and streaming them to a server.
 <p>SynthDef is one of the more complicated classes in SC and an exhaustive explanation of it is beyond the scope of this document. As such, the examples at the bottom of this document and those found in the various tutorials accessible from <a href="./../Help.html">Help</a> may be necessary to make some aspects of its use clear.<h3><a class='anchor' name='UGen%20Graph%20Functions%20and%20Special%20Argument%20Forms'>UGen Graph Functions and Special Argument Forms</a></h3>
 
-<p>The core of a def is its <a href="./../Classes/UGen.html">unit generator</a> graph function. This is an instance of <a href="./../Classes/Function.html">Function</a> which details how the def's unit generators are interconnected, its inputs and outputs, and what parameters are available for external control. In a synth based on the def, arguments to the function will become instances of <a href="./../Classes/Control.html">Control</a>. These can have default values, or can be set at the time the synth is created. After creation they will be controllable through <a href="./../Classes/Node.html">Node</a>'s <code class='code prettyprint lang-sc'>set</code> and <code class='code prettyprint lang-sc'>setn</code> methods, or the n_set and n_setn <a href="./../Browse.html#OpenSoundControl">OSC</a> messages.
+<p>The core of a def is its <a href="./../Classes/UGen.html">unit generator</a> graph function. This is an instance of <a href="./../Classes/Function.html">Function</a> which details how the def's unit generators are interconnected, its inputs and outputs, and what parameters are available for external control. In a synth based on the def, arguments to the function will become instances of <a href="./../Classes/Control.html">Control</a>. These can have default values, or can be set at the time the synth is created. After creation they will be controllable through <a href="./../Classes/Node.html">Node</a>'s <code>set</code> and <code>setn</code> methods, or the n_set and n_setn <a href="./../Browse.html#OpenSoundControl">OSC</a> messages.
 <p>There are four special types of arguments, which are treated differently:<dl>
-<dt>audio rate<dd>Arguments that begin with "a_" (e.g. <code class='code prettyprint lang-sc'>a_input</code>), or that are specified as <code class='code prettyprint lang-sc'>\ar</code> in the def's rates argument (see below), will be able to read an audio rate bus when mapped to it with <code class='code prettyprint lang-sc'>/n_mapa</code>.<dt>initial rate<dd>Arguments that begin with "i_" (e.g. <code class='code prettyprint lang-sc'>i_freq</code>), or that are specified as <code class='code prettyprint lang-sc'>\ir</code> in the def's rates argument (see below), will be static and non-modulatable. They will not respond to <code class='code prettyprint lang-sc'>/n_set</code> or <code class='code prettyprint lang-sc'>/n_map</code>. This is slightly more efficient in terms of CPU than a regular arg.<dt>trigger rate<dd>Arguments that begin with "t_" (e.g. <code class='code prettyprint lang-sc'>t_trig</code>), or that are specified as <code class='code prettyprint lang-sc'>\tr</code> in the def's rates argument (see below), will be made as a <a href="./../Classes/TrigControl.html">TrigControl</a>. Setting the argument will create a control-rate impulse at the set value. This is useful for triggers.<dt>literal arrays<dd>Arguments which have literal arrays as default values (see <a href="./../Reference/Literals.html">Literals</a>) result in multichannel controls, which can be set as a group with <a href="./../Classes/Node.html#setn">Node-setn</a> or <code class='code prettyprint lang-sc'>/n_setn</code>. When setting such controls no bounds checking is done, so you are responsible for making sure that you set the correct number of arguments.</dl>
+<dt>audio rate<dd>Arguments that begin with "a_" (e.g. <code>a_input</code>), or that are specified as <code>\ar</code> in the def's rates argument (see below), will be able to read an audio rate bus when mapped to it with <code>/n_mapa</code>.<dt>initial rate<dd>Arguments that begin with "i_" (e.g. <code>i_freq</code>), or that are specified as <code>\ir</code> in the def's rates argument (see below), will be static and non-modulatable. They will not respond to <code>/n_set</code> or <code>/n_map</code>. This is slightly more efficient in terms of CPU than a regular arg.<dt>trigger rate<dd>Arguments that begin with "t_" (e.g. <code>t_trig</code>), or that are specified as <code>\tr</code> in the def's rates argument (see below), will be made as a <a href="./../Classes/TrigControl.html">TrigControl</a>. Setting the argument will create a control-rate impulse at the set value. This is useful for triggers.<dt>literal arrays<dd>Arguments which have literal arrays as default values (see <a href="./../Reference/Literals.html">Literals</a>) result in multichannel controls, which can be set as a group with <a href="./../Classes/Node.html#setn">Node-setn</a> or <code>/n_setn</code>. When setting such controls no bounds checking is done, so you are responsible for making sure that you set the correct number of arguments.</dl>
 
 <p>See the examples below for more detail on how this works.
 <p>Certain argument names (such as 'out' to specify an out bus) are in such common use that adopting them might be said to constitute 'good style'. One of these, 'gate' when used to control the gate input of an <a href="./../Classes/EnvGen.html">EnvGen</a>, deserves special mention, as it allows one to use Node's release method. See <a href="./../Classes/Node.html">Node</a> for an example and more detail.<h3><a class='anchor' name='Static%20versus%20Dynamic%20Elements'>Static versus Dynamic Elements</a></h3>
 
-<p>It is important to understand that although a single def can provide a great deal of flexibility through its arguments, etc., it is nevertheless a static entity. A def's <a href="./../Classes/UGen.html">UGen</a> graph function (and the SC code within it) is evaluated only when the def is created. Thus statements like while, do, collect etc. will have no further effect at the time the def is used to create a Synth, and it is important to understand that a UGen graph function should not be designed in the same way as functions in the language, where multiple evaluations can yield different results. It will be evaluated once and only once.<div class='note'><span class='notelabel'>NOTE:</span> <code class='code prettyprint lang-sc'>if</code> is implemented as a linear signal crossfade when the receiver is an UGen</div>
-<p>There are other ways of achieving similar results, however, often using UGens such as Rand. For example, the following def will have a single randomly generated frequency, which will be the same for every Synth based on it:<pre class='code prettyprint lang-sc'>(
+<p>It is important to understand that although a single def can provide a great deal of flexibility through its arguments, etc., it is nevertheless a static entity. A def's <a href="./../Classes/UGen.html">UGen</a> graph function (and the SC code within it) is evaluated only when the def is created. Thus statements like while, do, collect etc. will have no further effect at the time the def is used to create a Synth, and it is important to understand that a UGen graph function should not be designed in the same way as functions in the language, where multiple evaluations can yield different results. It will be evaluated once and only once.<div class='note'><span class='notelabel'>NOTE:</span> <code>if</code> is implemented as a linear signal crossfade when the receiver is an UGen</div>
+<p>There are other ways of achieving similar results, however, often using UGens such as Rand. For example, the following def will have a single randomly generated frequency, which will be the same for every Synth based on it:<textarea class='editor'>(
 SynthDef(\help_notRand, { |out|
     Out.ar(out,
         SinOsc.ar(rrand(400, 800), 0, 0.2) * Line.kr(1, 0, 1, doneAction: Done.freeSelf)
@@ -134,9 +141,9 @@ SynthDef(\help_notRand, { |out|
 }).add;
 )
 a = Synth(\help_notRand);
-b = Synth(\help_notRand); // the same freq as a</pre>
+b = Synth(\help_notRand); // the same freq as a</textarea>
 
-<p>This one on the other hand will have a different random freq for each Synth created:<pre class='code prettyprint lang-sc'>(
+<p>This one on the other hand will have a different random freq for each Synth created:<textarea class='editor'>(
 SynthDef(\help_isRand, { |out|
     Out.ar(out,
         SinOsc.ar(Rand(400, 800), 0, 0.2) * Line.kr(1, 0, 1, doneAction: Done.freeSelf)
@@ -144,7 +151,7 @@ SynthDef(\help_isRand, { |out|
 }).add;
 )
 a = Synth(\help_isRand);
-b = Synth(\help_isRand); // a different randomly selected freq</pre>
+b = Synth(\help_isRand); // a different randomly selected freq</textarea>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>SynthDef.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>name</span>, <span class='argstr'>ugenGraphFunc</span>, <span class='argstr'>rates</span>, <span class='argstr'>prependArgs</span>, <span class='argstr'>variants</span>, <span class='argstr'>metadata</span>)</h3>
 <div class='method'>
@@ -157,44 +164,44 @@ b = Synth(\help_isRand); // a different randomly selected freq</pre>
 <p>A specification can be:<dl>
 <dt>nil/zero<dd>A standard control rate <a href="./../Classes/Control.html">Control</a> is created.<dt>\ar<dd>An audio rate <a href="./../Classes/AudioControl.html">AudioControl</a> is created.<dt>a float<dd>the Control will have a lag of the specified time. This can be used to create smooth transitions between different values. t_ and i_ args cannot be lagged.<dt>\ir<dd>The Control can be set only at creation ('initial rate'). See discussion above.<dt>\tr<dd>The Control is used as a trigger. See discussion above.</dl>
 <tr><td class='argumentname'>prependArgs<td class='argumentdesc'>
-<p>An optional <a href="./../Classes/Array.html">Array</a> of objects which will be passed as the first arguments to the ugenGraphFunc when it is evaluated. Arguments which receive values in this way will not be converted to instances of <a href="./../Classes/Control.html">Control</a>. See the <code class='code prettyprint lang-sc'>wrap</code> example below for an example of how this can be used.<tr><td class='argumentname'>variants<td class='argumentdesc'>
+<p>An optional <a href="./../Classes/Array.html">Array</a> of objects which will be passed as the first arguments to the ugenGraphFunc when it is evaluated. Arguments which receive values in this way will not be converted to instances of <a href="./../Classes/Control.html">Control</a>. See the <code>wrap</code> example below for an example of how this can be used.<tr><td class='argumentname'>variants<td class='argumentdesc'>
 <p>An optional <a href="./../Classes/Event.html">Event</a> containing default argument settings. These can override the defaults specified in the ugenGraphFunc. When creating a Synth a variant can be requested by appending the defName argument in the form 'name.variant' or "name.variant". See example below.<tr><td class='argumentname'>metadata<td class='argumentdesc'>
 <p>An optional <a href="./../Classes/Event.html">Event</a> containing additional, user-defined information that is relevant to the use of the SynthDef in the client. The SynthDef itself is sent to the server for audio rendering; metadata are strictly client-side descriptive information. Currently the 'specs' key in the event is reserved for <a href="./../Classes/ControlSpec.html">ControlSpec</a>s to be associated with SynthDef arguments (this is useful for automatic GUI construction). Metadata can be persisted to disk and loaded automatically as part of a SynthDesc. See the <a href="./../Classes/SynthDesc.html">SynthDesc</a> help file for more details.</table></div><h3 class='method-code'><span class='method-prefix'>SynthDef.</span><a class='method-name' name='*wrap' href='./../Overviews/Methods.html#wrap'>wrap</a>(<span class='argstr'>func</span>, <span class='argstr'>rates</span>, <span class='argstr'>prependArgs</span>)</h3>
 <div class='method'>
 <p>Wraps a function within an enclosing synthdef.<h4>Discussion:</h4>
 
-<p>Arguments to the wrapped function are automatically promoted to be SynthDef controls, using the same rules applied to arguments of the main UGen function. For a very simple example:<pre class='code prettyprint lang-sc'>d = SynthDef(\demoWrapping, { |out|
+<p>Arguments to the wrapped function are automatically promoted to be SynthDef controls, using the same rules applied to arguments of the main UGen function. For a very simple example:<textarea class='editor'>d = SynthDef(\demoWrapping, { |out|
     Out.ar(out, SynthDef.wrap({ |freq| SinOsc.ar(freq) }))
 });
 
-d.allControlNames;</pre>
+d.allControlNames;</textarea>
 
-<p>Prints: <code class='code prettyprint lang-sc'>[ ControlName  P 0 out control 0, ControlName  P 1 freq control 0 ]</code>.
+<p>Prints: <code>[ ControlName  P 0 out control 0, ControlName  P 1 freq control 0 ]</code>.
 <p>The outer function declares the argument 'out', and the wrapped function has 'freq' as its argument. The resulting SynthDef has both arguments as controls, exactly as if the outer function included both as arguments.
-<p>The rates array behaves as described earlier. <code class='code prettyprint lang-sc'>PrependArgs</code> allows values or unit generators to be passed into the inner function from the enclosing SynthDef context. Any inner function argument that receives a prependArg value (including nil) will use that value, suppressing creation of a control for that argument. The longer example below demonstrates this technique.
+<p>The rates array behaves as described earlier. <code>PrependArgs</code> allows values or unit generators to be passed into the inner function from the enclosing SynthDef context. Any inner function argument that receives a prependArg value (including nil) will use that value, suppressing creation of a control for that argument. The longer example below demonstrates this technique.
 <p>This is very useful for mass-producing SynthDefs that have a common "shell" defining features such as enveloping or triggering mechanisms that apply to different subgraphs of unit generators. The common features need be written only once; the UGens that differ between the SynthDefs are plugged into the supporting architecture.</div><h3 class='method-code'><span class='method-prefix'>SynthDef.</span><a class='method-name' name='*synthDefDir' href='./../Overviews/Methods.html#synthDefDir'>synthDefDir</a></h3>
 <h3 class='method-code'><span class='method-prefix'>SynthDef.</span><a class='method-name' name='*synthDefDir' href='./../Overviews/Methods.html#synthDefDir'>synthDefDir</a> = <span class='argstr'>dir</span></h3>
 <div class='method'>
 <p>Get or set the default directory to which defs are written.</div><h3 class='method-code'><span class='method-prefix'>SynthDef.</span><a class='method-name' name='*removeAt' href='./../Overviews/Methods.html#removeAt'>removeAt</a>(<span class='argstr'>name</span>, <span class='argstr'>libname: 'global'</span>)</h3>
 <div class='method'>
-<p>Remove the synthdef <code class='code prettyprint lang-sc'>name</code> from the SynthDescLib named <code class='code prettyprint lang-sc'>libname</code> and from its servers.</div><h3 class='method-code'><span class='method-prefix'>SynthDef.</span><a class='method-name' name='*writeOnce' href='./../Overviews/Methods.html#writeOnce'>writeOnce</a>(<span class='argstr'>name</span>, <span class='argstr'>func</span>, <span class='argstr'>rates</span>, <span class='argstr'>prependArgs</span>, <span class='argstr'>variants</span>, <span class='argstr'>dir</span>, <span class='argstr'>metadata</span>, <span class='argstr'>mdPlugin</span>)</h3>
+<p>Remove the synthdef <code>name</code> from the SynthDescLib named <code>libname</code> and from its servers.</div><h3 class='method-code'><span class='method-prefix'>SynthDef.</span><a class='method-name' name='*writeOnce' href='./../Overviews/Methods.html#writeOnce'>writeOnce</a>(<span class='argstr'>name</span>, <span class='argstr'>func</span>, <span class='argstr'>rates</span>, <span class='argstr'>prependArgs</span>, <span class='argstr'>variants</span>, <span class='argstr'>dir</span>, <span class='argstr'>metadata</span>, <span class='argstr'>mdPlugin</span>)</h3>
 <div class='method'>
-<p>Create a new SynthDef. It is written to disk only if a def file with this name does not already exist. Note that this will not check for differences, so you will need to delete the defFile to get it to rebuild. Default for dir is to use the path specified by <code class='code prettyprint lang-sc'>SynthDef.synthDefDir</code>.<div class='warning'><span class='warninglabel'>WARNING:</span> <code class='code prettyprint lang-sc'>SynthDef.writeOnce</code> is a legacy method. Its main use was to improve the efficiency of SynthDefs in quarks, but this is superseded by <a href="./../Classes/SynthDescLib.html">SynthDescLib</a>. Being completely impervious to changes, it can cause difficult-to-diagnose bugs (such as having version 1.1 of a quark but with a SynthDef stuck in version 1.0). Quark developers should now use <a href="#-add">-add</a> instead.
-<p>The exception is very large SynthDefs, where you have a choice between <a href="#-writeDefFile">-writeDefFile</a> and this method. Even then, the efficiency savings of <code class='code prettyprint lang-sc'>writeOnce</code> are only in disk I/O -- both methods build the SynthDef every time they run.</div></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<p>Create a new SynthDef. It is written to disk only if a def file with this name does not already exist. Note that this will not check for differences, so you will need to delete the defFile to get it to rebuild. Default for dir is to use the path specified by <code>SynthDef.synthDefDir</code>.<div class='warning'><span class='warninglabel'>WARNING:</span> <code>SynthDef.writeOnce</code> is a legacy method. Its main use was to improve the efficiency of SynthDefs in quarks, but this is superseded by <a href="./../Classes/SynthDescLib.html">SynthDescLib</a>. Being completely impervious to changes, it can cause difficult-to-diagnose bugs (such as having version 1.1 of a quark but with a SynthDef stuck in version 1.0). Quark developers should now use <a href="#-add">-add</a> instead.
+<p>The exception is very large SynthDefs, where you have a choice between <a href="#-writeDefFile">-writeDefFile</a> and this method. Even then, the efficiency savings of <code>writeOnce</code> are only in disk I/O -- both methods build the SynthDef every time they run.</div></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-add' href='./../Overviews/Methods.html#add'>add</a>(<span class='argstr'>libname</span>, <span class='argstr'>completionMsg</span>, <span class='argstr'>keepDef: true</span>)</h3>
 <div class='method'>
 <p>Adds the synthdef to the <a href="./../Classes/SynthDescLib.html">SynthDescLib</a> specified by libname, and sends it to the library's servers. No defFile is written; all operations take place in memory.<h4>Discussion:</h4>
 
-<p>After using this method, the synthdef can be used with event streams as in <code class='code prettyprint lang-sc'>store()</code>, but without the permanent artifact of a file on disk. Calling this method triggers an update message with the key <code class='code prettyprint lang-sc'>\synthDescAdded</code> for any dependants the library may have. This can be used to trigger additional behaviour every time a def/desc is added. See <a href="./../Classes/Object.html#Dependancy">Object: Dependancy</a>.
-<p>A server can be added by <code class='code prettyprint lang-sc'>SynthDescLib.global.addServer(server)</code>.
-<p>Note that the "dir" and "mdPlugin" arguments do not exist for this method. Because no file is written, there is no need to specify a directory or write a metadata file.<pre class='code prettyprint lang-sc'>(
+<p>After using this method, the synthdef can be used with event streams as in <code>store()</code>, but without the permanent artifact of a file on disk. Calling this method triggers an update message with the key <code>\synthDescAdded</code> for any dependants the library may have. This can be used to trigger additional behaviour every time a def/desc is added. See <a href="./../Classes/Object.html#Dependancy">Object: Dependancy</a>.
+<p>A server can be added by <code>SynthDescLib.global.addServer(server)</code>.
+<p>Note that the "dir" and "mdPlugin" arguments do not exist for this method. Because no file is written, there is no need to specify a directory or write a metadata file.<textarea class='editor'>(
 SynthDef(\help_synth, { |out, freq = 800, sustain = 1, amp = 0.1|
     Out.ar(out,
         SinOsc.ar(freq, 0, 0.2) * Line.kr(amp, 0, sustain, doneAction: Done.freeSelf)
     )
 }).add;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-name' href='./../Overviews/Methods.html#name'>name</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-name' href='./../Overviews/Methods.html#name'>name</a> = value</h3>
 <div class='method'>
@@ -207,7 +214,9 @@ SynthDef(\help_synth, { |out, freq = 800, sustain = 1, amp = 0.1|
 <p>Return an Event containing this def's variants.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-allControlNames' href='./../Overviews/Methods.html#allControlNames'>allControlNames</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-allControlNames' href='./../Overviews/Methods.html#allControlNames'>allControlNames</a> = value</h3>
 <div class='method'>
-<p>An array of <a href="./../Classes/ControlName.html">ControlName</a>'s for the controls.</div><h3><a class='anchor' name='Special%20purpose%20methods'>Special purpose methods</a></h3>
+<p>An array of <a href="./../Classes/ControlName.html">ControlName</a>'s for the controls.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-specs' href='./../Overviews/Methods.html#specs'>specs</a></h3>
+<div class='method'>
+<p>A <a href="./../Classes/Dictionary.html">Dictionary</a> of <a href="./../Classes/ControlSpec.html">ControlSpec</a>s for a SynthDef. Equivalent to: <code>d.metadata[\specs]</code></div><h3><a class='anchor' name='Special%20purpose%20methods'>Special purpose methods</a></h3>
 
 <p>(for most purposes, the method add is recommended)<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-writeDefFile' href='./../Overviews/Methods.html#writeDefFile'>writeDefFile</a>(<span class='argstr'>dir</span>, <span class='argstr'>overwrite: true</span>, <span class='argstr'>mdPlugin</span>)</h3>
 <div class='method'>
@@ -223,7 +232,7 @@ SynthDef(\help_synth, { |out, freq = 800, sustain = 1, amp = 0.1|
 <p>name of the <a href="./../Classes/SynthDescLib.html">SynthDescLib</a><tr><td class='argumentname'>dir<td class='argumentdesc'><tr><td class='argumentname'>completionMsg<td class='argumentdesc'><tr><td class='argumentname'>mdPlugin<td class='argumentdesc'>
 <p>(optional) The metadata plug-in class that will be used to persist metadata. If not supplied, the default plug-in is used. See the SynthDesc help file for details.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-play' href='./../Overviews/Methods.html#play'>play</a>(<span class='argstr'>target</span>, <span class='argstr'>args</span>, <span class='argstr'>addAction: 'addToHead'</span>)</h3>
 <div class='method'>
-<p>A convenience method which compiles the def and sends it to target's server. When this asynchronous command is completed, it create one synth from this definition, using the argument values specified in the Array args. For a list of valid addActions see <a href="./../Classes/Synth.html">Synth</a>. The default is \addToHead.<h4>Returns:</h4>
+<p>A convenience method which compiles the def and sends it to target's server. When this asynchronous command is completed, it creates one synth from this definition, using the argument values specified in the Array args. For a list of valid addActions see <a href="./../Classes/Synth.html">Synth</a>. The default is <code>\addToHead</code>.<h4>Returns:</h4>
 <div class='returnvalue'>
 <p>a corresponding Synth object.</div></div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
@@ -239,21 +248,21 @@ SynthDef(\help_synth, { |out, freq = 800, sustain = 1, amp = 0.1|
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-addUGen' href='./../Overviews/Methods.html#addUGen'>addUGen</a>(<span class='argstr'>ugen</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asBytes' href='./../Overviews/Methods.html#asBytes'>asBytes</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asDefName' href='./../Overviews/Methods.html#asDefName'>asDefName</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asDefName.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asDefName.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/asDefName.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/asDefName.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asSynthDef' href='./../Overviews/Methods.html#asSynthDef'>asSynthDef</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asDefName.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asDefName.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/asDefName.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/asDefName.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asSynthDesc' href='./../Overviews/Methods.html#asSynthDesc'>asSynthDesc</a>(<span class='argstr'>libname: 'global'</span>, <span class='argstr'>keepDef: true</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-available' href='./../Overviews/Methods.html#available'>available</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-available' href='./../Overviews/Methods.html#available'>available</a> = value</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-build' href='./../Overviews/Methods.html#build'>build</a>(<span class='argstr'>ugenGraphFunc</span>, <span class='argstr'>rates</span>, <span class='argstr'>prependArgs</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-buildControls' href='./../Overviews/Methods.html#buildControls'>buildControls</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-buildForProxy' href='./../Overviews/Methods.html#buildForProxy'>buildForProxy</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-buildUgenGraph' href='./../Overviews/Methods.html#buildUgenGraph'>buildUgenGraph</a>(<span class='argstr'>func</span>, <span class='argstr'>rates</span>, <span class='argstr'>prependArgs</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-canFreeSynth' href='./../Overviews/Methods.html#canFreeSynth'>canFreeSynth</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/canFreeSynth.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/canFreeSynth.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-canReleaseSynth' href='./../Overviews/Methods.html#canReleaseSynth'>canReleaseSynth</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/canFreeSynth.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/canFreeSynth.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-children' href='./../Overviews/Methods.html#children'>children</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-children' href='./../Overviews/Methods.html#children'>children</a> = value</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cleanupTopoSort' href='./../Overviews/Methods.html#cleanupTopoSort'>cleanupTopoSort</a></h3>
@@ -274,7 +283,7 @@ SynthDef(\help_synth, { |out, freq = 800, sustain = 1, amp = 0.1|
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-dumpUGens' href='./../Overviews/Methods.html#dumpUGens'>dumpUGens</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-finishBuild' href='./../Overviews/Methods.html#finishBuild'>finishBuild</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hasGateControl' href='./../Overviews/Methods.html#hasGateControl'>hasGateControl</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/canFreeSynth.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/canFreeSynth.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-indexUGens' href='./../Overviews/Methods.html#indexUGens'>indexUGens</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-initBuild' href='./../Overviews/Methods.html#initBuild'>initBuild</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-initTopoSort' href='./../Overviews/Methods.html#initTopoSort'>initTopoSort</a></h3>
@@ -284,10 +293,10 @@ SynthDef(\help_synth, { |out, freq = 800, sustain = 1, amp = 0.1|
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-metadata' href='./../Overviews/Methods.html#metadata'>metadata</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-metadata' href='./../Overviews/Methods.html#metadata'>metadata</a> = value</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numChannels' href='./../Overviews/Methods.html#numChannels'>numChannels</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-optimizeGraph' href='./../Overviews/Methods.html#optimizeGraph'>optimizeGraph</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-rate' href='./../Overviews/Methods.html#rate'>rate</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-removeUGen' href='./../Overviews/Methods.html#removeUGen'>removeUGen</a>(<span class='argstr'>ugen</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-replaceUGen' href='./../Overviews/Methods.html#replaceUGen'>replaceUGen</a>(<span class='argstr'>a</span>, <span class='argstr'>b</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setControlNames' href='./../Overviews/Methods.html#setControlNames'>setControlNames</a>(<span class='argstr'>controlUGens</span>, <span class='argstr'>cn</span>)</h3>
@@ -300,7 +309,7 @@ SynthDef(\help_synth, { |out, freq = 800, sustain = 1, amp = 0.1|
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-writeOnce' href='./../Overviews/Methods.html#writeOnce'>writeOnce</a>(<span class='argstr'>dir</span>, <span class='argstr'>mdPlugin</span>)</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 <h3><a class='anchor' name='Basic'>Basic</a></h3>
-<pre class='code prettyprint lang-sc'>// Note that constructions like SynthDef(...) and Synth(...) are short for SynthDef.new(...), etc.
+<textarea class='editor'>// Note that constructions like SynthDef(...) and Synth(...) are short for SynthDef.new(...), etc.
 // With SynthDef it is common to chain this with calls on the resulting instance,
 // e.g. SynthDef(...).add or SynthDef(...).play
 
@@ -324,43 +333,78 @@ x.free; y.free;
 
 // using the play convenience method
 x = SynthDef(\SimpleSine, {|freq = 440, out| Out.ar(out, SinOsc.ar(freq, 0, 0.2)) }).play
-x.free;</pre>
+x.free;</textarea>
 <h3><a class='anchor' name='Argument%20Rates'>Argument Rates</a></h3>
-<pre class='code prettyprint lang-sc'>// the following two defs are equivalent. The first uses a 't_' arg:
-(
-SynthDef(\trigTest, { |out, t_trig=0, freq=440| // t_trig creates a TrigControl
+<textarea class='editor'>(
+SynthDef(\trigTest1, { |out, t_trig=0, freq=440| // t_trig creates a TrigControl
     Out.ar(out, SinOsc.ar(freq+[0,1], 0, Decay2.kr(t_trig, 0.005, 1.0)));
-}, [0, 4]        // lag the freq by 4 seconds (the second arg), but not t_trig (won't work anyway)
-);
+}, [0, 0, 4]        // lag the freq by 4 seconds (the second arg), but not t_trig (won't work anyway)
+).add;
 )
 
+y = Synth(\trigTest1);
+y.set(\t_trig, 1); // you can do this multiple times
+y.set(\t_trig, 1, \freq, 220); // hear how the freq lags
+y.free;
+
+// Pbind with the default \note event type, and Pmono, use an automatically-generated
+// function to look up argument values. This function translates \trig in the 
+// event to \t_trig in the synth.
+(
+Pmono(\trigTest1, *[
+    trig: Prand([0, 1], inf),  // for random trigger, use trig, not t_trig
+    freq: Pwhite(lo: 220, hi: 440, length: 10),
+    dur: 1
+]).play;
+)
+
+// Note that With event type \set, there is no automatic translation so you 
+// should use t_trig in that case.
+y = Synth(\trigTest1);
+(
+Pbind(*[
+    type: \set,
+    id: y.nodeID,
+  args: #[\t_trig],
+    t_trig: Prand([0, 1], 8)
+]).play;
+)
+y.free;
+    
 // This second version makes trig a \tr arg by specifying it in the rates array.
 (
 SynthDef(\trigTest2, { |out, trig=0, freq=440|
     Out.ar(out, SinOsc.ar(freq+[0,1], 0, Decay2.kr(trig, 0.005, 1.0)));
-    }, [\tr, 4]        // lag the freq (lagtime: 4s), \tr creates a TrigControl for trig
+    }, [0, \tr, 4]        // lag the freq (lagtime: 4s), \tr creates a TrigControl for trig
 ).add;
 )
 
-// Different way of writing the same thing
+// There is a different way of writing the same thing using NamedControls
 (
 SynthDef(\trigTest2, { |out|
     Out.ar(out, SinOsc.ar(\freq.kr(440, 4) + [0,1], 0, Decay2.kr(\trig.tr, 0.005, 1.0)));
 }).add;
 )
 
+// Using the second version, create a synth
+z = Synth(\trigTest2);
 
-// Using the second version create a synth
-z = Synth.head(s, \trigTest2);
-
-// now trigger the decay envelope
+// Now trigger the decay envelope
 z.set(\trig, 1);                 // you can do this multiple times
 z.set(\trig, 1, \freq, 220);     // hear how the freq lags
 z.set(\trig, 1, \freq, 880);
+z.free; //free the synth
 
-z.free; //free the synth</pre>
+// Use trig in Pbind and Pmono
+(
+Pmono(\trigTest2, *[
+    trig: Prand([0, 1], inf),  // for random trigger, use trig, not t_trig
+    freq: Pwhite(lo: 220, hi: 440, length: 10),
+    dur: 1
+]).play;
+)</textarea>
 <h3><a class='anchor' name='Variants'>Variants</a></h3>
-<pre class='code prettyprint lang-sc'>// create a def with some variants
+<textarea class='editor'>// create a def with some variants
 (
 SynthDef(\vartest, { |out, freq = 440, amp = 0.2, a = 0.01, r = 1|
     // the EnvGen with doneAction: Done.freeSelf frees the synth automatically when done
@@ -378,9 +422,9 @@ Synth('vartest.beta');
 Synth('vartest.gamma');
 
 // override a variant
-Synth('vartest.alpha', [\release, 3, \freq, 660]);</pre>
+Synth('vartest.alpha', [\release, 3, \freq, 660]);</textarea>
 <h3><a class='anchor' name='Literal%20Array%20Arguments'>Literal Array Arguments</a></h3>
-<pre class='code prettyprint lang-sc'>// freqs has a literal array of defaults. This makes a multichannel Control of the same size.
+<textarea class='editor'>// freqs has a literal array of defaults. This makes a multichannel Control of the same size.
 (
 SynthDef(\arrayarg, { |out, amp = 0.1, freqs = #[300, 400, 500, 600], gate = 1|
     var env, sines;
@@ -418,9 +462,9 @@ fork {
 
     z.release;
 };
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Wrapping%20Example:%20'factory'%20production%20of%20effects%20defs'>Wrapping Example: 'factory' production of effects defs</a></h3>
-<pre class='code prettyprint lang-sc'>// The makeEffect function below wraps a simpler function within itself and provides
+<textarea class='editor'>// The makeEffect function below wraps a simpler function within itself and provides
 // a crossfade into the effect (so you can add it without clicks), control over wet
 // and dry mix, etc.
 // Such functionality is useful for a variety of effects, and SynthDef-wrap
@@ -484,9 +528,9 @@ y.release;
 // setting gate to zero has the same result
 z.set(\gate, 0);
 
-x.free;</pre>
+x.free;</textarea>
 <h3><a class='anchor' name='common%20argument%20names:%20out%20and%20gate'>common argument names: out and gate</a></h3>
-<pre class='code prettyprint lang-sc'>// arguments named 'out' and 'gate' are commonly used to specify an output bus and
+<textarea class='editor'>// arguments named 'out' and 'gate' are commonly used to specify an output bus and
 // EnvGen gate respectively. Although not required, using them can help with consistency
 // and interchangeability. 'gate' is particularly useful, as it allows for Node's release
 // method.
@@ -527,5 +571,34 @@ Pbind(
     \dur, 0.4,
     \out, Pseq([0, 1], inf)
 ).play;
-)</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/SynthDef.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/SynthDef.schelp</a><br>link::Classes/SynthDef::<br></div></div></body></html>
+)</textarea>
+<h3><a class='anchor' name='Inline%20ControlSpec%20definitions'>Inline ControlSpec definitions</a></h3>
+
+<p>Sometimes, it can be clearer to specify a <a href="./../Classes/ControlSpec.html">ControlSpec</a> for a parameter at the point of its usage in a SynthDef, rather than elsewhere. Specs can be set either when contructing a <a href="./../Classes/NamedControl.html">NamedControl</a> or as a property of a SynthDef argument.<textarea class='editor'>(
+~def = SynthDef(\argumentExample, { |freq, amp|
+    var sig;
+    freq.spec = ControlSpec(20, 20000, \exp);
+    amp.spec = ControlSpec(0, 1);
+    sig = SinOsc.ar(freq, 0, amp);
+    Out.ar(0, sig);
+});
+~def.specs.freq.postln;
+~def.specs.amp.postln;
+)
+
+(
+~def = SynthDef(\argumentExample, {
+    var sig;
+    sig = SinOsc.ar(
+        \freq.kr(spec:ControlSpec(20, 20000)),
+        0,
+        \amp.kr(spec:ControlSpec(0, 1));
+    );
+    Out.ar(0, sig);
+});
+~def.specs.freq.postln;
+~def.specs.amp.postln;
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/SynthDef.schelp'>/usr/share/SuperCollider/HelpSource/Classes/SynthDef.schelp</a><br>link::Classes/SynthDef::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

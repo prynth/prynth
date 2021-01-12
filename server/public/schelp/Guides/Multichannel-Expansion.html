@@ -1,30 +1,36 @@
-<!doctype html><html lang='en'><head><title>Multichannel Expansion | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Multichannel Expansion | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Multichannel Expansion';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Multichannel Expansion:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Multiple%20channels%20as%20Arrays'>Multiple channels as Arrays</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Multichannel%20expansion'>Multichannel expansion</a></li>
 <ul class='toc'><li class='toc2'><a href='#Expanding%20methods%20and%20operators'>Expanding methods and operators</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Using%20flop%20for%20multichannel%20expansion'>Using flop for multichannel expansion</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Multichannel%20expansion%20in%20Patterns'>Multichannel expansion in Patterns</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Pitfalls'>Pitfalls</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Protecting%20arrays%20against%20expansion'>Protecting arrays against expansion</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Reducing%20channel%20expansion%20with%20Mix'>Reducing channel expansion with Mix</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -36,67 +42,67 @@ var scdoc_sc_version = '3.9.3';
 </div>
 <h2><a class='anchor' name='Multiple%20channels%20as%20Arrays'>Multiple channels as Arrays</a></h2>
 
-<p>Multiple channels of audio are represented as <a href="./../Classes/Array.html">Array</a>s.<pre class='code prettyprint lang-sc'>s.boot;
+<p>Multiple channels of audio are represented as <a href="./../Classes/Array.html">Array</a>s.<textarea class='editor'>s.boot;
 // one channel
 { Blip.ar(800,4,0.1) }.play;
 
 // two channels
-{ [ Blip.ar(800,4,0.1), WhiteNoise.ar(0.1) ] }.play;</pre>
+{ [ Blip.ar(800,4,0.1), WhiteNoise.ar(0.1) ] }.play;</textarea>
 
 <p>Each channel of output will go out a different speaker, so your limit here is two for a stereo output. If you have a supported multi channel audio interface or card then you can output as many channels as the card supports.
 <p>All <a href="./../Classes/UGen.html">UGen</a>s have only a single output. This uniformity facilitates the use of array operations to perform manipulation of multi channel structures.
-<p>In order to implement multichannel output, UGens create a separate UGen known as an <a href="./../Classes/OutputProxy.html">OutputProxy</a> for each output. An OutputProxy is just a place holder for the output of a multichannel UGen. OutputProxies are created internally, you never need to create them yourself, but it is good to be aware that they exist so you'll know what they are when you run across them.<pre class='code prettyprint lang-sc'>// look at the outputs of Pan2:
+<p>In order to implement multichannel output, UGens create a separate UGen known as an <a href="./../Classes/OutputProxy.html">OutputProxy</a> for each output. An OutputProxy is just a place holder for the output of a multichannel UGen. OutputProxies are created internally, you never need to create them yourself, but it is good to be aware that they exist so you'll know what they are when you run across them.<textarea class='editor'>// look at the outputs of Pan2:
 Pan2.ar(PinkNoise.ar(0.1), FSinOsc.kr(3)).dump;
 
-play({ Pan2.ar(PinkNoise.ar(0.1), FSinOsc.kr(1)); });</pre>
+play({ Pan2.ar(PinkNoise.ar(0.1), FSinOsc.kr(1)); });</textarea>
 <h2><a class='anchor' name='Multichannel%20expansion'>Multichannel expansion</a></h2>
 
-<p>When an <a href="./../Classes/Array.html">Array</a> is given as an input to a unit generator it causes an array of multiple copies of that unit generator to be made, each with a different value from the input array. This is called multichannel expansion. All but a few special unit generators perform multichannel expansion. Only Arrays are expanded, no other type of Collection, not even subclasses of Array.<pre class='code prettyprint lang-sc'>{ Blip.ar(500,8,0.1) }.play // one channel
+<p>When an <a href="./../Classes/Array.html">Array</a> is given as an input to a unit generator it causes an array of multiple copies of that unit generator to be made, each with a different value from the input array. This is called multichannel expansion. All but a few special unit generators perform multichannel expansion. Only Arrays are expanded, no other type of Collection, not even subclasses of Array.<textarea class='editor'>{ Blip.ar(500,8,0.1) }.play // one channel
 
 // the array in the freq input causes an Array of 2 Blips to be created :
 { Blip.ar([499,600],8,0.1) }.play // two channels
 
 Blip.ar(500,8,0.1).postln // one unit generator created.
 
-Blip.ar([500,601],8,0.1).postln // two unit generators created.</pre>
+Blip.ar([500,601],8,0.1).postln // two unit generators created.</textarea>
 
-<p>Multichannel expansion will propagate through the expression graph. When a unit generator constructor is called with an array of inputs, it returns an array of instances. If that array is the input to another constructor, then another array is created, and so on.<pre class='code prettyprint lang-sc'>{ RLPF.ar(Saw.ar([100,250],0.05), XLine.kr(8000,400,5), 0.05) }.play;
+<p>Multichannel expansion will propagate through the expression graph. When a unit generator constructor is called with an array of inputs, it returns an array of instances. If that array is the input to another constructor, then another array is created, and so on.<textarea class='editor'>{ RLPF.ar(Saw.ar([100,250],0.05), XLine.kr(8000,400,5), 0.05) }.play;
 
 // the [100,250] array of frequency inputs to Saw causes Saw.ar to return
 // an array of two Saws, that array causes RLPF.ar to create two RLPFs.
-// Both RLPFs share a single instance of XLine.</pre>
+// Both RLPFs share a single instance of XLine.</textarea>
 
 <p>When a constructor is parameterized by two or more arrays, then the number of channels created is equal to the longest array, with parameters being pulled from each array in parallel. The shorter arrays will wrap.
-<p>for example, the following:<pre class='code prettyprint lang-sc'>Pulse.ar([400, 500, 600],[0.5, 0.1], 0.2)</pre>
+<p>for example, the following:<textarea class='editor'>Pulse.ar([400, 500, 600],[0.5, 0.1], 0.2)</textarea>
 
-<p>is equivalent to:<pre class='code prettyprint lang-sc'>[ Pulse.ar(400,0.5,0.2), Pulse.ar(500,0.1,0.2), Pulse.ar(600,0.5,0.2) ]</pre>
+<p>is equivalent to:<textarea class='editor'>[ Pulse.ar(400,0.5,0.2), Pulse.ar(500,0.1,0.2), Pulse.ar(600,0.5,0.2) ]</textarea>
 
-<p>A more complex example based on the Saw example above is given below. In this example, the <a href="./../Classes/XLine.html">XLine</a> is expanded to two instances, one going from 8000 Hz to 400 Hz and the other going in the opposite direction from 500 Hz to 7000 Hz. These two XLines are 'married' to the two Saw oscillators and used to parameterize two copies of <a href="./../Classes/RLPF.html">RLPF</a>. So on the left channel a 100 Hz Saw is filtered from 8000 Hz to 400 Hz and on the right channel a 250 Hz Saw is filtered from 500 Hz to 7000 Hz.<pre class='code prettyprint lang-sc'>{ RLPF.ar(Saw.ar([100,250],0.05), XLine.kr([8000,500],[400,7000],5), 0.05) }.play;</pre>
+<p>A more complex example based on the Saw example above is given below. In this example, the <a href="./../Classes/XLine.html">XLine</a> is expanded to two instances, one going from 8000 Hz to 400 Hz and the other going in the opposite direction from 500 Hz to 7000 Hz. These two XLines are 'married' to the two Saw oscillators and used to parameterize two copies of <a href="./../Classes/RLPF.html">RLPF</a>. So on the left channel a 100 Hz Saw is filtered from 8000 Hz to 400 Hz and on the right channel a 250 Hz Saw is filtered from 500 Hz to 7000 Hz.<textarea class='editor'>{ RLPF.ar(Saw.ar([100,250],0.05), XLine.kr([8000,500],[400,7000],5), 0.05) }.play;</textarea>
 <h3><a class='anchor' name='Expanding%20methods%20and%20operators'>Expanding methods and operators</a></h3>
 
-<p>Many operators and methods also multichannel expand. For example all common math operators:<pre class='code prettyprint lang-sc'>{ Saw.ar([100,250]) * [0.5,0.8] }.play;
-{ Saw.ar(LFNoise1.kr(1).range(0,100) + [100,250]) }.play;</pre>
+<p>Many operators and methods also multichannel expand. For example all common math operators:<textarea class='editor'>{ Saw.ar([100,250]) * [0.5,0.8] }.play;
+{ Saw.ar(LFNoise1.kr(1).range(0,100) + [100,250]) }.play;</textarea>
 
-<p>Also the various UGen convenience functions like <code class='code prettyprint lang-sc'>.clip2</code>, <code class='code prettyprint lang-sc'>.lag</code> and <code class='code prettyprint lang-sc'>.range</code> :<pre class='code prettyprint lang-sc'>{ Saw.ar(LFNoise1.kr(1).range(100,[200,300])) }.play;
-{ Saw.ar(LFPulse.kr(1).range(100,[200,300]).lag([0.1,0.2])) }.play;</pre>
+<p>Also the various UGen convenience functions like <code>.clip2</code>, <code>.lag</code> and <code>.range</code> :<textarea class='editor'>{ Saw.ar(LFNoise1.kr(1).range(100,[200,300])) }.play;
+{ Saw.ar(LFPulse.kr(1).range(100,[200,300]).lag([0.1,0.2])) }.play;</textarea>
 
 <p>The expansion is handled by wrapper-methods defined in <a href="./../Classes/SequenceableCollection.html">SequenceableCollection</a>.
-<p>You can use <a href="./../Classes/Object.html#-multiChannelPerform">Object: -multiChannelPerform</a> to do multichannel expansion with any method on any kind of object:<pre class='code prettyprint lang-sc'>["foo","bar"].multiChannelPerform(\toUpper);</pre>
+<p>You can use <a href="./../Classes/Object.html#-multiChannelPerform">Object: -multiChannelPerform</a> to do multichannel expansion with any method on any kind of object:<textarea class='editor'>["foo","bar"].multiChannelPerform(\toUpper);</textarea>
 
-<p>The shorter arrays wrap:<pre class='code prettyprint lang-sc'>["foo","bar","zoo"].multiChannelPerform('++', ["l","ba"])</pre>
+<p>The shorter arrays wrap:<textarea class='editor'>["foo","bar","zoo"].multiChannelPerform('++', ["l","ba"])</textarea>
 <h3><a class='anchor' name='Using%20flop%20for%20multichannel%20expansion'>Using flop for multichannel expansion</a></h3>
 
-<p>The method flop swaps columns and rows, allowing to derive series of argument sets:<pre class='code prettyprint lang-sc'>(
+<p>The method flop swaps columns and rows, allowing to derive series of argument sets:<textarea class='editor'>(
 SynthDef("help_multichannel", { |out=0, freq=440, mod=0.1, modrange=20|
     Out.ar(out,
         SinOsc.ar(
             LFPar.kr(mod, 0, modrange) + freq
         ) * EnvGate(0.1)
     )
-}).send(s);
-)</pre>
+}).add;
+)</textarea>
 
-<p><pre class='code prettyprint lang-sc'>(
+<p><textarea class='editor'>(
 var freq, mod, modrange;
 
 freq = Array.exprand(8, 400, 5000);
@@ -110,9 +116,9 @@ fork {
         0.3.wait;
     }
 };
-)</pre>
+)</textarea>
 
-<p>Similarly, <a href="./../Classes/Function.html#flop">Function:flop</a> returns an unevaluated function that will expand to its arguments when evaluated:<pre class='code prettyprint lang-sc'>(
+<p>Similarly, <a href="./../Classes/Function.html#flop">Function:flop</a> returns an unevaluated function that will expand to its arguments when evaluated:<textarea class='editor'>(
 SynthDef("blip", { |out, freq|
     Out.ar(out,
         Line.ar(0.1, 0, 0.05, 1, 0, 2) * Pulse.ar(freq * [1, 1.02])
@@ -127,20 +133,57 @@ a = { |dur=1, x=1, n=10, freq=400|
 }.flop;
 )
 
-a.value(5, [0.3, 0.3, 0.2], [12, 32, 64], [1000, 710, 700]);</pre>
+a.value(5, [0.3, 0.3, 0.2], [12, 32, 64], [1000, 710, 700]);</textarea>
+<h3><a class='anchor' name='Multichannel%20expansion%20in%20Patterns'>Multichannel expansion in Patterns</a></h3>
+
+<p>Multichannel expansion does not quite follow the scheme one might expect from the previously described. E.g. the following doesn't multichannel-expand properly:<textarea class='editor'>(
+SynthDef(\help_multichannel, { |out=0, freq=#[342, 145]|
+    var env = EnvGate.new;
+    Out.ar(out, [SinOsc.ar(freq[0]), Saw.ar(freq[1])] * env * 0.2)
+}).add
+)
+
+// not working as expected
+// only freq in the left channel gets set correctly
+(
+a = Pbind(
+    \instrument, \help_multichannel,
+    \freq, Pseq([[342, 145], [187, 564], [234, 135]], inf),
+    \dur, 0.5
+).play;
+)</textarea>
+
+<p>Instead wrap arrayed args in an extra pair of square brackets:<textarea class='editor'>a.stop;
+
+// freq in both channels set as expected
+(
+a = Pbind(
+    \instrument, \help_multichannel,
+    \freq, Pseq([[[342, 145]], [[187, 564]], [[234, 135]]], inf),
+    \dur, 0.5
+).play;
+)</textarea>
+
+<p>Under the hood this is a consequence of how .flop prepares the given args to be passed to the Synth:<textarea class='editor'>// single square brackets
+[\freq, [342, 145]].flop
+// --&gt; [ [ freq, 342 ], [ freq, 145 ] ]
+
+// double square brackets
+[\freq, [[342, 145]]].flop
+// --&gt; [ [ freq, [ 342, 145 ] ] ]</textarea>
 <h2><a class='anchor' name='Pitfalls'>Pitfalls</a></h2>
 
 <p>Some UGens create stereo output from mono input, and might not behave as expected regarding multichannel expansion.
-<p>For example, <a href="./../Classes/Pan2.html">Pan2</a> :<pre class='code prettyprint lang-sc'>{ Pan2.ar(SinOsc.ar([500,600]),[-0.5,0.5]) }.play;</pre>
+<p>For example, <a href="./../Classes/Pan2.html">Pan2</a> :<textarea class='editor'>{ Pan2.ar(SinOsc.ar([500,600]),[-0.5,0.5]) }.play;</textarea>
 
-<p>The expectation here might be that the two sines would get individual pan positions. And they do, but Pan2 expands into two stereo ugens nested in an outer array, resulting in a total of four output channels. <code class='code prettyprint lang-sc'>play</code> will add an <a href="./../Classes/Out.html">Out</a> UGen for each of them, resulting in both Pan2's writing to the same output bus:<pre class='code prettyprint lang-sc'>Pan2.ar(SinOsc.ar([500,600]),[-0.5,0.5])
+<p>The expectation here might be that the two sines would get individual pan positions. And they do, but Pan2 expands into two stereo ugens nested in an outer array, resulting in a total of four output channels. <code>play</code> will add an <a href="./../Classes/Out.html">Out</a> UGen for each of them, resulting in both Pan2's writing to the same output bus:<textarea class='editor'>Pan2.ar(SinOsc.ar([500,600]),[-0.5,0.5])
 
 // prints:
-// [ [ an OutputProxy, an OutputProxy ], [ an OutputProxy, an OutputProxy ] ]</pre>
+// [ [ an OutputProxy, an OutputProxy ], [ an OutputProxy, an OutputProxy ] ]</textarea>
 
-<p>In this case, the solution is simply to sum the nested four channels into a single stereo-channel:<pre class='code prettyprint lang-sc'>{ Pan2.ar(SinOsc.ar([500,600]),[-0.5,0.5]).sum }.play;</pre>
+<p>In this case, the solution is simply to sum the nested four channels into a single stereo-channel:<textarea class='editor'>{ Pan2.ar(SinOsc.ar([500,600]),[-0.5,0.5]).sum }.play;</textarea>
 
-<p>If we take a look at the resulting UGen graph of the code above, we can see that it is correct. The two Pan2 is mixed together to create a single stereo output:<pre class='code prettyprint lang-sc'>{ Pan2.ar(SinOsc.ar([500,600]),[-0.5,0.5]).sum }.asSynthDef.dumpUGens
+<p>If we take a look at the resulting UGen graph of the code above, we can see that it is correct. The two Pan2 is mixed together to create a single stereo output:<textarea class='editor'>{ Pan2.ar(SinOsc.ar([500,600]),[-0.5,0.5]).sum }.asSynthDef.dumpUGens
 
 // prints:
 // [ 0_Control, scalar, nil ]
@@ -150,36 +193,36 @@ a.value(5, [0.3, 0.3, 0.2], [12, 32, 64], [1000, 710, 700]);</pre>
 // [ 4_Pan2, audio, [ 3_SinOsc, 0.5, 1 ] ]
 // [ 5_+, audio, [ 2_Pan2[0], 4_Pan2[0] ] ]
 // [ 6_+, audio, [ 2_Pan2[1], 4_Pan2[1] ] ]
-// [ 7_Out, audio, [ 0_Control[0], 5_+, 6_+ ] ]</pre>
+// [ 7_Out, audio, [ 0_Control[0], 5_+, 6_+ ] ]</textarea>
 <h2><a class='anchor' name='Protecting%20arrays%20against%20expansion'>Protecting arrays against expansion</a></h2>
 
-<p>Some unit generators such as <a href="./../Classes/Klank.html">Klank</a> require arrays of values as inputs. Since all arrays are expanded, you need to protect some arrays by a <a href="./../Classes/Ref.html">Ref</a> object. A Ref instance is an object with a single slot named 'value' that serves as a holder of an object. <code class='code prettyprint lang-sc'>Ref.new(object)</code> is one way to create a Ref, but there is a syntactic shortcut. The backquote <code class='code prettyprint lang-sc'>`</code> is a unary operator that is equivalent to calling <code class='code prettyprint lang-sc'>Ref.new(something)</code>. So to protect arrays that are inputs to a Klank or similar UGens you write:<pre class='code prettyprint lang-sc'>Klank.ar(`[[400,500,600],[1,2,1]], z)</pre>
+<p>Some unit generators such as <a href="./../Classes/Klank.html">Klank</a> require arrays of values as inputs. Since all arrays are expanded, you need to protect some arrays by a <a href="./../Classes/Ref.html">Ref</a> object. A Ref instance is an object with a single slot named 'value' that serves as a holder of an object. <code>Ref.new(object)</code> is one way to create a Ref, but there is a syntactic shortcut. The backquote <code>`</code> is a unary operator that is equivalent to calling <code>Ref.new(something)</code>. So to protect arrays that are inputs to a Klank or similar UGens you write:<textarea class='editor'>Klank.ar(`[[400,500,600],[1,2,1]], z)</textarea>
 
-<p>You can still create multiple Klanks by giving it an array of Ref'ed arrays.<pre class='code prettyprint lang-sc'>Klank.ar([ `[[400,500,600],[1,2,1]],  `[[700,800,900],[1,2,1]] ], z)</pre>
+<p>You can still create multiple Klanks by giving it an array of Ref'ed arrays.<textarea class='editor'>Klank.ar([ `[[400,500,600],[1,2,1]],  `[[700,800,900],[1,2,1]] ], z)</textarea>
 
-<p>is equivalent to:<pre class='code prettyprint lang-sc'>[ Klank.ar(`[[400,500,600],[1,2,1]], z),  Klank.ar(`[[700,800,900],[1,2,1]], z)]</pre>
+<p>is equivalent to:<textarea class='editor'>[ Klank.ar(`[[400,500,600],[1,2,1]], z),  Klank.ar(`[[700,800,900],[1,2,1]], z)]</textarea>
 
-<p>Also the Refs multichannelExpand when passed to a Klank:<pre class='code prettyprint lang-sc'>Klank.ar(`[[[400,500,600], [700,800,900]],[1,2,1]], z)</pre>
+<p>Also the Refs multichannelExpand when passed to a Klank:<textarea class='editor'>Klank.ar(`[[[400,500,600], [700,800,900]],[1,2,1]], z)</textarea>
 
-<p>, which is is equivalent to:<pre class='code prettyprint lang-sc'>[ Klank.ar(`[[400,500,600],[1,2,1]], z),  Klank.ar(`[[700,800,900],[1,2,1]], z)]</pre>
+<p>, which is is equivalent to:<textarea class='editor'>[ Klank.ar(`[[400,500,600],[1,2,1]], z),  Klank.ar(`[[700,800,900],[1,2,1]], z)]</textarea>
 <h2><a class='anchor' name='Reducing%20channel%20expansion%20with%20Mix'>Reducing channel expansion with Mix</a></h2>
 
-<p>The <a href="./../Classes/Mix.html">Mix</a> object provides the means for reducing multichannel arrays to a single channel.<pre class='code prettyprint lang-sc'>Mix.new([a, b, c]) // array of channels</pre>
+<p>The <a href="./../Classes/Mix.html">Mix</a> object provides the means for reducing multichannel arrays to a single channel.<textarea class='editor'>Mix.new([a, b, c]) // array of channels</textarea>
 
-<p>or<pre class='code prettyprint lang-sc'>[a, b, c].sum</pre>
+<p>or<textarea class='editor'>[a, b, c].sum</textarea>
 
-<p>is equivalent to:<pre class='code prettyprint lang-sc'>a + b + c  // mixed to one</pre>
+<p>is equivalent to:<textarea class='editor'>a + b + c  // mixed to one</textarea>
 
-<p>Mix is more efficient than using + since it can perform multiple additions at a time. But the main advantage is that it can deal with situations where the number of channels is arbitrary or determined at runtime.<pre class='code prettyprint lang-sc'>// three channels of Pulse are mixed to one channel
-{ Mix.new(  Pulse.ar([400, 501, 600], [0.5, 0.1], 0.1) ) }.play</pre>
+<p>Mix is more efficient than using + since it can perform multiple additions at a time. But the main advantage is that it can deal with situations where the number of channels is arbitrary or determined at runtime.<textarea class='editor'>// three channels of Pulse are mixed to one channel
+{ Mix.new(  Pulse.ar([400, 501, 600], [0.5, 0.1], 0.1) ) }.play</textarea>
 
-<p>Multi channel expansion works differently for Mix. Mix takes one input which is an array (one not protected by a Ref). That array does not cause copies of Mix to be made. All elements of the array are mixed together in a single Mix object. On the other hand if the array contains one or more arrays then multi channel expansion is performed one level down. This allows you to mix an array of stereo (two element) arrays resulting in one two channel array. For example:<pre class='code prettyprint lang-sc'>Mix.new( [ [a, b], [c, d], [e, f] ] ) // input is an array of stereo pairs</pre>
+<p>Multi channel expansion works differently for Mix. Mix takes one input which is an array (one not protected by a Ref). That array does not cause copies of Mix to be made. All elements of the array are mixed together in a single Mix object. On the other hand if the array contains one or more arrays then multi channel expansion is performed one level down. This allows you to mix an array of stereo (two element) arrays resulting in one two channel array. For example:<textarea class='editor'>Mix.new( [ [a, b], [c, d], [e, f] ] ) // input is an array of stereo pairs</textarea>
 
-<p>is equivalent to:<pre class='code prettyprint lang-sc'>// mixed to a single stereo pair
-[ Mix.new( [a, c, e] ), Mix.new( [b, d, f] ) ]</pre>
+<p>is equivalent to:<textarea class='editor'>// mixed to a single stereo pair
+[ Mix.new( [a, c, e] ), Mix.new( [b, d, f] ) ]</textarea>
 
 <p>Currently it is not recursive. You cannot use Mix on arrays of arrays of arrays.
-<p>Here's a final example illustrating multi channel expansion and Mix. By changing the variable 'n' you can change the number of voices in the patch. How many voices can your machine handle?<pre class='code prettyprint lang-sc'>(
+<p>Here's a final example illustrating multi channel expansion and Mix. By changing the variable 'n' you can change the number of voices in the patch. How many voices can your machine handle?<textarea class='editor'>(
 {
     var n;
     n = 8; // number of 'voices'
@@ -201,5 +244,6 @@ a.value(5, [0.3, 0.3, 0.2], [12, 32, 64], [1000, 710, 700]);</pre>
         )
     )
 }.play;
-)</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Multichannel-Expansion.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Multichannel-Expansion.schelp</a><br>link::Guides/Multichannel-Expansion::<br></div></div></body></html>
+)</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/Multichannel-Expansion.schelp'>/usr/share/SuperCollider/HelpSource/Guides/Multichannel-Expansion.schelp</a><br>link::Guides/Multichannel-Expansion::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

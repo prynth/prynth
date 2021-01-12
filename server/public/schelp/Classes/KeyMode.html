@@ -1,0 +1,85 @@
+<!doctype html><html lang='en'><head><title>KeyMode | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'KeyMode';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>KeyMode:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Analysis'>Analysis</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Analysis>Pitch'>Pitch</a></span>
+</div><h1>KeyMode<span id='superclasses'> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Find best correlated key mode with chromagram between major, minor and chromatic cluster</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/SCMIRUGens/Classes/KeyMode.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/SCMIRUGens/Classes/KeyMode.sc'>KeyMode.sc</a></div><div id='related'>See also: <a href="./../Classes/KeyTrack.html">KeyTrack</a>, <a href="./../Classes/KeyClarity.html">KeyClarity</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A key mode tracker where output 0 = major, 1 = minor, 2 = chromatic (cluster). 
+<p>Based on a pitch class profile of energy across FFT bins, matching this to templates for major, minor and 7 note cluster chromatic scales in all transpositions. It assumes a 440 Hz concert A reference. The winning mode is based on the strength of the match, e.g. maximal correlation with key profiles for either major, minor or chromatic cluster (appropriately normalised to a probability distribution summing to 1.0). <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>KeyMode.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a>(<span class='argstr'>chain</span>, <span class='argstr'>keydecay: 2.0</span>, <span class='argstr'>chromaleak: 0.5</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>chain<td class='argumentdesc'>
+<p>[fft] Audio input to track. This must have been pre-analysed by a 4096 size FFT. No other FFT sizes are valid except as noted below.<textarea class='editor'>// With standard hop of half FFT size = 2048 samples
+b = Buffer.alloc(s,4096,1); // for sampling rates 44100 and 48000
+//b = Buffer.alloc(s,8192,1); // for sampling rates 88200 and 96000</textarea>
+<tr><td class='argumentname'>keydecay<td class='argumentdesc'>
+<p>[sk] Number of seconds for the influence of a window on the final key decision to decay by 40dB (to 0.01 its original value).<tr><td class='argumentname'>chromaleak<td class='argumentdesc'>
+<p>[sk] Each frame, the chroma values are set to the previous value multiplied by the chromadecay. 0.0 will start each frame afresh with no memory.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>d = Buffer.read(s, "/data/audio/mirdata/pixiesivebeentired.wav")
+
+d = Buffer.read(s,"/data/audio/mirdata/Beethoven8mvt4.wav")
+
+b = Buffer.alloc(s, 4096, 1); // for sampling rates 44100 and 48000
+
+(
+{
+var in, fft, resample;
+var mode;
+
+in = PlayBuf.ar(1, d, BufRateScale.kr(d), 1, 0, 1);
+
+fft = FFT(b, in);
+
+mode=KeyMode.kr(fft, 2.0, 0.5);
+
+mode.poll;
+
+Out.ar(0,Pan2.ar(in));
+}.play
+)</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/SCMIRUGens/HelpSource/Classes/KeyMode.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/SCMIRUGens/HelpSource/Classes/KeyMode.schelp</a><br>link::Classes/KeyMode::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

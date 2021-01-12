@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>FlowLayout | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>FlowLayout | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'FlowLayout';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>FlowLayout:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -43,8 +48,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-owner'>owner</a> </li>
 <li class='toc3'><a href='#-place'>place</a> </li>
 <li class='toc3'><a href='#-remove'>remove</a> </li>
-</ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -54,48 +59,48 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>A view decorator which autowraps the view contents</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/FlowLayout.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/FlowLayout.sc'>FlowLayout.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/FlowViewLayout.html">FlowViewLayout</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/FlowLayout.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/FlowLayout.sc'>FlowLayout.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/FlowViewLayout.html">FlowViewLayout</a></div>
 <div id='related'>See also: <a href="./../Classes/SCContainerView.html">SCContainerView</a>, <a href="./../Classes/CompositeView.html">CompositeView</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>FlowLayout is a decorator which automatically arranges views inside a container view in a row, and starts a new row if there is not enough space left for the next view. <a href="./../Classes/Window.html">Window</a> and <a href="./../Classes/CompositeView.html">CompositeView</a> both have <code class='code prettyprint lang-sc'>addFlowLayout</code> methods which assign FlowLayout to their view decorators and return the decorator.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<p>FlowLayout is a decorator which automatically arranges views inside a container view in a row, and starts a new row if there is not enough space left for the next view. <a href="./../Classes/Window.html">Window</a> and <a href="./../Classes/CompositeView.html">CompositeView</a> both have <code>addFlowLayout</code> methods which assign FlowLayout to their view decorators and return the decorator.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>FlowLayout.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>bounds</span>, <span class='argstr'>margin</span>, <span class='argstr'>gap</span>)</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>bounds<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Rect.html">Rect</a>. Normally set to the <code class='code prettyprint lang-sc'>parent.bounds</code>.<tr><td class='argumentname'>margin<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Rect.html">Rect</a>. Normally set to the <code>parent.bounds</code>.<tr><td class='argumentname'>margin<td class='argumentdesc'>
 <p>An instance of <a href="./../Classes/Point.html">Point</a>. The horizontal and vertical inner margins, within which the parent's subviews are placed.<tr><td class='argumentname'>gap<td class='argumentdesc'>
 <p>An instance of <a href="./../Classes/Point.html">Point</a>. The horizontal and vertical layout gap between the subviews.</table><h4>Discussion:</h4>
 
-<p>Example:<pre class='code prettyprint lang-sc'>(
+<p>Example:<textarea class='editor'>(
 w = Window.new.front;
 //change the gaps and margins to see how they work
 w.view.decorator = FlowLayout( w.view.bounds, 10@10, 20@5 );
 16.do{ Slider2D( w.view,80@80 ).background_( Color.rand ) };
-)</pre>
+)</textarea>
 
-<p>You can also write:<pre class='code prettyprint lang-sc'>(
+<p>You can also write:<textarea class='editor'>(
 w = Window.new.front;
 w.addFlowLayout( 10@10, 20@5 ); // a shortcut method, see SCContainerView
 16.do{ Slider2D( w.view,80@80 ).background_( Color.rand ) };
-)</pre>
+)</textarea>
 </div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Accessing%20Instance%20Variables'>Accessing Instance Variables</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nextLine' href='./../Overviews/Methods.html#nextLine'>nextLine</a></h3>
 <div class='method'>
-<p>Forces the decorator to start a new line:<pre class='code prettyprint lang-sc'>(
+<p>Forces the decorator to start a new line:<textarea class='editor'>(
 w = Window.new;
 q = w.addFlowLayout( 10@10, 20@5 );
 Slider2D( w.view,140@140 ).background_( Color.rand );
 q.nextLine;
 Slider2D( w.view,140@140 ).background_( Color.rand );
 w.front;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-indentedRemaining' href='./../Overviews/Methods.html#indentedRemaining'>indentedRemaining</a></h3>
 <div class='method'>
-<p>Returns and instance of <a href="./../Classes/Rect.html">Rect</a>. This is a very useful method which tells you how much space is left in a row, before the next row starts. The height of <code class='code prettyprint lang-sc'>indentedRemaining</code>, is the full height remaining in the FlowLayout.<pre class='code prettyprint lang-sc'>(
+<p>Returns and instance of <a href="./../Classes/Rect.html">Rect</a>. This is a very useful method which tells you how much space is left in a row, before the next row starts. The height of <code>indentedRemaining</code>, is the full height remaining in the FlowLayout.<textarea class='editor'>(
 //normally you will only use the width of indentedRemaining
 w = Window.new;
 w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
@@ -104,9 +109,9 @@ Slider2D( w.view,150@150 ).background_( Color.rand );
 Slider( w.view, d.indentedRemaining.width@150) //fits this view perfectly to the right innerBounds
     .background_( Color.rand );
 w.front;
-)</pre>
+)</textarea>
 
-<p>Compare this with:<pre class='code prettyprint lang-sc'>( //here the third view is fit to both the right and bottom innerBounds
+<p>Compare this with:<textarea class='editor'>( //here the third view is fit to both the right and bottom innerBounds
 w = Window.new;
 w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
 Slider2D( w.view,140@140 ).background_( Color.rand );
@@ -114,7 +119,7 @@ Slider2D( w.view,140@140 ).background_( Color.rand );
 d.nextLine;
 Slider2D( w.view, d.indentedRemaining ).background_( Color.rand );
 w.front;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bounds' href='./../Overviews/Methods.html#bounds'>bounds</a> = <span class='argstr'>b</span></h3>
 <div class='method'>
@@ -144,14 +149,14 @@ w.front;
 <table class='arguments'>
 <tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
 <p>A number.</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 w = Window.new;
 w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
 Slider2D( w.view,150@150 ).background_( Color.rand );
 d.left_(220); //manually set the new indentation
 Slider2D( w.view,150@150 ).background_( Color.rand );
 w.front;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-top' href='./../Overviews/Methods.html#top'>top</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-top' href='./../Overviews/Methods.html#top'>top</a> = value</h3>
 <div class='method'>
@@ -159,7 +164,7 @@ w.front;
 <table class='arguments'>
 <tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
 <p>A number.</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 w = Window.new;
 w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
 Slider2D( w.view,150@150 ).background_( Color.rand );
@@ -167,7 +172,7 @@ d.top_(50); //manually set the new indentation
 Slider2D( w.view,150@150 ).background_( Color.rand );
 Slider2D( w.view,150@150 ).background_( Color.rand );
 w.front;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-shift' href='./../Overviews/Methods.html#shift'>shift</a>(<span class='argstr'>x: 0</span>, <span class='argstr'>y: 0</span>)</h3>
 <div class='method'>
 <p>Set the current left and top indentation (see above).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-maxHeight' href='./../Overviews/Methods.html#maxHeight'>maxHeight</a></h3>
@@ -177,7 +182,7 @@ w.front;
 <table class='arguments'>
 <tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
 <p>A number.</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 w = Window.new;
 w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
 Slider2D( w.view,100@160 ).background_( Color.rand );
@@ -186,7 +191,7 @@ Slider2D( w.view,150@150 ).background_( Color.rand );
 Slider2D( w.view,150@150 ).background_( Color.rand );
 "second row maxHeight: " ++ d.maxHeight.postln;
 w.front;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-maxRight' href='./../Overviews/Methods.html#maxRight'>maxRight</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-maxRight' href='./../Overviews/Methods.html#maxRight'>maxRight</a> = value</h3>
 <div class='method'>
@@ -194,7 +199,7 @@ w.front;
 <table class='arguments'>
 <tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
 <p>A number.</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 w = Window.new;
 w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
 Slider2D( w.view,100@160 ).background_( Color.rand );
@@ -203,11 +208,11 @@ Slider2D( w.view,150@150 ).background_( Color.rand );
 Slider2D( w.view,150@150 ).background_( Color.rand );
 "second row maxRight: " ++ d.maxRight.postln;
 w.front;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-currentBounds' href='./../Overviews/Methods.html#currentBounds'>currentBounds</a></h3>
 <div class='method'>
-<p>Gets a <a href="./../Classes/Rect.html">Rect</a> with <code class='code prettyprint lang-sc'>bounds.width</code> and <code class='code prettyprint lang-sc'>height = top + maxHeight</code>.<h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(
+<p>Gets a <a href="./../Classes/Rect.html">Rect</a> with <code>bounds.width</code> and <code>height = top + maxHeight</code>.<h4>Discussion:</h4>
+<textarea class='editor'>(
 w = Window.new;
 w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 10@5 );
 Slider2D( w.view,100@160 ).background_( Color.rand );
@@ -217,11 +222,11 @@ d.currentBounds.postln;
 Slider2D( w.view,150@150 ).background_( Color.rand );
 d.currentBounds.postln;
 w.front;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-used' href='./../Overviews/Methods.html#used'>used</a></h3>
 <div class='method'>
 <p>Gets a <a href="./../Classes/Rect.html">Rect</a> with the space actually used.<h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 w = Window.new;
 w.view.decorator = d = FlowLayout.new( w.view.bounds, 10@10, 20@5 );
 Slider2D( w.view,100@160 ).background_( Color.rand );
@@ -231,7 +236,7 @@ d.used.postln;
 Slider2D( w.view,150@150 ).background_( Color.rand );
 d.used.postln;
 w.front;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-reset' href='./../Overviews/Methods.html#reset'>reset</a></h3>
 <div class='method'>
 <p>Resets the layout mechanism to 0,0.</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
@@ -241,4 +246,5 @@ w.front;
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-owner' href='./../Overviews/Methods.html#owner'>owner</a> = value</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-place' href='./../Overviews/Methods.html#place'>place</a>(<span class='argstr'>view</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-remove' href='./../Overviews/Methods.html#remove'>remove</a></h3>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/FlowLayout.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/FlowLayout.schelp</a><br>link::Classes/FlowLayout::<br></div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/FlowLayout.schelp'>/usr/share/SuperCollider/HelpSource/Classes/FlowLayout.schelp</a><br>link::Classes/FlowLayout::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

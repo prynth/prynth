@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>FunctionList | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>FunctionList | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'FunctionList';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>FunctionList:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -37,8 +42,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-valueArrayEnvir'>valueArrayEnvir</a> </li>
 <li class='toc3'><a href='#-valueEnvir'>valueEnvir</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -48,14 +53,14 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>A function that composes multiple functions into one</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/AbstractFunction.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/AbstractFunction.sc'>AbstractFunction.sc</a></div></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Core/AbstractFunction.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Core/AbstractFunction.sc'>AbstractFunction.sc</a></div></div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>A FunctionList is a function that composes multiple functions into one. This allows allow to deal transparently with several functions as if they were one and to append new functions at a later point. The functions are evaluated in the order they have in the FunctionList's array, which is by default the order in which they have been added to it.
-<p>See the <a href="./../Reference/Functions.html">Functions</a> help file for a basic introduction.<pre class='code prettyprint lang-sc'>a = FunctionList.new;
+<p>See the <a href="./../Reference/Functions.html">Functions</a> help file for a basic introduction.<textarea class='editor'>a = FunctionList.new;
 fork { loop { 0.7.wait; a.value.postln } };
 a.addFunc({ 800.rand });
-a.addFunc({ "another".scramble });</pre>
+a.addFunc({ "another".scramble });</textarea>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>FunctionList.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>functions</span>)</h3>
 <div class='method'>
@@ -67,20 +72,20 @@ a.addFunc({ "another".scramble });</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-array' href='./../Overviews/Methods.html#array'>array</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-array' href='./../Overviews/Methods.html#array'>array</a> = value</h3>
 <div class='method'>
-<p>Set/get the FunctionList's array. New functions can be added to the array directly, e.g.<pre class='code prettyprint lang-sc'>x = FunctionList(...some functions);
-x.array = x.array.insert(2, aFunction);</pre>
+<p>Set/get the FunctionList's array. New functions can be added to the array directly, e.g.<textarea class='editor'>x = FunctionList(...some functions);
+x.array = x.array.insert(2, aFunction);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-addFunc' href='./../Overviews/Methods.html#addFunc'>addFunc</a>( <span class='argstr'>... functions</span>)</h3>
 <div class='method'>
-<p>This message is used to be able to add to an Object, to a Function, or to a FunctionList. <code class='code prettyprint lang-sc'>nil.addFunc</code> returns a function, if only one function is passed in the argument. <code class='code prettyprint lang-sc'>function.addFunc</code> then returns a FunctionList.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-removeFunc' href='./../Overviews/Methods.html#removeFunc'>removeFunc</a>(<span class='argstr'>function</span>)</h3>
+<p>This message is used to be able to add to an Object, to a Function, or to a FunctionList. <code>nil.addFunc</code> returns a function, if only one function is passed in the argument. <code>function.addFunc</code> then returns a FunctionList.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-removeFunc' href='./../Overviews/Methods.html#removeFunc'>removeFunc</a>(<span class='argstr'>function</span>)</h3>
 <div class='method'>
 <p>remove a function from the list.<h4>Returns:</h4>
 <div class='returnvalue'>
-<p>the last function when only one function is left, or <code class='code prettyprint lang-sc'>nil</code> when the last function was removed.</div><h4>Discussion:</h4>
+<p>the last function when only one function is left, or <code>nil</code> when the last function was removed.</div><h4>Discussion:</h4>
 
-<p><code class='code prettyprint lang-sc'>addFunc</code> and <code class='code prettyprint lang-sc'>removeFunc</code> are implemented for <a href="./../Classes/Nil.html">Nil</a>, <a href="./../Classes/Object.html">Object</a> and <a href="./../Classes/FunctionList.html">FunctionList</a><pre class='code prettyprint lang-sc'>nil.addFunc(f) // returns f
+<p><code>addFunc</code> and <code>removeFunc</code> are implemented for <a href="./../Classes/Nil.html">Nil</a>, <a href="./../Classes/Object.html">Object</a> and <a href="./../Classes/FunctionList.html">FunctionList</a><textarea class='editor'>nil.addFunc(f) // returns f
 obj.addFunc(f) // returns FunctionList([obj, f])
 nil.removeFunc(f) // returns nil
-obj.removeFunc(f) // returns nil, if f === obj, else obj is returned</pre>
+obj.removeFunc(f) // returns nil, if f === obj, else obj is returned</textarea>
 </div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-copy' href='./../Overviews/Methods.html#copy'>copy</a></h3>
@@ -94,7 +99,7 @@ obj.removeFunc(f) // returns nil, if f === obj, else obj is returned</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-valueArrayEnvir' href='./../Overviews/Methods.html#valueArrayEnvir'>valueArrayEnvir</a>(<span class='argstr'>args</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-valueEnvir' href='./../Overviews/Methods.html#valueEnvir'>valueEnvir</a>( <span class='argstr'>... args</span>)</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>// example
+<textarea class='editor'>// example
 
 a = nil;
 a = a.addFunc { |x="", y=""| "this % is an % example\n".postf(x, y); 1 };
@@ -102,8 +107,8 @@ a.postln;
 a = a.addFunc { |x="", y=""| "there is no % that is %\n".postf(x, y); 2 };
 a.value;
 a.value("text", "extraordinary well written")
-a.valueArray(["x", "y"]);</pre>
-<pre class='code prettyprint lang-sc'>// Function:do vs FunctionList:do (same)
+a.valueArray(["x", "y"]);</textarea>
+<textarea class='editor'>// Function:do vs FunctionList:do (same)
 a.do { |x| x.value };
 { 4 }.do { |x| x.value.postln }
 
@@ -114,8 +119,8 @@ a.do { |x| x.value };
     a.valueEnvir;
     a.valueEnvir("list");
 }
-)</pre>
-<pre class='code prettyprint lang-sc'>// removing a function
+)</textarea>
+<textarea class='editor'>// removing a function
 x = { "removal test".postln };
 a.addFunc(x);
 a.value;
@@ -127,8 +132,8 @@ a = nil;
 a = a.addFunc({ 1.0.rand }).addFunc({ [0, 1].choose });
 a = a.squared.linexp(0, 1, 1.0, 500);
 
-a.value;</pre>
-<pre class='code prettyprint lang-sc'>// compatibility with function multichannel expansion
+a.value;</textarea>
+<textarea class='editor'>// compatibility with function multichannel expansion
 a = nil;
 a = a.addFunc { |x=0| if(x &gt; 0) { 7 } { 1000.rand } };
 a = a.addFunc { |x=0| if(x &lt; 0) { 17 } { -1000.rand } };
@@ -136,8 +141,8 @@ a.value
 
 a = a.flop;
 a.value
-a.value([-1, 1])</pre>
-<pre class='code prettyprint lang-sc'>// typical usage in a Document action
+a.value([-1, 1])</textarea>
+<textarea class='editor'>// typical usage in a Document action
 // see also SCView: addAction example.
 
 d = Document.current;
@@ -157,5 +162,6 @@ d.keyDownAction = d.keyDownAction.addFunc {:x, x&lt;-(1..), :: "already % times\
 
 );
 
-d.keyDownAction = nil;</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/FunctionList.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/FunctionList.schelp</a><br>link::Classes/FunctionList::<br></div></div></body></html>
+d.keyDownAction = nil;</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/FunctionList.schelp'>/usr/share/SuperCollider/HelpSource/Classes/FunctionList.schelp</a><br>link::Classes/FunctionList::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

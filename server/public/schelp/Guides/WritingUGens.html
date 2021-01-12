@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Writing Unit Generators | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Writing Unit Generators | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Writing Unit Generators';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Writing Unit Generators:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Pseudo-UGens'>Pseudo-UGens</a></li>
@@ -27,8 +32,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Coding%20Guidelines'>Coding Guidelines</a></li>
 <ul class='toc'><li class='toc2'><a href='#Thread%20Safety'>Thread Safety</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Deadlock%20Prevention'>Deadlock Prevention</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -45,62 +50,63 @@ var scdoc_sc_version = '3.9.3';
 <p>Writing UGens is not too difficult, but it's arguably far less convenient and intuitive than the high-level tools that SuperCollider provides. You'll need a build system and a good amount of boilerplate code -- even fairly basic signal processing operations can require a lot of code. You don't have an instant live coding environment, and mistakes can easily crash the server. SuperCollider's UGens are stable and well-tested, and custom UGens are best viewed as a last resort for when the limitations of SC are impassable.<h2><a class='anchor' name='Pseudo-UGens'>Pseudo-UGens</a></h2>
 
 <p>Before we proceed to the real UGens, we'll take a quick detour for the sake of completeness. A pseudo-UGen is a bit of SuperCollider code that abbreviates a certain configuration of UGens that gets used repeatedly. A pseudo-UGen is a class that superficially resembles a UGen class, but it only returns a composition of existing UGens. It has no efficiency savings, but it does save typing.
-<p>The below example has only a <code class='code prettyprint lang-sc'>.ar</code> method, but you can just as easily have both <code class='code prettyprint lang-sc'>.ar</code> and <code class='code prettyprint lang-sc'>.kr</code>methods.<pre class='code prettyprint lang-sc'>BoringMixer {
+<p>The below example has only a <code>.ar</code> method, but you can just as easily have both <code>.ar</code> and <code>.kr</code>methods.<textarea class='editor'>BoringMixer {
     *ar { arg left, right;
         ^(left + right) * 0.5;
     }
-}</pre>
+}</textarea>
 
 <p>Examples of pseudo-UGens found in SC include <a href="./../Classes/BLowPass4.html">BLowPass4</a> and <a href="./../Classes/BHiPass4.html">BHiPass4</a>, which break down into <a href="./../Classes/SOS.html">SOS</a> UGens.
 <p>There are very few restrictions on what these classes can contain, but you should keep the following in mind:<ul>
 <li>It is courteous to leave a note in your class's help file that identifies it as a pseudo-UGen.<li>To avoid confusion, pseudo-UGens should not inherit from the base class <a href="./../Classes/UGen.html">UGen</a>.<li>A SynthDef can only have two <a href="./../Classes/LocalIn.html">LocalIn</a>/<a href="./../Classes/LocalOut.html">LocalOut</a> pairings — one for control rate and one for audio rate. Putting LocalIn and LocalOut in a pseudo-UGen is a bad idea, as it could interfere with other feedback loops in the SynthDef.</ul>
 <h2><a class='anchor' name='Basics%20of%20UGens'>Basics of UGens</a></h2>
 
-<p>A (real) UGen needs two components: a plugin for the server, and a class for the language. The class goes in an ordinary <code class='code prettyprint lang-sc'>*.sc</code> file, and defines the interface for your UGen in the language. This class is generally just a few lines of code that ultimately call the class method <a href="./../Classes/UGen.html#-multiNew">UGen: -multiNew</a>.
+<p>A (real) UGen needs two components: a plugin for the server, and a class for the language. The class goes in an ordinary <code>*.sc</code> file, and defines the interface for your UGen in the language. This class is generally just a few lines of code that ultimately call the class method <a href="./../Classes/UGen.html#-multiNew">UGen: -multiNew</a>.
 <p>The server plugin is where the actual UGen behavior is defined. It is given by a dynamically loaded library written in C++, whose format is platform-dependent:<ul>
-<li><code class='code prettyprint lang-sc'>*.so</code> for *nix<li><code class='code prettyprint lang-sc'>*.dll</code> for Windows<li><code class='code prettyprint lang-sc'>*.scx</code> for macOS</ul>
+<li><code>*.so</code> for *nix<li><code>*.dll</code> for Windows<li><code>*.scx</code> for macOS</ul>
 
 <p>A plugin file can contain more than one UGen, and it can also define things other than UGens such as buffer fill ("/b_gen") commands.
-<p>When the server boots, it will look for plugin files in <code class='code prettyprint lang-sc'>Platform.userExtensionDir</code>. Since sclang also looks for class files in the same location, the class file and the library file can go in the same place.
+<p>When the server boots, it will look for plugin files in <code>Platform.userExtensionDir</code>. Since sclang also looks for class files in the same location, the class file and the library file can go in the same place.
 <p>Plug-ins are loaded during the startup of the server, so it will have to be restarted after (re-)compiling a plugin. If you modify the plugin file but not the class file, you don't need to reboot the interpreter.<h2><a class='anchor' name='FAUST'>FAUST</a></h2>
 
 <p>FAUST<a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a>  is an open source DSP language that describes real-time audio units. It can compile to SuperCollider plugins, providing an easy way to create UGens in SuperCollider.
-<p>FAUST provides a shell script useful for SuperCollider users called <code class='code prettyprint lang-sc'>faust2supercollider</code>. This compiles a .dsp file into a class file and server plugin, which you can then drop into your extensions directory.
+<p>FAUST provides a shell script useful for SuperCollider users called <code>faust2supercollider</code>. This compiles a .dsp file into a class file and server plugin, which you can then drop into your extensions directory.
 <p>FAUST plugins are often quick to develop and can be painlessly ported to other environments. Unfortunately, they can't take advantage of all of the server's features, such as accessing Buffers or random number generators, and some UGens featuring very complex logic are difficult or impossible to write in FAUST. Furthermore, the FAUST compiler is quite intelligent but it might not always offer the best efficiency in its results. If a UGen you are developing hits these limitations, it is time to move on to handwritten C++.<h2><a class='anchor' name='Example%20Plugins'>Example Plugins</a></h2>
 
 <p>To get an idea of the necessary ingredients for writing UGens, it's often best to poke around at complete examples. We've set up a GitHub repository at <a href="https://github.com/supercollider/example-plugins">https://github.com/supercollider/example-plugins</a>, which contains some example plugins numbered roughly by complexity. Each directory in that repository is self-contained with its own build system, so you can copy out a directory to form a starting point for your own UGens. The source codes of these plugins are heavily commented.
 <p>The first example, BoringMixer, is very minimal. The UGen is stateless and has only one calculation function, which is audio rate.
 <p>MySaw introduces states and multiple calculation functions. AnalogEcho introduces real-time memory management through internal buffers, and demonstrates how to do cubic interpolation from an array of samples.<h2><a class='anchor' name='Anatomy%20of%20a%20UGen'>Anatomy of a UGen</a></h2>
 
-<p>The SC source code has a header file, <code class='code prettyprint lang-sc'>include/plugin_interface/SC_PlugIn.h</code>, that gives you your interface to the server architecture as well as a bunch of helper functions. These are documented at <a href="./../Reference/ServerPluginAPI.html">Server Plugin API</a>.<h3><a class='anchor' name='The%20Entry%20Point'>The Entry Point</a></h3>
+<p>The SC source code has a header file, <code>include/plugin_interface/SC_PlugIn.h</code>, that gives you your interface to the server architecture as well as a bunch of helper functions. These are documented at <a href="./../Reference/ServerPluginAPI.html">Server Plugin API</a>.<h3><a class='anchor' name='The%20Entry%20Point'>The Entry Point</a></h3>
 
-<p>When the library is loaded the server calls a function in the library, which is defined by the <code class='code prettyprint lang-sc'>PluginLoad()</code>macro. This entry point has two responsibilities:<ul>
+<p>When the library is loaded the server calls a function in the library, which is defined by the <code>PluginLoad()</code>macro. This entry point has two responsibilities:<ul>
 <li>It needs to store the passed in pointer to the InterfaceTable in a global variable.<li>It registers the unit generators.</ul>
 
 <p>Unit Generators are defined by calling a function in the InterfaceTable and passing it the name of the unit generator, the size of its C data struct, and pointers to functions for constructing and destructing it. There are 4 macros, which can be used to simplify the process.<dl>
 <dt>DefineSimpleUnit<dd>Define a `simple' unit generator<dt>DefineDtorUnit<dd>Define a unit generator with a destructor<dt>DefineSimpleCantAliasUnit<dd>Define a `simple' unit generator, whose input and output buffers cannot alias<dt>DefineDtorCantAliasUnit<dd>Define a unit generator with a destructor, whose input and output buffers cannot alias</dl>
 
 <p>These macros depend on a specific naming convention:<ul>
-<li>The unit generator struct is named like the plug-in.<li>The unit generator constructor is named <code class='code prettyprint lang-sc'>PluginName_Ctor</code><li>The unit generator destructor is named <code class='code prettyprint lang-sc'>PluginName_Dtor</code></ul>
+<li>The unit generator struct is named like the plug-in.<li>The unit generator constructor is named <code>PluginName_Ctor</code><li>The unit generator destructor is named <code>PluginName_Dtor</code></ul>
 <h3><a class='anchor' name='The%20Calculation%20Function'>The Calculation Function</a></h3>
 
 <p>The meat of the UGen is its calculation function, which gets called every control period with the UGen object as an argument. (This is for control-rate and audio-rate UGens -- demand-rate is different.) In this function, the UGen reads from its inputs and writes to its outputs.
-<p>The calculation function is selected in the <code class='code prettyprint lang-sc'>PluginName_Ctor</code> function with the <code class='code prettyprint lang-sc'>SETCALC</code> macro. You can name the calculation function whatever you want, but the convention is <code class='code prettyprint lang-sc'>PluginName_next</code>.
+<p>The calculation function is selected in the <code>PluginName_Ctor</code> function with the <code>SETCALC</code> macro. You can name the calculation function whatever you want, but the convention is <code>PluginName_next</code>.
 <p>UGens often have multiple calculation functions, depending on the rate of the UGen itself and the rate of its inputs. For example, Phasor can be .ar or .kr, and its argument can be either .ar or .kr. So it has four calculation functions: Phasor_next_aa, Phasor_next_ak, Phasor_next_ka, and Phasor_next_kk. You don't need to be this thorough for your own UGens, however. For example, <a href="./../Classes/FreeVerb.html">FreeVerb</a> has only one calculation function. Who would want a control-rate reverb?<h3><a class='anchor' name='Building%20Unit%20Generator%20Plugins'>Building Unit Generator Plugins</a></h3>
 
 <p>The most portable way to build plugins is using cmake<a class='footnote anchor' name='footnote_org_2' href='#footnote_2'><sup>2</sup></a> , a cross-platform build system.
-<p>The examples in the example repository contain <code class='code prettyprint lang-sc'>CMakeLists.txt</code> files.<h2><a class='anchor' name='Coding%20Guidelines'>Coding Guidelines</a></h2>
+<p>The examples in the example repository contain <code>CMakeLists.txt</code> files.<h2><a class='anchor' name='Coding%20Guidelines'>Coding Guidelines</a></h2>
 
 <p>Unit generator plugins are called from the real-time context, which means that special care needs to be taken in order to avoid audio dropouts.<dl>
-<dt>Memory Allocation<dd>Do not allocate memory from the OS via <code class='code prettyprint lang-sc'>malloc</code> / <code class='code prettyprint lang-sc'>free</code> or <code class='code prettyprint lang-sc'>new</code>/ <code class='code prettyprint lang-sc'>delete</code>.  Instead you should use the real-time memory allocator via <code class='code prettyprint lang-sc'>RTAlloc</code> / <code class='code prettyprint lang-sc'>RTFree</code>.<dt>STL Containers<dd>It is generally not recommended to use STL containers, since they internally allocate memory. The only  way the STL containers can be used is by providing an Allocator, which maps to the allocating functions of  the server.<dt>Blocking API Calls<dd>Unit generators should not call any code, which could block the execution of the current thread. In  particular, system calls should be avoided. If synchronization with other threads is required, this has to be  done in a lock-free manner.</dl>
+<dt>Memory Allocation<dd>Do not allocate memory from the OS via <code>malloc</code> / <code>free</code> or <code>new</code>/ <code>delete</code>.  Instead you should use the real-time memory allocator via <code>RTAlloc</code> / <code>RTFree</code>.<dt>STL Containers<dd>It is generally not recommended to use STL containers, since they internally allocate memory. The only  way the STL containers can be used is by providing an Allocator, which maps to the allocating functions of  the server.<dt>Blocking API Calls<dd>Unit generators should not call any code, which could block the execution of the current thread. In  particular, system calls should be avoided. If synchronization with other threads is required, this has to be  done in a lock-free manner.</dl>
 <h3><a class='anchor' name='Thread%20Safety'>Thread Safety</a></h3>
 
 <p>There are two different implementations of the SuperCollider server. <strong>scsynth</strong> is the traditional server and <strong>supernova</strong> is a new implementation with support for multi-processor audio synthesis. Since the plugins in <strong>supernova</strong> can be called at the same time from multiple threads, write access to global data structures needs to be synchronized.<dl>
-<dt>Shared Global Data Structures<dd>Unit generators should not share data structures, which are written to. While it it safe to use  global data structures for read-only purposes (e.g. different unit generators could use the same constant wavetable),  the data structures that are modified by the unit generators should not be shared among different instances.<dt>Resource Locking<dd>SuperCollider's buffers and busses are global data structures, and access needs to be synchronized.  This is done internally by using reader-writer spinlocks. This is done by using the <code class='code prettyprint lang-sc'>ACQUIRE_</code>, <code class='code prettyprint lang-sc'>RELEASE_</code>, and  <code class='code prettyprint lang-sc'>LOCK_</code> macros, which are defined in SC_Unit.h. As exception, buffers in the wavetable format are not required to be  locked.</dl>
+<dt>Shared Global Data Structures<dd>Unit generators should not share data structures, which are written to. While it it safe to use  global data structures for read-only purposes (e.g. different unit generators could use the same constant wavetable),  the data structures that are modified by the unit generators should not be shared among different instances.<dt>Resource Locking<dd>SuperCollider's buffers and busses are global data structures, and access needs to be synchronized.  This is done internally by using reader-writer spinlocks. This is done by using the <code>ACQUIRE_</code>, <code>RELEASE_</code>, and  <code>LOCK_</code> macros, which are defined in SC_Unit.h. As exception, buffers in the wavetable format are not required to be  locked.</dl>
 <h3><a class='anchor' name='Deadlock%20Prevention'>Deadlock Prevention</a></h3>
 
 <p>In order to prevent deadlocks, a simple deadlock prevention scheme is implemented, based on the following constraints.<ul>
 <li>Lock resources only when required: few unit generators actually require the access to more than one resource at the same time.  The main exception of this rule are the FFT Chain UGens, which access multiple buffers at the same time. There is no known unit  generator, which accesses both buffers and busses at the same time.<li>Acquire reader locks if possible. Since multiple UGens can acquire a reader lock to the same resource at the same time, their  use reduces contention.<li>Resources have to be acquired in a well-defined order: busses should be acquired before buffers and resources with a high index  should be acquired before resources with a low index.</ul>
 
 <p><div class='footnotes'>
-<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - <a href="http://faust.grame.fr/">http://faust.grame.fr/</a></div><a class='anchor' name='footnote_2'/><div class='footnote'>[<a href='#footnote_org_2'>2</a>] - <a href="http://www.cmake.org">http://www.cmake.org</a></div></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/WritingUGens.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/WritingUGens.schelp</a><br>link::Guides/WritingUGens::<br></div></div></body></html>
+<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - <a href="http://faust.grame.fr/">http://faust.grame.fr/</a></div><a class='anchor' name='footnote_2'/><div class='footnote'>[<a href='#footnote_org_2'>2</a>] - <a href="http://www.cmake.org">http://www.cmake.org</a></div></div><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/WritingUGens.schelp'>/usr/share/SuperCollider/HelpSource/Guides/WritingUGens.schelp</a><br>link::Guides/WritingUGens::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

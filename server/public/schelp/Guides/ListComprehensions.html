@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>List Comprehensions | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>List Comprehensions | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'List Comprehensions';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>List Comprehensions:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
@@ -27,8 +32,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Constrained%20Search'>Constrained Search</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Grammar'>Grammar</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Code%20Generation'>Code Generation</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -41,31 +46,31 @@ var scdoc_sc_version = '3.9.3';
 <h2><a class='anchor' name='Introduction'>Introduction</a></h2>
 
 <p>List comprehensions are a syntactic feature of functional programming languages like Miranda, Haskell, and Erlang which were later copied into Python. You can search the web for "list comprehensions" or "generator expressions" to learn more. Basically list comprehensions are for getting a series of solutions to a problem.
-<p>in SC these are just a syntax macro for a longer expression. read this as <em>"all [x,y] for x in 1..5, y in 1..x, such that x+y is prime"</em>:<pre class='code prettyprint lang-sc'>all {:[x,y], x &lt;- (1..5), y &lt;- (1..x), (x+y).isPrime }</pre>
+<p>in SC these are just a syntax macro for a longer expression. read this as <em>"all [x,y] for x in 1..5, y in 1..x, such that x+y is prime"</em>:<textarea class='editor'>all {:[x,y], x &lt;- (1..5), y &lt;- (1..x), (x+y).isPrime }</textarea>
 
-<p>returns:<pre class='code prettyprint lang-sc'>[ [ 1, 1 ], [ 2, 1 ], [ 3, 2 ], [ 4, 1 ], [ 4, 3 ], [ 5, 2 ] ]</pre>
+<p>returns:<textarea class='editor'>[ [ 1, 1 ], [ 2, 1 ], [ 3, 2 ], [ 4, 1 ], [ 4, 3 ], [ 5, 2 ] ]</textarea>
 
-<p>the list comprehension above is equivalent to the following code:<pre class='code prettyprint lang-sc'>all(Routine.new({ (1..5).do {|x| (1..x).do {|y| if ((x+y).isPrime) {[x,y].yield} }}}));</pre>
+<p>the list comprehension above is equivalent to the following code:<textarea class='editor'>all(Routine.new({ (1..5).do {|x| (1..x).do {|y| if ((x+y).isPrime) {[x,y].yield} }}}));</textarea>
 
 <p>..but much more concise and much easier to keep in your head than writing it out.
-<p>In the list comprehension compiler, simple series like <code class='code prettyprint lang-sc'>(1..5)</code> and <code class='code prettyprint lang-sc'>(1..x)</code> are treated as special cases and implemented as loops rather than making a collection.
-<p>A list comprehension in SC is really a <a href="./../Classes/Routine.html">Routine</a>. You can use the <code class='code prettyprint lang-sc'>all</code> message to collect all of the Routine's results into a list.<h2><a class='anchor' name='A%20few%20examples'>A few examples</a></h2>
-<pre class='code prettyprint lang-sc'>all {: x/(x+1), x &lt;- (1..5) }
+<p>In the list comprehension compiler, simple series like <code>(1..5)</code> and <code>(1..x)</code> are treated as special cases and implemented as loops rather than making a collection.
+<p>A list comprehension in SC is really a <a href="./../Classes/Routine.html">Routine</a>. You can use the <code>all</code> message to collect all of the Routine's results into a list.<h2><a class='anchor' name='A%20few%20examples'>A few examples</a></h2>
+<textarea class='editor'>all {: x/(x+1), x &lt;- (1..5) }
 
-[ 0.5, 0.66666666666667, 0.75, 0.8, 0.83333333333333 ]</pre>
+[ 0.5, 0.66666666666667, 0.75, 0.8, 0.83333333333333 ]</textarea>
 
-<p><pre class='code prettyprint lang-sc'>all {:[x,y], x &lt;- (1..3), y &lt;- [\a,\b,\c] }
+<p><textarea class='editor'>all {:[x,y], x &lt;- (1..3), y &lt;- [\a,\b,\c] }
 
-[ [ 1, a ], [ 1, b ], [ 1, c ], [ 2, a ], [ 2, b ], [ 2, c ], [ 3, a ], [ 3, b ], [ 3, c ] ]</pre>
+[ [ 1, a ], [ 1, b ], [ 1, c ], [ 2, a ], [ 2, b ], [ 2, c ], [ 3, a ], [ 3, b ], [ 3, c ] ]</textarea>
 
-<p><pre class='code prettyprint lang-sc'>all {:[x,y], x &lt;- (0..3), y &lt;- (x..0) }
+<p><textarea class='editor'>all {:[x,y], x &lt;- (0..3), y &lt;- (x..0) }
 
-[ [ 0, 0 ], [ 1, 1 ], [ 1, 0 ], [ 2, 2 ], [ 2, 1 ], [ 2, 0 ], [ 3, 3 ], [ 3, 2 ], [ 3, 1 ], [ 3, 0 ] ]</pre>
+[ [ 0, 0 ], [ 1, 1 ], [ 1, 0 ], [ 2, 2 ], [ 2, 1 ], [ 2, 0 ], [ 3, 3 ], [ 3, 2 ], [ 3, 1 ], [ 3, 0 ] ]</textarea>
 
-<p><pre class='code prettyprint lang-sc'>all {:y, x &lt;- (1..4), y &lt;- (x..1) }
+<p><textarea class='editor'>all {:y, x &lt;- (1..4), y &lt;- (x..1) }
 
-[ 1, 2, 1, 3, 2, 1, 4, 3, 2, 1 ]</pre>
-<pre class='code prettyprint lang-sc'>(
+[ 1, 2, 1, 3, 2, 1, 4, 3, 2, 1 ]</textarea>
+<textarea class='editor'>(
 var intervals;
 // a function to generate intervals between all pairs of notes in a chord voicing
 intervals = {|chord|
@@ -80,78 +85,78 @@ intervals.([0,1,3,7]).postln;
 )
 
 [ 4, 3, 3, 7, 6, 10 ]
-[ 1, 2, 4, 3, 6, 7 ]</pre>
-<pre class='code prettyprint lang-sc'>all {:[y, z], x&lt;-(0..30), var y = x.nthPrime, var z = 2 ** y - 1, z.asInteger.isPrime.not  }
-[ [ 11, 2047 ], [ 23, 8388607 ], [ 29, 536870911 ] ] // mersenne numbers which are no primes</pre>
+[ 1, 2, 4, 3, 6, 7 ]</textarea>
+<textarea class='editor'>all {:[y, z], x&lt;-(0..30), var y = x.nthPrime, var z = 2 ** y - 1, z.asInteger.isPrime.not  }
+[ [ 11, 2047 ], [ 23, 8388607 ], [ 29, 536870911 ] ] // mersenne numbers which are no primes</textarea>
 <h2><a class='anchor' name='Qualifier%20Clauses'>Qualifier Clauses</a></h2>
 
-<p>A list comprehension begins with <code class='code prettyprint lang-sc'>{:</code> and contains a body followed by several qualifier clauses separated by commas.<pre class='code prettyprint lang-sc'>{: body , qualifiers }</pre>
+<p>A list comprehension begins with <code>{:</code> and contains a body followed by several qualifier clauses separated by commas.<textarea class='editor'>{: body , qualifiers }</textarea>
 
 <p>There are several types of qualifier clauses that can appear after the body.<h3><a class='anchor' name='generator%20clause'>generator clause</a></h3>
 
-<p>The basic clause is the generator clause. Its syntax is<pre class='code prettyprint lang-sc'>name &lt;- expr</pre>
+<p>The basic clause is the generator clause. Its syntax is<textarea class='editor'>name &lt;- expr</textarea>
 
-<p>The expression should be something that can respond meaningfully to 'do' such as a collection or a stream. The name takes on each value of the expression. The name is a local variable whose scope extends to all clauses to the right. The name is also in scope in the body.<pre class='code prettyprint lang-sc'>all {: x, x &lt;- (1..3) }
+<p>The expression should be something that can respond meaningfully to 'do' such as a collection or a stream. The name takes on each value of the expression. The name is a local variable whose scope extends to all clauses to the right. The name is also in scope in the body.<textarea class='editor'>all {: x, x &lt;- (1..3) }
 
-[ 1, 2, 3 ]</pre>
+[ 1, 2, 3 ]</textarea>
 
-<p><pre class='code prettyprint lang-sc'>all {: x, x &lt;- [\a, \b, \c] }
+<p><textarea class='editor'>all {: x, x &lt;- [\a, \b, \c] }
 
-[ a, b, c ]</pre>
+[ a, b, c ]</textarea>
 
-<p><pre class='code prettyprint lang-sc'>all {: x, x &lt;- (1!3)++(2!2)++3 }
+<p><textarea class='editor'>all {: x, x &lt;- (1!3)++(2!2)++3 }
 
-[ 1, 1, 1, 2, 2, 3 ]</pre>
+[ 1, 1, 1, 2, 2, 3 ]</textarea>
 
-<p>multiple generators act like nested loops.<pre class='code prettyprint lang-sc'>all {: [x,y], x &lt;- (1..2), y &lt;- (10,20..30) }
+<p>multiple generators act like nested loops.<textarea class='editor'>all {: [x,y], x &lt;- (1..2), y &lt;- (10,20..30) }
 
-[ [ 1, 10 ], [ 1, 20 ], [ 1, 30 ], [ 2, 10 ], [ 2, 20 ], [ 2, 30 ] ]</pre>
+[ [ 1, 10 ], [ 1, 20 ], [ 1, 30 ], [ 2, 10 ], [ 2, 20 ], [ 2, 30 ] ]</textarea>
 
-<p>generators can depend on previous values.<pre class='code prettyprint lang-sc'>all {: x, x &lt;- (1..3), y &lt;- (1..x) }
+<p>generators can depend on previous values.<textarea class='editor'>all {: x, x &lt;- (1..3), y &lt;- (1..x) }
 
-[ 1, 2, 2, 3, 3, 3 ]</pre>
+[ 1, 2, 2, 3, 3, 3 ]</textarea>
 
-<p><pre class='code prettyprint lang-sc'>all {: x, x &lt;- (1..3), y &lt;- (1..4-x) }
+<p><textarea class='editor'>all {: x, x &lt;- (1..3), y &lt;- (1..4-x) }
 
-[ 1, 1, 1, 2, 2, 3 ]</pre>
+[ 1, 1, 1, 2, 2, 3 ]</textarea>
 <h3><a class='anchor' name='guard%20clause'>guard clause</a></h3>
 
-<p>A guard clause is simply an expression. It should return a boolean value.<pre class='code prettyprint lang-sc'>expr</pre>
+<p>A guard clause is simply an expression. It should return a boolean value.<textarea class='editor'>expr</textarea>
 
-<p>The guard acts as a filter on the results and constrains the search.<pre class='code prettyprint lang-sc'>all {: x, x &lt;- (0..10), x.odd }
+<p>The guard acts as a filter on the results and constrains the search.<textarea class='editor'>all {: x, x &lt;- (0..10), x.odd }
 
-[ 1, 3, 5, 7, 9 ]</pre>
+[ 1, 3, 5, 7, 9 ]</textarea>
 
-<p><code class='code prettyprint lang-sc'>x.odd</code> is the guard and causes all even numbers to be skipped.<pre class='code prettyprint lang-sc'>all {: x, x &lt;- (0..30), (x % 5 == 0) || x.isPowerOfTwo }
+<p><code>x.odd</code> is the guard and causes all even numbers to be skipped.<textarea class='editor'>all {: x, x &lt;- (0..30), (x % 5 == 0) || x.isPowerOfTwo }
 
-[ 0, 1, 2, 4, 5, 8, 10, 15, 16, 20, 25, 30 ]</pre>
+[ 0, 1, 2, 4, 5, 8, 10, 15, 16, 20, 25, 30 ]</textarea>
 
-<p>you can have multiple guards.<pre class='code prettyprint lang-sc'>all {: [x,y], x &lt;- (0..10), (x % 5 == 0) || x.isPowerOfTwo, y &lt;- (1..2), (x+y).even }
+<p>you can have multiple guards.<textarea class='editor'>all {: [x,y], x &lt;- (0..10), (x % 5 == 0) || x.isPowerOfTwo, y &lt;- (1..2), (x+y).even }
 
-[ [ 0, 2 ], [ 1, 1 ], [ 2, 2 ], [ 4, 2 ], [ 5, 1 ], [ 8, 2 ], [ 10, 2 ] ]</pre>
+[ [ 0, 2 ], [ 1, 1 ], [ 2, 2 ], [ 4, 2 ], [ 5, 1 ], [ 8, 2 ], [ 10, 2 ] ]</textarea>
 <h3><a class='anchor' name='var%20clause'>var clause</a></h3>
 
-<p>A var clause lets you create a new variable binding that you can use in your expressions. The scope of the name extends to all clauses to the right and in the body.<pre class='code prettyprint lang-sc'>var name = expr</pre>
+<p>A var clause lets you create a new variable binding that you can use in your expressions. The scope of the name extends to all clauses to the right and in the body.<textarea class='editor'>var name = expr</textarea>
 
-<p>Unlike the generator clause, the name is bound to a single value, it doesn't iterate.<pre class='code prettyprint lang-sc'>all {: z, x &lt;- (1..20), var z = (x*x-x) div: 2, z.odd }
+<p>Unlike the generator clause, the name is bound to a single value, it doesn't iterate.<textarea class='editor'>all {: z, x &lt;- (1..20), var z = (x*x-x) div: 2, z.odd }
 
-[ 1, 3, 15, 21, 45, 55, 91, 105, 153, 171 ]</pre>
+[ 1, 3, 15, 21, 45, 55, 91, 105, 153, 171 ]</textarea>
 <h3><a class='anchor' name='side%20effect%20clause'>side effect clause</a></h3>
 
-<p>This clause lets you insert code to do some side effect like printing.<pre class='code prettyprint lang-sc'>\:: expr</pre>
+<p>This clause lets you insert code to do some side effect like printing.<textarea class='editor'>\:: expr</textarea>
 
-<p><pre class='code prettyprint lang-sc'>all {: z, x &lt;- (1..20), var z = (x*x-x) div: 2, :: [x,z].postln, z.even }</pre>
+<p><textarea class='editor'>all {: z, x &lt;- (1..20), var z = (x*x-x) div: 2, :: [x,z].postln, z.even }</textarea>
 <h3><a class='anchor' name='termination%20clause'>termination clause</a></h3>
 
-<p>The termination clause is for stopping further searching for results. Once the expression becomes false, the routine halts.<pre class='code prettyprint lang-sc'>:while expr</pre>
+<p>The termination clause is for stopping further searching for results. Once the expression becomes false, the routine halts.<textarea class='editor'>:while expr</textarea>
 
-<p>using a guard<pre class='code prettyprint lang-sc'>all {: z, x &lt;- (1..20), var z = (x*x-x) div: 2,  :: [x,z].postln, z &lt; 50 }</pre>
+<p>using a guard<textarea class='editor'>all {: z, x &lt;- (1..20), var z = (x*x-x) div: 2,  :: [x,z].postln, z &lt; 50 }</textarea>
 
-<p>using a termination clause. this one stops searching, so does less work than the above.<pre class='code prettyprint lang-sc'>all {: z, x &lt;- (1..20), var z = (x*x-x) div: 2,  :: [x,z].postln, :while z &lt; 50 }</pre>
+<p>using a termination clause. this one stops searching, so does less work than the above.<textarea class='editor'>all {: z, x &lt;- (1..20), var z = (x*x-x) div: 2,  :: [x,z].postln, :while z &lt; 50 }</textarea>
 <h2><a class='anchor' name='Constrained%20Search'>Constrained Search</a></h2>
 
 <p>list comprehensions can solve constrained combinatorial problems like this one:
-<p>Baker, Cooper, Fletcher, Miller, and Smith live on different floors of an apartment house that contains only five floors. Baker does not live on the top floor. Cooper does not live on the bottom floor. Fletcher does not live on either the top or the bottom floor. Miller lives on a higher floor than does Cooper. Smith does not live on a floor adjacent to Fletcher's. Fletcher does not live on a floor adjacent to Cooper's. Where does everyone live?<pre class='code prettyprint lang-sc'>(
+<p>Baker, Cooper, Fletcher, Miller, and Smith live on different floors of an apartment house that contains only five floors. Baker does not live on the top floor. Cooper does not live on the bottom floor. Fletcher does not live on either the top or the bottom floor. Miller lives on a higher floor than does Cooper. Smith does not live on a floor adjacent to Fletcher's. Fletcher does not live on a floor adjacent to Cooper's. Where does everyone live?<textarea class='editor'>(
 z = {: [baker, cooper, fletcher, miller, smith] ,
     var floors = (1..5),
     baker &lt;- floors,  baker != 5,  // Baker does not live on the top floor.
@@ -170,11 +175,11 @@ z = {: [baker, cooper, fletcher, miller, smith] ,
 )
 
 z.next; // [3, 2, 4, 5, 1 ]
-z.next; // nil.  only one solution</pre>
+z.next; // nil.  only one solution</textarea>
 
 <p>combinatorial problems can take a lot of time to run. you can reorder the above tests to make it run faster. generally you want to search the most constrained variables first. the most constrained person above is fletcher, so he should be searched first, then cooper, etc.<h2><a class='anchor' name='Grammar'>Grammar</a></h2>
 
-<p>Here is the BNF grammar for list comprehensions in SC.<pre class='code prettyprint lang-sc'>[ ] - optional
+<p>Here is the BNF grammar for list comprehensions in SC.<textarea class='editor'>[ ] - optional
 { } - zero or more
 
 &lt;list_compre&gt; ::= "{:" &lt;body&gt; ',' &lt;qualifiers&gt; "}"
@@ -195,14 +200,15 @@ z.next; // nil.  only one solution</pre>
 
 &lt;side_effect&gt; ::= "::" &lt;exprseq&gt;
 
-&lt;termination&gt; ::= ":while" &lt;exprseq&gt;</pre>
+&lt;termination&gt; ::= ":while" &lt;exprseq&gt;</textarea>
 <h2><a class='anchor' name='Code%20Generation'>Code Generation</a></h2>
 
 <p>For each of the above clauses, here is how the code is generated. The body acts as the innermost qualifier. By understanding these translations, you can better understand how scoping and control flow work in list comprehensions.<dl>
-<dt>generator<dd><pre class='code prettyprint lang-sc'>expr.do {|name| ..next qualifier.. }</pre>
-<dt>guard<dd><pre class='code prettyprint lang-sc'>if (expr) { ..next qualifier.. }</pre>
-<dt>binding<dd><pre class='code prettyprint lang-sc'>{|name| ..next qualifier.. }.value(expr)</pre>
-<dt>side effect<dd><pre class='code prettyprint lang-sc'>expr ; ..next qualifier..</pre>
-<dt>termination<dd><pre class='code prettyprint lang-sc'>if (expr) { ..next qualifier.. }{ nil.alwaysYield }</pre>
+<dt>generator<dd><textarea class='editor'>expr.do {|name| ..next qualifier.. }</textarea>
+<dt>guard<dd><textarea class='editor'>if (expr) { ..next qualifier.. }</textarea>
+<dt>binding<dd><textarea class='editor'>{|name| ..next qualifier.. }.value(expr)</textarea>
+<dt>side effect<dd><textarea class='editor'>expr ; ..next qualifier..</textarea>
+<dt>termination<dd><textarea class='editor'>if (expr) { ..next qualifier.. }{ nil.alwaysYield }</textarea>
 </dl>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/ListComprehensions.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/ListComprehensions.schelp</a><br>link::Guides/ListComprehensions::<br></div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/ListComprehensions.schelp'>/usr/share/SuperCollider/HelpSource/Guides/ListComprehensions.schelp</a><br>link::Guides/ListComprehensions::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

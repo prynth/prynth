@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>NodeProxyEditor | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>NodeProxyEditor | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'NodeProxyEditor';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>NodeProxyEditor:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -25,12 +30,12 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
 <ul class='toc'><li class='toc2'><a href='#You%20can%20drag%20and%20drop%20proxies%20between%20NodeProxyEditors'>You can drag and drop proxies between NodeProxyEditors</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
- | <span id='categories'><a href='./../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib>GUI'>GUI</a> | <a href='./../Browse.html#Live Coding'>Live Coding</a></span>
+ | <span id='categories'><a href='./../Browse.html#JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#JITLib>GUI'>GUI</a> | <a href='./../Browse.html#Live Coding'>Live Coding</a></span>
 </div><h1>NodeProxyEditor</h1>
 <div id='summary'>editor for a nodeproxy - replaced by NdefGui!</div>
 </div>
@@ -42,7 +47,7 @@ var scdoc_sc_version = '3.9.3';
 <div class='warning'><span class='warninglabel'>WARNING:</span> NodeProxyEditor has been rewritten and renamed <a href="./../Classes/NdefGui.html">NdefGui</a>, which has the same functionality, but is both more consistent and more flexible. There are some changes to the <strong>*new</strong> method:<dl>
 <dt>instead of<dd>*new(proxy, nSliders=16, parent, extras=[\CLR, \reset, \scope, \doc, \end, \fade], monitor, sinks, morph)<dt>NdefGui uses<dd>*new(object, numItems = 0, parent, bounds, makeSkip, options)</dl>
 
-<p><strong>proxy</strong> is now <strong>object</strong>, <strong>nSliders</strong> is now <strong>numItems</strong>, <strong>parent</strong> is still <strong>parent</strong>. <strong>bounds</strong> - can be <code class='code prettyprint lang-sc'>Rect(l, t, w, h)</code> or <code class='code prettyprint lang-sc'>width@heights</code>, <strong>makeSkip</strong> - is an option to build without skipjack. <strong>extras</strong> are now <strong>options</strong>, and have become more flexible.
+<p><strong>proxy</strong> is now <strong>object</strong>, <strong>nSliders</strong> is now <strong>numItems</strong>, <strong>parent</strong> is still <strong>parent</strong>. <strong>bounds</strong> - can be <code>Rect(l, t, w, h)</code> or <code>width@heights</code>, <strong>makeSkip</strong> - is an option to build without skipjack. <strong>extras</strong> are now <strong>options</strong>, and have become more flexible.
 <p>Please see <a href="./../Classes/NdefGui.html">NdefGui</a> for more details.</div>
 <p>NodeProxyEditor provides controls for handling and editing a node proxy and its monitors (cross-platform graphics).<ul>
 <li>sliders for numerical settings<li>mapping of kr proxies to parameters<li>optional controls for playing / monitoring</ul>
@@ -55,7 +60,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>    // preparation
+<textarea class='editor'>    // preparation
 s.boot;
 p = ProxySpace.push(s);
 
@@ -155,9 +160,9 @@ n.fullUpdate;
 
 Spec.add(\intv, ControlSpec(0, 24, \lin, 0.01, 0)); n.fullUpdate;
     // setting a param value unmaps a previous control source
-~test.set(\freq, rrand(200, 500), \intv, rrand(-5.5, 5.5));</pre>
+~test.set(\freq, rrand(200, 500), \intv, rrand(-5.5, 5.5));</textarea>
 <h3><a class='anchor' name='You%20can%20drag%20and%20drop%20proxies%20between%20NodeProxyEditors'>You can drag and drop proxies between NodeProxyEditors</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 // p = ProxySpace.push(s.boot);
 
 l = NodeProxyEditor(nil, 3); l.w.bounds_(l.w.bounds.moveBy(0, 120));
@@ -176,6 +181,7 @@ c = NodeProxy.audio.source_({ PinkNoise.ar(0.1 ! 2) });
 l.proxy_(~spacy);
 m.proxy_(Ndef(\ndeffy));
 n.proxy_(c);
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/NodeProxyEditor.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/NodeProxyEditor.schelp</a><br>link::Classes/NodeProxyEditor::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/NodeProxyEditor.schelp'>/usr/share/SuperCollider/HelpSource/Classes/NodeProxyEditor.schelp</a><br>link::Classes/NodeProxyEditor::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

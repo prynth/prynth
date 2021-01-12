@@ -1,47 +1,53 @@
-<!doctype html><html lang='en'><head><title>Syntax Shortcuts | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Syntax Shortcuts | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Syntax Shortcuts';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Syntax Shortcuts:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
-<ul class='toc'></ul><li class='toc1'><a href='#Objects,%20functions,%20messages%20and%20arguments'>Objects, functions, messages and arguments</a></li>
-<ul class='toc'><li class='toc2'><a href='#functional%20and%20receiver%20notation'>functional and receiver notation</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#defining%20instance%20variable%20accessor%20methods'>defining instance variable accessor methods</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#calling%20an%20instance%20variable%20setter%20method'>calling an instance variable setter method</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#use%20a%20selector%20as%20binary%20operator'>use a selector as binary operator</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#instantiate%20object'>instantiate object</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#moving%20blocks%20out%20of%20argument%20lists'>moving blocks out of argument lists</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#shorter%20argument%20lists'>shorter argument lists</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#calling%20the%20'value'%20method'>calling the 'value' method</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#calling%20performList'>calling performList</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#Defining%20functions%20and%20classes'>Defining functions and classes</a></li>
+<ul class='toc'><li class='toc2'><a href='#shorter%20argument%20lists%20in%20definitions'>shorter argument lists in definitions</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#partial%20application'>partial application</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#defining%20instance%20variable%20accessor%20methods'>defining instance variable accessor methods</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Sending%20messages,%20calling%20functions,%20and%20instantiating%20objects'>Sending messages, calling functions, and instantiating objects</a></li>
+<ul class='toc'><li class='toc2'><a href='#function-call%20and%20receiver%20notations'>function-call and receiver notations</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#calling%20the%20'value'%20method'>calling the 'value' method</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#instantiate%20object'>instantiate object</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#calling%20an%20instance%20variable%20setter%20method'>calling an instance variable setter method</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#calling%20performList'>calling performList</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#moving%20blocks%20out%20of%20argument%20lists%20(trailing-block%20arguments)'>moving blocks out of argument lists (trailing-block arguments)</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#use%20a%20selector%20(method%20name)%20as%20a%20binary%20operator'>use a selector (method name) as a binary operator</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Collections'>Collections</a></li>
 <ul class='toc'><li class='toc2'><a href='#create%20a%20collection'>create a collection</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#indexing%20elements'>indexing elements</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#accessing%20subranges%20of%20Arrays'>accessing subranges of Arrays</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#creating%20arithmetic%20series'>creating arithmetic series</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#creating%20Events'>creating Events</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#creating%20Arrays%20with%20key-value%20pairs'>creating Arrays with key-value pairs</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#creating%20arithmetic%20series'>creating arithmetic series</a></li>
-<ul class='toc'></ul><li class='toc2'><a href='#accessing%20subranges%20of%20Arrays'>accessing subranges of Arrays</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Other%20shortcuts'>Other shortcuts</a></li>
 <ul class='toc'><li class='toc2'><a href='#multiple%20assignment'>multiple assignment</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#accessing%20environment%20variables'>accessing environment variables</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#shorthand%20for%20Symbols'>shorthand for Symbols</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#creating%20a%20Ref'>creating a Ref</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Reference</span>
@@ -55,99 +61,156 @@ var scdoc_sc_version = '3.9.3';
 <h2><a class='anchor' name='Introduction'>Introduction</a></h2>
 
 <p>This file shows a number of syntax equivalences in the compiler.
-<p>Because of the multiple syntax equivalences, some expressions can be written in many different ways. All of the following do the same thing and compile to the same code.<pre class='code prettyprint lang-sc'>// new argument syntax
+<p>Because of the multiple syntax equivalences, some expressions can be written in many different ways. All of the following do the same thing and compile to the same code.<textarea class='editor'>// new argument syntax
 
-(1..10).collect({|n| n.squared }); // receiver syntax
-collect((1..10), {|n| n.squared }); // function call syntax
-(1..10).collect {|n| n.squared }; // receiver syntax with trailing function arg
-collect ((1..10)) {|n| n.squared }; // function call syntax with trailing function arg
-(1..10) collect: {|n| n.squared }; // binary operator syntax
+(1..10).collect({ |n| n.squared });  // receiver syntax
+collect((1..10), { |n| n.squared }); // function call syntax
+(1..10).collect { |n| n.squared };   // receiver syntax with trailing-block argument
+collect ((1..10)) { |n| n.squared }; // function call syntax with trailing-block argument
+(1..10) collect: { |n| n.squared };  // binary operator syntax
 
 
 // old argument syntax
 
-(1..10).collect({ arg n; n.squared }); // receiver syntax
+(1..10).collect({ arg n; n.squared });  // receiver syntax
 collect((1..10), { arg n; n.squared }); // function call syntax
-(1..10).collect { arg n; n.squared }; // receiver syntax with trailing function arg
-collect ((1..10)) { arg n; n.squared }; // function call syntax with trailing function arg
-(1..10) collect: { arg n; n.squared }; // binary operator syntax
+(1..10).collect { arg n; n.squared };   // receiver syntax with trailing-block argument
+collect ((1..10)) { arg n; n.squared }; // function call syntax with trailing-block argument
+(1..10) collect: { arg n; n.squared };  // binary operator syntax
 
 
 // partial application syntax
 
-(1..10).collect( _.squared ); // receiver syntax
-collect((1..10), _.squared ); // function call syntax
-(1..10) collect: _.squared ; // binary operator syntax</pre>
+(1..10).collect(_.squared);   // receiver syntax
+collect((1..10), _.squared);  // function call syntax
+(1..10) collect: _.squared;   // binary operator syntax</textarea>
 
-<p>You could even start expanding out the equivalent of (1..10) which is really a shortcut for <code class='code prettyprint lang-sc'>series(1, nil, 10)</code>. This could also be written <code class='code prettyprint lang-sc'>1.series(nil,10)</code>. This adds another 26 variations to the 13 variations above.<h2><a class='anchor' name='Objects,%20functions,%20messages%20and%20arguments'>Objects, functions, messages and arguments</a></h2>
-<h3><a class='anchor' name='functional%20and%20receiver%20notation'>functional and receiver notation</a></h3>
+<p>You could even start expanding out the equivalent of (1..10) which is really a shortcut for <code>series(1, nil, 10)</code>. This could also be written <code>1.series(nil,10)</code>. This adds another 26 variations to the 13 variations above.<h2><a class='anchor' name='Defining%20functions%20and%20classes'>Defining functions and classes</a></h2>
+<h3><a class='anchor' name='shorter%20argument%20lists%20in%20definitions'>shorter argument lists in definitions</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>f(x, y)</code><td><code class='code prettyprint lang-sc'>x.f(y)</code><tr><td><code class='code prettyprint lang-sc'>f(g(x))</code><td><code class='code prettyprint lang-sc'>x.g.f</code></table>
-<h3><a class='anchor' name='defining%20instance%20variable%20accessor%20methods'>defining instance variable accessor methods</a></h3>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>{ arg x; x &lt; 2 }</code><td><code>{ |x| x &lt; 2 }</code><tr><td><code>{ arg x = 123; x &lt; 2 }</code><td><code>{ |x = 123| x &lt; 2 }</code><tr><td><code>{ arg x = 10.rand; x &lt; 2 }</code><td><code>{ |x = (10.rand)| x &lt; 2 }</code> or <code>{|x(10.rand)| x &lt; 2 }</code></table>
+
+<p><div class='note'><span class='notelabel'>NOTE:</span> When using the new <code>||</code> syntax, the default value needs to be enclosed in parenthesis if it's not a literal.</div><h3><a class='anchor' name='partial%20application'>partial application</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><pre class='code prettyprint lang-sc'>Thing { var x;
+<tr><td>instead of writing:<td>you can write:<tr><td><code>{ |x| object.msg(a, x, b) }</code><td><code>object.msg(a, _, b)</code><tr><td><code>{ |x,y| object.msg(a, x, y) }</code><td><code>object.msg(a, _, _)</code><tr><td><code>{ |x| a + x }</code><td><code>a + _</code><tr><td><code>{ |x| [a, b, x] }</code><td><code>[a, b, _]</code><tr><td><code>{ |x| (a: x) }</code><td><code>(a: _)</code></table>
+
+<p><div class='note'><span class='notelabel'>NOTE:</span> There are some limitations to the extent of the surrounding expression that <code>_</code> can capture. See <a href="./../Reference/Partial-Application.html">Partial Application</a> for details.</div><h3><a class='anchor' name='defining%20instance%20variable%20accessor%20methods'>defining instance variable accessor methods</a></h3>
+<table>
+<tr><td>instead of writing:<td>you can write:<tr><td><textarea class='editor'>Thing { var x;
     x { ^x }
     x_ { arg z; x = z; }
-}</pre>
-<td><code class='code prettyprint lang-sc'>Thing { var &lt;&gt;x; }</code></table>
-<h3><a class='anchor' name='calling%20an%20instance%20variable%20setter%20method'>calling an instance variable setter method</a></h3>
+}</textarea>
+<td><textarea class='editor'>Thing { var &lt;&gt;x; }</textarea>
+</table>
+<h2><a class='anchor' name='Sending%20messages,%20calling%20functions,%20and%20instantiating%20objects'>Sending messages, calling functions, and instantiating objects</a></h2>
+<h3><a class='anchor' name='function-call%20and%20receiver%20notations'>function-call and receiver notations</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>p.x_(y)</code><td><code class='code prettyprint lang-sc'>p.x = y</code> or <code class='code prettyprint lang-sc'>x(p) = y</code></table>
-<h3><a class='anchor' name='use%20a%20selector%20as%20binary%20operator'>use a selector as binary operator</a></h3>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>f(x, y)</code><td><code>x.f(y)</code><tr><td><code>f(g(x))</code><td><code>x.g.f</code></table>
+<h3><a class='anchor' name='calling%20the%20'value'%20method'>calling the 'value' method</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>min(x, y)</code><td><code class='code prettyprint lang-sc'>x min: y</code></table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>f.value(x)</code><td><code>f.(x)</code></table>
 <h3><a class='anchor' name='instantiate%20object'>instantiate object</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>Point.new(3, 4);</code><td><code class='code prettyprint lang-sc'>Point(3, 4)</code></table>
-<h3><a class='anchor' name='moving%20blocks%20out%20of%20argument%20lists'>moving blocks out of argument lists</a></h3>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>Point.new(3, 4)</code><td><code>Point(3, 4)</code></table>
+<h3><a class='anchor' name='calling%20an%20instance%20variable%20setter%20method'>calling an instance variable setter method</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>if (x&lt;3, {\abc}, {\def});</code><td><code class='code prettyprint lang-sc'>if (x&lt;3) {\abc} {\def}</code><tr><td><code class='code prettyprint lang-sc'>z.do({|x| x.play });</code><td><code class='code prettyprint lang-sc'>z.do {|x| x.play };</code><tr><td><code class='code prettyprint lang-sc'>while({ a &lt; b },{ a = a * 2 });</code><td><code class='code prettyprint lang-sc'>while { a &lt; b } { a = a * 2 };</code></table>
-<h3><a class='anchor' name='shorter%20argument%20lists'>shorter argument lists</a></h3>
-<table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>{ arg x; x &lt; 2 }</code><td><code class='code prettyprint lang-sc'>{|x| x &lt; 2 }</code><tr><td><code class='code prettyprint lang-sc'>{ arg x = 123; x &lt; 2 }</code><td><code class='code prettyprint lang-sc'>{|x = 123| x &lt; 2 }</code><tr><td><code class='code prettyprint lang-sc'>{ arg x = 10.rand; x &lt; 2 }</code><td><code class='code prettyprint lang-sc'>{|x = (10.rand)| x &lt; 2 }</code> or <code class='code prettyprint lang-sc'>{|x(10.rand)| x &lt; 2 }</code></table>
-
-<p><div class='note'><span class='notelabel'>NOTE:</span> When using the new <code class='code prettyprint lang-sc'>||</code> syntax, the default value needs to be enclosed in parenthesis if it's not a literal.</div><h3><a class='anchor' name='calling%20the%20'value'%20method'>calling the 'value' method</a></h3>
-<table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>f.value(x)</code><td><code class='code prettyprint lang-sc'>f.(x)</code></table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>p.x_(y)</code><td><code>p.x = y</code> or <code>x(p) = y</code></table>
 <h3><a class='anchor' name='calling%20performList'>calling performList</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>object.performList(\method, a, b, array)</code><td><code class='code prettyprint lang-sc'>object.method(a, b, *array)</code></table>
-<h3><a class='anchor' name='partial%20application'>partial application</a></h3>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>object.performList(\method, a, b, array)</code><td><code>object.method(a, b, *array)</code></table>
+<h3><a class='anchor' name='moving%20blocks%20out%20of%20argument%20lists%20(trailing-block%20arguments)'>moving blocks out of argument lists (trailing-block arguments)</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>{|x| object.msg(a, x, b) }</code><td><code class='code prettyprint lang-sc'>object.msg(a, _, b)</code><tr><td><code class='code prettyprint lang-sc'>{|x,y| object.msg(a, x, y) }</code><td><code class='code prettyprint lang-sc'>object.msg(a, _, _)</code><tr><td><code class='code prettyprint lang-sc'>{|x| a + x }</code><td><code class='code prettyprint lang-sc'>a + _</code><tr><td><code class='code prettyprint lang-sc'>{|x| [a, b, x] }</code><td><code class='code prettyprint lang-sc'>[a, b, _]</code><tr><td><code class='code prettyprint lang-sc'>{|x| (a: x) }</code><td><code class='code prettyprint lang-sc'>(a: _)</code></table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>if (x &lt; 3, { \abc }, { \def })</code><td><code>if (x &lt; 3) { \abc } { \def }</code><tr><td><code>z.do({ |x| x.play })</code><td><code>z.do { |x| x.play }</code><tr><td><code>while({ a &lt; b }, { a = a * 2 })</code><td><code>while { a &lt; b } { a = a * 2 }</code><tr><td><code>Pfunc({ rrand(3, 6) })</code><td><code>Pfunc { rrand(3, 6) }</code></table>
+<div class='note'><span class='notelabel'>NOTE:</span> Trailing arguments must be literal blocks. No other expression may be used as a trailing argument, even if it evaluates to a Function. For example, you cannot use a variable name as a trailing argument, even if this variable was assigned a Function.
+<p>Using a selector as an infix binary operator (discussed in the next section) enables a visually similar construct that does allow arbitrary expressions as operands, but these binary-operator constructs technically do not have trailing arguments.<textarea class='editor'>(
+var f = { |n| (2**n) + (3**n) };
+collect((1..5), f); // valid
+(1..5).collect(f);  // valid
+(1..5) collect: f;  // valid (selector as binary operator)
+)
+(1..5).collect f;   // syntax error (non-block as a trailing argument)
+collect((1..5)) f;  // syntax error (ibid.)</textarea>
+
+<p>A fairly common case when this syntactic restriction matters: a partial application using the <code>_</code> syntax is an expression evaluating to a Function, but it is not a literal block. Therefore:<textarea class='editor'>do(6) _.postln  // syntax error
+6.do _.postln   // syntax error
+do(6, _.postln) // valid
+6.do(_.postln)  // valid
+6 do: _.postln  // valid</textarea>
+</div><h3><a class='anchor' name='use%20a%20selector%20(method%20name)%20as%20a%20binary%20operator'>use a selector (method name) as a binary operator</a></h3>
+<table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>div(x, y)</code><td><code>x div: y</code></table>
+<div class='warning'><span class='warninglabel'>WARNING:</span> When switching between various forms of call syntax, one has to be mindful that a selector as a binary operator has equal precedence with most other binary operators, but has lower precedence than the receiver dot notation (<code>.</code>). Therefore, replacing a receiver syntax (dot) with a selector written as a binary operator can change the result of some expressions, as illustrated below:<textarea class='editor'>4 + 5.div(2) // -&gt; 6
+4 + 5 div: 2 // -&gt; 4
+
+// This is a left-to-right application of two dots,
+// the first of which has a trailing block argument.
+(1..3).collect { |x| x + 1 }.bubble
+// -&gt; [ [ 2, 3, 4 ] ]
+
+// This is a selector binary operator ("collect:") applied
+// to two arguments, the second of which is the result
+// of applying "bubble" (via dot syntax) to a function.
+(1..3) collect: { |x| x + 1 }.bubble
+// -&gt; [ [ a Function ], [ a Function ], [ a Function ] ]
+
+// Changing precedence in the above with explicit parentheses
+((1..3) collect: { |x| x + 1 }).bubble
+// -&gt; [ [ 2, 3, 4 ] ]
+
+// Or by uniform use of selectors as binary operators
+(1..3) collect: { |x| x + 1 } bubble: 0</textarea>
+</div>
+<p>Native infix operators like <code>+</code> can also be written in (longer) function-call form, e.g.:<table>
+<tr><td>infix:<td>function call:<tr><td><code>1 + 2</code><td><code>(+)(1, 2)</code></table>
+
+<p>The latter form is usually not a shortcut, except when one wants to dynamically change the adverb of an operator, for instance that of <code>+++</code>, because adverbs in the infix notation are interpreted as literals.<textarea class='editor'>(
+var a = (_+_) ! [3, 3]; // -&gt; [ [ 0, 1, 2 ], [ 1, 2, 3 ], [ 2, 3, 4 ] ]
+(0..2) collect: (+++)(a, 99, _) flatten: 3; // iterated adverb
+)
+(0..2) collect: (a +++._ 99) flatten: 3;    // syntax error
+(
+var a = (_+_) ! [3, 3];
+(0..2) collect: {|v| a +++.v 99} flatten: 3 // the literal adverb \v is used
+)</textarea>
 <h2><a class='anchor' name='Collections'>Collections</a></h2>
 <h3><a class='anchor' name='create%20a%20collection'>create a collection</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>Set.new.add(3).add(4).add(5);</code><td><code class='code prettyprint lang-sc'>Set[3, 4, 5]</code><tr><td><code class='code prettyprint lang-sc'>Array[3, 4, 5];</code><td><code class='code prettyprint lang-sc'>[3, 4, 5]</code></table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>Set.new.add(3).add(4).add(5)</code><td><code>Set[3, 4, 5]</code><tr><td><code>Array[3, 4, 5]</code><td><code>[3, 4, 5]</code></table>
 <h3><a class='anchor' name='indexing%20elements'>indexing elements</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>z.at(i)</code><td><code class='code prettyprint lang-sc'>z[i]</code><tr><td><code class='code prettyprint lang-sc'>z.put(i, y);</code><td><code class='code prettyprint lang-sc'>z[i] = y;</code></table>
-<h3><a class='anchor' name='creating%20Events'>creating Events</a></h3>
-<table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>Event[\a -&gt; 1, \b -&gt; 2]</code><td><code class='code prettyprint lang-sc'>(a: 1, b: 2)</code></table>
-<h3><a class='anchor' name='creating%20Arrays%20with%20key-value%20pairs'>creating Arrays with key-value pairs</a></h3>
-<table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>[\a, 1, \b, 2]</code><td><code class='code prettyprint lang-sc'>[a: 1, b: 2]</code></table>
-<h3><a class='anchor' name='creating%20arithmetic%20series'>creating arithmetic series</a></h3>
-<table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>Array.series(16,1,1)</code> or <code class='code prettyprint lang-sc'>series(1,nil,16)</code><td><code class='code prettyprint lang-sc'>(1..16)</code><tr><td><code class='code prettyprint lang-sc'>Array.series(6,1,2)</code> or <code class='code prettyprint lang-sc'>series(1,3,11)</code><td><code class='code prettyprint lang-sc'>(1,3..11)</code></table>
-
-<p>There is also the similar syntax for creating an iterating <a href="./../Classes/Routine.html">Routine</a> :<table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>seriesIter(1,3,11)</code><td><code class='code prettyprint lang-sc'>(:1,3..11)</code></table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>z.at(i)</code><td><code>z[i]</code><tr><td><code>z.put(i, y)</code><td><code>z[i] = y</code></table>
 <h3><a class='anchor' name='accessing%20subranges%20of%20Arrays'>accessing subranges of Arrays</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>a.copyRange(4,8)</code><td><code class='code prettyprint lang-sc'>a[4..8]</code><tr><td><code class='code prettyprint lang-sc'>a.copyToEnd(4)</code><td><code class='code prettyprint lang-sc'>a[4..]</code><tr><td><code class='code prettyprint lang-sc'>a.copyFromStart(4)</code><td><code class='code prettyprint lang-sc'>a[..4]</code></table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>a.copyRange(4, 8)</code><td><code>a[4..8]</code><tr><td><code>a.copyToEnd(4)</code><td><code>a[4..]</code><tr><td><code>a.copyFromStart(4)</code><td><code>a[..4]</code></table>
+<h3><a class='anchor' name='creating%20arithmetic%20series'>creating arithmetic series</a></h3>
+<table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>Array.series(16, 1, 1)</code> or <code>series(1, nil, 16)</code><td><code>(1..16)</code><tr><td><code>Array.series(6, 1, 2)</code> or <code>series(1, 3, 11)</code><td><code>(1, 3..11)</code></table>
+
+<p>There is also the similar syntax for creating an iterating <a href="./../Classes/Routine.html">Routine</a>:<table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>seriesIter(1, 3, 11)</code><td><code>(:1, 3..11)</code></table>
+
+<p><div class='note'><span class='notelabel'>NOTE:</span> SuperCollider also supports <a href="./../Guides/ListComprehensions.html">List Comprehensions</a>.</div>
+<p>As a simple (non-combinatorial) example, the following are equivalent ways of listing the first 10 primes:<textarea class='editor'>(:1..) select: _.isPrime nextN: 10;
+{: x, x &lt;- (1..), x.isPrime }.nextN(10);</textarea>
+<h3><a class='anchor' name='creating%20Events'>creating Events</a></h3>
+<table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>Event[\a -&gt; 1, \b -&gt; 2]</code><td><code>(a: 1, b: 2)</code></table>
+<h3><a class='anchor' name='creating%20Arrays%20with%20key-value%20pairs'>creating Arrays with key-value pairs</a></h3>
+<table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>[\a, 1, \b, 2]</code><td><code>[a: 1, b: 2]</code></table>
 <h2><a class='anchor' name='Other%20shortcuts'>Other shortcuts</a></h2>
 <h3><a class='anchor' name='multiple%20assignment'>multiple assignment</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>x = z.at(0); y = z.at(1);</code><td><code class='code prettyprint lang-sc'># x, y = z;</code></table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>x = z.at(0); y = z.at(1);</code><td><code># x, y = z;</code></table>
 <h3><a class='anchor' name='accessing%20environment%20variables'>accessing environment variables</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>'myName'.envirGet</code><td><code class='code prettyprint lang-sc'>~myName</code><tr><td><code class='code prettyprint lang-sc'>'myName'.envirPut(9);</code><td><code class='code prettyprint lang-sc'>~myName = 9;</code></table>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>'myName'.envirGet</code><td><code>~myName</code><tr><td><code>'myName'.envirPut(9)</code><td><code>~myName = 9</code></table>
 <h3><a class='anchor' name='shorthand%20for%20Symbols'>shorthand for Symbols</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>'mySymbol'</code><td><code class='code prettyprint lang-sc'>\mySymbol</code></table>
-<h3><a class='anchor' name='creating%20a%20Ref'>creating a Ref</a></h3>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>'mySymbol'</code><td><code>\mySymbol</code></table>
+
+<p><div class='note'><span class='notelabel'>NOTE:</span> The shorthand only admits a subset of the symbols that may be enclosed in single quotes. See <a href="./../Reference/Literals.html#Symbols">Literals: Symbols</a> for details.</div><h3><a class='anchor' name='creating%20a%20Ref'>creating a Ref</a></h3>
 <table>
-<tr><td>instead of writing:<td>you can write:<tr><td><code class='code prettyprint lang-sc'>Ref.new(thing)</code><td><code class='code prettyprint lang-sc'>`thing</code></table>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Syntax-Shortcuts.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Syntax-Shortcuts.schelp</a><br>link::Reference/Syntax-Shortcuts::<br></div></div></body></html>
+<tr><td>instead of writing:<td>you can write:<tr><td><code>Ref.new(thing)</code><td><code>`thing</code></table>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Reference/Syntax-Shortcuts.schelp'>/usr/share/SuperCollider/HelpSource/Reference/Syntax-Shortcuts.schelp</a><br>link::Reference/Syntax-Shortcuts::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

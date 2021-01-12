@@ -1,0 +1,133 @@
+<!doctype html><html lang='en'><head><title>Audio device selection | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Audio device selection';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>Audio device selection:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#macOS'>macOS</a></li>
+<ul class='toc'><li class='toc2'><a href='#Sample%20rate%20mismatch'>Sample rate mismatch</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Aggregate%20device'>Aggregate device</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Linux'>Linux</a></li>
+<ul class='toc'><li class='toc2'><a href='#Setup%20with%20JACK%20server'>Setup with JACK server</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#Windows'>Windows</a></li>
+<ul class='toc'><li class='toc2'><a href='#Choosing%20the%20device%20and%20the%20API'>Choosing the device and the API</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#List%20of%20available%20APIs'>List of available APIs</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#ASIO4ALL'>ASIO4ALL</a></li>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Reference</span>
+ | <span id='categories'><a href='./../Browse.html#Server'>Server</a></span>
+</div><h1>Audio device selection</h1>
+<div id='summary'>A reference for making audio device selection</div>
+</div>
+<div class='subheader'>
+<div id='related'>See also: <a href="./../Classes/Server.html">Server</a>, <a href="./../Classes/ServerOptions.html">ServerOptions</a></div>
+</div>
+
+<p>This reference provides information on audio device selection, including platform-specific details.
+<p>Specific devices can be selected through an instance of <a href="./../Classes/ServerOptions.html">ServerOptions</a>. To access <code>ServerOptions</code> instance of the default server, you can use <code>Server.default.options</code>. <a href="./../Classes/ServerOptions.html">ServerOptions</a> also allows you to specify other important parameters of the device - the sample rate and hardware buffer size.<div class='note'><span class='notelabel'>NOTE:</span> Device selection won't take effect until the server is (re)booted.</div><h2><a class='anchor' name='macOS'>macOS</a></h2>
+
+<p>By default the server will boot to your system's default audio devices. If you want to explicitly tell the server to use the internal soundcard, you need to specify both input and output device. The following example comes from a MacBook Pro:<textarea class='editor'>Server.default.options.inDevice_("Built-in Microph");
+Server.default.options.outDevice_("Built-in Output");</textarea>
+
+<p>In case of a dedicated audio interface, you might need to specify a single device, e.g.<textarea class='editor'>Server.default.options.device_("MOTU 828");</textarea>
+
+<p>On Windows and macOS you can programmatically obtain a list of available audio devices without booting the server:<textarea class='editor'>ServerOptions.devices; // all devices
+ServerOptions.inDevices; // input devices
+ServerOptions.outDevices; // output devices</textarea>
+<h3><a class='anchor' name='Sample%20rate%20mismatch'>Sample rate mismatch</a></h3>
+
+<p>One possible reason why a server may fail to boot is a mismatch between input and output devices' sample rates, which may occur when using a different device for input and output (which is the case when using a Mac's internal soundcard). If the server fails to boot due to sample rate mismatch, an error will be posted accordingly.
+<p>You should set both input and output devices' sample rate to the same value. You can do this in Audio MIDI Setup:<textarea class='editor'>"open -a 'Audio MIDI Setup'".unixCmd; // execute this to launch it</textarea>
+<h3><a class='anchor' name='Aggregate%20device'>Aggregate device</a></h3>
+
+<p>Sometimes you might want to use multiple devices for input or output. macOS provides a way to combine multiple physical devices into a virtual <em>Aggregate Device</em>. To create one, you have to open the Audio MIDI Setup application (in <code>/Applications/Utilities</code>). You should do this from an user account with administrator privileges.<textarea class='editor'>"open -a 'Audio MIDI Setup'".unixCmd; // execute this to launch it</textarea>
+
+<p><ul>
+<li>In the <code>Audio Devices</code> window click on the Plus button on the bottom left and choose <code>Create Aggregate Device</code>.<li>You can change its name to something specific if desired, for example "InternalAndMOTU".<li>Check the <code>Use</code> column on the right for the devices you want to combine.</ul>
+
+<p>Now you need to tell SuperCollider to use your new aggregate device.<textarea class='editor'>Server.default.options.device = "Aggregate Device"; //or the name you have specified in the previous step</textarea>
+
+<p>After rebooting the server (<code>Server.default.reboot</code>) you should see in the post window that it now uses the Aggregate Device instead of system defaults:<pre>[...]
+"Aggregate Device" Input Device
+[...]
+"Aggregate Device" Output Device</pre>
+<p>Note that when you specify a sound device through SuperCollider's <code>ServerOptions</code>, there is no need to use the aggregate device as the system's default device.<h2><a class='anchor' name='Linux'>Linux</a></h2>
+
+<p>By default, SuperCollider on Linux uses JACK, and the audio device selection is managed by the JACK server. <code>ServerOptions</code> cannot override JACK's selection of audio hardware.<h3><a class='anchor' name='Setup%20with%20JACK%20server'>Setup with JACK server</a></h3>
+<div class='note'><span class='notelabel'>NOTE:</span> The SuperCollider server is considered a JACK <em>client</em>. In the following section, the term <em>client</em> will refer to the SuperCollider server, from the perspective of JACK.</div>
+<p>When the server is compiled to use JACK as the audio backend, the <code>ServerOption</code>'s <code>device</code> can be used in two ways:<ul>
+<li>to set the client name to register with JACK:<textarea class='editor'>Server.default.options.device = "my_synth";</textarea>
+
+<p><li>to use a specific JACK server, as well as set the client name:<textarea class='editor'>Server.default.options.device = "JACKServerName:scsynthName";</textarea>
+</ul>
+
+<p>A <code>nil</code> device is equivalent to <code>Server.default.options.device = "default:SuperCollider";</code>
+<p>The JACK connections can be configured via the environment variables <code>SC_JACK_DEFAULT_INPUTS</code> and <code>SC_JACK_DEFAULT_OUTPUTS</code>. The format is either a string that specifies another jack client or a comma-separated list of jack ports.<textarea class='editor'>// connect first to input channels with system
+"SC_JACK_DEFAULT_INPUTS".setenv("system:capture_1,system:capture_2");
+
+// connect all output channels with system
+"SC_JACK_DEFAULT_OUTPUTS".setenv("system");</textarea>
+<h2><a class='anchor' name='Windows'>Windows</a></h2>
+
+<p>By default the server will boot to your system's default audio devices using <code>MME</code> driver (which usually means higher latency).
+<p>On Windows there are multiple audio driver APIs (e.g. <code>MME</code>, <code>WASAPI</code>, <code>ASIO</code> etc.) that can be used to communicate with audio devices. The API (listed before the device name) needs to match between the input and the output, for example:<textarea class='editor'>o = Server.default.options;
+o.inDevice_("Windows WASAPI : Microphone");
+o.outDevice_("Windows WASAPI : Speakers");
+Server.default.reboot;</textarea>
+
+<p>You can programmatically obtain a list of available audio devices without booting the server:<textarea class='editor'>ServerOptions.devices; // all devices
+ServerOptions.inDevices; // input devices
+ServerOptions.outDevices; // output devices</textarea>
+
+<p>Partial device name matching is supported in Windows (though not in macOS).<h3><a class='anchor' name='Choosing%20the%20device%20and%20the%20API'>Choosing the device and the API</a></h3>
+<ul>
+<li>If you need to specify the device, you will need to do so for both input and output (setting both <code>.inDevice</code>, as well as <code>.outDevice</code>), unless you use ASIO<li>Both input and output device needs to use the same API (listed before the name, for example <code>MME</code>, <code>WDM-KS</code> etc.).<li>Both input and output device should use the same sample rate (although some APIs might provide resampling). This can be set in Windows's Audio Control Panel.</ul>
+
+<p>The following list provides basic reference for different APIs. The most recommended APIs are listed first.<h3><a class='anchor' name='List%20of%20available%20APIs'>List of available APIs</a></h3>
+<dl>
+<dt>ASIO<dd><ul>
+<li><strong>Maximum channel count:</strong> Supports an arbitrary number of input/output channels, as provided by the hardware<li><strong>Typical latency:</strong> Low<li><strong>Caveats:</strong> Dedicated ASIO driver needs to be provided by the audio device's manufacturer; this is common for most (semi-)professional interfaces, but not necessarily for internal soundcards<li><strong>More info:</strong> Designed for pro-audio devices; control over sampling rate and hardware buffer size is usually provided by the driver's control panel (i.e. not settable by SuperCollider); ASIO stands for Audio Stream Input/Output and was developed by Steinberg</ul>
+
+<p><dt>WASAPI<dd><ul>
+<li><strong>Maximum channel count:</strong> Typically supports mono or stereo only; devices with more than 2 channels might be represented as multiple stereo pairs<li><strong>Typical latency:</strong> Low<li><strong>Caveats:</strong> If the requested sample rate is different than the device's sample rate, the server will not boot<li><strong>More info:</strong> WASAPI stands for Windows Audio Session API and is the most modern Windows audio API</ul>
+
+<p><dt>WDM-KS<dd><ul>
+<li><strong>Maximum channel count:</strong> Typically supports mono or stereo only; devices with more than 2 channels might be represented as multiple stereo pairs<li><strong>Typical latency:</strong> Low<li><strong>Caveats:</strong> On some systems SuperCollider will prevent other applications from using the audio device when using this API<li><strong>More info:</strong> WDM-KS stands for Windows Driver Model Kernel Streaming. It was the first native Windows API providing reasonably low latency</ul>
+
+<p><dt>DirectSound<dd><ul>
+<li><strong>Maximum channel count:</strong> Typically supports mono or stereo only; devices with more than 2 channels might be represented as multiple stereo pairs<li><strong>Typical latency:</strong> Moderate/high<li><strong>Caveats:</strong> It is an older API and typically provides worse performance than the newer ones<li><strong>More info:</strong> DirectSound is part of DirectX and was originally created with game audio in mind</ul>
+
+<p><dt>MME<dd><ul>
+<li><strong>Maximum channel count:</strong> Typically supports mono or stereo only; devices with more than 2 channels might be represented as multiple stereo pairs<li><strong>Typical latency:</strong> High<li><strong>Caveats:</strong> It is the oldest API on this list; it is chosen by default if the user does not specify which device to use<li><strong>More info:</strong> This API might work out-of-the-box, but choosing a newer one instead will usually provide better performance; MME stands for Multimedia Extension (for Windows 3.0)</ul>
+</dl>
+
+<p>If ASIO driver is available, it is probably the best choice to ensure low input/output latency. ASIO drivers usually provide both inputs and outputs through a single device.<div class='note'><span class='notelabel'>NOTE:</span> On Windows, ASIO driver is likely the only option for multichannel operation (allowing to use more than 2 inputs/outputs simultaneously).</div><textarea class='editor'>o = Server.default.options;
+o.device = "ASIO : UMC ASIO Driver";
+Server.default.reboot;</textarea>
+<h3><a class='anchor' name='ASIO4ALL'>ASIO4ALL</a></h3>
+
+<p>If you are using an internal soundcard or a device which does not come with an ASIO driver, an alternative is to use ASIO4ALL. It is a virtual ASIO driver, communicating with the soundcard using Windows' native APIs. It might provide better performance with built-in soundcards and it should allow for multichannel operation with such devices (if supported by the hardware). Use a web search engine to find a download link.<div class='note'><span class='notelabel'>NOTE:</span> ASIO4ALL will usually <strong>not</strong> provide a better performance than a dedicated ASIO driver.</div>
+<p>After installing ASIO4ALL, it can be selected as follows (confirm in the post window when the server boots):<textarea class='editor'>Server.default.options.device = "ASIO : ASIO4ALL v2";</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Reference/AudioDeviceSelection.schelp'>/usr/share/SuperCollider/HelpSource/Reference/AudioDeviceSelection.schelp</a><br>link::Reference/AudioDeviceSelection::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

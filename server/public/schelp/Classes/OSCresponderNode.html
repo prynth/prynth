@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>OSCresponderNode | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>OSCresponderNode | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'OSCresponderNode';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>OSCresponderNode:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -34,8 +39,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Listening%20to%20data%20from%20the%20server'>Listening to data from the server</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Watching%20for%20something%20specific'>Watching for something specific</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Watching%20for%20errors'>Watching for errors</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -45,14 +50,14 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>client side network responder</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/deprecated/3.9/osc/OSCresponder.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/deprecated/3.9/osc/OSCresponder.sc'>OSCresponder.sc</a></div><div id='related'>See also: <a href="./../Classes/OSCFunc.html">OSCFunc</a>, <a href="./../Classes/OSCdef.html">OSCdef</a>, <a href="./../Guides/OSC_communication.html">OSC Communication</a>, <a href="./../Classes/OSCpathResponder.html">OSCpathResponder</a>, <a href="./../Classes/NetAddr.html">NetAddr</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/deprecated/3.10/osc/OSCresponder.sc' title='/usr/share/SuperCollider/SCClassLibrary/deprecated/3.10/osc/OSCresponder.sc'>OSCresponder.sc</a></div><div id='related'>See also: <a href="./../Classes/OSCFunc.html">OSCFunc</a>, <a href="./../Classes/OSCdef.html">OSCdef</a>, <a href="./../Guides/OSC_communication.html">OSC Communication</a>, <a href="./../Classes/OSCpathResponder.html">OSCpathResponder</a>, <a href="./../Classes/NetAddr.html">NetAddr</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 <div class='note'><span class='notelabel'>NOTE:</span> This class is deprecated and will be removed in a future version of SC. Use <a href="./../Classes/OSCFunc.html">OSCFunc</a> and <a href="./../Classes/OSCdef.html">OSCdef</a> instead. They are faster, safer, and have more logical argument order than the old responder classes, and they support pattern matching and custom listening ports. Use of the older classes OSCresponder, OSCresponderNode, and OSCpathResponder can be unsafe, since responders in user and class code can override each other unintentionally.</div>
 <p>Register a function to be called upon receiving a specific command from a specific OSC address. Same interface like <a href="./../Classes/OSCresponder.html">OSCresponder</a>, but allows <strong>multiple responders to the same command</strong>.
 <p>Note that OSCresponderNode evaluates its function in the system process. In order to access the application process (e.g. for GUI access ) use { ... }.defer;
-<p>Other applications sending messages to SuperCollider should distinguish between sending messages to the server or the language. Server messages are documented in the <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a> and should be sent to the server's port - <code class='code prettyprint lang-sc'>s.addr.port</code> - which is <strong>57110</strong> by default. Messages sent to the server will not be processed by any OSCresponder in the language.
-<p>Messages from external clients that should be processed by OSCresponders must be sent to the language port, <strong>57120</strong> by default. Use <code class='code prettyprint lang-sc'>NetAddr.langPort</code> to confirm which port the SuperCollider language is listening on.
+<p>Other applications sending messages to SuperCollider should distinguish between sending messages to the server or the language. Server messages are documented in the <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a> and should be sent to the server's port - <code>s.addr.port</code> - which is <strong>57110</strong> by default. Messages sent to the server will not be processed by any OSCresponder in the language.
+<p>Messages from external clients that should be processed by OSCresponders must be sent to the language port, <strong>57120</strong> by default. Use <code>NetAddr.langPort</code> to confirm which port the SuperCollider language is listening on.
 <p>See <a href="./../Guides/OSC_communication.html">OSC Communication</a> for more details.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
@@ -65,7 +70,7 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-value' href='./../Overviews/Methods.html#value'>value</a>(<span class='argstr'>time</span>, <span class='argstr'>msg</span>, <span class='argstr'>addr</span>)</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 <h3><a class='anchor' name='Setting%20up%20OSCresponderNode%20for%20listening%20to%20a%20remote%20application'>Setting up OSCresponderNode for listening to a remote application</a></h3>
-<pre class='code prettyprint lang-sc'>// example: two SuperCollider apps communicating
+<textarea class='editor'>// example: two SuperCollider apps communicating
 
 // application 1:
 n = NetAddr("127.0.0.1", 57120); // the url should be the one of computer of app 2 (or nil)
@@ -83,21 +88,21 @@ m.sendBundle(0.0, ["/chat", "Hello App 1"], ["/chat", "Hallo Wurld"]);
 )
 
 // end application 1:
-o.remove;</pre>
+o.remove;</textarea>
 <h3><a class='anchor' name='Listening%20to%20data%20from%20_any_%20client'>Listening to data from _any_ client</a></h3>
-<pre class='code prettyprint lang-sc'>// same as above, but we set the address to nil so we can receive from anywhere
+<textarea class='editor'>// same as above, but we set the address to nil so we can receive from anywhere
 // no need for a NetAddr since we are just listening (and not sending)
 
 o = OSCresponderNode(nil, '/test', { |t, r, msg| msg.postln }).add;
-o.remove;</pre>
+o.remove;</textarea>
 <h3><a class='anchor' name='Listening%20to%20data%20from%20_any_%20client,%20but%20from%20a%20specific%20host'>Listening to data from _any_ client, but from a specific host</a></h3>
-<pre class='code prettyprint lang-sc'>// same as above, but we use a NetAddr with a port of nil, so we can receive from a specific host, but from any port
+<textarea class='editor'>// same as above, but we use a NetAddr with a port of nil, so we can receive from a specific host, but from any port
 
 n = NetAddr("127.0.0.1", nil); // the url should be the one of computer of app 2
 o = OSCresponderNode(n, '/test', { |t, r, msg| msg.postln }).add;
-o.remove;</pre>
+o.remove;</textarea>
 <h3><a class='anchor' name='Listening%20to%20data%20from%20the%20server'>Listening to data from the server</a></h3>
-<pre class='code prettyprint lang-sc'>// example from SendTrig
+<textarea class='editor'>// example from SendTrig
 
 (
 s.boot;
@@ -121,9 +126,9 @@ b = OSCresponderNode(s.addr, '/tr', { arg time, responder, msg;
 x = Synth.new("help-SendTrig");
 a.remove;
 b.remove;
-x.free;</pre>
+x.free;</textarea>
 <h3><a class='anchor' name='Watching%20for%20something%20specific'>Watching for something specific</a></h3>
-<pre class='code prettyprint lang-sc'>// end of group message
+<textarea class='editor'>// end of group message
 
 s.boot;
 
@@ -139,9 +144,9 @@ g = Group.new;
 
 g.free;
 
-a.remove;</pre>
+a.remove;</textarea>
 <h3><a class='anchor' name='Watching%20for%20errors'>Watching for errors</a></h3>
-<pre class='code prettyprint lang-sc'>// example from ServerErrorGui in crucial lib
+<textarea class='editor'>// example from ServerErrorGui in crucial lib
 
 f = OSCresponderNode(s.addr, '/fail', { arg time, responder, msg;
     {
@@ -160,6 +165,7 @@ f.add;
 // cause a failure
 Synth("gthhhhppppppp!");
 
-f.remove</pre>
+f.remove</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/OSCresponderNode.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/OSCresponderNode.schelp</a><br>link::Classes/OSCresponderNode::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/OSCresponderNode.schelp'>/usr/share/SuperCollider/HelpSource/Classes/OSCresponderNode.schelp</a><br>link::Classes/OSCresponderNode::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

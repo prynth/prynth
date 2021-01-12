@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Quant | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Quant | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Quant';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Quant:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -34,8 +39,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc2'><a href='#Automatic%20instantiation'>Automatic instantiation</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Timing%20offset%20in%20Patterns'>Timing offset in Patterns</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Extensibility:%20adding%20custom%20scheduling%20models'>Extensibility: adding custom scheduling models</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -45,7 +50,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>encapsulate quantization issues associated with EventStreamPlayer and TempoClock</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Quant.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Quant.sc'>Quant.sc</a></div></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Streams/Quant.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Streams/Quant.sc'>Quant.sc</a></div></div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>Represents the standard scheduling model for Routines, Tasks and Patterns. A Quant object stores the parameters needed to calculate the precise time when a Routine/Task/Pattern will start playing on a specified TempoClock.
@@ -83,15 +88,15 @@ var scdoc_sc_version = '3.9.3';
 <p>Every point in time can be precisely identified this way, and it can be related back easily to the Western concept of meter or time signature.<h3><a class='anchor' name='Automatic%20instantiation'>Automatic instantiation</a></h3>
 
 <p>Certain objects convert themselves into Quant objects when used with <a href="./../Classes/Routine.html#-play">Routine: -play</a>, <a href="./../Classes/Task.html#-play">Task: -play</a> or <a href="./../Classes/Pattern.html#-play">Pattern: -play</a>.<dl>
-<dt><a href="./../Classes/SimpleNumber.html">SimpleNumber</a><dd><code class='code prettyprint lang-sc'>4.0 --&gt; Quant(4.0, nil, nil)</code><dt><a href="./../Classes/Array.html">Array</a><dd><code class='code prettyprint lang-sc'>[4.0, 1.0] --&gt; Quant(4.0, 1.0, nil)</code>
-<p><code class='code prettyprint lang-sc'>[4.0, 1.0, 0.1] --&gt; Quant(4.0, 1.0, 0.1)</code><dt><a href="./../Classes/Nil.html">Nil</a><dd><code class='code prettyprint lang-sc'>nil --&gt; Quant(nil, nil, nil)</code></dl>
+<dt><a href="./../Classes/SimpleNumber.html">SimpleNumber</a><dd><code>4.0 --&gt; Quant(4.0, nil, nil)</code><dt><a href="./../Classes/Array.html">Array</a><dd><code>[4.0, 1.0] --&gt; Quant(4.0, 1.0, nil)</code>
+<p><code>[4.0, 1.0, 0.1] --&gt; Quant(4.0, 1.0, 0.1)</code><dt><a href="./../Classes/Nil.html">Nil</a><dd><code>nil --&gt; Quant(nil, nil, nil)</code></dl>
 
-<p>This simplifies the syntax:<pre class='code prettyprint lang-sc'>Routine({ ... }).play(quant: 4.0):: vs. code::Routine({ ... }).play(quant: Quant(4.0))</pre>
+<p>This simplifies the syntax:<textarea class='editor'>Routine({ ... }).play(quant: 4.0):: vs. code::Routine({ ... }).play(quant: Quant(4.0))</textarea>
 <h3><a class='anchor' name='Timing%20offset%20in%20Patterns'>Timing offset in Patterns</a></h3>
 
 <p>In some cases, you might want two patterns that are sounding at the same time to evaluate in a specific order -- for instance, the second pattern might depend upon data calculated by the first. If they are scheduled on the clock for exactly the same time, you have no control over the order of execution: the second pattern might evaluate first, in which case it would be using stale data for the pattern that should have run first.
 <p>The timing offset is a positive number, usually small, that pushes the scheduling time slightly earlier, guaranteeing that patterns with larger timing offsets will execute earlier than others. The timing offset value is saved in the event prototype, which then delays its messages to the server by exactly that number of beats.
-<p>Two patterns, scheduled for the same quant and phase but with different timing offsets, should sound exactly together.<pre class='code prettyprint lang-sc'>(
+<p>Two patterns, scheduled for the same quant and phase but with different timing offsets, should sound exactly together.<textarea class='editor'>(
 // timing offset = 0
 p = Pbind(\freq, 440, \pan, -1, \delta, 1.0, \sustain, 0.1).play(quant: [2, 0, 0]);
 // timing offest = 0.1
@@ -101,7 +106,7 @@ q = Pbind(\freq, 880, \pan, 1, \delta, 0.5, \sustain, 0.1).play(quant: [2, 0, 0.
 // p's nextBeat is x.0 - q's is x.4 or x.9 (e.g., halves of a beat minus 0.1)
 [p.nextBeat, q.nextBeat]
 
-p.stop; q.stop;</pre>
+p.stop; q.stop;</textarea>
 <h3><a class='anchor' name='Extensibility:%20adding%20custom%20scheduling%20models'>Extensibility: adding custom scheduling models</a></h3>
 
 <p>While the standard scheduling model should be sufficient for most uses, the point of using an object to encapsulate scheduling details is that you can use a different object to schedule Routines or Patterns differently. (Users are not forced to use the standard scheduling model in every case.)
@@ -109,13 +114,14 @@ p.stop; q.stop;</pre>
 <p>*new(...): create a new instance, with whatever arguments you need
 <p>nextTimeOnGrid(clock): calculate the exact beat number on the clock
 <p>Your class should also have methods asQuant, offset and offset_. If your class is a subclass of Quant, it will inherit those methods automatically.
-<p>You can also use an Event for one shot scheduling. It should at least have an entry for nextTimeOnGrid, which will usually be a function taking the arguments "self" and "clock" that returns the absolute scheduling time. Any other values needed for that calculation should also be present in the Event.<pre class='code prettyprint lang-sc'>// schedule for a random number of beats after the next integer
+<p>You can also use an Event for one shot scheduling. It should at least have an entry for nextTimeOnGrid, which will usually be a function taking the arguments "self" and "clock" that returns the absolute scheduling time. Any other values needed for that calculation should also be present in the Event.<textarea class='editor'>// schedule for a random number of beats after the next integer
 Pfuncn({ thisThread.clock.beats.debug("scheduled for"); nil }, 1)
     .play(quant: (
         nextTimeOnGrid: { |self, clock|
             clock.beats.roundUp(1).debug("clock beats") + rrand(self.lo, self.hi).debug("rand")
         },
         lo: 0, hi: 4
-    ));</pre>
+    ));</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Quant.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Quant.schelp</a><br>link::Classes/Quant::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Quant.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Quant.schelp</a><br>link::Classes/Quant::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

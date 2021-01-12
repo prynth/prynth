@@ -1,0 +1,87 @@
+<!doctype html><html lang='en'><head><title>PV_SpectralEnhance | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'PV_SpectralEnhance';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>PV_SpectralEnhance:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JoshUGens'>JoshUGens</a> | <a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>FFT'>FFT</a></span>
+</div><h1>PV_SpectralEnhance<span id='superclasses'> : <a href="../Classes/PV_ChainUGen.html">PV_ChainUGen</a> : <a href="../Classes/WidthFirstUGen.html">WidthFirstUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>A harmonic enhancer</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/JoshPV.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/JoshPV.sc'>JoshPV.sc</a></div><div id='related'>See also: <a href="./../Classes/PV_SpectralMap.html">PV_SpectralMap</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>PV_SpectralEnhance.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>buffer</span>, <span class='argstr'>numPartials: 8</span>, <span class='argstr'>ratio: 2</span>, <span class='argstr'>strength: 0.1</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>buffer<td class='argumentdesc'>
+<p>The FFT buffer to filter.<tr><td class='argumentname'>numPartials<td class='argumentdesc'>
+<p>The number of partials above each bin to add magnitude to.<tr><td class='argumentname'>ratio<td class='argumentdesc'>
+<p>The ratio between the original partial and the partials above to add harmonic content to (should be greater the 1... usually 2 or greater).<tr><td class='argumentname'>strength<td class='argumentdesc'>
+<p>A multiplier for each successive partial.<div class='note'><span class='notelabel'>NOTE:</span> How numPartials, ratio and strength are used.
+<p>If you have a bin (e.g., bin 10) with magnitude of 1, magnitude will be added to numPartial bins above that bin according to the ratio. If numPartial is 4 and the ratio is 2, magnitude will be added to bins 20, 30, 40 and 50. If strength is 0.1, bin 20 will get an additional 0.1 * the original magnitude (0.1), bin 30 will get (0.1 / 2), bin 40 will get (0.1 / 3) and bin 50 (0.1 / 4). Strength can be any positive number.</div></table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>s.boot;
+
+z = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav")
+(
+x = SynthDef(\specEnhance, {arg ratio = 2;
+    var a, chain, out;
+    a = LocalBuf.new(2048);
+    // Sin tone
+//    chain = FFT(a, SinOsc.ar(440), 0.5);
+    // sf playback
+//    chain = FFT(a, PlayBuf.ar(1, z, loop: 1));
+    // something a little more complext
+    chain = FFT(a, SinOsc.ar(440 + SinOsc.ar(1760, 0.23, 2059), 0, 0.2));
+    // MouseX controls strength
+    chain = PV_SpectralEnhance(chain, 8, ratio, MouseX.kr(0, 0.99));
+    out = IFFT(chain);
+    Out.ar(0, out.dup);
+}).play(s)
+)
+
+x.set(\ratio, 2.1)
+x.set(\ratio, 3.1)
+x.set(\ratio, 0.98)
+
+x.free;
+z.free;</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/HelpSource/Classes/PV_SpectralEnhance.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/HelpSource/Classes/PV_SpectralEnhance.schelp</a><br>link::Classes/PV_SpectralEnhance::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

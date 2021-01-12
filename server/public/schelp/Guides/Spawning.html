@@ -1,27 +1,32 @@
-<!doctype html><html lang='en'><head><title>"Spawning" and "TSpawning" | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>"Spawning" and "TSpawning" | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = '"Spawning" and "TSpawning"';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>"Spawning" and "TSpawning":</div>
-<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'></ul></div><div class='contents'>
-<div id='menubar'></div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
- | <span id='categories'><a href='./../Browse.html#SC3 vs SC2'>SC3 vs SC2</a></span>
+ | <span id='categories'><a href='./../Browse.html#Language'>Language</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Language>SC3 vs SC2'>SC3 vs SC2</a></span>
 </div><h1>"Spawning" and "TSpawning"</h1>
 <div id='summary'>The lack of the Spawn and TSpawn UGens and their various convienence classes</div>
 </div>
@@ -29,7 +34,7 @@ var scdoc_sc_version = '3.9.3';
 </div>
 
 <p>In SC2, Spawn and TSpawn were two of the most powerful and commonly used UGens. In SC3 the idea of a top level Synth in which everything is spawned is no longer valid. Synthesis is always running (at least as long as a server is) and new Synths can be created on the fly. This arrangement results in even greater flexibility than in SC2, but requires a slightly different approach.
-<p>In SC3 one can create Synths at any time simply by executing blocks of code.<pre class='code prettyprint lang-sc'>// do this
+<p>In SC3 one can create Synths at any time simply by executing blocks of code.<textarea class='editor'>// do this
 (
 x = SynthDef("Help-SynthDef", { arg out = 0;
     Out.ar(out, PinkNoise.ar(0.1))
@@ -49,16 +54,16 @@ SynthDef("help-Rand", { arg out = 0;
 }).play(s);
 )
 
-x.free;</pre>
+x.free;</textarea>
 
-<p>Clocks, such as <a href="./../Classes/SystemClock.html">SystemClock</a>, provide a way to schedule things at arbitrary points in the future. This is similar to <code class='code prettyprint lang-sc'>Synth.sched</code> in SC2.<pre class='code prettyprint lang-sc'>(
+<p>Clocks, such as <a href="./../Classes/SystemClock.html">SystemClock</a>, provide a way to schedule things at arbitrary points in the future. This is similar to <code>Synth.sched</code> in SC2.<textarea class='editor'>(
 SystemClock.sched(2.0, {
     "2.0 seconds later".postln; // this could be any code, including Synth creation
     nil // this means don't repeat
 });
-)</pre>
+)</textarea>
 
-<p>In SC3 time-based sequences of events can be implemented using Routines. A <a href="./../Classes/Routine.html">Routine</a> which yields a number can be scheduled using a clock:<pre class='code prettyprint lang-sc'>(
+<p>In SC3 time-based sequences of events can be implemented using Routines. A <a href="./../Classes/Routine.html">Routine</a> which yields a number can be scheduled using a clock:<textarea class='editor'>(
 var w, r;
 
 w = Window.new("trem", Rect(512, 256, 360, 130));
@@ -77,11 +82,11 @@ r = Routine({ arg time;
 });
 
 SystemClock.play(r);
-)</pre>
+)</textarea>
 
 <p>Note that this implementation avoids one of the stranger aspects of the SC2 approach: The need to start a Synth to schedule time-based behavior, even if no audio is involved.
 <p>Both <a href="./../Classes/SystemClock.html">SystemClock</a> and <a href="./../Classes/AppClock.html">AppClock</a> (a less accurate version which can call Cocoa primitives) have only class methods. Thus one does not create instances of them. If you need to have an individual clock to manipulate (for instance to manipulate the tempi of different sequences of events) you can use <a href="./../Classes/TempoClock.html">TempoClock</a>.
-<p>A simple SC2 Spawn example is shown below, followed by its translation into SC3 style code.<pre class='code prettyprint lang-sc'>// This will not execute in SC3
+<p>A simple SC2 Spawn example is shown below, followed by its translation into SC3 style code.<textarea class='editor'>// This will not execute in SC3
 (
 Synth.play({
     Spawn.ar(
@@ -106,9 +111,9 @@ SynthDef("help-EnvGen",{ arg out = 0;
 (
 r = Routine.new({ { Synth.new("help-EnvGen"); 1.yield; }.loop }); // loop every one second
 SystemClock.play(r);
-)</pre>
+)</textarea>
 
-<p>Note that the above example uses a precompiled <a href="./../Classes/SynthDef.html">SynthDef</a>. This results in a lower CPU spike when Synths are created than SC2-style Spawning. It is possible to create SynthDefs on the fly, if this is necessary, but a great deal of variation can be achieved with arguments, or with UGens such as <a href="./../Classes/Rand.html">Rand</a> and <a href="./../Classes/TRand.html">TRand</a>. See the section <a href="./../Overviews/SC3vsSC2.html#SynthDefsVsSynths">SuperCollider 3 versus SuperCollider 2: SynthDefsVsSynths</a> for more detail.<pre class='code prettyprint lang-sc'>// SynthDefs on the fly
+<p>Note that the above example uses a precompiled <a href="./../Classes/SynthDef.html">SynthDef</a>. This results in a lower CPU spike when Synths are created than SC2-style Spawning. It is possible to create SynthDefs on the fly, if this is necessary, but a great deal of variation can be achieved with arguments, or with UGens such as <a href="./../Classes/Rand.html">Rand</a> and <a href="./../Classes/TRand.html">TRand</a>. See the section <a href="./../Overviews/SC3vsSC2.html#SynthDefsVsSynths">SuperCollider 3 versus SuperCollider 2: SynthDefsVsSynths</a> for more detail.<textarea class='editor'>// SynthDefs on the fly
 s.boot;
 (
 t = TempoClock.new;
@@ -125,9 +130,9 @@ r = Routine.new({
         1.yield;
     });
 }).play(t); // Note the alternative syntax: Routine.play(aClock)
-)</pre>
+)</textarea>
 
-<p>Note the alternative syntax for playing a Routine. <code class='code prettyprint lang-sc'>aClock.play(aRoutine)</code> and <code class='code prettyprint lang-sc'>aRoutine.play(aClock)</code> are functionally equivalent. The two make different things more or less convenient, like sending messages to the <a href="./../Classes/Routine.html">Routine</a> or <a href="./../Classes/Clock.html">Clock</a>. (See the play helpfile for a more detailed discussion.) For instance:<pre class='code prettyprint lang-sc'>(
+<p>Note the alternative syntax for playing a Routine. <code>aClock.play(aRoutine)</code> and <code>aRoutine.play(aClock)</code> are functionally equivalent. The two make different things more or less convenient, like sending messages to the <a href="./../Classes/Routine.html">Routine</a> or <a href="./../Classes/Clock.html">Clock</a>. (See the play helpfile for a more detailed discussion.) For instance:<textarea class='editor'>(
 // this, that and the other
 r = Routine.new({var i = 0; { ("this: " ++ i).postln; i = i + 1; 1.yield; }.loop });
 q = Routine.new({var i = 0; { ("that: " ++ i).postln; i = i + 1; 1.yield; }.loop });
@@ -153,9 +158,9 @@ c.clear;        // clear everything scheduled in c, i.e. this
 c.play(r);        // since it wasn't stopped, we don't have to reset this
             // and it picks up where it left off
 
-c.stop;            // stop c, destroy its scheduler, and release its OS thread</pre>
+c.stop;            // stop c, destroy its scheduler, and release its OS thread</textarea>
 
-<p>For convenience pauseable scheduling can be implemented with a <a href="./../Classes/Task.html">Task</a>. <code class='code prettyprint lang-sc'>Task.new</code> takes two arguments, a function and a clock, and creates it's own <a href="./../Classes/Routine.html">Routine</a>. If you don't specify a clock, it will create a <a href="./../Classes/TempoClock.html">TempoClock</a> for you. Since you don't have to explicitly create a <a href="./../Classes/Clock.html">Clock</a> or <a href="./../Classes/Routine.html">Routine</a>, use of <a href="./../Classes/Task.html">Task</a> can result in code that is a little more compact.<pre class='code prettyprint lang-sc'>(
+<p>For convenience pauseable scheduling can be implemented with a <a href="./../Classes/Task.html">Task</a>. <code>Task.new</code> takes two arguments, a function and a clock, and creates it's own <a href="./../Classes/Routine.html">Routine</a>. If you don't specify a clock, it will create a <a href="./../Classes/TempoClock.html">TempoClock</a> for you. Since you don't have to explicitly create a <a href="./../Classes/Clock.html">Clock</a> or <a href="./../Classes/Routine.html">Routine</a>, use of <a href="./../Classes/Task.html">Task</a> can result in code that is a little more compact.<textarea class='editor'>(
 t = Task.new({
     inf.do({ arg i;
         i.postln;
@@ -172,9 +177,9 @@ t.stop;            // Stop again
 t.resume;        // Restart from where you left off
 t.clock.tempo = 0.25;    // Get the Task's clock and change the tempo. This works since the
             // default is a TempoClock.
-t.pause;        // Same as t.stop</pre>
+t.pause;        // Same as t.stop</textarea>
 
-<p>TSpawn's functionality can be replicated with <a href="./../Classes/SendTrig.html">SendTrig</a> and <a href="./../Classes/OSCFunc.html">OSCFunc</a>. See their individual helpfiles for details on their arguments and functionality.<pre class='code prettyprint lang-sc'>s.boot;
+<p>TSpawn's functionality can be replicated with <a href="./../Classes/SendTrig.html">SendTrig</a> and <a href="./../Classes/OSCFunc.html">OSCFunc</a>. See their individual helpfiles for details on their arguments and functionality.<textarea class='editor'>s.boot;
 (
 // this Synth will send a trigger to the client app
 SynthDef("help-SendTrig", {
@@ -199,6 +204,7 @@ OSCFunc({
 
 // Start 'spawning'
 Synth("help-SendTrig");
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Spawning.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Spawning.schelp</a><br>link::Guides/Spawning::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/Spawning.schelp'>/usr/share/SuperCollider/HelpSource/Guides/Spawning.schelp</a><br>link::Guides/Spawning::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

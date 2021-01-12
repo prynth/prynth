@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>VDiskIn | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>VDiskIn | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'VDiskIn';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>VDiskIn:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -23,8 +28,8 @@ var scdoc_sc_version = '3.9.3';
 </ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -34,7 +39,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Stream in audio from a file, with variable rate</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/DiskIO.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/DiskIO.sc'>DiskIO.sc</a></div><div id='related'>See also: <a href="./../Classes/PlayBuf.html">PlayBuf</a>, <a href="./../Classes/BufRd.html">BufRd</a>, <a href="./../Classes/DiskIn.html">DiskIn</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Audio/DiskIO.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Audio/DiskIO.sc'>DiskIO.sc</a></div><div id='related'>See also: <a href="./../Classes/PlayBuf.html">PlayBuf</a>, <a href="./../Classes/BufRd.html">BufRd</a>, <a href="./../Classes/DiskIn.html">DiskIn</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -49,13 +54,13 @@ var scdoc_sc_version = '3.9.3';
 <p>controls the rate of playback. Values below 4 are probably fine, but the higher the value, the more disk activity there is, and the more likelihood there will be a problem.<div class='warning'><span class='warninglabel'>WARNING:</span> the rate does have a practical limit. The following must be true: rate &lt; Buffer's size / ( 2 * s.options.blockSize) e.g with typical default values, this will be 32768 / (2 * 64) = 256.</div>
 <p>If the rate is too high, the UGen will not execute, posting a warning.<tr><td class='argumentname'>loop<td class='argumentdesc'>
 <p>If loop is set to 1, the soundfile will loop.<tr><td class='argumentname'>sendID<td class='argumentdesc'>
-<p>If a sendID is given, the UGen sends an OSC message with this ID and the frame index <em>relative to the onset of the Synth</em> each time it reloads the buffer: <code class='code prettyprint lang-sc'>['/diskin', nodeID, sendID, frame]</code>. The true frame index into the file is determined by the <code class='code prettyprint lang-sc'>startFrame</code> given when reading the initial buffer's worth of data, using <a href="./../Classes/Buffer.html#-cueSoundFile">Buffer: -cueSoundFile</a> or <a href="./../Classes/Buffer.html#-read">Buffer: -read</a>. VDiskIn does not have access to the frame index used to cue the buffer. So, the frame index sent by OSC is always 0 at the start of the synth node. The user is responsible for adding the cue point: <code class='code prettyprint lang-sc'>cueStartFrame + msg[3]</code>.</table><h4>Discussion:</h4>
+<p>If a sendID is given, the UGen sends an OSC message with this ID and the frame index <em>relative to the onset of the Synth</em> each time it reloads the buffer: <code>['/diskin', nodeID, sendID, frame]</code>. The true frame index into the file is determined by the <code>startFrame</code> given when reading the initial buffer's worth of data, using <a href="./../Classes/Buffer.html#-cueSoundFile">Buffer: -cueSoundFile</a> or <a href="./../Classes/Buffer.html#-read">Buffer: -read</a>. VDiskIn does not have access to the frame index used to cue the buffer. So, the frame index sent by OSC is always 0 at the start of the synth node. The user is responsible for adding the cue point: <code>cueStartFrame + msg[3]</code>.</table><h4>Discussion:</h4>
 
 <p>This UGen will set the <a href="./../Classes/Done.html">'done' flag</a> when finished playing.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>b = Buffer.cueSoundFile(s, Platform.resourceDir +/+ "sounds/a11wlk01-44_1.aiff", 0, 1);
+<textarea class='editor'>b = Buffer.cueSoundFile(s, Platform.resourceDir +/+ "sounds/a11wlk01-44_1.aiff", 0, 1);
 
 x = { VDiskIn.ar(1, b, LFNoise2.kr(0.2).range(0.5, 2), 1, loop:1) }.play;
 
@@ -110,9 +115,9 @@ b.close; b.free;
 
 b.alloc; b.cueSoundFile(Platform.resourceDir +/+ "sounds/a11wlk01-44_1.aiff", 0); c = SoundFile(Platform.resourceDir +/+ "sounds/a11wlk01-44_1.aiff").info;
 
-x.free; b.close; b.free; o.free; // clean up eventually</pre>
+x.free; b.close; b.free; o.free; // clean up eventually</textarea>
 
-<p>The same example in OSC Messaging style, see <a href="./../Guides/NodeMessaging.html">Node Messaging</a><pre class='code prettyprint lang-sc'>// allocate a disk i/o buffer
+<p>The same example in OSC Messaging style, see <a href="./../Guides/NodeMessaging.html">Node Messaging</a><textarea class='editor'>// allocate a disk i/o buffer
 s.sendMsg("/b_alloc", 0, 65536, 1);
 
 // open an input file for this buffer, leave it open
@@ -132,6 +137,7 @@ s.sendMsg("/n_free", x); // stop reading
 
 s.sendMsg("/b_close", 0); // close the file.
 
-s.sendMsg("/b_free", 0); // frees the buffer</pre>
+s.sendMsg("/b_free", 0); // frees the buffer</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/VDiskIn.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/VDiskIn.schelp</a><br>link::Classes/VDiskIn::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/VDiskIn.schelp'>/usr/share/SuperCollider/HelpSource/Classes/VDiskIn.schelp</a><br>link::Classes/VDiskIn::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

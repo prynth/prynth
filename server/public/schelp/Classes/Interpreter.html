@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Interpreter | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Interpreter | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Interpreter';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Interpreter:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -38,8 +43,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc3'><a href='#-interpretCmdLine'>interpretCmdLine</a> </li>
 <li class='toc3'><a href='#-interpretPrintCmdLine'>interpretPrintCmdLine</a> </li>
 <li class='toc3'><a href='#-shallowCopy'>shallowCopy</a> </li>
-</ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -49,21 +54,21 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>The interpreter defines a context in which interactive commands are compiled and executed.</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Kernel.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Kernel.sc'>Kernel.sc</a></div><div id='related'>See also: <a href="./../Guides/How-to-Use-the-Interpreter.html">How to Use the Interpreter</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Core/Kernel.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Core/Kernel.sc'>Kernel.sc</a></div><div id='related'>See also: <a href="./../Guides/How-to-Use-the-Interpreter.html">How to Use the Interpreter</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>The interpreter is an object that handles the translation and execution of code at runtime. It is that what runs any program code and defines a context for it.<pre class='code prettyprint lang-sc'>(
+<p>The interpreter is an object that handles the translation and execution of code at runtime. It is that what runs any program code and defines a context for it.<textarea class='editor'>(
 a = 5 + 7;
 this.cmdLine.postln;
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Accessing'>Accessing</a></h3>
 
-<p>In the interpreter, <code class='code prettyprint lang-sc'>this</code> refers to the interpreter itself, e.g.: <code class='code prettyprint lang-sc'>this.postln</code>
-<p>The interpreter defines global variables (<code class='code prettyprint lang-sc'>a</code> … <code class='code prettyprint lang-sc'>z</code>), that can be used for interactive programming. Except these single letter variables ("interpreter variables"), all variables have to be defined by the keyword <code class='code prettyprint lang-sc'>var</code> (see: <a href="./../Reference/Assignment.html">Assignment Statements</a>, and <a href="./../Reference/Scope.html">Scoping and Closure</a>).<pre class='code prettyprint lang-sc'>// typical usage
+<p>In the interpreter, <code>this</code> refers to the interpreter itself, e.g.: <code>this.postln</code>
+<p>The interpreter defines global variables (<code>a</code> … <code>z</code>), that can be used for interactive programming. Except these single letter variables ("interpreter variables"), all variables have to be defined by the keyword <code>var</code> (see: <a href="./../Reference/Assignment.html">Assignment Statements</a>, and <a href="./../Reference/Scope.html">Scoping and Closure</a>).<textarea class='editor'>// typical usage
 a = 4;
 b = 3;
 b = b + a;
@@ -74,27 +79,27 @@ g = fork { loop { 0.1.wait; a.set(\freq, 200 + 20.0.rand2.postln) } };
 g.stop; a.free;
 
 // an overview of all the variables
-this.inspect;</pre>
-<div class='note'><span class='notelabel'>NOTE:</span> Use these variables with a bit of extra care – as they are global, they remain in memory and one piece of code may happen to interfere with another one. The variable <code class='code prettyprint lang-sc'>s</code> is by convention bound to the default server (<a href="./../Classes/Server.html">Server</a>) and should not be changed.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clearAll' href='./../Overviews/Methods.html#clearAll'>clearAll</a></h3>
+this.inspect;</textarea>
+<div class='note'><span class='notelabel'>NOTE:</span> Use these variables with a bit of extra care – as they are global, they remain in memory and one piece of code may happen to interfere with another one. The variable <code>s</code> is by convention bound to the default server (<a href="./../Classes/Server.html">Server</a>) and should not be changed.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clearAll' href='./../Overviews/Methods.html#clearAll'>clearAll</a></h3>
 <div class='method'>
-<p>set the values of the variables <code class='code prettyprint lang-sc'>a</code> through <code class='code prettyprint lang-sc'>z</code> to nil.<pre class='code prettyprint lang-sc'>x = 123;
+<p>set the values of the variables <code>a</code> through <code>z</code> to nil.<textarea class='editor'>x = 123;
 x.postln;
 this.clearAll;
-x.postln;</pre>
+x.postln;</textarea>
 </div><h3><a class='anchor' name='Compile%20&%20Interpret'>Compile &amp; Interpret</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-interpret' href='./../Overviews/Methods.html#interpret'>interpret</a>(<span class='argstr'>string</span> <span class='argstr'>... args</span>)</h3>
 <div class='method'>
-<p>Compile and execute a <a href="./../Classes/String.html">String</a>.<pre class='code prettyprint lang-sc'>this.interpret("(123 + 4000).postln");</pre>
+<p>Compile and execute a <a href="./../Classes/String.html">String</a>.<textarea class='editor'>this.interpret("(123 + 4000).postln");</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-interpretPrint' href='./../Overviews/Methods.html#interpretPrint'>interpretPrint</a>(<span class='argstr'>string</span> <span class='argstr'>... args</span>)</h3>
 <div class='method'>
-<p>Compile and execute a <a href="./../Classes/String.html">String</a>, printing the result.<pre class='code prettyprint lang-sc'>this.interpretPrint("123 + 4000");</pre>
+<p>Compile and execute a <a href="./../Classes/String.html">String</a>, printing the result.<textarea class='editor'>this.interpretPrint("123 + 4000");</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-compile' href='./../Overviews/Methods.html#compile'>compile</a>(<span class='argstr'>string</span>)</h3>
 <div class='method'>
-<p>Compile a String and return a <a href="./../Classes/Function.html">Function</a>.<pre class='code prettyprint lang-sc'>(
+<p>Compile a String and return a <a href="./../Classes/Function.html">Function</a>.<textarea class='editor'>(
 z = this.compile("(123 + 4000).postln");
 z.postln;
 z.value;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-compileFile' href='./../Overviews/Methods.html#compileFile'>compileFile</a>(<span class='argstr'>pathName</span>)</h3>
 <div class='method'>
 <p>Reads the file at pathName, compiles it and returns a Function. The file must contain a valid SuperCollider expression, naturally. This will not compile class definitions, only expressions.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-executeFile' href='./../Overviews/Methods.html#executeFile'>executeFile</a>(<span class='argstr'>pathName</span> <span class='argstr'>... args</span>)</h3>
@@ -102,27 +107,27 @@ z.value;
 <p>Reads the file at pathName, compiles it and executes it, returning the result. The file must contain a valid SuperCollider expression, naturally. This will not compile class definitions, only expressions.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cmdLine' href='./../Overviews/Methods.html#cmdLine'>cmdLine</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cmdLine' href='./../Overviews/Methods.html#cmdLine'>cmdLine</a> = value</h3>
 <div class='method'>
-<p>Returns the previously interpreted code.<pre class='code prettyprint lang-sc'>1 + 2;
-this.cmdLine</pre>
+<p>Returns the previously interpreted code.<textarea class='editor'>1 + 2;
+this.cmdLine</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-codeDump' href='./../Overviews/Methods.html#codeDump'>codeDump</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-codeDump' href='./../Overviews/Methods.html#codeDump'>codeDump</a> = value</h3>
 <div class='method'>
-<p>this interpreter variable can be set to evaluate a function with any successfully compiled code. see e.g. the class History.<pre class='code prettyprint lang-sc'>a = [ ]; // store all the code evaluated in a
+<p>this interpreter variable can be set to evaluate a function with any successfully compiled code. see e.g. the class History.<textarea class='editor'>a = [ ]; // store all the code evaluated in a
 this.codeDump = { |code| a = a.add(code) };
 1 + 3;
 f = { "hallo" };
 a.postcs;
-codeDump = nil; // reset to nil.</pre>
+codeDump = nil; // reset to nil.</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-preProcessor' href='./../Overviews/Methods.html#preProcessor'>preProcessor</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-preProcessor' href='./../Overviews/Methods.html#preProcessor'>preProcessor</a> = value</h3>
 <div class='method'>
 <p>If this is set to a function, all interactively executed code is piped through it before parsing and interpreting. This is mostly used for developing domain-specific live coding languages that piggyback off the SuperCollider editing environment.
-<p>This function is called by <a href="./../Classes/Interpreter.html#-interpretPrintCmdLine">Interpreter: -interpretPrintCmdLine</a> with two arguments: the code string and the interpreter itself.<pre class='code prettyprint lang-sc'>// silly but simple: understand a Saw for every SinOsc
+<p>This function is called by <a href="./../Classes/Interpreter.html#-interpretPrintCmdLine">Interpreter: -interpretPrintCmdLine</a> with two arguments: the code string and the interpreter itself.<textarea class='editor'>// silly but simple: understand a Saw for every SinOsc
 this.preProcessor = { |code| code.replace("SinOsc", "Saw") };
 
 { SinOsc.ar(200) * 0.1 }.play;
 
-preProcessor = nil; // reset to nil.</pre>
+preProcessor = nil; // reset to nil.</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-a' href='./../Overviews/Methods.html#a'>a</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-a' href='./../Overviews/Methods.html#a'>a</a> = value</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-b' href='./../Overviews/Methods.html#b'>b</a></h3>
@@ -183,4 +188,5 @@ preProcessor = nil; // reset to nil.</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-interpretCmdLine' href='./../Overviews/Methods.html#interpretCmdLine'>interpretCmdLine</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-interpretPrintCmdLine' href='./../Overviews/Methods.html#interpretPrintCmdLine'>interpretPrintCmdLine</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-shallowCopy' href='./../Overviews/Methods.html#shallowCopy'>shallowCopy</a></h3>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Interpreter.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Interpreter.schelp</a><br>link::Classes/Interpreter::<br></div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Interpreter.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Interpreter.schelp</a><br>link::Classes/Interpreter::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

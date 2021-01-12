@@ -1,0 +1,100 @@
+<!doctype html><html lang='en'><head><title>ArneodoCoulletTresser | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'ArneodoCoulletTresser';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>ArneodoCoulletTresser:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*categories'>categories</a> </li>
+<li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc3'><a href='#*equation'>equation</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators'>Generators</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators>Chaotic'>Chaotic</a></span>
+</div><h1>ArneodoCoulletTresser<span id='superclasses'> : <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>2-species Predator-Prey model</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/ChaosUGens/PredPrey.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/ChaosUGens/PredPrey.sc'>PredPrey.sc</a></div><div id='related'>See also: <a href="./../Classes/LotkaVolterra.html">LotkaVolterra</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>UGen implementing 4th order Runge-Kutta approximation of a 3-species Predator-Prey model as specified by Arneodo Coullet and Tresser:<textarea class='editor'>x' = x * (1.1 - x / 2 - y / 2 - z / 10)
+y' = y * (-0.5 + x / 2 + y / 10 - z / 10)
+z' = z * (alpha + 0.2 - alpha * x - y / 10 - z / 10)</textarea>
+
+<p>with <textarea class='editor'>alpha = Range(0, 2)</textarea>
+
+<p>Implemented by Till Bovermann inspired by Gary William Flake's Book "The Computational Beauty of Nature". Implementation following on Lance Putnam's chaos UGens and MCLDs ChaosUGens.
+<p><a href="http://tai-studio.org">http://tai-studio.org</a><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>ArneodoCoulletTresser.</span><a class='method-name' name='*categories' href='./../Overviews/Methods.html#categories'>categories</a></h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>ArneodoCoulletTresser.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>freq: 22050</span>, <span class='argstr'>alpha: 1.5</span>, <span class='argstr'>h: 0.05</span>, <span class='argstr'>xi: 0.5</span>, <span class='argstr'>yi: 0.5</span>, <span class='argstr'>zi: 0.5</span>, <span class='argstr'>mul: 1.0</span>, <span class='argstr'>add: 0.0</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>freq<td class='argumentdesc'>
+<p>update frequency, best set to Nyquist frequency. To modulate tonal qualities, use <code>h</code>.<tr><td class='argumentname'>alpha<td class='argumentdesc'>
+<p>meta parameter (shoud be between 0 and 2)<tr><td class='argumentname'>h<td class='argumentdesc'>
+<p>step size for the approximation<tr><td class='argumentname'>xi<td class='argumentdesc'>
+<p>initial value for x, resets the UGen when changed<tr><td class='argumentname'>yi<td class='argumentdesc'>
+<p>initial value for y, resets the UGen when changed<tr><td class='argumentname'>zi<td class='argumentdesc'>
+<p>initial value for z, resets the UGen when changed<tr><td class='argumentname'>mul<td class='argumentdesc'>
+<p>multiply <code>withthis</code><tr><td class='argumentname'>add<td class='argumentdesc'>
+<p>add <code>that</code></table></div><h3 class='method-code'><span class='method-prefix'>ArneodoCoulletTresser.</span><a class='method-name' name='*equation' href='./../Overviews/Methods.html#equation'>equation</a></h3>
+<div class='method'>
+<p>returns<textarea class='editor'>x' = x * (a - b * y)
+y' = y * (c * x - d)</textarea>
+</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>{Splay.ar(ArneodoCoulletTresser.ar(SampleRate.ir*0.5, alpha: MouseX.kr(1.2, 1.7, 4), h: MouseY.kr(0.2, 0.4, 2)) * [1, 1, 0.1])}.play</textarea>
+<textarea class='editor'>(
+Ndef(\pp).addSpec(\freq, [0.1, 24000, \exp]);
+Ndef(\pp).addSpec(\h, [0.01, 1, \exp]);
+Ndef(\pp).addSpec(\which, [0, 2, \lin]);
+Ndef(\pp).addSpec(\alpha, [1, 1.7, \lin]);
+
+Ndef(\pp, {
+    var which = \which.kr(0, 0.1);
+    var x, y, z;
+    # x, y, z = ArneodoCoulletTresser.ar(SampleRate.ir*0.5, alpha: \alpha.kr(1.5), h: \h.kr(0.01));
+    # x, y, z = [x, y, z] - 0.5 * 0.1;
+    [[x, y, z], [y, z, x]].collect{|chan|
+        SelectX.ar(which, chan);
+    }
+
+});
+)
+
+Ndef(\pp).scope;
+
+Ndef(\pp).gui;</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/ChaosUGens/HelpSource/Classes/ArneodoCoulletTresser.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/ChaosUGens/HelpSource/Classes/ArneodoCoulletTresser.schelp</a><br>link::Classes/ArneodoCoulletTresser::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

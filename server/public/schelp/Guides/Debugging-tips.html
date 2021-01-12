@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Debugging tips | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Debugging tips | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Debugging tips';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Debugging tips:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Debugging%20synthdefs'>Debugging synthdefs</a></li>
@@ -29,8 +34,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Tracing%20streams'>Tracing streams</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Debugging%20infinite%20loops%20or%20recursion'>Debugging infinite loops or recursion</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Removing%20debugging%20statements'>Removing debugging statements</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -46,9 +51,9 @@ var scdoc_sc_version = '3.9.3';
 <p>The challenge in debugging synthdefs is the invisibility of the server's operations. There are a handful of techniques to expose the output of various UGens.<h3><a class='anchor' name='SendTrig%20/%20OSCFunc'>SendTrig / OSCFunc</a></h3>
 
 <p>SendTrig is originally intended to send a trigger message back to the client, so the client can take further action on the server. However, it can be used to send any numeric value back to the client, which can then be printed out.
-<p>To print out the values, you need to create an OSCFunc as follows:<pre class='code prettyprint lang-sc'>o = OSCFunc({ |msg| msg.postln }, '/tr', s.addr);</pre>
+<p>To print out the values, you need to create an OSCFunc as follows:<textarea class='editor'>o = OSCFunc({ |msg| msg.postln }, '/tr', s.addr);</textarea>
 
-<p>Each line of output is an array with four values: <code class='code prettyprint lang-sc'>['/tr', defNode, id (from SendTrig), value (from SendTrig)]</code>.<pre class='code prettyprint lang-sc'>{    var    freq;
+<p>Each line of output is an array with four values: <code>['/tr', defNode, id (from SendTrig), value (from SendTrig)]</code>.<textarea class='editor'>{    var    freq;
     freq = LFNoise1.kr(2, 600, 800);
         // Impulse is needed to trigger the /tr message to be sent
     SendTrig.kr(Impulse.kr(4), 0, freq);
@@ -59,9 +64,9 @@ var scdoc_sc_version = '3.9.3';
 [ /tr, 1000, 0, 966.35247802734 ]
 [ /tr, 1000, 0, 629.31628417969 ]
 
-o.free;  // when done, you need to clean up the OSCFunc</pre>
+o.free;  // when done, you need to clean up the OSCFunc</textarea>
 
-<p>If you need to track multiple values, SendReply can send arrays of values back to the client.<pre class='code prettyprint lang-sc'>l = List.new;
+<p>If you need to track multiple values, SendReply can send arrays of values back to the client.<textarea class='editor'>l = List.new;
 o = OSCFunc({ |msg|
         // msg[3] is the first array value
         // [3..] means take everything in the array after that
@@ -81,31 +86,31 @@ a.free;
 o.free;  // when done, you need to clean up the OSCFunc
 
 // plot as two channels: frequencies in the top graph, amps in the bottom
-l.flat.plot(numChannels: 2);</pre>
+l.flat.plot(numChannels: 2);</textarea>
 <h3><a class='anchor' name='Polling'>Polling</a></h3>
 
-<p>Polling allows you to debug a SynthDef by printing samples of a UGen's output to the post window. To do this, use the .poll method (a shorthand for the Poll UGen), which prints 10 times per second by default.<pre class='code prettyprint lang-sc'>{ LFNoise1.kr.poll; }.play;   // default poll</pre>
+<p>Polling allows you to debug a SynthDef by printing samples of a UGen's output to the post window. To do this, use the .poll method (a shorthand for the Poll UGen), which prints 10 times per second by default.<textarea class='editor'>{ LFNoise1.kr.poll; }.play;   // default poll</textarea>
 
-<p>This can be too fast, so you can specify how many times per second the value should be printed.<pre class='code prettyprint lang-sc'>{ LFNoise1.kr.poll(3); }.play;  // poll more slowly</pre>
+<p>This can be too fast, so you can specify how many times per second the value should be printed.<textarea class='editor'>{ LFNoise1.kr.poll(3); }.play;  // poll more slowly</textarea>
 
-<p>You can also poll arrays<pre class='code prettyprint lang-sc'>{ [LFNoise1.kr, LFNoise1.kr].poll; }.play;  // poll an array</pre>
+<p>You can also poll arrays<textarea class='editor'>{ [LFNoise1.kr, LFNoise1.kr].poll; }.play;  // poll an array</textarea>
 
-<p>For more than one value or array at once, poll can become unwieldy, because so many values are printed to the screen that it is difficult to tell which is which. Labels help with this.<pre class='code prettyprint lang-sc'>{ LFNoise1.kr.poll(3, "a value"); LFNoise1.kr.poll(5, "another value"); }.play;</pre>
+<p>For more than one value or array at once, poll can become unwieldy, because so many values are printed to the screen that it is difficult to tell which is which. Labels help with this.<textarea class='editor'>{ LFNoise1.kr.poll(3, "a value"); LFNoise1.kr.poll(5, "another value"); }.play;</textarea>
 
-<p>Debugging triggers doesn't work with regular polling, because the trigger will mostly occur in between polling intervals. The output itself can be supplied instead of the number of polls per second. This way, the value is only printed when there is a trigger, rather than at a regular interval.<pre class='code prettyprint lang-sc'>{ var trig = Dust.kr; trig.poll(trig); }.play;</pre>
+<p>Debugging triggers doesn't work with regular polling, because the trigger will mostly occur in between polling intervals. The output itself can be supplied instead of the number of polls per second. This way, the value is only printed when there is a trigger, rather than at a regular interval.<textarea class='editor'>{ var trig = Dust.kr; trig.poll(trig); }.play;</textarea>
 
 <p>You can debug a value that changes infrequently in a similar way, using the Changed UGen. This only prints the value when it just changed.
-<p>Note that it will skip changes that occur immediately after a previous change, because any trigger needs to revert back to zero before triggering again.<pre class='code prettyprint lang-sc'>{ var steps = LFNoise0.kr; steps.poll(Changed.kr(steps); }.play;</pre>
+<p>Note that it will skip changes that occur immediately after a previous change, because any trigger needs to revert back to zero before triggering again.<textarea class='editor'>{ var steps = LFNoise0.kr; steps.poll(Changed.kr(steps); }.play;</textarea>
 
-<p>You can also use a seperate trigger. This is useful for having the most control over when a poll occurs.<pre class='code prettyprint lang-sc'>~synth={ arg t_trig; [LFNoise1.kr, LFNoise1.kr].poll(t_trig); }.play;
+<p>You can also use a separate trigger. This is useful for having the most control over when a poll occurs.<textarea class='editor'>~synth={ arg t_trig; [LFNoise1.kr, LFNoise1.kr].poll(t_trig); }.play;
 
 // the t_ in t_trig is shorthand to cause ~synth.set(\t_trig, 1) to trigger instead of set permanently
-~synth.set(\t_trig, 1); // run this line a couple of times</pre>
+~synth.set(\t_trig, 1); // run this line a couple of times</textarea>
 
-<p>All the examples above work the same for audio rate UGens.<pre class='code prettyprint lang-sc'>{ LFNoise1.ar.poll; }.play;</pre>
+<p>All the examples above work the same for audio rate UGens.<textarea class='editor'>{ LFNoise1.ar.poll; }.play;</textarea>
 <h3><a class='anchor' name='Trace%20control%20signals%20using%20a%20control%20bus'>Trace control signals using a control bus</a></h3>
 
-<p>Another technique to watch control values is to output the signal to a control-rate bus. Then you can access the bus using <a href="./../Classes/Bus.html#-get">Bus: -get</a> or <a href="./../Classes/Bus.html#-getSynchronous">Bus: -getSynchronous</a>. Saving the values into an Array or List is a little more straightforward with getSynchronous.<pre class='code prettyprint lang-sc'>b = Bus.control(s, 1);
+<p>Another technique to watch control values is to output the signal to a control-rate bus. Then you can access the bus using <a href="./../Classes/Bus.html#-get">Bus: -get</a> or <a href="./../Classes/Bus.html#-getSynchronous">Bus: -getSynchronous</a>. Saving the values into an Array or List is a little more straightforward with getSynchronous.<textarea class='editor'>b = Bus.control(s, 1);
 
 a = {
     var    freq;
@@ -120,14 +125,14 @@ r = fork { loop { l.add(b.getSynchronous); 0.1.wait } };
 r.stop;
 a.free;
 
-l.array.plot;  // to view the results graphically</pre>
+l.array.plot;  // to view the results graphically</textarea>
 
-<p>This works only with internal or local servers. For remote servers, the routine may be rewritten as follows.<pre class='code prettyprint lang-sc'>r = fork { loop { b.get({ |value| l.add(value) }); 0.1.wait } };</pre>
+<p>This works only with internal or local servers. For remote servers, the routine may be rewritten as follows.<textarea class='editor'>r = fork { loop { b.get({ |value| l.add(value) }); 0.1.wait } };</textarea>
 <div class='note'><span class='notelabel'>NOTE:</span> This approach is not valid for audio buses, because the data move too quickly to support 'get'.</div><h3><a class='anchor' name='Server-side%20trace'>Server-side trace</a></h3>
 
-<p>The <code class='code prettyprint lang-sc'>/n_trace</code> message causes the server to print a list of all the UGens in the node as well as their input and output values.
+<p>The <code>/n_trace</code> message causes the server to print a list of all the UGens in the node as well as their input and output values.
 <p>It takes some practice to read a synthdef trace, but it's the ultimate source of information when a synthdef is not behaving as expected. Signal flow can be identified by looking at the numbers at inputs and outputs. When a UGen's output feeds into another's input, the values will be the same at both ends.
-<p>For a concrete example, let's look at a synthdef that doesn't work. The intent is to generate a detuned sawtooth wave and run it through a set of parallel resonant filters whose cut-off frequencies are modulating randomly. We run the synth and generate the trace (reproduced below).<pre class='code prettyprint lang-sc'>SynthDef(\resonz, { |out, freq = 440|
+<p>For a concrete example, let's look at a synthdef that doesn't work. The intent is to generate a detuned sawtooth wave and run it through a set of parallel resonant filters whose cut-off frequencies are modulating randomly. We run the synth and generate the trace (reproduced below).<textarea class='editor'>SynthDef(\resonz, { |out, freq = 440|
     var    sig, ffreq;
     sig = Saw.ar([freq, freq+1], 0.2);
     ffreq = LFNoise1.kr(2, 1, 0.5);
@@ -201,12 +206,12 @@ a.free;
             out 32785.2
           unit 20 Out
             in  0 843934 3.02999e+08 9.14995e+10 -5.42883 515.506 32785.2
-            out</pre>
+            out</textarea>
 
 <p>Two problems leap out from the trace: first, there are six channels of the output (there should be 1), and second, all the outputs are well outside the audio range -1..1. The first is because we use multichannel expansion to produce an array of Resonz filters, but we don't mix them down into a single channel.
 <p>Note that there are no out of range signals prior to each Resonz. Looking at the Resonz inputs, we see that the frequency input is negative, which will blow up most digital filters.
 <p>The resonance frequency derives from multiplying an array by a LFNoise1. Tracing back (the red, italicized numbers), the LFNoise1 is outputting a negative number, where we expected it to be 0.5..1.5. But, the mul and add inputs are reversed!
-<p>If you look very carefully at the trace, you will see another problem relating to multichannel expansion. The two components of the detuned sawtooth go into alternate Resonz'es, where we expected both to go, combined, into every Resonz. To fix it, the sawtooths need to be mixed as well.<pre class='code prettyprint lang-sc'>SynthDef(\resonz, { |out, freq = 440|
+<p>If you look very carefully at the trace, you will see another problem relating to multichannel expansion. The two components of the detuned sawtooth go into alternate Resonz'es, where we expected both to go, combined, into every Resonz. To fix it, the sawtooths need to be mixed as well.<textarea class='editor'>SynthDef(\resonz, { |out, freq = 440|
     var    sig, ffreq;
     sig = Mix.ar(Saw.ar([freq, freq+1], 0.2));
     ffreq = LFNoise1.kr(2, 0.5, 1);
@@ -215,11 +220,11 @@ a.free;
 
 a = Synth(\resonz);
 a.trace;
-a.free;</pre>
+a.free;</textarea>
 <h2><a class='anchor' name='Debugging%20client-to-server%20communication'>Debugging client-to-server communication</a></h2>
 
 <p>Some bugs result from OSC messages to the server being constructed incorrectly. Julian Rohrhuber's DebugNetAddr is a convenient way to capture messages. The class may be downloaded from: <a href="http://swiki.hfbk-hamburg.de">http://swiki.hfbk-hamburg.de</a>:8888/MusicTechnology/710 .
-<p>To use it, you need to quit the currently running local server, then create a new server using a DebugNetAddr instead of a regular NetAddr. Messages will be dumped into a new document window.<pre class='code prettyprint lang-sc'>s.quit;
+<p>To use it, you need to quit the currently running local server, then create a new server using a DebugNetAddr instead of a regular NetAddr. Messages will be dumped into a new document window.<textarea class='editor'>s.quit;
 
 Server.default = s = Server.new('local-debug', DebugNetAddr("localhost", 57110));
 s.boot;
@@ -239,26 +244,26 @@ a = { SinOsc.ar(440, 0, 0.4) ! 2 }.play;
 a.free;
 
     latency nil
-        [ 11, 1001 ]</pre>
+        [ 11, 1001 ]</textarea>
 <h2><a class='anchor' name='Debugging%20client%20code'>Debugging client code</a></h2>
 
 <p>SuperCollider does not have a step trace function, which makes debugging on the client side tougher, but not impossible.<h3><a class='anchor' name='Errors'>Errors</a></h3>
 
 <p>Learning how to read SuperCollider error output is absolutely essential. Error dumps often (though not always) contain a great deal of information: what the action was, which objects are being acted upon, and how the flow of execution reached that point.
 <p>See the <a href="./../Guides/Understanding-Errors.html">Understanding errors</a> help file for a tutorial.
-<p>There's also a graphic Inspector for error dumps, which is enabled with the following command:<pre class='code prettyprint lang-sc'>Exception.debug = true;        // enable
-Exception.debug = false;    // disable</pre>
+<p>There's also a graphic Inspector for error dumps, which is enabled with the following command:<textarea class='editor'>Exception.debug = true;        // enable
+Exception.debug = false;    // disable</textarea>
 
 <p>In most cases, this will give you more information than a regular error dump. Usually the regular error dump is sufficient. If you are using Environments or prototype-style programming, the graphic inspector is indispensable.<h3><a class='anchor' name='Debug%20output%20using%20post%20statements'>Debug output using post statements</a></h3>
 
-<p>The most common approach is to insert statements to print the values of variables and expressions. Since the normal printing methods don't change the value of an expression, they can be placed in the middle of the statement without altering the processing flow. There's no significant difference between:<pre class='code prettyprint lang-sc'>if(a &gt; 0) { positive.value(a) };</pre>
+<p>The most common approach is to insert statements to print the values of variables and expressions. Since the normal printing methods don't change the value of an expression, they can be placed in the middle of the statement without altering the processing flow. There's no significant difference between:<textarea class='editor'>if(a &gt; 0) { positive.value(a) };</textarea>
 
-<p>and<pre class='code prettyprint lang-sc'>if((a &gt; 0).postln) { positive.value(a) };</pre>
+<p>and<textarea class='editor'>if((a &gt; 0).postln) { positive.value(a) };</textarea>
 
-<p>Common methods to use are:<pre class='code prettyprint lang-sc'>.postln
+<p>Common methods to use are:<textarea class='editor'>.postln
 .postcs        // post the object as a compile string
-.debug(caller)    // post the object along with a tag identifying the caller</pre>
-<pre class='code prettyprint lang-sc'>(
+.debug(caller)    // post the object along with a tag identifying the caller</textarea>
+<textarea class='editor'>(
 var    positiveFunc;
 positiveFunc = { |a|
     a.debug('positiveFunc-arg a');
@@ -270,16 +275,16 @@ if (a &gt; 0) { positiveFunc.value(a) };
 
 // output:
 positiveFunc-arg a: 5
-50</pre>
+50</textarea>
 
 <p>The caller argument is optional; however, it's very helpful for tracing the origin of erroneous values.
 <p>Another advantage of .debug is that it's easier to search for them in your source code and remove them later.
-<p>To print multiple values at one time, wrap them in an array before using .debug or .postcs. Note that if any of the array members are collections, postln will hide them behind the class name: "an Array, a Dictionary" etc. Use postcs if you expect to be posting collections.<pre class='code prettyprint lang-sc'>[val1, val2, val3].debug(\myMethod);
-[\callerTag, val1, val2, val3].postcs;</pre>
+<p>To print multiple values at one time, wrap them in an array before using .debug or .postcs. Note that if any of the array members are collections, postln will hide them behind the class name: "an Array, a Dictionary" etc. Use postcs if you expect to be posting collections.<textarea class='editor'>[val1, val2, val3].debug(\myMethod);
+[\callerTag, val1, val2, val3].postcs;</textarea>
 
 <p>By sprinkling these throughout your code, especially at the beginnings of functions or methods, the debugging output can give you a partial trace of which code blocks get visited in what order.<h3><a class='anchor' name='dumpBackTrace'>dumpBackTrace</a></h3>
 
-<p>If you discover that a particular method or function is being entered but you don't know how it got there, you can use the <code class='code prettyprint lang-sc'>.dumpBackTrace</code> method on any object. You'll get what looks like an error dump, but without the error. Execution continues normally after the stack dump.<pre class='code prettyprint lang-sc'>(
+<p>If you discover that a particular method or function is being entered but you don't know how it got there, you can use the <code>.dumpBackTrace</code> method on any object. You'll get what looks like an error dump, but without the error. Execution continues normally after the stack dump.<textarea class='editor'>(
 var    positiveFunc;
 positiveFunc = { |a|
     a.debug('positiveFunc-arg a');
@@ -303,56 +308,56 @@ CALL STACK:
         var func = &lt;instance of Function&gt;
     Process-interpretPrintCmdLine
         arg this = &lt;instance of Main&gt;
-50</pre>
+50</textarea>
 
 <p>This tells you that the function came from interpreting a closed FunctionDef (automatically created when evaluating a block of code).
-<p>In a method definition, it's recommended to use <code class='code prettyprint lang-sc'>this.dumpBackTrace</code>; in a free-standing function, there is no "this" so you should pick some arbitrary object.<h3><a class='anchor' name='Tracing%20streams'>Tracing streams</a></h3>
+<p>In a method definition, it's recommended to use <code>this.dumpBackTrace</code>; in a free-standing function, there is no "this" so you should pick some arbitrary object.<h3><a class='anchor' name='Tracing%20streams'>Tracing streams</a></h3>
 
-<p>To see the results of a pattern, use the .trace method. Each output value from the pattern gets posted to the main output.<pre class='code prettyprint lang-sc'>s.boot;
+<p>To see the results of a pattern, use the .trace method. Each output value from the pattern gets posted to the main output.<textarea class='editor'>s.boot;
 SynthDescLib.global.read;
 
 p = Pbind(\degree, Pwalk((0..14), Pstutter(Pwhite(1, 4, inf), Prand(#[-2, -1, 1, 2], inf)), Pseq(#[-1, 1], inf), 0), \delta, 0.25, \sustain, 0.2, \instrument, \default).trace.play;
 
-p.stop;</pre>
+p.stop;</textarea>
 <h3><a class='anchor' name='Debugging%20infinite%20loops%20or%20recursion'>Debugging infinite loops or recursion</a></h3>
-<pre class='code prettyprint lang-sc'>while(true);</pre>
+<textarea class='editor'>while(true);</textarea>
 
-<p>This is a bad idea. It will lock up SuperCollider and you will have to force quit. Sometimes this happens in your code and the reason isn't obvious. Debugging these situations is very painful because you might have to force quit, relaunch SuperCollider, and reload your code just to try again.<pre class='code prettyprint lang-sc'>f = { |func| func.value(func) };
-f.value(f);</pre>
+<p>This is a bad idea. It will lock up SuperCollider and you will have to force quit. Sometimes this happens in your code and the reason isn't obvious. Debugging these situations is very painful because you might have to force quit, relaunch SuperCollider, and reload your code just to try again.<textarea class='editor'>f = { |func| func.value(func) };
+f.value(f);</textarea>
 
 <p>Infinite recursion, on the other hand, is more likely to cause SuperCollider to quit unexpectedly when the execution stack runs out of space.
 <p>In macOS, inserting "post" or "debug" calls will not help with infinite loops or recursion, because posted output is held in a buffer until execution is complete. If execution never completes, you never see the output.
-<p>One useful approach is to insert statements that will cause execution to halt. The easiest is .halt, but it provides you with no information about where or how it stopped, or how it got there. If you want a more descriptive message, make up an error and throw it:<pre class='code prettyprint lang-sc'>Error("myFunction-halt").throw;</pre>
+<p>One useful approach is to insert statements that will cause execution to halt. The easiest is .halt, but it provides you with no information about where or how it stopped, or how it got there. If you want a more descriptive message, make up an error and throw it:<textarea class='editor'>Error("myFunction-halt").throw;</textarea>
 
 <p>When debugging code that crashes, place a line like this somewhere in the code. If you get the error output, you know that the infinite loop is happening after the error--so move the error.throw later and try again. If it crashes, you know the infinite loop is earlier. Eventually, after a lot of heartache, you can zero in on the location.
-<p>Here is a rogues' gallery of infinite loop gotchas--things that don't look like infinite loops, but they will kill your code quicker than you can wish you hadn't just pushed the enter key:<pre class='code prettyprint lang-sc'>i = 0;
-while (i &lt; 10) { i.postln; i = i+1 };     // crash</pre>
+<p>Here is a rogues' gallery of infinite loop gotchas--things that don't look like infinite loops, but they will kill your code quicker than you can wish you hadn't just pushed the enter key:<textarea class='editor'>i = 0;
+while (i &lt; 10) { i.postln; i = i+1 };     // crash</textarea>
 
-<p>While loop syntax is different in SuperCollider from C. The above loop means to check whether i &lt; 10 once, at the beginning of the loop, then loop if the value is true. Since the loop condition is evaluated only once, it never changes, so the loop never stops. The loop condition should be written inside a function, to wit:<pre class='code prettyprint lang-sc'>i = 0;
-while { i &lt; 10 } { i.postln; i = i+1 };</pre>
+<p>While loop syntax is different in SuperCollider from C. The above loop means to check whether i &lt; 10 once, at the beginning of the loop, then loop if the value is true. Since the loop condition is evaluated only once, it never changes, so the loop never stops. The loop condition should be written inside a function, to wit:<textarea class='editor'>i = 0;
+while { i &lt; 10 } { i.postln; i = i+1 };</textarea>
 
-<p>Routines and empty arrays:<pre class='code prettyprint lang-sc'>a = Array.new;
+<p>Routines and empty arrays:<textarea class='editor'>a = Array.new;
 r = Routine({
     loop {
         a.do({ |item| item.yield });
     }
 });
-r.next;    // crash</pre>
+r.next;    // crash</textarea>
 
 <p>This looks pretty innocent: iterate repeatedly over an array and yield each item successively. But, if the array is empty, the do loop never executes and yield never gets called. So, the outer loop{} runs forever, doing nothing.
-<p>Recursion is often used to walk through a tree structure. Tree structures are usually finite--no matter which branch you go down, eventually you will reach the end. If you have a data structure that is self-referential, you can easily get infinite recursion:<pre class='code prettyprint lang-sc'>a = (1..10);
+<p>Recursion is often used to walk through a tree structure. Tree structures are usually finite--no matter which branch you go down, eventually you will reach the end. If you have a data structure that is self-referential, you can easily get infinite recursion:<textarea class='editor'>a = (1..10);
 a.put(5, a);    // now one of the items of a is a itself
-a.postcs;        // crash--postcs has to walk through the entire collection, which loops on itself</pre>
+a.postcs;        // crash--postcs has to walk through the entire collection, which loops on itself</textarea>
 
-<p>Self-referential data structures are sometimes an indication of poor design. If this is the case, avoid them.<pre class='code prettyprint lang-sc'>a = 0;
-SystemClock.sched(2, { a.postln });    // crashes when scheduler fires the function</pre>
+<p>Self-referential data structures are sometimes an indication of poor design. If this is the case, avoid them.<textarea class='editor'>a = 0;
+SystemClock.sched(2, { a.postln });    // crashes when scheduler fires the function</textarea>
 
 <p>When a scheduled function executes, if it returns a number, the function will be rescheduled for now + the number. If the number is 0, it is effectively the same as an infinite loop.
-<p>To fix it, make sure the function returns a non-number.<pre class='code prettyprint lang-sc'>a = 0;
-SystemClock.sched(2, { a.postln; nil });</pre>
+<p>To fix it, make sure the function returns a non-number.<textarea class='editor'>a = 0;
+SystemClock.sched(2, { a.postln; nil });</textarea>
 <h3><a class='anchor' name='Removing%20debugging%20statements'>Removing debugging statements</a></h3>
 
-<p>Use formatting to help your eye locate debugging statements when it's time to remove them. SuperCollider code is usually indented. If you write your debugging statements fully left-justified, they're much easier to see.<pre class='code prettyprint lang-sc'>a = Array.new;
+<p>Use formatting to help your eye locate debugging statements when it's time to remove them. SuperCollider code is usually indented. If you write your debugging statements fully left-justified, they're much easier to see.<textarea class='editor'>a = Array.new;
 r = Routine({
     loop {
         "debugging".postln;    // looks like regular code, doesn't stand out
@@ -370,5 +375,6 @@ r = Routine({
         a.do({ |item| item.yield });
     }
 });
-r.next;    // crash</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Debugging-tips.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Debugging-tips.schelp</a><br>link::Guides/Debugging-tips::<br></div></div></body></html>
+r.next;    // crash</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/Debugging-tips.schelp'>/usr/share/SuperCollider/HelpSource/Guides/Debugging-tips.schelp</a><br>link::Guides/Debugging-tips::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

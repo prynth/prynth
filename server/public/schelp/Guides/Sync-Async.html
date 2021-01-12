@@ -1,27 +1,32 @@
-<!doctype html><html lang='en'><head><title>Synchronous and Asynchronous Execution | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Synchronous and Asynchronous Execution | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Synchronous and Asynchronous Execution';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Synchronous and Asynchronous Execution:</div>
-<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'></ul></div><div class='contents'>
-<div id='menubar'></div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
- | <span id='categories'><a href='./../Browse.html#SC3 vs SC2'>SC3 vs SC2</a></span>
+ | <span id='categories'><a href='./../Browse.html#Language'>Language</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Language>SC3 vs SC2'>SC3 vs SC2</a></span>
 </div><h1>Synchronous and Asynchronous Execution</h1>
 <div id='summary'>The problem of simultaneous synchronous and asynchronous execution</div>
 </div>
@@ -30,9 +35,9 @@ var scdoc_sc_version = '3.9.3';
 
 <p>Using a program such as SuperCollider introduces a number of issues regarding timing and order of execution. Realtime audio synthesis requires that samples are calculated and played back at a certain rate and on a certain schedule, in order to avoid dropouts, glitches, etc. Other tasks, such as loading a sample into memory, might take arbitrary amounts of time, and may not be needed within a definite timeframe. This is the difference between synchronous and asynchronous tasks.
 <p>Problems can arise when synchronous tasks are dependent upon the completion of asynchronous ones. For instance trying to play a sample that may or may not have been completely loaded yet.
-<p>In SC2 this was relatively simple to handle. One scheduled synchronous tasks during synthesis, i.e. within the scope of a <code class='code prettyprint lang-sc'>Synth.play</code>. Asynchronous tasks were executed in order, outside of synthesis. Thus one would first create buffers, load samples into them, and then start synthesis and play them back. The interpreter made sure that each step was only done when the necessary previous step had been completed.
+<p>In SC2 this was relatively simple to handle. One scheduled synchronous tasks during synthesis, i.e. within the scope of a <code>Synth.play</code>. Asynchronous tasks were executed in order, outside of synthesis. Thus one would first create buffers, load samples into them, and then start synthesis and play them back. The interpreter made sure that each step was only done when the necessary previous step had been completed.
 <p>In SC3 the separation of language and synth apps creates a problem: How does one side know that the other has completed necessary tasks, or in other words, how does the left hand know if the right is finished? The flexibility gained by the new architecture introduces another layer of complexity, and an additional demand on the user.
-<p>A simple way to deal with this is to execute code in blocks. In the following code, for instance, each block or line of code is dependent upon the previous one being completed.<pre class='code prettyprint lang-sc'>// Execute these one at a time
+<p>A simple way to deal with this is to execute code in blocks. In the following code, for instance, each block or line of code is dependent upon the previous one being completed.<textarea class='editor'>// Execute these one at a time
 
 // Boot the server
 s.boot;
@@ -54,10 +59,10 @@ x = Synth.new("Help-SynthDef", s);
 x.free;
 
 // Allow the client-side Synth object to be garbage collected
-x = nil;</pre>
+x = nil;</textarea>
 
-<p>In the previous example it was necessary to use interpreter variables (the variables a-z, which are declared at compile time) in order to refer to previously created objects in later blocks or lines of code. If one had declared a variable within a block of code (i.e. <code class='code prettyprint lang-sc'>var mySynth;</code>) than it would have only persisted within that scope. (See the helpfile <a href="./../Reference/Scope.html">Scoping and Closure</a> for more detail.)
-<p>This style of working, executing lines or blocks of code one at a time, can be very dynamic and flexible, and can be quite useful in a performance situation, especially when improvising. But it does raise the issues of scope and persistence. Another way around this that allows for more descriptive variable names is to use environment variables (i.e. names that begin with ~, so <code class='code prettyprint lang-sc'>~mysynth;</code> see the <a href="./../Classes/Environment.html">Environment</a> helpfile for details). However, in both methods you become responsible for making sure that objects and nodes do not persist when you no longer need them.<pre class='code prettyprint lang-sc'>(
+<p>In the previous example it was necessary to use interpreter variables (the variables a-z, which are declared at compile time) in order to refer to previously created objects in later blocks or lines of code. If one had declared a variable within a block of code (i.e. <code>var mySynth;</code>) than it would have only persisted within that scope. (See the helpfile <a href="./../Reference/Scope.html">Scoping and Closure</a> for more detail.)
+<p>This style of working, executing lines or blocks of code one at a time, can be very dynamic and flexible, and can be quite useful in a performance situation, especially when improvising. But it does raise the issues of scope and persistence. Another way around this that allows for more descriptive variable names is to use environment variables (i.e. names that begin with ~, so <code>~mysynth;</code> see the <a href="./../Classes/Environment.html">Environment</a> helpfile for details). However, in both methods you become responsible for making sure that objects and nodes do not persist when you no longer need them.<textarea class='editor'>(
 SynthDef("Help-SynthDef", { arg out = 0;
     Out.ar(out, PinkNoise.ar(0.1))
 }).send(s);
@@ -73,9 +78,9 @@ SynthDef("Help-SynthDef", { arg out = 0;
 ~mysynth.postln;
 
 // so remove it from the Environment so that the Synth will be garbage collected
-currentEnvironment.removeAt(\mysynth);</pre>
+currentEnvironment.removeAt(\mysynth);</textarea>
 
-<p>But what if you want to have one block of code which contains a number of synchronous and asynchronous tasks. The following will cause an error, as the <a href="./../Classes/SynthDef.html">SynthDef</a> that the server needs has not yet been received.<pre class='code prettyprint lang-sc'>// Doing this all at once produces the error "FAILURE /s_new SynthDef not found"
+<p>But what if you want to have one block of code which contains a number of synchronous and asynchronous tasks. The following will cause an error, as the <a href="./../Classes/SynthDef.html">SynthDef</a> that the server needs has not yet been received.<textarea class='editor'>// Doing this all at once produces the error "FAILURE /s_new SynthDef not found"
 (
 var name;
 name = "Rand-SynthDef" ++ 400.0.rand; // use a random name to ensure it's not already loaded
@@ -85,9 +90,9 @@ SynthDef(name, { arg out=0;
 }).send(s);
 
 Synth.new(name, s);
-)</pre>
+)</textarea>
 
-<p>A crude solution would be to schedule the dependant code for execution after a seemingly sufficient delay using a clock.<pre class='code prettyprint lang-sc'>// This one works since the def gets to the server app first
+<p>A crude solution would be to schedule the dependant code for execution after a seemingly sufficient delay using a clock.<textarea class='editor'>// This one works since the def gets to the server app first
 (
 var name;
 name = "Rand-SynthDef" ++ 400.0.rand;
@@ -97,17 +102,17 @@ SynthDef(name, { arg out = 0;
 }).send(s);
 
 SystemClock.sched(0.05, {Synth.new(name, s);}); // create a Synth after 0.05 seconds
-)</pre>
+)</textarea>
 
 <p>Although this works, it's not very elegant or efficient. What would be better would be to have the next thing execute immediately upon the previous thing's completion. To explore this, we'll look at an example which is already implemented.
-<p>You may have realized that first example above was needlessly complex. SynthDef-play will do all of this compilation, sending, and Synth creation in one stroke of the enter key.<pre class='code prettyprint lang-sc'>// All at once
+<p>You may have realized that first example above was needlessly complex. SynthDef-play will do all of this compilation, sending, and Synth creation in one stroke of the enter key.<textarea class='editor'>// All at once
 (
 SynthDef("Help-SynthDef", { arg out = 0;
     Out.ar(out, PinkNoise.ar(0.1))
 }).play(s);
-)</pre>
+)</textarea>
 
-<p>Let's take a look at the method definition for SynthDef-play and see what it does.<pre class='code prettyprint lang-sc'>    play { arg target,args,addAction=\addToTail;
+<p>Let's take a look at the method definition for SynthDef-play and see what it does.<textarea class='editor'>    play { arg target,args,addAction=\addToTail;
         var synth, msg;
         target = target.asTarget;
 
@@ -115,29 +120,29 @@ SynthDef("Help-SynthDef", { arg out = 0;
         msg = synth.newMsg(target, addAction, args);// make a message that will add a synth node
         this.send(target.server, msg); // ** send the def, and the message as a completion message
         ^synth // return the Synth object
-    }</pre>
+    }</textarea>
 
-<p>This might seem a little complicated if you're not used to mucking about in class definitions, but the important part is the second argument to <code class='code prettyprint lang-sc'>this.send(target.server, msg);</code>. This argument is a completion message, it is a message that the server will execute when the send action is complete. In this case it says create a synth node on the server which corresponds to the <a href="./../Classes/Synth.html">Synth</a> object I've already created, when and only when the def has been sent to the server app. (See the helpfile <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a> for details on messaging.)
-<p>Many methods in SC have the option to include completion messages. Here we can use SynthDef-send to accomplish the same thing as SynthDef-play:<pre class='code prettyprint lang-sc'>// Compile, send, and start playing
+<p>This might seem a little complicated if you're not used to mucking about in class definitions, but the important part is the second argument to <code>this.send(target.server, msg);</code>. This argument is a completion message, it is a message that the server will execute when the send action is complete. In this case it says create a synth node on the server which corresponds to the <a href="./../Classes/Synth.html">Synth</a> object I've already created, when and only when the def has been sent to the server app. (See the helpfile <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a> for details on messaging.)
+<p>Many methods in SC have the option to include completion messages. Here we can use SynthDef-send to accomplish the same thing as SynthDef-play:<textarea class='editor'>// Compile, send, and start playing
 (
 SynthDef("Help-SynthDef", { arg out=0;
     Out.ar(out, PinkNoise.ar(0.1))
 }).send(s, ["s_new", "Help-SynthDef", x = s.nextNodeID]);
 // this is 'messaging' style, see below
 )
-s.sendMsg("n_free", x);</pre>
+s.sendMsg("n_free", x);</textarea>
 
-<p>The completion message needs to be an OSC message, but it can also be some code which when evaluated returns one:<pre class='code prettyprint lang-sc'>// Interpret some code to return a completion message. The .value is needed.
+<p>The completion message needs to be an OSC message, but it can also be some code which when evaluated returns one:<textarea class='editor'>// Interpret some code to return a completion message. The .value is needed.
 // This and the preceding example are essentially the same as SynthDef.play
 (
 SynthDef("Help-SynthDef", { arg out=0;
     Out.ar(out, PinkNoise.ar(0.1))
 }).send(s, {x = Synth.basicNew("Help-SynthDef"); x.newMsg; }.value); // 'object' style
 )
-x.free;</pre>
+x.free;</textarea>
 
-<p>If you prefer to work in 'messaging' style, this is pretty simple. If you prefer to work in 'object' style, you can use the commands like <code class='code prettyprint lang-sc'>newMsg</code>, <code class='code prettyprint lang-sc'>setMsg</code>, etc. with objects to create appropriate server messages. The two proceeding examples show the difference. See the <a href="./../Guides/NodeMessaging.html">Node Messaging</a> helpfile for more detail.
-<p>In the case of <a href="./../Classes/Buffer.html">Buffer</a> objects a function can be used as a completion message. It will be evaluated and passed the <a href="./../Classes/Buffer.html">Buffer</a> object as an argument. This will happen after the <a href="./../Classes/Buffer.html">Buffer</a> object is created, but before the message is sent to the server. It can also return a valid OSC message for the server to execute upon completion.<pre class='code prettyprint lang-sc'>(
+<p>If you prefer to work in 'messaging' style, this is pretty simple. If you prefer to work in 'object' style, you can use the commands like <code>newMsg</code>, <code>setMsg</code>, etc. with objects to create appropriate server messages. The two proceeding examples show the difference. See the <a href="./../Guides/NodeMessaging.html">Node Messaging</a> helpfile for more detail.
+<p>In the case of <a href="./../Classes/Buffer.html">Buffer</a> objects a function can be used as a completion message. It will be evaluated and passed the <a href="./../Classes/Buffer.html">Buffer</a> object as an argument. This will happen after the <a href="./../Classes/Buffer.html">Buffer</a> object is created, but before the message is sent to the server. It can also return a valid OSC message for the server to execute upon completion.<textarea class='editor'>(
 SynthDef("help-Buffer",{ arg out=0, bufnum;
     Out.ar(
         out,
@@ -148,18 +153,18 @@ SynthDef("help-Buffer",{ arg out=0, bufnum;
 y = Synth.basicNew("help-Buffer"); // not sent yet
 
 b = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav", action: { arg buffer;
-        // synth add its s_new msg to follow
-        // after the buffer read completes
-        y.newMsg(s,\addToTail,[\bufnum,buffer])
-    } // .value NOT needed, unlike in the previous example
+       // synth send its s_new msg to follow
+       // after the buffer read completes
+       s.sendBundle(nil, y.newMsg(s,[\bufnum,buffer],\addToTail));
+   }
 );
 )
 
 // when done...
 y.free;
-b.free;</pre>
+b.free;</textarea>
 
-<p>The main purpose of completion messages is to provide OSC messages for the server to execute immediately upon completion. In the case of <a href="./../Classes/Buffer.html">Buffer</a> there is essentially no difference between the following:<pre class='code prettyprint lang-sc'>(
+<p>The main purpose of completion messages is to provide OSC messages for the server to execute immediately upon completion. In the case of <a href="./../Classes/Buffer.html">Buffer</a> there is essentially no difference between the following:<textarea class='editor'>(
 b = Buffer.alloc(s, 44100,
     completionMessage: { arg buffer; ("bufnum:" + buffer).postln; }
 );
@@ -167,11 +172,11 @@ b = Buffer.alloc(s, 44100,
 
 // this is equivalent to the above
 (
-b = Buffer.alloc;
+b = Buffer.alloc(s, 44100);
 ("bufnum:" + b).postln;
-)</pre>
+)</textarea>
 
-<p>One can also evaluate a function in response to a 'done' message, or indeed any other one, using an <a href="./../Classes/OSCFunc.html">OSCFunc</a>. See its help file for details.<pre class='code prettyprint lang-sc'>(
+<p>One can also evaluate a function in response to a 'done' message, or indeed any other one, using an <a href="./../Classes/OSCFunc.html">OSCFunc</a>. See its help file for details.<textarea class='editor'>(
 SynthDef("help-SendTrig",{
     SendTrig.kr(Dust.kr(1.0), 0, 0.9);
 }).send(s);
@@ -179,18 +184,20 @@ SynthDef("help-SendTrig",{
 // register to receive this message
 a = OSCFunc({ arg msg, time;
     ("This is the done message for the SynthDef.send:" + [time, msg]).postln;
-}, '/done', a.addr).oneShot; // remove me automatically when done
+}, '/done').oneShot; // remove me automatically when done
+
 b = OSCFunc({ arg msg, time;
     [time, msg].postln;
-}, '/tr', s.addr);
+}, '/tr');
 c = OSCFunc({ arg msg;
     "this is another call".postln;
-}, '/tr', s.addr);
+}, '/tr');
 )
 
 x = Synth.new("help-SendTrig");
 b.free;
 c.free;
-x.free;</pre>
+a.free;</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Sync-Async.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Sync-Async.schelp</a><br>link::Guides/Sync-Async::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/Sync-Async.schelp'>/usr/share/SuperCollider/HelpSource/Guides/Sync-Async.schelp</a><br>link::Guides/Sync-Async::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

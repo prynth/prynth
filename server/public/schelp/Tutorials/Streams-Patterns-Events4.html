@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Understanding Streams, Patterns and Events - Part 4 | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Understanding Streams, Patterns and Events - Part 4 | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Understanding Streams, Patterns and Events - Part 4';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Understanding Streams, Patterns and Events - Part 4:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Environment'>Environment</a></li>
@@ -24,8 +29,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc1'><a href='#Value%20Patterns,%20Event%20Patterns%20and%20Pbind'>Value Patterns, Event Patterns and Pbind</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#EventStreamPlayer'>EventStreamPlayer</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Changes%20in%20SC3'>Changes in SC3</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials</span>
@@ -40,21 +45,21 @@ var scdoc_sc_version = '3.9.3';
 <p>The preceding sections showed how to use Streams and Patterns to generate complex sequences of values for a single parameter at a time.
 <p>This section covers Environments and Events, which are used to build a symbolic event framework for patterns, allowing you to control all aspects of a composition using patterns.<h2><a class='anchor' name='Environment'>Environment</a></h2>
 
-<p>An <a href="./../Classes/Environment.html">Environment</a> is an <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> mapping <a href="./../Classes/Symbol.html">Symbol</a>s to values. There is always one current Environment which is stored in the <code class='code prettyprint lang-sc'>currentEnvironment</code> class variable of class <a href="./../Classes/Object.html">Object</a>.
-<p>Symbol and value pairs may be put into the current Environment as follows:<pre class='code prettyprint lang-sc'>currentEnvironment.put(\myvariable, 999);</pre>
+<p>An <a href="./../Classes/Environment.html">Environment</a> is an <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> mapping <a href="./../Classes/Symbol.html">Symbol</a>s to values. There is always one current Environment which is stored in the <code>currentEnvironment</code> class variable of class <a href="./../Classes/Object.html">Object</a>.
+<p>Symbol and value pairs may be put into the current Environment as follows:<textarea class='editor'>currentEnvironment.put(\myvariable, 999);</textarea>
 
-<p>and retrieved from the current Environment as follows:<pre class='code prettyprint lang-sc'>currentEnvironment.at(\myvariable).postln;</pre>
+<p>and retrieved from the current Environment as follows:<textarea class='editor'>currentEnvironment.at(\myvariable).postln;</textarea>
 
-<p>The compiler provides a shorthand for the two constructs above.<pre class='code prettyprint lang-sc'>~myvariable = 888;</pre>
+<p>The compiler provides a shorthand for the two constructs above.<textarea class='editor'>~myvariable = 888;</textarea>
 
-<p>is equivalent to:<pre class='code prettyprint lang-sc'>currentEnvironment.put(\myvariable, 888);</pre>
+<p>is equivalent to:<textarea class='editor'>currentEnvironment.put(\myvariable, 888);</textarea>
 
-<p>and:<pre class='code prettyprint lang-sc'>~myvariable.postln;</pre>
+<p>and:<textarea class='editor'>~myvariable.postln;</textarea>
 
-<p>is equivalent to:<pre class='code prettyprint lang-sc'>currentEnvironment.at(\myvariable).postln;</pre>
+<p>is equivalent to:<textarea class='editor'>currentEnvironment.at(\myvariable).postln;</textarea>
 <h2><a class='anchor' name='Making%20an%20Environment'>Making an Environment</a></h2>
 
-<p>Environment has a class method <strong>make</strong> which can be used to create an <a href="./../Classes/Environment.html">Environment</a> and fill it with values. What <strong>make</strong> does is temporarily replace the current Environment with a new one, call your function where you fill the Environment with values, then it replaces the previous current Environment and returns you the new one.<pre class='code prettyprint lang-sc'>(
+<p>Environment has a class method <strong>make</strong> which can be used to create an <a href="./../Classes/Environment.html">Environment</a> and fill it with values. What <strong>make</strong> does is temporarily replace the current Environment with a new one, call your function where you fill the Environment with values, then it replaces the previous current Environment and returns you the new one.<textarea class='editor'>(
 var a;
 a = Environment.make({
     ~a = 100;
@@ -62,10 +67,10 @@ a = Environment.make({
     ~c = 300;
 });
 a.postln;
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Using%20an%20Environment'>Using an Environment</a></h2>
 
-<p>The instance method <strong>use</strong> lets you temporarily replace the current <a href="./../Classes/Environment.html">Environment</a> with one you have made. The <strong>use</strong> method returns the result of your function instead of the Environment like <strong>make</strong> does.<pre class='code prettyprint lang-sc'>(
+<p>The instance method <strong>use</strong> lets you temporarily replace the current <a href="./../Classes/Environment.html">Environment</a> with one you have made. The <strong>use</strong> method returns the result of your function instead of the Environment like <strong>make</strong> does.<textarea class='editor'>(
 var a;
 a = Environment.make({
     ~a = 10;
@@ -75,9 +80,9 @@ a = Environment.make({
 a.use({
     ~a + ~b + ~c
 }).postln;
-)</pre>
+)</textarea>
 
-<p>There is also a <strong>use</strong> class method for when you want to make and use the result from an <a href="./../Classes/Environment.html">Environment</a> directly.<pre class='code prettyprint lang-sc'>(
+<p>There is also a <strong>use</strong> class method for when you want to make and use the result from an <a href="./../Classes/Environment.html">Environment</a> directly.<textarea class='editor'>(
 var a;
 a = Environment.use({
     ~a = 10;
@@ -85,10 +90,10 @@ a = Environment.use({
     ~c = 3000;
     ~a + ~b + ~c
 }).postln;
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Calling%20Functions%20with%20arguments%20from%20the%20current%20Environment'>Calling Functions with arguments from the current Environment</a></h2>
 
-<p>It is possible to call a <a href="./../Classes/Function.html">Function</a> and have it look up any unspecified argument values from the current Environment. This is done with the <strong>valueEnvir</strong> and <strong>valueArrayEnvir</strong> methods. These methods will, for any unspecified argument value, look in the current Environment for a symbol with the same name as the argument. If the argument is not found then whatever the function defines as the default value for that argument is used.<pre class='code prettyprint lang-sc'>(
+<p>It is possible to call a <a href="./../Classes/Function.html">Function</a> and have it look up any unspecified argument values from the current Environment. This is done with the <strong>valueEnvir</strong> and <strong>valueArrayEnvir</strong> methods. These methods will, for any unspecified argument value, look in the current Environment for a symbol with the same name as the argument. If the argument is not found then whatever the function defines as the default value for that argument is used.<textarea class='editor'>(
 var f;
 
 // define a function
@@ -105,9 +110,9 @@ Environment.use({
     f.valueEnvir;        // all arguments are looked up in the current Environment
     f.valueEnvir(z: 1);    // x and y are looked up in the current Environment
 });
-)</pre>
+)</textarea>
 
-<p>Here is a somewhat contrived example of how the Environment might be used to manufacture SynthDefs. Even though the three functions below have the freq, amp and pan args declared in different orders it does not matter, because valueEnvir looks them up in the environment.<pre class='code prettyprint lang-sc'>(
+<p>Here is a somewhat contrived example of how the Environment might be used to manufacture SynthDefs. Even though the three functions below have the freq, amp and pan args declared in different orders it does not matter, because valueEnvir looks them up in the environment.<textarea class='editor'>(
 var a, b, c, n;
 
 n = 40;
@@ -148,7 +153,7 @@ Task({
         (0.5 + 2.0.rand).wait;
     });
 }).play;
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Event'>Event</a></h2>
 
 <p>The class <a href="./../Classes/Event.html">Event</a> is a subclass of <a href="./../Classes/Environment.html">Environment</a>. Events are mappings of Symbols representing names of parameters for a musical event to their value. This lets you put any information you want into an event.
@@ -157,13 +162,13 @@ Task({
 <p><a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> <h2><a class='anchor' name='Value%20Patterns,%20Event%20Patterns%20and%20Pbind'>Value Patterns, Event Patterns and Pbind</a></h2>
 
 <p>The patterns discussed in parts 2 and 3 are known as "value patterns" because their streams return a single value for each call to <strong>next</strong>. Here we introduce "event patterns" which once turned into streams, return an <a href="./../Classes/Event.html">Event</a> for each call to <strong>next</strong>.
-<p>The class <a href="./../Classes/Pbind.html">Pbind</a> provides a bridge between value patterns and event patterns. It binds symbols in each event to values obtained from a pattern. Pbind takes arguments in pairs, the first of a pair being a <a href="./../Classes/Symbol.html">Symbol</a> and the second being a value <a href="./../Classes/Pattern.html">Pattern</a>. Any object can act as a Pattern, so you can use constants as the pattern ( see <code class='code prettyprint lang-sc'>\amp</code> in the example below ).
-<p>The Pbind stream returns nil whenever the first one of its streams ends.<pre class='code prettyprint lang-sc'>Pbind( \freq, Pseq([440,880]) ).play</pre>
+<p>The class <a href="./../Classes/Pbind.html">Pbind</a> provides a bridge between value patterns and event patterns. It binds symbols in each event to values obtained from a pattern. Pbind takes arguments in pairs, the first of a pair being a <a href="./../Classes/Symbol.html">Symbol</a> and the second being a value <a href="./../Classes/Pattern.html">Pattern</a>. Any object can act as a Pattern, so you can use constants as the pattern ( see <code>\amp</code> in the example below ).
+<p>The Pbind stream returns nil whenever the first one of its streams ends.<textarea class='editor'>Pbind( \freq, Pseq([440,880]) ).play</textarea>
 
-<p>An event stream is created for a Pattern by sending it the <code class='code prettyprint lang-sc'>asStream</code> message. What Pbind does is to produce a stream which puts the values for its symbols into the event, possibly overwriting previous bindings to those symbols:<pre class='code prettyprint lang-sc'>t = Pbind( \freq, Pseq([440,880]) ).asStream;
+<p>An event stream is created for a Pattern by sending it the <code>asStream</code> message. What Pbind does is to produce a stream which puts the values for its symbols into the event, possibly overwriting previous bindings to those symbols:<textarea class='editor'>t = Pbind( \freq, Pseq([440,880]) ).asStream;
 t.next(Event.default);
 t.next(Event.default);
-t.next(Event.default);</pre>
+t.next(Event.default);</textarea>
 
 <p>When calling <a href="./../Classes/Pattern.html#-play">Pattern: -play</a> an <a href="./../Classes/EventStreamPlayer.html">EventStreamPlayer</a> is automatically generated which handles scheduling as well as passing the protoEvent into the event stream.<h2><a class='anchor' name='EventStreamPlayer'>EventStreamPlayer</a></h2>
 
@@ -173,7 +178,7 @@ t.next(Event.default);</pre>
 
 <p>In SC2, you called asEventStream on an Pattern and you'd get a stream which actually returned events.
 <p>In SC3, if you want an event stream proper you call asStream on the Event Pattern. This will give you a stream of events which you can then use to initialize an EventStreamPlayer object. You don't however need to worry about that because it is usually done for you in Pattern's play method. Also changed is that you do not pass in your protoEvent through the asStream method. It is passed in for you by the EventStreamPlayer at each call to next on the stream.
-<p>Here you can see what the stream returned from a Pbind looks like.<pre class='code prettyprint lang-sc'>(
+<p>Here you can see what the stream returned from a Pbind looks like.<textarea class='editor'>(
 var pattern, stream;
 
     // bind Symbol xyz to values obtained from a pattern
@@ -187,9 +192,9 @@ stream = pattern.asStream;
     // event Streams require a prototype event as input.
     // this example uses an empty Event as a prototype
 4.do({ stream.next(Event.new).postln; });
-)</pre>
+)</textarea>
 
-<p>Here is an example with more bindings.<pre class='code prettyprint lang-sc'>(
+<p>Here is an example with more bindings.<textarea class='editor'>(
 var pattern, stream;
 
 pattern = Pbind(
@@ -201,9 +206,9 @@ pattern = Pbind(
 stream = pattern.asStream;
 
 7.do({ stream.next(Event.new).postln; });
-)</pre>
+)</textarea>
 
-<p>The ListPatterns discussed in part 3 can be put around Event Streams to create sequences of Event Streams.<pre class='code prettyprint lang-sc'>(
+<p>The ListPatterns discussed in part 3 can be put around Event Streams to create sequences of Event Streams.<textarea class='editor'>(
 var pattern, stream;
 pattern =
     Pseq([
@@ -225,7 +230,8 @@ pattern =
     ], 3);
 stream = pattern.asStream;
 10.do({ stream.next(Event.new).postln; });
-)</pre>
+)</textarea>
 
 <p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events5.html">Understanding Streams, Patterns and Events - Part 5</a><div class='footnotes'>
-<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - It's all a part of the Big Note, but don't tell the pigs and ponies.</div></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events4.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events4.schelp</a><br>link::Tutorials/Streams-Patterns-Events4::<br></div></div></body></html>
+<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - It's all a part of the Big Note, but don't tell the pigs and ponies.</div></div><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events4.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events4.schelp</a><br>link::Tutorials/Streams-Patterns-Events4::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

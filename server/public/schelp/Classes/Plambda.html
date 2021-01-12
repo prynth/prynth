@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Plambda | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Plambda | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Plambda';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Plambda:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#classmethods'>Class methods</a></li>
@@ -25,8 +30,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc3'><a href='#-embedInStream'>embedInStream</a> </li>
 <li class='toc3'><a href='#-scope'>scope</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -36,9 +41,11 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>create a scope (namespace) for enclosed streams</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Plambda.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Plambda.sc'>Plambda.sc</a></div><div id='related'>See also: <a href="./../Classes/Penvir.html">Penvir</a>, <a href="./../Classes/Pkey.html">Pkey</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Streams/Plambda.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Streams/Plambda.sc'>Plambda.sc</a></div><div id='related'>See also: <a href="./../Classes/Penvir.html">Penvir</a>, <a href="./../Classes/Pkey.html">Pkey</a></div>
 </div>
-<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+
+<p>Plambda is used to create a namespace for patterns to share data among each other.
+<p>Used in combination with <a href="./../Classes/Plet.html">Plet</a> and <a href="./../Classes/Pget.html">Pget</a>, it allows you to get the output of a pattern from one stream and use it in another stream and as such create a dataspace for your patterns.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>Plambda.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>pattern</span>, <span class='argstr'>scope</span>)</h3>
 <div class='method'>
 <p><h4>Arguments:</h4>
@@ -53,10 +60,39 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-scope' href='./../Overviews/Methods.html#scope'>scope</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-scope' href='./../Overviews/Methods.html#scope'>scope</a> = value</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>// Plet, Pget and Plambda.
-// Plet(key, stream, return)
-// Pget(key, default, repeats)
+<textarea class='editor'>/*
 
+A simple example:
+Two patterns playing in parallel,
+sharing data between eachother
+
+*/
+(
+    // a melody playing random scale degrees
+    a = Pbind(
+        \dur, 0.125,
+        \octave, 4,
+        \degree, Plet(\melody, pattern: Pwhite(0,7))
+    );
+
+    // the bass, scale degrees sampled from the \melody variable defined above
+    b = Pbind(
+        \dur, 0.5,
+        \octave, 3,
+        \degree, Pget(\melody, default: 1, repeats: inf).trace
+    );
+
+    // Play the patterns in parallel
+    Plambda(
+        Ppar([a, b], inf)
+    ).play;
+)
+/*
+
+A more complex example:
+Three patterns running in parallel
+
+*/
 (
 SynthDef(\sine,
     { arg out=0, freq=440, sustain=0.05, pan=0, amp=0.1;
@@ -79,12 +115,13 @@ a = Plambda(
     Pbind(\note, Pget(\x, 0, 6) + [0, 5], \dur, Pstutter(inf, Prand([2/3, 1/6])))
     ], inf).trace(\eventScope) // internally, the values are shared via \eventScope
 );
+
 b = Pbindf(a, \instrument, \sine, \legato, 0.1);
 b.play
 )
 
-// this structure remains parallelizable
+// Play two copies of the complex pattern above in parallel, one of them transposed and playing with shorter durations
+Ppar([b, Pbindf(b, \ctranspose, 24, \dur, Pkey(\dur) * 0.25)]).play;</textarea>
 
-Ppar([b, Pbindf(b, \ctranspose, 24, \dur, Pkey(\dur) * 0.25)]).play;</pre>
-
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Plambda.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Plambda.schelp</a><br>link::Classes/Plambda::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Plambda.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Plambda.schelp</a><br>link::Classes/Plambda::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

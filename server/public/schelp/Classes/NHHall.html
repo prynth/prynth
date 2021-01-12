@@ -1,0 +1,69 @@
+<!doctype html><html lang='en'><head><title>NHHall | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'NHHall';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>NHHall:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Filters'>Filters</a></span>
+</div><h1>NHHall<span id='superclasses'> : <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Stereo reverb</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/NHUGens/NHHall.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/NHUGens/NHHall.sc'>NHHall.sc</a></div></div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A general-purpose stereo-to-stereo reverb. Both the early and late reflections are "true stereo," designed so that the reflections bloom outward from the panned positions of the input signal. Random modulation adds lush chorus effects to the sound.
+<p>This provides only the wet signal. A practical reverb should generally have a wet/dry mix, predelay, and post-EQ (or pre-EQ). Since these are elementary to write in SuperCollider, they are not built in.
+<p>For a mono-to-stereo reverb, turn the input signal into a stereo signal with Pan2. For a mono-to-mono reverb, turn the stereo spread up to 1 and use only the left or right output channel. It is not advisable to sum the two channels together due to the use of the Haas effect in the output taps.
+<p>The reverb can be frozen by setting the reverberation time to infinity. Empirical tests have shown that this remains stable for at least a few minutes.
+<p>This reverb was written by Nathan Ho specifically for SuperCollider, ChucK, and Auraglyph (an open source modular synth for iPad).<div class='warning'><span class='warninglabel'>WARNING:</span> There is currently a denormal number bug in this UGen that causes CPU spikes on ARM processors (e.g. Raspberry Pi).</div><div class='warning'><span class='warninglabel'>WARNING:</span> This UGen is usable but currently still undergoing minor tweaks. Expect some slight changes in sound over different versions. Eventually, this UGen will be migrated to the core SuperCollider app and backward compatibility will be guaranteed.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>NHHall.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>in</span>, <span class='argstr'>rt60: 1</span>, <span class='argstr'>stereo: 0.5</span>, <span class='argstr'>lowFreq: 200</span>, <span class='argstr'>lowRatio: 0.5</span>, <span class='argstr'>hiFreq: 4000</span>, <span class='argstr'>hiRatio: 0.5</span>, <span class='argstr'>earlyDiffusion: 0.5</span>, <span class='argstr'>lateDiffusion: 0.5</span>, <span class='argstr'>modRate: 0.2</span>, <span class='argstr'>modDepth: 0.3</span>)</h3>
+<div class='method'>
+<p>All arguments except the input are control-rate.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>Input signal.<tr><td class='argumentname'>rt60<td class='argumentdesc'>
+<p>Approximate 60dB decay time of the mid frequencies. Setting this to infinity results in an infinite hold reverb.<tr><td class='argumentname'>stereo<td class='argumentdesc'>
+<p>Rate at which audio spreads between the left and right channels. At 0, the two channel paths are kept separate. At 1, they blend together nearly instantly. In between, the stereo spread happens slowly over time.<tr><td class='argumentname'>lowFreq<td class='argumentdesc'>
+<p>The low frequency cutoff.<tr><td class='argumentname'>lowRatio<td class='argumentdesc'>
+<p>The decay rate multiplier for low frequencies. Set this to 1 to use the same decay time as the mid frequencies.<tr><td class='argumentname'>hiFreq<td class='argumentdesc'>
+<p>The high frequency cutoff.<tr><td class='argumentname'>hiRatio<td class='argumentdesc'>
+<p>The decay rate multiplier for high frequencies. Set this to 1 to use the same decay time as the mid frequencies.<tr><td class='argumentname'>earlyDiffusion<td class='argumentdesc'>
+<p>The coefficient for the early reflection Schroeder allpass filters. Ranges from 0 to 1, but most normal reverbs will use 0.5 to 0.9. Higher values have a sharper attack and add metallic coloration to the signal.
+<p>Modulation depth for early reflections. Ranges from 0 to 1.<tr><td class='argumentname'>lateDiffusion<td class='argumentdesc'>
+<p>The coefficient for the late reflection Schroeder allpass filters. Ranges from 0 to 1, but most normal reverbs will use 0.5 to 0.9. Higher values have a sharper attack and add metallic coloration to the signal.<tr><td class='argumentname'>modRate<td class='argumentdesc'>
+<p>Modulation rate for late reflections. Ranges from 0 to 1.<tr><td class='argumentname'>modDepth<td class='argumentdesc'>
+<p>Modulation depth for late reflections. Ranges from 0 to 1.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/NHUGens/HelpSource/Classes/NHHall.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/NHUGens/HelpSource/Classes/NHHall.schelp</a><br>link::Classes/NHHall::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

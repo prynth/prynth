@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>TaskProxy | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>TaskProxy | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'TaskProxy';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>TaskProxy:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -25,6 +30,7 @@ var scdoc_sc_version = '3.9.3';
 </ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-source'>source</a> </li>
 <li class='toc3'><a href='#-clear'>clear</a> </li>
+<li class='toc3'><a href='#-clock'>clock</a> </li>
 <li class='toc3'><a href='#-quant'>quant</a> </li>
 <li class='toc3'><a href='#-condition'>condition</a> </li>
 <li class='toc3'><a href='#-reset'>reset</a> </li>
@@ -63,18 +69,18 @@ var scdoc_sc_version = '3.9.3';
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
 <ul class='toc'><li class='toc2'><a href='#a)%20using%20TaskProxy%20as%20a%20player'>a) using TaskProxy as a player</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#b)%20embedding%20TaskProxy%20into%20other%20Tasks%20/%20Routines'>b) embedding TaskProxy into other Tasks / Routines</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
- | <span id='categories'><a href='./../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib>Patterns'>Patterns</a> | <a href='./../Browse.html#Live Coding'>Live Coding</a></span>
+ | <span id='categories'><a href='./../Browse.html#JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#JITLib>Patterns'>Patterns</a> | <a href='./../Browse.html#Live Coding'>Live Coding</a></span>
 </div><h1>TaskProxy<span id='superclasses'> : <a href="../Classes/PatternProxy.html">PatternProxy</a> : <a href="../Classes/Pattern.html">Pattern</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
 </h1>
 <div id='summary'>event stream reference</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/Patterns/Pdef.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/Patterns/Pdef.sc'>Pdef.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/EventPatternProxy.html">EventPatternProxy</a>, <a href="../Classes/Tdef.html">Tdef</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/Patterns/Pdef.sc' title='/usr/share/SuperCollider/SCClassLibrary/JITLib/Patterns/Pdef.sc'>Pdef.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/EventPatternProxy.html">EventPatternProxy</a>, <a href="../Classes/Tdef.html">Tdef</a></div>
 <div id='related'>See also: <a href="./../Classes/Tdef.html">Tdef</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
@@ -97,7 +103,11 @@ var scdoc_sc_version = '3.9.3';
 <p>set the source. If a quantization is given, schedule this change to the next beat the object is a <strong>routine function</strong>, which is evaluated in a protected way, so that failure will notify the proxy that it has stopped. The object can also be a <strong>pattern</strong> of time values.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clear' href='./../Overviews/Methods.html#clear'>clear</a></h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
 <div class='method'>
-<p>set the source to nil</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quant' href='./../Overviews/Methods.html#quant'>quant</a></h3>
+<p>set the source to nil</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clock' href='./../Overviews/Methods.html#clock'>clock</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clock' href='./../Overviews/Methods.html#clock'>clock</a> = value</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
+<div class='method'>
+<p>get or set the instance's default clock, used by <a href="#-play">-play</a> if no other clock is specified. Defaults to TempoClock.default.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quant' href='./../Overviews/Methods.html#quant'>quant</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quant' href='./../Overviews/Methods.html#quant'>quant</a> = <span class='argstr'>val</span></h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/PatternProxy.html'>PatternProxy</a></div>
 <div class='method'>
@@ -132,7 +142,7 @@ var scdoc_sc_version = '3.9.3';
 <p>starts the TaskProxy and creates a player. if you want to play multiple instances, use <strong>.playOnce(clock, protoEvent, quant)</strong><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>argClock<td class='argumentdesc'>
-<p>which clock to use. if nil then the TempoClock.default is used.<tr><td class='argumentname'>doReset<td class='argumentdesc'>
+<p>which clock to use. if nil then use this instance's <a href="#-clock">-clock</a>, which in turn defaults to TempoClock.default.<tr><td class='argumentname'>doReset<td class='argumentdesc'>
 <p>A <a href="./../Classes/Boolean.html">Boolean</a><tr><td class='argumentname'>quant<td class='argumentdesc'>
 <p>can be an array of [quant, phase]</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-stop' href='./../Overviews/Methods.html#stop'>stop</a></h3>
 <div class='method'>
@@ -150,7 +160,7 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-align' href='./../Overviews/Methods.html#align'>align</a>(<span class='argstr'>argQuant</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asProtected' href='./../Overviews/Methods.html#asProtected'>asProtected</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-buildForProxy' href='./../Overviews/Methods.html#buildForProxy'>buildForProxy</a>(<span class='argstr'>proxy</span>, <span class='argstr'>channelOffset: 0</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-canPause' href='./../Overviews/Methods.html#canPause'>canPause</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-constrainStream' href='./../Overviews/Methods.html#constrainStream'>constrainStream</a>(<span class='argstr'>stream</span>, <span class='argstr'>newStream</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-convertFunction' href='./../Overviews/Methods.html#convertFunction'>convertFunction</a>(<span class='argstr'>func</span>)</h3>
@@ -166,11 +176,11 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-playQuant' href='./../Overviews/Methods.html#playQuant'>playQuant</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-playQuant' href='./../Overviews/Methods.html#playQuant'>playQuant</a> = value</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-proxyControlClass' href='./../Overviews/Methods.html#proxyControlClass'>proxyControlClass</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-wakeUp' href='./../Overviews/Methods.html#wakeUp'>wakeUp</a></h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 <h3><a class='anchor' name='a)%20using%20TaskProxy%20as%20a%20player'>a) using TaskProxy as a player</a></h3>
-<pre class='code prettyprint lang-sc'>// create an empty Tdef and play it.
+<textarea class='editor'>// create an empty Tdef and play it.
 x = TaskProxy.new;
 x.play;
 
@@ -193,8 +203,8 @@ TempoClock.default.tempo = 1;
 
 x.stop;
 x.play;
-x.stop;</pre>
-<pre class='code prettyprint lang-sc'>// sound example
+x.stop;</textarea>
+<textarea class='editor'>// sound example
 
 (
 // load a synthdef
@@ -263,9 +273,9 @@ x.source = {
 ... and so on ...
 
 x.stop;
-y.stop;</pre>
+y.stop;</textarea>
 <h3><a class='anchor' name='b)%20embedding%20TaskProxy%20into%20other%20Tasks%20/%20Routines'>b) embedding TaskProxy into other Tasks / Routines</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 #a, c = { TaskProxy.new } ! 2;
 a.source = { "one".postln; 1.wait; "two".postln };
 c.source = { var z; z = Synth(\default); 0.5.wait; z.release };
@@ -310,6 +320,7 @@ Routine {
     a.asStream.play;
 
 }.play;
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/TaskProxy.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/TaskProxy.schelp</a><br>link::Classes/TaskProxy::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/TaskProxy.schelp'>/usr/share/SuperCollider/HelpSource/Classes/TaskProxy.schelp</a><br>link::Classes/TaskProxy::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>EZKnob | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>EZKnob | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'EZKnob';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>EZKnob:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -47,8 +52,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-unitView'>unitView</a> </li>
 <li class='toc3'><a href='#-valueAction'>valueAction</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -58,7 +63,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Wrapper class for label, knob, number box</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/EZKnob.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/EZKnob.sc'>EZKnob.sc</a></div><div id='related'>See also: <a href="./../Classes/Knob.html">Knob</a>, <a href="./../Classes/NumberBox.html">NumberBox</a>, <a href="./../Classes/StaticText.html">StaticText</a>, <a href="./../Classes/CompositeView.html">CompositeView</a>, <a href="./../Classes/EZGui.html">EZGui</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/EZKnob.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/EZKnob.sc'>EZKnob.sc</a></div><div id='related'>See also: <a href="./../Classes/Knob.html">Knob</a>, <a href="./../Classes/NumberBox.html">NumberBox</a>, <a href="./../Classes/StaticText.html">StaticText</a>, <a href="./../Classes/CompositeView.html">CompositeView</a>, <a href="./../Classes/EZGui.html">EZGui</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -70,20 +75,20 @@ var scdoc_sc_version = '3.9.3';
 <table class='arguments'>
 <tr><td class='argumentname'>parent<td class='argumentdesc'>
 <p>The parent view or window. If the parent is nil, then EZKnob will create its own <a href="./../Classes/Window.html">Window</a>, and place it conveniently on the screen if the bounds are a <a href="./../Classes/Point.html">Point</a>. If the bounds are a <a href="./../Classes/Rect.html">Rect</a>, then the <a href="./../Classes/Rect.html">Rect</a> determines the window bounds.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Rect.html">Rect</a> or <a href="./../Classes/Point.html">Point</a>. Default value is <code class='code prettyprint lang-sc'>160@20</code>. Make certain to choose bounds that are large enough to encompass the knob, the number box, and the label (if you use one), otherwise you may get confusing results. See the examples below.<tr><td class='argumentname'>label<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Rect.html">Rect</a> or <a href="./../Classes/Point.html">Point</a>. Default value is <code>160@20</code>. Make certain to choose bounds that are large enough to encompass the knob, the number box, and the label (if you use one), otherwise you may get confusing results. See the examples below.<tr><td class='argumentname'>label<td class='argumentdesc'>
 <p>The label. Default value is nil. If nil, then no <a href="./../Classes/StaticText.html">StaticText</a> is created.<tr><td class='argumentname'>controlSpec<td class='argumentdesc'>
-<p>The <a href="./../Classes/ControlSpec.html">ControlSpec</a> for scaling the value. If the <code class='code prettyprint lang-sc'>minVal + maxVal</code> of the spec is 0, then <code class='code prettyprint lang-sc'>centered</code> will be set to true automatically.<tr><td class='argumentname'>action<td class='argumentdesc'>
+<p>The <a href="./../Classes/ControlSpec.html">ControlSpec</a> for scaling the value. If the <code>minVal + maxVal</code> of the spec is 0, then <code>centered</code> will be set to true automatically.<tr><td class='argumentname'>action<td class='argumentdesc'>
 <p>A <a href="./../Classes/Function.html">Function</a> called when the value changes. The function is passed the EZKnob instance as its argument.<tr><td class='argumentname'>initVal<td class='argumentdesc'>
 <p>The value to initialize the knob and number box with. If nil, then it uses the <a href="./../Classes/ControlSpec.html">ControlSpec</a>'s default value.<tr><td class='argumentname'>initAction<td class='argumentdesc'>
 <p>A <a href="./../Classes/Boolean.html">Boolean</a> indicating whether the action function should be called when setting the initial value. The default is false.<tr><td class='argumentname'>labelWidth<td class='argumentdesc'>
-<p>Number of pixels width for the label. default is 60. This is only valid for the <code class='code prettyprint lang-sc'>\horz</code> layout.<tr><td class='argumentname'>knobSize<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Point.html">Point</a>. It will adjust itself to maximize the space use of <code class='code prettyprint lang-sc'>width/height</code>. By default, it uses the maximum available height, and adjusts the width accordingly.<tr><td class='argumentname'>unitWidth<td class='argumentdesc'>
+<p>Number of pixels width for the label. default is 60. This is only valid for the <code>\horz</code> layout.<tr><td class='argumentname'>knobSize<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Point.html">Point</a>. It will adjust itself to maximize the space use of <code>width/height</code>. By default, it uses the maximum available height, and adjusts the width accordingly.<tr><td class='argumentname'>unitWidth<td class='argumentdesc'>
 <p>Number of pixels width for the unit label. Default is 0. If 0, then no unitLabel is created.<tr><td class='argumentname'>labelHeight<td class='argumentdesc'>
 <p>Default is 20.<tr><td class='argumentname'>layout<td class='argumentdesc'>
-<p><code class='code prettyprint lang-sc'>\vert</code>, <code class='code prettyprint lang-sc'>vert2</code>,  <code class='code prettyprint lang-sc'>\line2</code>, or <code class='code prettyprint lang-sc'>\horz</code>. default is <code class='code prettyprint lang-sc'>\vert</code>.<tr><td class='argumentname'>gap<td class='argumentdesc'>
-<p>A <a href="./../Classes/Point.html">Point</a>. By default, the view tries to get its parent's gap, otherwise it defaults to <code class='code prettyprint lang-sc'>2@2</code>. Setting it overrides these.<tr><td class='argumentname'>margin<td class='argumentdesc'>
+<p><code>\vert</code>, <code>vert2</code>,  <code>\line2</code>, or <code>\horz</code>. default is <code>\vert</code>.<tr><td class='argumentname'>gap<td class='argumentdesc'>
+<p>A <a href="./../Classes/Point.html">Point</a>. By default, the view tries to get its parent's gap, otherwise it defaults to <code>2@2</code>. Setting it overrides these.<tr><td class='argumentname'>margin<td class='argumentdesc'>
 <p>A <a href="./../Classes/Point.html">Point</a>. This will inset the bounds occupied by the subviews of view.</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 w=Window.new.front;
 g = EZKnob( w,        // parent
             50@90,    // bounds
@@ -98,9 +103,9 @@ g.setColors(Color.grey, Color.white)
 (
     g = EZKnob(label:" test ");
     g.action_({ |ez| (ez.value.asString ++" is the value of " ++ ez).postln });
-);</pre>
+);</textarea>
 
-<p>The contained views can be accessed via the EZKnob instance variables: <code class='code prettyprint lang-sc'>labelView</code>, <code class='code prettyprint lang-sc'>knobView</code>, <code class='code prettyprint lang-sc'>numberView</code>.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<p>The contained views can be accessed via the EZKnob instance variables: <code>labelView</code>, <code>knobView</code>, <code>numberView</code>.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>EZKnob.</span><a class='method-name' name='*compactRatio' href='./../Overviews/Methods.html#compactRatio'>compactRatio</a></h3>
 <h3 class='method-code'><span class='method-prefix'>EZKnob.</span><a class='method-name' name='*compactRatio' href='./../Overviews/Methods.html#compactRatio'>compactRatio</a> = value</h3>
@@ -109,21 +114,21 @@ g.setColors(Color.grey, Color.white)
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numberView' href='./../Overviews/Methods.html#numberView'>numberView</a></h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>the <code class='code prettyprint lang-sc'>numberView</code></div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-knobView' href='./../Overviews/Methods.html#knobView'>knobView</a></h3>
+<p>the <code>numberView</code></div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-knobView' href='./../Overviews/Methods.html#knobView'>knobView</a></h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>the <code class='code prettyprint lang-sc'>knobView</code></div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-labelView' href='./../Overviews/Methods.html#labelView'>labelView</a></h3>
+<p>the <code>knobView</code></div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-labelView' href='./../Overviews/Methods.html#labelView'>labelView</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-labelView' href='./../Overviews/Methods.html#labelView'>labelView</a> = value</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/EZGui.html'>EZGui</a></div>
 <div class='method'>
-<p>Set/get the <code class='code prettyprint lang-sc'>labelView</code></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-action' href='./../Overviews/Methods.html#action'>action</a></h3>
+<p>Set/get the <code>labelView</code></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-action' href='./../Overviews/Methods.html#action'>action</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-action' href='./../Overviews/Methods.html#action'>action</a> = value</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/EZGui.html'>EZGui</a></div>
 <div class='method'>
 <p>A function to be evaluated when the value changes. Te first argument will be the EZKnob.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>(arg1)<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Function.html">Function</a> or <a href="./../Classes/FunctionList.html">FunctionList</a>. Default value is <code class='code prettyprint lang-sc'>nil</code>.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-value' href='./../Overviews/Methods.html#value'>value</a></h3>
+<p>An instance of <a href="./../Classes/Function.html">Function</a> or <a href="./../Classes/FunctionList.html">FunctionList</a>. Default value is <code>nil</code>.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-value' href='./../Overviews/Methods.html#value'>value</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-value' href='./../Overviews/Methods.html#value'>value</a> = <span class='argstr'>val</span></h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/EZGui.html'>EZGui</a></div>
 <div class='method'>
@@ -154,19 +159,19 @@ g.setColors(Color.grey, Color.white)
 <p>Sets/gets if the component views are visible.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>bool<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Boolean.html">Boolean</a>. Default is <code class='code prettyprint lang-sc'>true</code>.</table></div><h3><a class='anchor' name='Changing%20Appearance'>Changing Appearance</a></h3>
+<p>An instance of <a href="./../Classes/Boolean.html">Boolean</a>. Default is <code>true</code>.</table></div><h3><a class='anchor' name='Changing%20Appearance'>Changing Appearance</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setColors' href='./../Overviews/Methods.html#setColors'>setColors</a>(<span class='argstr'>stringBackground</span>, <span class='argstr'>stringColor</span>, <span class='argstr'>numBackground</span>, <span class='argstr'>numStringColor</span>, <span class='argstr'>numNormalColor</span>, <span class='argstr'>numTypingColor</span>, <span class='argstr'>knobColors</span>, <span class='argstr'>background</span>)</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>stringBackground<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>background</code> of the label and unit views.<tr><td class='argumentname'>stringColor<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>stringColor</code> of the label and unit views.<tr><td class='argumentname'>numBackground<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>numColor</code> of the number view.<tr><td class='argumentname'>numStringColor<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>stringColor</code> of the number view.<tr><td class='argumentname'>numNormalColor<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>normalColor</code> of the number view.<tr><td class='argumentname'>numTypingColor<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>typingColor</code> of the number view.<tr><td class='argumentname'>knobColors<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>knobColors</code> of the knob view.<tr><td class='argumentname'>background<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>background</code> of the enclosing view.</table></div></h3>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>background</code> of the label and unit views.<tr><td class='argumentname'>stringColor<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>stringColor</code> of the label and unit views.<tr><td class='argumentname'>numBackground<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>numColor</code> of the number view.<tr><td class='argumentname'>numStringColor<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>stringColor</code> of the number view.<tr><td class='argumentname'>numNormalColor<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>normalColor</code> of the number view.<tr><td class='argumentname'>numTypingColor<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>typingColor</code> of the number view.<tr><td class='argumentname'>knobColors<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>knobColors</code> of the knob view.<tr><td class='argumentname'>background<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>background</code> of the enclosing view.</table></div></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-font' href='./../Overviews/Methods.html#font'>font</a> = <span class='argstr'>font</span></h3>
 <div class='method'>
 <p>Set the Font used by all the views.<h4>Arguments:</h4>
@@ -180,7 +185,7 @@ g.setColors(Color.grey, Color.white)
 </h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-valueAction' href='./../Overviews/Methods.html#valueAction'>valueAction</a> = <span class='argstr'>val</span></h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>(    // basic use
+<textarea class='editor'>(    // basic use
     w=Window.new.front;
     g=EZKnob(w, 50@90," test  ", \freq,{|a| a.value.postln});
     g.setColors(Color.grey,Color.white);
@@ -472,6 +477,7 @@ a.do{arg a;a.view.background_(Color.grey.alpha_(0.4))};
 a
 a[0].value
 a[3].value_(0.5)
-a.collect(_.value );</pre>
+a.collect(_.value );</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/EZKnob.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/EZKnob.schelp</a><br>link::Classes/EZKnob::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/EZKnob.schelp'>/usr/share/SuperCollider/HelpSource/Classes/EZKnob.schelp</a><br>link::Classes/EZKnob::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

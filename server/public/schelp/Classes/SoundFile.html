@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>SoundFile | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>SoundFile | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'SoundFile';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>SoundFile:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -63,8 +68,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-seek'>seek</a> </li>
 <li class='toc3'><a href='#-toCSV'>toCSV</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -74,17 +79,17 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>sclang soundfile data</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Files/SoundFile.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Files/SoundFile.sc'>SoundFile.sc</a></div><div id='related'>See also: <a href="./../Classes/File.html">File</a>, <a href="./../Classes/Buffer.html">Buffer</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Files/SoundFile.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Files/SoundFile.sc'>SoundFile.sc</a></div><div id='related'>See also: <a href="./../Classes/File.html">File</a>, <a href="./../Classes/Buffer.html">Buffer</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>The SoundFile class is used to check the size, format, channels etc. when the sclang client needs this information about a SoundFile. Soundfile data can be read and modified. Soundfile data can also be read and written incrementally, so with properly designed code, there is no restriction on the file size.
-<p>In most cases you will wish to send commands to the server to get it to load SoundFiles directly into Buffers. You will not need to use this class for this. See the <a href="./../Classes/Buffer.html">Buffer</a> helpfile.<pre class='code prettyprint lang-sc'>(
+<p>In most cases you will wish to send commands to the server to get it to load SoundFiles directly into Buffers. You will not need to use this class for this. See the <a href="./../Classes/Buffer.html">Buffer</a> helpfile.<textarea class='editor'>(
 f = SoundFile.new;
 f.openRead(Platform.resourceDir +/+ "sounds/a11wlk01.wav");
 f.inspect;
 f.close;
-)</pre>
+)</textarea>
 
 <p>When reading a sound file, the headerFormat, sampleFormat, numChannels and numFrames variables will be set according to the file on disk.
 <p>When creating a new SoundFile, the format will be monophonic, 44.1 kHz, AIFF, floating-point by default. Users may override the defaults by passing the desired format strings to <a href="./../Classes/SoundFile.html#*openWrite">SoundFile: *openWrite</a>, or by using <a href="./../Classes/SoundFile.html#-headerFormat">SoundFile: -headerFormat</a>, <a href="./../Classes/SoundFile.html#-sampleFormat">SoundFile: -sampleFormat</a>, <a href="./../Classes/SoundFile.html#-numChannels">SoundFile: -numChannels</a> and <a href="./../Classes/SoundFile.html#-sampleRate">SoundFile: -sampleRate</a> <em>before</em> calling <a href="./../Classes/SoundFile.html#-openWrite">SoundFile: -openWrite</a>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
@@ -97,24 +102,24 @@ f.close;
 <tr><td class='argumentname'>pathName<td class='argumentdesc'>
 <p>Full path to the sound file. Use <a href="./../Classes/String.html#-standardizePath">String: -standardizePath</a> to resolve home-folder shortcuts such as <code>~</code>.</table><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>A new SoundFile instance if successful, or <code class='code prettyprint lang-sc'>nil</code> if file open failed. User code should check for <code class='code prettyprint lang-sc'>nil</code> before doing anything with the SoundFile object.</div></div><h3 class='method-code'><span class='method-prefix'>SoundFile.</span><a class='method-name' name='*openWrite' href='./../Overviews/Methods.html#openWrite'>openWrite</a>(<span class='argstr'>pathName</span>, <span class='argstr'>headerFormat</span>, <span class='argstr'>sampleFormat</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>sampleRate</span>)</h3>
+<p>A new SoundFile instance if successful, or <code>nil</code> if file open failed. User code should check for <code>nil</code> before doing anything with the SoundFile object.</div></div><h3 class='method-code'><span class='method-prefix'>SoundFile.</span><a class='method-name' name='*openWrite' href='./../Overviews/Methods.html#openWrite'>openWrite</a>(<span class='argstr'>pathName</span>, <span class='argstr'>headerFormat</span>, <span class='argstr'>sampleFormat</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>sampleRate</span>)</h3>
 <div class='method'>
-<p>Try to create an audio file at the given path. Note that there is no <code class='code prettyprint lang-sc'>numFrames</code> argument: the number of frames is counted after writing data into the file.<h4>Arguments:</h4>
+<p>Try to create an audio file at the given path. Note that there is no <code>numFrames</code> argument: the number of frames is counted after writing data into the file.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>pathName<td class='argumentdesc'>
 <p>Full path to the sound file. Use <a href="./../Classes/String.html#-standardizePath">String: -standardizePath</a> to resolve home-folder shortcuts such as <code>~</code>.<tr><td class='argumentname'>headerFormat<td class='argumentdesc'>
-<p>A string for the sound file format. Valid strings are listed at <a href="./../Classes/SoundFile.html#-headerFormat">SoundFile: -headerFormat</a>. If not given, the default <code class='code prettyprint lang-sc'>"AIFF"</code> is used.<tr><td class='argumentname'>sampleFormat<td class='argumentdesc'>
-<p>A string for the sample format. Valid strings are listed at <a href="./../Classes/SoundFile.html#-sampleFormat">SoundFile: -sampleFormat</a>. If not given, the default <code class='code prettyprint lang-sc'>"float"</code> is used.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>A string for the sound file format. Valid strings are listed at <a href="./../Classes/SoundFile.html#-headerFormat">SoundFile: -headerFormat</a>. If not given, the default <code>"AIFF"</code> is used.<tr><td class='argumentname'>sampleFormat<td class='argumentdesc'>
+<p>A string for the sample format. Valid strings are listed at <a href="./../Classes/SoundFile.html#-sampleFormat">SoundFile: -sampleFormat</a>. If not given, the default <code>"float"</code> is used.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
 <p>An integer number of channels (1 by default).<tr><td class='argumentname'>sampleRate<td class='argumentdesc'>
 <p>An integer sample rate (44100 by default).</table><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>A new SoundFile instance if successful, or <code class='code prettyprint lang-sc'>nil</code> if file open failed. User code should check for <code class='code prettyprint lang-sc'>nil</code> before doing anything with the SoundFile object.</div></div><h3 class='method-code'><span class='method-prefix'>SoundFile.</span><a class='method-name' name='*collect' href='./../Overviews/Methods.html#collect'>collect</a>(<span class='argstr'>path: "sounds/*"</span>)</h3>
+<p>A new SoundFile instance if successful, or <code>nil</code> if file open failed. User code should check for <code>nil</code> before doing anything with the SoundFile object.</div></div><h3 class='method-code'><span class='method-prefix'>SoundFile.</span><a class='method-name' name='*collect' href='./../Overviews/Methods.html#collect'>collect</a>(<span class='argstr'>path: "sounds/*"</span>)</h3>
 <div class='method'>
-<p>Returns an <a href="./../Classes/Array.html">Array</a> of SoundFile objects whose paths match the pattern. (The associated files are closed. These objects can be used to cue playback buffers)<pre class='code prettyprint lang-sc'>SoundFile.collect("sounds/*").do { |f| f.path.postln };</pre>
+<p>Returns an <a href="./../Classes/Array.html">Array</a> of SoundFile objects whose paths match the pattern. (The associated files are closed. These objects can be used to cue playback buffers)<textarea class='editor'>SoundFile.collect("sounds/*").do { |f| f.path.postln };</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>SoundFile.</span><a class='method-name' name='*use' href='./../Overviews/Methods.html#use'>use</a>(<span class='argstr'>path</span>, <span class='argstr'>function</span>)</h3>
 <div class='method'>
-<p>Reads the data of a SoundFile, evaluates the function (passing the file as argument) and closes it again.<pre class='code prettyprint lang-sc'>SoundFile.use(Platform.resourceDir +/+ "sounds/a11wlk01.wav", { |f| f.inspect });</pre>
-</div><h3 class='method-code'><span class='method-prefix'>SoundFile.</span><a class='method-name' name='*normalize' href='./../Overviews/Methods.html#normalize'>normalize</a>(<span class='argstr'>path</span>, <span class='argstr'>outPath</span>, <span class='argstr'>newHeaderFormat</span>, <span class='argstr'>newSampleFormat</span>, <span class='argstr'>startFrame: 0</span>, <span class='argstr'>numFrames</span>, <span class='argstr'>maxAmp: 1</span>, <span class='argstr'>linkChannels: true</span>, <span class='argstr'>chunkSize: 4194304</span>, <span class='argstr'>threaded: false</span>)</h3>
+<p>Reads the data of a SoundFile, evaluates the function (passing the file as argument) and closes it again.<textarea class='editor'>SoundFile.use(Platform.resourceDir +/+ "sounds/a11wlk01.wav", { |f| f.inspect });</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>SoundFile.</span><a class='method-name' name='*normalize' href='./../Overviews/Methods.html#normalize'>normalize</a>(<span class='argstr'>path</span>, <span class='argstr'>outPath</span>, <span class='argstr'>newHeaderFormat</span>, <span class='argstr'>newSampleFormat</span>, <span class='argstr'>startFrame: 0</span>, <span class='argstr'>numFrames</span>, <span class='argstr'>maxAmp: 1.0</span>, <span class='argstr'>linkChannels: true</span>, <span class='argstr'>chunkSize: 4194304</span>, <span class='argstr'>threaded: false</span>)</h3>
 <div class='method'>
 <p>Normalizes a soundfile to a level set by the user. The normalized audio will be written into a second file.
 <p>Using this class method (SoundFile.normalize) will automatically open the source file for you. You may also <a href="#-openRead">-openRead</a> the SoundFile yourself and call <a href="#-normalize">-normalize</a> on it. In that case, the source path is omitted because the file is already open.
@@ -122,31 +127,32 @@ f.close;
 <div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>SoundFile.</span><a class='method-name' name='*closeAll' href='./../Overviews/Methods.html#closeAll'>closeAll</a></h3>
 <h3 class='method-code'><span class='method-prefix'>SoundFile.</span><a class='method-name' name='*collectIntoBuffers' href='./../Overviews/Methods.html#collectIntoBuffers'>collectIntoBuffers</a>(<span class='argstr'>path: "sounds/*"</span>, <span class='argstr'>server</span>)</h3>
-<h3 class='method-code'><span class='method-prefix'>SoundFile.</span><a class='method-name' name='*groupNormalize' href='./../Overviews/Methods.html#groupNormalize'>groupNormalize</a>(<span class='argstr'>paths</span>, <span class='argstr'>outDir</span>, <span class='argstr'>newHeaderFormat</span>, <span class='argstr'>newSampleFormat</span>, <span class='argstr'>maxAmp: 1</span>, <span class='argstr'>chunkSize: 4194304</span>, <span class='argstr'>threaded: true</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>SoundFile.</span><a class='method-name' name='*groupNormalize' href='./../Overviews/Methods.html#groupNormalize'>groupNormalize</a>(<span class='argstr'>paths</span>, <span class='argstr'>outDir</span>, <span class='argstr'>newHeaderFormat</span>, <span class='argstr'>newSampleFormat</span>, <span class='argstr'>maxAmp: 1.0</span>, <span class='argstr'>chunkSize: 4194304</span>, <span class='argstr'>threaded: true</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>SoundFile.</span><a class='method-name' name='*openFiles' href='./../Overviews/Methods.html#openFiles'>openFiles</a></h3>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Playback'>Playback</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cue' href='./../Overviews/Methods.html#cue'>cue</a>(<span class='argstr'>ev</span>, <span class='argstr'>playNow: false</span>, <span class='argstr'>closeWhenDone: false</span>)</h3>
 <div class='method'>
-<p>Allocates a buffer and cues the SoundFile for playback. Returns an event parameterized to play that buffer. (See <a href="./../Reference/NodeEvent.html">NodeEvent</a> for a description of how events can be used to control running synths.) The event responds to <strong>play</strong>, <strong>stop</strong>, <strong>pause</strong>, <strong>resume</strong>, keeping both the file and buffer open. The file is closed and the buffer is freed when the event is sent a <strong>close</strong> message.<h4>Arguments:</h4>
+<p>Allocates a buffer and cues the SoundFile for playback. Returns an event parameterized to play that buffer. (See <a href="./../Reference/NodeEvent.html">NodeEvent</a> for a description of how events can be used to control running synths.) The event responds to <strong>play</strong>, <strong>stop</strong>, <strong>pause</strong>, <strong>resume</strong>, keeping the buffer open. The buffer is closed when the event is sent a <strong>close</strong> message.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>ev<td class='argumentdesc'>
 <p>An <a href="./../Classes/Event.html">Event</a> can passed as an argument allowing playback to be customized using the following keys:<table>
-<tr><td><strong>key</strong><td><strong>default value</strong><td><strong>what it does</strong><tr><td>bufferSize<td>65536<td><tr><td>firstFrame<td>0<td>first frame to play<tr><td>lastFrame<td>nil<td>last frame to play (nil plays to end of file)<tr><td>out:<td>0<td>sets output bus<tr><td>server:<td>Server.default<td>which server<tr><td>group:<td>1<td>what target<tr><td>addAction:<td>0<td>head/tail/before/after<tr><td>amp:<td>1<td>amplitude<tr><td>instrument:<td>nil<td>if nil SoundFile:cue determines the SynthDef (one of diskIn1, diskIn2, ...diskIn16)</table>
+<tr><td><strong>key</strong><td><strong>default value</strong><td><strong>what it does</strong><tr><td>bufferSize<td>65536<td>Must be a power of two (65536, 131072 or 262144 recommended)<tr><td>firstFrame<td>0<td>first frame to play<tr><td>lastFrame<td>nil<td>last frame to play (nil plays to end of file)<tr><td>out:<td>0<td>sets output bus<tr><td>server:<td>Server.default<td>which server<tr><td>group:<td>1<td>what target<tr><td>addAction:<td>0<td>head/tail/before/after<tr><td>amp:<td>1<td>amplitude<tr><td>instrument:<td>nil<td>if nil SoundFile:cue determines the SynthDef (one of diskIn1, diskIn2, ...diskIn16)</table>
 
-<p>Where <strong>bufferSize</strong>, <strong>firstFrame</strong>, <strong>lastFrame</strong> are for buffer and playback position, and <strong>out</strong>, <strong>server</strong>, <strong>group</strong>, <strong>addAction</strong>, <strong>amp</strong> are synth parameters. Here is the default SynthDef used for stereo files:<pre class='code prettyprint lang-sc'>SynthDef(\diskIn2, { | bufnum, out, gate = 1, sustain, amp = 1, ar = 0, dr = 0.01 |
-    Out.ar(out, DiskIn.ar(2, bufnum)
-    * Linen.kr(gate, ar, 1, dr, 2)
-    * EnvGen.kr(Env.linen(0, sustain - ar - dr max: 0 ,dr),1, doneAction: Done.freeSelf) * amp)
-});</pre>
+<p>Where <strong>bufferSize</strong>, <strong>firstFrame</strong>, <strong>lastFrame</strong> are for buffer and playback position, and <strong>out</strong>, <strong>server</strong>, <strong>group</strong>, <strong>addAction</strong>, <strong>amp</strong> are synth parameters. Here is the default SynthDef used for stereo files:<textarea class='editor'>SynthDef(\diskIn2, { |out, amp=1, bufnum, sustainTime, atk=0, rel=0, gate=1|
+    var sig = VDiskIn.ar(2, bufnum, BufRateScale.kr(bufnum));
+    var gateEnv = EnvGen.kr(Env([1, 1, 0], [sustainTime-rel, 0]));
+    var env = EnvGen.kr(Env.asr(atk, 1, rel), gate * gateEnv, doneAction: Done.freeSelf);
+    Out.ar(out, sig * env * amp)
+});</textarea>
 
-<p>The control <strong>sustain</strong> determines playback duration based on the firstFrame and lastFrame. The control <strong>gate</strong> allows early termination of the playback<tr><td class='argumentname'>playNow<td class='argumentdesc'>
-<p>This is a <a href="./../Classes/Boolean.html">Boolean</a> that determines whether the file is to be played immediately after cueing.<pre class='code prettyprint lang-sc'>f = SoundFile.collect("sounds/*");
+<p>The control <strong>sustainTime</strong> determines playback duration based on the firstFrame and lastFrame. The control <strong>gate</strong> allows early termination of the playback<tr><td class='argumentname'>playNow<td class='argumentdesc'>
+<p>This is a <a href="./../Classes/Boolean.html">Boolean</a> that determines whether the file is to be played immediately after cueing.<textarea class='editor'>f = SoundFile.collect("sounds/*");
 e = f[1].cue;
 
-e = f[1].cue( (addAction: 2, group: 1) );    // synth will play ahead of the default group</pre>
+e = f[1].cue( (addAction: 2, group: 1) );    // synth will play ahead of the default group</textarea>
 <tr><td class='argumentname'>closeWhenDone<td class='argumentdesc'>
-<p>A flag to indicate wether the <code class='code prettyprint lang-sc'>SoundFile</code> will be closed after it's done playing. Default is False.</table></div><h3><a class='anchor' name='Read/Write'>Read/Write</a></h3>
+<p>A flag to indicate whether the buffer will be closed after playback is finished. Default is False.</table></div><h3><a class='anchor' name='Read/Write'>Read/Write</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-openRead' href='./../Overviews/Methods.html#openRead'>openRead</a>(<span class='argstr'>pathName</span>)</h3>
 <div class='method'>
 <p>Read the header of a file. Answers a <a href="./../Classes/Boolean.html">Boolean</a> whether the read was successful. Sets the <a href="#-numFrames">-numFrames</a>, <a href="#-numChannels">-numChannels</a> and <a href="#-sampleRate">-sampleRate</a>. Does <strong>not</strong> set the <a href="#-headerFormat">-headerFormat</a> and <a href="#-sampleFormat">-sampleFormat</a>.<h4>Arguments:</h4>
@@ -169,7 +175,7 @@ e = f[1].cue( (addAction: 2, group: 1) );    // synth will play ahead of the def
 <p>Writes the rawArray to the sample data of the file. You must have already called <a href="#-openWrite">-openWrite</a>.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>rawArray<td class='argumentdesc'>
-<p>The raw array must be a <a href="./../Classes/FloatArray.html">FloatArray</a> or <a href="./../Classes/Signal.html">Signal</a>, with all values between -1 and 1 to avoid clipping during playback.<pre class='code prettyprint lang-sc'>(
+<p>The raw array must be a <a href="./../Classes/FloatArray.html">FloatArray</a> or <a href="./../Classes/Signal.html">Signal</a>, with all values between -1 and 1 to avoid clipping during playback.<textarea class='editor'>(
 f = SoundFile.new.headerFormat_("AIFF").sampleFormat_("int16").numChannels_(1);
 f.openWrite("sounds/sfwrite.aiff");
     // sawtooth
@@ -177,7 +183,7 @@ b = Signal.sineFill(100, (1..20).reciprocal);
     // write multiple cycles (441 * 100 = 1 sec worth)
 441.do({ f.writeData(b) });
 f.close;
-)</pre>
+)</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isOpen' href='./../Overviews/Methods.html#isOpen'>isOpen</a></h3>
 <div class='method'>
 <p>answers if the file is open.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-close' href='./../Overviews/Methods.html#close'>close</a></h3>
@@ -185,10 +191,10 @@ f.close;
 <p>closes the file.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-duration' href='./../Overviews/Methods.html#duration'>duration</a></h3>
 <div class='method'>
 <p>the duration in seconds of the file.</div><h3><a class='anchor' name='Normalizing'>Normalizing</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-normalize' href='./../Overviews/Methods.html#normalize'>normalize</a>(<span class='argstr'>outPath</span>, <span class='argstr'>newHeaderFormat</span>, <span class='argstr'>newSampleFormat</span>, <span class='argstr'>startFrame: 0</span>, <span class='argstr'>numFrames</span>, <span class='argstr'>maxAmp: 1</span>, <span class='argstr'>linkChannels: true</span>, <span class='argstr'>chunkSize: 4194304</span>, <span class='argstr'>threaded: false</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-normalize' href='./../Overviews/Methods.html#normalize'>normalize</a>(<span class='argstr'>outPath</span>, <span class='argstr'>newHeaderFormat</span>, <span class='argstr'>newSampleFormat</span>, <span class='argstr'>startFrame: 0</span>, <span class='argstr'>numFrames</span>, <span class='argstr'>maxAmp: 1.0</span>, <span class='argstr'>linkChannels: true</span>, <span class='argstr'>chunkSize: 4194304</span>, <span class='argstr'>threaded: false</span>)</h3>
 <div class='method'>
 <p>Normalizes a soundfile to a level set by the user. The normalized audio will be written into a second file.
-<p>The normalizer may be used to convert a soundfile from one sample format to another (e.g., to take a floating point soundfile produced by SuperCollider and produce an int16 or int24 soundfile suitable for use in other applications).<div class='note'><span class='notelabel'>NOTE:</span> While the normalizer is working, there is no feedback to the user. It will look like SuperCollider is hung, but it will eventually complete the operation. You can set <code class='code prettyprint lang-sc'>threaded:true</code> to get feedback but it will take slightly longer to complete.</div><h4>Arguments:</h4>
+<p>The normalizer may be used to convert a soundfile from one sample format to another (e.g., to take a floating point soundfile produced by SuperCollider and produce an int16 or int24 soundfile suitable for use in other applications).<div class='note'><span class='notelabel'>NOTE:</span> While the normalizer is working, there is no feedback to the user. It will look like SuperCollider is hung, but it will eventually complete the operation. You can set <code>threaded:true</code> to get feedback but it will take slightly longer to complete.</div><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>outPath<td class='argumentdesc'>
 <p>a path to the destination file.<tr><td class='argumentname'>newHeaderFormat<td class='argumentdesc'>
@@ -241,7 +247,7 @@ f.close;
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-seek' href='./../Overviews/Methods.html#seek'>seek</a>(<span class='argstr'>offset: 0</span>, <span class='argstr'>origin: 0</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-toCSV' href='./../Overviews/Methods.html#toCSV'>toCSV</a>(<span class='argstr'>outpath</span>, <span class='argstr'>headers</span>, <span class='argstr'>delim: ","</span>, <span class='argstr'>append: false</span>, <span class='argstr'>func</span>, <span class='argstr'>action</span>)</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>// Writing a sound file, long form:
+<textarea class='editor'>// Writing a sound file, long form:
 // Set the format variables before calling 'openWrite'
 // The Boolean answer from 'openWrite' tells you if it's safe to proceed
 (
@@ -289,6 +295,7 @@ a = { (PlayBuf.ar(1, b, rate: 440 * 1024/44100, loop: 1) * 0.1).dup }.play;
 a.free;
 
 b.free;
-File.delete(PathName.tmp +/+ "sf-help.wav");</pre>
+File.delete(PathName.tmp +/+ "sf-help.wav");</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/SoundFile.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/SoundFile.schelp</a><br>link::Classes/SoundFile::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/SoundFile.schelp'>/usr/share/SuperCollider/HelpSource/Classes/SoundFile.schelp</a><br>link::Classes/SoundFile::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

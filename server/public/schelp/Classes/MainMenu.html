@@ -1,0 +1,154 @@
+<!doctype html><html lang='en'><head><title>MainMenu | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'MainMenu';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>MainMenu:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*initBuiltInMenus'>initBuiltInMenus</a> </li>
+<li class='toc3'><a href='#*register'>register</a> </li>
+<li class='toc3'><a href='#*registerQuarkMenu'>registerQuarkMenu</a> </li>
+<li class='toc3'><a href='#*unregister'>unregister</a> </li>
+<li class='toc3'><a href='#*otherMenus'>otherMenus</a> </li>
+<li class='toc3'><a href='#*add'>add</a> </li>
+<li class='toc3'><a href='#*remove'>remove</a> </li>
+<li class='toc3'><a href='#*insert'>insert</a> </li>
+<li class='toc3'><a href='#*clear'>clear</a> </li>
+<li class='toc3'><a href='#*applicationMenu'>applicationMenu</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*buildAppMenusAction'>buildAppMenusAction</a> </li>
+<li class='toc3'><a href='#*registered'>registered</a> </li>
+<li class='toc3'><a href='#*serversMenu'>serversMenu</a> </li>
+<li class='toc3'><a href='#*unregisterQuarkMenu'>unregisterQuarkMenu</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#GUI'>GUI</a></span>
+</div><h1>MainMenu<span id='superclasses'> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
+<div id='summary'>A manager for sclang's application-level menu</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/Menu.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/Menu.sc'>Menu.sc</a></div><div id='related'>See also: <a href="./../Classes/MenuAction.html">MenuAction</a>, <a href="./../Classes/ToolBar.html">ToolBar</a>, <a href="./../Classes/MainMenu.html">MainMenu</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>This class allows control over items displayed in the sclang application-level menu. Application-level menus may not exist depending on platform — in particular, macOS and some Linux window managers have it, but Windows does not. On platforms without this feature, the methods in this class simply don't do anything.<div class='note'><span class='notelabel'>NOTE:</span> This is the menu for the sclang application, not the IDE.</div><div class='warning'><span class='warninglabel'>WARNING:</span> The behavior of this class changed in version 3.10.2. Menu items for controlling the process and servers will not be added and updated by default, as in versions 3.10.0 and 3.10.1. Those items can still be created by calling <code>initBuiltInMenus</code>. This behavior may change again in a future version.</div><textarea class='editor'>(
+~testTone = MenuAction("Test Tone", {
+    { SinOsc.ar(400) * 0.1 }.play;
+});
+
+MainMenu.register(~testTone, "Tests");
+)
+
+MainMenu.unregister(~testTone); // to remove</textarea>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*initBuiltInMenus' href='./../Overviews/Methods.html#initBuiltInMenus'>initBuiltInMenus</a></h3>
+<div class='method'>
+<p> Initialize menu items under the main "SuperCollider" menu that enable process and server monitoring and control:<ul>
+<li>Stop - same as Cmd/Ctrl-Period<li>Servers - a submenu listing available servers, with items for controlling each. The default server will be noted, and selecting the name of a server in this menu will set it as the default.<li>Quit - quit sclang process</ul>
+</div><h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*register' href='./../Overviews/Methods.html#register'>register</a>(<span class='argstr'>action</span>, <span class='argstr'>menu</span>, <span class='argstr'>group: 'none'</span>)</h3>
+<div class='method'>
+<p> Register a MenuAction to a main application menu. This menu item will exist for the duration of the app, or until .unregister is called for the action.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>action<td class='argumentdesc'>
+<p> A <a href="./../Classes/MenuAction.html">MenuAction</a>.<tr><td class='argumentname'>menu<td class='argumentdesc'>
+<p> A String, representing the name of the top-level menu to contain the action.<tr><td class='argumentname'>group<td class='argumentdesc'>
+<p> An optional string. Action will be placed in a section of the menu with other members of the same group, with a separator between items of other groups.</table><h4>Discussion:</h4>
+
+<p>MainMenu.register provides an easy way to register global menu items, in a way that helps avoid disrupting menus registered by other SuperCollider components.
+<p> If you want to register menus for personal use, add the registration calls to your startup.scd file. This will ensure the menus are created automatically on launch.
+<p> If you're registering menu actions for a Quark or other component intended for distribution, be sure to be polite and thoughtful about where you're registering actions.
+<p> Avoid creating new top-level menus if possible - instead, try to use one of the following canonical menus to register your actions. Add your actions to a group to ensure you don't collide with actions from another component:<ul>
+<li>File<li>Edit<li>Server<li>Quarks<li>Help</ul>
+
+<p> If registering menu items for a Quark, consider registering as a sub-menu of the Quarks menu. This can easily be done using the <a href="./../Classes/MainMenu.html#registerQuarkMenu">MainMenu: registerQuarkMenu</a> method.</div><h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*registerQuarkMenu' href='./../Overviews/Methods.html#registerQuarkMenu'>registerQuarkMenu</a>(<span class='argstr'>quarkName</span>, <span class='argstr'>menu</span>)</h3>
+<div class='method'>
+<p> Convenience method for registering a menu of functionality related to a Quark.  It will appear as a sub-menu under the main Quarks menu.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>quarkName<td class='argumentdesc'>
+<p> A String, the name of the quark<tr><td class='argumentname'>menu<td class='argumentdesc'>
+<p> A <a href="./../Classes/Menu.html">Menu</a>, a menu.</table></div><h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*unregister' href='./../Overviews/Methods.html#unregister'>unregister</a>(<span class='argstr'>removeAction</span>)</h3>
+<div class='method'>
+<p> Remove a MenuAction that has been registered previously.<div class='note'><span class='notelabel'>NOTE:</span> It is usually disruptive and confusing to add and remove menu items dynamically.  If you're registering a menu item that should only sometimes be available, consider disabling it using <code>menuAction.enabled = false;</code> rather than removing it.</div><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>removeAction<td class='argumentdesc'>
+<p> A MenuAction.</table></div><h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*otherMenus' href='./../Overviews/Methods.html#otherMenus'>otherMenus</a></h3>
+<div class='method'>
+<p> A list of menus to append to the set of main application menus.<div class='warning'><span class='warninglabel'>WARNING:</span> This is intended for standalone SuperCollider applications, and should not be used to register menus during normal SC usage.</div></div><h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*add' href='./../Overviews/Methods.html#add'>add</a>(<span class='argstr'>menu</span>)</h3>
+<div class='method'>
+<p> Adds a menu to <code>otherMenus</code>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>menu<td class='argumentdesc'>
+<p> A <a href="./../Classes/Menu.html">Menu</a>.</table></div><h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*remove' href='./../Overviews/Methods.html#remove'>remove</a>(<span class='argstr'>menu</span>)</h3>
+<div class='method'>
+<p> Removes a menu to <code>otherMenus</code>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>menu<td class='argumentdesc'>
+<p> A <a href="./../Classes/Menu.html">Menu</a>.</table></div><h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*insert' href='./../Overviews/Methods.html#insert'>insert</a>(<span class='argstr'>index</span>, <span class='argstr'>menu</span>)</h3>
+<div class='method'>
+<p> Inserts a menu in <code>otherMenus</code> at the given index.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>index<td class='argumentdesc'>
+<p> Index. An <a href="./../Classes/Integer.html">Integer</a>.<tr><td class='argumentname'>menu<td class='argumentdesc'>
+<p> A <a href="./../Classes/Menu.html">Menu</a>.</table></div><h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*clear' href='./../Overviews/Methods.html#clear'>clear</a></h3>
+<div class='method'>
+<p> Clears <code>otherMenus</code>. The main application menus are unaffected.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>(menu)<td class='argumentdesc'>
+<p> A <a href="./../Classes/Menu.html">Menu</a>.</table></div><h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*applicationMenu' href='./../Overviews/Methods.html#applicationMenu'>applicationMenu</a></h3>
+<div class='method'>
+<p> The main SuperCollider application menu.<div class='warning'><span class='warninglabel'>WARNING:</span> This is intended for standalone SuperCollider applications, and should not be used to register menus during normal SC usage.</div></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*buildAppMenusAction' href='./../Overviews/Methods.html#buildAppMenusAction'>buildAppMenusAction</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*buildAppMenusAction' href='./../Overviews/Methods.html#buildAppMenusAction'>buildAppMenusAction</a> = value</h3>
+<h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*registered' href='./../Overviews/Methods.html#registered'>registered</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*serversMenu' href='./../Overviews/Methods.html#serversMenu'>serversMenu</a></h3>
+<h3 class='method-code'><span class='method-prefix'>MainMenu.</span><a class='method-name' name='*unregisterQuarkMenu' href='./../Overviews/Methods.html#unregisterQuarkMenu'>unregisterQuarkMenu</a>(<span class='argstr'>quarkName</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>(
+~show = MenuAction("Show Window", {
+    ~window ?? {
+        ~window = TextView().string_("Here it goes!").minSize_(300@200);
+        ~window.onClose = { ~window = nil };
+        ~window.front;
+    }
+});
+~hide = MenuAction("Hide Window", {
+    ~window !? {
+        ~window.close();
+        ~window = nil;
+    }
+});
+
+MainMenu.register(Menu(~show, ~hide).title_("My Quark"), "Quarks", "My Quark")
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/MainMenu.schelp'>/usr/share/SuperCollider/HelpSource/Classes/MainMenu.schelp</a><br>link::Classes/MainMenu::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

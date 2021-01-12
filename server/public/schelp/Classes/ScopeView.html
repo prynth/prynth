@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>ScopeView | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>ScopeView | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'ScopeView';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>ScopeView:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -23,6 +28,9 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc3'><a href='#*qtClass'>qtClass</a> </li>
 </ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-bufnum'>bufnum</a> </li>
+<li class='toc3'><a href='#-server'>server</a> </li>
+<li class='toc3'><a href='#-start'>start</a> </li>
+<li class='toc3'><a href='#-stop'>stop</a> </li>
 <li class='toc3'><a href='#-style'>style</a> </li>
 <li class='toc3'><a href='#-xZoom'>xZoom</a> </li>
 <li class='toc3'><a href='#-yZoom'>yZoom</a> </li>
@@ -31,15 +39,11 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-fill'>fill</a> </li>
 <li class='toc3'><a href='#-waveColors'>waveColors</a> </li>
 <li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
-<li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
-<ul class='toc'><li class='toc3'><a href='#-server'>server</a> </li>
-<li class='toc3'><a href='#-start'>start</a> </li>
-<li class='toc3'><a href='#-stop'>stop</a> </li>
-</ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
 <ul class='toc'><li class='toc2'><a href='#A%20step-by-step%20example'>A step-by-step example</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#An%20interactive%20example%20with%20sound'>An interactive example with sound</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -49,13 +53,13 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>A buffer plotting view.</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/ScopeView.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/ScopeView.sc'>ScopeView.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/QScope2.html">QScope2</a>, <a href="../Classes/Scope2.html">Scope2</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/ScopeView.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/ScopeView.sc'>ScopeView.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/QScope2.html">QScope2</a>, <a href="../Classes/Scope2.html">Scope2</a></div>
 <div id='related'>See also: <a href="./../Classes/Stethoscope.html">Stethoscope</a>, <a href="./../Classes/FreqScopeView.html">FreqScopeView</a>, <a href="./../Classes/FreqScope.html">FreqScope</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>ScopeView is mainly intended to support the implementation of <a href="./../Classes/Stethoscope.html">Stethoscope</a> (an oscilloscope), <a href="./../Classes/FreqScopeView.html">FreqScopeView</a> (a basic frequency spectrum plotting view) and <a href="./../Classes/FreqScope.html">FreqScope</a> (a frequency spectrum analyzer tool).
-<p>It is optimized to efficiently perform frequent plotting of the contents of a <a href="./../Classes/Buffer.html">Buffer</a> into which a <a href="./../Classes/ScopeOut.html">ScopeOut</a> UGen is writing. It will periodically poll the buffer for data and update the plot, as long as the ScopeOut UGen is writing into it; the buffer will not be plotted otherwise.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<p>It is optimized to efficiently perform frequent plotting of the contents of a <a href="./../Classes/Buffer.html">Buffer</a> into which a <a href="./../Classes/ScopeOut2.html">ScopeOut2</a> UGen is writing. It will periodically poll the buffer for data and update the plot, as long as the ScopeOut2 UGen is writing into it; the buffer will not be plotted otherwise.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>ScopeView.</span><a class='method-name' name='*qtClass' href='./../Overviews/Methods.html#qtClass'>qtClass</a></h3>
@@ -64,10 +68,21 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bufnum' href='./../Overviews/Methods.html#bufnum'>bufnum</a> = <span class='argstr'>buf</span></h3>
 <div class='method'>
 <p> The number of the Buffer to plot.
-<p> As soon as a valid buffer number is set and a <a href="./../Classes/ScopeOut.html">ScopeOut</a> UGen is writing into it, the view starts periodically plotting the buffer. If the ScopeOut UGen stops writing, or an invalid buffer number is set, the plotting will pause.<h4>Arguments:</h4>
+<p> To set up the ScopeView object for plotting, one needs to set a valid buffer number and tell a <a href="./../Classes/ScopeOut2.html">ScopeOut2</a> UGen to write to it. Before the view starts periodically plotting the buffer, however, one needs to assign it a <a href="./../Classes/Server.html">Server</a> object and call the <a href="#-start">-start</a> method on it.
+<p> If the ScopeOut2 UGen stops writing or an invalid buffer number is set, the plotting will pause.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>buf<td class='argumentdesc'>
-<p> An integer.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-style' href='./../Overviews/Methods.html#style'>style</a></h3>
+<p> An integer.</table></div></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-server' href='./../Overviews/Methods.html#server'>server</a> = <span class='argstr'>server</span></h3>
+<div class='method'>
+<p> An instance of ScopeView must be assigned to a particular server for it to work.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>server<td class='argumentdesc'>
+<p> A <a href="./../Classes/Server.html">Server</a> object</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-start' href='./../Overviews/Methods.html#start'>start</a></h3>
+<div class='method'>
+<p> Tells the ScopeView object to start plotting.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-stop' href='./../Overviews/Methods.html#stop'>stop</a></h3>
+<div class='method'>
+<p> Tells the ScopeView object to stop plotting. Plotting can be resumed anytime with the <a href="#start">start</a> method.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-style' href='./../Overviews/Methods.html#style'>style</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-style' href='./../Overviews/Methods.html#style'>style</a> = <span class='argstr'>value</span></h3>
 <div class='method'>
 <p> The plotting style:<ul>
@@ -112,79 +127,73 @@ var scdoc_sc_version = '3.9.3';
 <table class='arguments'>
 <tr><td class='argumentname'>aColorArray<td class='argumentdesc'>
 <p> An Array of Colors, one per channel.</table></div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
-<div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
-</h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-server' href='./../Overviews/Methods.html#server'>server</a> = <span class='argstr'>server</span></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-start' href='./../Overviews/Methods.html#start'>start</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-stop' href='./../Overviews/Methods.html#stop'>stop</a></h3>
-<h2><a class='anchor' name='examples'>Examples</a></h2>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
 <h3><a class='anchor' name='A%20step-by-step%20example'>A step-by-step example</a></h3>
-<pre class='code prettyprint lang-sc'>// execute these in succession
-(
+<textarea class='editor'>// boot the server (if not already booted)
 s.boot;
-)
+
+// execute the following two blocks in succession:
 (
 f = Buffer.alloc(s,1024,2);
 b = Bus.audio(s,1);
 
-w=Window.new.front;
+w = Window.new.front;
+w.onClose = { // free everything when finished
+    c.stop; a.free; d.free; f.free; b.free;
+    "SynthDefs, busses and buffers have all been freed.".postln;
+};
 c = ScopeView(w.view,w.view.bounds.insetAll(10,10,10,10));
 c.bufnum = f.bufnum;
+c.server = s; // Important: one must assign the ScopeView to a server
 )
+
 (
-// listening to the bus, using ScopeOut to write it to the buffer
-a=SynthDef("monoscope", { arg bus, bufnum;
-                var z;
-                z = In.ar(bus,2);
-                // ScopeOut writes the audio to the buffer
-                ScopeOut.ar(z, bufnum);
-            }).play(
-                RootNode(s),
-                [\bus,b.index, \bufnum, f.bufnum] ,
-                \addToTail // make sure it goes after what you are scoping
-            );
+// listening to the bus, using ScopeOut2 to write it to the buffer
+a = SynthDef("monoscope", { arg bus, bufnum;
+    var z;
+    z = In.ar(bus, 2);
+
+    ScopeOut2.ar(z, bufnum);
+    Out.ar(0, z);
+}).play(
+    target: RootNode(s),
+    args: [\bus, b.index, \bufnum, f.bufnum],
+    addAction: \addToTail // make sure it goes after what you are scoping
+);
 
 // making noise onto the buffer
-d=SynthDef("noise", { arg bus;
-                var z;
-                z = LFSaw.ar(SinOsc.kr(0.1).range(300,1000),[0,1]*pi) * 0.1;
-                Out.ar(bus, z);
-            }).play(
-                s,
-                [\bus,b.index]
-            );
+d = SynthDef("noise", { arg bus;
+    var z;
+    z = LFSaw.ar(SinOsc.kr(0.1).range(300,1000),[0,1]*pi) * 0.1;
+    Out.ar(bus, z);
+}).play(
+    s,
+    [\bus,b.index]
+);
+c.start; // Tell the ScopeView to start
+CmdPeriod.doOnce({w.close});
 )
 
-c.style = 0 // vertically spaced
-c.style = 1 // overlapped
-c.style = 2 // x/y
 
-(
-//remember to free your stuff when finished
-a.free;
-d.free;
-f.free;
-b.free;
-w.close;
-)</pre>
+c.style = 0; // vertically spaced
+c.style = 1; // overlapped
+c.style = 2; // x/y</textarea>
 <h3><a class='anchor' name='An%20interactive%20example%20with%20sound'>An interactive example with sound</a></h3>
 
-<p>This explains all the options:<pre class='code prettyprint lang-sc'>(
-s.waitForBoot(
-{
-
+<p>This explains all the options:<textarea class='editor'>(
+s.waitForBoot({
     var func, sdef1, sdef2, syn1, syn2,startButton ;
     f = Buffer.alloc(s,1024,2);
     b = Bus.audio(s,1);
 
-    w=Window("Scope", Rect(150, Window.screenBounds.height-500,790,400)).front;
+    w = Window("Scope", Rect(150, Window.screenBounds.height-500,790,400)).front;
     c = ScopeView(w,Rect(10,10,380,380)); // this is SCScope
     c.bufnum = f.bufnum;
 
     // IMPORTANT
-    c.server_(s);
+    c.server = s;
 
-    v=CompositeView(w,Rect(400,10,380,380)).background_(Color.rand(0.7));
+    v = CompositeView(w,Rect(400,10,380,380)).background_(Color.rand(0.7));
     v.decorator = n = FlowLayout(v.bounds, margin: 0@0, gap: 5@5);
 
     a = StaticText(v, Rect(20, 70, 90, 20)).string_(" xZoom = 1").background_(Color.rand);
@@ -196,57 +205,53 @@ s.waitForBoot(
     i = Slider(v, Rect(20, 60, 285, 20)).background_(h.background).action_({func.value}).value_(0.5);
 
     Button(v, Rect(0,0,380, 20))
-        .states_([["waveColors = [ Color.rand, ... ]",Color.black,Color.rand]])
-        .action_({c.waveColors = [Color.rand,Color.rand]});
+    .states_([["waveColors = [ Color.rand, ... ]",Color.black,Color.rand]])
+    .action_({c.waveColors = [Color.rand,Color.rand]});
 
     Button(v, Rect(0,0,380, 20))
-        .states_([[" background = Color.rand(0.1,0.3) ",Color.black,Color.rand]])
-        .action_({c.background = Color.rand(0.1,0.3) });
+    .states_([[" background = Color.rand(0.1,0.3) ",Color.black,Color.rand]])
+    .action_({c.background = Color.rand(0.1,0.3) });
 
-    t= Button(v, Rect(0,0,380, 20))
-        .states_([["Current style is 0",Color.black,Color.rand],
-            ["Current style is 1",Color.black,Color.rand],
-            ["Current style is 2",Color.black,Color.rand]])
-        .action_({func.value});
+    t = Button(v, Rect(0,0,380, 20))
+    .states_([["Current style is 0",Color.black,Color.rand],
+        ["Current style is 1",Color.black,Color.rand],
+        ["Current style is 2",Color.black,Color.rand]])
+    .action_({func.value});
 
-    func={
+    func = {
         c.xZoom = ([0.25, 10, \exp, 1/8, 1].asSpec.map(m.value)); a.string = " xZoom = %".format(c.xZoom);
         c.yZoom = ([0.25, 10, \exp, 1/8, 1].asSpec.map(g.value)); d.string = " yZoom = %".format(c.yZoom);
         c.x = ([ -1024,1024, \linear, 1/8, 1].asSpec.map(i.value)); h.string = " x = %".format(c.x);
         c.style=t.value
-        };
+    };
 
     startButton = Button.new(v, Rect(0,0,380, 50))
-        .states_([["Start Sound",Color.black,Color.green],["Stop Sound",Color.black,Color.red]]).action_({});
+    .states_([["Start Sound",Color.black,Color.green],["Stop Sound",Color.black,Color.red]]).action_({});
 
 
     startButton.action_{
         (startButton.value==1).if{
-    syn1=SynthDef("test1", { arg bus, bufnum;
-                    var z;
-                    z = In.ar(bus,2);
-                    // ScopeOut writes the audio to the buffer
-                //                     ScopeOut.ar(z, bufnum);
+            syn1 = SynthDef("test1", { arg bus, bufnum;
+                var z;
+                z = In.ar(bus,2);
+                // ScopeOut2 writes the audio to the buffer
                 // IMPORTANT - ScopeOut2, not ScopeOut
-                    ScopeOut2.ar(z, bufnum);
-                    Out.ar(0,z);
-                }).play(
-                    RootNode(s),
-                    [\bus,b.index, \bufnum, f.bufnum] ,
-                    \addToTail // make sure it goes after what you are scoping
-                );
+                ScopeOut2.ar(z, bufnum);
+                Out.ar(0,z);
+            }).play(
+                RootNode(s),
+                [\bus,b.index, \bufnum, f.bufnum] ,
+                \addToTail // make sure it goes after what you are scoping
+            );
 
-    // making noise onto the buffer
-    syn2=SynthDef("test2", { arg bus;
-                    var z;
-                    z = PMOsc.ar([300,250],*SinOsc.ar([0.027,0.017])*pi) * 0.1;
-                    Out.ar(bus, z);
-                }).play(s,[\bus,b.index]);
-
-
+            // making noise onto the buffer
+            syn2 = SynthDef("test2", { arg bus;
+                var z;
+                z = PMOsc.ar([300,250],*SinOsc.ar([0.027,0.017])*pi) * 0.1;
+                Out.ar(bus, z);
+            }).play(s,[\bus,b.index]);
 
         }{syn1.free; syn2.free};
-
     };
 
     // IMPORTANT
@@ -255,6 +260,7 @@ s.waitForBoot(
     w.onClose={syn1.free; syn2.free; b.free; f.free};
     CmdPeriod.doOnce({w.close});
 })
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/ScopeView.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/ScopeView.schelp</a><br>link::Classes/ScopeView::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/ScopeView.schelp'>/usr/share/SuperCollider/HelpSource/Classes/ScopeView.schelp</a><br>link::Classes/ScopeView::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

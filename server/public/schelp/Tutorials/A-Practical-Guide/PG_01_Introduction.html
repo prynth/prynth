@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Pattern Guide 01: Introduction | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide 01: Introduction | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'Pattern Guide 01: Introduction';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pattern Guide 01: Introduction:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
@@ -22,8 +27,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Reference%20material'>Reference material</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Why%20patterns?'>Why patterns?</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Patterns%20versus%20Streams'>Patterns versus Streams</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/A-Practical-Guide</span>
@@ -74,7 +79,7 @@ var scdoc_sc_version = '3.9.3';
 <p>Patterns describe calculations without explicitly stating every step. They are a higher-level representation of a computational task. While patterns are not ideally suited for every type of calculation, when they are appropriate they free the user from worrying about every detail of the process. Using patterns, one writes <em>what</em> is supposed to happen, rather than <em>how</em> to accomplish it.
 <p>In SuperCollider, patterns are best for tasks that need to produce sequences, or streams, of information. Often these are numbers, but they don't have to be -- patterns can generate any kind of object.
 <p>For a simple example, let's count upward starting from 0. We don't know how high we will need to count; we just know that every time we ask for values, we should get a continually increasing series.
-<p>Writing everything out, it looks like this. <a href="./../../Classes/Routine.html">Routine</a> is used because this is a control structure that can interrupt what it's doing and remember where it was, so that it can pick up again at exactly that point. You can get some numbers out of it, and call it again later and it will keep counting from the last number returned. (This is an example of a <a href="./../../Classes/Stream.html">Stream</a>. You can find more about Streams in <a href="./../../Tutorials/Streams-Patterns-Events1.html">Understanding Streams, Patterns and Events - Part 1</a>.)<pre class='code prettyprint lang-sc'>a = Routine {
+<p>Writing everything out, it looks like this. <a href="./../../Classes/Routine.html">Routine</a> is used because this is a control structure that can interrupt what it's doing and remember where it was, so that it can pick up again at exactly that point. You can get some numbers out of it, and call it again later and it will keep counting from the last number returned. (This is an example of a <a href="./../../Classes/Stream.html">Stream</a>. You can find more about Streams in <a href="./../../Tutorials/Streams-Patterns-Events1.html">Understanding Streams, Patterns and Events - Part 1</a>.)<textarea class='editor'>a = Routine {
     var    i = 0;
     loop {
         i.yield;
@@ -82,19 +87,19 @@ var scdoc_sc_version = '3.9.3';
     };
 };
 
-a.nextN(10);</pre>
+a.nextN(10);</textarea>
 
-<p>SuperCollider's built-in control structures allow some simplification.<pre class='code prettyprint lang-sc'>a = Routine {
+<p>SuperCollider's built-in control structures allow some simplification.<textarea class='editor'>a = Routine {
     (0..).do { |i|
         i.yield;
     };
 };
 
-a.nextN(10);</pre>
+a.nextN(10);</textarea>
 
-<p>But wouldn't it be nice just to say, "Give me an infinite series of numbers starting with 0, increasing by 1"? With <a href="./../../Classes/Pseries.html">Pseries</a>, you can. (Here, keyword addressing of the arguments is used for clarity, but <code class='code prettyprint lang-sc'>start</code>, <code class='code prettyprint lang-sc'>step</code> and <code class='code prettyprint lang-sc'>length</code> can be omitted.)<pre class='code prettyprint lang-sc'>a = Pseries(start: 0, step: 1, length: inf).asStream;
+<p>But wouldn't it be nice just to say, "Give me an infinite series of numbers starting with 0, increasing by 1"? With <a href="./../../Classes/Pseries.html">Pseries</a>, you can. (Here, keyword addressing of the arguments is used for clarity, but <code>start</code>, <code>step</code> and <code>length</code> can be omitted.)<textarea class='editor'>a = Pseries(start: 0, step: 1, length: inf).asStream;
 
-a.nextN(10);</pre>
+a.nextN(10);</textarea>
 
 <p>What are the advantages of the pattern representation?<ul>
 <li>It's shorter.<li>It's tested and it works. You don't have to debug how Pseries works (whereas, if you write a Routine, you might make a mistake and then have to find it.)<li>With the Routine -- especially if it's complicated -- you will have to decipher it when you come back to the code later. The Pattern states the purpose right there in the code.</ul>
@@ -109,21 +114,22 @@ a.nextN(10);</pre>
 <p><em>Patterns define behavior; streams execute it.</em>
 <p>A pattern is like a blueprint for a building, showing how all the parts fit together. The building doesn't exist until the contractors go and do what the plans specify. When a stream is made from a pattern, it follows the plans laid out in the pattern's blueprint. Rendering the plans into a real-world result does not change the blueprint in any way, but to get the result, the stream has to go through different states.
 <p>A pattern is supposed to describe behavior, and in general, evaluating the pattern (by way of a stream) should not change anything in the Pattern object itself. In computer science terms, patterns are <em>stateless</em>; their definition does not change over time. The stream is what keeps track of where we are in the pattern's evaluation.
-<p>This explains an easy "gotcha" with patterns -- forgetting to turn the pattern into a stream doesn't get the expected result. Since a pattern doesn't have any concept of a current state, calling <code class='code prettyprint lang-sc'>next</code> on it is meaningless, so <code class='code prettyprint lang-sc'>next</code> does what it does for most objects: return the receiver object itself. The method <code class='code prettyprint lang-sc'>asStream</code> creates the stream conforming to the pattern's specification, and calling <code class='code prettyprint lang-sc'>next</code> on the stream advances to its next state and returns the new value.<pre class='code prettyprint lang-sc'>p = Pseries(0, 1, 10);
+<p>This explains an easy "gotcha" with patterns -- forgetting to turn the pattern into a stream doesn't get the expected result. Since a pattern doesn't have any concept of a current state, calling <code>next</code> on it is meaningless, so <code>next</code> does what it does for most objects: return the receiver object itself. The method <code>asStream</code> creates the stream conforming to the pattern's specification, and calling <code>next</code> on the stream advances to its next state and returns the new value.<textarea class='editor'>p = Pseries(0, 1, 10);
 p.next;    // always returns the Pseries, not actual numbers
 
 q = p.asStream;
-q.next;    // calling this repeatedly gets the desired increasing integers</pre>
+q.next;    // calling this repeatedly gets the desired increasing integers</textarea>
 
-<p>There is a concrete benefit to this strict division of labor. Since the stream does not modify the original pattern, any number of streams can be made from the same blueprint. All of those streams maintain their own independent states, and they can operate concurrently without interfering with each other.<pre class='code prettyprint lang-sc'>r = p.asStream;
+<p>There is a concrete benefit to this strict division of labor. Since the stream does not modify the original pattern, any number of streams can be made from the same blueprint. All of those streams maintain their own independent states, and they can operate concurrently without interfering with each other.<textarea class='editor'>r = p.asStream;
 r.next;    // starts from zero, even though q already gave out some numbers
 
 q.next;    // resumes where q left off, with no effect from getting values from r
 
-[q.next, r.next]    // and so on...</pre>
+[q.next, r.next]    // and so on...</textarea>
 
 <p>Bear these points in mind as we move to the next subject: getting basic types of data (deterministic and random) out of patterns.
 <p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_02_Basic_Vocabulary.html">Pattern Guide 02: Basic Vocabulary</a><div class='footnotes'>
 <a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - Documentation licensing
 <p>The initial version of these documents was written December-February 2009 by H. James Harkins. As part of the SuperCollider package, they are released under the Creative Commons CC-BY-SA license. As SuperCollider is an open source project, it is expected (and encouraged) that other users will contribute to the series. Dr. Harkins, however, wishes to retain exclusive rights to revise and republish the original body of work independently of the open-source copy. This excludes material contributed into svn by others. The work may be redistributed at no charge with proper attribution:
-<p>Harkins, Henry James. "A Practical Guide to Patterns." SuperCollider 3.3 Documentation, 2009.</div></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_01_Introduction.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_01_Introduction.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_01_Introduction::<br></div></div></body></html>
+<p>Harkins, Henry James. "A Practical Guide to Patterns." SuperCollider 3.3 Documentation, 2009.</div></div><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_01_Introduction.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_01_Introduction.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_01_Introduction::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

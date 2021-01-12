@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>SimpleNumber | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>SimpleNumber | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'SimpleNumber';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>SimpleNumber:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -192,30 +197,182 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc3'><a href='#-lag'>lag</a>  <a href='#-lag2'>lag2</a>  <a href='#-lag3'>lag3</a>  <a href='#-lagud'>lagud</a>  <a href='#-lag2ud'>lag2ud</a>  <a href='#-lag3ud'>lag3ud</a>  <a href='#-slew'>slew</a>  <a href='#-varlag'>varlag</a> </li>
 </ul><li class='toc2'><a href='#misc'>misc</a></li>
 <ul class='toc'><li class='toc3'><a href='#-isValidUGenInput'>isValidUGenInput</a> </li>
+</ul><li class='toc2'><a href='#Special%20Functions'>Special Functions</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Number%20Series'>Number Series</a></li>
+<ul class='toc'><li class='toc3'><a href='#-bernouliB2n'>bernouliB2n</a> </li>
+<li class='toc3'><a href='#-tangentT2n'>tangentT2n</a> </li>
+</ul><li class='toc2'><a href='#Gamma%20Functions'>Gamma Functions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-tgamma'>tgamma</a> </li>
+<li class='toc3'><a href='#-tgamma1pm1'>tgamma1pm1</a> </li>
+<li class='toc3'><a href='#-lgamma'>lgamma</a> </li>
+<li class='toc3'><a href='#-digamma'>digamma</a> </li>
+<li class='toc3'><a href='#-trigamma'>trigamma</a> </li>
+<li class='toc3'><a href='#-polygamma'>polygamma</a> </li>
+<li class='toc3'><a href='#-tgammaRatio'>tgammaRatio</a> </li>
+<li class='toc3'><a href='#-tgammaDeltaRatio'>tgammaDeltaRatio</a> </li>
+<li class='toc3'><a href='#-gammaP'>gammaP</a> </li>
+<li class='toc3'><a href='#-gammaQ'>gammaQ</a> </li>
+<li class='toc3'><a href='#-tgammaLower'>tgammaLower</a> </li>
+<li class='toc3'><a href='#-tgammaUpper'>tgammaUpper</a> </li>
+<li class='toc3'><a href='#-gammaPInv'>gammaPInv</a> </li>
+<li class='toc3'><a href='#-gammaQInv'>gammaQInv</a> </li>
+<li class='toc3'><a href='#-gammaPInvA'>gammaPInvA</a> </li>
+<li class='toc3'><a href='#-gammaQInvA'>gammaQInvA</a> </li>
+<li class='toc3'><a href='#-gammaPDerivative'>gammaPDerivative</a> </li>
+<li class='toc3'><a href='#-gammaQDerivative'>gammaQDerivative</a> </li>
+</ul><li class='toc2'><a href='#Factorials%20and%20Binomial%20Coefficients'>Factorials and Binomial Coefficients</a></li>
+<ul class='toc'><li class='toc3'><a href='#-factorial'>factorial</a> </li>
+<li class='toc3'><a href='#-doubleFactorial'>doubleFactorial</a> </li>
+<li class='toc3'><a href='#-risingFactorial'>risingFactorial</a> </li>
+<li class='toc3'><a href='#-fallingFactorial'>fallingFactorial</a> </li>
+<li class='toc3'><a href='#-binomialCoefficient'>binomialCoefficient</a> </li>
+</ul><li class='toc2'><a href='#Beta%20Functions'>Beta Functions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-beta'>beta</a> </li>
+<li class='toc3'><a href='#-ibeta'>ibeta</a> </li>
+<li class='toc3'><a href='#-ibetaC'>ibetaC</a> </li>
+<li class='toc3'><a href='#-betaFull'>betaFull</a> </li>
+<li class='toc3'><a href='#-betaFullC'>betaFullC</a> </li>
+<li class='toc3'><a href='#-ibetaInv'>ibetaInv</a> </li>
+<li class='toc3'><a href='#-ibetaCInv'>ibetaCInv</a> </li>
+<li class='toc3'><a href='#-ibetaInvA'>ibetaInvA</a> </li>
+<li class='toc3'><a href='#-ibetaCInvA'>ibetaCInvA</a> </li>
+<li class='toc3'><a href='#-ibetaInvB'>ibetaInvB</a> </li>
+<li class='toc3'><a href='#-ibetaCInvB'>ibetaCInvB</a> </li>
+<li class='toc3'><a href='#-ibetaDerivative'>ibetaDerivative</a> </li>
+</ul><li class='toc2'><a href='#Error%20Functions'>Error Functions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-erf'>erf</a> </li>
+<li class='toc3'><a href='#-erfC'>erfC</a> </li>
+<li class='toc3'><a href='#-erfInv'>erfInv</a> </li>
+<li class='toc3'><a href='#-erfCInv'>erfCInv</a> </li>
+</ul><li class='toc2'><a href='#Polynomials'>Polynomials</a></li>
+<ul class='toc'><li class='toc3'><a href='#-legendreP'>legendreP</a> </li>
+<li class='toc3'><a href='#-legendrePPrime'>legendrePPrime</a> </li>
+<li class='toc3'><a href='#-legendrePZeros'>legendrePZeros</a> </li>
+<li class='toc3'><a href='#-legendrePAssoc'>legendrePAssoc</a> </li>
+<li class='toc3'><a href='#-legendreQ'>legendreQ</a> </li>
+<li class='toc3'><a href='#-laguerre'>laguerre</a> </li>
+<li class='toc3'><a href='#-laguerreAssoc'>laguerreAssoc</a> </li>
+<li class='toc3'><a href='#-hermite'>hermite</a> </li>
+<li class='toc3'><a href='#-chebyshevT'>chebyshevT</a> </li>
+<li class='toc3'><a href='#-chebyshevU'>chebyshevU</a> </li>
+<li class='toc3'><a href='#-chebyshevTPrime'>chebyshevTPrime</a> </li>
+<li class='toc3'><a href='#-chebyshevTZeros'>chebyshevTZeros</a> </li>
+<li class='toc3'><a href='#-sphericalHarmonic'>sphericalHarmonic</a> </li>
+<li class='toc3'><a href='#-sphericalHarmonicR'>sphericalHarmonicR</a> </li>
+<li class='toc3'><a href='#-sphericalHarmonicI'>sphericalHarmonicI</a> </li>
+</ul><li class='toc2'><a href='#Bessel%20Functions'>Bessel Functions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-cylBesselJ'>cylBesselJ</a> </li>
+<li class='toc3'><a href='#-cylNeumann'>cylNeumann</a> </li>
+<li class='toc3'><a href='#-cylBesselJZero'>cylBesselJZero</a> </li>
+<li class='toc3'><a href='#-cylNeumannZero'>cylNeumannZero</a> </li>
+<li class='toc3'><a href='#-cylBesselI'>cylBesselI</a> </li>
+<li class='toc3'><a href='#-cylBesselK'>cylBesselK</a> </li>
+<li class='toc3'><a href='#-sphBessel'>sphBessel</a> </li>
+<li class='toc3'><a href='#-sphNeumann'>sphNeumann</a> </li>
+<li class='toc3'><a href='#-cylBesselJPrime'>cylBesselJPrime</a> </li>
+<li class='toc3'><a href='#-cylNeumannPrime'>cylNeumannPrime</a> </li>
+<li class='toc3'><a href='#-cylBesselIPrime'>cylBesselIPrime</a> </li>
+<li class='toc3'><a href='#-cylBesselKPrime'>cylBesselKPrime</a> </li>
+<li class='toc3'><a href='#-sphBesselPrime'>sphBesselPrime</a> </li>
+<li class='toc3'><a href='#-sphNeumannPrime'>sphNeumannPrime</a> </li>
+</ul><li class='toc2'><a href='#Hankel%20Functions'>Hankel Functions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-cylHankel1'>cylHankel1</a> </li>
+<li class='toc3'><a href='#-cylHankel2'>cylHankel2</a> </li>
+<li class='toc3'><a href='#-sphHankel1'>sphHankel1</a> </li>
+<li class='toc3'><a href='#-sphHankel2'>sphHankel2</a> </li>
+</ul><li class='toc2'><a href='#Airy%20Functions'>Airy Functions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-airyAi'>airyAi</a> </li>
+<li class='toc3'><a href='#-airyBi'>airyBi</a> </li>
+<li class='toc3'><a href='#-airyAiPrime'>airyAiPrime</a> </li>
+<li class='toc3'><a href='#-airyBiPrime'>airyBiPrime</a> </li>
+<li class='toc3'><a href='#-airyAiZero'>airyAiZero</a> </li>
+<li class='toc3'><a href='#-airyBiZero'>airyBiZero</a> </li>
+</ul><li class='toc2'><a href='#Elliptic%20Integrals'>Elliptic Integrals</a></li>
+<ul class='toc'><li class='toc3'><a href='#-ellintRf'>ellintRf</a> </li>
+<li class='toc3'><a href='#-ellintRd'>ellintRd</a> </li>
+<li class='toc3'><a href='#-ellintRj'>ellintRj</a> </li>
+<li class='toc3'><a href='#-ellintRc'>ellintRc</a> </li>
+<li class='toc3'><a href='#-ellintRg'>ellintRg</a> </li>
+<li class='toc3'><a href='#-ellint1'>ellint1</a> </li>
+<li class='toc3'><a href='#-ellint1C'>ellint1C</a> </li>
+<li class='toc3'><a href='#-ellint2'>ellint2</a> </li>
+<li class='toc3'><a href='#-ellint2C'>ellint2C</a> </li>
+<li class='toc3'><a href='#-ellint3'>ellint3</a> </li>
+<li class='toc3'><a href='#-ellint3C'>ellint3C</a> </li>
+<li class='toc3'><a href='#-ellintD'>ellintD</a> </li>
+<li class='toc3'><a href='#-ellintDC'>ellintDC</a> </li>
+<li class='toc3'><a href='#-jacobiZeta'>jacobiZeta</a> </li>
+<li class='toc3'><a href='#-heumanLambda'>heumanLambda</a> </li>
+</ul><li class='toc2'><a href='#Jacobi%20Elliptic%20Functions'>Jacobi Elliptic Functions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-jacobiCd'>jacobiCd</a> </li>
+<li class='toc3'><a href='#-jacobiCn'>jacobiCn</a> </li>
+<li class='toc3'><a href='#-jacobiCs'>jacobiCs</a> </li>
+<li class='toc3'><a href='#-jacobiDc'>jacobiDc</a> </li>
+<li class='toc3'><a href='#-jacobiDn'>jacobiDn</a> </li>
+<li class='toc3'><a href='#-jacobiDs'>jacobiDs</a> </li>
+<li class='toc3'><a href='#-jacobiNc'>jacobiNc</a> </li>
+<li class='toc3'><a href='#-jacobiNd'>jacobiNd</a> </li>
+<li class='toc3'><a href='#-jacobiNs'>jacobiNs</a> </li>
+<li class='toc3'><a href='#-jacobiSc'>jacobiSc</a> </li>
+<li class='toc3'><a href='#-jacobiSd'>jacobiSd</a> </li>
+<li class='toc3'><a href='#-jacobiSn'>jacobiSn</a> </li>
+</ul><li class='toc2'><a href='#Zeta%20Functions'>Zeta Functions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-zeta'>zeta</a> </li>
+</ul><li class='toc2'><a href='#Exponential%20Integrals'>Exponential Integrals</a></li>
+<ul class='toc'><li class='toc3'><a href='#-expintEn'>expintEn</a> </li>
+<li class='toc3'><a href='#-expintEi'>expintEi</a> </li>
+</ul><li class='toc2'><a href='#Basic%20Functions'>Basic Functions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-sinPi'>sinPi</a> </li>
+<li class='toc3'><a href='#-cosPi'>cosPi</a> </li>
+<li class='toc3'><a href='#-log1p'>log1p</a> </li>
+<li class='toc3'><a href='#-expm1'>expm1</a> </li>
+<li class='toc3'><a href='#-cbrt'>cbrt</a> </li>
+<li class='toc3'><a href='#-sqrt1pm1'>sqrt1pm1</a> </li>
+<li class='toc3'><a href='#-powm1'>powm1</a> </li>
+</ul><li class='toc2'><a href='#Sinus%20Cardinal%20(Sinc)%20and%20Hyperbolic%20Sinus%20Cardinal%20Functions'>Sinus Cardinal (Sinc) and Hyperbolic Sinus Cardinal Functions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-sincPi'>sincPi</a> </li>
+<li class='toc3'><a href='#-sinhcPi'>sinhcPi</a> </li>
+</ul><li class='toc2'><a href='#Inverse%20Hyperbolic%20Functions'>Inverse Hyperbolic Functions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-asinh'>asinh</a> </li>
+<li class='toc3'><a href='#-acosh'>acosh</a> </li>
+<li class='toc3'><a href='#-atanh'>atanh</a> </li>
+</ul><li class='toc2'><a href='#Owen's%20T%20Function'>Owen's T Function</a></li>
+<ul class='toc'><li class='toc3'><a href='#-owensT'>owensT</a> </li>
 </ul><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 <li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-asBufWithValues'>asBufWithValues</a> </li>
 <li class='toc3'><a href='#-asEvent'>asEvent</a> </li>
 <li class='toc3'><a href='#-asMIDIInPortUID'>asMIDIInPortUID</a> </li>
 <li class='toc3'><a href='#-asSize'>asSize</a> </li>
+<li class='toc3'><a href='#-asTimeStringLJP'>asTimeStringLJP</a> </li>
+<li class='toc3'><a href='#-betarand'>betarand</a> </li>
 <li class='toc3'><a href='#-binaryValue'>binaryValue</a> </li>
 <li class='toc3'><a href='#-buildForProxy'>buildForProxy</a> </li>
+<li class='toc3'><a href='#-calcPVRecSize'>calcPVRecSize</a> </li>
+<li class='toc3'><a href='#-cauchy'>cauchy</a> </li>
 <li class='toc3'><a href='#-delta'>delta</a> </li>
 <li class='toc3'><a href='#-firstArg'>firstArg</a> </li>
+<li class='toc3'><a href='#-gaussian'>gaussian</a> </li>
 <li class='toc3'><a href='#-guiClass'>guiClass</a> </li>
 <li class='toc3'><a href='#-hypotApx'>hypotApx</a> </li>
+<li class='toc3'><a href='#-linrrand'>linrrand</a> </li>
+<li class='toc3'><a href='#-logistic'>logistic</a> </li>
+<li class='toc3'><a href='#-midinote'>midinote</a> </li>
 <li class='toc3'><a href='#-numChannels'>numChannels</a> </li>
+<li class='toc3'><a href='#-pareto'>pareto</a> </li>
 <li class='toc3'><a href='#-performBinaryOpOnComplex'>performBinaryOpOnComplex</a> </li>
 <li class='toc3'><a href='#-performBinaryOpOnSignal'>performBinaryOpOnSignal</a> </li>
 <li class='toc3'><a href='#-performBinaryOpOnSimpleNumber'>performBinaryOpOnSimpleNumber</a> </li>
 <li class='toc3'><a href='#-playAndDelta'>playAndDelta</a> </li>
+<li class='toc3'><a href='#-poisson'>poisson</a> </li>
 <li class='toc3'><a href='#-poll'>poll</a> </li>
 <li class='toc3'><a href='#-proxyControlClass'>proxyControlClass</a> </li>
 <li class='toc3'><a href='#-rate'>rate</a> </li>
+<li class='toc3'><a href='#-weibull'>weibull</a> </li>
 <li class='toc3'><a href='#-writeInputSpec'>writeInputSpec</a> </li>
 <li class='toc3'><a href='#-writeInputSpecOld'>writeInputSpecOld</a> </li>
-</ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -225,8 +382,8 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>one-dimensional value</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Math/SimpleNumber.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Math/SimpleNumber.sc'>SimpleNumber.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/Float.html">Float</a>, <a href="../Classes/Integer.html">Integer</a></div>
-<div id='related'>See also: <a href="./../Classes/Polar.html">Polar</a>, <a href="./../Classes/Complex.html">Complex</a>, <a href="./../Classes/Float.html">Float</a>, <a href="./../Classes/Integer.html">Integer</a>, <a href="./../Classes/UnaryOpUGen.html">UnaryOpUGen</a>, <a href="./../Classes/BinaryOpUGen.html">BinaryOpUGen</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Math/SimpleNumber.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Math/SimpleNumber.sc'>SimpleNumber.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/Float.html">Float</a>, <a href="../Classes/Integer.html">Integer</a></div>
+<div id='related'>See also: <a href="./../Classes/Polar.html">Polar</a>, <a href="./../Classes/Complex.html">Complex</a>, <a href="./../Classes/Float.html">Float</a>, <a href="./../Classes/Integer.html">Integer</a>, <a href="./../Classes/UnaryOpUGen.html">UnaryOpUGen</a>, <a href="./../Classes/BinaryOpUGen.html">BinaryOpUGen</a>, <a href="./../Guides/Tour-of-Special-Functions.html">Tour of Special Functions</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -269,13 +426,13 @@ var scdoc_sc_version = '3.9.3';
 <div class='method'>
 <p>Least common multiple</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gcd' href='./../Overviews/Methods.html#gcd'>gcd</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
-<p>Greatest common divisor</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-round' href='./../Overviews/Methods.html#round'>round</a>(<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<p>Greatest common divisor</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-round' href='./../Overviews/Methods.html#round'>round</a>(<span class='argstr'>aNumber: 1.0</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
-<p>Round to multiple of aNumber</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-roundUp' href='./../Overviews/Methods.html#roundUp'>roundUp</a>(<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<p>Round to multiple of aNumber</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-roundUp' href='./../Overviews/Methods.html#roundUp'>roundUp</a>(<span class='argstr'>aNumber: 1.0</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
-<p>Round up to a multiple of aNumber. For roundDown use <a href="./../Classes/SimpleNumber.html#-trunc">trunc</a>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-trunc' href='./../Overviews/Methods.html#trunc'>trunc</a>(<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<p>Round up to a multiple of aNumber. For roundDown use <a href="./../Classes/SimpleNumber.html#-trunc">trunc</a>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-trunc' href='./../Overviews/Methods.html#trunc'>trunc</a>(<span class='argstr'>aNumber: 1.0</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
-<p>Truncate to multiple of aNumber (e.g. it rounds numbers down to a multiple of aNumber).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-softRound' href='./../Overviews/Methods.html#softRound'>softRound</a>(<span class='argstr'>resolution: 1</span>, <span class='argstr'>margin: 0.05</span>, <span class='argstr'>strength: 1</span>)</h3>
+<p>Truncate to multiple of aNumber (e.g. it rounds numbers down to a multiple of aNumber).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-softRound' href='./../Overviews/Methods.html#softRound'>softRound</a>(<span class='argstr'>resolution: 1.0</span>, <span class='argstr'>margin: 0.05</span>, <span class='argstr'>strength: 1.0</span>)</h3>
 <div class='method'>
 <p>Rounds the value to a multiple of <strong>resolution</strong>. By using <strong>margin</strong> and <strong>strength</strong> you can control which values will be rounded, and by how much.
 <p>Conceptually this is the equivalent of MIDI quantization in a DAW/MIDI sequencer. In particular it allows a certain sloppiness close to the <strong>resolution</strong> value.
@@ -289,10 +446,10 @@ var scdoc_sc_version = '3.9.3';
 <p>Determines the degree to which this number will be changed.
 <p>If strength is 1, then this function will return the nearest resolution. If it is 0, then value of this number will be left unchanged.
 <p>E.g. If the resolution was 1 and strength was 0.5, then the value 0.6 would become 0.8.</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>((0..10) / 5).collect { |num| [num, num.softRound(1, 0, 1)] };
+<textarea class='editor'>((0..10) / 5).collect { |num| [num, num.softRound(1, 0, 1)] };
 ((0..10) / 5).collect { |num| [num, num.softRound(1, 0.3, 1)] };
-((0..10) / 5).collect { |num| [num, num.softRound(1, 0, 0.5)] };</pre>
-</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-snap' href='./../Overviews/Methods.html#snap'>snap</a>(<span class='argstr'>resolution: 1</span>, <span class='argstr'>margin: 0.05</span>, <span class='argstr'>strength: 1</span>)</h3>
+((0..10) / 5).collect { |num| [num, num.softRound(1, 0, 0.5)] };</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-snap' href='./../Overviews/Methods.html#snap'>snap</a>(<span class='argstr'>resolution: 1.0</span>, <span class='argstr'>margin: 0.05</span>, <span class='argstr'>strength: 1.0</span>)</h3>
 <div class='method'>
 <p>Rounds the values <strong>margin</strong> distance from resolution to a multiple of resolution. By using <strong>margin</strong> and <strong>strength</strong> you can control when values will be rounded, and by how much.
 <p>Conceptually this is the equivalent of 'snap' in a graphics program. Values within a certain distance (<strong>margin</strong>) from a grid line are snapped to it. All other values are unchanged.
@@ -306,16 +463,16 @@ var scdoc_sc_version = '3.9.3';
 <p>Determines the degree to which this number will be changed.
 <p>If strength is 1, then this function will return the nearest resolution. If it is 0, then value of this number will be left unchanged.
 <p>E.g. If the resolution was 1 and strength was 0.5, then the value 0.6 would become 0.8.</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>((0..10) / 5).collect { |num| [num, num.snap(1, 0, 1)] };
+<textarea class='editor'>((0..10) / 5).collect { |num| [num, num.snap(1, 0, 1)] };
 ((0..10) / 5).collect { |num| [num, num.snap(1, 0.3, 1)] };
-((0..10) / 5).collect { |num| [num, num.snap(1, 0, 0.5)] };</pre>
+((0..10) / 5).collect { |num| [num, num.snap(1, 0, 0.5)] };</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-thresh' href='./../Overviews/Methods.html#thresh'>thresh</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
 <p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-min' href='./../Overviews/Methods.html#min'>min</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
-<p>Minimum</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-max' href='./../Overviews/Methods.html#max'>max</a>(<span class='argstr'>aNumber: 0</span>, <span class='argstr'>adverb</span>)</h3>
+<p>Minimum</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-max' href='./../Overviews/Methods.html#max'>max</a>(<span class='argstr'>aNumber: 0.0</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
-<p>Maximum</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-wrap2' href='./../Overviews/Methods.html#wrap2'>wrap2</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<p>Maximum</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-wrap2' href='./../Overviews/Methods.html#wrap2'>wrap2</a>(<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
 <p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-atan2' href='./../Overviews/Methods.html#atan2'>atan2</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
@@ -377,7 +534,7 @@ var scdoc_sc_version = '3.9.3';
 <div class='method'>
 <p>1 / this</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pow' href='./../Overviews/Methods.html#pow'>pow</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
-<p>this to the power of aNumber</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-fold2' href='./../Overviews/Methods.html#fold2'>fold2</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<p>this to the power of aNumber</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-fold2' href='./../Overviews/Methods.html#fold2'>fold2</a>(<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
 <p>the folded value, a bitwise or with aNumber</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-previousPowerOf' href='./../Overviews/Methods.html#previousPowerOf'>previousPowerOf</a>(<span class='argstr'>base</span>)</h3>
 <div class='method'>
@@ -453,21 +610,21 @@ var scdoc_sc_version = '3.9.3';
 <div class='method'>
 <p>(a + b) ** 2</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-absdif' href='./../Overviews/Methods.html#absdif'>absdif</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
-<p>(a - b).abs</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-moddif' href='./../Overviews/Methods.html#moddif'>moddif</a>(<span class='argstr'>aNumber: 0</span>, <span class='argstr'>mod: 1</span>)</h3>
+<p>(a - b).abs</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-moddif' href='./../Overviews/Methods.html#moddif'>moddif</a>(<span class='argstr'>aNumber: 0.0</span>, <span class='argstr'>mod: 1.0</span>)</h3>
 <div class='method'>
-<p>On a circle, there are two distances between two points. This operator returns the smaller value of the two.<pre class='code prettyprint lang-sc'>moddif(0.75, 0, 1)</pre>
+<p>On a circle, there are two distances between two points. This operator returns the smaller value of the two.<textarea class='editor'>moddif(0.75, 0, 1)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-amclip' href='./../Overviews/Methods.html#amclip'>amclip</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
 <p>0 when b &lt;= 0,  a*b when b &gt; 0</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-scaleneg' href='./../Overviews/Methods.html#scaleneg'>scaleneg</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
-<p>a * b when a &lt; 0, otherwise a.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clip2' href='./../Overviews/Methods.html#clip2'>clip2</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<p>a * b when a &lt; 0, otherwise a.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clip2' href='./../Overviews/Methods.html#clip2'>clip2</a>(<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
-<p>clips receiver to +/- aNumber</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-excess' href='./../Overviews/Methods.html#excess'>excess</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<p>clips receiver to +/- aNumber</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-excess' href='./../Overviews/Methods.html#excess'>excess</a>(<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
 <p>Returns the difference of the receiver and its clipped form.<h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(a - clip2(a,b))</pre>
+<textarea class='editor'>(a - clip2(a,b))</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-madd' href='./../Overviews/Methods.html#madd'>madd</a>(<span class='argstr'>mul</span>, <span class='argstr'>add</span>)</h3>
-<div class='method'><pre class='code prettyprint lang-sc'>this * a + b</pre>
+<div class='method'><textarea class='editor'>this * a + b</textarea>
 </div><h3><a class='anchor' name='testing'>testing</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isPositive' href='./../Overviews/Methods.html#isPositive'>isPositive</a></h3>
 <div class='method'>
@@ -492,13 +649,13 @@ var scdoc_sc_version = '3.9.3';
 <div class='method'>
 <p>Converts this into an audiorate input.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asTimeString' href='./../Overviews/Methods.html#asTimeString'>asTimeString</a>(<span class='argstr'>precision: 0.001</span>, <span class='argstr'>maxDays: 365</span>, <span class='argstr'>dropDaysIfPossible: true</span>)</h3>
 <div class='method'>
-<p>Produces a time string in the format <code class='code prettyprint lang-sc'>ddd:hh:mm:ss.sss</code>, interpreting the receiver as time in seconds. See <a href="./../String#-asSecs">String: -asSecs</a> for the inverse function.<h4>Arguments:</h4>
+<p>Produces a time string in the format <code>ddd:hh:mm:ss.sss</code>, interpreting the receiver as time in seconds. See <a href="./../Classes/String.html#-asSecs">String: -asSecs</a> for the inverse function.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>precision<td class='argumentdesc'>
 <p>accuracy of the millisecond format; the string will always be formatted with 3 decimal places for milliseconds. Minimum value: 0.001.<tr><td class='argumentname'>maxDays<td class='argumentdesc'>
 <p>maximum number of days<tr><td class='argumentname'>dropDaysIfPossible<td class='argumentdesc'>
-<p>a <a href="./../Classes/Boolean.html">Boolean</a>. If set to <code class='code prettyprint lang-sc'>true</code>, and the number of days in the formatted string would be 0, that section is instead ommitted and the string is formatted as <code class='code prettyprint lang-sc'>hh:mm:ss.sss</code>.</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(
+<p>a <a href="./../Classes/Boolean.html">Boolean</a>. If set to <code>true</code>, and the number of days in the formatted string would be 0, that section is instead ommitted and the string is formatted as <code>hh:mm:ss.sss</code>.</table><h4>Discussion:</h4>
+<textarea class='editor'>(
 var start;
 start = Main.elapsedTime;
 {
@@ -507,7 +664,7 @@ start = Main.elapsedTime;
         0.05.wait
     }
 }.fork;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asPoint' href='./../Overviews/Methods.html#asPoint'>asPoint</a></h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
@@ -540,7 +697,7 @@ start = Main.elapsedTime;
 <div class='method'>
 <p>within a routine, yield the number so that the clock can wait for this many beats. Outside a Routine, this trows an error (see also Routine for details).<h4>Discussion:</h4>
 
-<p>Create a routine by a function fork<pre class='code prettyprint lang-sc'>(
+<p>Create a routine by a function fork<textarea class='editor'>(
 fork {
     1.wait;
     "I did wait".postln;
@@ -554,7 +711,7 @@ fork {
         i.wait
     }
 }
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-waitUntil' href='./../Overviews/Methods.html#waitUntil'>waitUntil</a></h3>
 <div class='method'>
 <p>like wait, only specify a time (measured in beats of the current thread's clock). Outside a Routine, this trows an error (see also Routine for details).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sleep' href='./../Overviews/Methods.html#sleep'>sleep</a></h3>
@@ -570,10 +727,10 @@ fork {
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
 <p>the value in the list closest to this</div><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 l = [0, 0.5, 0.9, 1];
 (0, 0.05..1).collect { |i| i.nearestInList(l) }
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nearestInScale' href='./../Overviews/Methods.html#nearestInScale'>nearestInScale</a>(<span class='argstr'>scale</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
@@ -582,28 +739,28 @@ l = [0, 0.5, 0.9, 1];
 <p>12 by default</table><h4>Returns:</h4>
 <div class='returnvalue'>
 <p>the value in the collection closest to this, assuming an octave repeating table of note values.</div><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 l = [0, 1, 5, 9, 11]; // pentatonic scale
 (60, 61..76).collect { |i| i.nearestInScale(l, 12) }
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-series' href='./../Overviews/Methods.html#series'>series</a>(<span class='argstr'>second</span>, <span class='argstr'>last</span>)</h3>
 <div class='method'>
-<p>return an arithmetic series from this over second to last.<h4>Discussion:</h4>
+<p>return an arithmetic series from this over second to last. The last value may not be included in the result if the step size does not divide evenly into the range of the series.<h4>Discussion:</h4>
 
-<p>This is used in the shortcuts:<pre class='code prettyprint lang-sc'>(0..100);
-(1, 3 .. 17)</pre>
+<p>This is used in the shortcuts:<textarea class='editor'>(0..100);
+(1, 3 .. 17)</textarea>
 
-<p>If second is nil, it is one magnitude step towards last (1 or -1). Examples:<pre class='code prettyprint lang-sc'>series(5, 7, 10);
+<p>If second is nil, it is one magnitude step towards last (1 or -1). Examples:<textarea class='editor'>series(5, 7, 10);
 series(5, nil, 10);
-(5, 7 .. 10)</pre>
+(5, 7 .. 10)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-seriesIter' href='./../Overviews/Methods.html#seriesIter'>seriesIter</a>(<span class='argstr'>second</span>, <span class='argstr'>last</span>)</h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
 <p>a Routine that iterates over the numbers from this to last.</div><h4>Discussion:</h4>
 
-<p>Since this is a lazy operation, last may be inf, generating an endless series (see also <a href="./../Guides/ListComprehensions.html">List Comprehensions</a>)<pre class='code prettyprint lang-sc'>r = seriesIter(0, 5);
+<p>Since this is a lazy operation, last may be inf, generating an endless series (see also <a href="./../Guides/ListComprehensions.html">List Comprehensions</a>)<textarea class='editor'>r = seriesIter(0, 5);
 r.nextN(8);
-r.nextN(8);</pre>
+r.nextN(8);</textarea>
 </div><h3><a class='anchor' name='windowing'>windowing</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-rectWindow' href='./../Overviews/Methods.html#rectWindow'>rectWindow</a></h3>
 <div class='method'><h4>Returns:</h4>
@@ -625,11 +782,11 @@ r.nextN(8);</pre>
 <p>Distortion with a perfectly linear region from -0.5 to +0.5</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-scurve' href='./../Overviews/Methods.html#scurve'>scurve</a></h3>
 <div class='method'>
 <p>Map receiver in the onto an S-curve.<h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>((0..100) / 100 ).collect(_.scurve).plot</pre>
+<textarea class='editor'>((0..100) / 100 ).collect(_.scurve).plot</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ramp' href='./../Overviews/Methods.html#ramp'>ramp</a></h3>
 <div class='method'>
 <p>Map receiver onto a ramp starting at 0.<h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>((-100..100) / 100 ).collect(_.ramp).plot</pre>
+<textarea class='editor'>((-100..100) / 100 ).collect(_.ramp).plot</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-magnitude' href='./../Overviews/Methods.html#magnitude'>magnitude</a></h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
@@ -643,12 +800,12 @@ r.nextN(8);</pre>
 <p>an array of SimpleNumbers each treated as a step in the octave.<tr><td class='argumentname'>stepsPerOctave<td class='argumentdesc'>
 <p>12 is the standard chromatic scale.</table><h4>Discussion:</h4>
 
-<p>the value is truncated to an integer and used as an index into an octave repeating table of note values. Indices wrap around the table and shift octaves as they do.<pre class='code prettyprint lang-sc'>(
+<p>the value is truncated to an integer and used as an index into an octave repeating table of note values. Indices wrap around the table and shift octaves as they do.<textarea class='editor'>(
 l = [0, 1, 5, 9, 11]; // pentatonic scale
 (1, 2..15).collect{|i|
     i.degreeToKey(l, 12)
 };
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-keyToDegree' href='./../Overviews/Methods.html#keyToDegree'>keyToDegree</a>(<span class='argstr'>scale</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
 <div class='method'>
 <p>inverse of degreeToKey.<h4>Arguments:</h4>
@@ -656,22 +813,22 @@ l = [0, 1, 5, 9, 11]; // pentatonic scale
 <tr><td class='argumentname'>scale<td class='argumentdesc'>
 <p>an array of SimpleNumbers each treated as a step in the octave.<tr><td class='argumentname'>stepsPerOctave<td class='argumentdesc'>
 <p>12 is the standard chromatic scale.</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 l = [0, 1, 5, 9, 11]; // pentatonic scale
 (60, 61..75).collect { |i| i.keyToDegree(l, 12) }
-)</pre>
+)</textarea>
 
-<p><pre class='code prettyprint lang-sc'>(
+<p><textarea class='editor'>(
 l = [0, 1, 5, 9, 11]; // pentatonic scale
 (60, 61..75).postln.collect { |i| i.keyToDegree(l, 12).degreeToKey(l) }
-)</pre>
-</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gaussCurve' href='./../Overviews/Methods.html#gaussCurve'>gaussCurve</a>(<span class='argstr'>a: 1</span>, <span class='argstr'>b: 0</span>, <span class='argstr'>c: 1</span>)</h3>
+)</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gaussCurve' href='./../Overviews/Methods.html#gaussCurve'>gaussCurve</a>(<span class='argstr'>a: 1.0</span>, <span class='argstr'>b: 0.0</span>, <span class='argstr'>c: 1.0</span>)</h3>
 <div class='method'>
 <p>map the receiver onto a gauss function.<h4>Discussion:</h4>
 
-<p>Uses the formula:<pre class='code prettyprint lang-sc'>a * (exp(squared(this - b) / (-2.0 * squared(c)))) Default values: a = 1; b = 0; c = 1</pre>
+<p>Uses the formula:<textarea class='editor'>a * (exp(squared(this - b) / (-2.0 * squared(c)))) Default values: a = 1; b = 0; c = 1</textarea>
 
-<p>Example code<pre class='code prettyprint lang-sc'>(0..1000).normalize(-10, 10).collect { |num| num.gaussCurve }.plot;</pre>
+<p>Example code<textarea class='editor'>(0..1000).normalize(-10, 10).collect { |num| num.gaussCurve }.plot;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-equalWithPrecision' href='./../Overviews/Methods.html#equalWithPrecision'>equalWithPrecision</a>(<span class='argstr'>that</span>, <span class='argstr'>precision: 0.0001</span>, <span class='argstr'>relativePrecision: 0</span>)</h3>
 <div class='method'>
 <p><h4>Arguments:</h4>
@@ -682,23 +839,23 @@ l = [0, 1, 5, 9, 11]; // pentatonic scale
 <p>The precision relative to the larger absolute of the values compared.</table><h4>Returns:</h4>
 <div class='returnvalue'>
 <p>true if receiver is closer to that than precision.</div><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>3.1.equalWithPrecision(3.0, 0.05); // false
+<textarea class='editor'>3.1.equalWithPrecision(3.0, 0.05); // false
 3.1.equalWithPrecision(3.0, 0.1); // false
 3.1.equalWithPrecision(3.0, 0.11); // true
 3000.1.equalWithPrecision(3000.0, 0, 0.01); // true
-3.1.equalWithPrecision(3.0, 0, 0.01); // false</pre>
-</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quantize' href='./../Overviews/Methods.html#quantize'>quantize</a>(<span class='argstr'>quantum: 1</span>, <span class='argstr'>tolerance: 0.05</span>, <span class='argstr'>strength: 1</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/deprecated/3.9/deprecated-3.9.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/deprecated/3.9/deprecated-3.9.sc</a></div>
+3.1.equalWithPrecision(3.0, 0, 0.01); // false</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quantize' href='./../Overviews/Methods.html#quantize'>quantize</a>(<span class='argstr'>quantum: 1.0</span>, <span class='argstr'>tolerance: 0.05</span>, <span class='argstr'>strength: 1.0</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/deprecated/3.10/deprecated-3.10.sc'>/usr/share/SuperCollider/SCClassLibrary/deprecated/3.10/deprecated-3.10.sc</a></div>
 <div class='method'>
-<p>Deprecated. Round the receiver to the quantum. If you're looking for MIDI quantization type features use <code class='code prettyprint lang-sc'>SimpleNumber#-softRound</code><h4>Arguments:</h4>
+<p>Deprecated. Round the receiver to the quantum. If you're looking for MIDI quantization type features use <code>SimpleNumber#-softRound</code><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>quantum<td class='argumentdesc'>
 <p>amount.<tr><td class='argumentname'>tolerance<td class='argumentdesc'>
 <p>allowed tolerance.<tr><td class='argumentname'>strength<td class='argumentdesc'>
 <p>Determines how much the value is allowed to differ in the tolerance range.</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>((0..10) / 10).collect { |num| num.quantize(1, 0.3, 0.5) }.postcs.plot;
+<textarea class='editor'>((0..10) / 10).collect { |num| num.quantize(1, 0.3, 0.5) }.postcs.plot;
 ((0..10) / 10).collect { |num| num.quantize(1, 0.6, 0.5) }.postcs.plot;
-((0..10) / 10).collect { |num| num.quantize(1, 1.0, 0.5) }.postcs.plot;</pre>
+((0..10) / 10).collect { |num| num.quantize(1, 1.0, 0.5) }.postcs.plot;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-linlin' href='./../Overviews/Methods.html#linlin'>linlin</a>(<span class='argstr'>inMin</span>, <span class='argstr'>inMax</span>, <span class='argstr'>outMin</span>, <span class='argstr'>outMax</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
 <div class='method'>
 <p>map the receiver from an assumed linear input range to a linear output range. If the input exceeds the assumed input range, the behaviour is specified by the clip argument.<h4>Arguments:</h4>
@@ -709,8 +866,8 @@ l = [0, 1, 5, 9, 11]; // pentatonic scale
 <p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
 <p>output maximum<tr><td class='argumentname'>clip<td class='argumentdesc'>
 <p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(0..10).collect { |num| num.linlin(0, 10, -4.3, 100) };
-(0..10).linlin(0, 10, -4.3, 100); // equivalent.</pre>
+<textarea class='editor'>(0..10).collect { |num| num.linlin(0, 10, -4.3, 100) };
+(0..10).linlin(0, 10, -4.3, 100); // equivalent.</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-linexp' href='./../Overviews/Methods.html#linexp'>linexp</a>(<span class='argstr'>inMin</span>, <span class='argstr'>inMax</span>, <span class='argstr'>outMin</span>, <span class='argstr'>outMax</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
 <div class='method'>
 <p>map the receiver from an assumed linear input range (inMin..inMax) to an exponential output range (outMin..outMax). The output range must not include zero. If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
@@ -721,8 +878,8 @@ l = [0, 1, 5, 9, 11]; // pentatonic scale
 <p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
 <p>output maximum<tr><td class='argumentname'>clip<td class='argumentdesc'>
 <p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(0..10).collect { |num| num.linexp(0, 10, 4.3, 100) };
-(0..10).linexp(0, 10, 4.3, 100); // equivalent.</pre>
+<textarea class='editor'>(0..10).collect { |num| num.linexp(0, 10, 4.3, 100) };
+(0..10).linexp(0, 10, 4.3, 100); // equivalent.</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-explin' href='./../Overviews/Methods.html#explin'>explin</a>(<span class='argstr'>inMin</span>, <span class='argstr'>inMax</span>, <span class='argstr'>outMin</span>, <span class='argstr'>outMax</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
 <div class='method'>
 <p>map the receiver from an assumed exponential input range (inMin..inMax) to a linear output range (outMin..outMax). If the input exceeds the assumed input range. The input range must not include zero. If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
@@ -733,8 +890,8 @@ l = [0, 1, 5, 9, 11]; // pentatonic scale
 <p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
 <p>output maximum<tr><td class='argumentname'>clip<td class='argumentdesc'>
 <p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(1..10).collect { |num| num.explin(0.1, 10, -4.3, 100) };
-(1..10).explin(0.1, 10, -4.3, 100); // equivalent.</pre>
+<textarea class='editor'>(1..10).collect { |num| num.explin(0.1, 10, -4.3, 100) };
+(1..10).explin(0.1, 10, -4.3, 100); // equivalent.</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-expexp' href='./../Overviews/Methods.html#expexp'>expexp</a>(<span class='argstr'>inMin</span>, <span class='argstr'>inMax</span>, <span class='argstr'>outMin</span>, <span class='argstr'>outMax</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
 <div class='method'>
 <p>map the receiver from an assumed exponential input range (inMin..inMax) to an exponential output range (outMin..outMax). If the input exceeds the assumed input range. Both input range and output range must not include zero. If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
@@ -745,8 +902,8 @@ l = [0, 1, 5, 9, 11]; // pentatonic scale
 <p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
 <p>output maximum<tr><td class='argumentname'>clip<td class='argumentdesc'>
 <p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(1..10).collect { |num| num.expexp(0.1, 10, 4.3, 100) };
-(1..10).expexp(0.1, 10, 4.3, 100); // equivalent.</pre>
+<textarea class='editor'>(1..10).collect { |num| num.expexp(0.1, 10, 4.3, 100) };
+(1..10).expexp(0.1, 10, 4.3, 100); // equivalent.</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-lincurve' href='./../Overviews/Methods.html#lincurve'>lincurve</a>(<span class='argstr'>inMin: 0</span>, <span class='argstr'>inMax: 1</span>, <span class='argstr'>outMin: 0</span>, <span class='argstr'>outMax: 1</span>, <span class='argstr'>curve: -4</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
 <div class='method'>
 <p>map the receiver from an assumed linear input range (inMin..inMax) to an exponential curve output range (outMin..outMax). A curve is like the curve parameter in Env. Unlike with linexp, the output range may include zero. If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
@@ -758,13 +915,13 @@ l = [0, 1, 5, 9, 11]; // pentatonic scale
 <p>output maximum<tr><td class='argumentname'>curve<td class='argumentdesc'>
 <p>0 (linear) &lt;0 (concave, negatively curved) &gt;0 (convex, positively curved)<tr><td class='argumentname'>clip<td class='argumentdesc'>
 <p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(0..10).collect { |num| num.lincurve(0, 10, -4.3, 100, -3) };
-(0..10).lincurve(0, 10, -4.3, 100, -3); // equivalent.</pre>
+<textarea class='editor'>(0..10).collect { |num| num.lincurve(0, 10, -4.3, 100, -3) };
+(0..10).lincurve(0, 10, -4.3, 100, -3); // equivalent.</textarea>
 
-<p><pre class='code prettyprint lang-sc'>// different curves:
+<p><textarea class='editor'>// different curves:
 (-4..4).do { |val|
     (0..100).collect(_.lincurve(0, 100, 0, 1, val)).plot
-}</pre>
+}</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-curvelin' href='./../Overviews/Methods.html#curvelin'>curvelin</a>(<span class='argstr'>inMin: 0</span>, <span class='argstr'>inMax: 1</span>, <span class='argstr'>outMin: 0</span>, <span class='argstr'>outMax: 1</span>, <span class='argstr'>curve: -4</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
 <div class='method'>
 <p>map the receiver from an assumed curve-exponential input range (inMin..inMax) to a linear output range (outMin..outMax). If the input exceeds the assumed input range. A curve is like the curve parameter in Env. Unlike with explin, the input range may include zero. If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
@@ -776,13 +933,13 @@ l = [0, 1, 5, 9, 11]; // pentatonic scale
 <p>output maximum<tr><td class='argumentname'>curve<td class='argumentdesc'>
 <p>0 (linear) &lt;0 (concave, negatively curved) &gt;0 (convex, positively curved)<tr><td class='argumentname'>clip<td class='argumentdesc'>
 <p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(1..10).collect { |num| num.curvelin(0, 10, -4.3, 100, -3) };
-(1..10).curvelin(0, 10, -4.3, 100, -3); // equivalent.</pre>
+<textarea class='editor'>(1..10).collect { |num| num.curvelin(0, 10, -4.3, 100, -3) };
+(1..10).curvelin(0, 10, -4.3, 100, -3); // equivalent.</textarea>
 
-<p><pre class='code prettyprint lang-sc'>// different curves:
+<p><textarea class='editor'>// different curves:
 (-4..4).do { |val|
     (0..100).collect(_.curvelin(0, 100, 0, 1, val)).plot
-}</pre>
+}</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bilin' href='./../Overviews/Methods.html#bilin'>bilin</a>(<span class='argstr'>inCenter</span>, <span class='argstr'>inMin</span>, <span class='argstr'>inMax</span>, <span class='argstr'>outCenter</span>, <span class='argstr'>outMin</span>, <span class='argstr'>outMax</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
 <div class='method'>
 <p>map the receiver from two assumed linear input ranges (inMin..inCenter) and (inCenter..inMax) to two linear output ranges (outMin..outCenter) and (outCenter..outMax). If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
@@ -793,7 +950,7 @@ l = [0, 1, 5, 9, 11]; // pentatonic scale
 <p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
 <p>output maximum<tr><td class='argumentname'>clip<td class='argumentdesc'>
 <p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>var center = 0.5, ctlCenter;
+<textarea class='editor'>var center = 0.5, ctlCenter;
 w = Window("bilin", Rect(100, 100, 200, 100)).front;
 a = Slider(w, Rect(20, 20, 150, 20)).value_(0.5);
 b = Slider(w, Rect(20, 45, 150, 20)).value_(0.5);
@@ -801,7 +958,7 @@ b.action = { center = b.value };
 a.mouseDownAction = { ctlCenter = a.value };
 a.action = {
     b.value = a.value.bilin(ctlCenter, 0, 1, center, 0, 1);
-};</pre>
+};</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-biexp' href='./../Overviews/Methods.html#biexp'>biexp</a>(<span class='argstr'>inCenter</span>, <span class='argstr'>inMin</span>, <span class='argstr'>inMax</span>, <span class='argstr'>outCenter</span>, <span class='argstr'>outMin</span>, <span class='argstr'>outMax</span>, <span class='argstr'>clip: 'minmax'</span>)</h3>
 <div class='method'>
 <p>map the receiver from two assumed exponential input ranges (inMin..inCenter) and (inCenter..inMax) to two linear output ranges (outMin..outCenter) and (outCenter..outMax). The input range must not include zero. If the input exceeds the input range, the following behaviours are specified by the clip argument.<h4>Arguments:</h4>
@@ -812,7 +969,7 @@ a.action = {
 <p>output minimum<tr><td class='argumentname'>outMax<td class='argumentdesc'>
 <p>output maximum<tr><td class='argumentname'>clip<td class='argumentdesc'>
 <p>nil (don't clip) \max (clip ceiling) \min (clip floor) \minmax (clip both - this is default).</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>// doesn't properly work yet.
+<textarea class='editor'>// doesn't properly work yet.
 (
 var center = 0.5, ctlCenter;
 w = Window("biexp", Rect(100, 100, 200, 100)).front;
@@ -823,14 +980,14 @@ a.mouseDownAction = { ctlCenter = a.value + 0.05 };
 a.action = {
     b.value = (a.value + 0.1).biexp(ctlCenter, 0.1, 1.1, center, 0, 1);
 };
-)</pre>
-</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-lcurve' href='./../Overviews/Methods.html#lcurve'>lcurve</a>(<span class='argstr'>a: 1</span>, <span class='argstr'>m: 0</span>, <span class='argstr'>n: 1</span>, <span class='argstr'>tau: 1</span>)</h3>
+)</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-lcurve' href='./../Overviews/Methods.html#lcurve'>lcurve</a>(<span class='argstr'>a: 1.0</span>, <span class='argstr'>m: 0.0</span>, <span class='argstr'>n: 1.0</span>, <span class='argstr'>tau: 1.0</span>)</h3>
 <div class='method'>
 <p>map the receiver onto an L-curve.<h4>Discussion:</h4>
 
-<p>Uses the formula<pre class='code prettyprint lang-sc'>a * (m * exp(x) * rTau + 1) / (n * exp(x) * rTau + 1)</pre>
+<p>Uses the formula<textarea class='editor'>a * (m * exp(x) * rTau + 1) / (n * exp(x) * rTau + 1)</textarea>
 
-<p>This is used for smoothing values and limiting them to a range.<pre class='code prettyprint lang-sc'>(0..1000).normalize(-10, 10).collect { |num| num.lcurve }.plot;</pre>
+<p>This is used for smoothing values and limiting them to a range.<textarea class='editor'>(0..1000).normalize(-10, 10).collect { |num| num.lcurve }.plot;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-degrad' href='./../Overviews/Methods.html#degrad'>degrad</a></h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
@@ -905,7 +1062,7 @@ a.action = {
 <tr><td class='argumentname'>standardDeviation<td class='argumentdesc'>
 <p>the upper limit</table><h4>Discussion:</h4>
 
-<p>Always returns a <a href="./../Classes/Float.html">Float</a>.<pre class='code prettyprint lang-sc'>(0..1000).collect { |num| gauss(0.0, num) }.plot;</pre>
+<p>Always returns a <a href="./../Classes/Float.html">Float</a>.<textarea class='editor'>(0..1000).collect { |num| gauss(0.0, num) }.plot;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-partition' href='./../Overviews/Methods.html#partition'>partition</a>(<span class='argstr'>parts: 2</span>, <span class='argstr'>min: 1</span>)</h3>
 <div class='method'>
 <p>randomly partition a number into parts of at least min size.<h4>Arguments:</h4>
@@ -913,8 +1070,8 @@ a.action = {
 <tr><td class='argumentname'>parts<td class='argumentdesc'>
 <p>number of parts<tr><td class='argumentname'>min<td class='argumentdesc'>
 <p>the minimum size</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>75.partition(8, 3);
-75.partition(75, 1);</pre>
+<textarea class='editor'>75.partition(8, 3);
+75.partition(75, 1);</textarea>
 </div><h3><a class='anchor' name='UGen%20Compatibility%20Methods'>UGen Compatibility Methods</a></h3>
 
 <p>Some methods to ease the development of generic ugen code.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-lag' href='./../Overviews/Methods.html#lag'>lag</a></h3>
@@ -928,38 +1085,417 @@ a.action = {
 <div class='method'>
 <p><h4>Returns:</h4>
 <div class='returnvalue'>
-<p><code class='code prettyprint lang-sc'>this</code></div></div><h3><a class='anchor' name='misc'>misc</a></h3>
+<p><code>this</code></div></div><h3><a class='anchor' name='misc'>misc</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isValidUGenInput' href='./../Overviews/Methods.html#isValidUGenInput'>isValidUGenInput</a></h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>false if receiver cannot be used in UGen.</div></div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<p>false if receiver cannot be used in UGen.</div></div><h3><a class='anchor' name='Special%20Functions'>Special Functions</a></h3>
+
+<p>A variety of Special Functions are supplied by the Boost C++ library. The library's <a href="http://www.boost.org/doc/libs/1_66_0/libs/math/doc/html/special.html">online documentation</a> serves as the primary reference for the following functions. The methods here match closely with those found in the source library, as do argument names.
+<p>Below you'll find descriptions of the functions and their bounds, but for visualizing the functions, have a look in <a href="./../Guides/Tour-of-Special-Functions.html">Tour of Special Functions</a>.<div class='warning'><span class='warninglabel'>WARNING:</span> Many of the functions are only valid in certain numerical ranges. For the most part, error handling happens in the underlying boost functions. While these errors are often obtuse, you'll usually find a useful message at the end of the error regarding proper ranges and the erroneous value supplied. Refer to the online documentation for more detailed descriptions, and the <a href="./../Guides/Tour-of-Special-Functions.html">Tour of Special Functions</a> for plots showing ranges and asymptotes.</div><h3><a class='anchor' name='Number%20Series'>Number Series</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Number%20Series">Number Series</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bernouliB2n' href='./../Overviews/Methods.html#bernouliB2n'>bernouliB2n</a></h3>
+<div class='method'>
+<p>Returns the (2*<code>n</code>)th Bernoulli number.
+<p>Because all odd numbered Bernoulli numbers are zero (apart from B(1) which is -1/2) the interface will only return the even numbered Bernoulli numbers.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tangentT2n' href='./../Overviews/Methods.html#tangentT2n'>tangentT2n</a></h3>
+<div class='method'>
+<p>Returns a single tangent number at <code>i</code>. Also called a zag function.</div><h3><a class='anchor' name='Gamma%20Functions'>Gamma Functions</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Gamma%20Functions">Gamma Functions</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tgamma' href='./../Overviews/Methods.html#tgamma'>tgamma</a></h3>
+<div class='method'>
+<p>Returns the "true gamma" of value <code>z</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tgamma1pm1' href='./../Overviews/Methods.html#tgamma1pm1'>tgamma1pm1</a></h3>
+<div class='method'>
+<p>Returns <code>gamma(dz + 1) - 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-lgamma' href='./../Overviews/Methods.html#lgamma'>lgamma</a></h3>
+<div class='method'>
+<p>Returns the natural logarithm of the gamma function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-digamma' href='./../Overviews/Methods.html#digamma'>digamma</a></h3>
+<div class='method'>
+<p>Returns the digamma or psi function of <code>z</code>.
+<p>Digamma is defined as the logarithmic derivative of the gamma function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-trigamma' href='./../Overviews/Methods.html#trigamma'>trigamma</a></h3>
+<div class='method'>
+<p>Returns the trigamma function of <code>z</code>.
+<p>Trigamma is defined as the derivative of the digamma function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-polygamma' href='./../Overviews/Methods.html#polygamma'>polygamma</a>(<span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns the polygamma function of <code>z</code>.
+<p>Polygamma is defined as the <code>n</code>'th derivative of the digamma function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tgammaRatio' href='./../Overviews/Methods.html#tgammaRatio'>tgammaRatio</a>(<span class='argstr'>b</span>)</h3>
+<div class='method'>
+<p>Returns the ratio of gamma functions <code>tgamma(a) / tgamma(b)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tgammaDeltaRatio' href='./../Overviews/Methods.html#tgammaDeltaRatio'>tgammaDeltaRatio</a>(<span class='argstr'>delta</span>)</h3>
+<div class='method'>
+<p>Returns the ratio of gamma functions <code>tgamma(a) / tgamma(a+delta)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaP' href='./../Overviews/Methods.html#gammaP'>gammaP</a>(<span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns the normalised lower incomplete gamma function.
+<p>Requires <code>a</code> &gt; 0 and <code>z</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaQ' href='./../Overviews/Methods.html#gammaQ'>gammaQ</a>(<span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns the normalised upper incomplete gamma function.
+<p>Requires <code>a</code> &gt; 0 and <code>z</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tgammaLower' href='./../Overviews/Methods.html#tgammaLower'>tgammaLower</a>(<span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns the full (non-normalised) lower incomplete gamma function.
+<p>Requires <code>a</code> &gt; 0 and <code>z</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tgammaUpper' href='./../Overviews/Methods.html#tgammaUpper'>tgammaUpper</a>(<span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns the full (non-normalised) upper incomplete gamma function.
+<p>Requires <code>a</code> &gt; 0 and <code>z</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaPInv' href='./../Overviews/Methods.html#gammaPInv'>gammaPInv</a>(<span class='argstr'>p</span>)</h3>
+<div class='method'>
+<p>Returns a value such that <code>p = gamma_p(a, x)</code>.
+<p>Requires <code>a</code> &gt; 0 and 1 &gt;= <code>p,q</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaQInv' href='./../Overviews/Methods.html#gammaQInv'>gammaQInv</a>(<span class='argstr'>q</span>)</h3>
+<div class='method'>
+<p>Returns a value x such that <code>q = gamma_q(a, x)</code>.
+<p>Requires <code>a</code> &gt; 0 and 1 &gt;= <code>p,q</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaPInvA' href='./../Overviews/Methods.html#gammaPInvA'>gammaPInvA</a>(<span class='argstr'>p</span>)</h3>
+<div class='method'>
+<p>Returns a value such that <code>p = gamma_p(a, x)</code>.
+<p>Requires <code>x</code> &gt; 0 and 1 &gt;= <code>p,q</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaQInvA' href='./../Overviews/Methods.html#gammaQInvA'>gammaQInvA</a>(<span class='argstr'>q</span>)</h3>
+<div class='method'>
+<p>Returns a value x such that <code>q = gamma_q(a, x)</code>.
+<p>Requires <code>x</code> &gt; 0 and 1 &gt;= <code>p,q</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaPDerivative' href='./../Overviews/Methods.html#gammaPDerivative'>gammaPDerivative</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Implements the partial derivative with respect to x of the incomplete gamma function (lower).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaQDerivative' href='./../Overviews/Methods.html#gammaQDerivative'>gammaQDerivative</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Implements the partial derivative with respect to x of the incomplete gamma function (upper).</div><h3><a class='anchor' name='Factorials%20and%20Binomial%20Coefficients'>Factorials and Binomial Coefficients</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Factorials%20and%20Binomial%20Coefficients">Factorials and Binomial Coefficients</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-factorial' href='./../Overviews/Methods.html#factorial'>factorial</a></h3>
+<div class='method'>
+<p>Returns <code>i!</code>.<div class='warning'><span class='warninglabel'>WARNING:</span> <code>factorial</code> will overflow if <code>i &gt; 170</code></div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doubleFactorial' href='./../Overviews/Methods.html#doubleFactorial'>doubleFactorial</a></h3>
+<div class='method'>
+<p>Returns <code>i!!</code>.
+<p>For <strong>even</strong> <code>i</code>, <code>i !! = i(i-2)(i-4)(i-6) ... (4)(2)</code>.
+<p>For <strong>odd</strong> <code>i</code>, <code>i !! = i(i-2)(i-4)(i-6) ... (3)(1)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-risingFactorial' href='./../Overviews/Methods.html#risingFactorial'>risingFactorial</a>(<span class='argstr'>i</span>)</h3>
+<div class='method'>
+<p>Returns the rising factorial of <code>x</code> and <code>i</code>:
+<p><code>x(x+1)(x+2)(x+3)...(x+i-1)</code>
+<p>Both <code>x</code> and <code>i</code> can be negative as well as positive.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-fallingFactorial' href='./../Overviews/Methods.html#fallingFactorial'>fallingFactorial</a>(<span class='argstr'>i</span>)</h3>
+<div class='method'>
+<p>Returns the falling factorial of <code>x</code> and <code>i</code>:
+<p><code>x(x-1)(x-2)(x-3)...(x-i+1)</code>
+<p>This function is only defined for positive <code>i</code>. Argument <code>x</code> can be either positive or negative.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-binomialCoefficient' href='./../Overviews/Methods.html#binomialCoefficient'>binomialCoefficient</a>(<span class='argstr'>k</span>)</h3>
+<div class='method'>
+<p>Requires <code>k</code> &lt;= <code>n</code>.</div><h3><a class='anchor' name='Beta%20Functions'>Beta Functions</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Beta%20Functions">Beta Functions</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-beta' href='./../Overviews/Methods.html#beta'>beta</a>(<span class='argstr'>b</span>)</h3>
+<div class='method'>
+<p>The beta function is defined by: <code>tgamma(a)*tgamma(b) / tgamma(a+b)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibeta' href='./../Overviews/Methods.html#ibeta'>ibeta</a>(<span class='argstr'>b</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the normalised incomplete beta function of <code>a</code>, <code>b</code> and <code>x</code>.
+<p>Require 0 &lt;= <code>x</code> &lt;= 1, <code>a,b</code> &gt;= 0, and in addition that not both <code>a</code> and <code>b</code> are zero.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaC' href='./../Overviews/Methods.html#ibetaC'>ibetaC</a>(<span class='argstr'>b</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the normalised complement of the incomplete beta function of <code>a</code>, <code>b</code> and <code>x</code>.
+<p>Require 0 &lt;= <code>x</code> &lt;= 1, <code>a,b</code> &gt;= 0, and in addition that not both <code>a</code> and <code>b</code> are zero.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-betaFull' href='./../Overviews/Methods.html#betaFull'>betaFull</a>(<span class='argstr'>b</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the full (non-normalised) incomplete beta function of <code>a</code>, <code>b</code> and <code>x</code>.
+<p>Require 0 &lt;= <code>x</code> &lt;= 1, and <code>a,b</code> &gt; 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-betaFullC' href='./../Overviews/Methods.html#betaFullC'>betaFullC</a>(<span class='argstr'>b</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the full (non-normalised) complement of the incomplete beta function of <code>a</code>, <code>b</code> and <code>x</code>.
+<p>Require 0 &lt;= <code>x</code> &lt;= 1, and <code>a,b</code> &gt; 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaInv' href='./../Overviews/Methods.html#ibetaInv'>ibetaInv</a>(<span class='argstr'>b</span>, <span class='argstr'>p</span>)</h3>
+<div class='method'>
+<p>Returns a value <code>x</code> such that: <code>p = ibeta(a, b, x)</code>.
+<p>Requires <code>a,b</code> &gt; 0 and 0 &lt;= <code>p</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaCInv' href='./../Overviews/Methods.html#ibetaCInv'>ibetaCInv</a>(<span class='argstr'>b</span>, <span class='argstr'>q</span>)</h3>
+<div class='method'>
+<p>Returns a value <code>x</code> such that: <code>q = ibetaC(a, b, x)</code>.
+<p>Requires <code>a,b</code> &gt; 0 and 0 &lt;= <code>q</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaInvA' href='./../Overviews/Methods.html#ibetaInvA'>ibetaInvA</a>(<span class='argstr'>x</span>, <span class='argstr'>p</span>)</h3>
+<div class='method'>
+<p>Returns a value <code>a</code> such that: <code>p = ibeta(a, b, x)</code>.
+<p>Requires <code>b</code> &gt; 0, 0 &lt; <code>x</code> &lt; 1, and 0 &lt;= <code>p</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaCInvA' href='./../Overviews/Methods.html#ibetaCInvA'>ibetaCInvA</a>(<span class='argstr'>x</span>, <span class='argstr'>q</span>)</h3>
+<div class='method'>
+<p>Returns a value <code>a</code> such that: <code>q = ibetaC(a, b, x)</code>.
+<p>Requires <code>b</code> &gt; 0, 0 &lt; <code>x</code> &lt; 1, and 0 &lt;= <code>q</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaInvB' href='./../Overviews/Methods.html#ibetaInvB'>ibetaInvB</a>(<span class='argstr'>x</span>, <span class='argstr'>p</span>)</h3>
+<div class='method'>
+<p>Returns a value <code>b</code> such that: <code>p = ibeta(a, b, x)</code>.
+<p>Requires <code>a</code> &gt; 0, 0 &lt; <code>x</code> &lt; 1, and 0 &lt;= <code>p</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaCInvB' href='./../Overviews/Methods.html#ibetaCInvB'>ibetaCInvB</a>(<span class='argstr'>x</span>, <span class='argstr'>q</span>)</h3>
+<div class='method'>
+<p>Returns a value <code>b</code> such that: <code>q = ibetaC(a, b, x)</code>.
+<p>Requires <code>a</code> &gt; 0, 0 &lt; <code>x</code> &lt; 1, and 0 &lt;= <code>q</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaDerivative' href='./../Overviews/Methods.html#ibetaDerivative'>ibetaDerivative</a>(<span class='argstr'>b</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the partial derivative with respect to <code>x</code> of the incomplete beta function <code>ibeta(a,b,x)</code>.</div><h3><a class='anchor' name='Error%20Functions'>Error Functions</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Error%20Functions">Error Functions</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-erf' href='./../Overviews/Methods.html#erf'>erf</a></h3>
+<div class='method'>
+<p>Returns the error function of <code>z</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-erfC' href='./../Overviews/Methods.html#erfC'>erfC</a></h3>
+<div class='method'>
+<p>Returns the complement of the error function of <code>z</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-erfInv' href='./../Overviews/Methods.html#erfInv'>erfInv</a></h3>
+<div class='method'>
+<p>Returns the inverse error function of <code>z</code>, that is a value <code>x</code> such that:
+<p><code>p = erf(x)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-erfCInv' href='./../Overviews/Methods.html#erfCInv'>erfCInv</a></h3>
+<div class='method'>
+<p>Returns the inverse of the complement of the error function of <code>z</code>, that is a value <code>x</code> such that:
+<p><code>p = erfC(x)</code></div><h3><a class='anchor' name='Polynomials'>Polynomials</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Polynomials">Polynomials</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-legendreP' href='./../Overviews/Methods.html#legendreP'>legendreP</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the Legendre Polynomial of the first kind.
+<p>Requires -1 &lt;= <code>x</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-legendrePPrime' href='./../Overviews/Methods.html#legendrePPrime'>legendrePPrime</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the derivatives of the Legendre polynomials.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-legendrePZeros' href='./../Overviews/Methods.html#legendrePZeros'>legendrePZeros</a></h3>
+<div class='method'>
+<p>Since the Legendre polynomials are alternatively even and odd, only the non-negative zeros are returned. For the odd Legendre polynomials, the first zero is always zero. The rest of the zeros are returned in increasing order.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-legendrePAssoc' href='./../Overviews/Methods.html#legendrePAssoc'>legendrePAssoc</a>(<span class='argstr'>m</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the associated Legendre polynomial of the first kind.
+<p>Requires -1 &lt;= <code>x</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-legendreQ' href='./../Overviews/Methods.html#legendreQ'>legendreQ</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the value of the Legendre polynomial that is the second solution to the Legendre differential equation.
+<p>Requires -1 &lt;= <code>x</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-laguerre' href='./../Overviews/Methods.html#laguerre'>laguerre</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the value of the Laguerre Polynomial of order <code>n</code> at point <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-laguerreAssoc' href='./../Overviews/Methods.html#laguerreAssoc'>laguerreAssoc</a>(<span class='argstr'>m</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the Associated Laguerre polynomial of degree of dgree <code>n</code> and order <code>m</code> at point <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hermite' href='./../Overviews/Methods.html#hermite'>hermite</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the value of the Hermite Polynomial of order <code>n</code> at point <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-chebyshevT' href='./../Overviews/Methods.html#chebyshevT'>chebyshevT</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the Chebyshev polynomials of the first kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-chebyshevU' href='./../Overviews/Methods.html#chebyshevU'>chebyshevU</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the Chebyshev polynomials of the second kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-chebyshevTPrime' href='./../Overviews/Methods.html#chebyshevTPrime'>chebyshevTPrime</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the derivatives of the Chebyshev polynomials of the first kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-chebyshevTZeros' href='./../Overviews/Methods.html#chebyshevTZeros'>chebyshevTZeros</a></h3>
+<div class='method'>
+<p>Returns the roots (zeros) of the <code>n</code>-th Chebyshev polynomial of the first kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphericalHarmonic' href='./../Overviews/Methods.html#sphericalHarmonic'>sphericalHarmonic</a>(<span class='argstr'>m</span>, <span class='argstr'>theta</span>, <span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the (<code>Complex</code>) value of the Spherical Harmonic.
+<p><code>theta</code> is taken as the polar (colatitudinal) coordinate within <code>[0, pi]</code>, and <code>phi</code> as the azimuthal (longitudinal) coordinate within <code>[0,2pi]</code>.
+<p>See boost documentation for further information, including a note about the Condon-Shortley phase term of <code>(-1)^m</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphericalHarmonicR' href='./../Overviews/Methods.html#sphericalHarmonicR'>sphericalHarmonicR</a>(<span class='argstr'>m</span>, <span class='argstr'>theta</span>, <span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the real part of the Spherical Harmonic.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphericalHarmonicI' href='./../Overviews/Methods.html#sphericalHarmonicI'>sphericalHarmonicI</a>(<span class='argstr'>m</span>, <span class='argstr'>theta</span>, <span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the imaginary part of the Spherical Harmonic.</div><h3><a class='anchor' name='Bessel%20Functions'>Bessel Functions</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Bessel%20Functions">Bessel Functions</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselJ' href='./../Overviews/Methods.html#cylBesselJ'>cylBesselJ</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the Bessel functions of the first kind.
+<p>The functions return the result of <code>domain_error</code> whenever the result is undefined or complex. This occurs when <code>x &lt; 0</code> and <code>v</code> is not an integer, or when <code>x == 0</code> and <code>v != 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylNeumann' href='./../Overviews/Methods.html#cylNeumann'>cylNeumann</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the Bessel functions of the second kind.
+<p>The functions return the result of <code>domain_error</code> whenever the result is undefined or complex. This occurs when <code>x &lt;= 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselJZero' href='./../Overviews/Methods.html#cylBesselJZero'>cylBesselJZero</a>(<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>Returns a single zero or root of the Bessel function of the first kind.
+<p><code>index</code> is a 1-based index of zero of the cylindrical Bessel function of order <code>v</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylNeumannZero' href='./../Overviews/Methods.html#cylNeumannZero'>cylNeumannZero</a>(<span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>Returns a single zero or root of the Neumann function (Bessel function of the second kind).
+<p><code>index</code> is a 1-based index of zero of the cylindrical Neumann function of order <code>v</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselI' href='./../Overviews/Methods.html#cylBesselI'>cylBesselI</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the modified Bessel functions of the first kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselK' href='./../Overviews/Methods.html#cylBesselK'>cylBesselK</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the modified Bessel functions of the second kind.
+<p>Requires <code>x &gt; 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphBessel' href='./../Overviews/Methods.html#sphBessel'>sphBessel</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the spherical Bessel functions of the first kind.
+<p>Requires <code>x</code> &gt; 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphNeumann' href='./../Overviews/Methods.html#sphNeumann'>sphNeumann</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the spherical Bessel functions of the first kind.
+<p>Requires <code>x</code> &gt; 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselJPrime' href='./../Overviews/Methods.html#cylBesselJPrime'>cylBesselJPrime</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the first derivative with respect to x of the corresponding Bessel function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylNeumannPrime' href='./../Overviews/Methods.html#cylNeumannPrime'>cylNeumannPrime</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the first derivative with respect to x of the corresponding Neumann function.
+<p>Requires <code>x &gt; 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselIPrime' href='./../Overviews/Methods.html#cylBesselIPrime'>cylBesselIPrime</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the first derivative with respect to x of the corresponding Bessel function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselKPrime' href='./../Overviews/Methods.html#cylBesselKPrime'>cylBesselKPrime</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the first derivative with respect to x of the corresponding Bessel function.
+<p>Requires <code>x &gt; 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphBesselPrime' href='./../Overviews/Methods.html#sphBesselPrime'>sphBesselPrime</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the first derivative with respect to x of the corresponding Bessel function.
+<p>Requires <code>x &gt; 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphNeumannPrime' href='./../Overviews/Methods.html#sphNeumannPrime'>sphNeumannPrime</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the first derivative with respect to x of the corresponding Neumann function.
+<p>Requires <code>x &gt; 0</code>.</div><h3><a class='anchor' name='Hankel%20Functions'>Hankel Functions</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Hankel%20Functions">Hankel Functions</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylHankel1' href='./../Overviews/Methods.html#cylHankel1'>cylHankel1</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the Hankel functions of the first kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylHankel2' href='./../Overviews/Methods.html#cylHankel2'>cylHankel2</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the Hankel functions of the second kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphHankel1' href='./../Overviews/Methods.html#sphHankel1'>sphHankel1</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the spherical Hankel functions of the first kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphHankel2' href='./../Overviews/Methods.html#sphHankel2'>sphHankel2</a>(<span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the spherical Hankel functions of the second kind.</div><h3><a class='anchor' name='Airy%20Functions'>Airy Functions</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Airy%20Functions">Airy Functions</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-airyAi' href='./../Overviews/Methods.html#airyAi'>airyAi</a></h3>
+<div class='method'>
+<p>Returns the result of the Airy function Ai at <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-airyBi' href='./../Overviews/Methods.html#airyBi'>airyBi</a></h3>
+<div class='method'>
+<p>Returns the result of the Airy function Bi at <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-airyAiPrime' href='./../Overviews/Methods.html#airyAiPrime'>airyAiPrime</a></h3>
+<div class='method'>
+<p>Returns the derivative of the Airy function Ai at <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-airyBiPrime' href='./../Overviews/Methods.html#airyBiPrime'>airyBiPrime</a></h3>
+<div class='method'>
+<p>Returns the derivative of the Airy function Bi at <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-airyAiZero' href='./../Overviews/Methods.html#airyAiZero'>airyAiZero</a></h3>
+<div class='method'>
+<p>Returns the <code>m</code>th zero or root of the Airy Ai function. The Airy Ai function has an infinite number of zeros on the negative real axis.
+<p><code>m</code> is 1-based.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-airyBiZero' href='./../Overviews/Methods.html#airyBiZero'>airyBiZero</a></h3>
+<div class='method'>
+<p>Returns the <code>m</code>th zero or root (1-based) of the Airy Bi function. The Airy Bi function has an infinite number of zeros on the negative real axis.
+<p><code>m</code> is 1-based.</div><h3><a class='anchor' name='Elliptic%20Integrals'>Elliptic Integrals</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Elliptic%20Integrals">Elliptic Integrals</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintRf' href='./../Overviews/Methods.html#ellintRf'>ellintRf</a>(<span class='argstr'>y</span>, <span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns Carlson's Elliptic Integral RF.
+<p>Requires that <code>x,y &gt;= 0</code>, with at most one of them zero, and that <code>z &gt;= 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintRd' href='./../Overviews/Methods.html#ellintRd'>ellintRd</a>(<span class='argstr'>y</span>, <span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns Carlson's Elliptic Integral RD.
+<p>Requires that <code>x,y &gt;= 0</code>, with at most one of them zero, and that <code>z &gt;= 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintRj' href='./../Overviews/Methods.html#ellintRj'>ellintRj</a>(<span class='argstr'>y</span>, <span class='argstr'>z</span>, <span class='argstr'>p</span>)</h3>
+<div class='method'>
+<p>Returns Carlson's Elliptic Integral RJ.
+<p>Requires that <code>x,y,z &gt;= 0</code>, with at most one of them zero, and that <code>p != 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintRc' href='./../Overviews/Methods.html#ellintRc'>ellintRc</a>(<span class='argstr'>y</span>)</h3>
+<div class='method'>
+<p>Returns Carlson's Elliptic Integral RC.
+<p>Requires that <code>x &gt;= 0</code>, with at most one of them zero, and that <code>y != 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintRg' href='./../Overviews/Methods.html#ellintRg'>ellintRg</a>(<span class='argstr'>y</span>, <span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns Carlson's Elliptic Integral RG.
+<p>Requires that <code>x,y &gt;= 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellint1' href='./../Overviews/Methods.html#ellint1'>ellint1</a>(<span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the incomplete elliptic integral of the first kind, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellint1C' href='./../Overviews/Methods.html#ellint1C'>ellint1C</a></h3>
+<div class='method'>
+<p>Returns the complete elliptic integral of the first kind, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellint2' href='./../Overviews/Methods.html#ellint2'>ellint2</a>(<span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the incomplete elliptic integral of the second kind, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellint2C' href='./../Overviews/Methods.html#ellint2C'>ellint2C</a></h3>
+<div class='method'>
+<p>Returns the complete elliptic integral of the second kind, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellint3' href='./../Overviews/Methods.html#ellint3'>ellint3</a>(<span class='argstr'>n</span>, <span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the incomplete elliptic integral of the third kind, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code> and <code>n &lt; 1/sin^2(phi)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellint3C' href='./../Overviews/Methods.html#ellint3C'>ellint3C</a>(<span class='argstr'>n</span>)</h3>
+<div class='method'>
+<p>Returns the complete elliptic integral of the third kind, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code> and <code>n &lt; 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintD' href='./../Overviews/Methods.html#ellintD'>ellintD</a>(<span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the incomplete elliptic integral <strong>D(phi, k)</strong>, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintDC' href='./../Overviews/Methods.html#ellintDC'>ellintDC</a></h3>
+<div class='method'>
+<p>Returns the complete elliptic integral <strong>D(phi, k)</strong>, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiZeta' href='./../Overviews/Methods.html#jacobiZeta'>jacobiZeta</a>(<span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the result of the Jacobi Zeta Function.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-heumanLambda' href='./../Overviews/Methods.html#heumanLambda'>heumanLambda</a>(<span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the result of the Heuman Lambda Function.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3><a class='anchor' name='Jacobi%20Elliptic%20Functions'>Jacobi Elliptic Functions</a></h3>
+
+<p>Like all elliptic functions, these can be parameterised in a number of ways:<ul>
+<li>In terms of a parameter <code>m</code>.<li>In terms of the elliptic modulus <code>k</code> where <code>m = k^2</code>.<li>In terms of the modular angle <code>α</code>, where <code>m = sin2α</code>.</ul>
+
+<p>This implementation takes the elliptic modulus <code>k</code> as the parameter. In addition the variable <code>u</code> is used to express an amplitude <strong>φ</strong>. All take the elliptic modulus as the first argument - this is for alignment with the <a href="#Elliptic%20Integrals">Elliptic Integrals</a>.
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Jacobi%20Elliptic%20Functions">Jacobi Elliptic Functions</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiCd' href='./../Overviews/Methods.html#jacobiCd'>jacobiCd</a>(<span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiCn' href='./../Overviews/Methods.html#jacobiCn'>jacobiCn</a>(<span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiCs' href='./../Overviews/Methods.html#jacobiCs'>jacobiCs</a>(<span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiDc' href='./../Overviews/Methods.html#jacobiDc'>jacobiDc</a>(<span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiDn' href='./../Overviews/Methods.html#jacobiDn'>jacobiDn</a>(<span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiDs' href='./../Overviews/Methods.html#jacobiDs'>jacobiDs</a>(<span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiNc' href='./../Overviews/Methods.html#jacobiNc'>jacobiNc</a>(<span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiNd' href='./../Overviews/Methods.html#jacobiNd'>jacobiNd</a>(<span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiNs' href='./../Overviews/Methods.html#jacobiNs'>jacobiNs</a>(<span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiSc' href='./../Overviews/Methods.html#jacobiSc'>jacobiSc</a>(<span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiSd' href='./../Overviews/Methods.html#jacobiSd'>jacobiSd</a>(<span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiSn' href='./../Overviews/Methods.html#jacobiSn'>jacobiSn</a>(<span class='argstr'>u</span>)</h3>
+<div class='method'></div><h3><a class='anchor' name='Zeta%20Functions'>Zeta Functions</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Zeta%20Functions">Zeta Functions</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-zeta' href='./../Overviews/Methods.html#zeta'>zeta</a></h3>
+<div class='method'>
+<p>Returns the zeta function of <code>z</code>.
+<p>Requires <code>z != 1</code>.</div><h3><a class='anchor' name='Exponential%20Integrals'>Exponential Integrals</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Exponential%20Integrals">Exponential Integrals</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-expintEn' href='./../Overviews/Methods.html#expintEn'>expintEn</a>(<span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns the exponential integral En of <code>z</code>.
+<p>Requires that when <code>n == 1</code>, <code>z !=0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-expintEi' href='./../Overviews/Methods.html#expintEi'>expintEi</a></h3>
+<div class='method'>
+<p>Returns the exponential integral of <code>z</code>.
+<p>Requires <code>z != 0</code>.</div><h3><a class='anchor' name='Basic%20Functions'>Basic Functions</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Basic%20Functions">Basic Functions</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sinPi' href='./../Overviews/Methods.html#sinPi'>sinPi</a></h3>
+<div class='method'>
+<p>Returns <code>sin(x * π)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cosPi' href='./../Overviews/Methods.html#cosPi'>cosPi</a></h3>
+<div class='method'>
+<p>Returns <code>cos(x * π)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-log1p' href='./../Overviews/Methods.html#log1p'>log1p</a></h3>
+<div class='method'>
+<p>Returns the natural logarithm of <code>x+1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-expm1' href='./../Overviews/Methods.html#expm1'>expm1</a></h3>
+<div class='method'>
+<p>Returns <code>e^x - 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cbrt' href='./../Overviews/Methods.html#cbrt'>cbrt</a></h3>
+<div class='method'>
+<p>Returns the cube root of <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sqrt1pm1' href='./../Overviews/Methods.html#sqrt1pm1'>sqrt1pm1</a></h3>
+<div class='method'>
+<p>Returns <code>sqrt(1+x) - 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-powm1' href='./../Overviews/Methods.html#powm1'>powm1</a>(<span class='argstr'>y</span>)</h3>
+<div class='method'>
+<p>Returns <code>x^y - 1</code>.</div><h3><a class='anchor' name='Sinus%20Cardinal%20(Sinc)%20and%20Hyperbolic%20Sinus%20Cardinal%20Functions'>Sinus Cardinal (Sinc) and Hyperbolic Sinus Cardinal Functions</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Sinus%20Cardinal%20(Sinc)%20and%20Hyperbolic%20Sinus%20Cardinal%20Functions,%20Inverse%20Hyperbolic%20Functions">Sinus Cardinal (Sinc) and Hyperbolic Sinus Cardinal Functions</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sincPi' href='./../Overviews/Methods.html#sincPi'>sincPi</a></h3>
+<div class='method'>
+<p>Returns the Sinus Cardinal of <code>x</code>. Also known as the "sinc" function.
+<p><code>sincPi(x) = sin(x) / x</code></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sinhcPi' href='./../Overviews/Methods.html#sinhcPi'>sinhcPi</a></h3>
+<div class='method'>
+<p>Returns the Hyperbolic Sinus Cardinal of <code>x</code>.
+<p><code>sinhcPi(x) = sinh(x) / x</code></div><h3><a class='anchor' name='Inverse%20Hyperbolic%20Functions'>Inverse Hyperbolic Functions</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Sinus%20Cardinal%20(Sinc)%20and%20Hyperbolic%20Sinus%20Cardinal%20Functions,%20Inverse%20Hyperbolic%20Functions">Inverse Hyperbolic Functions</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asinh' href='./../Overviews/Methods.html#asinh'>asinh</a></h3>
+<div class='method'>
+<p>Returns the reciprocal of the hyperbolic sine function at <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-acosh' href='./../Overviews/Methods.html#acosh'>acosh</a></h3>
+<div class='method'>
+<p>Returns the reciprocal of the hyperbolic cosine function at <code>x</code>.
+<p>Requires <code>x &gt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-atanh' href='./../Overviews/Methods.html#atanh'>atanh</a></h3>
+<div class='method'>
+<p>Returns the reciprocal of the hyperbolic sine function at <code>x</code>.
+<p>Requires <code>-1 &lt; x &lt; 1</code>.</div><h3><a class='anchor' name='Owen's%20T%20Function'>Owen's T Function</a></h3>
+
+<p>Take a tour of <a href="./../Guides/Tour-of-Special-Functions.html#Owen">Owen's T Function</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-owensT' href='./../Overviews/Methods.html#owensT'>owensT</a>(<span class='argstr'>a</span>)</h3>
+<div class='method'>
+<p>Returns the Owens T function of <code>h</code> and <code>a</code>.</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asBufWithValues' href='./../Overviews/Methods.html#asBufWithValues'>asBufWithValues</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asEvent' href='./../Overviews/Methods.html#asEvent'>asEvent</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Rest.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Rest.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Streams/Rest.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Streams/Rest.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asMIDIInPortUID' href='./../Overviews/Methods.html#asMIDIInPortUID'>asMIDIInPortUID</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asMIDIPort.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asMIDIPort.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/asMIDIPort.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/asMIDIPort.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asSize' href='./../Overviews/Methods.html#asSize'>asSize</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Geometry/Size.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Geometry/Size.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Geometry/Size.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Geometry/Size.sc</a></div>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asTimeStringLJP' href='./../Overviews/Methods.html#asTimeStringLJP'>asTimeStringLJP</a></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SimpleNumber-asTimeString.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SimpleNumber-asTimeString.sc</a></div>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-betarand' href='./../Overviews/Methods.html#betarand'>betarand</a>(<span class='argstr'>val2: 1</span>, <span class='argstr'>prob1: 1</span>, <span class='argstr'>prob2: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-binaryValue' href='./../Overviews/Methods.html#binaryValue'>binaryValue</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-buildForProxy' href='./../Overviews/Methods.html#buildForProxy'>buildForProxy</a>(<span class='argstr'>proxy</span>, <span class='argstr'>channelOffset: 0</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-calcPVRecSize' href='./../Overviews/Methods.html#calcPVRecSize'>calcPVRecSize</a>(<span class='argstr'>frameSize</span>, <span class='argstr'>hop</span>, <span class='argstr'>sampleRate</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/JoshPV.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/JoshPV.sc</a></div>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cauchy' href='./../Overviews/Methods.html#cauchy'>cauchy</a>(<span class='argstr'>spread: 1.0</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-delta' href='./../Overviews/Methods.html#delta'>delta</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Rest.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Rest.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Streams/Rest.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Streams/Rest.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-firstArg' href='./../Overviews/Methods.html#firstArg'>firstArg</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gaussian' href='./../Overviews/Methods.html#gaussian'>gaussian</a>(<span class='argstr'>dev: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-guiClass' href='./../Overviews/Methods.html#guiClass'>guiClass</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/tools/guicrucial/gui.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/tools/guicrucial/gui.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/tools/guicrucial/gui.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/tools/guicrucial/gui.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hypotApx' href='./../Overviews/Methods.html#hypotApx'>hypotApx</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-linrrand' href='./../Overviews/Methods.html#linrrand'>linrrand</a>(<span class='argstr'>val2: 1.0</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-logistic' href='./../Overviews/Methods.html#logistic'>logistic</a>(<span class='argstr'>spread: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-midinote' href='./../Overviews/Methods.html#midinote'>midinote</a></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/midinote.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/midinote.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numChannels' href='./../Overviews/Methods.html#numChannels'>numChannels</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pareto' href='./../Overviews/Methods.html#pareto'>pareto</a>(<span class='argstr'>shape: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performBinaryOpOnComplex' href='./../Overviews/Methods.html#performBinaryOpOnComplex'>performBinaryOpOnComplex</a>(<span class='argstr'>aSelector</span>, <span class='argstr'>aComplex</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performBinaryOpOnSignal' href='./../Overviews/Methods.html#performBinaryOpOnSignal'>performBinaryOpOnSignal</a>(<span class='argstr'>aSelector</span>, <span class='argstr'>aSignal</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performBinaryOpOnSimpleNumber' href='./../Overviews/Methods.html#performBinaryOpOnSimpleNumber'>performBinaryOpOnSimpleNumber</a>(<span class='argstr'>aSelector</span>, <span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-playAndDelta' href='./../Overviews/Methods.html#playAndDelta'>playAndDelta</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-poisson' href='./../Overviews/Methods.html#poisson'>poisson</a></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-poll' href='./../Overviews/Methods.html#poll'>poll</a>(<span class='argstr'>trig: 10</span>, <span class='argstr'>label</span>, <span class='argstr'>trigid: -1</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-proxyControlClass' href='./../Overviews/Methods.html#proxyControlClass'>proxyControlClass</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-rate' href='./../Overviews/Methods.html#rate'>rate</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-weibull' href='./../Overviews/Methods.html#weibull'>weibull</a>(<span class='argstr'>spread</span>, <span class='argstr'>shape: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-writeInputSpec' href='./../Overviews/Methods.html#writeInputSpec'>writeInputSpec</a>(<span class='argstr'>file</span>, <span class='argstr'>synth</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-writeInputSpecOld' href='./../Overviews/Methods.html#writeInputSpecOld'>writeInputSpecOld</a>(<span class='argstr'>file</span>, <span class='argstr'>synth</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/SynthDefOld.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/SynthDefOld.sc</a></div>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/SimpleNumber.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/SimpleNumber.schelp</a><br>link::Classes/SimpleNumber::<br></div></div></body></html>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Audio/SynthDefOld.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Audio/SynthDefOld.sc</a></div>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/SimpleNumber.schelp'>/usr/share/SuperCollider/HelpSource/Classes/SimpleNumber.schelp</a><br>link::Classes/SimpleNumber::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

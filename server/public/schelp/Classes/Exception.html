@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Exception | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Exception | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Exception';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Exception:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -38,8 +43,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-protectedBacktrace'>protectedBacktrace</a> </li>
 <li class='toc3'><a href='#-reportError'>reportError</a> </li>
 <li class='toc3'><a href='#-what'>what</a> </li>
-</ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -49,7 +54,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>root error class</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Error.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Error.sc'>Error.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/Error.html">Error</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Core/Error.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Core/Error.sc'>Error.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/Error.html">Error</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -59,26 +64,26 @@ var scdoc_sc_version = '3.9.3';
 
 <p>An exception is any event that disrupts the normal execution flow of a program. In practice there is not much distinction between an exception and an error; in SuperCollider, we tend to speak of errors where other object-oriented languages (Java, C++) would use exception consistently.
 <p>If a piece of code runs into an unexpected condition, it creates an exception object that holds information about the faulty condition, and then "throws" that object. From there, the interpreter unwinds backward through all the preceding stack frames looking for an exception handler that will "catch" the exception. The exception handler can take an alternate route to resolve the failure and continue normally; if this is not possible, it can re-throw the exception back to the previous stack frame. An exception that never gets caught causes execution to abort. In SuperCollider, this results in the standard error dump (see the Understanding-Errors help file for details); in C++ or Java, the effect is catastrophic, causing the whole program to crash.<h3><a class='anchor' name='Common%20syntax%20in%20other%20languages%20for%20exception%20handling%20is:'>Common syntax in other languages for exception handling is:</a></h3>
-<pre class='code prettyprint lang-sc'>try { ...code... }
-catch { ...exception handler... }</pre>
+<textarea class='editor'>try { ...code... }
+catch { ...exception handler... }</textarea>
 
-<p>Specific languages may have other variants. The SuperCollider compiler doesn't have room for the "catch" keyword, so the syntax is simpler:<pre class='code prettyprint lang-sc'>try { ...code... } { ...exception handler... };</pre>
+<p>Specific languages may have other variants. The SuperCollider compiler doesn't have room for the "catch" keyword, so the syntax is simpler:<textarea class='editor'>try { ...code... } { ...exception handler... };</textarea>
 
-<p>With "try", "if" the error cannot be handled, you have to re-throw the error explicitly:<pre class='code prettyprint lang-sc'>try { ...code... } { |error|
+<p>With "try", "if" the error cannot be handled, you have to re-throw the error explicitly:<textarea class='editor'>try { ...code... } { |error|
     if( test: can I handle the error? ) {
         handle gracefully
     } { error.throw }
-};</pre>
+};</textarea>
 
-<p>SuperCollider includes a variant, borrowed from Scheme, in which the exception is always fatal, but the preceding code might have allocated some resources that need to be released before reporting the error. For example, you might open a file and do some processing on it that might encounter an error. Good practice is to close the file before the error halt, which you can do this way:<pre class='code prettyprint lang-sc'>file = File(path, "r");
+<p>SuperCollider includes a variant, borrowed from Scheme, in which the exception is always fatal, but the preceding code might have allocated some resources that need to be released before reporting the error. For example, you might open a file and do some processing on it that might encounter an error. Good practice is to close the file before the error halt, which you can do this way:<textarea class='editor'>file = File(path, "r");
 protect {
     work with the file here, which might cause an error
 } {
     file.close;
-};</pre>
+};</textarea>
 
 <p>With "protect" the second function will execute even if there is no error, and any error will be passed up the chain.
-<p>In Java, you can catch specific classes of exception. You can simulate this usage with the following construction:<pre class='code prettyprint lang-sc'>// Java-style
+<p>In Java, you can catch specific classes of exception. You can simulate this usage with the following construction:<textarea class='editor'>// Java-style
 
 try {  }
 catch { FileNotFoundException e } { console.printLine("File not found: " + e.path) }
@@ -92,9 +97,9 @@ try {  } { |error|
         { 'EmptyFileException' } { postln("File is empty:" + e.path) }
             // default condition: unhandled exception, rethrow
         { error.throw }
-}</pre>
+}</textarea>
 
-<p>Following is an example that recovers from a failed attempt to write into an immutable array, by re-attempting the write on a copy of the array.<pre class='code prettyprint lang-sc'>(
+<p>Following is an example that recovers from a failed attempt to write into an immutable array, by re-attempting the write on a copy of the array.<textarea class='editor'>(
 ~inPlaceSub = { |array, find, replace|
     array.do({ |item, i|
         if(item == find) { array[i] = replace };
@@ -125,7 +130,7 @@ try {  } { |error|
 ~trySub.(#[0, 1, 2, 3, 4, 5], 5, 6);
 
 // pass in a nonsense value, other exception is re-thrown
-~trySub.(10, 5, 6);</pre>
+~trySub.(10, 5, 6);</textarea>
 
 <p><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
@@ -152,4 +157,5 @@ try {  } { |error|
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-reportError' href='./../Overviews/Methods.html#reportError'>reportError</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-what' href='./../Overviews/Methods.html#what'>what</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-what' href='./../Overviews/Methods.html#what'>what</a> = value</h3>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Exception.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Exception.schelp</a><br>link::Classes/Exception::<br></div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Exception.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Exception.schelp</a><br>link::Classes/Exception::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

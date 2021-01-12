@@ -1,0 +1,114 @@
+<!doctype html><html lang='en'><head><title>MatchingP | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'MatchingP';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>MatchingP:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a>  <a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Analysis'>Analysis</a></span>
+</div><h1>MatchingP<span id='superclasses'> : <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Real time sparse representation</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/MCLDSparseUGens.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/MCLDSparseUGens.sc'>MCLDSparseUGens.sc</a></div><div id='related'>See also: <a href="./../Classes/FFT.html">FFT</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>This UGen analyses frames of input audio, a bit like <a href="./../Classes/FFT.html">FFT</a> does, but using the assumption that most of the energy in each audio frame can be represented as a combination of a small number of "atoms". This is achieved using <strong>Matching Pursuit</strong>, which is a standard technique in the field of <em>sparse representations</em>.
+<p>You must supply a "dictionary" of atoms, given as a Buffer. Each channel of the Buffer is one atom (this means the atoms all have to be the same length - but zero-padding is OK).
+<p>This analysis is less efficient than FFT, so be careful of your CPU usage, and use small, short dictionaries if possible. It also outputs a lot of multichannel data.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>MatchingP.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>dict: 0</span>, <span class='argstr'>in: 0</span>, <span class='argstr'>dictsize: 1</span>, <span class='argstr'>ntofind: 1</span>, <span class='argstr'>hop: 1</span>, <span class='argstr'>method: 0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>MatchingP.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a>(<span class='argstr'>dict: 0</span>, <span class='argstr'>in: 0</span>, <span class='argstr'>dictsize: 1</span>, <span class='argstr'>ntofind: 1</span>, <span class='argstr'>hop: 1</span>, <span class='argstr'>method: 0</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>dict<td class='argumentdesc'>
+<p>The Buffer which holds the atoms. NOTE: in most use cases, the atoms should typically all be normalised so that they all have the same L2-norm (see examples below).<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>The input signal.<tr><td class='argumentname'>dictsize<td class='argumentdesc'>
+<p>The number of atoms (channels) in the dict.<tr><td class='argumentname'>ntofind<td class='argumentdesc'>
+<p>Specifies the number of activations to find in each frame - i.e. the number of atoms that are assumed to be "on" in each frame.<tr><td class='argumentname'>hop<td class='argumentdesc'>
+<p>The amount of hop between frames, expressed as a proportion of the dict length (like in <a href="./../Classes/FFT.html">FFT</a>). Maximum is 1.<tr><td class='argumentname'>method<td class='argumentdesc'>
+<p>Reserved. (Doesn't currently do anything.)</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p><code>[trigger, residual, index0, activ0, index1, activ1, ...]</code> where <code>trigger</code> indicates the moment when a frame has been processed, <code>residual</code> gives the signal that remains after subtracting the contribution from the selected atoms, and each pair of outputs such as <code>index0, activ0</code> indicates the index of the selected atom and the strength of its activation. This means there will be <code>ntofind * 2 + 2</code> outputs in all.</div></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>In this example we make a simple dictionary which happens to be quite similar to an un-windowed FFT basis, and then analyse it.<textarea class='editor'>~dictlen = 128;
+~dictsize = 64;
+~dictarr = ~dictsize.collect{|i|  sin(2pi*(i+1)*(1..~dictlen)/~dictlen)  };
+~dictarr = ~dictarr.collect{|a| a / a.squared.sum.sqrt }    // Here is where we L2 normalise all the atoms
+// The dictionary buffer:
+~dict = Buffer.loadCollection(s, ~dictarr.flop.flat, ~dictsize);
+~dict.plot
+
+// We'll output the activations to a bus too
+~ntofind = 2;
+~actbus = Bus.audio(s, ~ntofind * 2);
+
+(
+x={
+    var son, outputs, trig, residual, acts, indices, magnitudes, resynth, delayedson;
+    // Try one of these:
+    son = Pulse.ar(200 * SinOsc.kr(0.3).exprange(0.9, 1.1));
+    //son = PinkNoise.ar * LFPulse.kr(1);
+    //son = (PlayBuf.ar(~dictsize, ~dict, MouseX.kr(0.1, 2, 1). loop: 1) * ([0.1, 0.3, 0.5]++{0}.dup(~dictsize-3))).sum;
+    outputs = MatchingP.ar(~dict, son, ~dictsize, ntofind: ~ntofind);
+    trig = outputs[0];
+    residual = outputs[1];
+    acts = outputs[2..];
+    Out.ar(~actbus, acts);
+
+
+    // In the next part we'll resynthesise the sound.
+    // But you might like to mangle the 'acts' data to apply interesting FX:
+    # indices, magnitudes = acts.clump(2).flop;   // This makes it a bit convenient to apply manipulations
+    //magnitudes = magnitudes.collect{|a| a * 3 * SinOsc.ar(exprand(0.1, 10))};
+    //magnitudes = magnitudes.collect{|a| a * 3 * SinOsc.ar(LFNoise1.kr(10).exprange(0.1, 10))};
+    //magnitudes = magnitudes.collect{|a| DelayN.ar(a, 0.1, LFNoise1.kr(0.1).range(0, 0.1))};
+    //magnitudes = magnitudes.reverse;
+    //indices = ~dictsize - indices;
+    acts = [indices, magnitudes].flop.flat; // reconstruct
+
+    resynth = MatchingPResynth.ar(~dict, 0, trig, residual, *acts);
+    delayedson = DelayN.ar(son, delaytime:BufDur.ir(~dict));
+    //Amplitude.ar(resynth - delayedson, 0.1, 1).poll(1, "amplitude of reconstruction error");
+    [delayedson * 0.0001, resynth * 0.1];
+}.play
+)
+
+~actbus.scope
+
+s.scope</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/HelpSource/Classes/MatchingP.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/HelpSource/Classes/MatchingP.schelp</a><br>link::Classes/MatchingP::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

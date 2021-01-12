@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Rest | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Rest | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Rest';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Rest:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -28,8 +33,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
 <ul class='toc'><li class='toc2'><a href='#Alternatives%20to%20Rest'>Alternatives to Rest</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -39,20 +44,20 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Represents a rest in event patterns</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Rest.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Rest.sc'>Rest.sc</a></div><div id='related'>See also: <a href="./../Classes/Pbind.html">Pbind</a>, <a href="./../Classes/Event.html">Event</a>, <a href="./../Classes/AbstractFunction.html">AbstractFunction</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Streams/Rest.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Streams/Rest.sc'>Rest.sc</a></div><div id='related'>See also: <a href="./../Classes/Pbind.html">Pbind</a>, <a href="./../Classes/Event.html">Event</a>, <a href="./../Classes/AbstractFunction.html">AbstractFunction</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>A Rest may be used in event patterns to indicate that the resulting event should be a rest (i.e., silent). It should be used in one of the child patterns belonging to a Pbind, for instance.<pre class='code prettyprint lang-sc'>// do nothing for 2 seconds
+<p>A Rest may be used in event patterns to indicate that the resulting event should be a rest (i.e., silent). It should be used in one of the child patterns belonging to a Pbind, for instance.<textarea class='editor'>// do nothing for 2 seconds
 (note:Rest(), dur:2).play;
 
 // intersperse pauses in pattern
-Pbind(\note, Pseq([0, 4, 7, 11], inf), \dur, Pseq([2, 1, Rest(1)], inf) / 5).play;</pre>
+Pbind(\note, Pseq([0, 4, 7, 11], inf), \dur, Pseq([2, 1, Rest(1)], inf) / 5).play;</textarea>
 <h3><a class='anchor' name='Expressing%20rests%20in%20event%20patterns'>Expressing rests in event patterns</a></h3>
 
-<p>The Rest class allows rests to be indicated in any stream, not only frequency or event type. Also, using the duration argument (see the <a href="#*new">*new</a> method below), rests may be embedded into a duration stream. That is, rests may be treated as part of the rhythmic specification, rather than the pitch specification.<div class='note'><span class='notelabel'>NOTE:</span> As of SuperCollider 3.9, <code class='code prettyprint lang-sc'>Rest</code>'s behavior has changed to be more intuitive. Note that you have to now use <code class='code prettyprint lang-sc'>Rest()</code> - the shortcut of <code class='code prettyprint lang-sc'>Rest</code> as class directly is <strong>not supported</strong> anymore.</div><h3><a class='anchor' name='Usage'>Usage</a></h3>
+<p>The Rest class allows rests to be indicated in any stream, not only frequency or event type. Also, using the duration argument (see the <a href="#*new">*new</a> method below), rests may be embedded into a duration stream. That is, rests may be treated as part of the rhythmic specification, rather than the pitch specification.<div class='note'><span class='notelabel'>NOTE:</span> As of SuperCollider 3.9, <code>Rest</code>'s behavior has changed to be more intuitive. Note that you have to now use <code>Rest()</code> - the shortcut of <code>Rest</code> as class directly is <strong>not supported</strong> anymore.</div><h3><a class='anchor' name='Usage'>Usage</a></h3>
 <ul>
-<li><a href="./../Classes/Event.html#-isRest">Event: -isRest</a> checks every item in the event to see if it meets the condition to be a rest: it may be a <code class='code prettyprint lang-sc'>Rest</code> instance, the <code class='code prettyprint lang-sc'>Rest</code> class, or either of the symbols <code class='code prettyprint lang-sc'>\</code> or <code class='code prettyprint lang-sc'>\r</code>. If any item meets the condition, the event will be considered a rest and it will not take action when played.<li>If a Pbind child pattern yields a Rest object, the Rest is placed directly into the event. This is a change of behavior from 3.8.<li>If a Rest object has a value, it will respond to math operations: <code class='code prettyprint lang-sc'>Rest(1) * 2 == Rest(2)</code>.</ul>
+<li><a href="./../Classes/Event.html#-isRest">Event: -isRest</a> checks every item in the event to see if it meets the condition to be a rest: it may be a <code>Rest</code> instance, the <code>Rest</code> class, or either of the symbols <code>\</code> or <code>\r</code>. If any item meets the condition, the event will be considered a rest and it will not take action when played.<li>If a Pbind child pattern yields a Rest object, the Rest is placed directly into the event. This is a change of behavior from 3.8.<li>If a Rest object has a value, it will respond to math operations: <code>Rest(1) * 2 == Rest(2)</code>.</ul>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 
 <p>All methods of Rest except *new are private, and should not be used directly.<h3 class='method-code'><span class='method-prefix'>Rest.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>value: 1</span>)</h3>
@@ -60,13 +65,13 @@ Pbind(\note, Pseq([0, 4, 7, 11], inf), \dur, Pseq([2, 1, Rest(1)], inf) / 5).pla
 <p>Create an instance of Rest, with a value to be used in the resulting rest event.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>value<td class='argumentdesc'>
-<p>The Rest instance's numeric value, to be used in math operations. Note that a Rest's value is ignored for most Event keys (assuming the Event does nothing in response to <code class='code prettyprint lang-sc'>.play</code>). If a Rest appears in a rhythm key (<code class='code prettyprint lang-sc'>dur</code> or <code class='code prettyprint lang-sc'>delta</code>), then the number is the time until the next event. Consequently, numeric Rests are often used for duration -- but there is no requirement that a Rest's value must be a duration.</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>a = Rest(6);
+<p>The Rest instance's numeric value, to be used in math operations. Note that a Rest's value is ignored for most Event keys (assuming the Event does nothing in response to <code>.play</code>). If a Rest appears in a rhythm key (<code>dur</code> or <code>delta</code>), then the number is the time until the next event. Consequently, numeric Rests are often used for duration -- but there is no requirement that a Rest's value must be a duration.</table><h4>Discussion:</h4>
+<textarea class='editor'>a = Rest(6);
 b = a * 2; // returns Rest(12)
 b = 2 * a; // the same
-b.value; // returns 12</pre>
+b.value; // returns 12</textarea>
 
-<p>The rest of a rest is always a rest. This idempotence is implemented by Rest's superclass <a href="./../Classes/Operand.html">Operand</a>.<pre class='code prettyprint lang-sc'>Rest(Rest(1)) // returns Rest(1)</pre>
+<p>The rest of a rest is always a rest. This idempotence is implemented by Rest's superclass <a href="./../Classes/Operand.html">Operand</a>.<textarea class='editor'>Rest(Rest(1)) // returns Rest(1)</textarea>
 </div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isRest' href='./../Overviews/Methods.html#isRest'>isRest</a></h3>
@@ -75,17 +80,17 @@ b.value; // returns 12</pre>
 <div class='method'>
 <p>returns the value.<h4>Discussion:</h4>
 
-<p>This method implements the following behavior.<pre class='code prettyprint lang-sc'>Rest(6) + 1 // Rest(7)
-Rest(true) // true</pre>
+<p>This method implements the following behavior.<textarea class='editor'>Rest(6) + 1 // Rest(7)
+Rest(true) // true</textarea>
 
-<p>This makes comparisons work:<pre class='code prettyprint lang-sc'>Rest(6) &lt; 7 // true, and not Rest(true)
+<p>This makes comparisons work:<textarea class='editor'>Rest(6) &lt; 7 // true, and not Rest(true)
 a = Pseq([1, 2, 1, 3, Rest(1), 2, Rest(3)], inf); // e.g. as a duration pattern
 b = a.collect { |x| if(x &gt; 2) { x / 2 } { x } };
-b.asStream.nextN(8)</pre>
+b.asStream.nextN(8)</textarea>
 </div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
 
-<p>Using Rest instances in a pitch stream<pre class='code prettyprint lang-sc'>(
+<p>Using Rest instances in a pitch stream<textarea class='editor'>(
 Pbind(
     \degree, Pif(
         0.1.loop.coin,
@@ -94,30 +99,32 @@ Pbind(
     ),
     \dur, 0.125
 ).play
-)</pre>
+)</textarea>
 
-<p>Using a Rest instance in a duration stream<pre class='code prettyprint lang-sc'>(
+<p>Using a Rest instance in a duration stream<textarea class='editor'>(
 Pbind(
     \degree, Pseries(0, 1, inf).fold(-7, 7),
     \dur, Pseq([Pn(0.125, { rrand(3, 6) }), Rest(0.25)], inf)
 ).play
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Alternatives%20to%20Rest'>Alternatives to Rest</a></h3>
 
 <p>In addition to Rest, in events, rests can be specified in two other ways (legacy usages).<ul>
-<li>A <a href="./../Classes/Symbol.html">Symbol</a> may be specified in any frequency stream (under the keys degree, note, midinote or freq). The exception to this rule is control bus mapping symbols, beginning with 'c' followed by a number. Typical symbols that have been used include <strong>\rest</strong>, <strong>\r</strong> and the empty symbol <strong>\</strong>.<pre class='code prettyprint lang-sc'>p = Pbind(
+<li>A <a href="./../Classes/Symbol.html">Symbol</a> may be specified in any frequency stream (under the keys degree, note, midinote or freq). The exception to this rule is control bus mapping symbols, beginning with 'c' followed by a number. Typical symbols that have been used include <strong>\rest</strong>, <strong>\r</strong> and the empty symbol <strong>\</strong>.<textarea class='editor'>p = Pbind(
     \degree, Pseq([
         0, 1, 2, 0, 0, 1, 2, 0,
         2, 3, 4, \rest, 2, 3, 4, \rest
     ]),
     \dur, 0.25
-).play;</pre>
-<li>The event's <strong>\type</strong> may be set to <strong>\rest</strong>.<pre class='code prettyprint lang-sc'>p = Pbind(
+).play;</textarea>
+<li>The event's <strong>\type</strong> may be set to <strong>\rest</strong>.<textarea class='editor'>p = Pbind(
     \degree, Pseries(0, 1, inf).fold(-7, 7),
     \dur, 0.125,
     \type, Pwrand([\note, \rest], [0.9, 0.1], inf)
 ).play;
 
-p.stop;</pre>
+p.stop;</textarea>
 </ul>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Rest.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Rest.schelp</a><br>link::Classes/Rest::<br></div></div></body></html>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Rest.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Rest.schelp</a><br>link::Classes/Rest::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

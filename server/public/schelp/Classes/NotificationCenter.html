@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>NotificationCenter | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>NotificationCenter | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'NotificationCenter';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>NotificationCenter:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -29,8 +34,9 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#*removeForListener'>removeForListener</a> </li>
 </ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
-</ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul><li class='toc1'><a href='#Example'>Example</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -40,20 +46,24 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>let an object emit notifications</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Model.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Model.sc'>Model.sc</a></div><div id='related'>See also: <a href="./../Classes/SimpleController.html">SimpleController</a>, <a href="./../Classes/NodeWatcher.html">NodeWatcher</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Core/Model.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Core/Model.sc'>Model.sc</a></div><div id='related'>See also: <a href="./../Classes/SimpleController.html">SimpleController</a>, <a href="./../Classes/NodeWatcher.html">NodeWatcher</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>One common OOP pattern is Model-View-Controller where one object (the controller) is a dependant of the model. Every time the model changes it notifies all of its dependants. In this case the model has a dictionary of dependants and iterates through those.
-<p>Another common pattern is NotificationCenter wherein an object emits a notification and clients can register functions that will be executed when that notification happens.
-<p>A <a href="./../Classes/Server.html">Server</a> emits a \newAllocators notification when it creates new node and bus allocators which it does when it quits or boots.<pre class='code prettyprint lang-sc'>NotificationCenter.notify(Server.default, \newAllocators);</pre>
+<p>In certain cases it may be useful to make an object perform a specific function when receiving a predefined message from another given object. For example, a GUI element may want to update its state when the state of a server object changes. Such cases are: Update the count of synthdefs when a new synthdef is loaded, update the enabled/disabled state of a control gui element when a Synth which it controls starts running or is freed, etc. NotificationCenter makes it possible to add such a custom function to any object called the observer, and to perform it whenever another object called the subject issues a notification identified by a symbol called the message.
+<p>The implementation provided by NotificationPattern is a variant of a common OOP pattern called the Observer Pattern, which provides a way for an object to flexibly broadcast messages to interested receiver objects. This pattern defines a one-to-many dependency between objects so that when one object changes state, all its dependents are notified and updated automatically. (see: <a href="https://www.gofpatterns.com/behavioral-design-patterns/behavioral-patterns/observer-pattern.php">https://www.gofpatterns.com/behavioral-design-patterns/behavioral-patterns/observer-pattern.php</a> and <a href="https://en.wikipedia.org/wiki/Observer_pattern">https://en.wikipedia.org/wiki/Observer_pattern</a> ). An object that notifies its dependents is called the subject, and the dependents are called observers.
+<p>The original implementation of this pattern in SuperCollider involves three steps:<ol>
+<li>A subject adds a dependant with: <code>subject.addDependant(observer)</code><li>When a subject wants to inform its observers (dependants) that it has changed, it uses the method changed: <code>subject.changed(&lt;optional arguments&gt;...)</code><li>The method changed obtains the list of dependants of the subject and iterates over each observer sending it the message <code>update</code> : <code>observer.changed(subject, &lt;optional arguments&gt;...)</code></ol>
 
-<p>You can listen for this:<pre class='code prettyprint lang-sc'>NotificationCenter.register(Server.default, \newAllocators, yourself, {
-    // throw away all your node variables
-    // or stop the music
-});</pre>
+<p>Each observer object can then decide how to react to the change broadcast by the subject, based on the code contained in the update method and the arguments received from the subject.
+<p>The above implementation is simple to use, because it only requires to register each observer to the intended subject. However it is limited by the fact that the action to be performed by the observer is coded in the update method. This makes it complicated to code the choice of different actions to be performed depending on the subject, the observer, and the messages sent as arguments with the <code>changed</code> message. The NotificationCenter class provides a way to tell each observer what action to perform depending on the subject and on a symbol which is sent as argument together with the method broadcast by the subject. Thus, to make an observer perform an action when it receives a message symbol from a subject, it is necessary to specify the following 4 objects:<ol>
+<li>The subject (Any kind of object except nil)<li>The message (A symbol)<li>The observer (Any kind of object except nil)<li>The action to be performed (A Function)</ol>
 
-<p>The <a href="./../Classes/Buffer.html">Buffer</a> class register a function to clear its info cache whenever a server restarts. The server is emitting changed messages quite often (every 0.4 secs for the status updates), and the Buffer class is only interested in boot/quit events, so this is a more lightweight system for this purpose.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<p>Using the NotificationCenter class, a connection between a subject and an observer to perform an action in response to a message is created by the following code:<textarea class='editor'>NotificationCenter.register(subject, message, observer, action)</textarea>
+
+<p>To notify observers that a subject has changed, the NotificationCenter must call the method <code>notify</code> :<textarea class='editor'>NotificationCenter.notify(subject, message, &lt;optional arguments&gt;...);</textarea>
+
+<p>Any object that has been registered as observer to the subject issuing the notification, will perform the action that is coupled to the message of the notification. It is thus possible to make any observer object perform a specified action when receiving the corresponding message from the object with which it has been registered. <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>NotificationCenter.</span><a class='method-name' name='*notify' href='./../Overviews/Methods.html#notify'>notify</a>(<span class='argstr'>object</span>, <span class='argstr'>message</span>, <span class='argstr'>args</span>)</h3>
 <div class='method'>
 <p>The object emits a message and may also pass extra args.</div><h3 class='method-code'><span class='method-prefix'>NotificationCenter.</span><a class='method-name' name='*register' href='./../Overviews/Methods.html#register'>register</a>(<span class='argstr'>object</span>, <span class='argstr'>message</span>, <span class='argstr'>listener</span>, <span class='argstr'>action</span>)</h3>
@@ -70,4 +80,14 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>NotificationCenter.</span><a class='method-name' name='*removeForListener' href='./../Overviews/Methods.html#removeForListener'>removeForListener</a>(<span class='argstr'>listener</span>)</h3>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
-<div id='inheritedinstmets'></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/NotificationCenter.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/NotificationCenter.schelp</a><br>link::Classes/NotificationCenter::<br></div></div></body></html>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='Example'>Example</a></h2>
+
+<p>When a Server boots or quits, it notifies its observers sending them the message \newAllocators:<textarea class='editor'>NotificationCenter.notify(server, \newAllocators)</textarea>
+
+<p>Therefore any object that wants to perform an action when a server boots or quits, can use NotificationCenter to register the action using the following code:<textarea class='editor'>// using default server as subject and a symbol as observer:
+NotificationCenter.register(Server.default, \newAllocators, \yourself, {
+    // Substitute anything more meaningful here:
+    "symbol yourself was notified newAllocators by defaul server".postln;
+});</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/NotificationCenter.schelp'>/usr/share/SuperCollider/HelpSource/Classes/NotificationCenter.schelp</a><br>link::Classes/NotificationCenter::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

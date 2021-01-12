@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>SuperColliderAU | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>SuperColliderAU | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'SuperColliderAU';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>SuperColliderAU:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Installing'>Installing</a></li>
@@ -24,12 +29,12 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#synthdefs'>synthdefs</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#plugins'>plugins</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Making%20standalone%20plugins'>Making standalone plugins</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
- | <span id='categories'><a href='./../Browse.html#Platform'>Platform</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Platform>macOS (OS X)'>macOS (OS X)</a></span>
+ | <span id='categories'><a href='./../Browse.html#Platform'>Platform</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Platform>macOS'>macOS</a></span>
 </div><h1>SuperColliderAU</h1>
 <div id='summary'>wraps scsynth as an AudioUnits plugin</div>
 </div>
@@ -43,11 +48,11 @@ var scdoc_sc_version = '3.9.3';
 <p>Start up an Audio Units host application. Common hosts include Apple Logic and Ableton Live. A list of supported hosts can be found in this page of the SuperCollider swiki (feel free to update it):
 <p><a href="http://swiki.hfbk-hamburg.de">http://swiki.hfbk-hamburg.de</a>:8888/MusicTechnology/823
 <p>Find SuperColliderAU among the rest of AudioUnit plugins and add an instance to a track (check the manual of your host if you don't know how to do this). A panel will appear telling you which port the server is listening to for OSC messages.
-<p>Now you can run this code from within the SuperCollider language to talk directly with the embedded server:<pre class='code prettyprint lang-sc'>u = Server(\scau, NetAddr("127.0.0.1", 9989)); // Change the port from 9989 to the right one for you
+<p>Now you can run this code from within the SuperCollider language to talk directly with the embedded server:<textarea class='editor'>u = Server(\scau, NetAddr("127.0.0.1", 9989)); // Change the port from 9989 to the right one for you
 u.serverRunning = true;
 u.ping(10); // Gives about 0.02 for me - confirms that communication is working
 // Now let's create a quick ring-modulator effect:
-z = { SoundIn.ar([0,1]) * SinOsc.ar(MouseX.kr(100, 1000)) }.play(u);</pre>
+z = { SoundIn.ar([0,1]) * SinOsc.ar(MouseX.kr(100, 1000)) }.play(u);</textarea>
 <h2><a class='anchor' name='Inside%20the%20bundle'>Inside the bundle</a></h2>
 
 <p>As an AudioUnit plugin, SuperColliderAU is packaged in a component bundle. All the files needed by SuperColliderAU can be found in the Resources folder inside the bundle:<h3><a class='anchor' name='serverConfig.plist'>serverConfig.plist</a></h3>
@@ -62,4 +67,5 @@ z = { SoundIn.ar([0,1]) * SinOsc.ar(MouseX.kr(100, 1000)) }.play(u);</pre>
 
 <p>Here you need all the SC plugins you intend to use with that server.<h2><a class='anchor' name='Making%20standalone%20plugins'>Making standalone plugins</a></h2>
 
-<p>Besides controlling SuperColliderAU from within the language, you can create AudioUnits plugins that are controlled from the host using the default GUI. This can be done manually by duplicating SupercolliderAU.component, adding a synthdef and associated SC plugins and editing pluginSpec.plist. However, if you want an AudioUnit with a unique identifier (the identifier is what you see from within the host GUI) you have to recompile its resource file (with the new identifier) using Rez. This program is included in Apple's Developer Tools. A helper class that automates all this process is maintained in the AudioUnitBuilder quark. Using the class AudioUnitBuilder you can create standalone AudioUnit plugins without leaving SuperCollider.<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/SuperColliderAU.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/SuperColliderAU.schelp</a><br>link::Guides/SuperColliderAU::<br></div></div></body></html>
+<p>Besides controlling SuperColliderAU from within the language, you can create AudioUnits plugins that are controlled from the host using the default GUI. This can be done manually by duplicating SupercolliderAU.component, adding a synthdef and associated SC plugins and editing pluginSpec.plist. However, if you want an AudioUnit with a unique identifier (the identifier is what you see from within the host GUI) you have to recompile its resource file (with the new identifier) using Rez. This program is included in Apple's Developer Tools. A helper class that automates all this process is maintained in the AudioUnitBuilder quark. Using the class AudioUnitBuilder you can create standalone AudioUnit plugins without leaving SuperCollider.<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/SuperColliderAU.schelp'>/usr/share/SuperCollider/HelpSource/Guides/SuperColliderAU.schelp</a><br>link::Guides/SuperColliderAU::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,0 +1,104 @@
+<!doctype html><html lang='en'><head><title>LoopBuf | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'LoopBuf';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>LoopBuf:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Buffer'>Buffer</a></span>
+</div><h1>LoopBuf<span id='superclasses'> : <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>sample looping oscillator</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LoopBuf.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LoopBuf.sc'>LoopBuf.sc</a></div><div id='related'>See also: <a href="./../Classes/PlayBuf.html">PlayBuf</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Plays and loops between two frames of a sample resident in memory.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>LoopBuf.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>numChannels</span>, <span class='argstr'>bufnum: 0</span>, <span class='argstr'>rate: 1.0</span>, <span class='argstr'>gate: 1.0</span>, <span class='argstr'>startPos: 0.0</span>, <span class='argstr'>startLoop</span>, <span class='argstr'>endLoop</span>, <span class='argstr'>interpolation: 2</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>number of channels that the buffer will be. this must be a fixed integer. The architecture of the SynthDef cannot change after it is compiled.<div class='warning'><span class='warninglabel'>WARNING:</span> if you supply a bufnum of a buffer that has a different numChannels then you have specified to the LoopBuf, it will fail silently.</div><tr><td class='argumentname'>bufnum<td class='argumentdesc'>
+<p>the index of the buffer to use<tr><td class='argumentname'>rate<td class='argumentdesc'>
+<p>- 1.0 is normal, 2.0 is one octave up, 0.5 is one octave down. -1.0 is backwards normal rate ... etc.<tr><td class='argumentname'>gate<td class='argumentdesc'>
+<p>positive gate starts playback from startPos. negative gate plays rest of sample from current position<tr><td class='argumentname'>startPos<td class='argumentdesc'>
+<p>sample frame to start playback<tr><td class='argumentname'>startLoop<td class='argumentdesc'>
+<p>sample frame of start of loop<tr><td class='argumentname'>endLoop<td class='argumentdesc'>
+<p>sample frame of end of loop<tr><td class='argumentname'>interpolation<td class='argumentdesc'>
+<p>1 means no interpolation, 2 is linear, 4 is cubic interpolation</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>// Create buffer and SynthDef
+(
+// read a whole sound into memory
+b = Buffer.read(s,"sounds/a11wlk01.wav");
+
+// make a simple sampler instrument
+SynthDef("help-LoopBuf",{ 
+    arg out=0, bufnum=0, rate=1, glide=0, gate=1, loopRel=0, startPos=0, startLoop, endLoop, ipol=2;
+    var env, signal;
+    rate = Lag.kr(rate, glide);
+    env = EnvGen.ar(Env.adsr(0.1,0.2,1,2), gate, doneAction: 2);
+    signal = LoopBuf.ar(1,bufnum, BufRateScale.kr(bufnum) * rate, gate+loopRel, startPos, startLoop, endLoop, ipol);
+    Out.ar(out, (signal * env).dup);
+}).send(s);
+)
+
+// start playback
+s.sendMsg("/s_new", "help-LoopBuf", 3000, 1, 0, \bufnum, b.bufnum, \startLoop, 5000, \endLoop, 15000);
+
+s.sendMsg("/n_set", 3000, \rate, -1);    // backwards
+s.sendMsg("/n_set", 3000, \rate, 1);    // forwards
+
+s.sendMsg("/n_set", 3000, \startLoop, 11000, \endLoop, 13000) // change loop points
+
+s.sendMsg("/n_set", 3000, \glide, 5) // 5 second glide
+s.sendMsg("/n_set", 3000, \rate, 2); // up an octave
+s.sendMsg("/n_set", 3000, \rate, -1); // backwards again
+s.sendMsg("/n_set", 3000, \rate, 1);    // back to normal
+
+s.sendMsg("/n_set", 3000, \ipol, 1);    // no interpolation
+s.sendMsg("/n_set", 3000, \ipol, 2);    // linear interpolation
+s.sendMsg("/n_set", 3000, \ipol, 4);    // cubic interpolation
+
+// release gate to hear post-loop
+s.sendMsg("/n_set", 3000, \gate, 0);
+
+// release instrument without post-loop
+s.sendMsg("/s_new", "help-LoopBuf", 3000, 1, 0, \bufnum, b.bufnum, \startLoop, 11000, \endLoop, 13000);
+s.sendMsg("/n_set", 3000, \loopRel, 1, \gate, 0);</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/HelpSource/Classes/LoopBuf.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/HelpSource/Classes/LoopBuf.schelp</a><br>link::Classes/LoopBuf::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

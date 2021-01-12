@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Pspawn | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pspawn | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Pspawn';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pspawn:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -27,8 +32,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc3'><a href='#-embedInStream'>embedInStream</a> </li>
 <li class='toc3'><a href='#-spawnProtoEvent'>spawnProtoEvent</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -38,7 +43,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Spawns sub-patterns based on parameters in an event pattern</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Pspawner.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Pspawner.sc'>Pspawner.sc</a></div><div id='related'>See also: <a href="./../Classes/Pspawner.html">Pspawner</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Streams/Pspawner.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Streams/Pspawner.sc'>Pspawner.sc</a></div><div id='related'>See also: <a href="./../Classes/Pspawner.html">Pspawner</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -46,16 +51,16 @@ var scdoc_sc_version = '3.9.3';
 <p>Recommended to read the <a href="./../Classes/Pspawner.html">Pspawner</a> help file to become familiar with pattern spawning capabilities.<div class='note'><span class='notelabel'>NOTE:</span> Important: There are two kinds of events involved in Pspawn:<dl>
 <dt><strong>parent</strong> events<dd>which specify the pattern to embed, how to embed it (in parallel or sequence), and how long to wait until the next action;<dt><strong>child</strong> events<dd>which produce the resulting notes (or take other actions on the server).</dl>
 </div>
-<p>Of these, only the child events are returned to the event stream player during play. The parent events are used strictly internally to control spawning behavior. The parent and child event streams do not mix together. Thus pattern composition ( <a href="./../Classes/Pchain.html">Pchain</a> ) and parallelization ( <a href="./../Classes/Ppar.html">Ppar</a> ) may be used without special handling. It is up to the user to be aware of whether the parent or child stream should be subject to further manipulation, and put that manipulation in the right place. If it is to affect the child stream, it should enclose the entire Pspawn; for the parent stream, it should be inside Pspawn. (See the <a href="#Examples">Examples</a> below.)
+<p>Of these, only the child events are returned to the event stream player during play. The parent events are used strictly internally to control spawning behavior. The parent and child event streams do not mix together. Thus pattern composition ( <a href="./../Classes/Pchain.html">Pchain</a> ) and parallelization ( <a href="./../Classes/Ppar.html">Ppar</a> ) may be used without special handling. It is up to the user to be aware of whether the parent or child stream should be subject to further manipulation, and put that manipulation in the right place. If it is to affect the child stream, it should enclose the entire Pspawn; for the parent stream, it should be inside Pspawn. (See the <a href="#examples">examples</a> below.)
 <p>Pspawn uses the following items in the parent pattern:<dl>
 <dt>method<dd>The action to call on the spawner object. Currently supported: wait, seq, par, suspendAll.<dt>delta<dd>How long to wait until the next action.<dt>dict<dd>If 'pattern' is given as a symbol (see below), this is the dictionary in which the pattern will be looked up. If not specified, the <a href="./../Classes/Pdef.html">Pdef</a> collection will be used.<dt>pattern<dd>If 'method' is seq or par, this is a pattern or function to be embedded, according to the following rules.</dl>
 <table>
-<tr><td><strong>'pattern' in the event</strong><td><strong>Resulting behavior</strong><tr><td>A <a href="./../Classes/Function.html">Function</a> : <code class='code prettyprint lang-sc'>{ ... }</code><td>The function should return a pattern; this pattern is spawned.<tr><td>A <a href="./../Classes/Ref.html">Ref</a> to a pattern: <code class='code prettyprint lang-sc'>`Pbind(...)</code><td>The referenced pattern is spawned.<tr><td>A <a href="./../Classes/Symbol.html">Symbol</a> : <code class='code prettyprint lang-sc'>\scaleUp</code><td>The pattern is looked up in the event's 'dict'.</table>
+<tr><td><strong>'pattern' in the event</strong><td><strong>Resulting behavior</strong><tr><td>A <a href="./../Classes/Function.html">Function</a> : <code>{ ... }</code><td>The function should return a pattern; this pattern is spawned.<tr><td>A <a href="./../Classes/Ref.html">Ref</a> to a pattern: <code>`Pbind(...)</code><td>The referenced pattern is spawned.<tr><td>A <a href="./../Classes/Symbol.html">Symbol</a> : <code>\scaleUp</code><td>The pattern is looked up in the event's 'dict'.</table>
 <h3><a class='anchor' name='Using%20references%20to%20protect%20patterns%20from%20embedding'>Using references to protect patterns from embedding</a></h3>
 
-<p>Normally, when a pattern appears inside another pattern, the subpattern is embedded in the main output stream. It is not visible to the outside world as a pattern in itself; only its values appear.<pre class='code prettyprint lang-sc'>Pseq([Pwhite(0, 9, 5), Pwhite(10, 19, 5)], 1).asStream.all;</pre>
+<p>Normally, when a pattern appears inside another pattern, the subpattern is embedded in the main output stream. It is not visible to the outside world as a pattern in itself; only its values appear.<textarea class='editor'>Pseq([Pwhite(0, 9, 5), Pwhite(10, 19, 5)], 1).asStream.all;</textarea>
 
-<p>When using Pspawn, a sub pattern must be returned directly into the event. To accomplish this, every such pattern should be wrapped in a <a href="./../Classes/Ref.html">Ref</a> :<pre class='code prettyprint lang-sc'>Pseq([`Pwhite(0, 9, 5), `Pwhite(10, 19, 5)], 1).asStream.all;</pre>
+<p>When using Pspawn, a sub pattern must be returned directly into the event. To accomplish this, every such pattern should be wrapped in a <a href="./../Classes/Ref.html">Ref</a> :<textarea class='editor'>Pseq([`Pwhite(0, 9, 5), `Pwhite(10, 19, 5)], 1).asStream.all;</textarea>
 
 <p>Hint: <a href="./../Classes/Pfunc.html">Pfunc</a> is another good way to wrap patterns, because it simply returns its result values without further embedding. See the first example.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>Pspawn.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>pattern</span>, <span class='argstr'>spawnProtoEvent</span>)</h3>
@@ -72,7 +77,7 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-spawnProtoEvent' href='./../Overviews/Methods.html#spawnProtoEvent'>spawnProtoEvent</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-spawnProtoEvent' href='./../Overviews/Methods.html#spawnProtoEvent'>spawnProtoEvent</a> = value</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>// Play overlapping major scales, up and down
+<textarea class='editor'>// Play overlapping major scales, up and down
 (
 p = Pspawn(Pbind(
         // Pbind returned by Pfunc is not embedded, just placed in the event
@@ -154,6 +159,7 @@ p = Ppar([
 ]).play;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Pspawn.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Pspawn.schelp</a><br>link::Classes/Pspawn::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Pspawn.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Pspawn.schelp</a><br>link::Classes/Pspawn::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

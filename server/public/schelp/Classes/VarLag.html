@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>VarLag | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>VarLag | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'VarLag';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>VarLag:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -23,8 +28,8 @@ var scdoc_sc_version = '3.9.3';
 </ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -34,13 +39,13 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Variable shaped lag</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/Filter.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/Filter.sc'>Filter.sc</a></div><div id='related'>See also: <a href="./../Classes/Lag.html">Lag</a>, <a href="./../Classes/Ramp.html">Ramp</a>, <a href="./../Classes/Slew.html">Slew</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Audio/Filter.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Audio/Filter.sc'>Filter.sc</a></div><div id='related'>See also: <a href="./../Classes/Lag.html">Lag</a>, <a href="./../Classes/Ramp.html">Ramp</a>, <a href="./../Classes/Slew.html">Slew</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>Similar to <a href="./../Classes/Lag.html">Lag</a> but with other curve shapes than exponential. A change on the input will take the specified time to reach the new value. Useful for smoothing out control signals.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='method-code'><span class='method-prefix'>VarLag.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>in: 0</span>, <span class='argstr'>time: 0.1</span>, <span class='argstr'>curvature: 0</span>, <span class='argstr'>warp: 5</span>, <span class='argstr'>start</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
-<h3 class='method-code'><span class='method-prefix'>VarLag.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a>(<span class='argstr'>in: 0</span>, <span class='argstr'>time: 0.1</span>, <span class='argstr'>curvature: 0</span>, <span class='argstr'>warp: 5</span>, <span class='argstr'>start</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<p>Similar to <a href="./../Classes/Lag.html">Lag</a> but with other curve shapes than exponential. A change on the input will take the specified time to reach the new value. Useful for smoothing out control (not audio) signals.<div class='warning'><span class='warninglabel'>WARNING:</span> <code>VarLag.ar</code> currently accepts audio-rate input, but the underlying implementation treats the input as control rate. Effectively, then, the "sampling rate" of VarLag's input is <code>ControlRate.ir</code> or <code>server.sampleRate / server.options.blockSize</code>, and the maximum safe frequency to feed into VarLag is half of this. VarLag does not currently yield correct results for full-bandwidth audio-rate signals. Use <code>VarLag.ar</code> at your own risk.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>VarLag.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>in: 0.0</span>, <span class='argstr'>time: 0.1</span>, <span class='argstr'>curvature: 0</span>, <span class='argstr'>warp: 5</span>, <span class='argstr'>start</span>, <span class='argstr'>mul: 1.0</span>, <span class='argstr'>add: 0.0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>VarLag.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a>(<span class='argstr'>in: 0.0</span>, <span class='argstr'>time: 0.1</span>, <span class='argstr'>curvature: 0</span>, <span class='argstr'>warp: 5</span>, <span class='argstr'>start</span>, <span class='argstr'>mul: 1.0</span>, <span class='argstr'>add: 0.0</span>)</h3>
 <div class='method'>
 <p><h4>Arguments:</h4>
 <table class='arguments'>
@@ -49,16 +54,16 @@ var scdoc_sc_version = '3.9.3';
 <p>Lag time in seconds.<tr><td class='argumentname'>curvature<td class='argumentdesc'>
 <p>Control curvature if <strong>warp</strong> input is 5 (default). 0 means linear, positive and negative numbers curve the segment up and down.<tr><td class='argumentname'>warp<td class='argumentdesc'>
 <p>Determines the shape. The possible values are:<table>
-<tr><td><code class='code prettyprint lang-sc'>\step</code><td><td>flat segment<tr><td><code class='code prettyprint lang-sc'>\linear</code><td><code class='code prettyprint lang-sc'>\lin</code><td>linear segment, the default<tr><td><code class='code prettyprint lang-sc'>\exponential</code><td><code class='code prettyprint lang-sc'>\exp</code><td>natural exponential growth and decay. In this case, the levels must all be nonzero and the have the same sign.<tr><td><code class='code prettyprint lang-sc'>\sine</code><td><code class='code prettyprint lang-sc'>\sin</code><td>sinusoidal S shaped segment.<tr><td><code class='code prettyprint lang-sc'>\welch</code><td><code class='code prettyprint lang-sc'>\wel</code><td>sinusoidal segment shaped like the sides of a Welch window.<tr><td><code class='code prettyprint lang-sc'>\squared</code><td><code class='code prettyprint lang-sc'>\sqr</code><td>squared segment<tr><td><code class='code prettyprint lang-sc'>\cubed</code><td><code class='code prettyprint lang-sc'>\cub</code><td>cubed segment</table>
+<tr><td><code>\step</code><td><td>flat segment<tr><td><code>\linear</code><td><code>\lin</code><td>linear segment, the default<tr><td><code>\exponential</code><td><code>\exp</code><td>natural exponential growth and decay. In this case, the levels must all be nonzero and the have the same sign.<tr><td><code>\sine</code><td><code>\sin</code><td>sinusoidal S shaped segment.<tr><td><code>\welch</code><td><code>\wel</code><td>sinusoidal segment shaped like the sides of a Welch window.<tr><td><code>\squared</code><td><code>\sqr</code><td>squared segment<tr><td><code>\cubed</code><td><code>\cub</code><td>cubed segment</table>
 
-<p>All values above will ignore <strong>curvature</strong> input.<div class='note'><span class='notelabel'>NOTE:</span> When controlling this from the outside, use <code class='code prettyprint lang-sc'>Env.shapeNumber(symbol)</code> to get the numeric value for each shape.</div><tr><td class='argumentname'>start<td class='argumentdesc'>
+<p>All values above will ignore <strong>curvature</strong> input.<div class='note'><span class='notelabel'>NOTE:</span> When controlling this from the outside, use <code>Env.shapeNumber(symbol)</code> to get the numeric value for each shape.</div><tr><td class='argumentname'>start<td class='argumentdesc'>
 <p>Initial value. If not specified, same as the input signal.<tr><td class='argumentname'>mul<td class='argumentdesc'>
 <p>Output will be multiplied by this value.<tr><td class='argumentname'>add<td class='argumentdesc'>
 <p>This value will be added to the output.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 // used to lag pitch
 {
     SinOsc.ar(                              // sine wave
@@ -71,8 +76,8 @@ var scdoc_sc_version = '3.9.3';
         0.3                                 // sine amplitude
     )
 }.play
-)</pre>
-<pre class='code prettyprint lang-sc'>(
+)</textarea>
+<textarea class='editor'>(
 x = play { |amp=0, time=0, curve=0, warp=5|
     PinkNoise.ar(VarLag.kr(amp, time, curve, warp) ! 2)
 }
@@ -87,5 +92,6 @@ x.set(\amp, 0, \time, 0);
 x.set(\amp, 1, \time, 2, \warp, 5, \curve, -7); // fast curvature
 x.set(\amp, 0, \time, 0);
 
-x.free;</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/VarLag.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/VarLag.schelp</a><br>link::Classes/VarLag::<br></div></div></body></html>
+x.free;</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/VarLag.schelp'>/usr/share/SuperCollider/HelpSource/Classes/VarLag.schelp</a><br>link::Classes/VarLag::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

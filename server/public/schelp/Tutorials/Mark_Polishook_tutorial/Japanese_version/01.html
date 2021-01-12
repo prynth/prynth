@@ -1,24 +1,29 @@
-<!doctype html><html lang='en'><head><title>01 | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>01 | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../../lib/jquery.min.js'></script>
+<script src='./../../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../../..';
 var scdoc_title = '01';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../../scdoc.js' type='text/javascript'></script>
 <script src='./../../../docmap.js' type='text/javascript'></script>
-<script src='./../../../prettify.js' type='text/javascript'></script>
-<script src='./../../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>01:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#シンセシスとスケジューリングは2つの独立したプロセスである'>シンセシスとスケジューリングは2つの独立したプロセスである</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/Mark_Polishook_tutorial/Japanese_version</span>
@@ -39,7 +44,7 @@ var scdoc_sc_version = '3.9.3';
 <p>ネットワーキングという考え方は、私のこの週末のレクチャーを通して何度も取り上げるテーマです。私の意見では、ローカル、リモート、そして離れたところとネットワークするためにコンピュータを使うということは、創造性と芸術性に新しいモデルを提供するものです。それは、メディアのアーティストであり科学者である私たちが、注意深く取り組まなければならないものです。
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
 <p>まとめると、SuperCollider 3はシンセシスのプロセスをクライアントで定義して、その定義をサーバーで動かすためのプログラムです。
-<p>////////////////////////////////////////////////////////////////////////////////////////////////////<pre class='code prettyprint lang-sc'>////////////
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<textarea class='editor'>////////////
 // 例1
 // define a simple synthesis process and schedule one synthesis event (on one machine)
 // シンプルなシンセシスのプロセスを定義して、一つのシンセシスのイベントをスケジューリングする（一台のマシン上で）
@@ -51,9 +56,9 @@ s = Server("thisMachine", NetAddr("localhost", 57110));    // "localhost"は"127
 SynthDef("sine", { Out.ar(0, SinOsc.ar(440, 0, 0.2)) }).send(s);
 
 // 第3に、シンセシスをスケジューリング（実行）する
-s.sendMsg("s_new", "sine", 1000, 1, 0);</pre>
+s.sendMsg("s_new", "sine", 1000, 1, 0);</textarea>
 
-<p>////////////////////////////////////////////////////////////////////////////////////////////////////<pre class='code prettyprint lang-sc'>////////////
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<textarea class='editor'>////////////
 // 例2
 // 例1と同じプロセスだが、ネットワークを通じて2台のコンピュータがコミュニケートするという点が異なる
 
@@ -68,10 +73,10 @@ s = Server("thisMachine", NetAddr("... an ip number ...", 57110));
 SynthDef("sine", { Out.ar(0, SinOsc.ar(440, 0, 0.2)) }).send(s);
 
 // 第3に、シンセシスのプロセスをスケジュ−リングする .... 前の例の三番目のステップと全く同じ
-s.sendMsg("s_new", "sine", 1000, 1, 0);</pre>
+s.sendMsg("s_new", "sine", 1000, 1, 0);</textarea>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>次のコードは、前の２つの例から持って来たものですが、唯一の違いはローカルとリモートのサーバーは異なるIPアドレスで、そのうちの１つはサーバー・オブジェクトのアーギュメントとして与えられているということです。<pre class='code prettyprint lang-sc'>// ローカル・サーバー
+<p>次のコードは、前の２つの例から持って来たものですが、唯一の違いはローカルとリモートのサーバーは異なるIPアドレスで、そのうちの１つはサーバー・オブジェクトのアーギュメントとして与えられているということです。<textarea class='editor'>// ローカル・サーバー
 s = Server("thisMachine", NetAddr("localhost", 57110));
 SynthDef("sine", { Out.ar(0, SinOsc.ar(440, 0, 0.2)) }).send(s);
 s.sendMsg("s_new", "sine", 1000, 1, 0);
@@ -82,7 +87,8 @@ vs.
 s = Server("thisMachine", NetAddr("... an ip number ...", 57110));
 // この行を評価する前にリモート・マシンでサーバーが起動している様にする
 SynthDef("sine", { Out.ar(0, SinOsc.ar(440, 0, 0.2)) }).send(s);
-s.sendMsg("s_new", "sine", 1000, 1, 0);</pre>
+s.sendMsg("s_new", "sine", 1000, 1, 0);</textarea>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>go to <a href="./../../../Tutorials/Mark_Polishook_tutorial/Japanese_version/02.html">02</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/01.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/01.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/Japanese_version/01::<br></div></div></body></html>
+<p>go to <a href="./../../../Tutorials/Mark_Polishook_tutorial/Japanese_version/02.html">02</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/01.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/01.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/Japanese_version/01::<br></div></div><script src='./../../../editor.js' type='text/javascript'></script>
+</body></html>

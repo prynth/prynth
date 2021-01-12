@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Server | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Server | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Server';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Server:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -200,8 +205,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-syncThread'>syncThread</a> </li>
 <li class='toc3'><a href='#-tree'>tree</a> </li>
 <li class='toc3'><a href='#-window'>window</a> </li>
-</ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -211,18 +216,18 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Object representing a server application</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Server.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Server.sc'>Server.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/ScoreStreamPlayer.html">ScoreStreamPlayer</a></div>
-<div id='related'>See also: <a href="./../Classes/ServerOptions.html">ServerOptions</a>, <a href="./../Reference/Server-Architecture.html">Server Architecture</a>, <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a>, <a href="./../Classes/ServerStatusWatcher.html">ServerStatusWatcher</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/Server.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Control/Server.sc'>Server.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/ScoreStreamPlayer.html">ScoreStreamPlayer</a></div>
+<div id='related'>See also: <a href="./../Guides/Server-Guide.html">Server Guide</a>, <a href="./../Guides/MultiClient_Setups.html">Multi-client Setups</a>, <a href="./../Classes/ServerOptions.html">ServerOptions</a>, <a href="./../Reference/Server-Architecture.html">Server Architecture</a>, <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a>, <a href="./../Classes/ServerStatusWatcher.html">ServerStatusWatcher</a>, <a href="./../Reference/AudioDeviceSelection.html">Audio device selection</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>A Server object is a representation of a server application. It is used to control scsynth (or supernova) from the SuperCollider language. (See <a href="./../Guides/Server-Guide.html">Server Guide</a>, as well as <a href="./../Guides/ClientVsServer.html">Client vs Server</a> for more details on the distinction.) It forwards OSC messages and has a number of allocators that keep track of IDs for nodes, buses and buffers.
+<p>A Server object is a representation of a server application. It is used to control scsynth (or supernova) from the SuperCollider language. (See <a href="./../Guides/Server-Guide.html">Server Guide</a>, as well as <a href="./../Guides/ClientVsServer.html">Client vs Server</a> for more details on the distinction.) It forwards OSC messages and has a number of allocators that keep track of IDs for nodes, buses, and buffers.
 <p>The server application represented by a Server object might be running on the same machine as the sclang, or it may be running on a remote machine.
 <p>Most of a Server's options are controlled through its instance of ServerOptions. See the <a href="./../Classes/ServerOptions.html">ServerOptions</a> helpfile for more detail.
-<p>A server also holds an instance of a <a href="./../Classes/Recorder.html">Recorder</a> (for recording output into a file) and a <a href="./../Classes/Volume.html">Volume</a> (master level).<div class='note'><span class='notelabel'>NOTE:</span> By default, there is always one default server, which is stored in the interpreter variable 's'. E.g. you can boot the default server by calling <code class='code prettyprint lang-sc'>s.boot</code></div><pre class='code prettyprint lang-sc'>s.boot;
-{ SinOsc.ar * 0.1 }.play(s); // play a synth on the server</pre>
+<p>A server also holds an instance of a <a href="./../Classes/Recorder.html">Recorder</a> (for recording output into a file) and a <a href="./../Classes/Volume.html">Volume</a> (master level).<div class='note'><span class='notelabel'>NOTE:</span> By default, there is always one default server, which is stored in the interpreter variable 's'. E.g. you can boot the default server by calling <code>s.boot</code></div><textarea class='editor'>s.boot;
+{ SinOsc.ar * 0.1 }.play(s); // play a synth on the server</textarea>
 
-<p>The server application may be in three different states: running, not running, or unresponsive (for example while loading large files from disk).<pre class='code prettyprint lang-sc'>s.serverRunning // returns true if it is true</pre>
+<p>The server application may be in three different states: running, not running, or unresponsive (for example while loading large files from disk).<textarea class='editor'>s.serverRunning // returns true if it is true</textarea>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>name</span>, <span class='argstr'>addr</span>, <span class='argstr'>options</span>, <span class='argstr'>clientID</span>)</h3>
 <div class='method'>
@@ -231,39 +236,55 @@ var scdoc_sc_version = '3.9.3';
 <tr><td class='argumentname'>name<td class='argumentdesc'>
 <p>a symbol; each Server object is stored in one global classvariable under its name.<tr><td class='argumentname'>addr<td class='argumentdesc'>
 <p>an optional instance of <a href="./../Classes/NetAddr.html">NetAddr</a>, providing host and port. The default is the localhost address using port 57110; the same as the local server.<tr><td class='argumentname'>options<td class='argumentdesc'>
-<p>an optional instance of <a href="./../Classes/ServerOptions.html">ServerOptions</a>. If <code class='code prettyprint lang-sc'>nil</code>, an instance of ServerOptions will be created, using the default values.<tr><td class='argumentname'>clientID<td class='argumentdesc'>
-<p>an integer. In multi-client situations, every client can be given separate ranges for <a href="./../Classes/Node.html">Nodes</a>, <a href="./../Classes/Buffer.html">Buffers</a>, or <a href="./../Classes/Bus.html">Busses</a>. In normal usage the server will supply an ID automatically when a client registers for <a href="#-notify">notifications</a> so you should not need to supply one here. N.B. In multi-client situations you will need to set the <a href="./../Classes/ServerOptions.html#-maxLogins">ServerOptions: -maxLogins</a> to at least the number of clients you wish to allow. This must be the same in the Server instances on every client.</table></div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*remote' href='./../Overviews/Methods.html#remote'>remote</a>(<span class='argstr'>name</span>, <span class='argstr'>addr</span>, <span class='argstr'>options</span>, <span class='argstr'>clientID</span>)</h3>
+<p>an optional instance of <a href="./../Classes/ServerOptions.html">ServerOptions</a>. If <code>nil</code>, an instance of ServerOptions will be created, using the default values.<tr><td class='argumentname'>clientID<td class='argumentdesc'>
+<p>an integer. In multi-client situations, every client can be given separate ranges for <a href="./../Classes/Node.html">Nodes</a>, <a href="./../Classes/Buffer.html">Buffers</a>, or <a href="./../Classes/Bus.html">Busses</a>. In normal usage, the server will supply an ID automatically when a client registers for the <a href="#-notify">notifications</a> so you should not need to supply one here. N.B. In multi-client situations, you will need to set the <a href="./../Classes/ServerOptions.html#-maxLogins">ServerOptions: -maxLogins</a> to at least the number of clients you wish to allow. This must be the same in the Server instances on every client.</table></div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*remote' href='./../Overviews/Methods.html#remote'>remote</a>(<span class='argstr'>name</span>, <span class='argstr'>addr</span>, <span class='argstr'>options</span>, <span class='argstr'>clientID</span>)</h3>
 <div class='method'>
-<p>Create a new Server instance corresponding to a server app running on a separate machine. This method assumes the remote app has been booted, and starts listening immediately. You should not call <a href="#-boot">-boot</a> on an instance created using this method.<h4>Arguments:</h4>
+<p>Create a new Server instance corresponding to a server app running on a separate machine. This method assumes the remote app has been booted and starts listening immediately. You should not call <a href="#-boot">-boot</a> on an instance created using this method. <a href="./../Guides/Server-Guide.html">Server Guide</a> and <a href="./../Guides/MultiClient_Setups.html">Multi-client Setups</a> contain further information on this and multiclient usage.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>name<td class='argumentdesc'>
 <p>a symbol; each Server object is stored in one global classvariable under its name.<tr><td class='argumentname'>addr<td class='argumentdesc'>
-<p>an optional instance of <a href="./../Classes/NetAddr.html">NetAddr</a>, providing ip address of the remote machine and port the app is listening on.<tr><td class='argumentname'>options<td class='argumentdesc'>
-<p>an optional instance of <a href="./../Classes/ServerOptions.html">ServerOptions</a>. If <code class='code prettyprint lang-sc'>nil</code>, an instance of ServerOptions will be created, using the default values.<tr><td class='argumentname'>clientID<td class='argumentdesc'>
-<p>an integer. In multi-client situations, every client can be given separate ranges for <a href="./../Classes/Node.html">Nodes</a>, <a href="./../Classes/Buffer.html">Buffers</a>, or <a href="./../Classes/Bus.html">Busses</a>. In normal usage the server will supply an ID automatically when a client registers for <a href="#-notify">notifications</a> so you should not need to supply one here. N.B. In multi-client situations you will need to set the <a href="./../Classes/ServerOptions.html#-maxLogins">ServerOptions: -maxLogins</a> to at least the number of clients you wish to allow. This must be the same in the Server instances on every client.</table></div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*local' href='./../Overviews/Methods.html#local'>local</a></h3>
+<p>an optional instance of <a href="./../Classes/NetAddr.html">NetAddr</a>, providing IP address of the remote machine and port the app is listening on.<tr><td class='argumentname'>options<td class='argumentdesc'>
+<p>an optional instance of <a href="./../Classes/ServerOptions.html">ServerOptions</a>. If <code>nil</code>, an instance of ServerOptions will be created, using the default values.<div class='note'><span class='notelabel'>NOTE:</span> To enable remote connections you will need to change the option <a href="./../Classes/ServerOptions.html#-bindAddress">ServerOptions: -bindAddress</a> as the default value only allows connections from the local machine. <code>s.options.bindAddress = "0.0.0.0"</code> will allow connections from any address.</div><tr><td class='argumentname'>clientID<td class='argumentdesc'>
+<p>an integer. In multi-client situations, every client can be given separate ranges for <a href="./../Classes/Node.html">Nodes</a>, <a href="./../Classes/Buffer.html">Buffers</a>, or <a href="./../Classes/Bus.html">Busses</a>. In normal usage, the server will supply an ID automatically when a client registers for the <a href="#-notify">notifications</a> so you should not need to supply one here. N.B. In multi-client situations, you will need to set the <a href="./../Classes/ServerOptions.html#-maxLogins">ServerOptions: -maxLogins</a> to at least the number of clients you wish to allow. This must be the same in the Server instances on every client.<textarea class='editor'>// example usage:
+// on machine running the server
+(
+s.options.bindAddress = "0.0.0.0"; // allow connections from any address
+s.options.maxLogins = 2; // set to correct number of clients
+s.boot;
+)
+
+// on remote machine connecting to server
+(
+o = ServerOptions.new;
+o.options.maxLogins = 2;
+t = Server.remote(\remote, NetAddr("192.168.0.130", 57110), o); // set to correct address and port
+// info about returned client ID should be posted in the post window
+t.makeWindow; // make a window for monitoring
+)</textarea>
+</table></div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*local' href='./../Overviews/Methods.html#local'>local</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*local' href='./../Overviews/Methods.html#local'>local</a> = value</h3>
 <div class='method'>
-<p>get/set the local server, stored in classvar <code class='code prettyprint lang-sc'>local</code> (created already on initClass)</div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*internal' href='./../Overviews/Methods.html#internal'>internal</a></h3>
+<p>get/set the local server, stored in classvar <code>local</code> (created already on initClass)</div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*internal' href='./../Overviews/Methods.html#internal'>internal</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*internal' href='./../Overviews/Methods.html#internal'>internal</a> = value</h3>
 <div class='method'>
-<p>get/set the internal server, stored in classvar <code class='code prettyprint lang-sc'>internal</code> (created already on initClass) See: <a href="./../Guides/Server-Guide.html">Server Guide</a></div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*default' href='./../Overviews/Methods.html#default'>default</a></h3>
+<p>get/set the internal server, stored in classvar <code>internal</code> (created already on initClass) See: <a href="./../Guides/Server-Guide.html">Server Guide</a></div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*default' href='./../Overviews/Methods.html#default'>default</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*default' href='./../Overviews/Methods.html#default'>default</a> = <span class='argstr'>server</span></h3>
 <div class='method'>
 <p>Get or set the default server. By default this is the local server (see above).<h4>Discussion:</h4>
 
-<p>Setting this will also assign it to the <a href="./../Classes/Interpreter.html">Interpreter</a> variable 's'.<pre class='code prettyprint lang-sc'>// set the internal Server to be the default Server
+<p>Setting this will also assign it to the <a href="./../Classes/Interpreter.html">Interpreter</a> variable 's'.<textarea class='editor'>// set the internal Server to be the default Server
 Server.default = Server.internal;
-s.postln; // internal</pre>
+s.postln; // internal</textarea>
 </div><h3><a class='anchor' name='Accessing%20all%20servers'>Accessing all servers</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*all' href='./../Overviews/Methods.html#all'>all</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*all' href='./../Overviews/Methods.html#all'>all</a> = value</h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>a <a href="./../Classes/Set.html">Set</a> containing all servers.<pre class='code prettyprint lang-sc'>Server.all</pre>
+<p>a <a href="./../Classes/Set.html">Set</a> containing all servers.<textarea class='editor'>Server.all</textarea>
 </div></div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*allRunningServers' href='./../Overviews/Methods.html#allRunningServers'>allRunningServers</a></h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>a Set containing all running servers, according to the definition of <a href="#-serverRunning">-serverRunning</a>.<pre class='code prettyprint lang-sc'>Server.allRunningServers</pre>
+<p>a Set containing all running servers, according to the definition of <a href="#-serverRunning">-serverRunning</a>.<textarea class='editor'>Server.allRunningServers</textarea>
 </div></div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*allBootedServers' href='./../Overviews/Methods.html#allBootedServers'>allBootedServers</a></h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
@@ -271,7 +292,7 @@ s.postln; // internal</pre>
 <h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*named' href='./../Overviews/Methods.html#named'>named</a> = value</h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>An <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> of all servers listed by their name<pre class='code prettyprint lang-sc'>Server.named.at(\default)</pre>
+<p>An <a href="./../Classes/IdentityDictionary.html">IdentityDictionary</a> of all servers listed by their name<textarea class='editor'>Server.named.at(\default)</textarea>
 </div></div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*quitAll' href='./../Overviews/Methods.html#quitAll'>quitAll</a>(<span class='argstr'>watchShutDown: true</span>)</h3>
 <div class='method'>
 <p>quit all registered servers</div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*killAll' href='./../Overviews/Methods.html#killAll'>killAll</a></h3>
@@ -283,8 +304,8 @@ s.postln; // internal</pre>
 <p>try to free all nodes in all registered servers, even if the server seems not to be running</div><h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*sync_s' href='./../Overviews/Methods.html#sync_s'>sync_s</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*sync_s' href='./../Overviews/Methods.html#sync_s'>sync_s</a> = value</h3>
 <div class='method'>
-<p>If kept true (default), when the default server is changed, also the interpreter variable s is changed.<pre class='code prettyprint lang-sc'>Server.default = Server(\alice, NetAddr("127.0.0.1", 57130));
-s.postln; // see: it is alice.</pre>
+<p>If kept true (default), when the default server is changed, also the interpreter variable s is changed.<textarea class='editor'>Server.default = Server(\alice, NetAddr("127.0.0.1", 57130));
+s.postln; // see: it is alice.</textarea>
 </div><h3><a class='anchor' name='Switching%20the%20server%20application'>Switching the server application</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*supernova' href='./../Overviews/Methods.html#supernova'>supernova</a></h3>
 <div class='method'>
@@ -304,17 +325,17 @@ s.postln; // see: it is alice.</pre>
 <h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*resumeThreads' href='./../Overviews/Methods.html#resumeThreads'>resumeThreads</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*set' href='./../Overviews/Methods.html#set'>set</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Server.</span><a class='method-name' name='*set' href='./../Overviews/Methods.html#set'>set</a> = <span class='argstr'>item</span></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/deprecated/3.9/deprecated-3.9.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/deprecated/3.9/deprecated-3.9.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/deprecated/3.10/deprecated-3.10.sc'>/usr/share/SuperCollider/SCClassLibrary/deprecated/3.10/deprecated-3.10.sc</a></div>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sendMsg' href='./../Overviews/Methods.html#sendMsg'>sendMsg</a>( <span class='argstr'>... msg</span>)</h3>
 <div class='method'>
 <p>send an OSC-message to the server.<h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>s.sendMsg("/s_new", "default", s.nextNodeID, 0, 1);</pre>
+<textarea class='editor'>s.sendMsg("/s_new", "default", s.nextNodeID, 0, 1);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sendBundle' href='./../Overviews/Methods.html#sendBundle'>sendBundle</a>(<span class='argstr'>time</span> <span class='argstr'>... msgs</span>)</h3>
 <div class='method'>
 <p>send an OSC-bundle to the server.<h4>Discussion:</h4>
 
-<p>Since the network may have irregular performance, time allows for the bundle to be evaluated at a specified point in the future. Thus all messages are synchronous relative to each other, but delayed by a constant offset. If such a bundle arrives late, the server replies with a late message but still evaluates it.<pre class='code prettyprint lang-sc'>s.sendBundle(0.2, ["/s_new", "default", x = s.nextNodeID, 0, 1], ["/n_set", x, "freq", 500]);</pre>
+<p>Since the network may have irregular performance, time allows for the bundle to be evaluated at a specified point in the future. Thus all messages are synchronous relative to each other, but delayed by a constant offset. If such a bundle arrives late, the server replies with a late message but still evaluates it.<textarea class='editor'>s.sendBundle(0.2, ["/s_new", "default", x = s.nextNodeID, 0, 1], ["/n_set", x, "freq", 500]);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sendRaw' href='./../Overviews/Methods.html#sendRaw'>sendRaw</a>(<span class='argstr'>rawArray</span>)</h3>
 <div class='method'>
 <p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-listSendMsg' href='./../Overviews/Methods.html#listSendMsg'>listSendMsg</a>(<span class='argstr'>msg</span>)</h3>
@@ -323,8 +344,8 @@ s.postln; // see: it is alice.</pre>
 <div class='method'>
 <p>as sendBundle, but takes an array as argument.<h4>Discussion:</h4>
 
-<p>This allows you to collect messages in an array and then send them.<pre class='code prettyprint lang-sc'>s.listSendBundle(0.2, [["/s_new", "default", x = s.nextNodeID, 0, 1],
-    ["/n_set", x, "freq", 600]]);</pre>
+<p>This allows you to collect messages in an array and then send them.<textarea class='editor'>s.listSendBundle(0.2, [["/s_new", "default", x = s.nextNodeID, 0, 1],
+    ["/n_set", x, "freq", 600]]);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sendSynthDef' href='./../Overviews/Methods.html#sendSynthDef'>sendSynthDef</a>(<span class='argstr'>name</span>, <span class='argstr'>dir</span>)</h3>
 <div class='method'>
 <p>send a synthDef to the server that was written in a local directory</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-loadSynthDef' href='./../Overviews/Methods.html#loadSynthDef'>loadSynthDef</a>(<span class='argstr'>name</span>, <span class='argstr'>completionMsg</span>, <span class='argstr'>dir</span>)</h3>
@@ -349,23 +370,23 @@ s.postln; // see: it is alice.</pre>
 <tr><td class='argumentname'>onComplete<td class='argumentdesc'>
 <p>A function to evaluate after the server has booted successfully.<tr><td class='argumentname'>limit<td class='argumentdesc'>
 <p>The number of times to check for a successful boot. (5 times/sec)<tr><td class='argumentname'>onFailure<td class='argumentdesc'>
-<p>A function to evaluate after the server fails to boot. If onFailure is not given, an error message is posted. Providing a function suppresses the error message. If you want to supply a function and print the normal error message, make sure that your function returns "false," e.g. <code class='code prettyprint lang-sc'>s.waitForBoot(onFailure: { ... custom action...; false })</code>.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doWhenBooted' href='./../Overviews/Methods.html#doWhenBooted'>doWhenBooted</a>(<span class='argstr'>onComplete</span>, <span class='argstr'>limit: 100</span>, <span class='argstr'>onFailure</span>)</h3>
+<p>A function to evaluate after the server fails to boot. If onFailure is not given, an error message is posted. Providing a function suppresses the error message. If you want to supply a function and print the normal error message, make sure that your function returns "false," e.g. <code>s.waitForBoot(onFailure: { ... custom action...; false })</code>.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doWhenBooted' href='./../Overviews/Methods.html#doWhenBooted'>doWhenBooted</a>(<span class='argstr'>onComplete</span>, <span class='argstr'>limit: 100</span>, <span class='argstr'>onFailure</span>)</h3>
 <div class='method'>
-<p>Evaluate "onComplete" as soon as the server has booted. This method assumes the server is being booted explicitly through a separate <code class='code prettyprint lang-sc'>boot</code> call. If the server is already running, "onComplete" is executed immediately.<h4>Arguments:</h4>
+<p>Evaluate "onComplete" as soon as the server has booted. This method assumes the server is being booted explicitly through a separate <code>boot</code> call. If the server is already running, "onComplete" is executed immediately.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>onComplete<td class='argumentdesc'>
 <p>A function to evaluate after the server has booted successfully.<tr><td class='argumentname'>limit<td class='argumentdesc'>
 <p>The number of times to check for a successful boot.<tr><td class='argumentname'>onFailure<td class='argumentdesc'>
-<p>A function to evaluate after the server fails to boot. If onFailure is not given, an error message is posted. Providing a function suppresses the error message. If you want to supply a function and print the normal error message, make sure that your function returns "false," e.g. <code class='code prettyprint lang-sc'>s.doWhenBooted(onFailure: { ... custom action...; false })</code>.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-boot' href='./../Overviews/Methods.html#boot'>boot</a>(<span class='argstr'>startAliveThread: true</span>, <span class='argstr'>recover: false</span>, <span class='argstr'>onFailure</span>)</h3>
+<p>A function to evaluate after the server fails to boot. If onFailure is not given, an error message is posted. Providing a function suppresses the error message. If you want to supply a function and print the normal error message, make sure that your function returns "false," e.g. <code>s.doWhenBooted(onFailure: { ... custom action...; false })</code>.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-boot' href='./../Overviews/Methods.html#boot'>boot</a>(<span class='argstr'>startAliveThread: true</span>, <span class='argstr'>recover: false</span>, <span class='argstr'>onFailure</span>)</h3>
 <div class='method'>
 <p>boot the remote server, create new allocators.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>startAliveThread<td class='argumentdesc'>
-<p>If true, start a Routine to send a /status message to the server every so often. The interval between the messages is set by <code class='code prettyprint lang-sc'>theServer.aliveThreadPeriod = (seconds)</code>. The default period is 0.7. If false, /status will not be sent and the server's window will not update.<tr><td class='argumentname'>recover<td class='argumentdesc'>
+<p>If true, start a Routine to send a /status message to the server every so often. The interval between the messages is set by <code>theServer.aliveThreadPeriod = (seconds)</code>. The default period is 0.7. If false, /status will not be sent and the server's window will not update.<tr><td class='argumentname'>recover<td class='argumentdesc'>
 <p>If true, create a new node ID allocator for the server, but use the old buffer and bus allocators. This is useful if the server process did not actually stop. In normal use, the default value "false" should be used.<tr><td class='argumentname'>onFailure<td class='argumentdesc'>
 <p>In this method, the onFailure argument is for internal use only. If you wish to take specific actions when the server boots or fails to boot, it is recommended to use <a href="#-waitForBoot">-waitForBoot</a> or <a href="#-doWhenBooted">-doWhenBooted</a>.</table><h4>Discussion:</h4>
 
-<p>You cannot boot a server app on a remote machine, but you can initialise the allocators by calling this message.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quit' href='./../Overviews/Methods.html#quit'>quit</a>(<span class='argstr'>onComplete</span>, <span class='argstr'>onFailure</span>, <span class='argstr'>watchShutDown: true</span>)</h3>
+<p>You cannot boot a server app on a remote machine, but you can initialize the allocators by calling this message.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quit' href='./../Overviews/Methods.html#quit'>quit</a>(<span class='argstr'>onComplete</span>, <span class='argstr'>onFailure</span>, <span class='argstr'>watchShutDown: true</span>)</h3>
 <div class='method'>
 <p>quit the server application<h4>Arguments:</h4>
 <table class='arguments'>
@@ -385,14 +406,14 @@ s.postln; // see: it is alice.</pre>
 <p>query the server status</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-notify' href='./../Overviews/Methods.html#notify'>notify</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-notify' href='./../Overviews/Methods.html#notify'>notify</a> = <span class='argstr'>flag</span></h3>
 <div class='method'>
-<p>The server sends notifications, for example if a node was created, a 'tr' message from a <a href="./../Classes/SendTrig.html">SendTrig</a>, or a <strong>/done</strong> action. if <code class='code prettyprint lang-sc'>flag</code> is set to false, these messages will not be sent to this client. The default is true. If true the server will respond with a clientID (scsynth only) which can be useful in multi-client situations. If this is different from any previously received ID new allocators will be created. See <a href="#Local%20vs.%20Remote%20Servers,%20Multi-client%20Configurations">Local vs. Remote Servers, Multi-client Configurations</a> for more information.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ping' href='./../Overviews/Methods.html#ping'>ping</a>(<span class='argstr'>n: 1</span>, <span class='argstr'>wait: 0.1</span>, <span class='argstr'>func</span>)</h3>
+<p>The server sends notifications, for example, if a node was created, a 'tr' message from a <a href="./../Classes/SendTrig.html">SendTrig</a>, or a <strong>/done</strong> action. If <code>flag</code> is set to false, these messages will not be sent to this client. The default is true. If true the server will respond with a clientID (scsynth only) which can be useful in multi-client situations. If this is different from any previously received ID new allocators will be created. See <a href="#Local%20vs.%20Remote%20Servers,%20Multi-client%20Configurations">Local vs. Remote Servers, Multi-client Configurations</a> for more information.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ping' href='./../Overviews/Methods.html#ping'>ping</a>(<span class='argstr'>n: 1</span>, <span class='argstr'>wait: 0.1</span>, <span class='argstr'>func</span>)</h3>
 <div class='method'>
-<p>measure the time between server and client, which may vary. the <code class='code prettyprint lang-sc'>func</code> is evaluated after <code class='code prettyprint lang-sc'>n</code> number of times and is passed the resulting maximum.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-options' href='./../Overviews/Methods.html#options'>options</a></h3>
+<p>measure the time between server and client, which may vary. the <code>func</code> is evaluated after <code>n</code> number of times and is passed the resulting maximum.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-options' href='./../Overviews/Methods.html#options'>options</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-options' href='./../Overviews/Methods.html#options'>options</a> = value</h3>
 <div class='method'>
 <p>Get or set this Server's <a href="./../Classes/ServerOptions.html">ServerOptions</a> object. Changes to options only take effect when the server is rebooted.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-defaultGroup' href='./../Overviews/Methods.html#defaultGroup'>defaultGroup</a></h3>
 <div class='method'>
-<p>Return the default group on this Server for this client ID. This will be the same object as <code class='code prettyprint lang-sc'>server.defaultGroups[server.clientID]</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-defaultGroups' href='./../Overviews/Methods.html#defaultGroups'>defaultGroups</a></h3>
+<p>Return the default group on this Server for this client ID. This will be the same object as <code>server.defaultGroups[server.clientID]</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-defaultGroups' href='./../Overviews/Methods.html#defaultGroups'>defaultGroups</a></h3>
 <div class='method'>
 <p>Return an array mapping client IDs to their associated default groups as <a href="./../Classes/Group.html">Group</a> objects.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-volume' href='./../Overviews/Methods.html#volume'>volume</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-volume' href='./../Overviews/Methods.html#volume'>volume</a> = <span class='argstr'>newVolume</span></h3>
@@ -403,13 +424,13 @@ s.postln; // see: it is alice.</pre>
 <div class='method'>
 <p>unmute the server. This can also be toggled from the Server window with the 'm' key.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-reorder' href='./../Overviews/Methods.html#reorder'>reorder</a>(<span class='argstr'>nodeList</span>, <span class='argstr'>target</span>, <span class='argstr'>addAction: 'addToHead'</span>)</h3>
 <div class='method'>
-<p>Move the nodes in <code class='code prettyprint lang-sc'>nodeList</code> to the location specified by <code class='code prettyprint lang-sc'>target</code> and <code class='code prettyprint lang-sc'>addAction</code>, placing them there in the order indicated by nodeList.<h4>Discussion:</h4>
+<p>Move the nodes in <code>nodeList</code> to the location specified by <code>target</code> and <code>addAction</code>, placing them there in the order indicated by nodeList.<h4>Discussion:</h4>
 
-<p>Any nodes which have already been freed will be skipped. Passing nil for target and addAction will result in the location being the head of the default group.<pre class='code prettyprint lang-sc'>g = Group.new;
+<p>Any nodes which have already been freed will be skipped. Passing nil for target and addAction will result in the location being the head of the default group.<textarea class='editor'>g = Group.new;
 x = Array.fill(5, {Synth(\default)});
 s.queryAllNodes;
 s.reorder(x, g, \addToTail);
-s.queryAllNodes;</pre>
+s.queryAllNodes;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-inputBus' href='./../Overviews/Methods.html#inputBus'>inputBus</a></h3>
 <div class='method'>
 <p>Return a <a href="./../Classes/Bus.html">Bus</a> object that represents the input audio bus.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-outputBus' href='./../Overviews/Methods.html#outputBus'>outputBus</a></h3>
@@ -424,9 +445,9 @@ s.queryAllNodes;</pre>
 <div class='method'>
 <p>Post a representation of this Server's current node tree to the post window. See <a href="#-plotTree">-plotTree</a> for a graphical variant.<h4>Discussion:</h4>
 
-<p>Very helpful for debugging. For local servers this uses g_dumpTree and for remote g_queryTree. See <a href="./../Classes/Group.html">Group</a> and <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a> for more info.<pre class='code prettyprint lang-sc'>s.boot;
+<p>Very helpful for debugging. For local servers, this uses g_dumpTree and for remote g_queryTree. See <a href="./../Classes/Group.html">Group</a> and <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a> for more info.<textarea class='editor'>s.boot;
 s.queryAllNodes; // note the root node (ID 0) and the default group (ID 1)
-s.quit;</pre>
+s.quit;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-peakCPU' href='./../Overviews/Methods.html#peakCPU'>peakCPU</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-avgCPU' href='./../Overviews/Methods.html#avgCPU'>avgCPU</a></h3>
 <div class='method'>
@@ -441,54 +462,54 @@ s.quit;</pre>
 <div class='method'>
 <p>Get number of running <a href="./../Classes/Synth.html">Synth</a>s.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numGroups' href='./../Overviews/Methods.html#numGroups'>numGroups</a></h3>
 <div class='method'>
-<p>Get number of <a href="./../Classes/Group.html">Group</a>s.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numUGens' href='./../Overviews/Methods.html#numUGens'>numUGens</a></h3>
+<p>Get the number of <a href="./../Classes/Group.html">Group</a>s.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numUGens' href='./../Overviews/Methods.html#numUGens'>numUGens</a></h3>
 <div class='method'>
-<p>Get number of running <a href="./../Classes/UGen.html">UGen</a>s.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numSynthDefs' href='./../Overviews/Methods.html#numSynthDefs'>numSynthDefs</a></h3>
+<p>Get the number of running <a href="./../Classes/UGen.html">UGen</a>s.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numSynthDefs' href='./../Overviews/Methods.html#numSynthDefs'>numSynthDefs</a></h3>
 <div class='method'>
 <p>Get number of loaded <a href="./../Classes/SynthDef.html">SynthDef</a>initions.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pid' href='./../Overviews/Methods.html#pid'>pid</a></h3>
 <div class='method'>
-<p>Get process ID of running server (if not internal).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-addr' href='./../Overviews/Methods.html#addr'>addr</a></h3>
+<p>Get process ID of the running server (if not internal).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-addr' href='./../Overviews/Methods.html#addr'>addr</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-addr' href='./../Overviews/Methods.html#addr'>addr</a> = <span class='argstr'>netAddr</span></h3>
 <div class='method'>
 <p>The network address of the server as a <a href="./../Classes/NetAddr.html">NetAddr</a>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-maxNumClients' href='./../Overviews/Methods.html#maxNumClients'>maxNumClients</a></h3>
 <div class='method'>
-<p>If known, the maximum number of clients allowed on the server. Otherwise, the value of <a href="./../Classes/ServerOptions.html#-maxLogins">ServerOptions: -maxLogins</a>, which is what will be requested after the server boots. This number is not guaranteed to be correct until <a href="#-serverRunning">-serverRunning</a> is <code class='code prettyprint lang-sc'>true</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clientID' href='./../Overviews/Methods.html#clientID'>clientID</a></h3>
+<p>If known, the maximum number of clients allowed on the server. Otherwise, the value of <a href="./../Classes/ServerOptions.html#-maxLogins">ServerOptions: -maxLogins</a>, which is what will be requested after the server boots. This number is not guaranteed to be correct until <a href="#-serverRunning">-serverRunning</a> is <code>true</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clientID' href='./../Overviews/Methods.html#clientID'>clientID</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clientID' href='./../Overviews/Methods.html#clientID'>clientID</a> = <span class='argstr'>val</span></h3>
 <div class='method'>
-<p>The getter returns the client ID of this client on the remote process. <code class='code prettyprint lang-sc'>nil</code> until the server is running.
-<p>The setter attempts to set the client ID of this client for the remote server process. Fails on invalid input or if the server is running. Valid inputs are in the range <code class='code prettyprint lang-sc'>[0..(this.maxNumClients-1)]</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hasShmInterface' href='./../Overviews/Methods.html#hasShmInterface'>hasShmInterface</a></h3>
+<p>The getter returns the client ID of this client on the remote process. <code>nil</code> until the server is running.
+<p>The setter attempts to set the client ID of this client for the remote server process. Fails on invalid input or if the server is running. Valid inputs are in the range <code>[0..(this.maxNumClients-1)]</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hasShmInterface' href='./../Overviews/Methods.html#hasShmInterface'>hasShmInterface</a></h3>
 <div class='method'>
 <p>Returns true if a <a href="./../Classes/ServerShmInterface.html">ServerShmInterface</a> is available. See also <a href="./../Classes/Bus.html#Synchronous%20control%20bus%20methods">Bus: Synchronous control bus methods</a>. The shared memory interface is initialized after first server boot.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-serverBooting' href='./../Overviews/Methods.html#serverBooting'>serverBooting</a></h3>
 <div class='method'>
-<p><code class='code prettyprint lang-sc'>true</code> if the server is booting, <code class='code prettyprint lang-sc'>false</code> otherwise.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hasBooted' href='./../Overviews/Methods.html#hasBooted'>hasBooted</a></h3>
+<p><code>true</code> if the server is booting, <code>false</code> otherwise.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hasBooted' href='./../Overviews/Methods.html#hasBooted'>hasBooted</a></h3>
 <div class='method'>
-<p><code class='code prettyprint lang-sc'>true</code> if the server has booted. The server is not guaranteed to have a correct clientID, nor is it guaranteed that actions in <a href="./../Classes/ServerTree.html">ServerTree</a> will have run yet.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-serverRunning' href='./../Overviews/Methods.html#serverRunning'>serverRunning</a></h3>
+<p><code>true</code> if the server has booted. The server is not guaranteed to have a correct clientID, nor is it guaranteed that actions in <a href="./../Classes/ServerTree.html">ServerTree</a> will have run yet.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-serverRunning' href='./../Overviews/Methods.html#serverRunning'>serverRunning</a></h3>
 <div class='method'>
-<p><code class='code prettyprint lang-sc'>true</code> only if the server is fully ready. A server is fully ready once it has booted, received a reply to a <code class='code prettyprint lang-sc'>/notify</code> command, been given a client ID, and after the <a href="./../Classes/ServerTree.html">ServerTree</a> has run.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-unresponsive' href='./../Overviews/Methods.html#unresponsive'>unresponsive</a></h3>
+<p><code>true</code> only if the server is fully ready. A server is fully ready once it has booted, received a reply to a <code>/notify</code> command, been given a client ID, and after the <a href="./../Classes/ServerTree.html">ServerTree</a> has run.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-unresponsive' href='./../Overviews/Methods.html#unresponsive'>unresponsive</a></h3>
 <div class='method'>
-<p><code class='code prettyprint lang-sc'>true</code> if the server is unresponsive (specifically, if it has failed to respond after <a href="./../Classes/ServerOptions.html#-pingsBeforeConsideredDead">ServerOptions: -pingsBeforeConsideredDead</a> ping attempts); <code class='code prettyprint lang-sc'>false</code> otherwise.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isLocal' href='./../Overviews/Methods.html#isLocal'>isLocal</a></h3>
+<p><code>true</code> if the server is unresponsive (specifically, if it has failed to respond after <a href="./../Classes/ServerOptions.html#-pingsBeforeConsideredDead">ServerOptions: -pingsBeforeConsideredDead</a> ping attempts); <code>false</code> otherwise.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isLocal' href='./../Overviews/Methods.html#isLocal'>isLocal</a></h3>
 <div class='method'>
-<p><code class='code prettyprint lang-sc'>true</code> if the server is running on the same machine as sclang, <code class='code prettyprint lang-sc'>false</code> otherwise.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-remoteControlled' href='./../Overviews/Methods.html#remoteControlled'>remoteControlled</a></h3>
+<p><code>true</code> if the server is running on the same machine as sclang, <code>false</code> otherwise.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-remoteControlled' href='./../Overviews/Methods.html#remoteControlled'>remoteControlled</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-remoteControlled' href='./../Overviews/Methods.html#remoteControlled'>remoteControlled</a> = value</h3>
 <div class='method'>
-<p><code class='code prettyprint lang-sc'>true</code> if the server is not being controlled by the machine on which it is running, <code class='code prettyprint lang-sc'>false</code> otherwise. This value is the same as <code class='code prettyprint lang-sc'>isLocal</code> unless explicitly set.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-userSpecifiedClientID' href='./../Overviews/Methods.html#userSpecifiedClientID'>userSpecifiedClientID</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/deprecated/3.9/deprecated-3.9.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/deprecated/3.9/deprecated-3.9.sc</a></div>
+<p><code>true</code> if the server is not being controlled by the machine on which it is running, <code>false</code> otherwise. This value is the same as <code>isLocal</code> unless explicitly set.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-userSpecifiedClientID' href='./../Overviews/Methods.html#userSpecifiedClientID'>userSpecifiedClientID</a></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/deprecated/3.10/deprecated-3.10.sc'>/usr/share/SuperCollider/SCClassLibrary/deprecated/3.10/deprecated-3.10.sc</a></div>
 <div class='method'>
-<p>Deprecated in 3.9. Returns <code class='code prettyprint lang-sc'>false</code>. Server:clientID can now be set while a server is off, and is locked while the server is running. Thus, userSpecifiedClientID is no longer needed internally, and meaningless.</div><h3><a class='anchor' name='Message%20Bundling'>Message Bundling</a></h3>
+<p>Deprecated in 3.9. Returns <code>false</code>. Server:clientID can now be set while a server is off, and is locked while the server is running. Thus, userSpecifiedClientID is no longer needed internally, and meaningless.</div><h3><a class='anchor' name='Message%20Bundling'>Message Bundling</a></h3>
 
-<p>Server provides support for automatically bundling messages. This is quite convenient in object style, and ensures synchronous execution. See also <a href="./../Guides/Bundled-Messages.html">Bundled Server Messages</a><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeBundle' href='./../Overviews/Methods.html#makeBundle'>makeBundle</a>(<span class='argstr'>time</span>, <span class='argstr'>func</span>, <span class='argstr'>bundle</span>)</h3>
+<p>The server provides support for automatically bundling messages. This is quite convenient in object style and ensures synchronous execution. See also <a href="./../Guides/Bundled-Messages.html">Bundled Server Messages</a><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeBundle' href='./../Overviews/Methods.html#makeBundle'>makeBundle</a>(<span class='argstr'>time</span>, <span class='argstr'>func</span>, <span class='argstr'>bundle</span>)</h3>
 <div class='method'>
-<p>The Function <code class='code prettyprint lang-sc'>func</code> is evaluated, and all OSC messages generated by it are deferred and added to a bundle.<h4>Arguments:</h4>
+<p>The Function <code>func</code> is evaluated, and all OSC messages generated by it are deferred and added to a bundle.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>time<td class='argumentdesc'>
-<p>If set to nil or a number the bundle will be automatically sent and executed after the corresponding delay in seconds. If <code class='code prettyprint lang-sc'>time</code> is set to false the bundle will not be sent.<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>If set to nil or a number the bundle will be automatically sent and executed after the corresponding delay in seconds. If <code>time</code> is set to false the bundle will not be sent.<tr><td class='argumentname'>func<td class='argumentdesc'>
 <p>The function to evaluate.<tr><td class='argumentname'>bundle<td class='argumentdesc'>
 <p>allows you to pass in a preexisting bundle and continue adding to it.</table><h4>Returns:</h4>
 <div class='returnvalue'>
 <p>The bundle so that it can be further used if needed.</div><h4>Discussion:</h4>
 
-<p>Calling <code class='code prettyprint lang-sc'>sync</code> inside func will split the bundle and wait for asynchronous actions to complete before continuing.
-<p>If an error is encountered while evaluating <code class='code prettyprint lang-sc'>func</code> this method will throw an <a href="./../Classes/Error.html">Error</a> and stop message deferral.<pre class='code prettyprint lang-sc'>s.boot;
+<p>Calling <code>sync</code> inside func will split the bundle and wait for asynchronous actions to complete before continuing.
+<p>If an error is encountered while evaluating <code>func</code> this method will throw an <a href="./../Classes/Error.html">Error</a> and stop message deferral.<textarea class='editor'>s.boot;
 (
 // send a synth def to server
 SynthDef("tpulse", { arg out=0,freq=700,sawFreq=440.0;
@@ -542,17 +563,17 @@ s.makeBundle(nil, {
     x = { PlayBuf.ar(1, b) * 0.5 }.play;
 });
 )
-x.free; b.free;</pre>
+x.free; b.free;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bind' href='./../Overviews/Methods.html#bind'>bind</a>(<span class='argstr'>func</span>)</h3>
 <div class='method'>
-<p>Just as in <code class='code prettyprint lang-sc'>makeBundle</code>, the Function <code class='code prettyprint lang-sc'>func</code> is evaluated, and all OSC messages generated by it are deferred and added to a bundle, which is sent to the server, using the server default latency.<h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>(
+<p>Just as in <code>makeBundle</code>, the Function <code>func</code> is evaluated, and all OSC messages generated by it are deferred and added to a bundle, which is sent to the server, using the server default latency.<h4>Discussion:</h4>
+<textarea class='editor'>(
 s.bind {
     a = { |freq=100| SinOsc.ar(freq, LFTri.ar(freq)) * 0.2 }.play;
     s.sync;
     a.set(\freq, 400);
 }
-)</pre>
+)</textarea>
 </div><h3><a class='anchor' name='Shared%20Controls'>Shared Controls</a></h3>
 
 <p>The internal server has a number of shared control buses. Their values can be set or polled using the methods below.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-getSharedControl' href='./../Overviews/Methods.html#getSharedControl'>getSharedControl</a>(<span class='argstr'>num</span>)</h3>
@@ -567,24 +588,24 @@ s.bind {
 <div class='method'>
 <p>This method initializes the <a href="./../Reference/default_group.html">Default Group</a> and runs <a href="./../Classes/ServerTree.html">ServerTree</a>.<h4>Discussion:</h4>
 
-<p>This method is called automatically when you boot a Server from the language. N.B. If you started a server app from the command line you will have to call initTree manually if you need this functionality.<pre class='code prettyprint lang-sc'>s.quit;
+<p>This method is called automatically when you boot a Server from the language. N.B. If you started a server app from the command line you will have to call initTree manually if you need this functionality.<textarea class='editor'>s.quit;
 f = {Group.new(s.defaultGroup); "Other code can be evaluated too".postln;};
 ServerTree.add(f);
 s.boot;
 s.queryAllNodes; // note the group within the default group
-ServerTree.remove(f);</pre>
+ServerTree.remove(f);</textarea>
 
 <p><a href="./../Classes/ServerBoot.html">ServerBoot</a> and <a href="./../Classes/ServerQuit.html">ServerQuit</a> provide similar functionality at boot and quit times.</div><h3><a class='anchor' name='GUI%20methods'>GUI methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeGui' href='./../Overviews/Methods.html#makeGui'>makeGui</a>(<span class='argstr'>w</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc</a></div>
 <div class='method'>
 <p>Create and show the server window. The window responds to a number of keyboard shortcuts:<table>
 <tr><td><strong>key</strong><td><strong>action</strong><tr><td><code>n</code><td>Post a representation of this Server's current node tree to the post window. (See <a href="#-queryAllNodes">-queryAllNodes</a>)<tr><td><code>N</code><td>As 'n' above but include controls.<tr><td><code>l</code><td>Show input/output level meters. (See <a href="#-meter">-meter</a>)<tr><td><code>p</code><td>Show graphical view of the node tree. (See <a href="#-plotTree">-plotTree</a>)<tr><td>(space)<td>Boot server if not already booted. (See <a href="#-boot">-boot</a>)<tr><td><code>s</code><td>Show scope window. (See <a href="#-scope">-scope</a>)<tr><td><code>f</code><td>Show frequency analyzer window. (See <a href="#-freqscope">-freqscope</a>)<tr><td><code>d</code><td>Toggle dumping of OSC messages.<tr><td><code>m</code><td>Toggle mute.<tr><td><code>0</code><td>Reset volume to 0 db.</table>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeWindow' href='./../Overviews/Methods.html#makeWindow'>makeWindow</a>(<span class='argstr'>w</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc</a></div>
 <div class='method'>
-<p>On most platforms, this is equivalent to <code class='code prettyprint lang-sc'>makeGui</code>. If you are running SuperCollider on Emacs, it makes a server view composed of Emacs widgets.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-scope' href='./../Overviews/Methods.html#scope'>scope</a>(<span class='argstr'>numChannels</span>, <span class='argstr'>index: 0</span>, <span class='argstr'>bufsize: 4096</span>, <span class='argstr'>zoom: 1</span>, <span class='argstr'>rate: 'audio'</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc</a></div>
+<p>On most platforms, this is equivalent to <code>makeGui</code>. If you are running SuperCollider on Emacs, it makes a server view composed of Emacs widgets.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-scope' href='./../Overviews/Methods.html#scope'>scope</a>(<span class='argstr'>numChannels</span>, <span class='argstr'>index: 0</span>, <span class='argstr'>bufsize: 4096</span>, <span class='argstr'>zoom: 1</span>, <span class='argstr'>rate: 'audio'</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc</a></div>
 <div class='method'>
 <p>Open a scope window showing the output of the Server. see <a href="./../Classes/Stethoscope.html">Stethoscope</a> for further details.<h4>Arguments:</h4>
 <table class='arguments'>
@@ -592,21 +613,21 @@ ServerTree.remove(f);</pre>
 <p>the number of channels to be scoped out. The default is this server's options' numOutputBusChannels.<tr><td class='argumentname'>index<td class='argumentdesc'>
 <p>the first channel to be output. The default is 0.<tr><td class='argumentname'>bufsize<td class='argumentdesc'>
 <p>the size of the buffer for the ScopeView. The default is 4096.<tr><td class='argumentname'>zoom<td class='argumentdesc'>
-<p>a zoom value for the scope's X axis. Larger values show more. The default is 1.<tr><td class='argumentname'>rate<td class='argumentdesc'>
+<p>a zoom value for the scope's X-axis. Larger values show more. The default is 1.<tr><td class='argumentname'>rate<td class='argumentdesc'>
 <p>whether to display audio or control rate buses (either \audio or \control)</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-freqscope' href='./../Overviews/Methods.html#freqscope'>freqscope</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc</a></div>
 <div class='method'>
 <p>Show frequency analyzer window.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-meter' href='./../Overviews/Methods.html#meter'>meter</a>(<span class='argstr'>numIns</span>, <span class='argstr'>numOuts</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/server-meter.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/server-meter.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-meter.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-meter.sc</a></div>
 <div class='method'>
 <p>Show input/output level meters.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-plotTree' href='./../Overviews/Methods.html#plotTree'>plotTree</a>(<span class='argstr'>interval: 0.5</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc</a></div>
 <div class='method'>
 <p>Plot the node/group tree. As <a href="#-queryAllNodes">-queryAllNodes</a> but graphical.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>interval<td class='argumentdesc'>
 <p>Polling interval.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-plotTreeView' href='./../Overviews/Methods.html#plotTreeView'>plotTreeView</a>(<span class='argstr'>interval: 0.5</span>, <span class='argstr'>parent</span>, <span class='argstr'>actionIfFail</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc</a></div>
 <div class='method'>
 <p>Plot the node/group tree graphically on a given view.<h4>Arguments:</h4>
 <table class='arguments'>
@@ -617,12 +638,12 @@ ServerTree.remove(f);</pre>
 <div class='returnvalue'>
 <p>Function to be evaluated in order to clean up all actions performed inside the method. To be called for instance by the onClose method of the enclosing window.</div></div><h3><a class='anchor' name='Recording%20Support'>Recording Support</a></h3>
 
-<p>The following methods are for convenience use. For recording with sample accurate start and stop times you should make your own nodes. See the <a href="./../Classes/DiskOut.html">DiskOut</a> helpfile for more info. For non-realtime recording, see the <a href="./../Guides/Non-Realtime-Synthesis.html">Non-Realtime Synthesis (NRT)</a> helpfile.
-<p>This functionality is also available through the recording button on the server windows. Pressing it once calls record, and pressing it again calls stopRecording (see below). When doing so the file created will be in your recordings folder and be named for the current date and time. The default location of the recordings folder varies from platform to platform but is always stored in <code class='code prettyprint lang-sc'>thisProcess.platform.recordingsDir</code>. Setting this variable allows you to change the default.<div class='note'><span class='notelabel'>NOTE:</span> record creates the recording synth after the Server's default group and uses In.ar. Thus if you add nodes after the recording synth their output will not be captured. To avoid this, either use Node objects (which use the default node as their target) or (when using messaging style) use a target nodeID of 1.<pre class='code prettyprint lang-sc'>s.sendMsg("/s_new", "default", s.nextNodeID, 1,1);</pre>
+<p>The following methods are for convenience use. For recording with sample-accurate start and stop times you should make your own nodes. See the <a href="./../Classes/DiskOut.html">DiskOut</a> helpfile for more info. For non-realtime recording, see the <a href="./../Guides/Non-Realtime-Synthesis.html">Non-Realtime Synthesis (NRT)</a> helpfile.
+<p>This functionality is also available through the recording button on the server windows. Pressing it once calls record, and pressing it again calls stopRecording (see below). When doing so the file created will be in your recordings folder and be named for the current date and time. The default location of the recordings folder varies from platform to platform but is always stored in <code>thisProcess.platform.recordingsDir</code>. Setting this variable allows you to change the default.<div class='note'><span class='notelabel'>NOTE:</span> record creates the recording synth after the Server's default group and uses In.ar. Thus if you add nodes after the recording synth their output will not be captured. To avoid this, either use Node objects (which use the default node as their target) or (when using messaging style) use a target nodeID of 1.<textarea class='editor'>s.sendMsg("/s_new", "default", s.nextNodeID, 1,1);</textarea>
 </div>
 <p>For more detail on this subject see <a href="./../Guides/Order-of-execution.html">Order of execution</a>, <a href="./../Reference/default_group.html">Default Group</a>, and <a href="./../Guides/NodeMessaging.html">Node Messaging</a>.
 <p>See <a href="./../Classes/SoundFile.html">SoundFile</a> for information on the various sample and header formats. Not all sample and header formats are compatible. Note that the sampling rate of the output file will be the same as that of the server app. This can be set using the Server's <a href="./../Classes/ServerOptions.html">ServerOptions</a>.
-<p>Example:<pre class='code prettyprint lang-sc'>s.boot; // start the server
+<p>Example:<textarea class='editor'>s.boot; // start the server
 
 // something to record
 (
@@ -636,7 +657,7 @@ SynthDef("bubbles", { |out|
 
 x = Synth.new("bubbles");
 
-s.prepareForRecord; // if you want to start recording on a precise moment in time, you have to call this first.
+s.prepareForRecord; // if you want to start recording at a precise moment in time, you have to call this first.
 
 s.record;
 
@@ -648,14 +669,14 @@ s.stopRecording; // this closes the file and deallocates the buffer recording no
 
 x.free; // stop the synths
 
-// look in your recordings folder and you'll find a file named for this date and time</pre>
+// look in your recordings folder and you'll find a file named for this date and time</textarea>
 
-<p>Recording is done via an of <a href="./../Classes/Recorder.html">Recorder</a> - a server holds one instance implicitly.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-prepareForRecord' href='./../Overviews/Methods.html#prepareForRecord'>prepareForRecord</a>(<span class='argstr'>path</span>, <span class='argstr'>numChannels</span>)</h3>
+<p>The recording is done via an of <a href="./../Classes/Recorder.html">Recorder</a> - a server holds one instance implicitly.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-prepareForRecord' href='./../Overviews/Methods.html#prepareForRecord'>prepareForRecord</a>(<span class='argstr'>path</span>, <span class='argstr'>numChannels</span>)</h3>
 <div class='method'>
-<p>Allocates the necessary buffer, etc. for recording the server's output. (See <code class='code prettyprint lang-sc'>record</code> below.)<h4>Arguments:</h4>
+<p>Allocates the necessary buffer, etc. for recording the server's output. (See <code>record</code> below.)<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>path<td class='argumentdesc'>
-<p>a <a href="./../Classes/String.html">String</a> representing the path and name of the output file.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>a <a href="./../Classes/String.html">String</a> representing the path and name of the output file. If the directory does not exist, it will be created for you. (Note, however, that if this fails for any reason, the recording will also fail.)<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
 <p>a <a href="./../Classes/String.html">String</a> the number of output channels to record.</table><h4>Discussion:</h4>
 
 <p>If you do not specify a path than a file will be created in your recordings folder (see the note above on this) called SC_thisDateAndTime. Changes to the header or sample format, or to the number of channels must be made <strong>before</strong> calling this.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-record' href='./../Overviews/Methods.html#record'>record</a>(<span class='argstr'>path</span>, <span class='argstr'>bus</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>node</span>, <span class='argstr'>duration</span>)</h3>
@@ -663,7 +684,7 @@ x.free; // stop the synths
 <p>Starts or resumes recording the output.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>path<td class='argumentdesc'>
-<p>this is optional, and is passed to <code class='code prettyprint lang-sc'>prepareForRecord</code> (above).<tr><td class='argumentname'>bus<td class='argumentdesc'>
+<p>this is optional, and is passed to <code>prepareForRecord</code> (above).<tr><td class='argumentname'>bus<td class='argumentdesc'>
 <p>the bus to record - defaults to 0<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
 <p>the number of channels to record - defaults to server numChannels<tr><td class='argumentname'>node<td class='argumentdesc'>
 <p>the node to record - defaults to server rootnode<tr><td class='argumentname'>duration<td class='argumentdesc'>
@@ -678,7 +699,7 @@ x.free; // stop the synths
 <p>You must call this when finished recording or the output file will be unusable. Cmd-. while recording has the same effect.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recChannels' href='./../Overviews/Methods.html#recChannels'>recChannels</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recChannels' href='./../Overviews/Methods.html#recChannels'>recChannels</a> = <span class='argstr'>n</span></h3>
 <div class='method'>
-<p>Get/set the number of channels (int) to record. Is automatically set to the value of <a href="./../Classes/ServerOptions.html#-numOutputBusChannels">ServerOptions: -numOutputBusChannels</a> when booting the server. Must be called <strong>before</strong> prepareForRecord.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recHeaderFormat' href='./../Overviews/Methods.html#recHeaderFormat'>recHeaderFormat</a></h3>
+<p>Get/set the number of channels (int) to record. By default this is set to 2 (stereo) but can be increased to record soundfiles with many more channels. Must be called <strong>before</strong> prepareForRecord.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recHeaderFormat' href='./../Overviews/Methods.html#recHeaderFormat'>recHeaderFormat</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recHeaderFormat' href='./../Overviews/Methods.html#recHeaderFormat'>recHeaderFormat</a> = <span class='argstr'>string</span></h3>
 <div class='method'>
 <p>Get/set the header format (string) of the output file. The default is "aiff". Must be called <strong>before</strong> prepareForRecord.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recSampleFormat' href='./../Overviews/Methods.html#recSampleFormat'>recSampleFormat</a></h3>
@@ -687,9 +708,9 @@ x.free; // stop the synths
 <p>Get/set the sample format (string) of the output file. The default is "float". Must be called <strong>before</strong> prepareForRecord.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recBufSize' href='./../Overviews/Methods.html#recBufSize'>recBufSize</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recBufSize' href='./../Overviews/Methods.html#recBufSize'>recBufSize</a> = <span class='argstr'>n</span></h3>
 <div class='method'>
-<p>Get/set the size of the <a href="./../Classes/Buffer.html">Buffer</a> to use with the <a href="./../Classes/DiskOut.html">DiskOut</a> UGen. This must be a power of two. The default is the <code class='code prettyprint lang-sc'>sampleRate.nextPowerOfTwo</code> or the first power of two number of samples longer than one second. Must be called <strong>before</strong> prepareForRecord.</div><h3><a class='anchor' name='Asynchronous%20Commands'>Asynchronous Commands</a></h3>
+<p>Get/set the size of the <a href="./../Classes/Buffer.html">Buffer</a> to use with the <a href="./../Classes/DiskOut.html">DiskOut</a> UGen. This must be a power of two. The default is the <code>sampleRate.nextPowerOfTwo</code> or the first power of two number of samples longer than one second. Must be called <strong>before</strong> prepareForRecord.</div><h3><a class='anchor' name='Asynchronous%20Commands'>Asynchronous Commands</a></h3>
 
-<p>Server provides support for waiting on the completion of asynchronous OSC-commands such as reading or writing soundfiles. N.B. The following methods must be called from within a running <a href="./../Classes/Routine.html">Routine</a>. Explicitly passing in a <a href="./../Classes/Condition.html">Condition</a> allows multiple elements to depend on different conditions. The examples below should make clear how all this works.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bootSync' href='./../Overviews/Methods.html#bootSync'>bootSync</a>(<span class='argstr'>condition</span>)</h3>
+<p>The server provides support for waiting on the completion of asynchronous OSC-commands such as reading or writing sound files. N.B. The following methods must be called from within a running <a href="./../Classes/Routine.html">Routine</a>. Explicitly passing in a <a href="./../Classes/Condition.html">Condition</a> allows multiple elements to depend on different conditions. The examples below should make clear how all this works.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bootSync' href='./../Overviews/Methods.html#bootSync'>bootSync</a>(<span class='argstr'>condition</span>)</h3>
 <div class='method'>
 <p>Boot the Server and wait until it has completed before resuming the thread.<h4>Arguments:</h4>
 <table class='arguments'>
@@ -702,14 +723,14 @@ x.free; // stop the synths
 <p>an optional instance of <a href="./../Classes/Condition.html">Condition</a> used for evaluating this.<tr><td class='argumentname'>... args<td class='argumentdesc'>
 <p>one or more valid OSC messages.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sync' href='./../Overviews/Methods.html#sync'>sync</a>(<span class='argstr'>condition</span>, <span class='argstr'>bundles</span>, <span class='argstr'>latency</span>)</h3>
 <div class='method'>
-<p>Send a <code class='code prettyprint lang-sc'>/sync</code> message to the server, which will reply with the message <code class='code prettyprint lang-sc'>/synced</code> when all pending asynchronous commands have been completed.<h4>Arguments:</h4>
+<p>Send a <code>/sync</code> message to the server, which will reply with the message <code>/synced</code> when all pending asynchronous commands have been completed.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>condition<td class='argumentdesc'>
 <p>an optional instance of <a href="./../Classes/Condition.html">Condition</a> used for evaluating this.<tr><td class='argumentname'>bundles<td class='argumentdesc'>
 <p>one or more OSC messages which will be bundled before the sync message (thus ensuring that they will arrive before the /sync message).<tr><td class='argumentname'>latency<td class='argumentdesc'>
 <p>allows for the message to be evaluated at a specific point in the future.</table><h4>Discussion:</h4>
 
-<p>This may be slightly less safe then sendMsgSync under UDP on a wide area network, as packets may arrive out of order, but on a local network should be okay. Under TCP this should always be safe.<pre class='code prettyprint lang-sc'>(
+<p>This may be slightly less safe then sendMsgSync under UDP on a wide area network, as packets may arrive out of order, but on a local network should be okay. Under TCP this should always be safe.<textarea class='editor'>(
 Routine.run {
     var c;
 
@@ -742,7 +763,7 @@ Routine.run {
     s.sync(c);
     \b_alloc_DONE.postln;
 };
-)</pre>
+)</textarea>
 </div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-aliveThreadIsRunning' href='./../Overviews/Methods.html#aliveThreadIsRunning'>aliveThreadIsRunning</a></h3>
@@ -752,13 +773,13 @@ Routine.run {
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-archiveAsCompileString' href='./../Overviews/Methods.html#archiveAsCompileString'>archiveAsCompileString</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-archiveAsObject' href='./../Overviews/Methods.html#archiveAsObject'>archiveAsObject</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asBus' href='./../Overviews/Methods.html#asBus'>asBus</a>(<span class='argstr'>rate</span>, <span class='argstr'>numChannels: 1</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asBus.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asBus.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/asBus.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/asBus.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asGroup' href='./../Overviews/Methods.html#asGroup'>asGroup</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asGroup.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asGroup.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/asGroup.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/asGroup.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asNodeID' href='./../Overviews/Methods.html#asNodeID'>asNodeID</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asTarget.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asTarget.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/asTarget.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/asTarget.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asTarget' href='./../Overviews/Methods.html#asTarget'>asTarget</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asTarget.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asTarget.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/asTarget.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/asTarget.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-audioBusAllocator' href='./../Overviews/Methods.html#audioBusAllocator'>audioBusAllocator</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bootInProcess' href='./../Overviews/Methods.html#bootInProcess'>bootInProcess</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bootInit' href='./../Overviews/Methods.html#bootInit'>bootInit</a>(<span class='argstr'>recover: false</span>)</h3>
@@ -767,7 +788,7 @@ Routine.run {
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cachedBufferAt' href='./../Overviews/Methods.html#cachedBufferAt'>cachedBufferAt</a>(<span class='argstr'>bufnum</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cachedBuffersDo' href='./../Overviews/Methods.html#cachedBuffersDo'>cachedBuffersDo</a>(<span class='argstr'>func</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-calculateViewBounds' href='./../Overviews/Methods.html#calculateViewBounds'>calculateViewBounds</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/ServerPlusGUI.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-closeBundle' href='./../Overviews/Methods.html#closeBundle'>closeBundle</a>(<span class='argstr'>time</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cmdPeriod' href='./../Overviews/Methods.html#cmdPeriod'>cmdPeriod</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-connectSharedMemory' href='./../Overviews/Methods.html#connectSharedMemory'>connectSharedMemory</a></h3>
@@ -797,17 +818,17 @@ Routine.run {
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nodeAllocator' href='./../Overviews/Methods.html#nodeAllocator'>nodeAllocator</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-notified' href='./../Overviews/Methods.html#notified'>notified</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-onBootAdd' href='./../Overviews/Methods.html#onBootAdd'>onBootAdd</a>(<span class='argstr'>object</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-onBootRemove' href='./../Overviews/Methods.html#onBootRemove'>onBootRemove</a>(<span class='argstr'>object</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-onQuitAdd' href='./../Overviews/Methods.html#onQuitAdd'>onQuitAdd</a>(<span class='argstr'>object</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-onQuitRemove' href='./../Overviews/Methods.html#onQuitRemove'>onQuitRemove</a>(<span class='argstr'>object</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-openBundle' href='./../Overviews/Methods.html#openBundle'>openBundle</a>(<span class='argstr'>bundle</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quitInProcess' href='./../Overviews/Methods.html#quitInProcess'>quitInProcess</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recordNode' href='./../Overviews/Methods.html#recordNode'>recordNode</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/deprecated/3.9/deprecated-3.9.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/deprecated/3.9/deprecated-3.9.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/deprecated/3.10/deprecated-3.10.sc'>/usr/share/SuperCollider/SCClassLibrary/deprecated/3.10/deprecated-3.10.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recorder' href='./../Overviews/Methods.html#recorder'>recorder</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-remove' href='./../Overviews/Methods.html#remove'>remove</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-schedSync' href='./../Overviews/Methods.html#schedSync'>schedSync</a>(<span class='argstr'>func</span>)</h3>
@@ -821,7 +842,7 @@ Routine.run {
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sendStatusMsg' href='./../Overviews/Methods.html#sendStatusMsg'>sendStatusMsg</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setControlBusValue' href='./../Overviews/Methods.html#setControlBusValue'>setControlBusValue</a>(<span class='argstr'>busIndex</span>, <span class='argstr'>value</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setControlBusValues' href='./../Overviews/Methods.html#setControlBusValues'>setControlBusValues</a>(<span class='argstr'>busIndex</span>, <span class='argstr'>valueArray</span>)</h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-startAliveThread' href='./../Overviews/Methods.html#startAliveThread'>startAliveThread</a>(<span class='argstr'>delay: 0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-startAliveThread' href='./../Overviews/Methods.html#startAliveThread'>startAliveThread</a>(<span class='argstr'>delay: 0.0</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-statusWatcher' href='./../Overviews/Methods.html#statusWatcher'>statusWatcher</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-stopAliveThread' href='./../Overviews/Methods.html#stopAliveThread'>stopAliveThread</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-syncTasks' href='./../Overviews/Methods.html#syncTasks'>syncTasks</a></h3>
@@ -829,4 +850,5 @@ Routine.run {
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tree' href='./../Overviews/Methods.html#tree'>tree</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tree' href='./../Overviews/Methods.html#tree'>tree</a> = value</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-window' href='./../Overviews/Methods.html#window'>window</a></h3>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Server.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Server.schelp</a><br>link::Classes/Server::<br></div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Server.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Server.schelp</a><br>link::Classes/Server::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Polymorphism | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Polymorphism | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Polymorphism';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Polymorphism:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
@@ -26,8 +31,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#SynthDef'>SynthDef</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Pattern'>Pattern</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Conclusion'>Conclusion</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -41,33 +46,33 @@ var scdoc_sc_version = '3.9.3';
 <h2><a class='anchor' name='Introduction'>Introduction</a></h2>
 
 <p>Polymorphism is the ability of different classes to respond to a message in different ways. A message generally has some underlying meaning and it is the responsibility of each class to respond in a way appropriate to that meaning.
-<p>For example, the <code class='code prettyprint lang-sc'>value</code> message means "give me the effective value of this object".
+<p>For example, the <code>value</code> message means "give me the effective value of this object".
 <p>The value method is implemented by these classes (among others):<dl>
 <dt>Function :<dd>this.value(args)<dt>Object :<dd>this.value()<dt>Ref :<dd>this.value</dl>
 
 <p>Let's look at how these classes implement the value message.<h3><a class='anchor' name='Object'>Object</a></h3>
 
-<p>Here's the value method in class <a href="./../Classes/Object.html">Object</a> :<pre class='code prettyprint lang-sc'>value { ^this }</pre>
+<p>Here's the value method in class <a href="./../Classes/Object.html">Object</a> :<textarea class='editor'>value { ^this }</textarea>
 
-<p>It simply returns itself. Since all classes inherit from class Object this means that unless a class overrides <code class='code prettyprint lang-sc'>value</code>, the object will respond to <code class='code prettyprint lang-sc'>value</code> by returning itself.<pre class='code prettyprint lang-sc'>5.postln;            // posts itself
+<p>It simply returns itself. Since all classes inherit from class Object this means that unless a class overrides <code>value</code>, the object will respond to <code>value</code> by returning itself.<textarea class='editor'>5.postln;            // posts itself
 5.value.postln;        // value returns itself
 'a symbol'.postln;
 'a symbol'.value.postln;
 [1,2,3].value.postln;
-//etc...</pre>
+//etc...</textarea>
 <h3><a class='anchor' name='Function'>Function</a></h3>
 
-<p>In class <a href="./../Classes/Function.html">Function</a> the value method is a primitive:<pre class='code prettyprint lang-sc'>value { arg ... args;
+<p>In class <a href="./../Classes/Function.html">Function</a> the value method is a primitive:<textarea class='editor'>value { arg ... args;
     _FunctionValue
     // evaluate a function with args
     ^this.primitiveFailed
-}</pre>
+}</textarea>
 
-<p><code class='code prettyprint lang-sc'>_FunctionValue</code> is a C code primitive, so it is not possible to know just by looking at it what it does. However what it does is to evaluate the function and return the result.<pre class='code prettyprint lang-sc'>{ 5.squared }.postln;            // posts Instance of Function
-{ 5.squared }.value.postln;        // posts 25</pre>
+<p><code>_FunctionValue</code> is a C code primitive, so it is not possible to know just by looking at it what it does. However what it does is to evaluate the function and return the result.<textarea class='editor'>{ 5.squared }.postln;            // posts Instance of Function
+{ 5.squared }.value.postln;        // posts 25</textarea>
 <h3><a class='anchor' name='Ref'>Ref</a></h3>
 
-<p>The <a href="./../Classes/Ref.html">Ref</a> class provides a way to create an indirect reference to an object. It can be used to pass a value by reference. Ref objects have a single instance variable called <code class='code prettyprint lang-sc'>value</code>. The <code class='code prettyprint lang-sc'>value</code> method returns the value of the instance variable <code class='code prettyprint lang-sc'>value</code>. Here is a part of the class definition for Ref:<pre class='code prettyprint lang-sc'>Ref : AbstractFunction
+<p>The <a href="./../Classes/Ref.html">Ref</a> class provides a way to create an indirect reference to an object. It can be used to pass a value by reference. Ref objects have a single instance variable called <code>value</code>. The <code>value</code> method returns the value of the instance variable <code>value</code>. Here is a part of the class definition for Ref:<textarea class='editor'>Ref : AbstractFunction
 {
     var &lt;&gt;value;
 
@@ -86,27 +91,27 @@ var scdoc_sc_version = '3.9.3';
     storeOn { arg stream;
         stream &lt;&lt; "`(" &lt;&lt;&lt; value &lt;&lt; ")";
     }
-}</pre>
+}</textarea>
 
-<p>Here is how it responds :<pre class='code prettyprint lang-sc'>Ref.new(123).postln;
-Ref.new(123).value.postln;</pre>
+<p>Here is how it responds :<textarea class='editor'>Ref.new(123).postln;
+Ref.new(123).value.postln;</textarea>
 
-<p>Ref also implements a message called <code class='code prettyprint lang-sc'>dereference</code> which is another good example of polymorphism. As implemented in Ref, dereference just returns the value instance variable which is no different than what the value method does. So what is the need for it? That is explained by how other classes respond to dereference. The dereference message means "remove any Ref that contains you". In class Object dereference returns the object itself, again just like the value message. The difference is that no other classes override this method. So that dereference of a Function is still the Function.<dl>
+<p>Ref also implements a message called <code>dereference</code> which is another good example of polymorphism. As implemented in Ref, dereference just returns the value instance variable which is no different than what the value method does. So what is the need for it? That is explained by how other classes respond to dereference. The dereference message means "remove any Ref that contains you". In class Object dereference returns the object itself, again just like the value message. The difference is that no other classes override this method. So that dereference of a Function is still the Function.<dl>
 <dt>Object :<dd>this.dereference()<dt>Ref :<dd>this.dereference()</dl>
 
-<p><pre class='code prettyprint lang-sc'>5.value.postln;
+<p><textarea class='editor'>5.value.postln;
 { 5.squared }.value.postln;
 Ref.new(123).value.postln;
 
 5.dereference.postln;
 { 5.squared }.dereference.postln;
-Ref.new(123).dereference.postln;</pre>
+Ref.new(123).dereference.postln;</textarea>
 <h2><a class='anchor' name='Play'>Play</a></h2>
 
 <p>Yet another example of polymorphism is play. Many different kinds of objects know how to play themselves.<h3><a class='anchor' name='Function'>Function</a></h3>
-<pre class='code prettyprint lang-sc'>{ PinkNoise.ar(0.1) }.play;</pre>
+<textarea class='editor'>{ PinkNoise.ar(0.1) }.play;</textarea>
 <h3><a class='anchor' name='AppClock'>AppClock</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 var w, r;
 w = Window.new("trem", Rect(512, 256, 360, 130));
 w.front;
@@ -121,15 +126,16 @@ r = Routine({ arg appClockTime;
     w.close;
 });
 AppClock.play(r);
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='SynthDef'>SynthDef</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 x = SynthDef("Help-SynthDef", { arg out=0;
     Out.ar(out, PinkNoise.ar(0.1))
 }).play;
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Pattern'>Pattern</a></h3>
-<pre class='code prettyprint lang-sc'>Pbind(\degree, Pseq([0, 1, 2, 3],inf)).play;</pre>
+<textarea class='editor'>Pbind(\degree, Pseq([0, 1, 2, 3],inf)).play;</textarea>
 <h2><a class='anchor' name='Conclusion'>Conclusion</a></h2>
 
-<p>Polymorphism allows you to write code that does not assume anything about the implementation of an object, but rather asks the object to "do what I mean" and have the object respond appropriately.<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Polymorphism.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Polymorphism.schelp</a><br>link::Guides/Polymorphism::<br></div></div></body></html>
+<p>Polymorphism allows you to write code that does not assume anything about the implementation of an object, but rather asks the object to "do what I mean" and have the object respond appropriately.<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/Polymorphism.schelp'>/usr/share/SuperCollider/HelpSource/Guides/Polymorphism.schelp</a><br>link::Guides/Polymorphism::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

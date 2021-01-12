@@ -1,0 +1,83 @@
+<!doctype html><html lang='en'><head><title>Dneuromodule | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Dneuromodule';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>Dneuromodule:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc3'><a href='#*kr'>kr</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Demand'>Demand</a></span>
+</div><h1>Dneuromodule<span id='superclasses'> : <a href="../Classes/MultiOutDemandUGen.html">MultiOutDemandUGen</a> : <a href="../Classes/DUGen.html">DUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>discrete time neurodynamics</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/Neuromodules/Neuromodules.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/Neuromodules/Neuromodules.sc'>Neuromodules.sc</a></div></div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>The discrete time dynamics of a neural network can be described by initial state, bias, and the weights of the influence between the nodes. This demand rate ugen simulates the bahavior for any number of nodes.
+<p>The implementation follows the paper: Frank Pasemann, Complex dynamics and the structure of small neural networks, Network: Comput. Neural Syst. 13 (2002) p. 195–216.
+<p>In the core, Dneuromodule implements the following formula:<div class='image'><img src='neuromodule.png'/></div>
+
+<p>As transfer function (sigma) <code>tanh</code> is used.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>Dneuromodule.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>numChannels</span>, <span class='argstr'>theta</span>, <span class='argstr'>x</span>, <span class='argstr'>weights</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p>Number of nodes that represent cells, which is also the number of output channels of the UGen.<tr><td class='argumentname'>theta<td class='argumentdesc'>
+<p>Bias for each node. Should be an array on <code>numChannels</code> size. This argument is also the usual way to define an input into the node. It can contain demand rate ugens or any other ugens or numbers.<tr><td class='argumentname'>x<td class='argumentdesc'>
+<p>Initial value of each node. Should be an array on <code>numChannels</code> size.<tr><td class='argumentname'>weights<td class='argumentdesc'>
+<p>An <code>n x n</code> matrix of inter-node connections that represent synapses. Should be an array of <code>numChannels * numChannels</code> size. It can contain demand rate ugens or any other ugens or numbers.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>Dneuromodule.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>dt</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>theta</span>, <span class='argstr'>x</span>, <span class='argstr'>weights</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>Dneuromodule.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a>(<span class='argstr'>dt</span>, <span class='argstr'>numChannels</span>, <span class='argstr'>theta</span>, <span class='argstr'>x</span>, <span class='argstr'>weights</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>(
+{
+    var dt, module, m;
+    dt = 0.001;
+    module = Dneuromodule(2,
+            theta: [MouseX.kr(-2, 2), MouseY.kr(-2, 2)],
+            x: [0.1, 0.3],
+            weights: [-3, 2, -2, 0]
+    );
+    m = Duty.ar(dt, 0, module).lag3(dt);
+    SinOsc.ar(m * 400 + 600) * 0.1
+}.play
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/Neuromodules/HelpSource/Classes/Dneuromodule.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/Neuromodules/HelpSource/Classes/Dneuromodule.schelp</a><br>link::Classes/Dneuromodule::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

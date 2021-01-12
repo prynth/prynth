@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>ProxySpace | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>ProxySpace | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'ProxySpace';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>ProxySpace:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -54,11 +59,11 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc3'><a href='#-copy'>copy</a> </li>
 </ul><li class='toc2'><a href='#Writing%20code'>Writing code</a></li>
 <ul class='toc'><li class='toc3'><a href='#-document'>document</a> </li>
+<li class='toc3'><a href='#-asCode'>asCode</a> </li>
 </ul><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 <li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-activeProxies'>activeProxies</a> </li>
 <li class='toc3'><a href='#-arProxyNames'>arProxyNames</a> </li>
-<li class='toc3'><a href='#-asCode'>asCode</a> </li>
 <li class='toc3'><a href='#-awake'>awake</a> </li>
 <li class='toc3'><a href='#-copyState'>copyState</a> </li>
 <li class='toc3'><a href='#-doFunctionPerform'>doFunctionPerform</a> </li>
@@ -80,6 +85,7 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-playingProxies'>playingProxies</a> </li>
 <li class='toc3'><a href='#-postln'>postln</a> </li>
 <li class='toc3'><a href='#-proxyNames'>proxyNames</a> </li>
+<li class='toc3'><a href='#-rebuild'>rebuild</a> </li>
 <li class='toc3'><a href='#-registerServer'>registerServer</a> </li>
 <li class='toc3'><a href='#-removeNeutral'>removeNeutral</a> </li>
 <li class='toc3'><a href='#-reshaping'>reshaping</a> </li>
@@ -87,18 +93,18 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-size'>size</a> </li>
 <li class='toc3'><a href='#-unregisterServer'>unregisterServer</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
- | <span id='categories'><a href='./../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib>Environments'>Environments</a> | <a href='./../Browse.html#Live Coding'>Live Coding</a> | <a href='./../Browse.html#Collections'>Collections</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Collections>Unordered'>Unordered</a></span>
+ | <span id='categories'><a href='./../Browse.html#JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#JITLib>Environments'>Environments</a> | <a href='./../Browse.html#Live Coding'>Live Coding</a> | <a href='./../Browse.html#Collections'>Collections</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Collections>Unordered'>Unordered</a></span>
 </div><h1>ProxySpace<span id='superclasses'> : <a href="../Classes/LazyEnvir.html">LazyEnvir</a> : <a href="../Classes/EnvironmentRedirect.html">EnvironmentRedirect</a> : <a href="../Classes/Object.html">Object</a></span>
 </h1>
 <div id='summary'>an environment of references on a server</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/ProxySpace.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/ProxySpace.sc'>ProxySpace.sc</a></div><div id='related'>See also: <a href="./../Classes/NodeProxy.html">NodeProxy</a>, <a href="./../Classes/ProxyMixer.html">ProxyMixer</a>, <a href="./../Overviews/JITLib.html">JITLib</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/ProxySpace.sc' title='/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/ProxySpace.sc'>ProxySpace.sc</a></div><div id='related'>See also: <a href="./../Classes/NodeProxy.html">NodeProxy</a>, <a href="./../Classes/ProxyMixer.html">ProxyMixer</a>, <a href="./../Overviews/JITLib.html">JITLib</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -106,7 +112,7 @@ var scdoc_sc_version = '3.9.3';
 <p>When accessed, ProxySpace returns a <a href="./../Classes/NodeProxy.html">NodeProxy</a>. A similar class without environment: <a href="./../Classes/Ndef.html">Ndef</a>
 <p>For more examples see: <a href="./../Tutorials/JITLib/proxyspace_examples.html">ProxySpace examples</a>, <a href="./../Tutorials/JITLib/jitlib_basic_concepts_01.html">jitlib_basic_concepts_01</a>
 <p>For GUI overview, see <a href="./../Classes/ProxyMixer.html">ProxyMixer</a>. See <a href="./../Classes/NodeProxy.html">NodeProxy</a> for many relevant methods.<h3><a class='anchor' name='First%20Example'>First Example</a></h3>
-<pre class='code prettyprint lang-sc'>s.boot;
+<textarea class='editor'>s.boot;
 
 p = ProxySpace.new;
 p.fadeTime = 2; // fadeTime specifies crossfade
@@ -120,8 +126,7 @@ p[\out] = Pbind(\dur, 0.03, \freq, Pbrown(0, 1, 0.1, inf).linexp(0, 1, 200, 350)
 p[\out] = { Ringz.ar(p[\in].ar, [350, 351.3] * 8, 0.2) * 4 };
 p[\in] = { Impulse.ar([5, 7]/2, [0, 0.5]) };
 
-a.clear(3); // clear after 3 seconds
-b.clear(3);</pre>
+p.clear(3); // clear after 3 seconds</textarea>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3><a class='anchor' name='Creation'>Creation</a></h3>
 <h3 class='method-code'><span class='method-prefix'>ProxySpace.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>server</span>, <span class='argstr'>name</span>, <span class='argstr'>clock</span>)</h3>
@@ -130,7 +135,7 @@ b.clear(3);</pre>
 <table class='arguments'>
 <tr><td class='argumentname'>server<td class='argumentdesc'>
 <p>a <a href="./../Classes/Server.html">Server</a> object. Note that on remote computers the clock must be in sync.<tr><td class='argumentname'>name<td class='argumentdesc'>
-<p>a <a href="./../Classes/Symbol.html">Symbol</a>. If a name is given, the proxy space is <strong>stored</strong> in <code class='code prettyprint lang-sc'>ProxySpace.all</code> under this name.<tr><td class='argumentname'>clock<td class='argumentdesc'>
+<p>a <a href="./../Classes/Symbol.html">Symbol</a>. If a name is given, the proxy space is <strong>stored</strong> in <code>ProxySpace.all</code> under this name.<tr><td class='argumentname'>clock<td class='argumentdesc'>
 <p>for event-based or beat-sync playing use a <a href="./../Classes/TempoClock.html">TempoClock</a>.</table></div><h3 class='method-code'><span class='method-prefix'>ProxySpace.</span><a class='method-name' name='*push' href='./../Overviews/Methods.html#push'>push</a>(<span class='argstr'>server</span>, <span class='argstr'>name</span>, <span class='argstr'>clock</span>)</h3>
 <div class='method'>
 <p>replace the currentEnvironment with a new ProxySpace and <strong>clear</strong> the current one, if it is a ProxySpace (this is to avoid piling up proxy spaces).
@@ -199,7 +204,7 @@ b.clear(3);</pre>
 <p>free all proxies that are not needed in order to play the ones passed in with 'to'. if none are passed in, all proxies that are monitored (with the play message) are kept as well as their parents etc.</div><h3><a class='anchor' name='making%20copies'>making copies</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-copy' href='./../Overviews/Methods.html#copy'>copy</a></h3>
 <div class='method'>
-<p>Copies the environment into a new one, with each proxy being copied as well (See: <a href="./../Classes/NodeProxy.html#-copy">NodeProxy: -copy</a>). Also the instance variables that determine the ProxySpace behaviour are included, such as server, fadeTime, quant, reshaping (this happens in the <code class='code prettyprint lang-sc'>copyState</code> method).<pre class='code prettyprint lang-sc'>p = ProxySpace.push(s.boot);
+<p>Copies the environment into a new one, with each proxy being copied as well (See: <a href="./../Classes/NodeProxy.html#-copy">NodeProxy: -copy</a>). Also the instance variables that determine the ProxySpace behaviour are included, such as server, fadeTime, quant, reshaping (this happens in the <code>copyState</code> method).<textarea class='editor'>p = ProxySpace.push(s.boot);
 p.reshaping = \elastic;
 ~out.play;
 ~out = { Blip.ar(~freq, ~numharm) };
@@ -212,22 +217,31 @@ q.reshaping.postln; // also elastic
 ~out.play;
 ~freq = { MouseY.kr(2, 1000, 1) * [1, 1.2] };
 
-p.end; q.end;</pre>
+p.end; q.end;</textarea>
 </div><h3><a class='anchor' name='Writing%20code'>Writing code</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-document' href='./../Overviews/Methods.html#document'>document</a>(<span class='argstr'>keys</span>, <span class='argstr'>onlyAudibleOutput: false</span>, <span class='argstr'>includeSettings: true</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc</a></div>
 <div class='method'>
 <p>creates a new document with the current proxyspace state. This does not allow open functions as proxy sources. see: <a href="./../Tutorials/JITLib/jitlib_asCompileString.html">jitlib_asCompileString</a>.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>keys<td class='argumentdesc'>
 <p>list of keys to document a subset of proxies<tr><td class='argumentname'>onlyAudibleOutput<td class='argumentdesc'>
 <p>a boolean.<tr><td class='argumentname'>includeSettings<td class='argumentdesc'>
-<p>a boolean.</table></div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<p>a boolean.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asCode' href='./../Overviews/Methods.html#asCode'>asCode</a></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc</a></div>
+<div class='method'>
+<p>If proxyspace is globally accessible, this posts a code string that can access it.<textarea class='editor'>p = ProxySpace.push(s.boot);
+p.reshaping = \elastic;
+p.asCode;
+p.pop;
+
+Ndef(\x); // initializes an Ndef proxyspace for default server
+Ndef.all[\localhost]; // access that proxyspace
+Ndef.all[\localhost].asCode; // posts as valid code</textarea>
+</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-activeProxies' href='./../Overviews/Methods.html#activeProxies'>activeProxies</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-arProxyNames' href='./../Overviews/Methods.html#arProxyNames'>arProxyNames</a>(<span class='argstr'>func: true</span>)</h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asCode' href='./../Overviews/Methods.html#asCode'>asCode</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-awake' href='./../Overviews/Methods.html#awake'>awake</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-awake' href='./../Overviews/Methods.html#awake'>awake</a> = <span class='argstr'>flag</span></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-copyState' href='./../Overviews/Methods.html#copyState'>copyState</a>(<span class='argstr'>proxySpace</span>)</h3>
@@ -235,25 +249,26 @@ p.end; q.end;</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doOnServerBoot' href='./../Overviews/Methods.html#doOnServerBoot'>doOnServerBoot</a>(<span class='argstr'>server</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doOnServerQuit' href='./../Overviews/Methods.html#doOnServerQuit'>doOnServerQuit</a>(<span class='argstr'>server</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-documentOutput' href='./../Overviews/Methods.html#documentOutput'>documentOutput</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/extStoreOn.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-existingProxies' href='./../Overviews/Methods.html#existingProxies'>existingProxies</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gcList' href='./../Overviews/Methods.html#gcList'>gcList</a>(<span class='argstr'>excluding</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-getStructure' href='./../Overviews/Methods.html#getStructure'>getStructure</a>(<span class='argstr'>keys</span>, <span class='argstr'>excluding</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-group' href='./../Overviews/Methods.html#group'>group</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-group' href='./../Overviews/Methods.html#group'>group</a> = <span class='argstr'>node</span></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gui' href='./../Overviews/Methods.html#gui'>gui</a>(<span class='argstr'>numItems</span>, <span class='argstr'>bounds</span>, <span class='argstr'>preset</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extJITgui.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extJITgui.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extJITgui.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extJITgui.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-includes' href='./../Overviews/Methods.html#includes'>includes</a>(<span class='argstr'>proxy</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-initProxy' href='./../Overviews/Methods.html#initProxy'>initProxy</a>(<span class='argstr'>proxy</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-krProxyNames' href='./../Overviews/Methods.html#krProxyNames'>krProxyNames</a>(<span class='argstr'>func: true</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeProxy' href='./../Overviews/Methods.html#makeProxy'>makeProxy</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeTempoClock' href='./../Overviews/Methods.html#makeTempoClock'>makeTempoClock</a>(<span class='argstr'>tempo: 1</span>, <span class='argstr'>beats</span>, <span class='argstr'>seconds</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeTempoClock' href='./../Overviews/Methods.html#makeTempoClock'>makeTempoClock</a>(<span class='argstr'>tempo: 1.0</span>, <span class='argstr'>beats</span>, <span class='argstr'>seconds</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-monitors' href='./../Overviews/Methods.html#monitors'>monitors</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-name' href='./../Overviews/Methods.html#name'>name</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-name' href='./../Overviews/Methods.html#name'>name</a> = <span class='argstr'>argName</span></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-playingProxies' href='./../Overviews/Methods.html#playingProxies'>playingProxies</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-postln' href='./../Overviews/Methods.html#postln'>postln</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-proxyNames' href='./../Overviews/Methods.html#proxyNames'>proxyNames</a>(<span class='argstr'>rate</span>, <span class='argstr'>func: true</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-rebuild' href='./../Overviews/Methods.html#rebuild'>rebuild</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-registerServer' href='./../Overviews/Methods.html#registerServer'>registerServer</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-removeNeutral' href='./../Overviews/Methods.html#removeNeutral'>removeNeutral</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-reshaping' href='./../Overviews/Methods.html#reshaping'>reshaping</a></h3>
@@ -262,15 +277,15 @@ p.end; q.end;</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-size' href='./../Overviews/Methods.html#size'>size</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-unregisterServer' href='./../Overviews/Methods.html#unregisterServer'>unregisterServer</a></h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>// ProxySpace returns instances of NodeProxy:
+<textarea class='editor'>// ProxySpace returns instances of NodeProxy:
 a = NodeProxy(s)     is equivalent to ~a;
 a.source = ...        is equivalent to ~a = ...
 a[3] = ...        is equivalent to ~a[3] = ...
 
 // the two expressions are equivalent:
 ~out = something;
-currentEnvironment.put(\out, something);</pre>
-<pre class='code prettyprint lang-sc'>// examples
+currentEnvironment.put(\out, something);</textarea>
+<textarea class='editor'>// examples
 
 p = ProxySpace.push(s.boot); // use ProxySpace as current environment.
 
@@ -293,6 +308,7 @@ p.fadeTime = 5;
 p.clear(8); // end and clear all in 8 sec.
 
 
-p.pop; // move out.</pre>
+p.pop; // move out.</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/ProxySpace.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/ProxySpace.schelp</a><br>link::Classes/ProxySpace::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/ProxySpace.schelp'>/usr/share/SuperCollider/HelpSource/Classes/ProxySpace.schelp</a><br>link::Classes/ProxySpace::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

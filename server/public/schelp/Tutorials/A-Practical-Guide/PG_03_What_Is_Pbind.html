@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Pattern Guide 03: What Is Pbind | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide 03: What Is Pbind | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'Pattern Guide 03: What Is Pbind';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pattern Guide 03: What Is Pbind:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#What's%20that%20Pbind%20thing?'>What's that Pbind thing?</a></li>
@@ -26,8 +31,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc1'><a href='#Writing%20SynthDefs%20for%20patterns'>Writing SynthDefs for patterns</a></li>
 <ul class='toc'><li class='toc2'><a href='#Synths%20should%20release%20themselves'>Synths should release themselves</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Argument%20name%20prefixes'>Argument name prefixes</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/A-Practical-Guide</span>
@@ -41,7 +46,7 @@ var scdoc_sc_version = '3.9.3';
 <h2><a class='anchor' name='What's%20that%20Pbind%20thing?'>What's that Pbind thing?</a></h2>
 
 <p>Some of the examples in the last tutorial played notes using Pbind, and you might be wondering how it works in general and what else you can do with it.
-<p>In the most general sense, <a href="./../../Classes/Pbind.html">Pbind</a> is just a way to give names to values coming out of the types of patterns we just saw. When you ask a Pbind stream for its next value, the result is an object called an <a href="./../../Classes/Event.html">Event</a>. Like a <a href="./../../Classes/Dictionary.html">Dictionary</a> (which is a superclass of Event), an event is a set of "key-value pairs": each value is named by a key.<pre class='code prettyprint lang-sc'>e = (freq: 440, dur: 0.5);    // an Event
+<p>In the most general sense, <a href="./../../Classes/Pbind.html">Pbind</a> is just a way to give names to values coming out of the types of patterns we just saw. When you ask a Pbind stream for its next value, the result is an object called an <a href="./../../Classes/Event.html">Event</a>. Like a <a href="./../../Classes/Dictionary.html">Dictionary</a> (which is a superclass of Event), an event is a set of "key-value pairs": each value is named by a key.<textarea class='editor'>e = (freq: 440, dur: 0.5);    // an Event
 
 e.at(\freq)        // access a value by name
 e[\freq]
@@ -52,12 +57,12 @@ e[\freq] = 660;
 e.freq = 220;
 
 e.put(\amp, 0.6);    // Add a new value into the event
-e.put(\dur, nil);    // Remove a value</pre>
+e.put(\dur, nil);    // Remove a value</textarea>
 
 <p>A Pbind is defined by a list of pairs: keys associated with the patterns that will supply the values for the events.
 <p>Things get interesting when the names associated with Pbind's sub-patterns are also <a href="./../../Classes/SynthDef.html">SynthDef</a> arguments. Then it becomes possible to play new Synths with Pbind, and feed their inputs with different values on each event.<h2><a class='anchor' name='Building%20an%20event,%20one%20key%20at%20a%20time'>Building an event, one key at a time</a></h2>
 
-<p>We can look at the return values from a Pbind by calling <code class='code prettyprint lang-sc'>next</code> on the stream. Note that it's necessary to pass an empty event into <em>next</em>, so that Pbind has somewhere to put the values.<pre class='code prettyprint lang-sc'>(
+<p>We can look at the return values from a Pbind by calling <code>next</code> on the stream. Note that it's necessary to pass an empty event into <em>next</em>, so that Pbind has somewhere to put the values.<textarea class='editor'>(
 p = Pbind(
     \degree, Pseq(#[0, 0, 4, 4, 5, 5, 4], 1),
     \dur, Pseq(#[0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 1], 1)
@@ -70,21 +75,21 @@ p.next(Event.new);    // shorter: p.next(())
 ( 'degree': 0, 'dur': 0.5 )
 ( 'degree': 0, 'dur': 0.5 )
 ( 'degree': 4, 'dur': 0.5 )
-( 'degree': 4, 'dur': 0.5 )</pre>
+( 'degree': 4, 'dur': 0.5 )</textarea>
 
 <p>The return events show us what Pbind really does. Each time the next value is requested, it goes through each key-pattern pair and gets the next value from each pattern (actually streams, but Pbind makes streams out of the sub patterns internally). Each value gets put into the event, using the associated key.
-<p>For the first event, the first key is <code class='code prettyprint lang-sc'>'degree'</code> and the value is <code class='code prettyprint lang-sc'>0</code>. This is placed into the event before moving to the next pair: the event in transition contains <code class='code prettyprint lang-sc'>( 'degree': 0 )</code>. Then the next key supplies <code class='code prettyprint lang-sc'>0.5</code> for <code class='code prettyprint lang-sc'>'dur'</code>, and since there are no more pairs, the event is complete: <code class='code prettyprint lang-sc'>( 'degree': 0, 'dur': 0.5 )</code>.
-<p>// User does:<pre class='code prettyprint lang-sc'>p.next(Event.new);</pre>
+<p>For the first event, the first key is <code>'degree'</code> and the value is <code>0</code>. This is placed into the event before moving to the next pair: the event in transition contains <code>( 'degree': 0 )</code>. Then the next key supplies <code>0.5</code> for <code>'dur'</code>, and since there are no more pairs, the event is complete: <code>( 'degree': 0, 'dur': 0.5 )</code>.
+<p>// User does:<textarea class='editor'>p.next(Event.new);</textarea>
 
 <p>// SuperCollider processes:<ol>
-<li><code class='code prettyprint lang-sc'>\degree</code> stream returns <code class='code prettyprint lang-sc'>0</code><li>Put it in the Event: <code class='code prettyprint lang-sc'>( 'degree': 0 )</code><li><code class='code prettyprint lang-sc'>\dur</code> stream returns <code class='code prettyprint lang-sc'>0.5</code><li>Put it in the Event: <code class='code prettyprint lang-sc'>( 'degree': 0, 'dur': 0.5 )</code><li>Return the result event.</ol>
+<li><code>\degree</code> stream returns <code>0</code><li>Put it in the Event: <code>( 'degree': 0 )</code><li><code>\dur</code> stream returns <code>0.5</code><li>Put it in the Event: <code>( 'degree': 0, 'dur': 0.5 )</code><li>Return the result event.</ol>
 <div class='note'><span class='notelabel'>NOTE:</span> Dictionaries in SuperCollider are <em>unordered</em> collections. Even though Pbind processes its child streams in the order given, the results can display the keys and values in any order. This does not affect the behavior of playing Events, as we will soon see.</div><h2><a class='anchor' name='Event,%20.play%20and%20event%20prototypes'>Event, .play and event prototypes</a></h2>
 
-<p>So far we haven't seen anything that produces a note, just data processing: fetching values from patterns and stitching them together into events. The notes come from the difference between Events and regular Dictionaries: Events can do things when you <code class='code prettyprint lang-sc'>.play</code> them.<pre class='code prettyprint lang-sc'>( 'degree': 0, 'dur': 0.5 ).play;</pre>
+<p>So far we haven't seen anything that produces a note, just data processing: fetching values from patterns and stitching them together into events. The notes come from the difference between Events and regular Dictionaries: Events can do things when you <code>.play</code> them.<textarea class='editor'>( 'degree': 0, 'dur': 0.5 ).play;</textarea>
 
-<p>The action that the event will take is defined in an "event prototype." The prototype must include a function for the <code class='code prettyprint lang-sc'>'play'</code> key; this function is executed when <code class='code prettyprint lang-sc'>.play</code> is called on the event. Also, optionally the prototype can contain default values for a wide variety of parameters.
-<p>Pbind doesn't do much without an event prototype. Fortunately, you don't have to write the prototype on your own. There is a default event, accessed by <code class='code prettyprint lang-sc'>Event.default</code>, that includes functions for many different server-messaging tasks. If no specific action is requested, the normal action is to play a Synth. That's why playing a Pbind, as in the previous tutorial, with only <code class='code prettyprint lang-sc'>'degree'</code> and <code class='code prettyprint lang-sc'>'dur'</code> patterns produced notes: each event produces at least one synth by default, and the default event prototype knows how to convert scale degrees into frequencies and <code class='code prettyprint lang-sc'>'dur'</code> (duration) into note lengths.
-<p>When a pattern is played, an object called <a href="./../../Classes/EventStreamPlayer.html">EventStreamPlayer</a> is created. This object reads out the events one by one from the pattern's stream (using a given event prototype as the base), and calls <code class='code prettyprint lang-sc'>play</code> on each. The <code class='code prettyprint lang-sc'>'delta'</code> value in the event determines how many beats to wait until the next event. Play continues until the pattern stops producing events, or you call .stop on the EventStreamPlayer. (Note that calling <code class='code prettyprint lang-sc'>.stop</code> on the pattern does nothing. Patterns are stateless and cannot play or stop by themselves.)
+<p>The action that the event will take is defined in an "event prototype." The prototype must include a function for the <code>'play'</code> key; this function is executed when <code>.play</code> is called on the event. Also, optionally the prototype can contain default values for a wide variety of parameters.
+<p>Pbind doesn't do much without an event prototype. Fortunately, you don't have to write the prototype on your own. There is a default event, accessed by <code>Event.default</code>, that includes functions for many different server-messaging tasks. If no specific action is requested, the normal action is to play a Synth. That's why playing a Pbind, as in the previous tutorial, with only <code>'degree'</code> and <code>'dur'</code> patterns produced notes: each event produces at least one synth by default, and the default event prototype knows how to convert scale degrees into frequencies and <code>'dur'</code> (duration) into note lengths.
+<p>When a pattern is played, an object called <a href="./../../Classes/EventStreamPlayer.html">EventStreamPlayer</a> is created. This object reads out the events one by one from the pattern's stream (using a given event prototype as the base), and calls <code>play</code> on each. The <code>'delta'</code> value in the event determines how many beats to wait until the next event. Play continues until the pattern stops producing events, or you call .stop on the EventStreamPlayer. (Note that calling <code>.stop</code> on the pattern does nothing. Patterns are stateless and cannot play or stop by themselves.)
 <p>- <strong>To sum up so far</strong> : A Pbind's stream generates Events. When an Event is played, it does some work that usually makes noise on the server. This work is defined in an event prototype. The Event class provides a default event prototype that includes powerful options to create and manipulate objects on the server.<h3><a class='anchor' name='Rests'>Rests</a></h3>
 
 <p>Rests may be indicated in three ways.<ul>
@@ -97,32 +102,32 @@ p.next(Event.new);    // shorter: p.next(())
 
 <p>A more complete discussion is found in the <a href="./../../Classes/Rest.html">Rest</a> help file.<h3><a class='anchor' name='Useful%20Pbind%20variant:%20Pmono'>Useful Pbind variant: Pmono</a></h3>
 
-<p>Pbind plays separate notes by default. Sometimes, you might need a pattern to act more like a monophonic synthesizer, where it plays just one Synth node and changes its values with each event. If Pbind normally corresponds to <code class='code prettyprint lang-sc'>Synth.new</code> or <code class='code prettyprint lang-sc'>/s_new</code>, <a href="./../../Classes/Pmono.html">Pmono</a> corresponds to <code class='code prettyprint lang-sc'>aSynth.set</code> or <code class='code prettyprint lang-sc'>/n_set</code>.
-<p>Compare the sound of these patterns. Pbind produces an attack on every note, while Pmono glides from pitch to pitch.<pre class='code prettyprint lang-sc'>p = Pbind(\degree, Pwhite(0, 7, inf), \dur, 0.25, \legato, 1).play;
+<p>Pbind plays separate notes by default. Sometimes, you might need a pattern to act more like a monophonic synthesizer, where it plays just one Synth node and changes its values with each event. If Pbind normally corresponds to <code>Synth.new</code> or <code>/s_new</code>, <a href="./../../Classes/Pmono.html">Pmono</a> corresponds to <code>aSynth.set</code> or <code>/n_set</code>.
+<p>Compare the sound of these patterns. Pbind produces an attack on every note, while Pmono glides from pitch to pitch.<textarea class='editor'>p = Pbind(\degree, Pwhite(0, 7, inf), \dur, 0.25, \legato, 1).play;
 p.stop;
 
 p = Pmono(\default, \degree, Pwhite(0, 7, inf), \dur, 0.25).play;
-p.stop;</pre>
+p.stop;</textarea>
 
 <p>Articulating phrases is possible with Pmono by chaining several Pmono patterns together in a row, or by using <a href="./../../Classes/PmonoArtic.html">PmonoArtic</a>.<h2><a class='anchor' name='Connecting%20Event%20values%20to%20SynthDef%20inputs'>Connecting Event values to SynthDef inputs</a></h2>
 
-<p>Most SynthDefs have <a href="./../../Classes/Control.html">Control</a> inputs, usually defined by arguments to the UGen function. For example, the default SynthDef (declared in Event.sc) defines five inputs: <code class='code prettyprint lang-sc'>out</code>, <code class='code prettyprint lang-sc'>freq</code>, <code class='code prettyprint lang-sc'>amp</code>, <code class='code prettyprint lang-sc'>pan</code> and <code class='code prettyprint lang-sc'>gate</code>.<pre class='code prettyprint lang-sc'>SynthDef(\default, { arg out=0, freq=440, amp=0.1, pan=0, gate=1;
+<p>Most SynthDefs have <a href="./../../Classes/Control.html">Control</a> inputs, usually defined by arguments to the UGen function. For example, the default SynthDef (declared in Event.sc) defines five inputs: <code>out</code>, <code>freq</code>, <code>amp</code>, <code>pan</code> and <code>gate</code>.<textarea class='editor'>SynthDef(\default, { arg out=0, freq=440, amp=0.1, pan=0, gate=1;
     var z;
     z = LPF.ar(
             Mix.new(VarSaw.ar(freq + [0, Rand(-0.4,0.0), Rand(0.0,0.4)], 0, 0.3)),
             XLine.kr(Rand(4000,5000), Rand(2500,3200), 1)
         ) * Linen.kr(gate, 0.01, 0.7, 0.3, 2);
     OffsetOut.ar(out, Pan2.ar(z, pan, amp));
-}, [\ir]);</pre>
+}, [\ir]);</textarea>
 
-<p>When an event plays a synth, any values stored in the event under the same name as a SynthDef input will be passed to the new synth. Compare the following:<pre class='code prettyprint lang-sc'>// Similar to Synth(\default, [freq: 293.3333, amp: 0.2, pan: -0.7])
+<p>When an event plays a synth, any values stored in the event under the same name as a SynthDef input will be passed to the new synth. Compare the following:<textarea class='editor'>// Similar to Synth(\default, [freq: 293.3333, amp: 0.2, pan: -0.7])
 (freq: 293.3333, amp: 0.2, pan: -0.7).play;
 
 // Similar to Synth(\default, [freq: 440, amp: 0.1, pan: 0.7])
-(freq: 440, amp: 0.1, pan: 0.7).play;</pre>
+(freq: 440, amp: 0.1, pan: 0.7).play;</textarea>
 
 <p>This leads to a key point: <strong>The names that you use for patterns in Pbind should correspond to the arguments in the SynthDef being played</strong>. The Pbind pattern names determine the names for values in the resulting Event, and those values are sent to the corresponding Synth control inputs.
-<p>The SynthDef to play is named by the <code class='code prettyprint lang-sc'>'instrument'</code> key. To play a pattern using a different Synth, simply name it in the pattern.<pre class='code prettyprint lang-sc'>SynthDef(\harpsi, { |outbus = 0, freq = 440, amp = 0.1, gate = 1|
+<p>The SynthDef to play is named by the <code>'instrument'</code> key. To play a pattern using a different Synth, simply name it in the pattern.<textarea class='editor'>SynthDef(\harpsi, { |outbus = 0, freq = 440, amp = 0.1, gate = 1|
     var out;
     out = EnvGen.ar(Env.adsr, gate, doneAction: Done.freeSelf) * amp *
         Pulse.ar(freq, 0.25, 0.75);
@@ -134,26 +139,26 @@ p = Pbind(
     \instrument, \harpsi,
     \degree, Pseries(0, 1, 8),
     \dur, 0.25
-).play;</pre>
+).play;</textarea>
 
 <p>It's actually an oversimplification to say that the Pbind names should always match up to SynthDef arguments.<ul>
-<li>A Pbind can use some values in the event for intermediate calculations (see <a href="./../../Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.html">Pattern Guide 06g: Data Sharing</a>). If these intermediate values have names not found in the SynthDef, they are not sent to the server. There is no requirement that every item in an Event must correspond to a SynthDef control.<li>The default event prototype performs some automatic conversions. You might have noticed that the examples so far use <code class='code prettyprint lang-sc'>'degree'</code> to specify pitch, but the default SynthDef being played does not have a degree argument. It works because the default event converts degree into <code class='code prettyprint lang-sc'>'freq'</code>, which is an argument. The most important conversions are for pitch and timing. Timing is simple; pitch is more elaborate. See <a href="./../../Tutorials/A-Practical-Guide/PG_07_Value_Conversions.html">Pattern Guide 07: Value Conversions</a> for an explanation of these automatic calculations.</ul>
+<li>A Pbind can use some values in the event for intermediate calculations (see <a href="./../../Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.html">Pattern Guide 06g: Data Sharing</a>). If these intermediate values have names not found in the SynthDef, they are not sent to the server. There is no requirement that every item in an Event must correspond to a SynthDef control.<li>The default event prototype performs some automatic conversions. You might have noticed that the examples so far use <code>'degree'</code> to specify pitch, but the default SynthDef being played does not have a degree argument. It works because the default event converts degree into <code>'freq'</code>, which is an argument. The most important conversions are for pitch and timing. Timing is simple; pitch is more elaborate. See <a href="./../../Tutorials/A-Practical-Guide/PG_07_Value_Conversions.html">Pattern Guide 07: Value Conversions</a> for an explanation of these automatic calculations.</ul>
 
 <p><strong>Don't send or load SynthDefs; use .add or .store instead</strong>
-<p>To send only the relevant values to the new Synth, the Event needs to know what controls exist in the SynthDef. This is done by a library of descriptors for SynthDefs; the descriptor is a <a href="./../../Classes/SynthDesc.html">SynthDesc</a>, and the library is a <a href="./../../Classes/SynthDescLib.html">SynthDescLib</a>. The normal methods -- <code class='code prettyprint lang-sc'>.send(s)</code>, <code class='code prettyprint lang-sc'>.load(s)</code> -- to communicate a SynthDef to the server do not enter it into the library. As a result, SynthDefs sent this way will not work properly with Pbind. Instead, use different methods that <em>store</em> the SynthDef into the library.<pre class='code prettyprint lang-sc'>// Save into the library, write a .scsyndef file, and load it on the server
+<p>To send only the relevant values to the new Synth, the Event needs to know what controls exist in the SynthDef. This is done by a library of descriptors for SynthDefs; the descriptor is a <a href="./../../Classes/SynthDesc.html">SynthDesc</a>, and the library is a <a href="./../../Classes/SynthDescLib.html">SynthDescLib</a>. The normal methods -- <code>.send(s)</code>, <code>.load(s)</code> -- to communicate a SynthDef to the server do not enter it into the library. As a result, SynthDefs sent this way will not work properly with Pbind. Instead, use different methods that <em>store</em> the SynthDef into the library.<textarea class='editor'>// Save into the library, write a .scsyndef file, and load it on the server
 SynthDef(...).store;
 
 // Save into the library and send the SynthDef to the server (no .scsyndef file)
 // Make sure the server is booted before doing this
-SynthDef(...).add;</pre>
+SynthDef(...).add;</textarea>
 
 <p>.load(s) --&gt; .store
 <p>.send(s) --&gt; .add<h2><a class='anchor' name='Rest%20events'>Rest events</a></h2>
 
 <p>Beginning with version 3.5, rests may be indicated using instances of <a href="./../../Classes/Rest.html">Rest</a>.<ul>
-<li>Rests may be given in any Pbind key-value pair. (Previously, rests could be indicated only in \type, \degree, \note, \midinote or \freq.)<li>A rest has a value, e.g. <code class='code prettyprint lang-sc'>Rest(0.5)</code>, and will pass transparently through calculations.<li>Addresses some problems with the former convention (to be discussed in brief below).</ul>
+<li>Rests may be given in any Pbind key-value pair. (Previously, rests could be indicated only in \type, \degree, \note, \midinote or \freq.)<li>A rest has a value, e.g. <code>Rest(0.5)</code>, and will pass transparently through calculations.<li>Addresses some problems with the former convention (to be discussed in brief below).</ul>
 
-<p>Ligeti's "touches bloquées" technique could be written this way (see <a href="./../../Tutorials/A-Practical-Guide/PG_06e_Language_Control.html">Pattern Guide 06e: Language Control</a> for an explanation of the conditional <a href="./../../Classes/Pif.html">Pif</a>):<pre class='code prettyprint lang-sc'>(
+<p>Ligeti's "touches bloquées" technique could be written this way (see <a href="./../../Tutorials/A-Practical-Guide/PG_06e_Language_Control.html">Pattern Guide 06e: Language Control</a> for an explanation of the conditional <a href="./../../Classes/Pif.html">Pif</a>):<textarea class='editor'>(
 // first, pitches ascending by 1-3 semitones, until 2 octaves are reached
 var    pitches = Pseries(0, Pconst(24, Pwhite(1, 3, inf)), inf).asStream.all,
         // randomly block 1/3 of those
@@ -169,20 +174,20 @@ p = Pbind(
 ).play;
 )
 
-p.stop;</pre>
-<div class='note'><span class='notelabel'>NOTE:</span> In 3.9, it is no longer supported to use the Rest class in patterns. All rests need to have a value, e.g. <code class='code prettyprint lang-sc'>Rest(0)</code>. Rest objects now support math operators. That is, you can now write <code class='code prettyprint lang-sc'>Pseq([1, 2, Rest(0)], inf) * 2</code> <em>and</em> <code class='code prettyprint lang-sc'>[1, 2, Rest(0)] * 2</code>. (Prior to 3.9, the former usage was supported, but only in Pbind, and the latter usage was not supported at all.)</div>
-<p>The older convention for rests is to set the <code class='code prettyprint lang-sc'>\freq</code> key to a <a href="./../../Classes/Symbol.html">Symbol</a>. Commonly this is <code class='code prettyprint lang-sc'>\rest</code>, but a backslash by itself is enough to suppress the note on the server. (This usage is still supported, but not recommended because it is limited to pitch-related keys only.)
-<p>If it's the <code class='code prettyprint lang-sc'>\freq</code> key that determines whether the event as a rest or not, why does it work to use it with <code class='code prettyprint lang-sc'>\note</code>? As noted, keys like <code class='code prettyprint lang-sc'>\degree</code>, <code class='code prettyprint lang-sc'>\note</code>, and <code class='code prettyprint lang-sc'>\midinote</code> are automatically converted into frequency. The math operations that perform the conversion preserve Symbols intact -- e.g., <code class='code prettyprint lang-sc'>\rest + 1 == \rest</code> . So the <code class='code prettyprint lang-sc'>\rest</code> value is passed all the way through the chain of conversions so that <code class='code prettyprint lang-sc'>\freq</code> in the event ends up receiving <code class='code prettyprint lang-sc'>\rest</code>.
-<p>Note that it doesn't matter if the SynthDef has a <code class='code prettyprint lang-sc'>freq</code> argument. It's the event, on the <em>client</em> side, that looks to this key to determine whether to play the note or not. If it is a rest, the server is not involved at all.<h2><a class='anchor' name='Writing%20SynthDefs%20for%20patterns'>Writing SynthDefs for patterns</a></h2>
+p.stop;</textarea>
+<div class='note'><span class='notelabel'>NOTE:</span> In 3.9, it is no longer supported to use the Rest class in patterns. All rests need to have a value, e.g. <code>Rest(0)</code>. Rest objects now support math operators. That is, you can now write <code>Pseq([1, 2, Rest(0)], inf) * 2</code> <em>and</em> <code>[1, 2, Rest(0)] * 2</code>. (Prior to 3.9, the former usage was supported, but only in Pbind, and the latter usage was not supported at all.)</div>
+<p>The older convention for rests is to set the <code>\freq</code> key to a <a href="./../../Classes/Symbol.html">Symbol</a>. Commonly this is <code>\rest</code>, but a backslash by itself is enough to suppress the note on the server. (This usage is still supported, but not recommended because it is limited to pitch-related keys only.)
+<p>If it's the <code>\freq</code> key that determines whether the event as a rest or not, why does it work to use it with <code>\note</code>? As noted, keys like <code>\degree</code>, <code>\note</code>, and <code>\midinote</code> are automatically converted into frequency. The math operations that perform the conversion preserve Symbols intact -- e.g., <code>\rest + 1 == \rest</code> . So the <code>\rest</code> value is passed all the way through the chain of conversions so that <code>\freq</code> in the event ends up receiving <code>\rest</code>.
+<p>Note that it doesn't matter if the SynthDef has a <code>freq</code> argument. It's the event, on the <em>client</em> side, that looks to this key to determine whether to play the note or not. If it is a rest, the server is not involved at all.<h2><a class='anchor' name='Writing%20SynthDefs%20for%20patterns'>Writing SynthDefs for patterns</a></h2>
 
 <p>SynthDefs should have a couple of specific features to work well with patterns.<h3><a class='anchor' name='Synths%20should%20release%20themselves'>Synths should release themselves</a></h3>
 
 <p>The default event prototype relies on the synth to remove itself from the server when it's finished. This can be done in several ways:<ul>
-<li>(Most typical) A gated envelope with a releasing <code class='code prettyprint lang-sc'>doneAction</code> ( &gt;= 2) in the envelope generator (see <a href="./../../Classes/Done.html">Done</a> for a complete list). The <code class='code prettyprint lang-sc'>\harpsi</code> SynthDef above uses this technique. A gated envelope specifies a release node or uses one of the predefined sustaining envelope types: <code class='code prettyprint lang-sc'>Env.asr</code>, <code class='code prettyprint lang-sc'>Env.adsr</code>, <code class='code prettyprint lang-sc'>Env.dadsr</code>. The <a href="./../../Classes/Env.html">Env</a> help file offers more detail on gated envelopes.<li><code class='code prettyprint lang-sc'>Linen.kr</code>, which is a shortcut for <code class='code prettyprint lang-sc'>EnvGen.kr(Env([0, susLevel, 0], [attackTime, releaseTime], \lin, releaseNode: 1), gate, doneAction: [2 or higher])</code>. The default SynthDef uses this. The <code class='code prettyprint lang-sc'>doneAction</code> should be at least 2 to release the node.<div class='note'><span class='notelabel'>NOTE:</span> If the release is controlled by a gate, the gate must be represented by the synth argument <code class='code prettyprint lang-sc'>gate</code>; standard event prototypes expect to be able to control the synth's release using this argument. Also, make sure the gate's default value is greater than 0. Otherwise, the envelope will never start and you will both hear nothing and watch synths pile up on the server.</div>
+<li>(Most typical) A gated envelope with a releasing <code>doneAction</code> ( &gt;= 2) in the envelope generator (see <a href="./../../Classes/Done.html">Done</a> for a complete list). The <code>\harpsi</code> SynthDef above uses this technique. A gated envelope specifies a release node or uses one of the predefined sustaining envelope types: <code>Env.asr</code>, <code>Env.adsr</code>, <code>Env.dadsr</code>. The <a href="./../../Classes/Env.html">Env</a> help file offers more detail on gated envelopes.<li><code>Linen.kr</code>, which is a shortcut for <code>EnvGen.kr(Env([0, susLevel, 0], [attackTime, releaseTime], \lin, releaseNode: 1), gate, doneAction: [2 or higher])</code>. The default SynthDef uses this. The <code>doneAction</code> should be at least 2 to release the node.<div class='note'><span class='notelabel'>NOTE:</span> If the release is controlled by a gate, the gate must be represented by the synth argument <code>gate</code>; standard event prototypes expect to be able to control the synth's release using this argument. Also, make sure the gate's default value is greater than 0. Otherwise, the envelope will never start and you will both hear nothing and watch synths pile up on the server.</div>
 <p><li>Fixed-duration envelopes (no gate).</ul>
 <h3><a class='anchor' name='Argument%20name%20prefixes'>Argument name prefixes</a></h3>
 
-<p>One other subtle point about synth argument names. In a SynthDef, argument names can have the prefix <code class='code prettyprint lang-sc'>t_</code> to indicate a "trigger control," or <code class='code prettyprint lang-sc'>i_</code> for an "initial rate" control (meaning that it holds the value set when the Synth is first played). This is described in <a href="./../../Classes/SynthDef.html">SynthDef</a> help. Pbind and its cousins should leave out the prefixes, e.g.:<pre class='code prettyprint lang-sc'>(
+<p>One other subtle point about synth argument names. In a SynthDef, argument names can have the prefix <code>t_</code> to indicate a "trigger control," or <code>i_</code> for an "initial rate" control (meaning that it holds the value set when the Synth is first played). This is described in <a href="./../../Classes/SynthDef.html">SynthDef</a> help. Pbind and its cousins should leave out the prefixes, e.g.:<textarea class='editor'>(
 SynthDef(\trig_demo, { |out, freq = 440, gate = 1, t_trig = 1|    // t_trig here
     var    env = Decay2.kr(t_trig, 0.01, 0.1),
         sig = SinOsc.ar(freq, 0, env)
@@ -199,7 +204,8 @@ p = Pmono(\trig_demo,
 ).play;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_02_Basic_Vocabulary.html">Pattern Guide 02: Basic Vocabulary</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_04_Words_to_Phrases.html">Pattern Guide 04: Words to Phrases</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_03_What_Is_Pbind.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_03_What_Is_Pbind.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_03_What_Is_Pbind::<br></div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_04_Words_to_Phrases.html">Pattern Guide 04: Words to Phrases</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_03_What_Is_Pbind.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_03_What_Is_Pbind.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_03_What_Is_Pbind::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Symbolic Notations | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Symbolic Notations | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Symbolic Notations';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Symbolic Notations:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Arithmetic%20operators'>Arithmetic operators</a></li>
@@ -31,8 +36,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc1'><a href='#Class%20and%20instance%20variable%20access'>Class and instance variable access</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Array%20series%20and%20indexing'>Array series and indexing</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Adverbs%20to%20math%20operators'>Adverbs to math operators</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Overviews</span>
@@ -46,33 +51,33 @@ var scdoc_sc_version = '3.9.3';
 <h2><a class='anchor' name='Arithmetic%20operators'>Arithmetic operators</a></h2>
 
 <p>Math operators apply to many classes, including arrays and other collections.
-<p>Using a basic math operator on a Symbol swallows the operation (returns the symbol)<pre class='code prettyprint lang-sc'>\symbol * 5
-symbol</pre>
+<p>Using a basic math operator on a Symbol swallows the operation (returns the symbol)<textarea class='editor'>\symbol * 5
+symbol</textarea>
 <dl>
-<dt><code class='code prettyprint lang-sc'>number + number</code><dd>addition<dt><code class='code prettyprint lang-sc'>number - number</code><dd>subtraction<dt><code class='code prettyprint lang-sc'>number * number</code><dd>multiplication<dt><code class='code prettyprint lang-sc'>number / number</code><dd>division<dt><code class='code prettyprint lang-sc'>number % number</code><dd>modulo<dt><code class='code prettyprint lang-sc'>number ** number</code><dd>exponentiation</dl>
+<dt><code>number + number</code><dd>addition<dt><code>number - number</code><dd>subtraction<dt><code>number * number</code><dd>multiplication<dt><code>number / number</code><dd>division<dt><code>number % number</code><dd>modulo<dt><code>number ** number</code><dd>exponentiation</dl>
 <h2><a class='anchor' name='Bitwise%20arithmetic'>Bitwise arithmetic</a></h2>
 <dl>
-<dt><code class='code prettyprint lang-sc'>number &amp; number</code><dd>bitwise and<dt><code class='code prettyprint lang-sc'>number | number</code><dd>bitwise or<dt><code class='code prettyprint lang-sc'>number &lt;&lt; number</code><dd>bitwise left shift<dt><code class='code prettyprint lang-sc'>number &gt;&gt; number</code><dd>bitwise right shift<dt><code class='code prettyprint lang-sc'>number +&gt;&gt; number</code><dd>unsigned bitwise right shift</dl>
+<dt><code>number &amp; number</code><dd>bitwise and<dt><code>number | number</code><dd>bitwise or<dt><code>number &lt;&lt; number</code><dd>bitwise left shift<dt><code>number &gt;&gt; number</code><dd>bitwise right shift<dt><code>number +&gt;&gt; number</code><dd>unsigned bitwise right shift</dl>
 <h2><a class='anchor' name='Logical%20operators'>Logical operators</a></h2>
 <dl>
-<dt><code class='code prettyprint lang-sc'>object == object</code><dd>equivalence<dt><code class='code prettyprint lang-sc'>object === object</code><dd>identity<dt><code class='code prettyprint lang-sc'>object != object</code><dd>not equal to<dt><code class='code prettyprint lang-sc'>object !== object</code><dd>not identical to</dl>
+<dt><code>object == object</code><dd>equivalence<dt><code>object === object</code><dd>identity<dt><code>object != object</code><dd>not equal to<dt><code>object !== object</code><dd>not identical to</dl>
 
-<p>Objects may be equivalent but not identical.<pre class='code prettyprint lang-sc'>[1, 2, 3] == [1, 2, 3]
+<p>Objects may be equivalent but not identical.<textarea class='editor'>[1, 2, 3] == [1, 2, 3]
 true
 [1, 2, 3] === [1, 2, 3]
 false       // a and b are two different array instances with the same contents
 
 a = b = [1, 2, 3];
 a === b;
-true        // a and b are the same array instance</pre>
+true        // a and b are the same array instance</textarea>
 <dl>
-<dt><code class='code prettyprint lang-sc'>number &lt; number</code><dd>comparison (less than)<dt><code class='code prettyprint lang-sc'>number &lt;= number</code><dd>comparison (less than or equal to)<dt><code class='code prettyprint lang-sc'>number &gt; number</code><dd>comparison (greater than)<dt><code class='code prettyprint lang-sc'>number &gt;= number</code><dd>comparison (greater than or equal to)</dl>
+<dt><code>number &lt; number</code><dd>comparison (less than)<dt><code>number &lt;= number</code><dd>comparison (less than or equal to)<dt><code>number &gt; number</code><dd>comparison (greater than)<dt><code>number &gt;= number</code><dd>comparison (greater than or equal to)</dl>
 
 <p><dl>
-<dt><code class='code prettyprint lang-sc'>boolean &amp;&amp; boolean</code><dd>logical And<dt><code class='code prettyprint lang-sc'>boolean || boolean</code><dd>logical Or</dl>
+<dt><code>boolean &amp;&amp; boolean</code><dd>logical And<dt><code>boolean || boolean</code><dd>logical Or</dl>
 
 <p>When a function is the second operand, these operators perform short-circuiting (i.e., the function is executed only when its result would influence the result of the operation). This is recommended for speed.
-<p>With <code class='code prettyprint lang-sc'>and:</code> and <code class='code prettyprint lang-sc'>or:</code> second-argument functions will be inlined. If you use <code class='code prettyprint lang-sc'>&amp;&amp;</code> or <code class='code prettyprint lang-sc'>||</code>, no inlining will be done and performance will be slower.<pre class='code prettyprint lang-sc'>a = 1;
+<p>With <code>and:</code> and <code>or:</code> second-argument functions will be inlined. If you use <code>&amp;&amp;</code> or <code>||</code>, no inlining will be done and performance will be slower.<textarea class='editor'>a = 1;
 
 a == 1 and: { "second condition".postln; [true, false].choose }
 second condition
@@ -86,24 +91,24 @@ false
 
 a != 1 or: { "second condition".postln; [true, false].choose }
 second condition
-true</pre>
+true</textarea>
 
-<p>In this case, the second condition will cause an error if a is nil, because nil does not understand addition. a.notNil is a safeguard to ensure the second condition makes sense.<pre class='code prettyprint lang-sc'>a = nil;
+<p>In this case, the second condition will cause an error if a is nil, because nil does not understand addition. a.notNil is a safeguard to ensure the second condition makes sense.<textarea class='editor'>a = nil;
 a.notNil and: { "second condition".postln; (a = a+1) &lt; 5 }
 false
 
 a = 10;
 a.notNil and: { "second condition".postln; (a = a+1) &lt; 5 }
 second condition
-false</pre>
+false</textarea>
 <h2><a class='anchor' name='Array%20and%20Collection%20operators'>Array and Collection operators</a></h2>
 <dl>
-<dt><code class='code prettyprint lang-sc'>object ++ object</code><dd>concatenation<dt><code class='code prettyprint lang-sc'>collection +++ collection</code><dd>lamination (see <a href="./../Guides/J-concepts-in-SC.html">J concepts in SC</a>)<dt><code class='code prettyprint lang-sc'>collection @ index</code><dd>collection/array indexing: .at(index) or [index]<dt><code class='code prettyprint lang-sc'>collection @@ integer</code><dd>collection/array indexing: .wrapAt(int)<dt><code class='code prettyprint lang-sc'>collection @|@ integer</code><dd>collection/array indexing: .foldAt(int)<dt><code class='code prettyprint lang-sc'>collection |@| integer</code><dd>collection/array indexing: .clipAt(int)</dl>
+<dt><code>object ++ object</code><dd>concatenation<dt><code>collection +++ collection</code><dd>lamination (see <a href="./../Guides/J-concepts-in-SC.html">J concepts in SC</a>)<dt><code>collection @ index</code><dd>collection/array indexing: .at(index) or [index]<dt><code>collection @@ integer</code><dd>collection/array indexing: .wrapAt(int)<dt><code>collection @|@ integer</code><dd>collection/array indexing: .foldAt(int)<dt><code>collection |@| integer</code><dd>collection/array indexing: .clipAt(int)</dl>
 <h2><a class='anchor' name='Set%20operators'>Set operators</a></h2>
 <dl>
-<dt><code class='code prettyprint lang-sc'>set &amp; set</code><dd>intersection of two sets<dt><code class='code prettyprint lang-sc'>set | set</code><dd>union of two sets<dt><code class='code prettyprint lang-sc'>setA - setB</code><dd>difference of sets (elements of setA not found in setB)<dt><code class='code prettyprint lang-sc'>set -- set</code><dd>symmetric difference:<pre class='code prettyprint lang-sc'>(setA -- setB) == ((setA - setB) | (setB - setA))</pre>
+<dt><code>set &amp; set</code><dd>intersection of two sets<dt><code>set | set</code><dd>union of two sets<dt><code>setA - setB</code><dd>difference of sets (elements of setA not found in setB)<dt><code>set -- set</code><dd>symmetric difference:<textarea class='editor'>(setA -- setB) == ((setA - setB) | (setB - setA))</textarea>
 </dl>
-<pre class='code prettyprint lang-sc'>a = Set[2, 3, 4, 5, 6, 7];
+<textarea class='editor'>a = Set[2, 3, 4, 5, 6, 7];
 b = Set[5, 6, 7, 8, 9];
 
 a - b
@@ -116,52 +121,52 @@ Set[ 8, 9 ]
 Set[ 2, 9, 3, 4, 8 ]
 
 a -- b
-Set[ 2, 9, 3, 4, 8 ]</pre>
+Set[ 2, 9, 3, 4, 8 ]</textarea>
 <h2><a class='anchor' name='Geometry%20operators'>Geometry operators</a></h2>
 <dl>
-<dt><code class='code prettyprint lang-sc'>number @ number</code><dd>make a <a href="./../Classes/Point.html">Point</a> of two numbers<pre class='code prettyprint lang-sc'>x @ y
+<dt><code>number @ number</code><dd>make a <a href="./../Classes/Point.html">Point</a> of two numbers<textarea class='editor'>x @ y
 // returns:
-Point(x, y)</pre>
+Point(x, y)</textarea>
 
-<p><dt><code class='code prettyprint lang-sc'>point @ point</code><dd>make a <a href="./../Classes/Rect.html">Rect</a> of two <a href="./../Classes/Point.html">Point</a>s<pre class='code prettyprint lang-sc'>Point(left, top) @ Point(right, bottom)
+<p><dt><code>point @ point</code><dd>make a <a href="./../Classes/Rect.html">Rect</a> of two <a href="./../Classes/Point.html">Point</a>s<textarea class='editor'>Point(left, top) @ Point(right, bottom)
 // returns:
-Rect(left, top, right-left, bottom-top)</pre>
+Rect(left, top, right-left, bottom-top)</textarea>
 
-<p><dt><code class='code prettyprint lang-sc'>ugen @ ugen</code><dd>create a Point with two <a href="./../Classes/UGen.html">UGen</a>s<dt><code class='code prettyprint lang-sc'>rect &amp; rect</code><dd>intersection of two rectangles<dt><code class='code prettyprint lang-sc'>rect | rect</code><dd>union of two rectangles (returns a Rect whose boundaries exactly encompass both Rects)</dl>
+<p><dt><code>ugen @ ugen</code><dd>create a Point with two <a href="./../Classes/UGen.html">UGen</a>s<dt><code>rect &amp; rect</code><dd>intersection of two rectangles<dt><code>rect | rect</code><dd>union of two rectangles (returns a Rect whose boundaries exactly encompass both Rects)</dl>
 <h2><a class='anchor' name='IOStream%20operators'>IOStream operators</a></h2>
 <dl>
-<dt><code class='code prettyprint lang-sc'>stream &lt;&lt; object</code><dd>represent the object as a string and add to the stream. A common usage is with the Post class, to write output to the post window.<pre class='code prettyprint lang-sc'>Post &lt;&lt; "Here is a random number: " &lt;&lt; 20.rand &lt;&lt; ".\n";
-Here is a random number: 13.</pre>
-<dt><code class='code prettyprint lang-sc'>stream &lt;&lt;* collection</code><dd>add each item of the collection to the stream.<pre class='code prettyprint lang-sc'>Post &lt;&lt; [0, 1, 2, 3]
+<dt><code>stream &lt;&lt; object</code><dd>represent the object as a string and add to the stream. A common usage is with the Post class, to write output to the post window.<textarea class='editor'>Post &lt;&lt; "Here is a random number: " &lt;&lt; 20.rand &lt;&lt; ".\n";
+Here is a random number: 13.</textarea>
+<dt><code>stream &lt;&lt;* collection</code><dd>add each item of the collection to the stream.<textarea class='editor'>Post &lt;&lt; [0, 1, 2, 3]
 [ 0, 1, 2, 3 ]
 
 Post &lt;&lt;* [0, 1, 2, 3]
-0, 1, 2, 3</pre>
-<dt><code class='code prettyprint lang-sc'>stream &lt;&lt;&lt; object</code><dd>add the object's compile string to the stream.<pre class='code prettyprint lang-sc'>Post &lt;&lt;&lt; "a string"
-"a string"</pre>
+0, 1, 2, 3</textarea>
+<dt><code>stream &lt;&lt;&lt; object</code><dd>add the object's compile string to the stream.<textarea class='editor'>Post &lt;&lt;&lt; "a string"
+"a string"</textarea>
 
-<p><dt><code class='code prettyprint lang-sc'>stream &lt;&lt;&lt;* collection</code><dd>add each item's compile string to the stream.</dl>
+<p><dt><code>stream &lt;&lt;&lt;* collection</code><dd>add each item's compile string to the stream.</dl>
 <h2><a class='anchor' name='Conditional%20execution%20operators'>Conditional execution operators</a></h2>
 <dl>
-<dt><code class='code prettyprint lang-sc'>object ? object</code><dd>nil check (no .value)<dt><code class='code prettyprint lang-sc'>object ?? function</code><dd>nil check (.value, function is inlined) If the object is nil, the second expression's value will be used; otherwise, it will be the first object.<pre class='code prettyprint lang-sc'>a = [nil, 5];
+<dt><code>object ? object</code><dd>nil check (no .value)<dt><code>object ?? function</code><dd>nil check (.value, function is inlined) If the object is nil, the second expression's value will be used; otherwise, it will be the first object.<textarea class='editor'>a = [nil, 5];
 
 10.do({ (a.choose ? 20.rand).postln });
-10.do({ (a.choose ?? { 20.rand }).postln });</pre>
+10.do({ (a.choose ?? { 20.rand }).postln });</textarea>
 
-<p><code class='code prettyprint lang-sc'>?? { }</code> is generally recommended. <code class='code prettyprint lang-sc'>?</code> always evaluates the second expression, even if its value will not be used. <code class='code prettyprint lang-sc'>??</code> evaluates the function conditionally (only when needed). If the function defines no variables, the function will be inlined for speed.
-<p>Especially useful when the absence of an object requires a new object to be created. In this example, it's critical that a new Slider not be created if the object was already passed in.<pre class='code prettyprint lang-sc'>f = { |slider, parent|
+<p><code>?? { }</code> is generally recommended. <code>?</code> always evaluates the second expression, even if its value will not be used. <code>??</code> evaluates the function conditionally (only when needed). If the function defines no variables, the function will be inlined for speed.
+<p>Especially useful when the absence of an object requires a new object to be created. In this example, it's critical that a new Slider not be created if the object was already passed in.<textarea class='editor'>f = { |slider, parent|
     slider = slider ?? { Slider.new(parent, Rect(0, 0, 100, 20)) };
     slider.value_(0);
-};</pre>
+};</textarea>
 
-<p>If the first line inside the function instead read<pre class='code prettyprint lang-sc'>slider = slider ? Slider.new(parent, Rect(0, 0, 100, 20));</pre>
+<p>If the first line inside the function instead read<textarea class='editor'>slider = slider ? Slider.new(parent, Rect(0, 0, 100, 20));</textarea>
 
-<p>, a new slider would be created even if it is not needed, or used.<dt><code class='code prettyprint lang-sc'>object !? function</code><dd>execute function if object is not nil.<pre class='code prettyprint lang-sc'>a = [10, nil].choose;
+<p>, a new slider would be created even if it is not needed, or used.<dt><code>object !? function</code><dd>execute function if object is not nil.<textarea class='editor'>a = [10, nil].choose;
 a !? { "ran func".postln };
 // equivalent of:
-if (a.notNil) { "ran func".postln };</pre>
+if (a.notNil) { "ran func".postln };</textarea>
 
-<p>Used when an operation requires a variable not to be empty.<pre class='code prettyprint lang-sc'>f = { |a| a + 5 };
+<p>Used when an operation requires a variable not to be empty.<textarea class='editor'>f = { |a| a + 5 };
 f.value
 // error: nil does not understand +
 
@@ -169,17 +174,17 @@ f = { |a| a !? { a+5 } };
 f.value
 nil // no error
 f.value(2)
-7</pre>
+7</textarea>
 </dl>
 <h2><a class='anchor' name='Miscellaneous%20operators'>Miscellaneous operators</a></h2>
 <dl>
-<dt><code class='code prettyprint lang-sc'>object ! number</code><dd>same as <code class='code prettyprint lang-sc'>object.dup(number)</code><pre class='code prettyprint lang-sc'>15 ! 5
-[ 15, 15, 15, 15, 15 ]</pre>
+<dt><code>object ! number</code><dd>same as <code>object.dup(number)</code><textarea class='editor'>15 ! 5
+[ 15, 15, 15, 15, 15 ]</textarea>
 
-<p>If the object is a function, it behaves like Array.fill(number, function).<pre class='code prettyprint lang-sc'>{ 10.rand } ! 5
-[ 8, 9, 3, 8, 0 ]</pre>
+<p>If the object is a function, it behaves like Array.fill(number, function).<textarea class='editor'>{ 10.rand } ! 5
+[ 8, 9, 3, 8, 0 ]</textarea>
 
-<p><dt><code class='code prettyprint lang-sc'>object -&gt; object</code><dd>creates an <a href="./../Classes/Association.html">Association</a>, used in dictionaries.<dt><code class='code prettyprint lang-sc'>expression &lt;! expression</code><dd>bypass value of second expression. This operator evaluates both expressions, and returns the value of the first.<pre class='code prettyprint lang-sc'>a = 0;
+<p><dt><code>object -&gt; object</code><dd>creates an <a href="./../Classes/Association.html">Association</a>, used in dictionaries.<dt><code>expression &lt;! expression</code><dd>bypass value of second expression. This operator evaluates both expressions, and returns the value of the first.<textarea class='editor'>a = 0;
 0
 
 // a is incremented twice, but the return value (1)
@@ -188,39 +193,39 @@ f.value(2)
 1
 
 a    // a's value reflects both increments
-2</pre>
-<dt><code class='code prettyprint lang-sc'>function &lt;&gt; function</code><dd>function composition operator. This operator returns a new function, which evaluates the second function and passes the result to the first function.<pre class='code prettyprint lang-sc'>f = { |a| a * 5 } &lt;&gt; {|a| a + 2 };
+2</textarea>
+<dt><code>function &lt;&gt; function</code><dd>function composition operator. This operator returns a new function, which evaluates the second function and passes the result to the first function.<textarea class='editor'>f = { |a| a * 5 } &lt;&gt; {|a| a + 2 };
 f.(10);
-60                  // == (10+2) * 5</pre>
+60                  // == (10+2) * 5</textarea>
 
-<p>An array as argument is passed through the chain:<pre class='code prettyprint lang-sc'>f.([10, 75, 512]);
-[ 60, 385, 2570 ]   // == ([10, 75, 512]+2) * 5</pre>
+<p>An array as argument is passed through the chain:<textarea class='editor'>f.([10, 75, 512]);
+[ 60, 385, 2570 ]   // == ([10, 75, 512]+2) * 5</textarea>
 </dl>
 <h2><a class='anchor' name='Symbolic%20notations%20to%20define%20literals/other%20objects'>Symbolic notations to define literals/other objects</a></h2>
 <dl>
-<dt><code class='code prettyprint lang-sc'>$</code><dd>character prefix: <code class='code prettyprint lang-sc'>"ABC".at(0) == $A</code><dt><code class='code prettyprint lang-sc'>''</code> or <code class='code prettyprint lang-sc'>\</code><dd>define a literal <a href="./../Classes/Symbol.html">Symbol</a> : <code class='code prettyprint lang-sc'>'abc' === \abc</code><dt><code class='code prettyprint lang-sc'>""</code><dd>define a literal <a href="./../Classes/String.html">String</a> : <code class='code prettyprint lang-sc'>"SuperCollider is the best"</code><dt><code class='code prettyprint lang-sc'>[item, item...]</code><dd>define an <a href="./../Classes/Array.html">Array</a> containing given items<dt><code class='code prettyprint lang-sc'>Set[item, item...]</code><dd>define a <a href="./../Classes/Set.html">Set</a> -- any <a href="./../Classes/Collection.html">Collection</a> class name can be used other than Set<dt><code class='code prettyprint lang-sc'>#[item, item...]</code><dd>define a literal <a href="./../Classes/Array.html">Array</a><dt><code class='code prettyprint lang-sc'>(a:1, b:2)</code><dd>define an <a href="./../Classes/Event.html">Event</a> (same as <code class='code prettyprint lang-sc'>Event[\a -&gt; 1, \b -&gt; 2]</code>)<dt><code class='code prettyprint lang-sc'>`</code> (backtick or backquote)<dd>define a <a href="./../Classes/Ref.html">Ref</a> : <code class='code prettyprint lang-sc'>`1 == Ref(1), `(a+1) == Ref(a+1)</code><dt><code class='code prettyprint lang-sc'>\</code><dd>inside a string or symbol, escapes the next character<pre class='code prettyprint lang-sc'>"abc\"def\"ghi"
+<dt><code>$</code><dd>character prefix: <code>"ABC".at(0) == $A</code><dt><code>''</code> or <code>\</code><dd>define a literal <a href="./../Classes/Symbol.html">Symbol</a> : <code>'abc' === \abc</code><dt><code>""</code><dd>define a literal <a href="./../Classes/String.html">String</a> : <code>"SuperCollider is the best"</code><dt><code>[item, item...]</code><dd>define an <a href="./../Classes/Array.html">Array</a> containing given items<dt><code>Set[item, item...]</code><dd>define a <a href="./../Classes/Set.html">Set</a> -- any <a href="./../Classes/Collection.html">Collection</a> class name can be used other than Set<dt><code>#[item, item...]</code><dd>define a literal <a href="./../Classes/Array.html">Array</a><dt><code>(a:1, b:2)</code><dd>define an <a href="./../Classes/Event.html">Event</a> (same as <code>Event[\a -&gt; 1, \b -&gt; 2]</code>)<dt><code>`</code> (backtick or backquote)<dd>define a <a href="./../Classes/Ref.html">Ref</a> : <code>`1 == Ref(1), `(a+1) == Ref(a+1)</code><dt><code>\</code><dd>inside a string or symbol, escapes the next character<textarea class='editor'>"abc\"def\"ghi"
 abc"def"ghi
 
 'abc\'def\'ghi'
-abc'def'ghi</pre>
+abc'def'ghi</textarea>
 
 <p><dl>
-<dt><code class='code prettyprint lang-sc'>\t</code><dd>tab character<dt><code class='code prettyprint lang-sc'>\n</code><dd>newline character<dt><code class='code prettyprint lang-sc'>\l</code><dd>linefeed character<dt><code class='code prettyprint lang-sc'>\r</code><dd>carriage return character<dt><code class='code prettyprint lang-sc'>\\</code><dd>\ character</dl>
-<dt><code class='code prettyprint lang-sc'>{ }</code><dd>define an open function<dt><code class='code prettyprint lang-sc'>#{ }</code><dd>define a closed function<dt><code class='code prettyprint lang-sc'>(_ * 2)</code><dd>define a function <code class='code prettyprint lang-sc'>{ |a| a * 2 }</code> (see <a href="./../Reference/Partial-Application.html">Partial Application</a>)</dl>
+<dt><code>\t</code><dd>tab character<dt><code>\n</code><dd>newline character<dt><code>\l</code><dd>linefeed character<dt><code>\r</code><dd>carriage return character<dt><code>\\</code><dd>\ character</dl>
+<dt><code>{ }</code><dd>define an open function<dt><code>#{ }</code><dd>define a closed function<dt><code>(_ * 2)</code><dd>define a function <code>{ |a| a * 2 }</code> (see <a href="./../Reference/Partial-Application.html">Partial Application</a>)</dl>
 <h2><a class='anchor' name='Argument%20definition'>Argument definition</a></h2>
 <dl>
-<dt><code class='code prettyprint lang-sc'>|a, b, c|</code><dd>define function/method arguments<dt><code class='code prettyprint lang-sc'>|a, b ... c|</code><dd>define function/method arguments; arguments after a and b will be placed into c as an array<dt><code class='code prettyprint lang-sc'>#a, b, c = myArray</code><dd>assign consecutive elements of myArray to multiple variables<dt><code class='code prettyprint lang-sc'>#a, b ... c = myArray</code><dd>assign first two elements to a and b; the rest as an array into c</dl>
+<dt><code>|a, b, c|</code><dd>define function/method arguments<dt><code>|a, b ... c|</code><dd>define function/method arguments; arguments after a and b will be placed into c as an array<dt><code>#a, b, c = myArray</code><dd>assign consecutive elements of myArray to multiple variables<dt><code>#a, b ... c = myArray</code><dd>assign first two elements to a and b; the rest as an array into c</dl>
 <h2><a class='anchor' name='Where%20f%20is%20a%20function'>Where f is a function</a></h2>
 <dl>
-<dt><code class='code prettyprint lang-sc'>f.( )</code><dd>evaluate the function with the arguments in parentheses<dt><code class='code prettyprint lang-sc'>f.(*argList)</code><dd>evaluate the function with the arguments in an array<dt><code class='code prettyprint lang-sc'>f.(anArgName: value)</code><dd>keyword addressing of function or method arguments<pre class='code prettyprint lang-sc'>f = { |a, b| a * b };
+<dt><code>f.( )</code><dd>evaluate the function with the arguments in parentheses<dt><code>f.(*argList)</code><dd>evaluate the function with the arguments in an array<dt><code>f.(anArgName: value)</code><dd>keyword addressing of function or method arguments<textarea class='editor'>f = { |a, b| a * b };
 f.(2, 4);
 f.(*[2, 4]);
-f.(a: 2, b: 4);</pre>
+f.(a: 2, b: 4);</textarea>
 
-<p><dt><code class='code prettyprint lang-sc'>SomeClass.[index]</code><dd>Equivalent to SomeClass.at(index) -- Instr.at is a good example<dt><code class='code prettyprint lang-sc'>myObject.method(*array)</code><dd>call the method with the arguments in an array<dt><code class='code prettyprint lang-sc'>obj1 method: obj2</code><dd>same as <code class='code prettyprint lang-sc'>obj1.method(obj2)</code> or <code class='code prettyprint lang-sc'>method(obj1, obj2)</code>. This works only with single-argument methods like binary operators.</dl>
+<p><dt><code>SomeClass.[index]</code><dd>Equivalent to SomeClass.at(index) -- Instr.at is a good example<dt><code>myObject.method(*array)</code><dd>call the method with the arguments in an array<dt><code>obj1 method: obj2</code><dd>same as <code>obj1.method(obj2)</code> or <code>method(obj1, obj2)</code>. This works only with single-argument methods like binary operators.</dl>
 <h2><a class='anchor' name='Class%20and%20instance%20variable%20access'>Class and instance variable access</a></h2>
 
-<p>Inside a class definition (see <a href="./../Guides/WritingClasses.html">Writing Classes</a> ):<pre class='code prettyprint lang-sc'>{
+<p>Inside a class definition (see <a href="./../Guides/WritingClasses.html">Writing Classes</a> ):<textarea class='editor'>{
     classvar &lt;a,    // Define a class variable with a getter method (for outside access)
              &gt;b,    // Define a class variable with a setter method
              &lt;&gt;c;   // Define a class variable with both a getter and setter method
@@ -230,22 +235,23 @@ f.(a: 2, b: 4);</pre>
              &lt;&gt;c;   // Define an instance variable with both a getter and setter method
 
     // methods go here ...
-}</pre>
+}</textarea>
 
 <p>These notations do not apply to variables defined within methods.<dl>
-<dt><code class='code prettyprint lang-sc'>^someExpression</code><dd>Inside a method definition: return the expression's value to the caller<dt><code class='code prettyprint lang-sc'>instVar_ { }</code><dd>define a setter for an instance variable<dt><code class='code prettyprint lang-sc'>myObject.instVar = x;</code><dd>invoke the setter: <code class='code prettyprint lang-sc'>(myObject.instVar_(x); x)</code></dl>
+<dt><code>^someExpression</code><dd>Inside a method definition: return the expression's value to the caller<dt><code>instVar_ { }</code><dd>define a setter for an instance variable<dt><code>myObject.instVar = x;</code><dd>invoke the setter: <code>(myObject.instVar_(x); x)</code></dl>
 <h2><a class='anchor' name='Array%20series%20and%20indexing'>Array series and indexing</a></h2>
 <dl>
-<dt><code class='code prettyprint lang-sc'>(a..b)</code><dd>produces an array consisting of consecutive integers from a to b<dt><code class='code prettyprint lang-sc'>(a, b..c)</code><dd>e.g.: (1, 3..9) produces [1, 3, 5, 7, 9]<dt><code class='code prettyprint lang-sc'>(..b)</code><dd>produces an array 0 through b<dt><code class='code prettyprint lang-sc'>(a..)</code><dd>not legal (no endpoint given)<dt><code class='code prettyprint lang-sc'>a[i..j]</code><dd>same as <code class='code prettyprint lang-sc'>a.copySeries(i, j)</code> (see <a href="./../Classes/ArrayedCollection.html#-copySeries">ArrayedCollection: -copySeries</a>)<dt><code class='code prettyprint lang-sc'>a[i, j..k]</code><dd>e.g.: <code class='code prettyprint lang-sc'>a[1, 3..9]</code> retrieves array elements 1, 3, 5, 7, 9<dt><code class='code prettyprint lang-sc'>a[..j]</code><dd>same as <code class='code prettyprint lang-sc'>a.copySeries(0, j)</code><dt><code class='code prettyprint lang-sc'>a[j..]</code><dd>same as <code class='code prettyprint lang-sc'>a.copySeries(i, a.size-1)</code> (this is OK--Array is finite)<dt><code class='code prettyprint lang-sc'>~</code><dd>access an environment variable<dt><code class='code prettyprint lang-sc'>~abc</code><dd>compiles to <code class='code prettyprint lang-sc'>\abc.envirGet</code><dt><code class='code prettyprint lang-sc'>~abc = value</code><dd>compiles to <code class='code prettyprint lang-sc'>\abc.envirPut(value)</code></dl>
+<dt><code>(a..b)</code><dd>produces an array consisting of consecutive integers from a to b<dt><code>(a, b..c)</code><dd>e.g.: (1, 3..9) produces [1, 3, 5, 7, 9]<dt><code>(..b)</code><dd>produces an array 0 through b<dt><code>(a..)</code><dd>not legal (no endpoint given)<dt><code>a[i..j]</code><dd>same as <code>a.copySeries(i, j)</code> (see <a href="./../Classes/ArrayedCollection.html#-copySeries">ArrayedCollection: -copySeries</a>)<dt><code>a[i, j..k]</code><dd>e.g.: <code>a[1, 3..9]</code> retrieves array elements 1, 3, 5, 7, 9<dt><code>a[..j]</code><dd>same as <code>a.copySeries(0, j)</code><dt><code>a[j..]</code><dd>same as <code>a.copySeries(i, a.size-1)</code> (this is OK--Array is finite)<dt><code>~</code><dd>access an environment variable<dt><code>~abc</code><dd>compiles to <code>\abc.envirGet</code><dt><code>~abc = value</code><dd>compiles to <code>\abc.envirPut(value)</code></dl>
 <h2><a class='anchor' name='Adverbs%20to%20math%20operators'>Adverbs to math operators</a></h2>
 
 <p>(see <a href="./../Reference/Adverbs.html">Adverbs for Binary Operators</a> )
-<p>e.g.:<pre class='code prettyprint lang-sc'>[1, 2, 3] * [2, 3, 4]
+<p>e.g.:<textarea class='editor'>[1, 2, 3] * [2, 3, 4]
 [ 2, 6, 12 ]
 
 [1, 2, 3] *.t [2, 3, 4]
-[ [ 2, 3, 4 ], [ 4, 6, 8 ], [ 6, 9, 12 ] ]</pre>
+[ [ 2, 3, 4 ], [ 4, 6, 8 ], [ 6, 9, 12 ] ]</textarea>
 
 <p><dl>
-<dt><code class='code prettyprint lang-sc'>.s</code><dd>output length is the shorter of the two arrays<dt><code class='code prettyprint lang-sc'>.f</code><dd>use folded indexing instead of wrapped indexing<dt><code class='code prettyprint lang-sc'>.t</code><dd>table-style<dt><code class='code prettyprint lang-sc'>.x</code><dd>cross (like table, except that the results of each operation are concatenated, not added as another dimension)<dt><code class='code prettyprint lang-sc'>.0</code><dd>operator depth (see <a href="./../Guides/J-concepts-in-SC.html">J concepts in SC</a> )<dt><code class='code prettyprint lang-sc'>.1</code><dd>etc.</dl>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Overviews/SymbolicNotations.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Overviews/SymbolicNotations.schelp</a><br>link::Overviews/SymbolicNotations::<br></div></div></body></html>
+<dt><code>.s</code><dd>output length is the shorter of the two arrays<dt><code>.f</code><dd>use folded indexing instead of wrapped indexing<dt><code>.t</code><dd>table-style<dt><code>.x</code><dd>cross (like table, except that the results of each operation are concatenated, not added as another dimension)<dt><code>.0</code><dd>operator depth (see <a href="./../Guides/J-concepts-in-SC.html">J concepts in SC</a> )<dt><code>.1</code><dd>etc.</dl>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Overviews/SymbolicNotations.schelp'>/usr/share/SuperCollider/HelpSource/Overviews/SymbolicNotations.schelp</a><br>link::Overviews/SymbolicNotations::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

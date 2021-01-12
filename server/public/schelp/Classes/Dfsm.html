@@ -1,0 +1,173 @@
+<!doctype html><html lang='en'><head><title>Dfsm | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Dfsm';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>Dfsm:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*convertRules'>convertRules</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Demand'>Demand</a></span>
+</div><h1>Dfsm<span id='superclasses'> : <a href="../Classes/DUGen.html">DUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>demand rate finite state machine</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/TagSystemUGens/SymbolicMachines.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/TagSystemUGens/SymbolicMachines.sc'>SymbolicMachines.sc</a></div><div id='related'>See also: <a href="./../Classes/Pfsm.html">Pfsm</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Similar to <a href="./../Classes/Pfsm.html">Pfsm</a>, Dfsm implements a markov chain. Each state has a number of next states out of which one is randomly chosen.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>Dfsm.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>rules</span>, <span class='argstr'>n: 1</span>, <span class='argstr'>rgen</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>rules<td class='argumentdesc'>
+<p>array in the format:<textarea class='editor'>[
+    [ entry states ],
+    item, [ next states ],
+    item, [ next states ],
+    ...
+    end item
+ ]</textarea>
+
+<p>Each <strong>item</strong> can be a number, or a ugen, typically demand rate. If no <strong>end item</strong> is given, <strong>0.0</strong> is used as default.<tr><td class='argumentname'>n<td class='argumentdesc'>
+<p>number of items from each state to embed. If <strong>inf</strong>, they are embedded completely.<tr><td class='argumentname'>rgen<td class='argumentdesc'>
+<p>demand rate random number generator that should ouput values between 0.0 and 1.0. If a deterministic ugen is used, the choice of next states of the finite state machine can be controlled (i.e. 0 will allways choose the first, 1 always the last, else in between).</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>Dfsm.</span><a class='method-name' name='*convertRules' href='./../Overviews/Methods.html#convertRules'>convertRules</a>(<span class='argstr'>rules</span>)</h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>s.boot;
+
+// random jumps
+(
+{
+    var a, b, trig = Impulse.kr(MouseX.kr(4, 100, 1));
+    a = Dfsm([[1], 1.5, [0, 1], 2.5, [0, 1]]);
+    b = Demand.kr(trig, 0, a).poll(trig);
+    SinOsc.ar(b * 200 + 300) * 0.1
+}.play
+);
+
+// 2.5 may come after 1.5, but not the other way round.
+(
+{
+    var a, b, trig = Impulse.kr(MouseX.kr(4, 100, 1));
+    a = Dfsm([[0], 1.5, [0, 0, 1], 2.5, [1, 2], 0.5, [0]]);
+    b = Demand.kr(trig, 0, a).poll(trig);
+    SinOsc.ar(b * 200 + 300) * 0.1
+}.play
+);
+
+
+
+// embed demand ugens, embed 2 of each, end with series of 4, 5, 3.
+(
+{
+    var a, n = 2, trig = Impulse.kr(MouseX.kr(4, 100, 1));
+    a = Dfsm([
+        [0], // entry states
+        Dseq([-2, -3], inf), [1],
+        Dseq([1, 2, 1.5], inf), [0, 0, 0, 1, 2],
+        Dseq([4, 5, 3], inf) // exit state
+    ], n);
+    b = Demand.kr(trig, 0, a).poll(trig);
+    SinOsc.ar(b * 200 + 700) * 0.1
+}.play
+);
+
+
+// direct audification
+(
+{
+    var a, b, pseudorandomness;
+    pseudorandomness = Dswitch1((0..1000).scramble / 1000, Dwhite(0, 1, inf)
+        * MouseY.kr(1, 1000, 1));
+    a = {
+        var next = { { #[0, 1, 2, 3].choose } ! rrand(2, 5) };
+        var n = 2;
+        var d = Dfsm([
+            next.value,
+            Dseq([0, 0, 1], inf), next.value,
+            Dseq([-1, 0].clipExtend(10.rand + 2), inf), next.value,
+            Dseq([1, 0, -1, 0].clipExtend(10.rand + 4), inf), next.value,
+            Dwhite(0, 1, inf), next.value,
+            0
+        ],
+        MouseX.kr(1, 1115, 1),
+        pseudorandomness
+        );
+        Pan2.ar(Duty.ar(SampleDur.ir, 0, d), LFNoise1.kr(1))
+    } ! 5;
+    a.sum * 0.1;
+}.play
+);</textarea>
+<textarea class='editor'>///////////////////////////////////////////
+// tests
+
+// reset test.
+(
+{
+    var a, trig = MouseButton.kr &gt; 0.5;
+    a = Dfsm([[0], Dseq([-2, -3], inf), [1, 7], Dseq([0.1, 0.2], inf), [0, 1], Dseq([900], inf)]);
+    Demand.kr(trig, 0, a); // should end after final state.
+    Silent.ar;
+}.play
+);
+
+
+// reset test.
+(
+{
+    var a, trig = ;
+    a = Dfsm([[0], Dseq([-2, -3], inf), [1, 7], Dseq([0.1, 0.2], inf), [0, 1], Dseq([900], inf)]);
+    Demand.kr(trig, MouseButton.kr &gt; 0.5, Dseq([a], inf));
+    Silent.ar;
+}.play
+);
+
+// embedding test
+(
+a = { |t_reset|
+    var trig = MouseButton.kr &gt; 0.5;
+    a = Dfsm([[0], Dseq([-2, -3, -4], inf), [7], Dseq([0.1, 0.2], 1), [0, 1], Dseq([900, 90], inf)],
+        2);
+    Demand.kr(trig, t_reset, a);
+    Silent.ar;
+}.play
+);
+
+a.set(\t_reset, 1);</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/TagSystemUGens/HelpSource/Classes/Dfsm.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/TagSystemUGens/HelpSource/Classes/Dfsm.schelp</a><br>link::Classes/Dfsm::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

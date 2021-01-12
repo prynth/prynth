@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>jitlib_basic_concepts_03 | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>jitlib_basic_concepts_03 | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'jitlib_basic_concepts_03';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>jitlib_basic_concepts_03:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#a)%20NodeProxy%20slots'>a) NodeProxy slots</a></li>
@@ -24,12 +29,12 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#pause%20/%20resume'>pause / resume</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#clear'>clear</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#d)%20The%20parameter%20context'>d) The parameter context</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/JITLib</span>
- | <span id='categories'><a href='./../../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Libraries>JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Libraries>JITLib>Tutorials'>Tutorials</a> | <a href='./../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Tutorials>JITLib'>JITLib</a></span>
+ | <span id='categories'><a href='./../../Browse.html#JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#JITLib>Tutorials'>Tutorials</a> | <a href='./../../Browse.html#Tutorials'>Tutorials</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Tutorials>JITLib'>JITLib</a></span>
 </div><h1>jitlib_basic_concepts_03</h1>
 <div id='summary'>proxyspace - basic concepts</div>
 </div>
@@ -40,12 +45,12 @@ var scdoc_sc_version = '3.9.3';
 <p>internal structure of the node proxy, node order and the parameter context<ul>
 <li><a href="#a)%20NodeProxy%20slots">a) slots</a><li><a href="#b)%20fade%20time">b) fadeTime</a><li><a href="#c)%20play/stop,%20send/free,%20pause/resume">c) play/stop, send/release, pause/resume, clear</a><li><a href="#d)%20The%20parameter%20context">d) the parameter context</a></ul>
 
-<p>A NodeProxy has two internal contexts in which the objects are inserted: The group, which is on the server, and the nodeMap, which is a client side parameter context. As the group can contain an order of synths, there is a client side representation, in which the source objects are stored (see <a href="./../../Classes/Order.html">Order</a>).<pre class='code prettyprint lang-sc'>// make new space
+<p>A NodeProxy has two internal contexts in which the objects are inserted: The group, which is on the server, and the nodeMap, which is a client side parameter context. As the group can contain an order of synths, there is a client side representation, in which the source objects are stored (see <a href="./../../Classes/Order.html">Order</a>).<textarea class='editor'>// make new space
 p = ProxySpace.push(s.boot);
-~z.play; ~y.ar; // explicitly initialize proxies</pre>
+~z.play; ~y.ar; // explicitly initialize proxies</textarea>
 <h2><a class='anchor' name='a)%20NodeProxy%20slots'>a) NodeProxy slots</a></h2>
 
-<p>One node proxy can hold several objects in an execution order. The index can be any positive integer.<pre class='code prettyprint lang-sc'>// the initial slot (0) is used when assigning directly.
+<p>One node proxy can hold several objects in an execution order. The index can be any positive integer.<textarea class='editor'>// the initial slot (0) is used when assigning directly.
 // ~y is still unused, we will add it later.
 
 ~z = (~y * pi).sin * 0.1 * { LFSaw.kr(LFNoise1.kr(0.1 ! 3).sum * -18).max(0.2) };
@@ -63,9 +68,9 @@ p = ProxySpace.push(s.boot);
 ~y.objects[1] // a playing interface
 ~y.objects[1].source.postcs // the function that was put in.
 ~y.objects.postcs     // this returns objects in the slots.
-~y.source.postcs    // this returns the function in slot 0 only.</pre>
+~y.source.postcs    // this returns the function in slot 0 only.</textarea>
 
-<p>multiple assignment<pre class='code prettyprint lang-sc'>// the function is assigned to th slots from 1 to 4
+<p>multiple assignment<textarea class='editor'>// the function is assigned to th slots from 1 to 4
 ~z[1..4] = { SinOsc.ar(exprand(300, 600), 0, LFTri.kr({exprand(1, 3)} ! 3).sum.max(0)) * 0.1 };
 
 
@@ -76,9 +81,9 @@ p = ProxySpace.push(s.boot);
 ~z = { OnePole.ar(Saw.ar([400, 401.3], 0.3), 0.95) };
 
 ~z.end;
-~y.end;</pre>
+~y.end;</textarea>
 <h2><a class='anchor' name='b)%20fade%20time'>b) fade time</a></h2>
-<pre class='code prettyprint lang-sc'>// setting the fadeTime will allow cross fades.
+<textarea class='editor'>// setting the fadeTime will allow cross fades.
 // in case of an audio rate proxy the fade is pseudo-gaussian
 // in case of a control rate proxy it is linear.
 
@@ -90,24 +95,24 @@ p = ProxySpace.push(s.boot);
 
 // the fadeTime can be set effectively at any time
 ~z.fadeTime = 0.2;
-~z = { max(SinOsc.ar(ExpRand(3, 160)), Saw.ar([304, 304.3])) * 0.1 };</pre>
+~z = { max(SinOsc.ar(ExpRand(3, 160)), Saw.ar([304, 304.3])) * 0.1 };</textarea>
 <div class='note'><span class='notelabel'>NOTE:</span> the fadeTime is also used for the operations xset and xmap. (see below)</div><h2><a class='anchor' name='c)%20play/stop,%20send/free,%20pause/resume'>c) play/stop, send/free, pause/resume</a></h2>
 
 <p>there are a couple of messages a NodeProxy understands that are related to play, stop etc. Here is what they do.<h3><a class='anchor' name='play/stop'>play/stop</a></h3>
 
-<p>this pair of messages is related to the monitoring function of the proxy. play starts monitoring, stop ends the monitoring. <em>if the proxy group is playing</em> (this can be tested with .isPlaying), play will not affect the proxie's internal behaviour in any way. Only if it is not playing (e.g because one has freed the group by cmd-period) it starts the synths/objects in the proxy. Stop never affects the internal state of the proxy.<pre class='code prettyprint lang-sc'>// first hit cmd-period.
+<p>this pair of messages is related to the monitoring function of the proxy. play starts monitoring, stop ends the monitoring. <em>if the proxy group is playing</em> (this can be tested with .isPlaying), play will not affect the proxie's internal behaviour in any way. Only if it is not playing (e.g because one has freed the group by cmd-period) it starts the synths/objects in the proxy. Stop never affects the internal state of the proxy.<textarea class='editor'>// first hit cmd-period.
 ~z = { max(SinOsc.ar(ExpRand(3, 160)), Saw.ar([304, 304.3])) * 0.1 };
 ~z.play;        // monitor the proxy
 ~z.stop;        // note that now the proxy is still playing, but only in private
 ~z.isPlaying;        // is the group playing? yes.
-~z.monitor.isPlaying;    // is the monitor playing? no.</pre>
+~z.monitor.isPlaying;    // is the monitor playing? no.</textarea>
 
-<p>You can pass a vol argument to play to adjust the monitor volume without affecting the proxy internal bus volume.<pre class='code prettyprint lang-sc'>~z.play(vol:0.3);
+<p>You can pass a vol argument to play to adjust the monitor volume without affecting the proxy internal bus volume.<textarea class='editor'>~z.play(vol:0.3);
 // while playing you can set the volume also:
-~z.vol = 0.8;</pre>
+~z.vol = 0.8;</textarea>
 <h3><a class='anchor' name='send%20/%20release'>send / release</a></h3>
 
-<p>this pair of messages controls the synths within the proxy. It does not affect the monitoring (see above). send starts a new synth, release releases the synth. <strong>send</strong> by default releases the last synth. if the synth frees itself (doneAction 2) <strong>spawn</strong> can be used.<pre class='code prettyprint lang-sc'>// first hit cmd-period.
+<p>this pair of messages controls the synths within the proxy. It does not affect the monitoring (see above). send starts a new synth, release releases the synth. <strong>send</strong> by default releases the last synth. if the synth frees itself (doneAction 2) <strong>spawn</strong> can be used.<textarea class='editor'>// first hit cmd-period.
 ~z.play; // monitor. this starts also the synth, if the group wasn't playing.
 
 ~z = { SinOsc.ar(ExpRand(20, 660) ! 2) * Saw.ar(ExpRand(200, 960) ! 2) * 0.1 };
@@ -122,14 +127,14 @@ p = ProxySpace.push(s.boot);
 
 ~z.stop;
 
-~z.play; // monitor. as the group was still playing, this does _not_ start the proxy.</pre>
+~z.play; // monitor. as the group was still playing, this does _not_ start the proxy.</textarea>
 
-<p>in order to free the synths and the group together, <strong>free</strong> is used:<pre class='code prettyprint lang-sc'>~z.free; // this does also not affect the monitoring.
-~z.play; // monitor. as the group was not playing, this starts the proxy.</pre>
+<p>in order to free the synths and the group together, <strong>free</strong> is used:<textarea class='editor'>~z.free; // this does also not affect the monitoring.
+~z.play; // monitor. as the group was not playing, this starts the proxy.</textarea>
 
-<p>in order to free the synths and the group, stop playback, <strong>end</strong> is used.<pre class='code prettyprint lang-sc'>~z.end(3); // end in 3 sec</pre>
+<p>in order to free the synths and the group, stop playback, <strong>end</strong> is used.<textarea class='editor'>~z.end(3); // end in 3 sec</textarea>
 
-<p>in order to rebuild the synthdef on the server, use <strong>rebuild</strong>. this is of course far less efficient than <em>send</em>, but it can make sense; e.g. the synthdef has random elements. UGens like Rand(300, 400) create new random values on every send, while client-side random functions like exprand(1, 1.3) only get built once; to force new decisions with these, one can use <strong>rebuild</strong>.<pre class='code prettyprint lang-sc'>(
+<p>in order to rebuild the synthdef on the server, use <strong>rebuild</strong>. this is of course far less efficient than <em>send</em>, but it can make sense; e.g. the synthdef has random elements. UGens like Rand(300, 400) create new random values on every send, while client-side random functions like exprand(1, 1.3) only get built once; to force new decisions with these, one can use <strong>rebuild</strong>.<textarea class='editor'>(
 ~z = {
     Splay.ar(
         SinOsc.ar(Rand(300,400) + ({exprand(1, 1.3)} ! rrand(1, 9)))
@@ -144,60 +149,60 @@ p = ProxySpace.push(s.boot);
 ~z.rebuild;
 ~z.send;    // send just creates a new synth - new freq, all else remains the same
 ~z.rebuild;    // rebuild the synthdef, re-decide numbers of oscs
-~z.end;</pre>
+~z.end;</textarea>
 <h3><a class='anchor' name='pause%20/%20resume'>pause / resume</a></h3>
 
-<p>when paused, a node proxy still stays active, but every synth that is started is paused until the proxy is resumed again.<pre class='code prettyprint lang-sc'>~z.play;
+<p>when paused, a node proxy still stays active, but every synth that is started is paused until the proxy is resumed again.<textarea class='editor'>~z.play;
 
 ~z.pause; // pause the synth.
 
 ~z = { SinOsc.ar({ExpRand(300, 660)} ! 2) * 0.1 };    // you can add a new function,
                             // which is paused.
 
-~z.resume; // resume playing.</pre>
+~z.resume; // resume playing.</textarea>
 
 <p>Note that pause/resume causes clicks with audio rate proxies, which do not happen when pauseing control rate proxies.<h3><a class='anchor' name='clear'>clear</a></h3>
 
-<p>clear removes all synths, the group, the monitor and releases the bus number.<pre class='code prettyprint lang-sc'>~z.clear;
+<p>clear removes all synths, the group, the monitor and releases the bus number.<textarea class='editor'>~z.clear;
 ~z.bus;        // no bus
-~z.isNeutral;    // not initialized.</pre>
+~z.isNeutral;    // not initialized.</textarea>
 
 <p>note that when other processes use the nodeproxy these are not notified. So clearing has to be done with regard to this.<h2><a class='anchor' name='d)%20The%20parameter%20context'>d) The parameter context</a></h2>
 
-<p>what happens to function arguments?<pre class='code prettyprint lang-sc'>~y.play;
-~y = { arg freq=500; SinOsc.ar(freq * [1, 1.1]) * 0.1 };</pre>
+<p>what happens to function arguments?<textarea class='editor'>~y.play;
+~y = { arg freq=500; SinOsc.ar(freq * [1, 1.1]) * 0.1 };</textarea>
 
-<p>now the argument 'freq' is a control in the synth (just like in SynthDef) which you can change by the <strong>'set'</strong> message.<pre class='code prettyprint lang-sc'>~y.set(\freq, 440);
+<p>now the argument 'freq' is a control in the synth (just like in SynthDef) which you can change by the <strong>'set'</strong> message.<textarea class='editor'>~y.set(\freq, 440);
 
 // unlike in synths, this context is kept and applied to every new synth:
 
-~y = { arg freq=500; Formant.ar(50, freq * [1, 1.1], 70) * 0.1 };</pre>
+~y = { arg freq=500; Formant.ar(50, freq * [1, 1.1], 70) * 0.1 };</textarea>
 
-<p>the message <strong>xset</strong> is a variant of set, to crossfade the change using the current fadeTime:<pre class='code prettyprint lang-sc'>~y.fadeTime = 3;
+<p>the message <strong>xset</strong> is a variant of set, to crossfade the change using the current fadeTime:<textarea class='editor'>~y.fadeTime = 3;
 ~y.xset(\freq, 600);
 
 // the same context is applied to all slots:
 
 ~y[2] = { arg freq=500; SinOsc.ar(freq * [1, 1.1]) * LFPulse.kr(Rand(1, 3)) * 0.1 };
-~y.xset(\freq, 300);</pre>
+~y.xset(\freq, 300);</textarea>
 
-<p>the parameter context also can keep bus mappings. a control can be mapped to any <em>control proxy</em> :<pre class='code prettyprint lang-sc'>~c = { MouseX.kr(300, 800, 1) };
+<p>the parameter context also can keep bus mappings. a control can be mapped to any <em>control proxy</em> :<textarea class='editor'>~c = { MouseX.kr(300, 800, 1) };
 ~y.map(\freq, ~c);
 
 // also here the context is kept:
 
-~y = { arg freq=500; Formant.ar(4, freq * [1, 1.1], 70) * 0.1 };</pre>
+~y = { arg freq=500; Formant.ar(4, freq * [1, 1.1], 70) * 0.1 };</textarea>
 
-<p>the message <strong>xmap</strong> is a variant of map, to crossfade the change using the current fadeTime:<pre class='code prettyprint lang-sc'>~y.set(\freq, 440);
-~y.xmap(\freq, ~c);</pre>
+<p>the message <strong>xmap</strong> is a variant of map, to crossfade the change using the current fadeTime:<textarea class='editor'>~y.set(\freq, 440);
+~y.xmap(\freq, ~c);</textarea>
 
-<p>to remove a setting or a mapping, use unmap / unset.<pre class='code prettyprint lang-sc'>~y.unmap;</pre>
+<p>to remove a setting or a mapping, use unmap / unset.<textarea class='editor'>~y.unmap;</textarea>
 
-<p>also multichannel controls can be mapped to a multichannel proxy using <strong>map</strong> :<pre class='code prettyprint lang-sc'>~c2 = { [MouseX.kr(300, 800, 1), MouseY.kr(300, 800, 1)] };
+<p>also multichannel controls can be mapped to a multichannel proxy using <strong>map</strong> :<textarea class='editor'>~c2 = { [MouseX.kr(300, 800, 1), MouseY.kr(300, 800, 1)] };
 ~y = { arg freq=#[440, 550]; SinOsc.ar(freq) * SinOsc.ar(freq + 3) * 0.05 };
-~y.map(\freq, ~c2);</pre>
+~y.map(\freq, ~c2);</textarea>
 
-<p>the parameter context can be examined:<pre class='code prettyprint lang-sc'>~y.nodeMap;
+<p>the parameter context can be examined:<textarea class='editor'>~y.nodeMap;
 
 // apart from the parameters explicitly set,
 // it contains the bus index and the fadeTime
@@ -205,6 +210,7 @@ p = ProxySpace.push(s.boot);
 // for more information, see NodeMap
 
 
-p.clear(8); // clear the whole proxy space, in 8 secs.</pre>
+p.clear(8); // clear the whole proxy space, in 8 secs.</textarea>
 
-<p>previous: <a href="./../../Tutorials/JITLib/jitlib_basic_concepts_02.html">jitlib_basic_concepts_02</a> next: <a href="./../../Tutorials/JITLib/jitlib_basic_concepts_04.html">jitlib_basic_concepts_04</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/JITLib/jitlib_basic_concepts_03.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/JITLib/jitlib_basic_concepts_03.schelp</a><br>link::Tutorials/JITLib/jitlib_basic_concepts_03::<br></div></div></body></html>
+<p>previous: <a href="./../../Tutorials/JITLib/jitlib_basic_concepts_02.html">jitlib_basic_concepts_02</a> next: <a href="./../../Tutorials/JITLib/jitlib_basic_concepts_04.html">jitlib_basic_concepts_04</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/JITLib/jitlib_basic_concepts_03.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/JITLib/jitlib_basic_concepts_03.schelp</a><br>link::Tutorials/JITLib/jitlib_basic_concepts_03::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

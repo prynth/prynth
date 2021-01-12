@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>MIDI | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>MIDI | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'MIDI';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>MIDI:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Practical%20usage%20overview'>Practical usage overview</a></li>
@@ -21,8 +26,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Sending%20MIDI%20output'>Sending MIDI output</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Summary%20of%20MIDI%20classes'>Summary of MIDI classes</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -37,18 +42,18 @@ var scdoc_sc_version = '3.9.3';
 
 <p>Begin with the <a href="./../Guides/UsingMIDI.html">Using MIDI</a> help file.<h3><a class='anchor' name='Receiving%20MIDI%20input'>Receiving MIDI input</a></h3>
 
-<p><a href="./../Classes/MIDIFunc.html">MIDIFunc</a> and <a href="./../Classes/MIDIdef.html">MIDIdef</a> are the standard, recommended way to receive MIDI note on/off, controller, pitch bend, aftertouch, poly-touch and program change messages.<div class='note'><span class='notelabel'>NOTE:</span> <strong>IMPORTANT:</strong> Before MIDI can be received, SuperCollider needs to be told to connect to the MIDI subsystem and connect to the available devices.<pre class='code prettyprint lang-sc'>MIDIClient.init;
-MIDIIn.connectAll;</pre>
+<p><a href="./../Classes/MIDIFunc.html">MIDIFunc</a> and <a href="./../Classes/MIDIdef.html">MIDIdef</a> are the standard, recommended way to receive MIDI note on/off, controller, pitch bend, aftertouch, poly-touch and program change messages.<div class='note'><span class='notelabel'>NOTE:</span> <strong>IMPORTANT:</strong> Before MIDI can be received, SuperCollider needs to be told to connect to the MIDI subsystem and connect to the available devices.<textarea class='editor'>MIDIClient.init;
+MIDIIn.connectAll;</textarea>
 
 <p>You need to do this once after launching SuperCollider, or recompiling the class library.</div>
 <p>There are some examples in the wild using the MIDIIn class directly to receive MIDI. This is not recommended for normal use. The exceptions are sysex (system exclusive) and sysrt (MIDI clock) messages, which are currently supported only by MIDIIn. See the example below.<h3><a class='anchor' name='Sending%20MIDI%20output'>Sending MIDI output</a></h3>
 
 <p>See the <a href="./../Classes/MIDIOut.html">MIDIOut</a> help file for details.<h2><a class='anchor' name='Summary%20of%20MIDI%20classes'>Summary of MIDI classes</a></h2>
 <dl>
-<dt><a href="./../Classes/MIDIClient.html">MIDIClient</a><dd>This class connects to the operating system's MIDI layer, and obtains the lists of available MIDI sources and destinations. The information about the hardware is stored in <code class='code prettyprint lang-sc'>MIDIClient.sources</code> and <code class='code prettyprint lang-sc'>MIDIClient.destinations</code> as <a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a> objects. MIDIClient must be initialized before MIDI can be received. See the note above.<dt><a href="./../Classes/MIDIFunc.html">MIDIFunc</a><dd>The optimal way to receive the most typical MIDI messages: note on/off, controller, pitch bend, aftertouch, poly-touch and program change.<dt><a href="./../Classes/MIDIdef.html">MIDIdef</a><dd>Related to <a href="./../Classes/MIDIFunc.html">MIDIFunc</a>, this class keeps several MIDIFunc objects in global storage, by name. Especially helpful for live or interactive use.<dt><a href="./../Classes/MIDIOut.html">MIDIOut</a><dd>Supports MIDI output to hardware ports or inter-application MIDI buses.<dt><a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a><dd>Represents a MIDI port published by the operating system. It contains a device name, port name and unique identifier (uid).<dt><a href="./../Classes/MIDIIn.html">MIDIIn</a><dd>The lowest-level MIDI input class. MIDIFunc and MIDIdef use this class so that you don't have to. It is strongly recommended to avoid using this class directly.</dl>
+<dt><a href="./../Classes/MIDIClient.html">MIDIClient</a><dd>This class connects to the operating system's MIDI layer, and obtains the lists of available MIDI sources and destinations. The information about the hardware is stored in <code>MIDIClient.sources</code> and <code>MIDIClient.destinations</code> as <a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a> objects. MIDIClient must be initialized before MIDI can be received. See the note above.<dt><a href="./../Classes/MIDIFunc.html">MIDIFunc</a><dd>The optimal way to receive the most typical MIDI messages: note on/off, controller, pitch bend, aftertouch, poly-touch and program change.<dt><a href="./../Classes/MIDIdef.html">MIDIdef</a><dd>Related to <a href="./../Classes/MIDIFunc.html">MIDIFunc</a>, this class keeps several MIDIFunc objects in global storage, by name. Especially helpful for live or interactive use.<dt><a href="./../Classes/MIDIOut.html">MIDIOut</a><dd>Supports MIDI output to hardware ports or inter-application MIDI buses.<dt><a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a><dd>Represents a MIDI port published by the operating system. It contains a device name, port name and unique identifier (uid).<dt><a href="./../Classes/MIDIIn.html">MIDIIn</a><dd>The lowest-level MIDI input class. MIDIFunc and MIDIdef use this class so that you don't have to. It is strongly recommended to avoid using this class directly.</dl>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 
-<p>MIDI input:<pre class='code prettyprint lang-sc'>(
+<p>MIDI input:<textarea class='editor'>(
 MIDIClient.init;
 MIDIIn.connectAll;
 m = MIDIFunc.noteOn({ |vel, num|
@@ -57,20 +62,21 @@ m = MIDIFunc.noteOn({ |vel, num|
 )
 
 // when finished
-m.free;</pre>
+m.free;</textarea>
 
-<p>MIDI output:<pre class='code prettyprint lang-sc'>(
+<p>MIDI output:<textarea class='editor'>(
 MIDIClient.init;
 m = MIDIOut(0, MIDIClient.destinations.at(0).uid);
 m.noteOn(0, 60, 60);
-)</pre>
+)</textarea>
 
-<p>Receiving system exclusive messages:<pre class='code prettyprint lang-sc'>~sysexFunc = { |uid, data|
+<p>Receiving system exclusive messages:<textarea class='editor'>~sysexFunc = { |uid, data|
     // 'data' holds the sysex packet as 8-bit integers
 };
 MIDIIn.addFuncTo(\sysex, ~sysexFunc);
 
 // when finished
-MIDIIn.removeFuncFrom(\sysex, ~sysexFunc);</pre>
+MIDIIn.removeFuncFrom(\sysex, ~sysexFunc);</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/MIDI.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/MIDI.schelp</a><br>link::Guides/MIDI::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/MIDI.schelp'>/usr/share/SuperCollider/HelpSource/Guides/MIDI.schelp</a><br>link::Guides/MIDI::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

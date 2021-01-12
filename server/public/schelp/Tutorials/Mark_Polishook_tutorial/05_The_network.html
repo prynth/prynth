@@ -1,26 +1,31 @@
-<!doctype html><html lang='en'><head><title>05_The_network | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>05_The_network | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = '05_The_network';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>05_The_network:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Networks%20and%20client/server'>Networks and client/server</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Client/server%20examples'>Client/server examples</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Localhost%20and%20internal%20servers'>Localhost and internal servers</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/Mark_Polishook_tutorial</span>
@@ -36,7 +41,7 @@ var scdoc_sc_version = '3.9.3';
 <p>SuperCollider 3 uses a client/server model to operate across a network. What this means is that users write client programs that ask a server to do something, that is, they request service. Such requests can occur locally on one computer or they can be distributed remotely among two or more computers. Whether the computers are in the same room or separated across the world makes no difference as long as they're connected on a network.
 <p>Client programs in SuperCollider typically specify synthesis definition (how a particular sound will be made) and synthesis scheduling (when a particular sound will be made). In turn, a SuperCollider server (or servers) synthesizes audio according to client instructions.
 <p>To summarize, clients request; servers respond.<h2><a class='anchor' name='Client/server%20examples'>Client/server examples</a></h2>
-<pre class='code prettyprint lang-sc'>////////////////////////////////////////////////////////////////////////////////////////////////////
+<textarea class='editor'>////////////////////////////////////////////////////////////////////////////////////////////////////
 // EX. 1 - execute each line, one at a time
 // define a synthesis process and make a client request to a server
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,8 +61,8 @@ s.sendMsg("s_new", "sine", n = s.nextNodeID, 0, 1);
 s.sendMsg("/n_free", n);
 
 // (optionally) stop the server
-s.quit;</pre>
-<pre class='code prettyprint lang-sc'>////////////////////////////////////////////////////////////////////////////////////////////////////
+s.quit;</textarea>
+<textarea class='editor'>////////////////////////////////////////////////////////////////////////////////////////////////////
 // EX. 2
 // the same as in above, except on 2 computers across a network
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -76,8 +81,8 @@ SynthDef("sine", { Out.ar(0, SinOsc.ar(440, 0, 0.2)) }).send(s);
 s.sendMsg("s_new", "sine", n = s.nextNodeID, 0, 1);
 
 // stop the synth (delete it)
-s.sendMsg("/n_free", n);</pre>
-<pre class='code prettyprint lang-sc'>////////////////////////////////////////////////////////////////////////////////////////////////////
+s.sendMsg("/n_free", n);</textarea>
+<textarea class='editor'>////////////////////////////////////////////////////////////////////////////////////////////////////
 // EX. 3
 // client/server on one computer vs. client server on two computers
 // the previous examples without comments
@@ -99,10 +104,11 @@ vs.
 s = Server("aServer", NetAddr("... an ip number ...", 56789));
 SynthDef("sine", { Out.ar(0, SinOsc.ar(440, 0, 0.2)) }).send(s);
 s.sendMsg("s_new", "sine", n = s.nextNodeID, 0, 1);
-s.sendMsg("/n_free", n);</pre>
+s.sendMsg("/n_free", n);</textarea>
 <h2><a class='anchor' name='Localhost%20and%20internal%20servers'>Localhost and internal servers</a></h2>
 
 <p>The previous examples define server objects. But, for the most part, this isn't necessary as SuperCollider defines two such objects, the localhost and internal servers, at startup. They're represented by windows at the bottom of the screen. Each of the windows has a boot button to start its respective server.
-<p>See the <a href="./../../Guides/ClientVsServer.html">Client vs Server</a>, <a href="./../../Classes/Server.html">Server</a>, and <a href="./../../Classes/ServerOptions.html">ServerOptions</a> and <a href="./../../Tutorials/Tutorial.html">SuperCollider 3 Server Tutorial</a> documents in the SuperCollider help system for further information.
+<p>See the <a href="./../../Guides/ClientVsServer.html">Client vs Server</a>, <a href="./../../Classes/Server.html">Server</a>, and <a href="./../../Classes/ServerOptions.html">ServerOptions</a> and <a href="./../../Tutorials/Server_Tutorial.html">Server Tutorial</a> documents in the SuperCollider help system for further information.
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>Go to <a href="./../../Tutorials/Mark_Polishook_tutorial/06_Prerequisites.html">06_Prerequisites</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/05_The_network.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/05_The_network.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/05_The_network::<br></div></div></body></html>
+<p>Go to <a href="./../../Tutorials/Mark_Polishook_tutorial/06_Prerequisites.html">06_Prerequisites</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/05_The_network.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/05_The_network.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/05_The_network::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

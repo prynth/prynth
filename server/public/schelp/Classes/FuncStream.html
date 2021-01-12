@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>FuncStream | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>FuncStream | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'FuncStream';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>FuncStream:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -28,32 +33,32 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-resetFunc'>resetFunc</a> </li>
 <li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
- | <span id='categories'><a href='./../Browse.html#Streams'>Streams</a></span>
+ | <span id='categories'><a href='./../Browse.html#Streams-Patterns-Events'>Streams-Patterns-Events</a></span>
 </div><h1>FuncStream<span id='superclasses'> : <a href="../Classes/Stream.html">Stream</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
 </h1>
 <div id='summary'>Stream of a function</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Stream.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Stream.sc'>Stream.sc</a></div><div id='related'>See also: <a href="./../Classes/Pfunc.html">Pfunc</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Streams/Stream.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Streams/Stream.sc'>Stream.sc</a></div><div id='related'>See also: <a href="./../Classes/Pfunc.html">Pfunc</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>FuncStream is one of the most basic ways to describe a stream: it has a function that is called for each next stream value.<pre class='code prettyprint lang-sc'>// make a stream that returns a random number
+<p>FuncStream is one of the most basic ways to describe a stream: it has a function that is called for each next stream value.<textarea class='editor'>// make a stream that returns a random number
 a = FuncStream({ 1.0.rand });
-a.next;</pre>
+a.next;</textarea>
 
-<p>It uses <a href="./../Classes/Function.html#-inEnvir">Function: -inEnvir</a> to statically bind the function call to the environment in which the <code class='code prettyprint lang-sc'>FuncStream</code> was created.<pre class='code prettyprint lang-sc'>a = Environment.use { ~x = 100; FuncStream({ ~x + 8 }) };
+<p>It uses <a href="./../Classes/Function.html#-inEnvir">Function: -inEnvir</a> to statically bind the function call to the environment in which the <code>FuncStream</code> was created.<textarea class='editor'>a = Environment.use { ~x = 100; FuncStream({ ~x + 8 }) };
 ~x = 0;
-a.next; // returns 108, not 8.</pre>
+a.next; // returns 108, not 8.</textarea>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>FuncStream.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>nextFunc</span>, <span class='argstr'>resetFunc</span>)</h3>
 <div class='method'>
-<p>Return a new stream object.<pre class='code prettyprint lang-sc'>(
+<p>Return a new stream object.<textarea class='editor'>(
 var func, reset, count = 0;
 func = { count = count + 2.rand };
 reset = { count = 0 };
@@ -63,7 +68,7 @@ a = FuncStream(func, reset);
 a.next;
 a.nextN(80).plot;
 a.reset;
-a.next; // starts again.</pre>
+a.next; // starts again.</textarea>
 <h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>nextFunc<td class='argumentdesc'>
@@ -74,7 +79,7 @@ a.next; // starts again.</pre>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>inval<td class='argumentdesc'>
-<p>Return the next value by calling the function. <code class='code prettyprint lang-sc'>inval</code> is passed as an argument to the function.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-reset' href='./../Overviews/Methods.html#reset'>reset</a></h3>
+<p>Return the next value by calling the function. <code>inval</code> is passed as an argument to the function.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-reset' href='./../Overviews/Methods.html#reset'>reset</a></h3>
 <div class='method'>
 <p>Call the reset function, if defined.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-envir' href='./../Overviews/Methods.html#envir'>envir</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-envir' href='./../Overviews/Methods.html#envir'>envir</a> = value</h3>
@@ -87,7 +92,7 @@ a.next; // starts again.</pre>
 <div class='method'>
 <p>Get or set the function which is called on <a href="#-reset">-reset</a>.</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 // create 16 different series
 a = {
     var diff = [2, 4, 5].choose * [1, -1].choose;
@@ -117,5 +122,6 @@ fork {
         0.16.wait;
     }
 }
-)</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/FuncStream.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/FuncStream.schelp</a><br>link::Classes/FuncStream::<br></div></div></body></html>
+)</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/FuncStream.schelp'>/usr/share/SuperCollider/HelpSource/Classes/FuncStream.schelp</a><br>link::Classes/FuncStream::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

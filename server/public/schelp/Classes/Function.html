@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Function | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Function | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Function';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Function:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -59,6 +64,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-scope'>scope</a> </li>
 <li class='toc3'><a href='#-plot'>plot</a> </li>
 <li class='toc3'><a href='#-asBuffer'>asBuffer</a> </li>
+<li class='toc3'><a href='#-loadToFloatArray'>loadToFloatArray</a> </li>
+<li class='toc3'><a href='#-getToFloatArray'>getToFloatArray</a> </li>
 </ul><li class='toc2'><a href='#Conversion'>Conversion</a></li>
 <ul class='toc'><li class='toc3'><a href='#-asSynthDef'>asSynthDef</a> </li>
 <li class='toc3'><a href='#-asDefName'>asDefName</a> </li>
@@ -70,11 +77,12 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc3'><a href='#-archiveAsCompileString'>archiveAsCompileString</a> </li>
 <li class='toc3'><a href='#-archiveAsObject'>archiveAsObject</a> </li>
 <li class='toc3'><a href='#-argNames'>argNames</a> </li>
+<li class='toc3'><a href='#-asMenuAction'>asMenuAction</a> </li>
 <li class='toc3'><a href='#-awake'>awake</a> </li>
+<li class='toc3'><a href='#-benchmark'>benchmark</a> </li>
 <li class='toc3'><a href='#-checkCanArchive'>checkCanArchive</a> </li>
 <li class='toc3'><a href='#-cmdPeriod'>cmdPeriod</a> </li>
 <li class='toc3'><a href='#-defaultArgs'>defaultArgs</a> </li>
-<li class='toc3'><a href='#-doOnApplicationStart'>doOnApplicationStart</a> </li>
 <li class='toc3'><a href='#-doOnCmdPeriod'>doOnCmdPeriod</a> </li>
 <li class='toc3'><a href='#-doOnError'>doOnError</a> </li>
 <li class='toc3'><a href='#-doOnServerBoot'>doOnServerBoot</a> </li>
@@ -86,7 +94,6 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-get'>get</a> </li>
 <li class='toc3'><a href='#-handleError'>handleError</a> </li>
 <li class='toc3'><a href='#-isFunction'>isFunction</a> </li>
-<li class='toc3'><a href='#-loadToFloatArray'>loadToFloatArray</a> </li>
 <li class='toc3'><a href='#-makeFlopFunc'>makeFlopFunc</a> </li>
 <li class='toc3'><a href='#-numArgs'>numArgs</a> </li>
 <li class='toc3'><a href='#-numVars'>numVars</a> </li>
@@ -102,8 +109,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-varArgs'>varArgs</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
 <ul class='toc'><li class='toc2'><a href='#Exception%20Handling'>Exception Handling</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -113,29 +120,29 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Implements a function</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Function.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Function.sc'>Function.sc</a></div><div id='related'>See also: <a href="./../Classes/FunctionDef.html">FunctionDef</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Core/Function.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Core/Function.sc'>Function.sc</a></div><div id='related'>See also: <a href="./../Classes/FunctionDef.html">FunctionDef</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>A Function is a reference to a FunctionDef and its defining context Frame. When a FunctionDef is encountered in your code it is pushed on the stack as a Function. A Function can be evaluated by using the 'value' method. See the Functions help file for a basic introduction.
-<p>Because it inherits from AbstractFunction, Functions respond to math operations by creating a new Function.<pre class='code prettyprint lang-sc'>// example
+<p>Because it inherits from AbstractFunction, Functions respond to math operations by creating a new Function.<textarea class='editor'>// example
 (
 var a, b, c;
 a = { [100, 200, 300].choose };    // a Function
 b = { 10.rand + 1 };    // another Function
 c = a + b;     // c is a Function.
 c.value.postln;    // evaluate c and print the result
-)</pre>
+)</textarea>
 
-<p>See AbstractFunction for function composition examples.
-<p>Because Functions are such an important concept, here some examples from related programming languages with functions as first class objects:<pre class='code prettyprint lang-sc'>// returning the first argument itself:
+<p>See <a href="./../Classes/AbstractFunction.html#Function%20Composition">AbstractFunction: Function Composition</a> for function composition examples.
+<p>Because Functions are such an important concept, here some examples from related programming languages with functions as first class objects:<textarea class='editor'>// returning the first argument itself:
 { |x| x }.value(1) // SuperCollider
 [:x | x ] value: 1 // Smalltalk
-((lambda (x) x) 1) // Lisp</pre>
+((lambda (x) x) 1) // Lisp</textarea>
 <h3><a class='anchor' name='Related%20Keywords'>Related Keywords</a></h3>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='thisFunction' href='./../Overviews/Methods.html#thisFunction'>thisFunction</a></h3>
 <div class='method'>
-<p>The global pseudo-variable <code class='code prettyprint lang-sc'>thisFunction</code> always evaluates to the current enclosing Function.<div class='note'><span class='notelabel'>NOTE:</span> Be aware of <a href="./../Reference/Control-Structures.html#Inline%20optimization">inline optimizations</a> which will be reflected in the value of <code class='code prettyprint lang-sc'>thisFunction</code>.</div>
+<p>The global pseudo-variable <code>thisFunction</code> always evaluates to the current enclosing Function.<div class='note'><span class='notelabel'>NOTE:</span> Be aware of <a href="./../Reference/Control-Structures.html#Inline%20optimization">inline optimizations</a> which will be reflected in the value of <code>thisFunction</code>.</div>
 <p>See also: <a href="./../Classes/FunctionDef.html#.thisFunctionDef">thisFunctionDef</a></div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
@@ -147,63 +154,63 @@ c.value.postln;    // evaluate c and print the result
 <p>returns true if the function is closed, i.e. has no external references and can thus be converted to a compile string safely.</div><h3><a class='anchor' name='Evaluation'>Evaluation</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-value' href='./../Overviews/Methods.html#value'>value</a>( <span class='argstr'>... args</span>)</h3>
 <div class='method'>
-<p>Evaluates the FunctionDef referred to by the Function. The Function is passed the args given.<pre class='code prettyprint lang-sc'>{ |a, b| (a * b).postln }.value(3, 10);
-{ arg a, b; (a * b).postln }.value(3, 10); // different way of expressing the same</pre>
+<p>Evaluates the FunctionDef referred to by the Function. The Function is passed the args given.<textarea class='editor'>{ |a, b| (a * b).postln }.value(3, 10);
+{ arg a, b; (a * b).postln }.value(3, 10); // different way of expressing the same</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-valueArray' href='./../Overviews/Methods.html#valueArray'>valueArray</a>( <span class='argstr'>... args</span>)</h3>
 <div class='method'>
-<p>Evaluates the FunctionDef referred to by the Function. If the last argument is an Array or List, then it is unpacked and appended to the other arguments (if any) to the Function. If the last argument is not an Array or List then this is the same as the 'value' method.<pre class='code prettyprint lang-sc'>{ |a, b, c| ((a * b) + c).postln }.valueArray([3, 10, 7]);
+<p>Evaluates the FunctionDef referred to by the Function. If the last argument is an Array or List, then it is unpacked and appended to the other arguments (if any) to the Function. If the last argument is not an Array or List then this is the same as the 'value' method.<textarea class='editor'>{ |a, b, c| ((a * b) + c).postln }.valueArray([3, 10, 7]);
 
 { |a, b, c, d| [a, b, c, d].postln }.valueArray([1, 2, 3]);
 
 { |a, b, c, d| [a, b, c, d].postln }.valueArray(9, [1, 2, 3]);
 
-{ |a, b, c, d| [a, b, c, d].postln }.valueArray(9, 10, [1, 2, 3]);</pre>
+{ |a, b, c, d| [a, b, c, d].postln }.valueArray(9, 10, [1, 2, 3]);</textarea>
 
-<p>A common syntactic shortcut:<pre class='code prettyprint lang-sc'>{ |a, b, c| ((a * b) + c).postln }.value(*[3, 10, 7]);</pre>
+<p>A common syntactic shortcut:<textarea class='editor'>{ |a, b, c| ((a * b) + c).postln }.value(*[3, 10, 7]);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-valueEnvir' href='./../Overviews/Methods.html#valueEnvir'>valueEnvir</a>( <span class='argstr'>... args</span>)</h3>
 <div class='method'>
-<p>As value above. Unsupplied argument names are looked up in the current Environment.<pre class='code prettyprint lang-sc'>(
+<p>As value above. Unsupplied argument names are looked up in the current Environment.<textarea class='editor'>(
 Environment.use({
 ~a = 3;
 ~b = 10;
 { |a, b| (a * b).postln }.valueEnvir;
 });
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-valueArrayEnvir' href='./../Overviews/Methods.html#valueArrayEnvir'>valueArrayEnvir</a>( <span class='argstr'>... args</span>)</h3>
 <div class='method'>
 <p>Evaluates the FunctionDef referred to by the Function. If the last argument is an Array or List, then it is unpacked and appended to the other arguments (if any) to the Function. If the last argument is not an Array or List then this is the same as the 'value' method. Unsupplied argument names are looked up in the current Environment.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-valueWithEnvir' href='./../Overviews/Methods.html#valueWithEnvir'>valueWithEnvir</a>(<span class='argstr'>envir</span>)</h3>
 <div class='method'>
-<p>Evaluate the function, using arguments from the supplied environment This is slightly faster than valueEnvir and does not require replacing the currentEnvironment<pre class='code prettyprint lang-sc'>(
+<p>Evaluate the function, using arguments from the supplied environment This is slightly faster than valueEnvir and does not require replacing the currentEnvironment<textarea class='editor'>(
 e = Environment.make({ ~a = 3; ~b = 10 });
 { |a, b| (a * b) }.valueWithEnvir(e);
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-functionPerformList' href='./../Overviews/Methods.html#functionPerformList'>functionPerformList</a>(<span class='argstr'>selector</span>, <span class='argstr'>arglist</span>)</h3>
 <div class='method'>
 <p>For Function, this behaves the same as valueArray(arglist). It is used where Functions and other objects should behave differently to value, such as in the object prototyping implementation of Environment.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performWithEnvir' href='./../Overviews/Methods.html#performWithEnvir'>performWithEnvir</a>(<span class='argstr'>selector</span>, <span class='argstr'>envir</span>)</h3>
 <div class='method'>
-<p><pre class='code prettyprint lang-sc'>a = { |a, b, c| postf("% plus % plus % is %\n", a, b, c, a + b + c); "" };
-a.performWithEnvir(\value, (a: 1, c: 3, d: 4, b: 2));</pre>
+<p><textarea class='editor'>a = { |a, b, c| postf("% plus % plus % is %\n", a, b, c, a + b + c); "" };
+a.performWithEnvir(\value, (a: 1, c: 3, d: 4, b: 2));</textarea>
 <h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>selector<td class='argumentdesc'>
 <p>A Symbol representing a method selector.<tr><td class='argumentname'>envir<td class='argumentdesc'>
 <p>The remaining arguments derived from the environment and passed as arguments to the method named by the selector.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performKeyValuePairs' href='./../Overviews/Methods.html#performKeyValuePairs'>performKeyValuePairs</a>(<span class='argstr'>selector</span>, <span class='argstr'>pairs</span>)</h3>
 <div class='method'>
-<p><pre class='code prettyprint lang-sc'>a = { |a, b, c| postf("% plus % plus % is %\n", a, b, c, a + b + c); "" };
-a.performKeyValuePairs(\value, [\a, 1, \b, 2, \c, 3, \d, 4]);</pre>
+<p><textarea class='editor'>a = { |a, b, c| postf("% plus % plus % is %\n", a, b, c, a + b + c); "" };
+a.performKeyValuePairs(\value, [\a, 1, \b, 2, \c, 3, \d, 4]);</textarea>
 <h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>selector<td class='argumentdesc'>
 <p>A Symbol representing a method selector.<tr><td class='argumentname'>pairs<td class='argumentdesc'>
 <p>Array or List with key-value pairs.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-loop' href='./../Overviews/Methods.html#loop'>loop</a></h3>
 <div class='method'>
-<p>Repeat this function. Useful with Task and Clocks.<pre class='code prettyprint lang-sc'>t = Task({ { "I'm loopy".postln; 1.wait;}.loop });
+<p>Repeat this function. Useful with Task and Clocks.<textarea class='editor'>t = Task({ { "I'm loopy".postln; 1.wait;}.loop });
 t.start;
-t.stop;</pre>
+t.stop;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-defer' href='./../Overviews/Methods.html#defer'>defer</a>(<span class='argstr'>delta</span>)</h3>
 <div class='method'>
-<p>Delay the evaluation of this Function by <code class='code prettyprint lang-sc'>delta</code> in seconds on AppClock.
-<p>This is equivalent to <code class='code prettyprint lang-sc'>AppClock.sched(0, function)</code> unless <code class='code prettyprint lang-sc'>delta</code> is <code class='code prettyprint lang-sc'>nil</code>. In that case the function is only scheduled if current code is not running on AppClock, otherwise the function is evaluated immediately.<pre class='code prettyprint lang-sc'>{ "2 seconds have passed.".postln; }.defer(2);
+<p>Delay the evaluation of this Function by <code>delta</code> in seconds on AppClock.
+<p>This is equivalent to <code>AppClock.sched(0, function)</code> unless <code>delta</code> is <code>nil</code>. In that case the function is only scheduled if current code is not running on AppClock, otherwise the function is evaluated immediately.<textarea class='editor'>{ "2 seconds have passed.".postln; }.defer(2);
 
 (
 { "chicken".postln }.defer(0); // schedules on the AppClock
@@ -215,68 +222,68 @@ fork { // schedules on a TempoClock
     { "chicken".postln }.defer // schedules on the AppClock
 };
 { "egg".postln }.defer // evaluates immediately
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-dup' href='./../Overviews/Methods.html#dup'>dup</a>(<span class='argstr'>n: 2</span>)</h3>
 <div class='method'>
-<p>Return an Array consisting of the results of n evaluations of this Function.<pre class='code prettyprint lang-sc'>x = { 4.rand; }.dup(4);
-x.postln;</pre>
+<p>Return an Array consisting of the results of n evaluations of this Function.<textarea class='editor'>x = { 4.rand; }.dup(4);
+x.postln;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-!' href='./../Overviews/Methods.html#!'>!</a>(<span class='argstr'>n</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
 <div class='method'>
-<p>equivalent to dup(n)<pre class='code prettyprint lang-sc'>x = { 4.rand } ! 4;
-x.postln;</pre>
+<p>equivalent to dup(n)<textarea class='editor'>x = { 4.rand } ! 4;
+x.postln;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sum' href='./../Overviews/Methods.html#sum'>sum</a>(<span class='argstr'>n: 2</span>)</h3>
 <div class='method'>
-<p>return the sum of n values produced.<pre class='code prettyprint lang-sc'>{ 4.rand }.sum(8);</pre>
+<p>return the sum of n values produced.<textarea class='editor'>{ 4.rand }.sum(8);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-choose' href='./../Overviews/Methods.html#choose'>choose</a></h3>
 <div class='method'>
-<p>evaluates the function. This makes it polymorphic to SequenceableCollection, Bag and Set.<pre class='code prettyprint lang-sc'>[{ 100.rand }, [20, 30, 40]].collect(_.choose);</pre>
+<p>evaluates the function. This makes it polymorphic to SequenceableCollection, Bag and Set.<textarea class='editor'>[{ 100.rand }, [20, 30, 40]].collect(_.choose);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bench' href='./../Overviews/Methods.html#bench'>bench</a>(<span class='argstr'>print: true</span>)</h3>
 <div class='method'>
-<p>Returns the amount of time this function takes to evaluate. print is a boolean indicating whether the result is posted. The default is true.<pre class='code prettyprint lang-sc'>{ 1000000.do({ 1.0.rand }); }.bench;</pre>
+<p>Returns the amount of time this function takes to evaluate. print is a boolean indicating whether the result is posted. The default is true.<textarea class='editor'>{ 1000000.do({ 1.0.rand }); }.bench;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-fork' href='./../Overviews/Methods.html#fork'>fork</a>(<span class='argstr'>clock</span>, <span class='argstr'>quant</span>, <span class='argstr'>stackSize</span>)</h3>
 <div class='method'>
-<p>Returns a Routine using the receiver as it's function, and plays it in a TempoClock.<pre class='code prettyprint lang-sc'>{ 4.do({ "Threading...".postln; 1.wait;}) }.fork;</pre>
+<p>Returns a Routine using the receiver as it's function, and plays it in a TempoClock.<textarea class='editor'>{ 4.do({ "Threading...".postln; 1.wait;}) }.fork;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-forkIfNeeded' href='./../Overviews/Methods.html#forkIfNeeded'>forkIfNeeded</a>(<span class='argstr'>clock</span>, <span class='argstr'>quant</span>, <span class='argstr'>stackSize</span>)</h3>
 <div class='method'>
-<p>If needed, creates a new Routine to evaluate the function in, if the message is called within a routine already, it simply evaluates it.<pre class='code prettyprint lang-sc'>f = { 4.do({ "Threading...".postln; 1.wait;}) };
+<p>If needed, creates a new Routine to evaluate the function in, if the message is called within a routine already, it simply evaluates it.<textarea class='editor'>f = { 4.do({ "Threading...".postln; 1.wait;}) };
 f.forkIfNeeded;
-{ "we are now in a routine".postln; 1.wait; f.forkIfNeeded }.fork;</pre>
+{ "we are now in a routine".postln; 1.wait; f.forkIfNeeded }.fork;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-block' href='./../Overviews/Methods.html#block'>block</a></h3>
 <div class='method'>
-<p>Break from a loop. Calls the receiver with an argument which is a function that returns from the method block. To exit the loop, call .value on the function passed in. You can pass a value to this function and that value will be returned from the block method.<pre class='code prettyprint lang-sc'>block {|break|
+<p>Break from a loop. Calls the receiver with an argument which is a function that returns from the method block. To exit the loop, call .value on the function passed in. You can pass a value to this function and that value will be returned from the block method.<textarea class='editor'>block {|break|
     100.do {|i|
         i.postln;
         if (i == 7) { break.value(999) }
     };
-}</pre>
+}</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-thunk' href='./../Overviews/Methods.html#thunk'>thunk</a></h3>
 <div class='method'>
-<p>Return a Thunk, which is an unevaluated value that can be used in calculations<pre class='code prettyprint lang-sc'>x = thunk { 4.rand };
+<p>Return a Thunk, which is an unevaluated value that can be used in calculations<textarea class='editor'>x = thunk { 4.rand };
 x.value;
-x.value;</pre>
+x.value;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-flop' href='./../Overviews/Methods.html#flop'>flop</a></h3>
 <div class='method'>
-<p>Return a function that, when evaluated with nested arguments, does multichannel expansion by evaluating the receiver function for each channel. A flopped function responds like the "map" function in languages like Lisp.<pre class='code prettyprint lang-sc'>f = { |a, b| if(a &gt; 0) { a + b } { -inf } }.flop;
+<p>Return a function that, when evaluated with nested arguments, does multichannel expansion by evaluating the receiver function for each channel. A flopped function responds like the "map" function in languages like Lisp.<textarea class='editor'>f = { |a, b| if(a &gt; 0) { a + b } { -inf } }.flop;
 f.value([-1, 2, 1, -3.0], [10, 1000]);
-f.value(2, 3);</pre>
+f.value(2, 3);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-envirFlop' href='./../Overviews/Methods.html#envirFlop'>envirFlop</a></h3>
 <div class='method'>
-<p>like flop, but implements an environment argument passing (valueEnvir). Less efficient in generation than flop, but not a big difference in evaluation.<pre class='code prettyprint lang-sc'>f = { |a| if(a &gt; 0) { a + 1 } { -inf } }.envirFlop;
+<p>like flop, but implements an environment argument passing (valueEnvir). Less efficient in generation than flop, but not a big difference in evaluation.<textarea class='editor'>f = { |a| if(a &gt; 0) { a + 1 } { -inf } }.envirFlop;
 e = (a: [20, 40]);
-e.use { f.value }</pre>
+e.use { f.value }</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-inEnvir' href='./../Overviews/Methods.html#inEnvir'>inEnvir</a>(<span class='argstr'>envir</span>)</h3>
 <div class='method'>
-<p>returns an "environment-safe" function. See Environment for more details.<pre class='code prettyprint lang-sc'>// prints nil because ~a is read from topEnvironment, not e
+<p>returns an "environment-safe" function. See Environment for more details.<textarea class='editor'>// prints nil because ~a is read from topEnvironment, not e
 e = (a: "got it", f: { { ~a.postln }.defer(0.5) });
 e.use { e.f };
 
 // prints "got it" because { ~a.postln } is now bound to the e environment
 e = (a: "got it", f: { { ~a.postln }.inEnvir.defer(0.5) });
-e.use { e.f };</pre>
+e.use { e.f };</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-case' href='./../Overviews/Methods.html#case'>case</a>( <span class='argstr'>... cases</span>)</h3>
 <div class='method'>
-<p>Function implements a case method which allows for conditional evaluation with multiple cases. Since the receiver represents the first case this can be simply written as pairs of test functions and corresponding functions to be evaluated if true. Unlike Object-switch, this is inlined and is therefore just as efficient as nested if statements.<pre class='code prettyprint lang-sc'>(
+<p>Function implements a case method which allows for conditional evaluation with multiple cases. Since the receiver represents the first case this can be simply written as pairs of test functions and corresponding functions to be evaluated if true. Unlike Object-switch, this is inlined and is therefore just as efficient as nested if statements.<textarea class='editor'>(
 var i, x, z;
 z = [0, 1, 1.1, 1.3, 1.5, 2];
 i = z.choose;
@@ -288,14 +295,14 @@ x = case
     { i == 2 }   { \wrong }
     { i == 0 }   { \true };
 x.postln;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-matchItem' href='./../Overviews/Methods.html#matchItem'>matchItem</a>(<span class='argstr'>item</span>)</h3>
 <div class='method'>
 <p>Interface shared with other classes that implements pattern matching. See also: matchItem. Function.matchItem evaluates the function with the item as argument, expecting a Boolean as reply.
-<p>See also <a href="./../Reference/matchItem.html">matchItem</a>.<pre class='code prettyprint lang-sc'>{ |x| x &gt; 5 }.matchItem(6); // true</pre>
+<p>See also <a href="./../Reference/matchItem.html">matchItem</a>.<textarea class='editor'>{ |x| x &gt; 5 }.matchItem(6); // true</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performDegreeToKey' href='./../Overviews/Methods.html#performDegreeToKey'>performDegreeToKey</a>(<span class='argstr'>scaleDegree</span>, <span class='argstr'>stepsPerOctave: 12</span>, <span class='argstr'>accidental: 0</span>)</h3>
 <div class='method'>
-<p>use a function as a conversion from scale degree to note number. See also SequenceableCollection and Scale<pre class='code prettyprint lang-sc'>// a strange mapping
+<p>use a function as a conversion from scale degree to note number. See also SequenceableCollection and Scale<textarea class='editor'>// a strange mapping
 (
 var f = {|degree, stepsPerOctave, acc|
     (1.8 ** (degree % stepsPerOctave) + acc).postln
@@ -304,7 +311,7 @@ Pbind(
     \scale, f,
     \degree, Pseq([0, 1, 2b, 3s, 4s, 6, 14, [0, 2, 4], [1, 3, 6]], inf)
 ).play
-)</pre>
+)</textarea>
 </div><h3><a class='anchor' name='Exception%20Handling'>Exception Handling</a></h3>
 
 <p>For the following two methods a return ^ inside of the receiver itself cannot be caught. Returns in methods called by the receiver are OK.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-try' href='./../Overviews/Methods.html#try'>try</a>(<span class='argstr'>handler</span>)</h3>
@@ -313,28 +320,31 @@ Pbind(
 <div class='method'>
 <p>Executes the receiver. The cleanup function handler is executed with an error as an argument, or nil if there was no error. The error continues to be in effect.</div><h3><a class='anchor' name='Audio'>Audio</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-play' href='./../Overviews/Methods.html#play'>play</a>(<span class='argstr'>target</span>, <span class='argstr'>outbus: 0</span>, <span class='argstr'>fadeTime: 0.02</span>, <span class='argstr'>addAction: 'addToHead'</span>, <span class='argstr'>args</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asDefName.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asDefName.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/asDefName.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/asDefName.sc</a></div>
 <div class='method'>
-<p>This is probably the simplest way to get audio in SC3. It wraps the Function in a SynthDef (adding an Out ugen if needed), creates and starts a new Synth with it, and returns the Synth object. A Linen is also added to avoid clicks, which is configured to allow the resulting Synth to have its \gate argument set, or to respond to a release message. Args in the function become args in the resulting def.<pre class='code prettyprint lang-sc'>x = { |freq = 440| SinOsc.ar(freq, 0, 0.3) }.play; // this returns a Synth object;
-x.set(\freq, 880); // note you can set the freq argument
-x.defName; // the name of the resulting SynthDef (generated automatically in a cycle of 512)
-x.release(4); // fadeout over 4 seconds</pre>
-
-<p>Many of the examples make use of the Function.play syntax. Note that reusing such code in a SynthDef requires the addition of an Out ugen.<pre class='code prettyprint lang-sc'>// the following two lines produce equivalent results
-{ SinOsc.ar(440, 0, 0.3) }.play(fadeTime: 0.0);
-SynthDef(\help_FuncPlay, { Out.ar(0, SinOsc.ar(440, 0, 0.3))}).play;</pre>
-
-<p>Function.play is often more convenient than SynthDef.play, particularly for short examples and quick testing. The latter does have some additional options, such as lagtimes for controls, etc. Where reuse and maximum flexibility are of greater importance, SynthDef and its various methods are usually the better choice.<h4>Arguments:</h4>
+<p>Play a Synth from UGens returned by the function. The function arguments become controls that can be set afterwards.
+<p>This works as follows: play wraps the UGens in a SynthDef and sends it to the target. When this asynchronous command is completed, it creates one synth from this definition.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>target<td class='argumentdesc'>
-<p>a Node, Server, or Nil. A Server will be converted to the default group of that server. Nil will be converted to the default group of the default Server.<tr><td class='argumentname'>outbus<td class='argumentdesc'>
-<p>the output bus to play the audio out on. This is equivalent to Out.ar(outbus, theoutput). The default is 0.<tr><td class='argumentname'>fadeTime<td class='argumentdesc'>
-<p>a fadein time. The default is 0.02 seconds, which is just enough to avoid a click. This will also be the fadeout time for a release if you do not specify.<tr><td class='argumentname'>addAction<td class='argumentdesc'>
-<p>see Synth for a list of valid addActions. The default is \addToHead.<tr><td class='argumentname'>args<td class='argumentdesc'>
-<p>arguments</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-scope' href='./../Overviews/Methods.html#scope'>scope</a>(<span class='argstr'>numChannels</span>, <span class='argstr'>outbus: 0</span>, <span class='argstr'>fadeTime: 0.05</span>, <span class='argstr'>bufsize: 4096</span>, <span class='argstr'>zoom</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc</a></div>
+<p>A Node, Server, or Nil. A Server will be converted to the default group of that server. Nil will be converted to the default group of the default Server.<tr><td class='argumentname'>outbus<td class='argumentdesc'>
+<p>A bus number that determines the output channel. This is equivalent to <code>Out.ar(outbus, signal)</code>. The default is 0.<tr><td class='argumentname'>fadeTime<td class='argumentdesc'>
+<p>Crossfade time for attack and release of the synth. The default is 0.02 seconds, which is just enough to avoid a click.<tr><td class='argumentname'>addAction<td class='argumentdesc'>
+<p>The add action for the synth. For a list of valid addActions see <a href="./../Classes/Synth.html">Synth</a><tr><td class='argumentname'>args<td class='argumentdesc'>
+<p>An array of key value pairs of control names and control values which are used when starting the synth.<div class='note'><span class='notelabel'>NOTE:</span> Some UGens are added in this process.<ul>
+<li>an <a href="./../Classes/Out.html">Out</a> UGen for playing the audio to the first audio busses. If the function returns an Out UGen, this is omitted.<li>an envelope with a <code>\gate</code> control for releasing and crossfading. If the function provides its own releasable envelope, this is omitted.</ul>
+</div><textarea class='editor'>x = { |freq = 440| SinOsc.ar(freq, 0, 0.3) }.play; // this returns a Synth object;
+x.set(\freq, 880); // note you can set the freq argument
+x.defName; // the name of the resulting SynthDef
+x.release(4); // fadeout over 4 seconds</textarea>
+
+<p>Many of the examples make use of the Function.play syntax. Note that reusing such code in a SynthDef requires the addition of an Out ugen.<textarea class='editor'>// the following two lines produce equivalent results
+{ SinOsc.ar(440, 0, 0.3) }.play(fadeTime: 0.0);
+SynthDef(\help_FuncPlay, { Out.ar(0, SinOsc.ar(440, 0, 0.3))}).play;</textarea>
+
+<p>Function.play is often more convenient than SynthDef.play, particularly for short examples and quick testing. The latter does have some additional options, such as lagtimes for controls, etc. Where reuse and maximum flexibility are of greater importance, SynthDef and its various methods are usually the better choice.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-scope' href='./../Overviews/Methods.html#scope'>scope</a>(<span class='argstr'>numChannels</span>, <span class='argstr'>outbus: 0</span>, <span class='argstr'>fadeTime: 0.05</span>, <span class='argstr'>bufsize: 4096</span>, <span class='argstr'>zoom</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc</a></div>
 <div class='method'>
-<p>As play above, and calls Server-scope to open a scope window in which to view the output.<pre class='code prettyprint lang-sc'>{ FSinOsc.ar(440, 0, 0.3) }.scope(1)</pre>
+<p>As play above, and calls Server-scope to open a scope window in which to view the output.<textarea class='editor'>{ FSinOsc.ar(440, 0, 0.3) }.scope(1)</textarea>
 <h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>numChannels<td class='argumentdesc'>
@@ -342,37 +352,74 @@ SynthDef(\help_FuncPlay, { Out.ar(0, SinOsc.ar(440, 0, 0.3))}).play;</pre>
 <p>The output bus to play the audio out on. This is equivalent to Out.ar(outbus, theoutput). The default is 0.<tr><td class='argumentname'>fadeTime<td class='argumentdesc'>
 <p>A fadein time. The default is 0.02 seconds, which is just enough to avoid a click.<tr><td class='argumentname'>bufsize<td class='argumentdesc'>
 <p>The size of the buffer for the ScopeView. The default is 4096.<tr><td class='argumentname'>zoom<td class='argumentdesc'>
-<p>A zoom value for the scope's X axis. Larger values show more. The default is 1.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-plot' href='./../Overviews/Methods.html#plot'>plot</a>(<span class='argstr'>duration: 0.01</span>, <span class='argstr'>server</span>, <span class='argstr'>bounds</span>, <span class='argstr'>minval</span>, <span class='argstr'>maxval</span>, <span class='argstr'>separately: false</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc</a></div>
+<p>A zoom value for the scope's X axis. Larger values show more. The default is 1.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-plot' href='./../Overviews/Methods.html#plot'>plot</a>(<span class='argstr'>duration: 0.01</span>, <span class='argstr'>target</span>, <span class='argstr'>bounds</span>, <span class='argstr'>minval</span>, <span class='argstr'>maxval</span>, <span class='argstr'>separately: false</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc</a></div>
 <div class='method'>
-<p>Calculates duration in seconds worth of the output of this function asynchronously, and plots it in a GUI window. Unlike play and scope it will not work with explicit Out Ugens, so your function should return a UGen or an Array of them. The plot will be calculated in realtime.<pre class='code prettyprint lang-sc'>{ SinOsc.ar(440) }.plot(0.01, bounds: Window.screenBounds);
+<p><div class='note'><span class='notelabel'>NOTE:</span> See <a href="./../Reference/plot.html">plot</a> for a general reference on plotting</div>
+<p>Calculates duration in seconds worth of the output of this function asynchronously, and plots it in a GUI window. Unlike play and scope it will not work with explicit Out Ugens, so your function should return a UGen or an Array of them. The plot will be calculated in realtime.<textarea class='editor'>{ SinOsc.ar(440) }.plot(0.01, bounds: Window.screenBounds);
 
-{ {|i| SinOsc.ar(1 + i)}.dup(7) }.plot(1);</pre>
+{ {|i| SinOsc.ar(1 + i)}.dup(7) }.plot(1);</textarea>
 <h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>duration<td class='argumentdesc'>
-<p>The duration of the function to plot in seconds. The default is 0.01.<tr><td class='argumentname'>server<td class='argumentdesc'>
-<p>The Server on which to calculate the plot. This must be running on your local machine, but does not need to be the internal server. If nil the default server will be used.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
+<p>The duration of the function to plot in seconds. The default is 0.01.<tr><td class='argumentname'>target<td class='argumentdesc'>
+<p>The server, synth or group where the signal is picked up. See <a href="./../Reference/asTarget.html">asTarget</a>.<textarea class='editor'>(
+var synth = { Out.ar(99, SinOsc.ar([300, 700])) }.play;
+{ In.ar(99, 2) }.plot(0.02, synth);
+)</textarea>
+<tr><td class='argumentname'>bounds<td class='argumentdesc'>
 <p>An instance of Rect or Point indicating the bounds of the plot window.<tr><td class='argumentname'>minval<td class='argumentdesc'>
-<p>the minimum value in the plot. Defaults to -1.0.<tr><td class='argumentname'>maxval<td class='argumentdesc'>
-<p>the maximum value in the plot. Defaults to 1.0.<tr><td class='argumentname'>separately<td class='argumentdesc'>
-<p>For multi channel signals, set whether to use separate value display ranges or not. a window to place the plot in. If nil, one will be created for you.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asBuffer' href='./../Overviews/Methods.html#asBuffer'>asBuffer</a>(<span class='argstr'>duration: 0.01</span>, <span class='argstr'>server</span>, <span class='argstr'>action</span>, <span class='argstr'>fadeTime: 0</span>)</h3>
+<p>the minimum value in the plot. If not specified, the signal's minimum is used.<tr><td class='argumentname'>maxval<td class='argumentdesc'>
+<p>the maximum value in the plot. If not specified, the signal's maximum is used.<tr><td class='argumentname'>separately<td class='argumentdesc'>
+<p>If set to <code>true</code>, for multichannel signals use separate value display ranges, unless minval or maxval is specified already.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asBuffer' href='./../Overviews/Methods.html#asBuffer'>asBuffer</a>(<span class='argstr'>duration: 0.01</span>, <span class='argstr'>target</span>, <span class='argstr'>action</span>, <span class='argstr'>fadeTime: 0</span>)</h3>
 <div class='method'>
-<p>Calculates duration in seconds worth of the output of this function asynchronously, and returns it in a <a href="./../Classes/Buffer.html">Buffer</a> of the number of channels. This method immediately returns a buffer, which takes <code class='code prettyprint lang-sc'>duration</code> seconds to become filled with data asynchronously. Then the action function is called.<h4>Arguments:</h4>
+<p>Calculates duration in seconds worth of the output of this function asynchronously, and returns it in a <a href="./../Classes/Buffer.html">Buffer</a> of the number of channels. This method immediately returns a buffer, which takes <code>duration</code> seconds to become filled with data asynchronously. Then the action function is called.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>duration<td class='argumentdesc'>
-<p>The duration of the function to plot in seconds. The default is 0.01.<tr><td class='argumentname'>server<td class='argumentdesc'>
-<p>The server on which the function is calculated. The default is <code class='code prettyprint lang-sc'>Server.default</code>.<tr><td class='argumentname'>action<td class='argumentdesc'>
+<p>The duration of the function to plot in seconds. The default is 0.01.<tr><td class='argumentname'>target<td class='argumentdesc'>
+<p>The synth or group after which the synth runs (see <a href="./../Reference/asTarget.html">asTarget</a>). The default is the default group of <code>Server.default</code>.<tr><td class='argumentname'>action<td class='argumentdesc'>
 <p>A function that is called when the buffer is filled. It is passed the buffer as argument.<tr><td class='argumentname'>fadeTime<td class='argumentdesc'>
 <p>A fade in and out time in seconds. Only when greater than zero, an envelope is applied to the signal to avoid clicks (default: 0).</table><h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>// record a buffer
+<textarea class='editor'>// record a buffer
 b = { Blip.ar(XLine.kr(10000, 4, 3) * [1, 1.2], 20) * 0.1 }.asBuffer(3, fadeTime:0.1)
 b.plot; // after 3 seconds, you can see it.
 // play the soundfile back
-{ PlayBuf.ar(b.numChannels, b, LFNoise2.kr(2 ! 8).exprange(0.15, 1), loop:1).sum }.play;</pre>
+{ PlayBuf.ar(b.numChannels, b, LFNoise2.kr(2 ! 8).exprange(0.15, 1), loop:1).sum }.play;</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-loadToFloatArray' href='./../Overviews/Methods.html#loadToFloatArray'>loadToFloatArray</a>(<span class='argstr'>duration: 0.01</span>, <span class='argstr'>target</span>, <span class='argstr'>action</span>)</h3>
+<div class='method'>
+<p>Write a UGen function to a file and then load it into a FloatArray.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>duration<td class='argumentdesc'>
+<p>Amount of data to record in seconds<tr><td class='argumentname'>target<td class='argumentdesc'>
+<p>A server, synth, or group where to place the synth that plays the function<tr><td class='argumentname'>action<td class='argumentdesc'>
+<p>A function to call when writing is finished.<textarea class='editor'>// get some data from the synth audio
+{ SinOsc.ar + GrayNoise.ar(0.1) }.loadToFloatArray(0.01, action: { arg array; a = array });
+a.postln;
+a.plot;
+
+// place it after some other node:
+z = { WhiteNoise.ar * 0.1 }.play; // play some noise
+{ BPF.ar(In.ar(0), 7000, 0.01) * 10 }.loadToFloatArray(0.01, z, action: { arg array; a = array });
+a.postln;</textarea>
+</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-getToFloatArray' href='./../Overviews/Methods.html#getToFloatArray'>getToFloatArray</a>(<span class='argstr'>duration: 0.01</span>, <span class='argstr'>target</span>, <span class='argstr'>action</span>, <span class='argstr'>wait: 0.01</span>, <span class='argstr'>timeout: 3</span>)</h3>
+<div class='method'>
+<p>Stream the function audio values to the client using a series of getn messages and put the results into a FloatArray.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>duration<td class='argumentdesc'>
+<p>Amount of data to record in seconds<tr><td class='argumentname'>target<td class='argumentdesc'>
+<p>A server, synth, or group where to place the synth that plays the function<tr><td class='argumentname'>action<td class='argumentdesc'>
+<p>A function to call when writing is finished.<tr><td class='argumentname'>wait<td class='argumentdesc'>
+<p>The amount of time in seconds to wait between sending getn messages. Longer times are safer. The default is 0.01 seconds which seems reliable under normal circumstances. A setting of 0 is not recommended.<tr><td class='argumentname'>timeout<td class='argumentdesc'>
+<p>The amount of time in seconds after which to post a warning if all replies have not yet been received. the default is 3.</table><h4>Discussion:</h4>
+
+<p>For a discussion of the difference between getToFloatArray and loadToFloatArray, see <a href="./../Classes/Buffer.html#-getToFloatArray">Buffer: -getToFloatArray</a> and <a href="./../Classes/Buffer.html#-loadToFloatArray">Buffer: -loadToFloatArray</a>.<textarea class='editor'>// get some data from the synth audio
+
+{ SinOsc.ar + GrayNoise.ar(0.1) }.getToFloatArray(0.01, action: { arg array; a = array });
+a.postln;
+a.plot;</textarea>
 </div><h3><a class='anchor' name='Conversion'>Conversion</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asSynthDef' href='./../Overviews/Methods.html#asSynthDef'>asSynthDef</a>(<span class='argstr'>rates</span>, <span class='argstr'>prependArgs</span>, <span class='argstr'>outClass: 'Out'</span>, <span class='argstr'>fadeTime</span>, <span class='argstr'>name</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asDefName.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asDefName.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/asDefName.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/asDefName.sc</a></div>
 <div class='method'>
 <p>Returns a SynthDef based on this Function, adding a Linen and an Out ugen if needed.<h4>Arguments:</h4>
 <table class='arguments'>
@@ -382,68 +429,69 @@ b.plot; // after 3 seconds, you can see it.
 <p>The class of the output ugen as a symbol. The default is \Out.<tr><td class='argumentname'>fadeTime<td class='argumentdesc'>
 <p>a fadein time. The default is 0.<tr><td class='argumentname'>name<td class='argumentdesc'>
 <p>the name of the SynthDef</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asDefName' href='./../Overviews/Methods.html#asDefName'>asDefName</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asDefName.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asDefName.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/asDefName.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/asDefName.sc</a></div>
 <div class='method'>
-<p>Performs asSynthDef (see above), sends the resulting def to the local server and returns the SynthDefs name. This is asynchronous.<pre class='code prettyprint lang-sc'>x = { SinOsc.ar(440, 0, 0.3) }.asDefName; // this must complete first
-y = Synth(x);</pre>
+<p>Performs asSynthDef (see above), sends the resulting def to the local server and returns the SynthDefs name. This is asynchronous.<textarea class='editor'>x = { SinOsc.ar(440, 0, 0.3) }.asDefName; // this must complete first
+y = Synth(x);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asRoutine' href='./../Overviews/Methods.html#asRoutine'>asRoutine</a></h3>
 <div class='method'>
 <p>Returns a Routine using this as its func argument.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-r' href='./../Overviews/Methods.html#r'>r</a></h3>
 <div class='method'>
-<p>Returns a Routine using this as its func argument.<pre class='code prettyprint lang-sc'>a = r { 5.do { |i| i.rand.yield } };
-a.nextN(8);</pre>
+<p>Returns a Routine using this as its func argument.<textarea class='editor'>a = r { 5.do { |i| i.rand.yield } };
+a.nextN(8);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-p' href='./../Overviews/Methods.html#p'>p</a></h3>
 <div class='method'>
-<p>Returns a Prout using this as its func argument.<pre class='code prettyprint lang-sc'>a = p { 5.do { |i| i.rand.yield } };
+<p>Returns a Prout using this as its func argument.<textarea class='editor'>a = p { 5.do { |i| i.rand.yield } };
 x = a.asStream;
-x.nextN(8);</pre>
+x.nextN(8);</textarea>
 
-<p>This is useful for using ListComprehensions in Patterns:<pre class='code prettyprint lang-sc'>Pbind(\degree, p {:[x, y].postln, x&lt;-(0..10), y&lt;-(0..10), (x + y).isPrime }, \dur, 0.3).play;</pre>
+<p>This is useful for using ListComprehensions in Patterns:<textarea class='editor'>Pbind(\degree, p {:[x, y].postln, x&lt;-(0..10), y&lt;-(0..10), (x + y).isPrime }, \dur, 0.3).play;</textarea>
 </div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-archiveAsCompileString' href='./../Overviews/Methods.html#archiveAsCompileString'>archiveAsCompileString</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-archiveAsObject' href='./../Overviews/Methods.html#archiveAsObject'>archiveAsObject</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-argNames' href='./../Overviews/Methods.html#argNames'>argNames</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asMenuAction' href='./../Overviews/Methods.html#asMenuAction'>asMenuAction</a></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/Menu.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/Menu.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-awake' href='./../Overviews/Methods.html#awake'>awake</a>(<span class='argstr'>beats</span>, <span class='argstr'>seconds</span>, <span class='argstr'>clock</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-benchmark' href='./../Overviews/Methods.html#benchmark'>benchmark</a>(<span class='argstr'>num: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/Function-benchmark.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/Function-benchmark.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-checkCanArchive' href='./../Overviews/Methods.html#checkCanArchive'>checkCanArchive</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cmdPeriod' href='./../Overviews/Methods.html#cmdPeriod'>cmdPeriod</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-defaultArgs' href='./../Overviews/Methods.html#defaultArgs'>defaultArgs</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doOnApplicationStart' href='./../Overviews/Methods.html#doOnApplicationStart'>doOnApplicationStart</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Platform/osx/ApplicationStart.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Platform/osx/ApplicationStart.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doOnCmdPeriod' href='./../Overviews/Methods.html#doOnCmdPeriod'>doOnCmdPeriod</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doOnError' href='./../Overviews/Methods.html#doOnError'>doOnError</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doOnServerBoot' href='./../Overviews/Methods.html#doOnServerBoot'>doOnServerBoot</a>(<span class='argstr'>server</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doOnServerQuit' href='./../Overviews/Methods.html#doOnServerQuit'>doOnServerQuit</a>(<span class='argstr'>server</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doOnServerTree' href='./../Overviews/Methods.html#doOnServerTree'>doOnServerTree</a>(<span class='argstr'>server</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doOnShutDown' href='./../Overviews/Methods.html#doOnShutDown'>doOnShutDown</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doOnStartUp' href='./../Overviews/Methods.html#doOnStartUp'>doOnStartUp</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extSystemActions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-freqscope' href='./../Overviews/Methods.html#freqscope'>freqscope</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-get' href='./../Overviews/Methods.html#get'>get</a>(<span class='argstr'>prevVal</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-handleError' href='./../Overviews/Methods.html#handleError'>handleError</a>(<span class='argstr'>error</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isFunction' href='./../Overviews/Methods.html#isFunction'>isFunction</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-loadToFloatArray' href='./../Overviews/Methods.html#loadToFloatArray'>loadToFloatArray</a>(<span class='argstr'>duration: 0.01</span>, <span class='argstr'>server</span>, <span class='argstr'>action</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeFlopFunc' href='./../Overviews/Methods.html#makeFlopFunc'>makeFlopFunc</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numArgs' href='./../Overviews/Methods.html#numArgs'>numArgs</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numVars' href='./../Overviews/Methods.html#numVars'>numVars</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-plotAudio' href='./../Overviews/Methods.html#plotAudio'>plotAudio</a>(<span class='argstr'>duration: 0.01</span>, <span class='argstr'>minval: -1</span>, <span class='argstr'>maxval: 1</span>, <span class='argstr'>server</span>, <span class='argstr'>bounds</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-postString' href='./../Overviews/Methods.html#postString'>postString</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/Patterns/extFunction.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/Patterns/extFunction.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/Patterns/extFunction.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/Patterns/extFunction.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-prTry' href='./../Overviews/Methods.html#prTry'>prTry</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-prepareForProxySynthDef' href='./../Overviews/Methods.html#prepareForProxySynthDef'>prepareForProxySynthDef</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-scopeResponse' href='./../Overviews/Methods.html#scopeResponse'>scopeResponse</a>(<span class='argstr'>server</span>, <span class='argstr'>freqMode: 1</span>, <span class='argstr'>label: "Empirical Frequency response"</span>, <span class='argstr'>mute: false</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/scopeResponse.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/scopeResponse.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/scopeResponse.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/scopeResponse.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-set' href='./../Overviews/Methods.html#set'>set</a>( <span class='argstr'>... args</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-shallowCopy' href='./../Overviews/Methods.html#shallowCopy'>shallowCopy</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-transformEvent' href='./../Overviews/Methods.html#transformEvent'>transformEvent</a>(<span class='argstr'>event</span>)</h3>
@@ -451,13 +499,13 @@ x.nextN(8);</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-varArgs' href='./../Overviews/Methods.html#varArgs'>varArgs</a></h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 <h3><a class='anchor' name='Exception%20Handling'>Exception Handling</a></h3>
-<pre class='code prettyprint lang-sc'>// no exception handler
+<textarea class='editor'>// no exception handler
 value { 8.zorg; \didnt_continue.postln; }
 
 try { 8.zorg } {|error| error.postln; \cleanup.postln; }; \continued.postln;
 
-protect { 8.zorg } {|error| error.postln; }; \didnt_continue.postln;</pre>
-<pre class='code prettyprint lang-sc'>try { 123.postln; 456.throw; 789.postln } {|error| [\catch, error].postln };
+protect { 8.zorg } {|error| error.postln; }; \didnt_continue.postln;</textarea>
+<textarea class='editor'>try { 123.postln; 456.throw; 789.postln } {|error| [\catch, error].postln };
 
 try { 123.postln; 789.postln } {|error| [\catch, error].postln };
 
@@ -475,8 +523,8 @@ try {
 
 value { 123.postln; 456.throw; 789.postln }
 
-value { 123.postln; Error("what happened?").throw; 789.postln }</pre>
-<pre class='code prettyprint lang-sc'>(
+value { 123.postln; Error("what happened?").throw; 789.postln }</textarea>
+<textarea class='editor'>(
 a = [\aaa, \bbb, \ccc, \ddd];
 a[1].postln;
 a[\x].postln;
@@ -508,5 +556,6 @@ protect {
     a[\x].postln;
     a[2].postln;
 } {|error| \caught.postln; error.dump }
-)</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Function.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Function.schelp</a><br>link::Classes/Function::<br></div></div></body></html>
+)</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Function.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Function.schelp</a><br>link::Classes/Function::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

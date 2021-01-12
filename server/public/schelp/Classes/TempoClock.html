@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>TempoClock | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>TempoClock | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'TempoClock';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>TempoClock:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -47,6 +52,7 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#*bar'>bar</a> </li>
 <li class='toc3'><a href='#*nextBar'>nextBar</a> </li>
 <li class='toc3'><a href='#*beatInBar'>beatInBar</a> </li>
+<li class='toc3'><a href='#*isRunning'>isRunning</a> </li>
 </ul><li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
 <li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*all'>all</a> </li>
@@ -54,6 +60,7 @@ var scdoc_sc_version = '3.9.3';
 </ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-stop'>stop</a> </li>
 <li class='toc3'><a href='#-clear'>clear</a> </li>
+<li class='toc3'><a href='#-isRunning'>isRunning</a> </li>
 <li class='toc3'><a href='#-tempo'>tempo</a> </li>
 <li class='toc3'><a href='#-etempo'>etempo</a> </li>
 <li class='toc3'><a href='#-permanent'>permanent</a> </li>
@@ -85,8 +92,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-setTempoAtBeat'>setTempoAtBeat</a> </li>
 <li class='toc3'><a href='#-setTempoAtSec'>setTempoAtSec</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -96,7 +103,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>tempo based scheduler</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Clock.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Clock.sc'>Clock.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/TempoBusClock.html">TempoBusClock</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Core/Clock.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Core/Clock.sc'>Clock.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/LinkClock.html">LinkClock</a>, <a href="../Classes/TempoBusClock.html">TempoBusClock</a></div>
 <div id='related'>See also: <a href="./../Classes/AppClock.html">AppClock</a>, <a href="./../Classes/SystemClock.html">SystemClock</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
@@ -108,13 +115,13 @@ var scdoc_sc_version = '3.9.3';
 <p>Creates a new instance of TempoClock.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>tempo<td class='argumentdesc'>
-<p>The initial <a href="#-tempo">tempo</a>. Defaults to <code class='code prettyprint lang-sc'>1</code>.<tr><td class='argumentname'>beats<td class='argumentdesc'>
-<p>The time in beats, corresponding to the reference time given with the <code class='code prettyprint lang-sc'>seconds</code> argument. Defaults to <code class='code prettyprint lang-sc'>0</code>.<tr><td class='argumentname'>seconds<td class='argumentdesc'>
-<p>The reference time in seconds, to which the <code class='code prettyprint lang-sc'>beats</code> argument corresponds. Defaults to the current Thread's logical time (see <a href="./../Classes/Thread.html#-seconds">Thread: -seconds</a>).<tr><td class='argumentname'>queueSize<td class='argumentdesc'>
+<p>The initial <a href="#-tempo">tempo</a>. Defaults to <code>1</code>.<tr><td class='argumentname'>beats<td class='argumentdesc'>
+<p>The time in beats, corresponding to the reference time given with the <code>seconds</code> argument. Defaults to <code>0</code>.<tr><td class='argumentname'>seconds<td class='argumentdesc'>
+<p>The reference time in seconds, to which the <code>beats</code> argument corresponds. Defaults to the current Thread's logical time (see <a href="./../Classes/Thread.html#-seconds">Thread: -seconds</a>).<tr><td class='argumentname'>queueSize<td class='argumentdesc'>
 <p>The storage size of the scheduling queue. Each scheduled item takes 2 counts of space, so this size divided by 2 gives the amount of items that can be scheduled at a time. See also <a href="#-queue">-queue</a>.</table><h4>Discussion:</h4>
 
-<p>The TempoClock will be created <strong>as if</strong> it started counting beats at the time given in the <code class='code prettyprint lang-sc'>seconds</code> argument with the starting amount given in the <code class='code prettyprint lang-sc'>beats</code> argument. The current count of beats will thus be equal to that starting amount plus the amount of beats that would be counted since the given reference time in seconds, according to the given tempo.
-<p>The default arguments create a TempoClock that starts counting beats with <code class='code prettyprint lang-sc'>0</code> at the current logical time.<pre class='code prettyprint lang-sc'>// Create a TempoClock that starts counting beats with 5 now.
+<p>The TempoClock will be created <strong>as if</strong> it started counting beats at the time given in the <code>seconds</code> argument with the starting amount given in the <code>beats</code> argument. The current count of beats will thus be equal to that starting amount plus the amount of beats that would be counted since the given reference time in seconds, according to the given tempo.
+<p>The default arguments create a TempoClock that starts counting beats with <code>0</code> at the current logical time.<textarea class='editor'>// Create a TempoClock that starts counting beats with 5 now.
 (
 t = TempoClock.new(2, 5);
 "current beats:" + t.beats;
@@ -124,14 +131,14 @@ t = TempoClock.new(2, 5);
 (
 t = TempoClock.new(2, 0, thisThread.seconds - 5);
 "current beats:" + t.beats;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>TempoClock.</span><a class='method-name' name='*default' href='./../Overviews/Methods.html#default'>default</a></h3>
 <h3 class='method-code'><span class='method-prefix'>TempoClock.</span><a class='method-name' name='*default' href='./../Overviews/Methods.html#default'>default</a> = value</h3>
 <div class='method'>
-<p>Sets or gets the permanent default TempoClock instantiated at startup.<pre class='code prettyprint lang-sc'>TempoClock.default.beats // beats since default TempoClock was started</pre>
+<p>Sets or gets the permanent default TempoClock instantiated at startup.<textarea class='editor'>TempoClock.default.beats // beats since default TempoClock was started</textarea>
 </div><h3><a class='anchor' name='Forwarding%20to%20the%20default%20instance'>Forwarding to the default instance</a></h3>
 
-<p>The following methods only forward to the <a href="#*default">default instance</a>, allowing you to use the TempoClock class itself in place of <code class='code prettyprint lang-sc'>TempoClock.default</code>.<h3 class='method-code'><span class='method-prefix'>TempoClock.</span><a class='method-name' name='*stop' href='./../Overviews/Methods.html#stop'>stop</a></h3>
+<p>The following methods only forward to the <a href="#*default">default instance</a>, allowing you to use the TempoClock class itself in place of <code>TempoClock.default</code>.<h3 class='method-code'><span class='method-prefix'>TempoClock.</span><a class='method-name' name='*stop' href='./../Overviews/Methods.html#stop'>stop</a></h3>
 <div class='method'></div><h3 class='method-code'><span class='method-prefix'>TempoClock.</span><a class='method-name' name='*play' href='./../Overviews/Methods.html#play'>play</a>(<span class='argstr'>task</span>, <span class='argstr'>quant</span>)</h3>
 <div class='method'></div><h3 class='method-code'><span class='method-prefix'>TempoClock.</span><a class='method-name' name='*sched' href='./../Overviews/Methods.html#sched'>sched</a>(<span class='argstr'>delta</span>, <span class='argstr'>item</span>)</h3>
 <div class='method'></div><h3 class='method-code'><span class='method-prefix'>TempoClock.</span><a class='method-name' name='*schedAbs' href='./../Overviews/Methods.html#schedAbs'>schedAbs</a>(<span class='argstr'>beat</span>, <span class='argstr'>item</span>)</h3>
@@ -161,6 +168,7 @@ t = TempoClock.new(2, 0, thisThread.seconds - 5);
 <div class='method'></div><h3 class='method-code'><span class='method-prefix'>TempoClock.</span><a class='method-name' name='*bar' href='./../Overviews/Methods.html#bar'>bar</a></h3>
 <div class='method'></div><h3 class='method-code'><span class='method-prefix'>TempoClock.</span><a class='method-name' name='*nextBar' href='./../Overviews/Methods.html#nextBar'>nextBar</a>(<span class='argstr'>beat</span>)</h3>
 <div class='method'></div><h3 class='method-code'><span class='method-prefix'>TempoClock.</span><a class='method-name' name='*beatInBar' href='./../Overviews/Methods.html#beatInBar'>beatInBar</a></h3>
+<div class='method'></div><h3 class='method-code'><span class='method-prefix'>TempoClock.</span><a class='method-name' name='*isRunning' href='./../Overviews/Methods.html#isRunning'>isRunning</a></h3>
 <div class='method'>
 <p></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
@@ -171,14 +179,17 @@ t = TempoClock.new(2, 0, thisThread.seconds - 5);
 <div class='method'>
 <p>Destroys the scheduler and releases the OS thread running the scheduler.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clear' href='./../Overviews/Methods.html#clear'>clear</a>(<span class='argstr'>releaseNodes: true</span>)</h3>
 <div class='method'>
-<p>Removes all tasks from the scheduling queue.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tempo' href='./../Overviews/Methods.html#tempo'>tempo</a></h3>
+<p>Removes all tasks from the scheduling queue.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isRunning' href='./../Overviews/Methods.html#isRunning'>isRunning</a></h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Boolean, true if the clock is active or false if the clock has been stopped.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tempo' href='./../Overviews/Methods.html#tempo'>tempo</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tempo' href='./../Overviews/Methods.html#tempo'>tempo</a> = <span class='argstr'>newTempo</span></h3>
 <div class='method'>
-<p>Sets or gets the current tempo in beats per second at the current <strong>logical time</strong>.<pre class='code prettyprint lang-sc'>t= TempoClock.new;
+<p>Sets or gets the current tempo in beats per second at the current <strong>logical time</strong>.<textarea class='editor'>t= TempoClock.new;
 t.tempo_(2.0); // equivalent to t.tempo = 2.0;
 t.tempo;
 t.tempo_(72/60) // 72 beats per minute
-t.tempo;</pre>
+t.tempo;</textarea>
 </div></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-etempo' href='./../Overviews/Methods.html#etempo'>etempo</a> = <span class='argstr'>newTempo</span></h3>
 <div class='method'>
@@ -189,8 +200,8 @@ t.tempo;</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-beats' href='./../Overviews/Methods.html#beats'>beats</a> = <span class='argstr'>beats</span></h3>
 <div class='method'>
 <p>Gets or sets the current logical time in beats according to this clock.
-<p>When <strong>getting</strong> <code class='code prettyprint lang-sc'>beats</code>, if this clock is the current Thread's <a href="./../Classes/Thread.html#-clock">associated clock</a>, the Thread's own <a href="./../Classes/Thread.html#-beats">time in beats</a> is returned, otherwise the Thread's <a href="./../Classes/Thread.html#-seconds">time in seconds</a> converted to beats according to this clock is returned.
-<p>After <strong>changing</strong> <code class='code prettyprint lang-sc'>beats</code> towards the <strong>future</strong>, the clock will immediately perform all tasks scheduled until the new time. Likewise, when changing <code class='code prettyprint lang-sc'>beats</code> towards the <strong>past</strong>, already scheduled tasks will be postponed, so they will still be performed at the scheduled time in beats.<div class='note'><span class='notelabel'>NOTE:</span> When changing <code class='code prettyprint lang-sc'>beats</code>, you are only changing the clocks's notion of time, and not the current Thread's <a href="./../Classes/Thread.html#-beats">logical time</a>, which will stay the same until the Thread is called again. Hence, if this clock is the current Thread's <a href="./../Classes/Thread.html#-clock">associated clock</a>, and you ask the clock for time in beats just after changing it, you will see no effect. Nevertheless, the effect will be visible immediately on a different Thread.</div><pre class='code prettyprint lang-sc'>(
+<p>When <strong>getting</strong> <code>beats</code>, if this clock is the current Thread's <a href="./../Classes/Thread.html#-clock">associated clock</a>, the Thread's own <a href="./../Classes/Thread.html#-beats">time in beats</a> is returned, otherwise the Thread's <a href="./../Classes/Thread.html#-seconds">time in seconds</a> converted to beats according to this clock is returned.
+<p>After <strong>changing</strong> <code>beats</code> towards the <strong>future</strong>, the clock will immediately perform all tasks scheduled until the new time. Likewise, when changing <code>beats</code> towards the <strong>past</strong>, already scheduled tasks will be postponed, so they will still be performed at the scheduled time in beats.<div class='note'><span class='notelabel'>NOTE:</span> When changing <code>beats</code>, you are only changing the clocks's notion of time, and not the current Thread's <a href="./../Classes/Thread.html#-beats">logical time</a>, which will stay the same until the Thread is called again. Hence, if this clock is the current Thread's <a href="./../Classes/Thread.html#-clock">associated clock</a>, and you ask the clock for time in beats just after changing it, you will see no effect. Nevertheless, the effect will be visible immediately on a different Thread.</div><textarea class='editor'>(
 t = TempoClock.new;
 
 t.sched(3, {
@@ -210,19 +221,19 @@ fork {
 };
 )
 
-c.beats = 100;</pre>
+c.beats = 100;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-schedAbs' href='./../Overviews/Methods.html#schedAbs'>schedAbs</a>(<span class='argstr'>beat</span>, <span class='argstr'>item</span>)</h3>
 <div class='method'>
 <p>Schedules a task to be performed at a particular time in <strong>beats</strong>.
-<p>When the scheduling time is up, the task's <code class='code prettyprint lang-sc'>awake</code> method is called. If the method returns a number, the task will be rescheduled for the time equal to the last scheduling time plus the returned value.
+<p>When the scheduling time is up, the task's <code>awake</code> method is called. If the method returns a number, the task will be rescheduled for the time equal to the last scheduling time plus the returned value.
 <p>See also: <a href="./../Classes/Clock.html#Scheduling">Clock: Scheduling</a>, <a href="./../Classes/Object.html#-awake">Object: -awake</a>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sched' href='./../Overviews/Methods.html#sched'>sched</a>(<span class='argstr'>delta</span>, <span class='argstr'>item</span>)</h3>
 <div class='method'>
-<p>Schedules a task to be performed <code class='code prettyprint lang-sc'>delta</code> amount of <strong>beats</strong> after the current Thread's logical time. If this clock is the current Thread's <a href="./../Classes/Thread.html#-clock">associated clock</a>, the Thread's <a href="./../Classes/Thread.html#-beats">time in beats</a> is used, otherwise the Thread's <a href="./../Classes/Thread.html#-seconds">time in seconds</a> is converted to beats according to this clock's tempo and time of origin.
-<p>When the scheduling time is up, the task's <code class='code prettyprint lang-sc'>awake</code> method is called. If the method returns a number, the task will be rescheduled for the time equal to the last scheduling time plus the returned value.
+<p>Schedules a task to be performed <code>delta</code> amount of <strong>beats</strong> after the current Thread's logical time. If this clock is the current Thread's <a href="./../Classes/Thread.html#-clock">associated clock</a>, the Thread's <a href="./../Classes/Thread.html#-beats">time in beats</a> is used, otherwise the Thread's <a href="./../Classes/Thread.html#-seconds">time in seconds</a> is converted to beats according to this clock's tempo and time of origin.
+<p>When the scheduling time is up, the task's <code>awake</code> method is called. If the method returns a number, the task will be rescheduled for the time equal to the last scheduling time plus the returned value.
 <p>See also: <a href="./../Classes/Clock.html#Scheduling">Clock: Scheduling</a>, <a href="./../Classes/Object.html#-awake">Object: -awake</a>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-play' href='./../Overviews/Methods.html#play'>play</a>(<span class='argstr'>task</span>, <span class='argstr'>quant: 1</span>)</h3>
 <div class='method'>
-<p>Plays task (a function) at the next beat, where <strong>quant</strong> is 1 by default. Shortcut for <a href="#-schedAbs">-schedAbs</a>; see <a href="#-seconds">-seconds</a> and <a href="#-nextTimeOnGrid">-nextTimeOnGrid</a> for further details on time and quant.<pre class='code prettyprint lang-sc'>t= TempoClock.default;
-t.play({arg beats, time, clock; [beats, time, clock].postln});</pre>
+<p>Plays task (a function) at the next beat, where <strong>quant</strong> is 1 by default. Shortcut for <a href="#-schedAbs">-schedAbs</a>; see <a href="#-seconds">-seconds</a> and <a href="#-nextTimeOnGrid">-nextTimeOnGrid</a> for further details on time and quant.<textarea class='editor'>t= TempoClock.default;
+t.play({arg beats, time, clock; [beats, time, clock].postln});</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-playNextBar' href='./../Overviews/Methods.html#playNextBar'>playNextBar</a>(<span class='argstr'>task</span>)</h3>
 <div class='method'>
 <p>Plays task (a function) at the next bar using <a href="#-schedAbs">-schedAbs</a>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-queue' href='./../Overviews/Methods.html#queue'>queue</a></h3>
@@ -232,9 +243,9 @@ t.play({arg beats, time, clock; [beats, time, clock].postln});</pre>
 <p>Returns the duration in seconds of a current whole beat.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-beatsPerBar' href='./../Overviews/Methods.html#beatsPerBar'>beatsPerBar</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-beatsPerBar' href='./../Overviews/Methods.html#beatsPerBar'>beatsPerBar</a> = <span class='argstr'>newBeatsPerBar</span></h3>
 <div class='method'>
-<p>Gets or sets the number of beats per bar. The default is 4. Setting must be done from within the scheduling thread, e.g.<pre class='code prettyprint lang-sc'>t= TempoClock.new;
+<p>Gets or sets the number of beats per bar. The default is 4. Setting must be done from within the scheduling thread, e.g.<textarea class='editor'>t= TempoClock.new;
 t.schedAbs(t.nextBar, {t.beatsPerBar_(3)});
-t.beatsPerBar;</pre>
+t.beatsPerBar;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bar' href='./../Overviews/Methods.html#bar'>bar</a></h3>
 <div class='method'>
 <p>Returns the current bar. See <a href="#-bars2beats">-bars2beats</a> for returning beat of current bar.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nextBar' href='./../Overviews/Methods.html#nextBar'>nextBar</a>(<span class='argstr'>beat</span>)</h3>
@@ -249,24 +260,24 @@ t.beatsPerBar;</pre>
 <div class='method'>
 <p>Returns a bar as a float relative to <a href="#-baseBarBeat">-baseBarBeat</a>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bars2beats' href='./../Overviews/Methods.html#bars2beats'>bars2beats</a>(<span class='argstr'>bars</span>)</h3>
 <div class='method'>
-<p>Returns a beat relative to <a href="#-baseBar">-baseBar</a>.<pre class='code prettyprint lang-sc'>t= TempoClock.default;
-t.bars2beats(t.bar) // downbeat of the current bar</pre>
-</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-timeToNextBeat' href='./../Overviews/Methods.html#timeToNextBeat'>timeToNextBeat</a>(<span class='argstr'>quant: 1</span>)</h3>
+<p>Returns a beat relative to <a href="#-baseBar">-baseBar</a>.<textarea class='editor'>t= TempoClock.default;
+t.bars2beats(t.bar) // downbeat of the current bar</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-timeToNextBeat' href='./../Overviews/Methods.html#timeToNextBeat'>timeToNextBeat</a>(<span class='argstr'>quant: 1.0</span>)</h3>
 <div class='method'>
 <p>Returns the logical time to next beat. <strong>quant</strong> is 1 by default, relative to baseBarBeat, see <a href="#-nextTimeOnGrid">-nextTimeOnGrid</a>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nextTimeOnGrid' href='./../Overviews/Methods.html#nextTimeOnGrid'>nextTimeOnGrid</a>(<span class='argstr'>quant: 1</span>, <span class='argstr'>phase: 0</span>)</h3>
 <div class='method'>
-<p>With default values, returns the next whole beat. <strong>quant</strong> is 1 by default, <strong>phase</strong> is 0. quant is relative to <a href="#-baseBarBeat">-baseBarBeat</a>, such that<pre class='code prettyprint lang-sc'>t= TempoClock.default;
-t.nextTimeOnGrid(t.beatsPerBar) == t.nextBar // =&gt; true</pre>
+<p>With default values, returns the next whole beat. <strong>quant</strong> is 1 by default, <strong>phase</strong> is 0. quant is relative to <a href="#-baseBarBeat">-baseBarBeat</a>, such that<textarea class='editor'>t= TempoClock.default;
+t.nextTimeOnGrid(t.beatsPerBar) == t.nextBar // =&gt; true</textarea>
 
-<p>Together <strong>quant</strong> and <strong>phase</strong> are useful for finding the next n beat in a bar, e.g. <code class='code prettyprint lang-sc'>nextTimeOnGrid(4, 2)</code> will return the next 3rd beat of a bar (of 4 beats), whereas <code class='code prettyprint lang-sc'>nextBar-2</code> may return an elapsed beat.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-elapsedBeats' href='./../Overviews/Methods.html#elapsedBeats'>elapsedBeats</a></h3>
+<p>Together <strong>quant</strong> and <strong>phase</strong> are useful for finding the next n beat in a bar, e.g. <code>nextTimeOnGrid(4, 2)</code> will return the next 3rd beat of a bar (of 4 beats), whereas <code>nextBar-2</code> may return an elapsed beat.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-elapsedBeats' href='./../Overviews/Methods.html#elapsedBeats'>elapsedBeats</a></h3>
 <div class='method'>
-<p>Returns the current elapsed time in beats. This is equivalent to <code class='code prettyprint lang-sc'>tempoClock.secs2beats(Main.elapsedTime)</code>. It is often preferable to use <a href="#-beats">-beats</a> instead of elapsedBeats because beats uses a thread's logical time.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-seconds' href='./../Overviews/Methods.html#seconds'>seconds</a></h3>
+<p>Returns the current elapsed time in beats. This is equivalent to <code>tempoClock.secs2beats(Main.elapsedTime)</code>. It is often preferable to use <a href="#-beats">-beats</a> instead of elapsedBeats because beats uses a thread's logical time.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-seconds' href='./../Overviews/Methods.html#seconds'>seconds</a></h3>
 <div class='method'>
 <p>Returns the current elapsed time. (This method is inherited from <a href="./../Classes/Clock.html">Clock</a>.)</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-beats2secs' href='./../Overviews/Methods.html#beats2secs'>beats2secs</a>(<span class='argstr'>beats</span>)</h3>
 <div class='method'>
-<p>Converts absolute <strong>beats</strong> to absolute <strong>seconds</strong>, returning the elapsed time of the clock at the given <strong>beats</strong>. Only works for times in the current tempo. If the tempo changes any computed time in future will be wrong.<pre class='code prettyprint lang-sc'>t= TempoClock.default;
+<p>Converts absolute <strong>beats</strong> to absolute <strong>seconds</strong>, returning the elapsed time of the clock at the given <strong>beats</strong>. Only works for times in the current tempo. If the tempo changes any computed time in future will be wrong.<textarea class='editor'>t= TempoClock.default;
 t.beats2secs(t.beats) // equivalent to t.seconds
-t.beats2secs(0) // how many seconds after startup did beat 0 occur?</pre>
+t.beats2secs(0) // how many seconds after startup did beat 0 occur?</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-secs2beats' href='./../Overviews/Methods.html#secs2beats'>secs2beats</a>(<span class='argstr'>secs</span>)</h3>
 <div class='method'>
 <p>Converts absolute <strong>seconds</strong> to absolute beats. Only works for times in the current tempo. If the tempo changes any computed time in future will be wrong.</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
@@ -276,7 +287,7 @@ t.beats2secs(0) // how many seconds after startup did beat 0 occur?</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setTempoAtBeat' href='./../Overviews/Methods.html#setTempoAtBeat'>setTempoAtBeat</a>(<span class='argstr'>newTempo</span>, <span class='argstr'>beats</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setTempoAtSec' href='./../Overviews/Methods.html#setTempoAtSec'>setTempoAtSec</a>(<span class='argstr'>newTempo</span>, <span class='argstr'>secs</span>)</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>t = TempoClock(1); // create a TempoClock
+<textarea class='editor'>t = TempoClock(1); // create a TempoClock
 
 // schedule an event at next whole beat
 t.schedAbs(t.beats.ceil, { arg beat, sec; [beat, sec].postln; 1 });
@@ -290,9 +301,9 @@ t.clear;
 
 t.schedAbs(t.beats.ceil, { arg beat, sec; [beat, sec].postln; 1 });
 
-t.stop;</pre>
+t.stop;</textarea>
 
-<p><pre class='code prettyprint lang-sc'>(
+<p><textarea class='editor'>(
 // get elapsed time, round up to next second
 v = Main.elapsedTime.ceil;
 
@@ -318,9 +329,9 @@ t.tempo = t.tempo * 1/4;
 (
 t.stop;
 u.stop;
-)</pre>
+)</textarea>
 
-<p><pre class='code prettyprint lang-sc'>(
+<p><textarea class='editor'>(
 // get elapsed time, round up to next second
 v = Main.elapsedTime.ceil;
 
@@ -347,6 +358,7 @@ t.tempo = t.tempo * 1/4;
 (
 t.stop;
 u.stop;
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/TempoClock.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/TempoClock.schelp</a><br>link::Classes/TempoClock::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/TempoClock.schelp'>/usr/share/SuperCollider/HelpSource/Classes/TempoClock.schelp</a><br>link::Classes/TempoClock::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

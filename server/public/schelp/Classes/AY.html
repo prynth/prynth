@@ -1,0 +1,173 @@
+<!doctype html><html lang='en'><head><title>AY | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'AY';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>AY:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Oscillator%20behavior'>Oscillator behavior</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc3'><a href='#*freqtotone'>freqtotone</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators'>Generators</a></span>
+</div><h1>AY<span id='superclasses'> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Emulator of the AY (aka YM) soundchip, used in Spectrum/Atari</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/AYUGens/AY.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/AYUGens/AY.sc'>AY.sc</a></div></div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Emulates the General Instrument AY-3-8910 (a.k.a. the Yamaha YM2149) 3-voice sound chip, as found in the <strong>ZX Spectrum 128</strong>, the <strong>Atari ST</strong>, and various other home computers during the 1980s.<div class='note'><span class='notelabel'>NOTE:</span> The chip's inputs are integer values, so non-integer values will be rounded off.</div>
+<p>The emulation is provided by the libayemu library: <a href="http://sourceforge.net/projects/libayemu">http://sourceforge.net/projects/libayemu</a> - I have merely wrapped it up as a SC UGen.<h3><a class='anchor' name='Oscillator%20behavior'>Oscillator behavior</a></h3>
+
+<p>Typically, we think of oscillators as vibrating around zero (balanced output, with no DC offset).
+<p>The AY chip has three pulse oscillators and one noise oscillator (which may be multiplied in with the other oscillators' signals). They vibrate as follows (note that their sum is scaled down to valid floating-point signal range):<table>
+<tr><td><strong>Oscillator</strong><td>Low value<td>High value<tr><td>A<td>0<td>4<tr><td>B<td>0<td>2<tr><td>C<td>0<td>1</table>
+<div class='note'><span class='notelabel'>NOTE:</span> There is always DC offset with this UGen. It's strongly recommended to use <a href="./../Classes/LeakDC.html">LeakDC</a> on AY's output.</div>
+<p>The <code>control</code> input controls whether the oscillator will be used or not, and whether the pulse wave will be multiplied by noise or not.
+<p>If <code>control</code> disables an oscillator, it produces its nonzero value as DC. This way, the three oscillators working together can access all 8 possible states resulting from three bits.<ul>
+<li>A alone oscillates between 3 and 7 (because B and C's nonzero values add up to 3).<li>B alone oscillates between 5 and 7 (because A and C's nonzero values add up to 5).<li>C alone oscillates between 6 and 7 (because A and B's nonzero values add up to 6).</ul>
+
+<p>This means oscillator B will be perceived to be quieter than A, and C quieter than B.
+<p>This characteristic can be used to simulate wave shapes. For example, if A:B:C = fundamental : octave : 2 octaves, mixing the three oscillators at equal volume is close to a sawtooth wave.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>AY.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>tonea: 1777</span>, <span class='argstr'>toneb: 1666</span>, <span class='argstr'>tonec: 1555</span>, <span class='argstr'>noise: 1</span>, <span class='argstr'>control: 7</span>, <span class='argstr'>vola: 15</span>, <span class='argstr'>volb: 15</span>, <span class='argstr'>volc: 15</span>, <span class='argstr'>envfreq: 4</span>, <span class='argstr'>envstyle: 1</span>, <span class='argstr'>chiptype: 0</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>tonea<td class='argumentdesc'>
+<p>integer "tone" value for the first of the three voices, from <strong>0 to 4095</strong> (i.e. 12-bit range). Higher value = lower pitch. For convenience, the <a href="#*freqtotone">*freqtotone</a> method converts a frequency value to something appropriate for the tone input.<tr><td class='argumentname'>toneb<td class='argumentdesc'>
+<p>integer "tone" value for the second of the three voices. See description of <strong>tonea</strong>.<tr><td class='argumentname'>tonec<td class='argumentdesc'>
+<p>integer "tone" value for the third of the three voices. See description of <strong>tonea</strong>.<tr><td class='argumentname'>noise<td class='argumentdesc'>
+<p>the period of the pseudo-random noise generator, <strong>0 to 31</strong><tr><td class='argumentname'>control<td class='argumentdesc'>
+<p>controls how the noise is mixed into the tone(s), <strong>0 to 63</strong> (0 is mute). This is a binary mask value which masks the noise/tone mixture in each channel, so it's not linear.
+<p>Six bits are used: <code>fedcba</code> (with <code>a</code> being least significant and <code>f</code> most significant).<ul>
+<li>Bits a and d control oscillator A.<li>Bits b and e control oscillator B.<li>Bits c and f control oscillator C.<li>Bits a, b, and c turn oscillators A, B and C on or off, respectively: 001 = decimal 1 plays oscillator A only, 110 = decimal 6 plays oscillators B and C together. (Turning an oscillator "off" produces its nonzero DC value.)<li>Bits d, e and f multiply A, B and C respectively by noise. When the oscillator is "off" (nonzero), continuous noise is produced. When the oscillator is on, noise will turn on and off periodically according to the oscillator's frequency.</ul>
+
+<p>Control value 7 will mix A, B and C's clean tones together. Control value 0 reduces all oscillators to DC.<tr><td class='argumentname'>vola<td class='argumentdesc'>
+<p>volume of the first of the three voices, <strong>0 to 15</strong> (or 0 to 31 if using YM chiptype).<tr><td class='argumentname'>volb<td class='argumentdesc'>
+<p>volume of the second of the three voices, <strong>0 to 15</strong> (or 0 to 31 if using YM chiptype). Its perceived volume is 1/2 of oscillator A's volume.<tr><td class='argumentname'>volc<td class='argumentdesc'>
+<p>volume of the third of the three voices, <strong>0 to 15</strong> (or 0 to 31 if using YM chiptype). Its perceived volume is 1/4 of oscillator A's volume.<tr><td class='argumentname'>envfreq<td class='argumentdesc'>
+<p>envelope frequency, <strong>0 to 4095</strong><tr><td class='argumentname'>envstyle<td class='argumentdesc'>
+<p>type of envelope used, <strong>0 to 15</strong><tr><td class='argumentname'>chiptype<td class='argumentdesc'>
+<p><strong>0</strong> for AY (default), <strong>1</strong> for YM. The models behave slightly differently. This input cannot be modulated - its value is only handled at the moment the UGen starts.<tr><td class='argumentname'>mul<td class='argumentdesc'>
+<p>general multiply controls for the resulting signal<tr><td class='argumentname'>add<td class='argumentdesc'>
+<p>general add controls for the resulting signal</table></div><h3 class='method-code'><span class='method-prefix'>AY.</span><a class='method-name' name='*freqtotone' href='./../Overviews/Methods.html#freqtotone'>freqtotone</a>(<span class='argstr'>freq</span>)</h3>
+<div class='method'>
+<p>converts a frequency value to something appropriate for the <strong>tonea</strong>, <strong>toneb</strong> and <strong>tonec</strong> inputs.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>s.boot;
+
+// Default...
+x = {AY.ar * 0.1}.play(s);
+x.free;
+
+// Mouse-controlled tones
+(
+x = {
+    Pan2.ar(AY.ar(
+        tonea:     MouseY.kr(10, 3900, 1),
+        toneb:     MouseX.kr(10, 3900, 1),
+        control:     3,
+        vola:     14,
+        volb:     14,
+        volc:     0,
+        mul: 0.1
+    ))
+}.play;
+)
+
+x.free;
+
+// A random walk in a ZX Spectrum
+(
+x = {
+    var rate = MouseX.kr(0.1, 10); // You control your wandering speed
+    Pan2.ar(AY.ar(
+        tonea:     LFDNoise3.kr(rate).range(10, 3900),
+        toneb:     LFDNoise3.kr(rate).range(10, 3900),
+        tonec:     LFDNoise3.kr(rate).range(10, 3900),
+        noise:     LFDNoise3.kr(rate).range(0, 31),
+        control:     LFDNoise0.kr(rate).range(0, 31),
+        vola:     LFDNoise3.kr(rate).range(0, 15),
+        volb:     LFDNoise3.kr(rate).range(0, 15),
+        volc:     LFDNoise3.kr(rate).range(0, 15),
+        envfreq:     LFDNoise3.kr(rate).range(0, 4095),
+        envstyle:     LFDNoise3.kr(rate).range(0, 15),
+        mul: 0.1
+    ))
+}.play;
+)
+
+x.free;
+
+// Now to define a synth which can be used in patterns etc
+(
+SynthDef(\ay1, { | freqa=440, freqb=550, freqc=660, vola=15, volb=0, volc=0, chink=1, wobbly=1, pan=0, amp=0.1, gate=1|
+    var ay, chinkenv, wobblyenv;
+
+    //chinkenv = if(chink&gt;0, EnvGen.kr(Env.new([0.06125, 0.06125, 1, 1], [0.05, 0, 0.1], 0, 4, 4)), 1);
+    chinkenv = if(chink&gt;0, EnvGen.kr(Env.new([2, 2, 1, 1], [0.05, 0, 0.1], 0, 4, 4)), 1);
+    wobblyenv = LFPulse.kr(10, 0.5, mul:wobbly).range(0.5, 1);
+
+    # freqa, freqb, freqc = [freqa, freqb, freqc] * [1, wobblyenv, wobblyenv] * chinkenv;
+    ay = AY.ar(AY.freqtotone(freqa), AY.freqtotone(freqb), AY.freqtotone(freqc),
+        0, 3, vola, volb, volc, mul: amp);
+    ay = ay * EnvGen.kr(Env.asr(0.01, 1, 0.05), gate, doneAction:2);
+    Out.ar(0, Pan2.ar(ay, pan));
+}).load(s);
+)
+
+x = Synth(\ay1, [\wobbly, 0, \chink, 1, \tonea, 1000.rand]);
+x.free;
+
+SynthDescLib.read;
+
+// Use the synth in a jerky lo-fi pattern of some sort...
+(
+Pbind(
+    \instrument, \ay1,
+    \freqa,    Pseq((#[55, 55, 57, 58, 57, 55, 58, 50]-12).midicps, inf),
+    \freqb,    Pseq([
+                    Pseq( (#[55, 55, 54, 55, 54, 55, 58, 57]+12).midicps, 2),
+                    Prand((#[55, 55, 54, 55, 54, 55, 58, 57]+12).midicps, 2)
+                ], inf),
+    \dur,    Pseq(#[3, 0.5, 0.5, 1.5, 0.5, 1, 1, 4] * 0.4, inf),
+    \wobbly,    Pstutter(8 * 4, Prand(#[0, 1], inf)),
+    \vola,    15,
+    \volb,    14,
+    \chink,    1,
+    \amp,    0.4
+).play
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/AYUGens/HelpSource/Classes/AY.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/AYUGens/HelpSource/Classes/AY.schelp</a><br>link::Classes/AY::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Scale | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Scale | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Scale';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Scale:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -57,8 +62,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-performNearestInList'>performNearestInList</a> </li>
 <li class='toc3'><a href='#-performNearestInScale'>performNearestInScale</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -68,12 +73,12 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>represents a musical scale</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Collections/Scale.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Collections/Scale.sc'>Scale.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/ScaleAD.html">ScaleAD</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Collections/Scale.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Collections/Scale.sc'>Scale.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/ScaleAD.html">ScaleAD</a></div>
 <div id='related'>See also: <a href="./../Classes/Tuning.html">Tuning</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>Scale supports arbitrary octave divisions and ratios, and (in conjunction with <a href="./../Classes/Tuning.html">Tuning</a>) can generate pitch information in various ways, including as input to Patterns.<pre class='code prettyprint lang-sc'>s.boot;
+<p>Scale supports arbitrary octave divisions and ratios, and (in conjunction with <a href="./../Classes/Tuning.html">Tuning</a>) can generate pitch information in various ways, including as input to Patterns.<textarea class='editor'>s.boot;
 
 a = Scale.major;
 a.degrees;        // [ 0, 2, 4, 5, 7, 9, 11 ]
@@ -89,38 +94,38 @@ a.degrees;        // no change; degrees are independent of tuning
 a.semitones;        // [ 0, 2.0391000173077, 3.1564128700055, 4.9804499913461, etc. ]
 a.ratios.collect(_.round(0.001));    // [ 1, 1.125, 1.2, 1.333, 1.5, 1.667, 1.875 ]
 
-Pbind(\scale, a, \degree, Pseq((0..7) ++ (6..0) ++ [\rest], 1), \dur, 0.25).play;</pre>
+Pbind(\scale, a, \degree, Pseq((0..7) ++ (6..0) ++ [\rest], 1), \dur, 0.25).play;</textarea>
 <h3><a class='anchor' name='Creation'>Creation</a></h3>
 
 <p><strong>*major, *minor, *dorian, *chromatic, *todi, *hijaz, *partch_o1, etc.</strong>
-<p>Creates a scale from the library stored in the instance variable "all". Each scale comes with an appropriate default <a href="./../Classes/Tuning.html">Tuning</a>, but alternate tunings can be specified at creation time:<pre class='code prettyprint lang-sc'>Scale.phrygian(\pythagorean)</pre>
+<p>Creates a scale from the library stored in the instance variable "all". Each scale comes with an appropriate default <a href="./../Classes/Tuning.html">Tuning</a>, but alternate tunings can be specified at creation time:<textarea class='editor'>Scale.phrygian(\pythagorean)</textarea>
 
 <p>If the tuning size does not match the scale's <a href="#-pitchesPerOctave">-pitchesPerOctave</a>, a warning will be thrown, and the scale will use its default tuning.
-<p>For a complete list of available scales, execute<pre class='code prettyprint lang-sc'>Scale.directory</pre>
+<p>For a complete list of available scales, execute<textarea class='editor'>Scale.directory</textarea>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>Scale.</span><a class='method-name' name='*all' href='./../Overviews/Methods.html#all'>all</a></h3>
 <div class='method'>
-<p>The scale repository, to which new scales can be added.<pre class='code prettyprint lang-sc'>Scale.all.put(\catastrophic, Scale([0, 0.01, 0.04, 11.2]));
-Scale.at(\catastrophic); // access the scale</pre>
+<p>The scale repository, to which new scales can be added.<textarea class='editor'>Scale.all.put(\catastrophic, Scale([0, 0.01, 0.04, 11.2]));
+Scale.at(\catastrophic); // access the scale</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>Scale.</span><a class='method-name' name='*at' href='./../Overviews/Methods.html#at'>at</a>(<span class='argstr'>key</span>)</h3>
 <div class='method'>
-<p>Access from the scale repository.<pre class='code prettyprint lang-sc'>Scale.all.put(\catastrophic, Scale([0, 0.01, 0.04, 11.2]));
+<p>Access from the scale repository.<textarea class='editor'>Scale.all.put(\catastrophic, Scale([0, 0.01, 0.04, 11.2]));
 Scale.at(\ionian);
-Scale.newFromKey(\ionian); // access a copy of the scale for modification</pre>
+Scale.newFromKey(\ionian); // access a copy of the scale for modification</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>Scale.</span><a class='method-name' name='*choose' href='./../Overviews/Methods.html#choose'>choose</a>(<span class='argstr'>size: 7</span>, <span class='argstr'>pitchesPerOctave: 12</span>)</h3>
 <div class='method'>
-<p>Creates a random scale from the library, constrained by size and pitchsPerOctave if desired.<pre class='code prettyprint lang-sc'>Scale.choose;        // could be anything
+<p>Creates a random scale from the library, constrained by size and pitchsPerOctave if desired.<textarea class='editor'>Scale.choose;        // could be anything
 Scale.choose(7);    // will be a seven-note scale in its default tuning (could be any)
 Scale.choose(7, 12);    // will be a seven-note scale in a twelve-tone tuning (usually ET!2)
 
 // Random seven-note scale in random twelve-tone tuning
 a = Scale.choose(7, 12).tuning_(Tuning.choose(12));
-a.tuning.name;</pre>
+a.tuning.name;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>Scale.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>degrees: 'ionian'</span>, <span class='argstr'>pitchesPerOctave</span>, <span class='argstr'>tuning</span>, <span class='argstr'>name: "Unknown Scale"</span>)</h3>
 <div class='method'>
-<p>Creates a Scale from scratch. <strong>degrees</strong> should be an array of Integers or scale name. If <strong>pitchesPerOctave</strong> is nil, will guess the most appropriate number based on degrees. <strong>tuning</strong> can be an instance of <a href="./../Classes/Tuning.html">Tuning</a> or a symbol; if nil, will be equal temperament of pitchesPerOctave. Specify <strong>descDegrees</strong> if the Scale should play differently when descending than when ascending; otherwise it should be nil.<pre class='code prettyprint lang-sc'>Scale.new(#[0, 1, 3, 6, 8, 10, 11], name: "My ET12");        // will be in ET12
+<p>Creates a Scale from scratch. <strong>degrees</strong> should be an array of Integers or scale name. If <strong>pitchesPerOctave</strong> is nil, will guess the most appropriate number based on degrees. <strong>tuning</strong> can be an instance of <a href="./../Classes/Tuning.html">Tuning</a> or a symbol; if nil, will be equal temperament of pitchesPerOctave. Specify <strong>descDegrees</strong> if the Scale should play differently when descending than when ascending; otherwise it should be nil.<textarea class='editor'>Scale.new(#[0, 1, 3, 6, 8, 10, 11], name: "My ET12");        // will be in ET12
 Scale.new(#[0, 3, 7, 10, 15, 19, 22], name: "My Quarter-Tone");    // will be in ET24
-Scale.new(#[0, 6, 17, 21, 30, 39], 43, \partch, "My Partch");</pre>
+Scale.new(#[0, 6, 17, 21, 30, 39], 43, \partch, "My Partch");</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>Scale.</span><a class='method-name' name='*chromatic' href='./../Overviews/Methods.html#chromatic'>chromatic</a>(<span class='argstr'>tuning: 'et12'</span>)</h3>
 <div class='method'>
 <p>Returns a chromatic scale for a specific tuning.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
@@ -145,7 +150,7 @@ Scale.new(#[0, 6, 17, 21, 30, 39], 43, \partch, "My Partch");</pre>
 <div class='method'>
 <p>Returns a tuned array of ratios.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-as' href='./../Overviews/Methods.html#as'>as</a>(<span class='argstr'>class</span>)</h3>
 <div class='method'>
-<p>Converting. For example <code class='code prettyprint lang-sc'>as(Array)</code>, <code class='code prettyprint lang-sc'>as(List)</code> and <code class='code prettyprint lang-sc'>as(LocalBuf)</code> which is useful for server-side work.<pre class='code prettyprint lang-sc'>(
+<p>Converting. For example <code>as(Array)</code>, <code>as(List)</code> and <code>as(LocalBuf)</code> which is useful for server-side work.<textarea class='editor'>(
 r = {
     var scale = Scale.choose.postln;
     SinOsc.ar(
@@ -165,41 +170,41 @@ r = {
 }.play;
 )
 
-r.free;</pre>
+r.free;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-size' href='./../Overviews/Methods.html#size'>size</a></h3>
 <div class='method'>
-<p>Returns the length of the scale.<pre class='code prettyprint lang-sc'>Scale.ionian.size; // 7
+<p>Returns the length of the scale.<textarea class='editor'>Scale.ionian.size; // 7
 Scale.minorPentatonic.size; // 5
 Scale.ajam.size; // 7
-Scale.partch_o1.size; // 6</pre>
+Scale.partch_o1.size; // 6</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pitchesPerOctave' href='./../Overviews/Methods.html#pitchesPerOctave'>pitchesPerOctave</a></h3>
 <div class='method'>
-<p>Returns the size of the pitch class set from which the tuning is drawn.<pre class='code prettyprint lang-sc'>Scale.ionian.pitchesPerOctave; // 12
+<p>Returns the size of the pitch class set from which the tuning is drawn.<textarea class='editor'>Scale.ionian.pitchesPerOctave; // 12
 Scale.minorPentatonic.pitchesPerOctave; // 12
 Scale.ajam.pitchesPerOctave; // 24--this is a quarter-tone scale
-Scale.partch_o1.pitchesPerOctave; // 43</pre>
+Scale.partch_o1.pitchesPerOctave; // 43</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-stepsPerOctave' href='./../Overviews/Methods.html#stepsPerOctave'>stepsPerOctave</a></h3>
 <div class='method'>
-<p>Usually 12, but may be different if the current tuning has a stretched or compressed octave. Needed for degreeToKey.<pre class='code prettyprint lang-sc'>Scale.new((0..14), 15, tuning: \wcAlpha).stepsPerOctave;    // ~ 11.7
-Scale.new(#[0, 3, 6, 9, 12], 13, tuning: \bp).stepsPerOctave;    // ~ 19.02</pre>
+<p>Usually 12, but may be different if the current tuning has a stretched or compressed octave. Needed for degreeToKey.<textarea class='editor'>Scale.new((0..14), 15, tuning: \wcAlpha).stepsPerOctave;    // ~ 11.7
+Scale.new(#[0, 3, 6, 9, 12], 13, tuning: \bp).stepsPerOctave;    // ~ 19.02</textarea>
 
-<p>but note:<pre class='code prettyprint lang-sc'>Scale.ajam.stepsPerOctave;    // 12 -- quarter-tone scales have normal octaves</pre>
+<p>but note:<textarea class='editor'>Scale.ajam.stepsPerOctave;    // 12 -- quarter-tone scales have normal octaves</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-at' href='./../Overviews/Methods.html#at'>at</a>(<span class='argstr'>index</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-wrapAt' href='./../Overviews/Methods.html#wrapAt'>wrapAt</a>(<span class='argstr'>index</span>)</h3>
 <div class='method'>
-<p>These access the array generated by semitones.<pre class='code prettyprint lang-sc'>a = Scale.major;
+<p>These access the array generated by semitones.<textarea class='editor'>a = Scale.major;
 a.wrapAt(4);    // 7
 a.wrapAt(5);    // 9
 a.wrapAt(6);    // 11
-a.wrapAt(7);    // 0</pre>
+a.wrapAt(7);    // 0</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-degreeToFreq' href='./../Overviews/Methods.html#degreeToFreq'>degreeToFreq</a>(<span class='argstr'>degree</span>, <span class='argstr'>rootFreq</span>, <span class='argstr'>octave</span>)</h3>
 <div class='method'>
-<p>Returns a frequency based on current tuning and rootFreq argument.<pre class='code prettyprint lang-sc'>Scale.major.degreeToFreq(2, 60.midicps, 1);        // 659.25511...
-Scale.major(\just).degreeToFreq(2, 60.midicps, 1);    // 654.06391...</pre>
+<p>Returns a frequency based on current tuning and rootFreq argument.<textarea class='editor'>Scale.major.degreeToFreq(2, 60.midicps, 1);        // 659.25511...
+Scale.major(\just).degreeToFreq(2, 60.midicps, 1);    // 654.06391...</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-degreeToRatio' href='./../Overviews/Methods.html#degreeToRatio'>degreeToRatio</a>(<span class='argstr'>degree</span>, <span class='argstr'>octave: 0</span>)</h3>
 <div class='method'>
-<p>Returns a ratio based on current tuning.<pre class='code prettyprint lang-sc'>Scale.major.degreeToRatio(2, 1).round(0.001);        // 2.52
-Scale.major(\just).degreeToRatio(2, 1).round(0.001);    // 2.5</pre>
+<p>Returns a ratio based on current tuning.<textarea class='editor'>Scale.major.degreeToRatio(2, 1).round(0.001);        // 2.52
+Scale.major(\just).degreeToRatio(2, 1).round(0.001);    // 2.5</textarea>
 </div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-==' href='./../Overviews/Methods.html#=='>==</a>(<span class='argstr'>that</span>)</h3>
@@ -215,7 +220,7 @@ Scale.major(\just).degreeToRatio(2, 1).round(0.001);    // 2.5</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performNearestInList' href='./../Overviews/Methods.html#performNearestInList'>performNearestInList</a>(<span class='argstr'>degree</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performNearestInScale' href='./../Overviews/Methods.html#performNearestInScale'>performNearestInScale</a>(<span class='argstr'>degree</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 s.waitForBoot({
     a = Scale.ionian;
 
@@ -273,8 +278,8 @@ a.ratios;
 
 a.tuning.name;
 a.tuning.semitones;
-a.tuning.ratios;</pre>
-<pre class='code prettyprint lang-sc'>// for ascending/descending scales, use Pavaroh
+a.tuning.ratios;</textarea>
+<textarea class='editor'>// for ascending/descending scales, use Pavaroh
 (
 Pbind(\note, Pavaroh(
     Pseq([0, 1, 2, 3, 4, 5, 6, 7, 6, 5, 4, 3, 2, 1, 0, \rest], 2),
@@ -283,8 +288,8 @@ Pbind(\note, Pavaroh(
     ),
     \dur, 0.25
 ).play;
-)</pre>
-<pre class='code prettyprint lang-sc'>// note that the root pitch is not stored in the Scale (which should arguably be called a Mode for that reason)
+)</textarea>
+<textarea class='editor'>// note that the root pitch is not stored in the Scale (which should arguably be called a Mode for that reason)
 // instead you supply it at play time:
 
 // key of A
@@ -292,6 +297,7 @@ Pbind(
     \degree, Pseq((0..7), inf), // your melody goes here
     \scale, Scale.major, // your scale goes here
     \root, -3 // semitones relative to 60.midicps, so this is A
-).play;</pre>
+).play;</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Scale.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Scale.schelp</a><br>link::Classes/Scale::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Scale.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Scale.schelp</a><br>link::Classes/Scale::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

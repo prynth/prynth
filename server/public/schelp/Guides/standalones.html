@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Making Standalone Applications | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Making Standalone Applications | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Making Standalone Applications';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Making Standalone Applications:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
@@ -22,8 +27,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#What%20to%20prepare'>What to prepare</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Naming,%20copying,%20and%20fixing%20up%20the%20new%20app'>Naming, copying, and fixing up the new app</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Adaptation%20to%20the%20project'>Adaptation to the project</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -43,9 +48,9 @@ var scdoc_sc_version = '3.9.3';
 <p>This Guide is for exporting copies of an existing SC3 setup, for at least two scenarios:<ul>
 <li>Freezing an SC-based setup for non-expert users, say an installation for a piece that runs in a museum, which is as easily movable and selfcontained as possible.<li>Copying a setup for a piece or performance setup,as backup or safety copy, keeping much flexibility for skilled users.</ul>
 
-<p>Creating more complex user-oriented applications with SC was possible in versions pre 3.6, and a number of people work on additions to SC that will allow similar flexibility again.<div class='note'><span class='notelabel'>NOTE:</span> Known working versions for making standalones: <strong>SC3.8.0, SC3.9dev from branch [2a105f1]</strong><pre class='code prettyprint lang-sc'>"https://supercollider.github.io/download".openOS;</pre>
+<p>Creating more complex user-oriented applications with SC was possible in versions pre 3.6, and a number of people work on additions to SC that will allow similar flexibility again.<div class='note'><span class='notelabel'>NOTE:</span> Known working versions for making standalones: <strong>SC3.8.0, SC3.9dev from branch [2a105f1]</strong><textarea class='editor'>"https://supercollider.github.io/download".openOS;</textarea>
 
-<p>Self-built SC versions may assume their <code class='code prettyprint lang-sc'>Platform.userAppSupportDir</code> is called <code class='code prettyprint lang-sc'>.../SuperCollider/</code> and not the name of the newly made app.</div><h3><a class='anchor' name='How%20this%20guide%20works'>How this guide works</a></h3>
+<p>Self-built SC versions may assume their <code>Platform.userAppSupportDir</code> is called <code>.../SuperCollider/</code> and not the name of the newly made app.</div><h3><a class='anchor' name='How%20this%20guide%20works'>How this guide works</a></h3>
 
 <p>This guide is a set of scripts for creating a SuperCollider-based Standalone app in a few basic steps:<ol>
 <li>copy the open SuperCollider.app or SC3-derived standalone.<li>fix the copy's info files so it uses its own userAppSupportDir<li>test that Platform.userAppSupportDir is independent in the new app!
@@ -54,7 +59,7 @@ var scdoc_sc_version = '3.9.3';
 <ul>
 <li>have your system ready with all desired quarks installed, and a working startup file. (can be a very simple test setup)<li>read each section, then try evaluating it at once;  in case of problems, evaluate line by line,  and tell me where which problems happen<li>when you get to the wakeup kiss, share and enjoy!</ul>
 <h3><a class='anchor' name='Naming,%20copying,%20and%20fixing%20up%20the%20new%20app'>Naming, copying, and fixing up the new app</a></h3>
-<pre class='code prettyprint lang-sc'>// TO PREPARE, CHECK YOUR CURRENT config in Preferences-&gt;Interpreter:
+<textarea class='editor'>// TO PREPARE, CHECK YOUR CURRENT config in Preferences-&gt;Interpreter:
 // you should be using the internal SCClassLibrary and HelpSource,
 // not an external git repository!
 // To test exporting extensions, it is best to have some quarks
@@ -79,7 +84,7 @@ var scdoc_sc_version = '3.9.3';
 };
 
 // make some needed paths and folders
-~pathToThisApp = String.scDir.dirname.dirname;
+~pathToThisApp = Platform.resourceDir.dirname.dirname;
 ~thisAppName = ~pathToThisApp.basename.splitext.first;
 ~pathToNewApp = ~newAppLocation +/+ ~newAppName ++ ".app";
 ~newAppResDir = ~pathToNewApp +/+ "Contents/Resources";
@@ -133,20 +138,20 @@ unixCmd("open" + ~pathToNewApp);
 
 // ... and independence test:
 // IN THE NEW APP, run this code:
-Platform.userAppSupportDir.postcs;</pre>
+Platform.userAppSupportDir.postcs;</textarea>
 <div class='note'><span class='notelabel'>NOTE:</span> THIS SHOULD END WITH ~newAppName! If it has the original ~thisAppName (the one you started from, e.g. ~/././SuperCollider), the new app will not be interfere with SuperCollider! So, delete the app again, and start over using a recommended version of SC3 (see tested list on top)!</div><h3><a class='anchor' name='Adaptation%20to%20the%20project'>Adaptation to the project</a></h3>
 
 <p>Quit the new standalone and go back to the starting app to do:<ul>
 <li>4. overwrite .startupFiles to look inside the app folder<li>5. make a demo project folder and loadfile for the new app<li>6.create a startup file that loads the project loadfile<li>7. transfer active quarks and extensions to the new app<li>8. replace/fill the project folder with your files, scripts etc</ul>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 // 4. write a class extension file to look for the startupFile
-// in the app, in String.scDir for self-containment.
+// in the app, in Platform.resourceDir for self-containment.
 ~overDir = ~newAppResDir +/+ "SCClassLibrary/SystemOverwrites";
 File.mkdir(~overDir);
 ~writeText.value(~overDir +/+ "extModStartupFile.sc",
     "+ OSXPlatform {
     startupFiles {
-        ^[String.scDir +/+ \"startup.scd\"];
+        ^[Platform.resourceDir +/+ \"startup.scd\"];
     }
 }
 "
@@ -269,7 +274,7 @@ unixCmd("open" + ~pathToNewApp);
 // AND IN THE NEW APP, run this to create a self-contained startup config file:
 (
 // use the internal extensions - repeat this when you move the app!
-LanguageConfig.addIncludePath(String.scDir +/+ "InternalExtensions");
+LanguageConfig.addIncludePath(Platform.resourceDir +/+ "InternalExtensions");
 // exclude the default
 LanguageConfig.addExcludePath(Platform.userExtensionDir);
 LanguageConfig.addExcludePath(Platform.systemExtensionDir);
@@ -282,9 +287,9 @@ LanguageConfig.includePaths.last.pathMatch.postln;
 )
 
 // STILL IN THE NEW APP, REBOOT THE INTERPRETER NOW!
-// - the added quarks should now be present.</pre>
+// - the added quarks should now be present.</textarea>
 <div class='note'><span class='notelabel'>NOTE:</span> You can use the Standalone quark to make sure your app remains closed, keeps using its to its InternalExtensions dir, and continues to ignore anything in its userExtensionDir or systemExtensionDir.</div>
-<p><pre class='code prettyprint lang-sc'>// IN THE NEW APP, DO:
+<p><textarea class='editor'>// IN THE NEW APP, DO:
 Quarks.install("https://github.com/adcxyz/Standalone");
 // reboot interpreter, then do
 Standalone.activate;
@@ -295,6 +300,7 @@ Standalone.activate;
 // adapt the loading sequence,
 // and test until everything works to perfection...
 
-// Share and Enjoy your special standalone app!</pre>
+// Share and Enjoy your special standalone app!</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/standalones.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/standalones.schelp</a><br>link::Guides/standalones::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/standalones.schelp'>/usr/share/SuperCollider/HelpSource/Guides/standalones.schelp</a><br>link::Guides/standalones::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

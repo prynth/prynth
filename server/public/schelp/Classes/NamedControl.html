@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>NamedControl | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>NamedControl | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'NamedControl';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>NamedControl:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -34,12 +39,13 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-lags'>lags</a> </li>
 <li class='toc3'><a href='#-name'>name</a> </li>
 <li class='toc3'><a href='#-rate'>rate</a> </li>
+<li class='toc3'><a href='#-spec'>spec</a> </li>
 <li class='toc3'><a href='#-values'>values</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
 <ul class='toc'><li class='toc2'><a href='#Comparison%20with%20direct%20use%20of%20Controls'>Comparison with direct use of Controls</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Using%20dictionary%20with%20functions%20to%20build%20SynthDefs'>Using dictionary with functions to build SynthDefs</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -49,33 +55,33 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Named reference to a control</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/GraphBuilder.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/GraphBuilder.sc'>GraphBuilder.sc</a></div><div id='related'>See also: <a href="./../Classes/ControlName.html">ControlName</a>, <a href="./../Classes/Control.html">Control</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/GraphBuilder.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Control/GraphBuilder.sc'>GraphBuilder.sc</a></div><div id='related'>See also: <a href="./../Classes/ControlName.html">ControlName</a>, <a href="./../Classes/Control.html">Control</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>A NamedControl directly combines a ControlName and a Control UGen conveniently. Also this makes it safe even if several identical controls exist (see example below).
-<p>There are syntax shortcuts that generate NamedControls from the name:<pre class='code prettyprint lang-sc'>\name.ar(values, lags)
-\name.kr(values, lags, fixedLag)
-\name.ir(values, lags)
-\name.tr(values, lags)</pre>
+<p>There are syntax shortcuts that generate NamedControls from the name:<textarea class='editor'>\name.ar(values, lags, spec)
+\name.kr(values, lags, fixedLag, spec)
+\name.ir(values, lags, spec)
+\name.tr(values, lags, spec)</textarea>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='method-code'><span class='method-prefix'>NamedControl.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>lags</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>NamedControl.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>lags</span>, <span class='argstr'>spec</span>)</h3>
 <div class='method'>
 <p>add a new instance of <a href="./../Classes/AudioControl.html">AudioControl</a> with given name and default values. If lags are given, apply a Lag UGen to it.<h4>Discussion:</h4>
 
-<p><code class='code prettyprint lang-sc'>\symbol.ar(values, lags)</code> is a synonym.</div><h3 class='method-code'><span class='method-prefix'>NamedControl.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a>(<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>lags</span>, <span class='argstr'>fixedLag: false</span>)</h3>
+<p><code>\symbol.ar(values, lags, spec)</code> is a synonym.</div><h3 class='method-code'><span class='method-prefix'>NamedControl.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a>(<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>lags</span>, <span class='argstr'>fixedLag: false</span>, <span class='argstr'>spec</span>)</h3>
 <div class='method'>
 <p>add a new instance of <a href="./../Classes/Control.html">Control</a> (kr) with given name and default values. If lags are given, apply a <a href="./../Classes/Lag.html">Lag</a> UGen to it. If fixedLag is set to true, create a <a href="./../Classes/LagControl.html">LagControl</a>(lags cannot be modulated then, but fewer UGens are required).<h4>Discussion:</h4>
 
-<p><code class='code prettyprint lang-sc'>\symbol.kr(values, lags, fixedLag)</code> is a synonym.</div><h3 class='method-code'><span class='method-prefix'>NamedControl.</span><a class='method-name' name='*ir' href='./../Overviews/Methods.html#ir'>ir</a>(<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>lags</span>)</h3>
+<p><code>\symbol.kr(values, lags, fixedLag, spec)</code> is a synonym.</div><h3 class='method-code'><span class='method-prefix'>NamedControl.</span><a class='method-name' name='*ir' href='./../Overviews/Methods.html#ir'>ir</a>(<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>lags</span>, <span class='argstr'>spec</span>)</h3>
 <div class='method'>
 <p>add a new instance of <a href="./../Classes/Control.html">Control</a> (ir) with given name and default values. If lags are given, apply a <a href="./../Classes/Lag.html">Lag</a> UGen to it.<h4>Discussion:</h4>
 
-<p><code class='code prettyprint lang-sc'>\symbol.ir(values, lags)</code> is a synonym.</div><h3 class='method-code'><span class='method-prefix'>NamedControl.</span><a class='method-name' name='*tr' href='./../Overviews/Methods.html#tr'>tr</a>(<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>lags</span>)</h3>
+<p><code>\symbol.ir(values, lags, spec)</code> is a synonym.</div><h3 class='method-code'><span class='method-prefix'>NamedControl.</span><a class='method-name' name='*tr' href='./../Overviews/Methods.html#tr'>tr</a>(<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>lags</span>, <span class='argstr'>spec</span>)</h3>
 <div class='method'>
 <p>add a new instance of <a href="./../Classes/TrigControl.html">TrigControl</a> with given name and default values. If lags are given, apply a <a href="./../Classes/Lag.html">Lag</a> UGen to it.<h4>Discussion:</h4>
 
-<p><code class='code prettyprint lang-sc'>\symbol.tr(values, lags)</code> is a synonym.</div><h3 class='method-code'><span class='method-prefix'>NamedControl.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>rate</span>, <span class='argstr'>lags</span>, <span class='argstr'>fixedLag: false</span>)</h3>
+<p><code>\symbol.tr(values, lags, spec)</code> is a synonym.</div><h3 class='method-code'><span class='method-prefix'>NamedControl.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>name</span>, <span class='argstr'>values</span>, <span class='argstr'>rate</span>, <span class='argstr'>lags</span>, <span class='argstr'>fixedLag: false</span>, <span class='argstr'>spec</span>)</h3>
 <div class='method'>
 <p>add a new instance with the given rate, name and default values. If lags are given, apply a <a href="./../Classes/Lag.html">Lag</a> UGen to it. If fixedLag is set to true, create a <a href="./../Classes/LagControl.html">LagControl</a>(lags cannot be modulated then, but fewer UGens are required).</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
@@ -88,9 +94,11 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-lags' href='./../Overviews/Methods.html#lags'>lags</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-name' href='./../Overviews/Methods.html#name'>name</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-rate' href='./../Overviews/Methods.html#rate'>rate</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-spec' href='./../Overviews/Methods.html#spec'>spec</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-spec' href='./../Overviews/Methods.html#spec'>spec</a> = <span class='argstr'>spec</span></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-values' href='./../Overviews/Methods.html#values'>values</a></h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>// use NamedControl to create a number of multichannel controls:
+<textarea class='editor'>// use NamedControl to create a number of multichannel controls:
 
 a = { SinOsc.ar(NamedControl.kr(\freq, [300, 330, 370], [1, 0.3, 0.02])).sum * 0.1 }.play;
 a.setn(\freq, [700, 705, 890]);
@@ -104,10 +112,10 @@ a = { SinOsc.ar(\freq.kr(440, 3.5)) + Saw.ar(\freq.kr(440, 0.05) * 0.5) * 0.1 }.
 
 
 a.set(\freq, 1220)
-a.set(\freq, 120)</pre>
+a.set(\freq, 120)</textarea>
 <h3><a class='anchor' name='Comparison%20with%20direct%20use%20of%20Controls'>Comparison with direct use of Controls</a></h3>
 
-<p>In the situation when functions are used to combine UGens to more complex SynthDefs, it may not be known which ControlNames are already taken by others. NamedControl allows to reuse existing control names.<pre class='code prettyprint lang-sc'>// compare:
+<p>In the situation when functions are used to combine UGens to more complex SynthDefs, it may not be known which ControlNames are already taken by others. NamedControl allows to reuse existing control names.<textarea class='editor'>// compare:
 (
 a = {
     var x, y;
@@ -130,10 +138,10 @@ a = {
 )
 
 a.set(\freq, 1220)
-a.set(\freq, 120)</pre>
+a.set(\freq, 120)</textarea>
 <h3><a class='anchor' name='Using%20dictionary%20with%20functions%20to%20build%20SynthDefs'>Using dictionary with functions to build SynthDefs</a></h3>
 
-<p>Here is a basic example using a dictionary with functions that can be combined to build SynthDefs.<pre class='code prettyprint lang-sc'>(
+<p>Here is a basic example using a dictionary with functions that can be combined to build SynthDefs.<textarea class='editor'>(
 q = ();
 q.makeEnv = { |q, env, doneAction = 0| EnvGen.kr(env, NamedControl.kr(\gate, 1), doneAction: doneAction) };
 q.chooseNoise = { [ {PinkNoise.ar}, {WhiteNoise.ar}, {LFNoise2.ar(Rand(100, 1000))}].choose.value};
@@ -166,5 +174,6 @@ a = {
 }.play;
 )
 a.set(\freq, 6000); // set filter frequency
-a.set(\gate, -3); // release in 3 seconds</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/NamedControl.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/NamedControl.schelp</a><br>link::Classes/NamedControl::<br></div></div></body></html>
+a.set(\gate, -3); // release in 3 seconds</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/NamedControl.schelp'>/usr/share/SuperCollider/HelpSource/Classes/NamedControl.schelp</a><br>link::Classes/NamedControl::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>MultiSliderView | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>MultiSliderView | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'MultiSliderView';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>MultiSliderView:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -68,8 +73,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Interactive%20Example'>Interactive Example</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Display%20a%20Sound%20File'>Display a Sound File</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Use%20as%20a%20Sequencer'>Use as a Sequencer</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -79,19 +84,19 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>A view displaying an array of sliders</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/QMultiSliderView.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/QMultiSliderView.sc'>QMultiSliderView.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/QMultiSliderView.html">QMultiSliderView</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QMultiSliderView.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QMultiSliderView.sc'>QMultiSliderView.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/QMultiSliderView.html">QMultiSliderView</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>MultiSliderView displays a collection of values, each represented by the position of one of the sliders placed side by side.
 <p>When clicking into the view, the value of the slider under the mouse pointer will be set. Whenever the mouse is moved with a mouse button pressed, the slider currently under the mouse pointer will be adjusted.
 <p>The last slider modified is considered to be the <strong>current</strong> one, i.e. the <a href="#-index">-index</a> method will return its index, and <a href="#-currentValue">-currentValue</a> relates to its value.
-<p>The current slider is also considered to be the <strong>selected</strong> one. Selection can be extended to more than one slider by modifying <a href="#-selectionSize">-selectionSize</a>. Whenever a different slider becomes the current one, the selection size shrinks back to 1. Note that the selection will only be visually indicated if <a href="#-showIndex">-showIndex</a> is <code class='code prettyprint lang-sc'>true</code>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<p>The current slider is also considered to be the <strong>selected</strong> one. Selection can be extended to more than one slider by modifying <a href="#-selectionSize">-selectionSize</a>. Whenever a different slider becomes the current one, the selection size shrinks back to 1. Note that the selection will only be visually indicated if <a href="#-showIndex">-showIndex</a> is <code>true</code>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>MultiSliderView.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>parent</span>, <span class='argstr'>bounds</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/View.html'>View</a></div>
 <div class='method'>
 <p> A new MultiSliderView is created empty, without any columns. <a href="#-size">-size</a> or <a href="#-value">-value</a> has to be set in order to create some columns.
-<p> So if you want a specific number of sliders, then it is best to specify the <a href="#-size">-size</a> and set <a href="#-elasticMode">-elasticMode</a> to 1. Then you will get a MultiSliderView which distributes <a href="#-size">-size</a> amount of sliders over <code class='code prettyprint lang-sc'>bounds.width</code>, where the slider widths are at maximum <a href="#-indexThumbSize">-indexThumbSize</a> (default 12) and the <a href="#-gap">-gap</a> is adjusted accordingly.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<p> So if you want a specific number of sliders, then it is best to specify the <a href="#-size">-size</a> and set <a href="#-elasticMode">-elasticMode</a> to 1. Then you will get a MultiSliderView which distributes <a href="#-size">-size</a> amount of sliders over <code>bounds.width</code>, where the slider widths are at maximum <a href="#-indexThumbSize">-indexThumbSize</a> (default 12) and the <a href="#-gap">-gap</a> is adjusted accordingly.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>MultiSliderView.</span><a class='method-name' name='*qtClass' href='./../Overviews/Methods.html#qtClass'>qtClass</a></h3>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
@@ -248,10 +253,10 @@ var scdoc_sc_version = '3.9.3';
 <div class='returnvalue'>
 <p>a) If <a href="#-selectionSize">-selectionSize</a> is 0, returns <a href="#-value">-value</a>.
 <p> b) If <a href="#-selectionSize">-selectionSize</a> &gt; 1, returns an Array with the values at the indexes in the selection.
-<p> If <a href="#-reference">-reference</a> is not nil, returns an Array containing (a) or (b), and an Array of the corresponding reference values: <code class='code prettyprint lang-sc'>[[values], [references]]</code>.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-defaultCanReceiveDrag' href='./../Overviews/Methods.html#defaultCanReceiveDrag'>defaultCanReceiveDrag</a></h3>
+<p> If <a href="#-reference">-reference</a> is not nil, returns an Array containing (a) or (b), and an Array of the corresponding reference values: <code>[[values], [references]]</code>.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-defaultCanReceiveDrag' href='./../Overviews/Methods.html#defaultCanReceiveDrag'>defaultCanReceiveDrag</a></h3>
 <div class='method'><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>True for any drag data, but the data should either be an Array of values ( <code class='code prettyprint lang-sc'>[values]</code> ), or an Array containg an Array of values and an Array of corresponding reference values ( <code class='code prettyprint lang-sc'>[[values], [references]]</code> ).</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-defaultReceiveDrag' href='./../Overviews/Methods.html#defaultReceiveDrag'>defaultReceiveDrag</a>(<span class='argstr'>data</span>)</h3>
+<p>True for any drag data, but the data should either be an Array of values ( <code>[values]</code> ), or an Array containg an Array of values and an Array of corresponding reference values ( <code>[[values], [references]]</code> ).</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-defaultReceiveDrag' href='./../Overviews/Methods.html#defaultReceiveDrag'>defaultReceiveDrag</a>(<span class='argstr'>data</span>)</h3>
 <div class='method'>
 <p> If the drag data is in one of the acceptable forms (see <a href="#-defaultCanReceiveDrag">-defaultCanReceiveDrag</a> above), sets <a href="#-value">-value</a> (and <a href="#-reference">-reference</a>) using that data.</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
@@ -260,7 +265,7 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-xOffset' href='./../Overviews/Methods.html#xOffset'>xOffset</a> = <span class='argstr'>int</span></h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 <h3><a class='anchor' name='Basic%20Examples'>Basic Examples</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 n=20;
 w = Window.new.front;
 m = MultiSliderView(w,Rect(10,10,n*13+2,100)); //default thumbWidth is 13
@@ -268,9 +273,9 @@ m.value=Array.fill(n, {|v| v*0.05}); // size is set automatically when you set t
 m.action = { arg q;
     q.value.postln;
 };
-)</pre>
+)</textarea>
 
-<p>Looks like a candlestick graph:<pre class='code prettyprint lang-sc'>(
+<p>Looks like a candlestick graph:<textarea class='editor'>(
 var size;
 size = 350 / 6;
 w = Window.new;
@@ -287,10 +292,10 @@ w.front;
 (
 m.bounds_(Rect(0, 0, 100, 350));
 m.indexIsHorizontal_(false);
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Interactive%20Example'>Interactive Example</a></h3>
 
-<p>A walk through all the graphic options:<pre class='code prettyprint lang-sc'>(
+<p>A walk through all the graphic options:<textarea class='editor'>(
 n=40;
 
 w = Window("MultiSlider Options", Rect(200, Window.screenBounds.height-550, 600, 450));
@@ -343,9 +348,9 @@ f={
 f.value;
 w.front;
 
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Display%20a%20Sound%20File'>Display a Sound File</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 // press shift to extend the selection
 // use as waveView: scrubbing over the view returns index
 // if showIndex(false) the view is not refreshed (faster);
@@ -407,9 +412,9 @@ b.colors_(Color.black, Color.blue(1.0,1.0));
 b.showIndex_(true);
 a.front;
 
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Use%20as%20a%20Sequencer'>Use as a Sequencer</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 var size;
 size = 12;
 s.waitForBoot({
@@ -448,6 +453,7 @@ s.waitForBoot({
     });
     AppClock.play(r);
 });
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/MultiSliderView.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/MultiSliderView.schelp</a><br>link::Classes/MultiSliderView::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/MultiSliderView.schelp'>/usr/share/SuperCollider/HelpSource/Classes/MultiSliderView.schelp</a><br>link::Classes/MultiSliderView::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

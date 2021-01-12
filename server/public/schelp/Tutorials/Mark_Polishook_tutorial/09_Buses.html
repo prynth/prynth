@@ -1,26 +1,31 @@
-<!doctype html><html lang='en'><head><title>09_Buses | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>09_Buses | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = '09_Buses';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>09_Buses:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Placing%20audio%20into%20a%20bus'>Placing audio into a bus</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Getting%20audio%20from%20a%20bus'>Getting audio from a bus</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Control%20rate%20buses'>Control rate buses</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/Mark_Polishook_tutorial</span>
@@ -33,14 +38,14 @@ var scdoc_sc_version = '3.9.3';
 </div>
 
 <p>By default, SuperCollider has 1024 buses for audio signals and 16,384 for control signals. The buses, which are items in an array, are what SuperCollider uses to represent audio and control rate data.
-<p>////////////////////////////////////////////////////////////////////////////////////////////////////<pre class='code prettyprint lang-sc'>// the array of audio buses (channels)
+<p>////////////////////////////////////////////////////////////////////////////////////////////////////<textarea class='editor'>// the array of audio buses (channels)
 [ channel0, channel1, channel2, channel3, channel4, ... , ..., ..., etc., ... channel127 ]
 
 // the array of control buses (channels)
-[ channel0, channel1, channel2, channel3, channel4, ... , ..., ..., etc., ... channel4095 ]</pre>
+[ channel0, channel1, channel2, channel3, channel4, ... , ..., ..., etc., ... channel4095 ]</textarea>
 <h2><a class='anchor' name='Placing%20audio%20into%20a%20bus'>Placing audio into a bus</a></h2>
 
-<p>Use an Out ugen at the audio rate to put data into an audio bus.<pre class='code prettyprint lang-sc'>(
+<p>Use an Out ugen at the audio rate to put data into an audio bus.<textarea class='editor'>(
 SynthDef("dataForABus", {
     Out.ar(
         0,        // write 1 channel of audio into bus 0
@@ -49,16 +54,16 @@ SynthDef("dataForABus", {
 }).add;
 )
 
-Synth("dataForABus");</pre>
+Synth("dataForABus");</textarea>
 
-<p>A SynthDef browser<pre class='code prettyprint lang-sc'>(
+<p>A SynthDef browser<textarea class='editor'>(
 SynthDescLib.global.read;
 SynthDescLib.global.browse;
-)</pre>
+)</textarea>
 
 <p>shows 1 channel of output on channel 0.<h2><a class='anchor' name='Getting%20audio%20from%20a%20bus'>Getting audio from a bus</a></h2>
 
-<p>Send an .ar message to an In ugen to get data from an audio bus.<pre class='code prettyprint lang-sc'>(
+<p>Send an .ar message to an In ugen to get data from an audio bus.<textarea class='editor'>(
 SynthDef("dataFromABus", {
     Out.ar(
         0,
@@ -73,11 +78,12 @@ SynthDef("dataFromABus", {
 (
 Synth("dataForABus");    // synthesize a sawtooth wave on channel 0
 Synth("dataFromABus");    // pair it with a sine wave on channel 1
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Control%20rate%20buses'>Control rate buses</a></h2>
 
-<p>Use <code class='code prettyprint lang-sc'>In.kr</code> and <code class='code prettyprint lang-sc'>Out.kr</code> to read from or write to control buses.
+<p>Use <code>In.kr</code> and <code>Out.kr</code> to read from or write to control buses.
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
 <p>For additional information, see the <a href="./../../Classes/Out.html">Out</a>, <a href="./../../Classes/In.html">In</a>, and <a href="./../../Classes/Bus.html">Bus</a> files in the SuperCollider help system.
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/10_Controls.html">10_Controls</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/09_Buses.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/09_Buses.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/09_Buses::<br></div></div></body></html>
+<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/10_Controls.html">10_Controls</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/09_Buses.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/09_Buses.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/09_Buses::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

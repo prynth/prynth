@@ -1,26 +1,31 @@
-<!doctype html><html lang='en'><head><title>04 | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>04 | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../../lib/jquery.min.js'></script>
+<script src='./../../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../../..';
 var scdoc_title = '04';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../../scdoc.js' type='text/javascript'></script>
 <script src='./../../../docmap.js' type='text/javascript'></script>
-<script src='./../../../prettify.js' type='text/javascript'></script>
-<script src='./../../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>04:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#ユニット・ジェネレータのコントロール%20のレート'>ユニット・ジェネレータのコントロール のレート</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Audio%20rate'>Audio rate</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Control%20rate'>Control rate</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/Mark_Polishook_tutorial/Japanese_version</span>
@@ -33,22 +38,22 @@ var scdoc_sc_version = '3.9.3';
 </div>
 <h2><a class='anchor' name='ユニット・ジェネレータのコントロール%20のレート'>ユニット・ジェネレータのコントロール のレート</a></h2>
 
-<p>いくつかのSuperColliderのugenは、後に.arメッセージが続けられているということに気づいているでしょう。例えば、次の様に<pre class='code prettyprint lang-sc'>SinOsc.kr</pre>
+<p>いくつかのSuperColliderのugenは、後に.arメッセージが続けられているということに気づいているでしょう。例えば、次の様に<textarea class='editor'>SinOsc.kr</textarea>
 
-<p>というものもあれば、他のugenは、次の様に.arメッセージを使うということもあります。<pre class='code prettyprint lang-sc'>SinOsc.ar</pre>
+<p>というものもあれば、他のugenは、次の様に.arメッセージを使うということもあります。<textarea class='editor'>SinOsc.ar</textarea>
 <h2><a class='anchor' name='Audio%20rate'>Audio rate</a></h2>
 
-<p>.arメッセージを持つugenはオーディオ・レートで動作します。デフォルトでは、一秒間あたり44,100サンプルです。<pre class='code prettyprint lang-sc'>SinOsc.ar(440, 0, 1);</pre>
+<p>.arメッセージを持つugenはオーディオ・レートで動作します。デフォルトでは、一秒間あたり44,100サンプルです。<textarea class='editor'>SinOsc.ar(440, 0, 1);</textarea>
 
 <p>耳に聞こえるオーディオ・チェーンの一部分である場合にはいつでも、.arメッセージをユニット・ジェネレータに送ります。<h2><a class='anchor' name='Control%20rate'>Control rate</a></h2>
 
 <p>コントロール・レート
-<p>.krメッセージが後に続くugenはコントロール・レートで動作します。デフォルトでは、コントロール・レートのugenは、オーディオ・レートのugenが生成する64サンプルごとに1回だけ生成します。<pre class='code prettyprint lang-sc'>SinOsc.kr(440, 0, 1);</pre>
+<p>.krメッセージが後に続くugenはコントロール・レートで動作します。デフォルトでは、コントロール・レートのugenは、オーディオ・レートのugenが生成する64サンプルごとに1回だけ生成します。<textarea class='editor'>SinOsc.kr(440, 0, 1);</textarea>
 
 <p>.krメッセージをユニット・ジェネレータに送るのは、それら（ユニット・ジェネレータ）をモジュレータ、すなわち、オーディオ信号を形作るまたはコントロールするもの、として使いたいときだけです。
 <p>コントロール・レート・シグナルは、一方のオーディオ・レートと比較して計算負荷が低くなります。オーディオ・レートのugenのパラメータを変調するために使う場合には、変化のレートが異なるにも関わらず、ほとんどスムーズに聞こえます。
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>これは1つのUGenがオーディオ・レートで動作し、他のUGenがコントロール・レートで動作するという一例です。<pre class='code prettyprint lang-sc'>(
+<p>これは1つのUGenがオーディオ・レートで動作し、他のUGenがコントロール・レートで動作するという一例です。<textarea class='editor'>(
 SynthDef("anExample", {
     Out.ar(
         0,
@@ -61,9 +66,10 @@ SynthDef("anExample", {
 }).add;
 )
 
-Synth("anExample")</pre>
+Synth("anExample")</textarea>
 
 <p>コントロール・レートで動作するこのSinOscーSinOsc.kr([7, 8], 0, 7)ーのインスタンスは、オーディオ・レートで聞くSinOscの周波数を変調します。
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
 <p>将来的には、増加し続けるコンピュータの速度によって（完全に廃止されてしまわない限りは）オーディオ・レートとコントロール・レートを使い分ける必要性は減るでしょう。コントロール・レートでugenを使うことにより、オーディオ・レートでデータを生成する様な厳密さが要求されない場合には、処理にかかる負荷を抑えることができます。
-<p>go to <a href="./../../../Tutorials/Mark_Polishook_tutorial/Japanese_version/05.html">05</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/04.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/04.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/Japanese_version/04::<br></div></div></body></html>
+<p>go to <a href="./../../../Tutorials/Mark_Polishook_tutorial/Japanese_version/05.html">05</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/04.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/04.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/Japanese_version/04::<br></div></div><script src='./../../../editor.js' type='text/javascript'></script>
+</body></html>

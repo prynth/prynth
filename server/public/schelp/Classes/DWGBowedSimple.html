@@ -1,0 +1,88 @@
+<!doctype html><html lang='en'><head><title>DWGBowedSimple | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'DWGBowedSimple';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>DWGBowedSimple:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>PhysicalModels'>PhysicalModels</a></span>
+</div><h1>DWGBowedSimple<span id='superclasses'> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Plucked physical model.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/DWGUGens/classes/DWGBowed.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/DWGUGens/classes/DWGBowed.sc'>DWGBowed.sc</a></div></div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Digital wave guide physical model of a bowed instrument. Sound must go throught BowSoundBoard for better sound. <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>DWGBowedSimple.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>freq: 440</span>, <span class='argstr'>velb: 0.5</span>, <span class='argstr'>force: 1</span>, <span class='argstr'>gate: 1</span>, <span class='argstr'>pos: 0.14</span>, <span class='argstr'>release: 0.1</span>, <span class='argstr'>c1: 1</span>, <span class='argstr'>c3: 30</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>freq<td class='argumentdesc'>
+<p>Sound frequency.<tr><td class='argumentname'>velb<td class='argumentdesc'>
+<p>Bow velocity.<tr><td class='argumentname'>force<td class='argumentdesc'>
+<p>Bow normal force.<tr><td class='argumentname'>gate<td class='argumentdesc'>
+<p>Releases synth when value changes from &gt;0 to 0.<tr><td class='argumentname'>pos<td class='argumentdesc'>
+<p>Relative bow position from 0 to 1.<tr><td class='argumentname'>release<td class='argumentdesc'>
+<p>Release time in seconds.<tr><td class='argumentname'>c1<td class='argumentdesc'>
+<p>Inverse of DC decay time.<tr><td class='argumentname'>c3<td class='argumentdesc'>
+<p>Hight frequency loss factor.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>//Define bow synthdef
+(
+SynthDef(\help_dwgbowed, { |out=0, freq=440, amp=0.5,force=1, gate=1,pos=0.07,c1=0.25,c3=31,pan=0|
+    var vib = Gendy1.kr(1,1,1,1,0.1, 4,mul:0.003,add:1);
+    var son = DWGBowedSimple.ar(freq*vib, amp,force, gate,pos,0.1,c1,c3);
+    son = DWGSoundBoard.ar(son);
+    son = BPF.ar(son,118,1)+son;
+    son = BPF.ar(son,430,1)+son;
+    son = BPF.ar(son,490,1)+son;
+    son = LPF.ar(son,6000);
+    Out.ar(out, Pan2.ar(son * 0.1, pan));
+}).add;
+)
+
+//Use it.
+(
+
+Pbind(
+    \instrument, \help_dwgbowed,
+    \dur , 0.25,
+    \degree, Pseq([1,5,7+3], inf),
+    \amp , Pseq([0.9,0.7,0.5],inf),
+).play;
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/DWGUGens/HelpSource/Classes/DWGBowedSimple.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/DWGUGens/HelpSource/Classes/DWGBowedSimple.schelp</a><br>link::Classes/DWGBowedSimple::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

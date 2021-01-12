@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Ref | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Ref | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Ref';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Ref:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -43,8 +48,8 @@ var scdoc_sc_version = '3.9.3';
 </ul></ul><li class='toc1'><a href='#Typical%20uses%20of%20Ref:'>Typical uses of Ref:</a></li>
 <ul class='toc'><li class='toc2'><a href='#preventing%20multi-channel%20expansion'>preventing multi-channel expansion</a></li>
 <ul class='toc'><li class='toc3'><a href='#.multichannelExpandRef'>multichannelExpandRef</a> </li>
-</ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -54,21 +59,21 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>a reference to a value</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Ref.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Ref.sc'>Ref.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/Maybe.html">Maybe</a>, <a href="../Classes/RefCopy.html">RefCopy</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Core/Ref.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Core/Ref.sc'>Ref.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/Maybe.html">Maybe</a>, <a href="../Classes/RefCopy.html">RefCopy</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>A Ref holds an object which may be retrieved and altered with the messages value and value_(obj). The backquote <code class='code prettyprint lang-sc'>`</code> is a unary operator that is equivalent to calling <code class='code prettyprint lang-sc'>Ref.new(obj)</code>.
-<p>Refs are most commonly used to prevent multi-channel expansion in <a href="./../Classes/SynthDef.html">SynthDef</a>s and <a href="./../Classes/Pattern.html">Pattern</a>s (see <a href="./../Classes/Klank.html">Klank</a> for an example). Refs can also be used to simplify the coding of co-routines used in EventStreams (see <a href="./../Classes/Prout.html">Prout</a> for an example).<pre class='code prettyprint lang-sc'>x = Ref(nil);
+<p>A Ref holds an object which may be retrieved and altered with the messages value and value_(obj). The backquote <code>`</code> is a unary operator that is equivalent to calling <code>Ref.new(obj)</code>.
+<p>Refs are most commonly used to prevent multi-channel expansion in <a href="./../Classes/SynthDef.html">SynthDef</a>s and <a href="./../Classes/Pattern.html">Pattern</a>s (see <a href="./../Classes/Klank.html">Klank</a> for an example). Refs can also be used to simplify the coding of co-routines used in EventStreams (see <a href="./../Classes/Prout.html">Prout</a> for an example).<textarea class='editor'>x = Ref(nil);
 z = obj.method(x);        // method puts something in reference
-x.value.doSomething;    // retrieve value and use it</pre>
+x.value.doSomething;    // retrieve value and use it</textarea>
 
 <p>Ref is also used as a quoting device to protect against multi channel expansion in certain UGens that require Arrays.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>Ref.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>thing</span>)</h3>
 <div class='method'>
 <p>create a Ref of an object.<h4>Discussion:</h4>
 
-<p>Another syntax:<pre class='code prettyprint lang-sc'>`5</pre>
+<p>Another syntax:<textarea class='editor'>`5</textarea>
 </div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-dereference' href='./../Overviews/Methods.html#dereference'>dereference</a></h3>
@@ -84,12 +89,12 @@ x.value.doSomething;    // retrieve value and use it</pre>
 <div class='method'>
 <p>Sets value.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-at' href='./../Overviews/Methods.html#at'>at</a>(<span class='argstr'>key</span>)</h3>
 <div class='method'>
-<p>Returns <code class='code prettyprint lang-sc'>value.at(index)</code></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-put' href='./../Overviews/Methods.html#put'>put</a>(<span class='argstr'>key</span>, <span class='argstr'>val</span>)</h3>
+<p>Returns <code>value.at(index)</code></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-put' href='./../Overviews/Methods.html#put'>put</a>(<span class='argstr'>key</span>, <span class='argstr'>val</span>)</h3>
 <div class='method'>
 <p>Executes value.put(index, value)</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-seq' href='./../Overviews/Methods.html#seq'>seq</a>(<span class='argstr'>pat</span>)</h3>
 <div class='method'>
 <p>this method is used to return values from within a Routine definition<h4>Discussion:</h4>
-<pre class='code prettyprint lang-sc'>{ this.value = output.embedInStream(this.value); }</pre>
+<textarea class='editor'>{ this.value = output.embedInStream(this.value); }</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asUGenInput' href='./../Overviews/Methods.html#asUGenInput'>asUGenInput</a></h3>
 <div class='method'>
 <p>Returns the Ref - this prevents multi-channel expansion in a SynthDef</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asControlInput' href='./../Overviews/Methods.html#asControlInput'>asControlInput</a></h3>
@@ -98,7 +103,7 @@ x.value.doSomething;    // retrieve value and use it</pre>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asBufWithValues' href='./../Overviews/Methods.html#asBufWithValues'>asBufWithValues</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asOSCArgEmbeddedArray' href='./../Overviews/Methods.html#asOSCArgEmbeddedArray'>asOSCArgEmbeddedArray</a>(<span class='argstr'>array</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extConvertToOSC.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extConvertToOSC.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extConvertToOSC.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extConvertToOSC.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-multichannelExpandRef' href='./../Overviews/Methods.html#multichannelExpandRef'>multichannelExpandRef</a>(<span class='argstr'>rank</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-next' href='./../Overviews/Methods.html#next'>next</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-valueArray' href='./../Overviews/Methods.html#valueArray'>valueArray</a></h3>
@@ -108,9 +113,9 @@ x.value.doSomething;    // retrieve value and use it</pre>
 <h3><a class='anchor' name='preventing%20multi-channel%20expansion'>preventing multi-channel expansion</a></h3>
 
 <p>Consult <a href="./../Guides/Multichannel-Expansion.html">Multichannel Expansion</a> for details on multi-channel expansion in SynthDefs.
-<p>Refs prevent multi-channel expansion in a SynthDef, so the array below defines one Klank UGen rather than three.<pre class='code prettyprint lang-sc'>{ Klank.ar(`[[800, 1071, 1153, 1723], nil, [1, 1, 1, 1]], Impulse.ar(2, 0, 0.1)) }.play;</pre>
+<p>Refs prevent multi-channel expansion in a SynthDef, so the array below defines one Klank UGen rather than three.<textarea class='editor'>{ Klank.ar(`[[800, 1071, 1153, 1723], nil, [1, 1, 1, 1]], Impulse.ar(2, 0, 0.1)) }.play;</textarea>
 
-<p>Refs cannot be used reliably to suppress multi-channel expansion within Events and Patterns. Instead, it is necessary to enclose the array of values in another array:<pre class='code prettyprint lang-sc'>(
+<p>Refs cannot be used reliably to suppress multi-channel expansion within Events and Patterns. Instead, it is necessary to enclose the array of values in another array:<textarea class='editor'>(
     SynthDef(\multi, { | out, freq = #[100,200,300], amp = 0.1, pan = 0, sustain = 1|
         var audio, env;
         env = EnvGen.kr(Env.perc(0.01, sustain), doneAction: Done.freeSelf);
@@ -121,8 +126,8 @@ x.value.doSomething;    // retrieve value and use it</pre>
 
     ( instrument: \multi, freq: [ [500, 501, 700] ], sustain: 2).play
 
-)</pre>
-<pre class='code prettyprint lang-sc'>(
+)</textarea>
+<textarea class='editor'>(
     Pbind(*[
         instrument: \multi,
         freq:     Prand([
@@ -133,13 +138,14 @@ x.value.doSomething;    // retrieve value and use it</pre>
         dur: 0.2,
         sustain: 0.3
     ]).play;
-)</pre>
+)</textarea>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='multichannelExpandRef' href='./../Overviews/Methods.html#multichannelExpandRef'>multichannelExpandRef</a></h3>
 <div class='method'>
 <p>This method is called internally on inputs to UGens that take multidimensional arrays, like <a href="./../Classes/Klank.html">Klank</a> and it allows proper multichannel expansion even in those cases. For SequenceableCollection, this returns the collection itself, assuming that it contains already a number of Refs.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>rank<td class='argumentdesc'>
-<p>The depth at which the list is expanded. For instance the Klank spec has a rank of 2.<pre class='code prettyprint lang-sc'>`([[[100, 200], 500], nil, [[[0.01, 0.3], 0.8]]]).multichannelExpandRef(2);
-[`[[100, 200], nil, [0.2, 0.8]], `[[130, 202], nil, [0.2, 0.5]]].multichannelExpandRef(2);</pre>
+<p>The depth at which the list is expanded. For instance the Klank spec has a rank of 2.<textarea class='editor'>`([[[100, 200], 500], nil, [[[0.01, 0.3], 0.8]]]).multichannelExpandRef(2);
+[`[[100, 200], nil, [0.2, 0.8]], `[[130, 202], nil, [0.2, 0.5]]].multichannelExpandRef(2);</textarea>
 
-<p></table></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Ref.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Ref.schelp</a><br>link::Classes/Ref::<br></div></div></body></html>
+<p></table></div><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Ref.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Ref.schelp</a><br>link::Classes/Ref::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

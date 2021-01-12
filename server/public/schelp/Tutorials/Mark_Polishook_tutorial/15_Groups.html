@@ -1,26 +1,31 @@
-<!doctype html><html lang='en'><head><title>15_Groups | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>15_Groups | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = '15_Groups';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>15_Groups:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Groups%20are%20linked%20lists'>Groups are linked lists</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Nodes,%20linked%20lists,%20trees'>Nodes, linked lists, trees</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#RootNode%20and%20default_group'>RootNode and default_group</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/Mark_Polishook_tutorial</span>
@@ -32,9 +37,9 @@ var scdoc_sc_version = '3.9.3';
 <div id='related'>See also: <a href="./../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
 </div>
 
-<p>The simplest synthesis processes use a single ugen.<pre class='code prettyprint lang-sc'>{ Saw.ar(500, 0.1) }.scope;</pre>
+<p>The simplest synthesis processes use a single ugen.<textarea class='editor'>{ Saw.ar(500, 0.1) }.scope;</textarea>
 
-<p>or<pre class='code prettyprint lang-sc'>{ Formlet.ar(Saw.ar(22), 400, 0.01, 0.11, 0.022) }.scope</pre>
+<p>or<textarea class='editor'>{ Formlet.ar(Saw.ar(22), 400, 0.01, 0.11, 0.022) }.scope</textarea>
 
 <p>Most of the SuperCollider help documents for the UGens show other such examples.
 <p><a href="./../../Browse.html#UGens">Browse: UGens</a>
@@ -50,15 +55,15 @@ var scdoc_sc_version = '3.9.3';
 <li><a href="http://en.wikipedia.org/wiki/Node">http://en.wikipedia.org/wiki/Node</a><li><a href="http://en.wikipedia.org/wiki/Linked_list">http://en.wikipedia.org/wiki/Linked_list</a><li><a href="http://en.wikipedia.org/wiki/Tree_data_structure">http://en.wikipedia.org/wiki/Tree_data_structure</a></ul>
 <h2><a class='anchor' name='RootNode%20and%20default_group'>RootNode and default_group</a></h2>
 
-<p>By default, the localhost and internal servers each boot with two predefined groups: the <a href="./../../Classes/RootNode.html">RootNode</a> and the <a href="./../../Reference/default_group.html">Default Group</a> (see their help files). To see this, start the localhost server and then evaluate<pre class='code prettyprint lang-sc'>s.queryAllNodes;</pre>
+<p>By default, the localhost and internal servers each boot with two predefined groups: the <a href="./../../Classes/RootNode.html">RootNode</a> and the <a href="./../../Reference/default_group.html">Default Group</a> (see their help files). To see this, start the localhost server and then evaluate<textarea class='editor'>s.queryAllNodes;</textarea>
 
-<p>The next two lines<pre class='code prettyprint lang-sc'>Group(0)
-        Group(1)</pre>
+<p>The next two lines<textarea class='editor'>Group(0)
+        Group(1)</textarea>
 
 <p>will appear in the transcript window.
 <p>Group(0) is the rootnode group and Group(1) is the default_group. Group(1) is indented to show that it branches from Group(0).
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>New synths are attached by default to the head of the default_group.<pre class='code prettyprint lang-sc'>// 1st, evaluate a synthdef
+<p>New synths are attached by default to the head of the default_group.<textarea class='editor'>// 1st, evaluate a synthdef
 (
 SynthDef("ringModulation", {
     Out.ar(
@@ -80,21 +85,21 @@ Synth("ringModulation");
 // 3rd, tell the server to list its nodes
 (
 s.queryAllNodes;
-)</pre>
-<pre class='code prettyprint lang-sc'>Group(0)
+)</textarea>
+<textarea class='editor'>Group(0)
         Group(1)
-                Synth 1003</pre>
+                Synth 1003</textarea>
 
-<p>will appear in the transcript window. It shows Group(0) as the rootnode, Group(1) as the branching default_node and Synth 1003 (or some such number) as a leaf attached to the default_node.<pre class='code prettyprint lang-sc'>Rootnode - Group(0)
+<p>will appear in the transcript window. It shows Group(0) as the rootnode, Group(1) as the branching default_node and Synth 1003 (or some such number) as a leaf attached to the default_node.<textarea class='editor'>Rootnode - Group(0)
       |
       |
 default_node - Group(1)
       /
      /
-Synth 1003</pre>
+Synth 1003</textarea>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>An example with two synths.<pre class='code prettyprint lang-sc'>// 1st, evaluate a synthdef
+<p>An example with two synths.<textarea class='editor'>// 1st, evaluate a synthdef
 (
 SynthDef("pitchFromNoise", { arg out = 0;
     Out.ar(
@@ -117,25 +122,25 @@ Synth("pitchFromNoise", [\out, 1]);
 // 3rd, tell the server to list its nodes
 (
 s.queryAllNodes;
-)</pre>
+)</textarea>
 
-<p>The printout in the transcript window<pre class='code prettyprint lang-sc'>Group(0)
+<p>The printout in the transcript window<textarea class='editor'>Group(0)
         Group(1)
                 Synth 1005
-                Synth 1004</pre>
+                Synth 1004</textarea>
 
 <p>shows that Group(0) is the rootnode and Group(1) is the default_node.
-<p>Synth 1005 and 1004 (or similar such numbers) are leaves attached to the default_node. Synth 1005 is first in the list because of the way nodes are attached, by default, to the head of a list: Synth 1004, the "ringModulation" synth, was evaluated first and attached to the head of Group(1). Then Synth 1005, the "pitchFromNoise"s synth, was evaluated and placed at the head of the list (in front of Synth 1004).<pre class='code prettyprint lang-sc'>    Rootnode - Group(0)
+<p>Synth 1005 and 1004 (or similar such numbers) are leaves attached to the default_node. Synth 1005 is first in the list because of the way nodes are attached, by default, to the head of a list: Synth 1004, the "ringModulation" synth, was evaluated first and attached to the head of Group(1). Then Synth 1005, the "pitchFromNoise"s synth, was evaluated and placed at the head of the list (in front of Synth 1004).<textarea class='editor'>    Rootnode - Group(0)
       |
       |
  default_node - Group(1)
       /     \
      /       \
 Synth 1005  Synth 1004
-(head)        (tail)</pre>
+(head)        (tail)</textarea>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>It's the responsibility of the user to make sure that nodes on the server are ordered properly. For this reason, the two synths below must be evaluated in the order in which they're given - because the first synth is source material for the second synth, a filter that processes its input.<pre class='code prettyprint lang-sc'>(
+<p>It's the responsibility of the user to make sure that nodes on the server are ordered properly. For this reason, the two synths below must be evaluated in the order in which they're given - because the first synth is source material for the second synth, a filter that processes its input.<textarea class='editor'>(
 SynthDef("firstNode-source", {
     Out.ar(
         0,
@@ -166,20 +171,20 @@ Synth("firstNode-source");
 
 (
 s.queryAllNodes;
-)</pre>
+)</textarea>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>Or, use .head and .tail messages to attach the the nodes to the default_group).<pre class='code prettyprint lang-sc'>(
+<p>Or, use .head and .tail messages to attach the the nodes to the default_group).<textarea class='editor'>(
 Synth.head(s, "firstNode-source");
 Synth.tail(s, "secondNode-filter");
 )
 
 (
 s.queryAllNodes;
-)</pre>
+)</textarea>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>Or, assign the synths to groups.<pre class='code prettyprint lang-sc'>(
+<p>Or, assign the synths to groups.<textarea class='editor'>(
 ~source = Group.head(s);    // attach the group to the head of the default_node
 ~effect = Group.tail(s);    // attach the group to the tail of the default_node
 )
@@ -188,13 +193,13 @@ s.queryAllNodes;
 // add the synths to the appropriate groups
 Synth.head(~effect, "secondNode-filter");
 Synth.head(~source, "firstNode-source");
-)</pre>
+)</textarea>
 
-<p>The idea is that the groups are attached first to the default_group in the desired order. The synths can then be evaluated in any order as long as they're attached to the appropriate group.<pre class='code prettyprint lang-sc'>// run the code to see a diagram of the nodes
+<p>The idea is that the groups are attached first to the default_group in the desired order. The synths can then be evaluated in any order as long as they're attached to the appropriate group.<textarea class='editor'>// run the code to see a diagram of the nodes
 (
 s.queryAllNodes;
-)</pre>
-<pre class='code prettyprint lang-sc'>    Rootnode
+)</textarea>
+<textarea class='editor'>    Rootnode
       |
       |
  default_node
@@ -203,10 +208,10 @@ s.queryAllNodes;
 Group    Group
   |        |
   |        |
-Synth    Synth</pre>
+Synth    Synth</textarea>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>Set a control for all of the synths in a group.<pre class='code prettyprint lang-sc'>// each of the synthdefs below has a control for amplitude (mul)
+<p>Set a control for all of the synths in a group.<textarea class='editor'>// each of the synthdefs below has a control for amplitude (mul)
 (
 // build 3 synthdefs and a group
 SynthDef("synthNumber1", { arg mul = 0.2;
@@ -247,7 +252,8 @@ Synth.head(~myGroup, "synthNumber3");
 // execute to see a diagram of the nodes
 (
 s.queryAllNodes;
-)</pre>
+)</textarea>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/16_Playbuf.html">16_Playbuf</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/15_Groups.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/15_Groups.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/15_Groups::<br></div></div></body></html>
+<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/16_Playbuf.html">16_Playbuf</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/15_Groups.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/15_Groups.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/15_Groups::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

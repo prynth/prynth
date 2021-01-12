@@ -1,25 +1,30 @@
-<!doctype html><html lang='en'><head><title>07 | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>07 | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../../lib/jquery.min.js'></script>
+<script src='./../../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../../..';
 var scdoc_title = '07';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../../scdoc.js' type='text/javascript'></script>
 <script src='./../../../docmap.js' type='text/javascript'></script>
-<script src='./../../../prettify.js' type='text/javascript'></script>
-<script src='./../../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>07:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#いつ1つのSynthDefを用いるか%20...%20いつ2つまたはそれ以上のSynthDefを用いるか'>いつ1つのSynthDefを用いるか ... いつ2つまたはそれ以上のSynthDefを用いるか</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#関数と.scopeメッセージ'>関数と.scopeメッセージ</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/Mark_Polishook_tutorial/Japanese_version</span>
@@ -37,19 +42,19 @@ var scdoc_sc_version = '3.9.3';
 
 <p>シンプルなシンセシスのプロセスを試してみる簡単な方法は、関数の中で実行してみるということで、これはSynthDefを定義してそれをシンセの中でエンジンとして使うというよりも簡単です。この様な方法でコードを開発している時、後のある時点で、コードをテスト用の関数からSynthDefに変換することができます。
 <p>実際には、.playと.scopeメッセージは関数に送ることができ、そうすることでこの手法は有益なものになります。なぜなら、.scopeメッセージは関数の中でそのコードを実行し、定義されたシンセシスのプロセスによって生成される波形を視覚的な表現として表示するからです。
-<p>しかしながら、.scopeメッセージはインターナル・サーバーに対してしか機能しません。つまり、これを使うためにはインターナル・サーバーがオンになっていなければならないということです。これを手動でやるためには、インターナル・サーバーのbootボタンを押すか、コードとして次の様に実行します。<pre class='code prettyprint lang-sc'>s.boot;</pre>
+<p>しかしながら、.scopeメッセージはインターナル・サーバーに対してしか機能しません。つまり、これを使うためにはインターナル・サーバーがオンになっていなければならないということです。これを手動でやるためには、インターナル・サーバーのbootボタンを押すか、コードとして次の様に実行します。<textarea class='editor'>s.boot;</textarea>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>この例を実行してスコープ・ウィンドウに注目して下さい。<pre class='code prettyprint lang-sc'>(
+<p>この例を実行してスコープ・ウィンドウに注目して下さい。<textarea class='editor'>(
 {
     SinOsc.ar([440.067, 441.013], 0, 1)
     *
     SinOsc.ar([111, 109], 0, 0.2)
 }.scope;
-)</pre>
+)</textarea>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>これは同じシンセシスのプロセスをSnythDefとして表現したものです。以下に示す様に、上の例で関数の中に書かれているコードが、単にそのままOutの第２アーギュメントになっているということに注目して下さい。<pre class='code prettyprint lang-sc'>(
+<p>これは同じシンセシスのプロセスをSnythDefとして表現したものです。以下に示す様に、上の例で関数の中に書かれているコードが、単にそのままOutの第２アーギュメントになっているということに注目して下さい。<textarea class='editor'>(
 SynthDef("ringMod", {
     Out.ar(
         0,
@@ -58,7 +63,8 @@ SynthDef("ringMod", {
 }).add;
 )
 
-Synth("ringMod")</pre>
+Synth("ringMod")</textarea>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>go to <a href="./../../../Tutorials/Mark_Polishook_tutorial/Japanese_version/08.html">08</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/07.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/07.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/Japanese_version/07::<br></div></div></body></html>
+<p>go to <a href="./../../../Tutorials/Mark_Polishook_tutorial/Japanese_version/08.html">08</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/07.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/Japanese_version/07.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/Japanese_version/07::<br></div></div><script src='./../../../editor.js' type='text/javascript'></script>
+</body></html>

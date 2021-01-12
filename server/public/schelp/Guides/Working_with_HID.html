@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Working with HID | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Working with HID | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Working with HID';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Working with HID:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
@@ -24,8 +29,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Assigning%20actions%20to%20HID%20control%20data'>Assigning actions to HID control data</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#A%20simple%20example'>A simple example</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Finding%20a%20device%20automatically%20again%20after%20it%20is%20detached'>Finding a device automatically again after it is detached</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -50,45 +55,45 @@ var scdoc_sc_version = '3.9.3';
 <p>When you want to use an HID, you will initially want to explore the device and check out its capabilities, and then write some code that you can reuse every time you want to start using your instrument.<h2><a class='anchor' name='Exploring%20HID'>Exploring HID</a></h2>
 
 <p>Here is a short example of how to explore which HID's are attached, and what input they generate:<dl>
-<dt>Find available devices:<dd><code class='code prettyprint lang-sc'>HID.findAvailable;</code><dt>Print a readable list of available devices:<dd><code class='code prettyprint lang-sc'>HID.postAvailable;</code><dt>Open a specific device:<dd><code class='code prettyprint lang-sc'>~myhid = HID.open( 1103, 53251 );</code><dt>Print all HID output:<dd><code class='code prettyprint lang-sc'>HID.debug = true;</code><dt>Alternatively (see below for the difference),<dd><code class='code prettyprint lang-sc'>HIDFunc.trace( true );</code></dl>
+<dt>Find available devices:<dd><code>HID.findAvailable;</code><dt>Print a readable list of available devices:<dd><code>HID.postAvailable;</code><dt>Open a specific device:<dd><code>~myhid = HID.open( 1103, 53251 );</code><dt>Print all HID output:<dd><code>HID.debug = true;</code><dt>Alternatively (see below for the difference),<dd><code>HIDFunc.trace( true );</code></dl>
 
-<p>The method <code class='code prettyprint lang-sc'>findAvailable</code> will check which devices are connected to the computer, and retrieve basic information about them. With the method <code class='code prettyprint lang-sc'>postAvailable</code> the list of devices is then printed to the post window in a readable list, in the first column the index into the devicelist is given, in the second column various properties of the device are listed. These properties can be used to open a specific device.
+<p>The method <code>findAvailable</code> will check which devices are connected to the computer, and retrieve basic information about them. With the method <code>postAvailable</code> the list of devices is then printed to the post window in a readable list, in the first column the index into the devicelist is given, in the second column various properties of the device are listed. These properties can be used to open a specific device.
 <p>To open the device, there are various methods available:<ul>
-<li>using the index into the device list, e.g.: <code class='code prettyprint lang-sc'>HID.openAt( 0 );</code><li>using the path in the operation system, e.g.: <code class='code prettyprint lang-sc'>HID.openPath( "/dev/hidraw4" );</code><li>using the vendor id and product id of the device, and optionally the path, e.g.: <code class='code prettyprint lang-sc'>HID.open( 1103, 53251 );</code></ul>
+<li>using the index into the device list, e.g.: <code>HID.openAt( 0 );</code><li>using the path in the operation system, e.g.: <code>HID.openPath( "/dev/hidraw4" );</code><li>using the vendor id and product id of the device, and optionally the path, e.g.: <code>HID.open( 1103, 53251 );</code></ul>
 
-<p>The last one (if the path is not given) is cross platform compatible. The vendor and product id are reported by the device to the operating system, and will thus always be the same. These numbers are unique for the type of device (e.g. the Thrustmaster Run'N'Drive gamepad has the same number). If you are using multiple of the same devices, you may want to adjust your setup to use the path as well in order to be able to identify which device you open.<div class='note'><span class='notelabel'>NOTE:</span> if you have trouble opening a device, e.g. when you get the message <code class='code prettyprint lang-sc'>ERROR: HID: Could not open device</code>, please check the <a href="./../Guides/HID_permissions.html">HID permissions</a></div><div class='note'><span class='notelabel'>NOTE:</span> on macOS the internal devices of laptops are somewhat messed up - they show up multiple times and do not have unique paths, this makes it hard to open a specific one of them.</div>
+<p>The last one (if the path is not given) is cross platform compatible. The vendor and product id are reported by the device to the operating system, and will thus always be the same. These numbers are unique for the type of device (e.g. the Thrustmaster Run'N'Drive gamepad has the same number). If you are using multiple of the same devices, you may want to adjust your setup to use the path as well in order to be able to identify which device you open.<div class='note'><span class='notelabel'>NOTE:</span> if you have trouble opening a device, e.g. when you get the message <code>ERROR: HID: Could not open device</code>, please check the <a href="./../Guides/HID_permissions.html">HID permissions</a></div><div class='note'><span class='notelabel'>NOTE:</span> on macOS the internal devices of laptops are somewhat messed up - they show up multiple times and do not have unique paths, this makes it hard to open a specific one of them.</div>
 <p>You can always check which devices have already been opened by SuperCollider with
-<p><code class='code prettyprint lang-sc'>HID.openDevices;</code><h3><a class='anchor' name='Exploring%20HID%20control%20data'>Exploring HID control data</a></h3>
+<p><code>HID.openDevices;</code><h3><a class='anchor' name='Exploring%20HID%20control%20data'>Exploring HID control data</a></h3>
 
-<p>If you have enabled debugging of the HID input data, and you move one of the controls on your device, you will get an output similar to this:<pre class='code prettyprint lang-sc'>HID Element Data:
+<p>If you have enabled debugging of the HID input data, and you move one of the controls on your device, you will get an output similar to this:<textarea class='editor'>HID Element Data:
     devid: 0, elid: 18
     element:      page: 1    usage: 53
-    array value: 0,     raw value: 128,    physical value: 128,    value: 0.50196081399918</pre>
+    array value: 0,     raw value: 128,    physical value: 128,    value: 0.50196081399918</textarea>
 
 <p>An <em>element</em> is the name for an element of the HID, it can represent for example the x-axis of a joystick, or the first key that is pressed on a keyboard.
-<p>The <em>devid</em> is the index into the dictionary of open devices (<code class='code prettyprint lang-sc'>HID.openDevices;</code>), the element id (<em>elid</em>) is the index into the array of elements of the device. This index can vary between operating systems, so it is mostly just used internally.
+<p>The <em>devid</em> is the index into the dictionary of open devices (<code>HID.openDevices;</code>), the element id (<em>elid</em>) is the index into the array of elements of the device. This index can vary between operating systems, so it is mostly just used internally.
 <p>The <em>page</em> and <em>usage</em> of the element are lookup indices for the functionality of the element. These lookup indices are standardized and tables are available to look up the names of the controls.
 <p>The <em>raw value</em> is the value as it comes in - it is not scaled in anyway. The <em>value</em> is scaled between 0 and 1 according to the logical minimum and maximum that is reported by the device.
 <p>The <em>array value</em> is only of importance for those elements which can represent multiple usages, such as from keyboards. In that case it indicates the key that is pressed, and by adding this number to the usage of the element you know which function the key has.
-<p>With the debugging method <code class='code prettyprint lang-sc'>HIDFunc.trace( true )</code> the data will be printed in a different way:<pre class='code prettyprint lang-sc'>HID Element Data:    devid: 0, elid: 18
+<p>With the debugging method <code>HIDFunc.trace( true )</code> the data will be printed in a different way:<textarea class='editor'>HID Element Data:    devid: 0, elid: 18
     device:     a HIDInfo(Thrustmaster, Run'N' Drive, IDs:1103, 53251, /dev/hidraw4, , 258, 0),     page: 1     usage: 5
     element:    a HIDElement(18: type: 2, usage: 1, 53)
-                page: 1    usage: 53    raw value: 128,    value: 0.50196081399918</pre>
+                page: 1    usage: 53    raw value: 128,    value: 0.50196081399918</textarea>
 
 <p>Turn debugging off again with:<ul>
-<li><code class='code prettyprint lang-sc'>HIDFunc.trace( false )</code><li><code class='code prettyprint lang-sc'>HID.debug_( false )</code></ul>
+<li><code>HIDFunc.trace( false )</code><li><code>HID.debug_( false )</code></ul>
 
 <p>Rather than looking at the data as it comes in, we can also check which elements the device has with<ul>
-<li><code class='code prettyprint lang-sc'>~myhid.postElements</code><li><code class='code prettyprint lang-sc'>~myhid.postInputElements</code><li><code class='code prettyprint lang-sc'>~myhid.postOutputElements</code></ul>
+<li><code>~myhid.postElements</code><li><code>~myhid.postInputElements</code><li><code>~myhid.postOutputElements</code></ul>
 
-<p>Or check which usages are available: <code class='code prettyprint lang-sc'>~myhid.postUsages</code>
-<p>These will post detailed information on each element:<pre class='code prettyprint lang-sc'>HID Element: 18, type: 1, 2, usage page: 1, usage index: 53
+<p>Or check which usages are available: <code>~myhid.postUsages</code>
+<p>These will post detailed information on each element:<textarea class='editor'>HID Element: 18, type: 1, 2, usage page: 1, usage index: 53
     Description: GenericDesktop, Rz, input,
     [ Data, Variable, Absolute, NoWrap, Linear, PreferredState, NoNullPosition, NonVolatile, BitField ]
     Usage range: [ -1, -1 ]
     Logical range: [ 0, 255 ]
     Physical range: [ 0, 255 ], Unit: 0, Exponent: 0
-    Report ID: 0, size 8, index 5</pre>
+    Report ID: 0, size 8, index 5</textarea>
 
 <p>The <em>type</em> is a numerical index of whether it is an input, output or feature element, the second one indicates other properties. In the description the page and usage are translated using the table lookup, and the type indication is also translated to something understandable.
 <p>The usage range is again of importance for keyboards, the logical and physical range give ranges within which values will vary. The report ID, size and index give low level information on how the data comes in.<h3><a class='anchor' name='Assigning%20actions%20to%20HID%20control%20data'>Assigning actions to HID control data</a></h3>
@@ -98,13 +103,13 @@ var scdoc_sc_version = '3.9.3';
 <li>at the global level - called for any HID device, for any element<li>at the device level - called for the specific device, for any element<li>at the element level - called for the specific element of the specific device</ul>
 
 <p>Alternately, you can also use the <a href="./../Classes/HIDFunc.html">HIDFunc</a> interface, which allows filtering of events for multiple devices based on their usage.<dl>
-<dt>the global level<dd><code class='code prettyprint lang-sc'>HID.action = { |value, rawValue, usage, page, elid, element, devid, device | "HID global action: ".post; [value, rawValue, usage, page, elid, element, devid, device].postln; };</code><dt>the device level<dd><code class='code prettyprint lang-sc'>~myhid.action = { | value, physValue, rawValue,  arrayValue, usage, page, elid | "HID device action: ".post; [value, physValue, rawValue,  arrayValue, usage, page, elid].postln; };</code><dt>the element level<dd><code class='code prettyprint lang-sc'>~myhid.elements.at(18).action = { |value,element| "HID element action: ".post; [value,element].postln; };</code><dt>using HIDFunc<dd><code class='code prettyprint lang-sc'>HIDFunc.usage( { |value, rawValue, usage, page, elid, ele, devid, device, key| "HIDFunc.usage action: ".post; [value, rawValue, usage, page, elid, ele, devid, device, key].postln; }, \Rz );</code><dt>using HIDdef<dd><code class='code prettyprint lang-sc'>HIDdef.usage( \myRz, { |value, rawValue, usage, page, elid, ele, devid, device, key| "HIDdef.usage action: ".post; [value, rawValue, usage, page, elid, ele, devid, device, key].postln; }, \Rz );</code></dl>
+<dt>the global level<dd><code>HID.action = { |value, rawValue, usage, page, elid, element, devid, device | "HID global action: ".post; [value, rawValue, usage, page, elid, element, devid, device].postln; };</code><dt>the device level<dd><code>~myhid.action = { | value, physValue, rawValue,  arrayValue, usage, page, elid | "HID device action: ".post; [value, physValue, rawValue,  arrayValue, usage, page, elid].postln; };</code><dt>the element level<dd><code>~myhid.elements.at(18).action = { |value,element| "HID element action: ".post; [value,element].postln; };</code><dt>using HIDFunc<dd><code>HIDFunc.usage( { |value, rawValue, usage, page, elid, ele, devid, device, key| "HIDFunc.usage action: ".post; [value, rawValue, usage, page, elid, ele, devid, device, key].postln; }, \Rz );</code><dt>using HIDdef<dd><code>HIDdef.usage( \myRz, { |value, rawValue, usage, page, elid, ele, devid, device, key| "HIDdef.usage action: ".post; [value, rawValue, usage, page, elid, ele, devid, device, key].postln; }, \Rz );</code></dl>
 
 <p>The <a href="./../Classes/HIDFunc.html">HIDFunc</a> and <a href="./../Classes/HIDdef.html">HIDdef</a> options allow for the most flexible control and are similar to the use of <a href="./../Classes/MIDIFunc.html">MIDIFunc</a> and <a href="./../Classes/MIDIdef.html">MIDIdef</a> and <a href="./../Classes/OSCFunc.html">OSCFunc</a> and <a href="./../Classes/OSCdef.html">OSCdef</a>.
 <p>The advantages are that you can filter for just the type of control, so you can easily replace your game controller with a game controller of a similar type.
-<p>Let's close the device again:<pre class='code prettyprint lang-sc'>~myhid.close;</pre>
+<p>Let's close the device again:<textarea class='editor'>~myhid.close;</textarea>
 <h2><a class='anchor' name='A%20simple%20example'>A simple example</a></h2>
-<pre class='code prettyprint lang-sc'>HID.findAvailable; // check which devices are attached
+<textarea class='editor'>HID.findAvailable; // check which devices are attached
 ~myhid = HID.open( 1103, 53251 ); // open the Run'N' Drive game controller
 
 s.boot; // boot the server
@@ -115,9 +120,9 @@ Ndef( \sinewave ).play;
 ~freqRange = [500, 5000, \exponential].asSpec; // create a frequency range
 
 HIDdef.usage( \freq, { |value| Ndef( \sinewave ).set( \freq, ~freqRange.map( value ) ); }, \X );
-HIDdef.usage( \amp, { |value| Ndef( \sinewave ).set( \amp, value ); }, \Y );</pre>
+HIDdef.usage( \amp, { |value| Ndef( \sinewave ).set( \amp, value ); }, \Y );</textarea>
 <h2><a class='anchor' name='Finding%20a%20device%20automatically%20again%20after%20it%20is%20detached'>Finding a device automatically again after it is detached</a></h2>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 Tdef( 'tryOpenHID' , {
    var keepLooking = true;
    while ( { keepLooking } ){
@@ -146,6 +151,7 @@ Tdef( 'tryOpenHID' , {
    }
 } );
 );
-Tdef( 'tryOpenHID' ).play;</pre>
+Tdef( 'tryOpenHID' ).play;</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Working_with_HID.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Working_with_HID.schelp</a><br>link::Guides/Working_with_HID::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/Working_with_HID.schelp'>/usr/share/SuperCollider/HelpSource/Guides/Working_with_HID.schelp</a><br>link::Guides/Working_with_HID::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>
