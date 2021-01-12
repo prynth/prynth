@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>MIDIIn | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>MIDIIn | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'MIDIIn';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>MIDIIn:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -77,8 +82,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#example%20with%20sound'>example with sound</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#writing%20to%20the%20bus%20rather%20than%20directly%20to%20the%20synth'>writing to the bus rather than directly to the synth</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Keyboard%20Split%20for%20two%20voices'>Keyboard Split for two voices</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -88,7 +93,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>receive MIDI messages</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/MIDIOut.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/MIDIOut.sc'>MIDIOut.sc</a></div><div id='related'>See also: <a href="./../Classes/MIDIClient.html">MIDIClient</a>, <a href="./../Classes/MIDIOut.html">MIDIOut</a>, <a href="./../Classes/MIDIFunc.html">MIDIFunc</a>, <a href="./../Classes/MIDIdef.html">MIDIdef</a>, <a href="./../Guides/MIDI.html">MIDI</a>, <a href="./../Guides/UsingMIDI.html">Using MIDI</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/MIDIOut.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Control/MIDIOut.sc'>MIDIOut.sc</a></div><div id='related'>See also: <a href="./../Classes/MIDIClient.html">MIDIClient</a>, <a href="./../Classes/MIDIOut.html">MIDIOut</a>, <a href="./../Classes/MIDIFunc.html">MIDIFunc</a>, <a href="./../Classes/MIDIdef.html">MIDIdef</a>, <a href="./../Guides/MIDI.html">MIDI</a>, <a href="./../Guides/UsingMIDI.html">Using MIDI</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -102,32 +107,33 @@ var scdoc_sc_version = '3.9.3';
 <p>The first argument these functions receive is an unique identifier that specifies the source of the data.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*findPort' href='./../Overviews/Methods.html#findPort'>findPort</a>(<span class='argstr'>deviceName</span>, <span class='argstr'>portName</span>)</h3>
 <div class='method'>
-<p>searches for a connected <a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a> by name.<pre class='code prettyprint lang-sc'>//list connected ins:
+<p>searches for a connected <a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a> by name.<textarea class='editor'>//list connected ins:
 MIDIClient.init;
-MIDIClient.sources;</pre>
+MIDIClient.sources;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*addFuncTo' href='./../Overviews/Methods.html#addFuncTo'>addFuncTo</a>(<span class='argstr'>what</span>, <span class='argstr'>func</span>)</h3>
 <div class='method'>
 <p>Add a <a href="./../Classes/Function.html">Function</a> or similar object to be evaluated whenever a particular MIDI message is received. This method is preferable to the setters below, since it will not overwrite any existing functions.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>what<td class='argumentdesc'>
-<p>A <a href="./../Classes/Symbol.html">Symbol</a> indicating the message type to wait for, one of <code class='code prettyprint lang-sc'>'noteOn'</code> <code class='code prettyprint lang-sc'>'noteOff'</code>, <code class='code prettyprint lang-sc'>'polytouch'</code>, <code class='code prettyprint lang-sc'>'control'</code>, <code class='code prettyprint lang-sc'>'program'</code>, <code class='code prettyprint lang-sc'>'touch'</code>, <code class='code prettyprint lang-sc'>'bend'</code>, <code class='code prettyprint lang-sc'>'sysex'</code>, <code class='code prettyprint lang-sc'>'sysrt'</code>, <code class='code prettyprint lang-sc'>'smpte'</code>, or <code class='code prettyprint lang-sc'>'invalid'</code> (for invalid sysex messages).<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A <a href="./../Classes/Symbol.html">Symbol</a> indicating the message type to wait for, one of <code>'noteOn'</code> <code>'noteOff'</code>, <code>'polytouch'</code>, <code>'control'</code>, <code>'program'</code>, <code>'touch'</code>, <code>'bend'</code>, <code>'sysex'</code>, <code>'sysrt'</code>, <code>'smpte'</code>, or <code>'invalid'</code> (for invalid sysex messages).<tr><td class='argumentname'>func<td class='argumentdesc'>
 <p>A <a href="./../Classes/Function.html">Function</a> or similar object to be evaluated when a message of the specified type is received. See the setters below for the arguments which will be passed at evaluation time.</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*removeFuncFrom' href='./../Overviews/Methods.html#removeFuncFrom'>removeFuncFrom</a>(<span class='argstr'>what</span>, <span class='argstr'>func</span>)</h3>
 <div class='method'>
 <p>Remove a <a href="./../Classes/Function.html">Function</a> or similar object from the list of those to be evaluated whenever a particular MIDI message is received. This method is preferable to the setters below, since it will leave any existing functions in place.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>what<td class='argumentdesc'>
-<p>A <a href="./../Classes/Symbol.html">Symbol</a> indicating the message type, one of <code class='code prettyprint lang-sc'>'noteOn'</code> <code class='code prettyprint lang-sc'>'noteOff'</code>, <code class='code prettyprint lang-sc'>'polytouch'</code>, <code class='code prettyprint lang-sc'>'control'</code>, <code class='code prettyprint lang-sc'>'program'</code>, <code class='code prettyprint lang-sc'>'touch'</code>, <code class='code prettyprint lang-sc'>'bend'</code>, <code class='code prettyprint lang-sc'>'sysex'</code>, <code class='code prettyprint lang-sc'>'sysrt'</code>, <code class='code prettyprint lang-sc'>'smpte'</code>, or <code class='code prettyprint lang-sc'>'invalid'</code> (for invalid sysex messages).<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A <a href="./../Classes/Symbol.html">Symbol</a> indicating the message type, one of <code>'noteOn'</code> <code>'noteOff'</code>, <code>'polytouch'</code>, <code>'control'</code>, <code>'program'</code>, <code>'touch'</code>, <code>'bend'</code>, <code>'sysex'</code>, <code>'sysrt'</code>, <code>'smpte'</code>, or <code>'invalid'</code> (for invalid sysex messages).<tr><td class='argumentname'>func<td class='argumentdesc'>
 <p>The <a href="./../Classes/Function.html">Function</a> or similar object to be removed.</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*replaceFuncTo' href='./../Overviews/Methods.html#replaceFuncTo'>replaceFuncTo</a>(<span class='argstr'>what</span>, <span class='argstr'>func</span>, <span class='argstr'>newFunc</span>)</h3>
 <div class='method'>
 <p>Replace a <a href="./../Classes/Function.html">Function</a> or similar object in the list to be evaluated whenever a particular MIDI message is received with another one. This method is preferable to the setters below, since it will not overwrite any existing functions.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>what<td class='argumentdesc'>
-<p>A <a href="./../Classes/Symbol.html">Symbol</a> indicating the message type to wait for, one of <code class='code prettyprint lang-sc'>'noteOn'</code> <code class='code prettyprint lang-sc'>'noteOff'</code>, <code class='code prettyprint lang-sc'>'polytouch'</code>, <code class='code prettyprint lang-sc'>'control'</code>, <code class='code prettyprint lang-sc'>'program'</code>, <code class='code prettyprint lang-sc'>'touch'</code>, <code class='code prettyprint lang-sc'>'bend'</code>, <code class='code prettyprint lang-sc'>'sysex'</code>, <code class='code prettyprint lang-sc'>'sysrt'</code>, <code class='code prettyprint lang-sc'>'smpte'</code>, or <code class='code prettyprint lang-sc'>'invalid'</code> (for invalid sysex messages).<tr><td class='argumentname'>func<td class='argumentdesc'>
+<p>A <a href="./../Classes/Symbol.html">Symbol</a> indicating the message type to wait for, one of <code>'noteOn'</code> <code>'noteOff'</code>, <code>'polytouch'</code>, <code>'control'</code>, <code>'program'</code>, <code>'touch'</code>, <code>'bend'</code>, <code>'sysex'</code>, <code>'sysrt'</code>, <code>'smpte'</code>, or <code>'invalid'</code> (for invalid sysex messages).<tr><td class='argumentname'>func<td class='argumentdesc'>
 <p>The <a href="./../Classes/Function.html">Function</a> or similar object to be replaced.<tr><td class='argumentname'>newFunc<td class='argumentdesc'>
 <p>A <a href="./../Classes/Function.html">Function</a> or similar object to be evaluated when a message of the specified type is received. See the setters below for the arguments which will be passed at evaluation time.</table></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*noteOnZeroAsNoteOff' href='./../Overviews/Methods.html#noteOnZeroAsNoteOff'>noteOnZeroAsNoteOff</a></h3>
 <h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*noteOnZeroAsNoteOff' href='./../Overviews/Methods.html#noteOnZeroAsNoteOff'>noteOnZeroAsNoteOff</a> = value</h3>
 <div class='method'>
-<p>By default this flag is <code class='code prettyprint lang-sc'>true</code> and SuperCollider interprets incoming MIDI noteOn message with velocity 0 as noteOff messages. In case you do not want this automatic translation, you can set this flag to <code class='code prettyprint lang-sc'>false</code></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*connectAll' href='./../Overviews/Methods.html#connectAll'>connectAll</a>(<span class='argstr'>verbose: true</span>)</h3>
+<p>By default this flag is <code>true</code> and SuperCollider interprets incoming MIDI noteOn message with velocity 0 as noteOff messages. In case you do not want this automatic translation, you can set this flag to <code>false</code></div><h3 class='method-code'><span class='method-prefix'>MIDIIn.</span><a class='method-name' name='*connectAll' href='./../Overviews/Methods.html#connectAll'>connectAll</a>(<span class='argstr'>verbose: true</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Platform/linux/SystemOverwrites/extMIDIOut.sc'>/usr/share/SuperCollider/SCClassLibrary/Platform/linux/SystemOverwrites/extMIDIOut.sc</a></div>
 <div class='method'>
 <p>Connect to all possible MIDI inputs.<h4>Arguments:</h4>
 <table class='arguments'>
@@ -260,7 +266,7 @@ MIDIClient.sources;</pre>
 <h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
 <h3><a class='anchor' name='Quick%20start%20for%201%20port'>Quick start for 1 port</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 MIDIIn.connect;    // init for one port midi interface
 // register functions:
 ~noteOff = { arg src, chan, num, vel;    [chan,num,vel / 127].postln; };
@@ -297,18 +303,18 @@ MIDIIn.removeFuncFrom(\bend, ~bend);
 MIDIIn.removeFuncFrom(\sysex, ~sysex);
 MIDIIn.removeFuncFrom(\sysrt, ~sysrt);
 MIDIIn.removeFuncFrom(\smpte, ~smpte);
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Quick%20start%20for%202%20or%20more%20ports'>Quick start for 2 or more ports</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
     var inPorts = 2;
     var outPorts = 2;
     MIDIClient.init(inPorts,outPorts);    // explicitly intialize the client
     inPorts.do({ arg i;
         MIDIIn.connect(i, MIDIClient.sources.at(i));
     });
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='example%20with%20sound'>example with sound</a></h3>
-<pre class='code prettyprint lang-sc'>MIDIIn.connect;
+<textarea class='editor'>MIDIIn.connect;
 s.boot;
 
 (
@@ -350,9 +356,9 @@ MIDIIn.addFuncTo(\bend, ~bend);
 //cleanup
 MIDIIn.removeFuncFrom(\noteOn, ~noteOn);
 MIDIIn.removeFuncFrom(\noteOff, ~noteOff);
-MIDIIn.removeFuncFrom(\bend, ~bend);</pre>
+MIDIIn.removeFuncFrom(\bend, ~bend);</textarea>
 <h3><a class='anchor' name='writing%20to%20the%20bus%20rather%20than%20directly%20to%20the%20synth'>writing to the bus rather than directly to the synth</a></h3>
-<pre class='code prettyprint lang-sc'>//i used this and got acceptable latency for triggering synths live.
+<textarea class='editor'>//i used this and got acceptable latency for triggering synths live.
 //The latency might actually be less than sc2, but i haven't used it enough
 //to tell for sure yet.
 //Powerbook G4, 512mb ram.
@@ -408,9 +414,9 @@ x.free;
 b.free;
 MIDIIn.removeFuncFrom(\noteOn, ~noteOn);
 MIDIIn.removeFuncFrom(\control, ~control);
-MIDIIn.removeFuncFrom(\bend, ~bend);</pre>
+MIDIIn.removeFuncFrom(\bend, ~bend);</textarea>
 <h3><a class='anchor' name='Keyboard%20Split%20for%20two%20voices'>Keyboard Split for two voices</a></h3>
-<pre class='code prettyprint lang-sc'>//pbend to cutoff, mod to rez, 7 to amp
+<textarea class='editor'>//pbend to cutoff, mod to rez, 7 to amp
 //- matrix6k@somahq.com
 
 s.boot;
@@ -511,6 +517,7 @@ MIDIIn.addFuncTo(\noteOff, ~noteOff);
 //cleanup
 MIDIIn.removeFuncFrom(\noteOn, ~noteOn);
 MIDIIn.removeFuncFrom(\control, ~control);
-MIDIIn.removeFuncFrom(\bend, ~bend);</pre>
+MIDIIn.removeFuncFrom(\bend, ~bend);</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/MIDIIn.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/MIDIIn.schelp</a><br>link::Classes/MIDIIn::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/MIDIIn.schelp'>/usr/share/SuperCollider/HelpSource/Classes/MIDIIn.schelp</a><br>link::Classes/MIDIIn::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

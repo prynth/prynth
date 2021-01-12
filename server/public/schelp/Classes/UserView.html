@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>UserView | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>UserView | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'UserView';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>UserView:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -46,8 +51,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Responding%20to%20mouse%20clicks%20and%20movement'>Responding to mouse clicks and movement</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Animation'>Animation</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Usage%20of%20refreshInRect(aRect)'>Usage of refreshInRect(aRect)</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -57,7 +62,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>A custom drawn view using Pen</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/QUserView.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/QUserView.sc'>QUserView.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/QUserView.html">QUserView</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QUserView.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QUserView.sc'>QUserView.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/QUserView.html">QUserView</a></div>
 <div id='related'>See also: <a href="./../Classes/Pen.html">Pen</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
@@ -65,7 +70,7 @@ var scdoc_sc_version = '3.9.3';
 <p>An empty view on which you can draw using the <a href="./../Classes/Pen.html">Pen</a> class.
 <p>This view displays and does nothing by itself, but allows you to define how it will be drawn, and expects you to define its entire mode of interaction using mouse, key, and drag and drop actions.
 <p>To define how the view is drawn you set the <a href="#-drawFunc">-drawFunc</a> variable to a <a href="./../Classes/Function.html">Function</a> within which you can use the <a href="./../Classes/Pen.html">Pen</a> class to draw graphical primitives, such as lines, rectangles, ellipses, curves, and also text.
-<p>This class offers convenient mechanisms for creating animations, that is, to automatically redraw itself in regular time intervals. See the <a href="#animation">Animation</a> section of this document.
+<p>This class offers convenient mechanisms for creating animations, that is, to automatically redraw itself in regular time intervals. See the <a href="#Animation">Animation</a> section of this document.
 <p>For a guide to using this view, see <a href="./../Guides/GUI-Introduction.html#Custom%20views">Introduction to GUI: Custom views</a>.<div class='note'><span class='notelabel'>NOTE:</span> Older tutorials might recommend subclassing UserView. Don't do that. Use composition, not inheritance. Make the UserView a property of your custom view class.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
@@ -86,49 +91,49 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-background' href='./../Overviews/Methods.html#background'>background</a> = <span class='argstr'>color</span></h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/View.html'>View</a></div>
 <div class='method'>
-<p> Sets the color used to fill the whole area occupied by the view below the drawing done in <a href="#-drawFunc">-drawFunc</a>. You can set the background at any moment, even within the <code class='code prettyprint lang-sc'>drawFunc</code>, but any drawing done in that Function will always be displayed on top of the background.<h4>Arguments:</h4>
+<p> Sets the color used to fill the whole area occupied by the view below the drawing done in <a href="#-drawFunc">-drawFunc</a>. You can set the background at any moment, even within the <code>drawFunc</code>, but any drawing done in that Function will always be displayed on top of the background.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>color<td class='argumentdesc'>
 <p> A Color.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-drawingEnabled' href='./../Overviews/Methods.html#drawingEnabled'>drawingEnabled</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-drawingEnabled' href='./../Overviews/Methods.html#drawingEnabled'>drawingEnabled</a> = <span class='argstr'>boolean</span></h3>
 <div class='method'>
 <p> Whether the <a href="#-drawFunc">-drawFunc</a> will be called when the view is redrawing itself. Note that <a href="#-background">-background</a> will be painted regardless of this variable.
-<p> The default value is <code class='code prettyprint lang-sc'>true</code>.<h4>Arguments:</h4>
+<p> The default value is <code>true</code>.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>boolean<td class='argumentdesc'>
 <p> A Boolean.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clearOnRefresh' href='./../Overviews/Methods.html#clearOnRefresh'>clearOnRefresh</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clearOnRefresh' href='./../Overviews/Methods.html#clearOnRefresh'>clearOnRefresh</a> = <span class='argstr'>boolean</span></h3>
 <div class='method'>
 <p> Whether the view shall clear the last drawing done in <a href="#-drawFunc">-drawFunc</a> before being redrawn.
-<p> If this is <code class='code prettyprint lang-sc'>false</code>, the view will continuously draw on top of all the previous drawing whenever it is redrawn, until <a href="#-clearDrawing">-clearDrawing</a> is called.
-<p> The default value is <code class='code prettyprint lang-sc'>true</code>.<div class='note'><span class='notelabel'>NOTE:</span> On macOS this functionality is only available for the version &gt;= 10.4.</div><h4>Arguments:</h4>
+<p> If this is <code>false</code>, the view will continuously draw on top of all the previous drawing whenever it is redrawn, until <a href="#-clearDrawing">-clearDrawing</a> is called.
+<p> The default value is <code>true</code>.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>boolean<td class='argumentdesc'>
 <p> A Boolean.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clearDrawing' href='./../Overviews/Methods.html#clearDrawing'>clearDrawing</a></h3>
 <div class='method'>
-<p> If <a href="#-clearOnRefresh">-clearOnRefresh</a> is <code class='code prettyprint lang-sc'>false</code>, you can call this method to manually clear any drawing done in <a href="#-drawFunc">-drawFunc</a> so far.</div><h3><a class='anchor' name='Animation'>Animation</a></h3>
+<p> If <a href="#-clearOnRefresh">-clearOnRefresh</a> is <code>false</code>, you can call this method to manually clear any drawing done in <a href="#-drawFunc">-drawFunc</a> so far.</div><h3><a class='anchor' name='Animation'>Animation</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-animate' href='./../Overviews/Methods.html#animate'>animate</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-animate' href='./../Overviews/Methods.html#animate'>animate</a> = <span class='argstr'>bool</span></h3>
 <div class='method'>
 <p> Whether the view shall redraw itself internally at a regular time interval (frame rate). See <a href="#-frameRate">-frameRate</a> for the way to adjust that interval.<div class='note'><span class='notelabel'>NOTE:</span> This method is <strong>not</strong> available in <strong>SwingOSC GUI</strong>.</div>
-<p> The default value is <code class='code prettyprint lang-sc'>false</code>.<h4>Arguments:</h4>
+<p> The default value is <code>false</code>.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>bool<td class='argumentdesc'>
 <p> A Boolean.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-frameRate' href='./../Overviews/Methods.html#frameRate'>frameRate</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-frameRate' href='./../Overviews/Methods.html#frameRate'>frameRate</a> = <span class='argstr'>fps</span></h3>
 <div class='method'>
-<p> The interval at which the view regularly redraws itself, if <a href="#-animate">-animate</a> is <code class='code prettyprint lang-sc'>true</code>. You can change the desired frame rate by setting this variable.
+<p> The interval at which the view regularly redraws itself, if <a href="#-animate">-animate</a> is <code>true</code>. You can change the desired frame rate by setting this variable.
 <p> The default frame rate is 60fps.<div class='note'><span class='notelabel'>NOTE:</span> Getting the value of this variable will return the average actual frame rate. If it is lower than the desired frame rate set as described above, that implies that the view tries but does not manage to redraw itself at that frame rate. The reason may typically be that the drawing defined in <a href="#-drawFunc">-drawFunc</a> is computationally too demanding for the system.</div><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>fps<td class='argumentdesc'>
 <p> A Float defining the interval between frames of animation, in frames per second.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-frame' href='./../Overviews/Methods.html#frame'>frame</a></h3>
 <div class='method'>
-<p> The count of frames drawn while <a href="#-animate">-animate</a> is <code class='code prettyprint lang-sc'>true</code>; it will increase by 1 every time the view is redrawn.
-<p> If animation is stopped and started again (by setting <code class='code prettyprint lang-sc'>animate</code> to <code class='code prettyprint lang-sc'>false</code> and then <code class='code prettyprint lang-sc'>true</code> again), the frame count is restarted.<h4>Returns:</h4>
+<p> The count of frames drawn while <a href="#-animate">-animate</a> is <code>true</code>; it will increase by 1 every time the view is redrawn.
+<p> If animation is stopped and started again (by setting <code>animate</code> to <code>false</code> and then <code>true</code> again), the frame count is restarted.<h4>Returns:</h4>
 <div class='returnvalue'>
 <p>An Integer.</div></div><h3><a class='anchor' name='Actions'>Actions</a></h3>
 
-<p> The UserView by itself does not respond to any interaction by the user. You can define the modes of interaction entirely on your own using mouse and keyboard actions. See <a href="./../Guides/GUI-Introduction.html#Actions%20and%20hooks:%20make%20that%20button%20do%20something!">Actions and Hooks</a> for detailed explanation.
+<p> The UserView by itself does not respond to any interaction by the user. You can define the modes of interaction entirely on your own using mouse and keyboard actions. See <a href="./../Guides/GUI-Introduction.html#Actions%20and%20hooks:%20Make%20that%20button%20do%20something!">Actions and Hooks</a> for detailed explanation.
 <p> Note that there is no default mode of interaction with the UserView, so <a href="./../Classes/View.html#-action">View: -action</a> will never be triggered, if you don't implement that yourself.<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-action' href='./../Overviews/Methods.html#action'>action</a></h3>
@@ -138,12 +143,12 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-draw' href='./../Overviews/Methods.html#draw'>draw</a></h3>
 </h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-drawHook' href='./../Overviews/Methods.html#drawHook'>drawHook</a> = <span class='argstr'>func</span></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/backwardsCompatibility/classNameRedirects.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/backwardsCompatibility/classNameRedirects.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/classNameRedirects.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/classNameRedirects.sc</a></div>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 
 <p>'Introduction to GUI' contains an <a href="./../Guides/GUI-Introduction.html#Custom%20views">example</a> with elaborate explanation on how to use UserView. Below are further examples.<h3><a class='anchor' name='Basic%20Usage'>Basic Usage</a></h3>
 
-<p>Resize the window or click on the UserView to refresh the drawing:<pre class='code prettyprint lang-sc'>(
+<p>Resize the window or click on the UserView to refresh the drawing:<textarea class='editor'>(
 w=Window.new;
 v=UserView(w, w.view.bounds.insetBy(50,50));
 v.resize = 5;
@@ -155,9 +160,9 @@ v.drawFunc={|uview|
     };
 v.mouseDownAction={v.refresh};
 w.front;
-)</pre>
+)</textarea>
 
-<p>Coordinates are relative to the UserView. Try resizing the window:<pre class='code prettyprint lang-sc'>(
+<p>Coordinates are relative to the UserView. Try resizing the window:<textarea class='editor'>(
 var func;
 
 func = {|me|
@@ -181,11 +186,11 @@ w.view.background_(Color.white);
 };
 
 w.refresh;
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Responding%20to%20mouse%20clicks%20and%20movement'>Responding to mouse clicks and movement</a></h3>
 
 <p>Using <a href="./../Classes/View.html#Mouse%20actions">mouse actions</a> you can make UserView change the way it is drawn in response to mouse interaction. The sequence of examples below will guide you through the various possibilities.
-<p>Clicking and moving the mouse on each of the painted squares in the following example will redraw them differently. See interpreter output for posted information that you can use in the mouse actions.<pre class='code prettyprint lang-sc'>// drag some circles
+<p>Clicking and moving the mouse on each of the painted squares in the following example will redraw them differently. See interpreter output for posted information that you can use in the mouse actions.<textarea class='editor'>// drag some circles
 (
 var w, r, u;
 var clicked, relativeWhere;
@@ -221,8 +226,8 @@ u.mouseMoveAction = { |v, x, y|
 u.mouseUpAction = {
     clicked = nil;
 }
-)</pre>
-<pre class='code prettyprint lang-sc'>// draw some random shapes
+)</textarea>
+<textarea class='editor'>// draw some random shapes
 (
 var drawFunc, mouseDownFunc, mouseUpFunc, mouseMoveFunc, sat = 0, startX;
 
@@ -262,9 +267,9 @@ w.view.background_(Color.white);
     v.mouseMoveAction = mouseMoveFunc;
 };
 w.refresh;
-)</pre>
+)</textarea>
 
-<p>The following example uses the <a href="#-clearOnRefresh">-clearOnRefresh</a> option to prevent the UserView from clearing its contents when redrawn. Clicking and moving the mouse within each square will draw ever more arcs on top of each other.<pre class='code prettyprint lang-sc'>(
+<p>The following example uses the <a href="#-clearOnRefresh">-clearOnRefresh</a> option to prevent the UserView from clearing its contents when redrawn. Clicking and moving the mouse within each square will draw ever more arcs on top of each other.<textarea class='editor'>(
 var func, views;
 
 func = {|me|
@@ -292,10 +297,10 @@ views = {|i|
     v.clearOnRefresh_(false);
 } ! 3;
 w.refresh;
-)</pre>
+)</textarea>
 
 <p>The following example uses the <a href="#-clearOnRefresh">-clearOnRefresh</a> option to keep the old contents when redrawn, allowing you to draw a line which follows the mouse cursor by clicking and dragging on the view.
-<p>It also uses the mouse position to compute the color of the line.<pre class='code prettyprint lang-sc'>(
+<p>It also uses the mouse position to compute the color of the line.<textarea class='editor'>(
 var w, txt, lines, points, drawLine;
 
 drawLine = { |points, bounds|
@@ -353,10 +358,10 @@ v = UserView(w,w.view.bounds)
     };
 
 w.front;
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Animation'>Animation</a></h3>
 
-<p>The following is an animation with mouse interaction. Click and drag in the view to move the center of the rotating object.<pre class='code prettyprint lang-sc'>(
+<p>The following is an animation with mouse interaction. Click and drag in the view to move the center of the rotating object.<textarea class='editor'>(
 var width = 400, height = 400, mx = 0, my = 0, pt, r;
 
 w = Window("animation and mouse interaction", Rect(100, 200, width, height), false);
@@ -400,9 +405,9 @@ w.front;
 
 u.animate = false; //animation can be paused and resumed
 u.animate = true;
-w.close; //stops animation</pre>
+w.close; //stops animation</textarea>
 
-<p>A simple ball animation:<pre class='code prettyprint lang-sc'>(
+<p>A simple ball animation:<textarea class='editor'>(
 var width = 400, height = 400, xspeed = 3, yspeed = 2, x = width*0.5, y = height*0.5;
 w = Window("ball", Rect(100, 200, width, height));
 u = UserView(w, Rect(0, 0, width, height));
@@ -429,9 +434,9 @@ u.drawFunc = {
 )
 
 //close the window to stop
-w.close;</pre>
+w.close;</textarea>
 
-<p>An animation that makes a good use of the <a href="#-clearOnRefresh">-clearOnRefresh</a> option to keep the old contents when redrawing.<div class='note'><span class='notelabel'>NOTE:</span> In <strong>Cocoa GUI</strong> this functionality is only available on macOS version &gt;= 10.4.</div><pre class='code prettyprint lang-sc'>(
+<p>An animation that makes a good use of the <a href="#-clearOnRefresh">-clearOnRefresh</a> option to keep the old contents when redrawing.<textarea class='editor'>(
 var width = 640, height = 480, w, theta = 0, drawFunc;
 w = Window( "trails", Rect( 128, 64, width, height ), false );
 drawFunc = { arg view;
@@ -455,10 +460,10 @@ x = UserView( w, Rect( 10, 10, width - 20, height - 20 ))
 
 w.front;
 x.animate = true
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Usage%20of%20refreshInRect(aRect)'>Usage of refreshInRect(aRect)</a></h3>
 <div class='note'><span class='notelabel'>NOTE:</span> This functionality is only available in <strong>Cocoa GUI</strong></div>
-<p>The <code class='code prettyprint lang-sc'>refreshInRect</code> method constrains the receiver's refresh area to the rectangle passed in aRect. You may use Quartz Debug's flash screen updates to see the refresh area of the view<pre class='code prettyprint lang-sc'>(
+<p>The <code>refreshInRect</code> method constrains the receiver's refresh area to the rectangle passed in aRect. You may use Quartz Debug's flash screen updates to see the refresh area of the view<textarea class='editor'>(
 var userView, win, blob = Rect(0, 0, 50, 50), trackblob=false, pmouse;
 
 a = SCImage.new("/Library/Desktop Pictures/Ripples Blue.jpg");
@@ -495,6 +500,7 @@ userView = SCUserView(win, Rect(10,10,2000,800))
 
 blob = blob.moveBy(userView.bounds.left, userView.bounds.top);
 userView.bounds.postln;
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/UserView.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/UserView.schelp</a><br>link::Classes/UserView::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/UserView.schelp'>/usr/share/SuperCollider/HelpSource/Classes/UserView.schelp</a><br>link::Classes/UserView::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

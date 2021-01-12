@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>ServerOptions | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>ServerOptions | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'ServerOptions';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>ServerOptions:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -45,6 +50,7 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-numWireBufs'>numWireBufs</a> </li>
 <li class='toc3'><a href='#-outputStreamsEnabled'>outputStreamsEnabled</a> </li>
 <li class='toc3'><a href='#-protocol'>protocol</a> </li>
+<li class='toc3'><a href='#-bindAddress'>bindAddress</a> </li>
 <li class='toc3'><a href='#-remoteControlVolume'>remoteControlVolume</a> </li>
 <li class='toc3'><a href='#-sampleRate'>sampleRate</a> </li>
 <li class='toc3'><a href='#-verbosity'>verbosity</a> </li>
@@ -72,8 +78,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-reservedNumBuffers'>reservedNumBuffers</a> </li>
 <li class='toc3'><a href='#-reservedNumControlBusChannels'>reservedNumControlBusChannels</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -83,23 +89,22 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Encapsulates commandline and other options for a Server</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Server.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Server.sc'>Server.sc</a></div><div id='related'>See also: <a href="./../Classes/Server.html">Server</a>, <a href="./../Reference/Server-Architecture.html">Server Architecture</a>, <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/Server.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Control/Server.sc'>Server.sc</a></div><div id='related'>See also: <a href="./../Classes/Server.html">Server</a>, <a href="./../Reference/Server-Architecture.html">Server Architecture</a>, <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a>, <a href="./../Reference/AudioDeviceSelection.html">Audio device selection</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>ServerOptions encapsulates various options for a server app within an object. This makes it convenient to launch multiple servers with the same options, or to archive different sets of options, etc. Every <a href="./../Classes/Server.html">Server</a> has an instance of ServerOptions created for it if one is not passed as the options argument when the Server object is created. (This is the case for example with the local and internal Servers which are created at startup.)
 <p>A Server's instance of ServerOptions is stored in its options instance variable, which can be accessed through corresponding getter and setter methods.
 <p>N.B. A ServerOptions' instance variables are translated into commandline arguments when a server app is booted. Thus a running Server must be rebooted before changes will take effect. There are also a few commandline options which are not currently encapsulated in ServerOptions. See <a href="./../Reference/Server-Architecture.html">Server Architecture</a> for more details.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='method-code'><span class='method-prefix'>ServerOptions.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>maxSize: 0</span>)</h3>
-<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
+<h3 class='method-code'><span class='method-prefix'>ServerOptions.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a></h3>
 <div class='method'>
 <p>Create and return a new instance of ServerOptions.</div><h3 class='method-code'><span class='method-prefix'>ServerOptions.</span><a class='method-name' name='*devices' href='./../Overviews/Methods.html#devices'>devices</a></h3>
 <div class='method'>
-<p>macOS only. Return an Array of Strings listing the audio devices currently available on the system.</div><h3 class='method-code'><span class='method-prefix'>ServerOptions.</span><a class='method-name' name='*inDevices' href='./../Overviews/Methods.html#inDevices'>inDevices</a></h3>
+<p>Return an Array of Strings listing the audio devices currently available on the system.</div><h3 class='method-code'><span class='method-prefix'>ServerOptions.</span><a class='method-name' name='*inDevices' href='./../Overviews/Methods.html#inDevices'>inDevices</a></h3>
 <div class='method'>
-<p>macOS only. Return an Array of Strings listing the audio devices currently available on the system which have input channels.</div><h3 class='method-code'><span class='method-prefix'>ServerOptions.</span><a class='method-name' name='*outDevices' href='./../Overviews/Methods.html#outDevices'>outDevices</a></h3>
+<p>Return an Array of Strings listing the audio devices currently available on the system which have input channels.</div><h3 class='method-code'><span class='method-prefix'>ServerOptions.</span><a class='method-name' name='*outDevices' href='./../Overviews/Methods.html#outDevices'>outDevices</a></h3>
 <div class='method'>
-<p>macOS only. Return an Array of Strings listing the audio devices currently available on the system which have output channels.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<p>Return an Array of Strings listing the audio devices currently available on the system which have output channels.<div class='note'><span class='notelabel'>NOTE:</span> The above three methods are not available if SuperCollider is built with JACK backend (by default on Linux). Also see <a href="./../Reference/AudioDeviceSelection.html">Audio device selection</a> for more information on selecting audio device.</div></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='The%20Options'>The Options</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-blockSize' href='./../Overviews/Methods.html#blockSize'>blockSize</a></h3>
@@ -108,19 +113,13 @@ var scdoc_sc_version = '3.9.3';
 <p>The number of samples in one control period. The default is 64.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-device' href='./../Overviews/Methods.html#device'>device</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-device' href='./../Overviews/Methods.html#device'>device</a> = <span class='argstr'>dev</span></h3>
 <div class='method'>
-<p>A String that allows you to choose a sound device to use as input and output. The default, nil will use the system's default input and output device(s) (more below in the examples).<div class='note'><span class='notelabel'>NOTE:</span> When the server is compiled for jack natively, the <code>device</code> can be used to connect to a named server and use a specific client name. The argument specifies either a server name or a server name and the requested client name. Passing <code class='code prettyprint lang-sc'>nil</code> is equivalent to to <code>default:SuperCollider</code>.
-<p>The jack connections can be configured via the environment variables <code>SC_JACK_DEFAULT_INPUTS</code> and <code>SC_JACK_DEFAULT_OUTPUTS</code>. The format is either a string that specifies the another jack client or a comma-separate list of jack ports.<pre class='code prettyprint lang-sc'>// connect first to input channels with system
-"SC_JACK_DEFAULT_INPUTS".setenv("system:capture_1,system:capture_2");
-
-// connect all output channels with system
-"SC_JACK_DEFAULT_OUTPUTS".setenv("system");</pre>
-</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-inDevice' href='./../Overviews/Methods.html#inDevice'>inDevice</a></h3>
+<p>A String that allows you to choose a sound device to use as input and output. The default, <code>nil</code>, will use the system's default input and output device(s). See <a href="./../Reference/AudioDeviceSelection.html">Audio device selection</a> for more details.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-inDevice' href='./../Overviews/Methods.html#inDevice'>inDevice</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-inDevice' href='./../Overviews/Methods.html#inDevice'>inDevice</a> = value</h3>
 <div class='method'>
-<p>A String that allows you to choose an input sound device. The default, nil will use the system's default input device (more below in the examples).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-outDevice' href='./../Overviews/Methods.html#outDevice'>outDevice</a></h3>
+<p>A String that allows you to choose an input sound device. The default, <code>nil</code>, will use the system's default input device. See <a href="./../Reference/AudioDeviceSelection.html">Audio device selection</a> for more details.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-outDevice' href='./../Overviews/Methods.html#outDevice'>outDevice</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-outDevice' href='./../Overviews/Methods.html#outDevice'>outDevice</a> = value</h3>
 <div class='method'>
-<p>A String that allows you to choose an output sound device. The default, nil will use the system's default output device (more below in the examples).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hardwareBufferSize' href='./../Overviews/Methods.html#hardwareBufferSize'>hardwareBufferSize</a></h3>
+<p>A String that allows you to choose an output sound device. The default, <code>nil</code>, will use the system's default output device. See <a href="./../Reference/AudioDeviceSelection.html">Audio device selection</a> for more details.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hardwareBufferSize' href='./../Overviews/Methods.html#hardwareBufferSize'>hardwareBufferSize</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hardwareBufferSize' href='./../Overviews/Methods.html#hardwareBufferSize'>hardwareBufferSize</a> = value</h3>
 <div class='method'>
 <p>The preferred hardware buffer size. If non-nil the server app will attempt to set the hardware buffer frame size. Not all sizes are valid. See the documentation of your audio hardware for details. Default value is nil.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-initialNodeID' href='./../Overviews/Methods.html#initialNodeID'>initialNodeID</a></h3>
@@ -151,10 +150,10 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numControlBusChannels' href='./../Overviews/Methods.html#numControlBusChannels'>numControlBusChannels</a> = value</h3>
 <div class='method'>
 <p>The number of internal control rate busses. The default is 16384.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numInputBusChannels' href='./../Overviews/Methods.html#numInputBusChannels'>numInputBusChannels</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numInputBusChannels' href='./../Overviews/Methods.html#numInputBusChannels'>numInputBusChannels</a> = <span class='argstr'>numChannels: 8</span></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numInputBusChannels' href='./../Overviews/Methods.html#numInputBusChannels'>numInputBusChannels</a> = <span class='argstr'>numChannels: 2</span></h3>
 <div class='method'>
 <p>The number of audio input bus channels. This need not correspond to the number of hardware inputs. The default is 2.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numOutputBusChannels' href='./../Overviews/Methods.html#numOutputBusChannels'>numOutputBusChannels</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numOutputBusChannels' href='./../Overviews/Methods.html#numOutputBusChannels'>numOutputBusChannels</a> = <span class='argstr'>numChannels: 8</span></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numOutputBusChannels' href='./../Overviews/Methods.html#numOutputBusChannels'>numOutputBusChannels</a> = <span class='argstr'>numChannels: 2</span></h3>
 <div class='method'>
 <p>The number of audio output bus channels. This need not correspond to the number of hardware outputs (this can be useful for instance in the case of recording). The default is 2.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numRGens' href='./../Overviews/Methods.html#numRGens'>numRGens</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numRGens' href='./../Overviews/Methods.html#numRGens'>numRGens</a> = value</h3>
@@ -168,10 +167,14 @@ var scdoc_sc_version = '3.9.3';
 <p>A String which allows turning off output streams that you are not interested in on the audio device. If the string is "11000", for example, then only the first two output streams on the device will be enabled. Turning off streams can reduce CPU load.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-protocol' href='./../Overviews/Methods.html#protocol'>protocol</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-protocol' href='./../Overviews/Methods.html#protocol'>protocol</a> = value</h3>
 <div class='method'>
-<p>A Symbol representing the communications protocol. Either <code class='code prettyprint lang-sc'>\udp</code> or <code class='code prettyprint lang-sc'>\tcp</code>. The default is <code class='code prettyprint lang-sc'>\udp</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-remoteControlVolume' href='./../Overviews/Methods.html#remoteControlVolume'>remoteControlVolume</a></h3>
+<p>A Symbol representing the communications protocol. Either <code>\udp</code> or <code>\tcp</code>. The default is <code>\udp</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bindAddress' href='./../Overviews/Methods.html#bindAddress'>bindAddress</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bindAddress' href='./../Overviews/Methods.html#bindAddress'>bindAddress</a> = value</h3>
+<div class='method'>
+<p>scsynth only. The IP address that the server's TCP or UDP socket is listening on. The default value is <code>"127.0.0.1"</code>, meaning only listen to OSC messages on the host.<div class='warning'><span class='warninglabel'>WARNING:</span> Until SuperCollider 3.10.3, this was set to <code>"0.0.0.0"</code> (listen on all network interfaces). However, this is a dangerous default configuration — for most users working on laptops connected to WiFi, this means that anyone on your local network can send OSC messages to the server. <code>"0.0.0.0"</code> is only useful if you are running networked server/client, and only safe if your networking is properly configured.
+<p>supernova always listens to all network interfaces, and ignores the <code>bindAddress</code> option. This cannot be configured. To avoid exposing yourself to security issues, you should switch to scsynth, or disable networking on your machine when running supernova.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-remoteControlVolume' href='./../Overviews/Methods.html#remoteControlVolume'>remoteControlVolume</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-remoteControlVolume' href='./../Overviews/Methods.html#remoteControlVolume'>remoteControlVolume</a> = value</h3>
 <div class='method'>
-<p>A Boolean indicating whether this server should allow its volume to be set remotely. The default value is <code class='code prettyprint lang-sc'>false</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sampleRate' href='./../Overviews/Methods.html#sampleRate'>sampleRate</a></h3>
+<p>A Boolean indicating whether this server should allow its volume to be set remotely. The default value is <code>false</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sampleRate' href='./../Overviews/Methods.html#sampleRate'>sampleRate</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sampleRate' href='./../Overviews/Methods.html#sampleRate'>sampleRate</a> = value</h3>
 <div class='method'>
 <p>The preferred sample rate. If non-nil the server app will attempt to set the sample rate of the hardware. The hardware has to support the sample rate that you choose.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-verbosity' href='./../Overviews/Methods.html#verbosity'>verbosity</a></h3>
@@ -189,15 +192,15 @@ var scdoc_sc_version = '3.9.3';
 <p>Allows you to restrict the system paths in which the server is allowed to read/write files during running. A nil value (the default) means no restriction. Otherwise, set it as a string representing a single path.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-threads' href='./../Overviews/Methods.html#threads'>threads</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-threads' href='./../Overviews/Methods.html#threads'>threads</a> = value</h3>
 <div class='method'>
-<p>Number of audio threads that are spawned by supernova. For scsynth this value is ignored. If it is <code class='code prettyprint lang-sc'>nil</code>or 0, it uses the one thread per CPU. Default is <code class='code prettyprint lang-sc'>nil</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-useSystemClock' href='./../Overviews/Methods.html#useSystemClock'>useSystemClock</a></h3>
+<p>Number of audio threads that are spawned by supernova. For scsynth this value is ignored. If it is <code>nil</code>or 0, it uses the one thread per CPU. Default is <code>nil</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-useSystemClock' href='./../Overviews/Methods.html#useSystemClock'>useSystemClock</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-useSystemClock' href='./../Overviews/Methods.html#useSystemClock'>useSystemClock</a> = value</h3>
 <div class='method'>
 <p>Tells supernova whether to sync to the driver's sample clock, or to the system clock. For scsynth this value is ignored.<ul>
-<li><code class='code prettyprint lang-sc'>false</code> (default) -- Use the sample clock. This helps to support sample-accurate scheduling; however, messaging latency from the SuperCollider language will drift over long periods of time.<li><code class='code prettyprint lang-sc'>true</code> -- Use the system clock. Timestamped messages will maintain consistent latency over long sessions, but may not be perfectly sample-accurate.</ul>
+<li><code>false</code> (default) -- Use the sample clock. This helps to support sample-accurate scheduling; however, messaging latency from the SuperCollider language will drift over long periods of time.<li><code>true</code> -- Use the system clock. Timestamped messages will maintain consistent latency over long sessions, but may not be perfectly sample-accurate.</ul>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-memoryLocking' href='./../Overviews/Methods.html#memoryLocking'>memoryLocking</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-memoryLocking' href='./../Overviews/Methods.html#memoryLocking'>memoryLocking</a> = value</h3>
 <div class='method'>
-<p>A Boolean indicating whether the server should try to lock its memory into physical RAM. Default is <code class='code prettyprint lang-sc'>false</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-maxLogins' href='./../Overviews/Methods.html#maxLogins'>maxLogins</a></h3>
+<p>A Boolean indicating whether the server should try to lock its memory into physical RAM. Default is <code>false</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-maxLogins' href='./../Overviews/Methods.html#maxLogins'>maxLogins</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-maxLogins' href='./../Overviews/Methods.html#maxLogins'>maxLogins</a> = value</h3>
 <div class='method'>
 <p>An Integer indicating the maximum number of clients which can simultaneously receive notifications from the server. When using TCP this is also the maximum number of simultaneous connections. This is also used by the language to split ranges of <a href="./../Classes/Node.html">Nodes</a>, <a href="./../Classes/Buffer.html">Buffers</a>, or <a href="./../Classes/Bus.html">Busses</a>. In multi-client situations you will need to set this to at least the number of clients you wish to allow. This must be the same in the Server instances on every client. The default is 1.</div><h3><a class='anchor' name='Other%20Instance%20Methods'>Other Instance Methods</a></h3>
@@ -217,7 +220,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bootInProcess' href='./../Overviews/Methods.html#bootInProcess'>bootInProcess</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numPrivateAudioBusChannels' href='./../Overviews/Methods.html#numPrivateAudioBusChannels'>numPrivateAudioBusChannels</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numPrivateAudioBusChannels' href='./../Overviews/Methods.html#numPrivateAudioBusChannels'>numPrivateAudioBusChannels</a> = <span class='argstr'>numChannels: 112</span></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numPrivateAudioBusChannels' href='./../Overviews/Methods.html#numPrivateAudioBusChannels'>numPrivateAudioBusChannels</a> = <span class='argstr'>numChannels: 1020</span></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recBufSize' href='./../Overviews/Methods.html#recBufSize'>recBufSize</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recBufSize' href='./../Overviews/Methods.html#recBufSize'>recBufSize</a> = value</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recChannels' href='./../Overviews/Methods.html#recChannels'>recChannels</a></h3>
@@ -234,9 +237,9 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-reservedNumControlBusChannels' href='./../Overviews/Methods.html#reservedNumControlBusChannels'>reservedNumControlBusChannels</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-reservedNumControlBusChannels' href='./../Overviews/Methods.html#reservedNumControlBusChannels'>reservedNumControlBusChannels</a> = value</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>// Get the local server's options
+<textarea class='editor'>// Get the default server's options
 
-o = Server.local.options;
+o = Server.default.options;
 
 // Post the number of output channels
 
@@ -251,18 +254,29 @@ o.numOutputBusChannels = 6; // The next time it boots, this will take effect
 o.device ="MOTU Traveler";     // use a specific soundcard
 o.device = nil;            // use the system default soundcard
 
-// Create a new instance of ServerOptions
+// finally, boot the server
 
-o = ServerOptions.new;
+Server.default.boot;
+// or, if the server was already running, reboot it
+Server.default.reboot;
+
+
+// ServerOptions and multiple servers
+
+// Create a new instance of ServerOptions for
+
+p = ServerOptions.new;
 
 // Set the memory size to twice the default
 
-o.memSize = 4096;
+p.memSize = 4096;
 
 // Create a new Server on the local machine using o for its options
 
-t = Server(\Local2, NetAddr("127.0.0.1", 57111), o);
+t = Server(\Local2, NetAddr("127.0.0.1", 57111), p);
 t.makeWindow;
 t.boot;
-t.quit;</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/ServerOptions.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/ServerOptions.schelp</a><br>link::Classes/ServerOptions::<br></div></div></body></html>
+t.quit;</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/ServerOptions.schelp'>/usr/share/SuperCollider/HelpSource/Classes/ServerOptions.schelp</a><br>link::Classes/ServerOptions::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

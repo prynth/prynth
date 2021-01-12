@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Streams | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Streams | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Streams';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Streams:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Some%20tutorials'>Some tutorials</a></li>
@@ -23,8 +28,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#event%20stream%20specific%20filter%20patterns'>event stream specific filter patterns</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#other%20Patterns'>other Patterns</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Streams'>Streams</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Overviews</span>
@@ -88,7 +93,7 @@ var scdoc_sc_version = '3.9.3';
 <li> <a href='./../Classes/PparGroup.html'>PparGroup</a> - Starts a new ParGroup and plays the pattern in this group
 </ul>
 <li> <a href='./../Classes/Pavaroh.html'>Pavaroh</a> - applying ascending and descending scales to event stream
-<li> <a href='./../Classes/Pbindf.html'>Pbindf</a> - bind several value patterns to one existing event stream by binding keys to valueskeys to values
+<li> <a href='./../Classes/Pbindf.html'>Pbindf</a> - bind several value patterns to one existing event stream by binding keys to values
 <li> <a href='./../Classes/Pbus.html'>Pbus</a> - isolate a pattern by restricting it to a bus
 <li> <a href='./../Classes/Pclump.html'>Pclump</a> - A pattern that takes another pattern and groups its values into arrays.
 <ul class='tree'>
@@ -96,8 +101,8 @@ var scdoc_sc_version = '3.9.3';
 </ul>
 <li> <a href='./../Classes/Pclutch.html'>Pclutch</a> - sample and hold a pattern
 <li> <a href='./../Classes/Pconst.html'>Pconst</a> - constrain the sum of a value pattern
-<li> <a href='./../Classes/Pdiff.html'>Pdiff</a> - (Undocumented class)
-<li> <a href='./../Classes/Pdrop.html'>Pdrop</a> - (Undocumented class)
+<li> <a href='./../Classes/Pdiff.html'>Pdiff</a> - returns the difference between the current and previous values of an enclosed pattern
+<li> <a href='./../Classes/Pdrop.html'>Pdrop</a> - skips (drops) the first n events from a pattern
 <li> <a href='./../Classes/PfadeIn.html'>PfadeIn</a> - (Undocumented class)
 <ul class='tree'>
 <li> <a href='./../Classes/PfadeOut.html'>PfadeOut</a> - (Undocumented class)
@@ -120,7 +125,7 @@ var scdoc_sc_version = '3.9.3';
 </ul>
 <li> <a href='./../Classes/Pplayer.html'>Pplayer</a> - (Undocumented class)
 <li> <a href='./../Classes/Pprotect.html'>Pprotect</a> - evaluate a function when an error occured in the thread
-<li> <a href='./../Classes/Prewrite.html'>Prewrite</a> - rewriting system
+<li> <a href='./../Classes/Prewrite.html'>Prewrite</a> - L-system pattern for selfsimilar structures
 <li> <a href='./../Classes/Prorate.html'>Prorate</a> - divide stream proportionally
 <li> <a href='./../Classes/Pseed.html'>Pseed</a> - set the random seed in subpattern
 <li> <a href='./../Classes/Pset.html'>Pset</a> - event pattern that sets values of one key
@@ -157,7 +162,7 @@ var scdoc_sc_version = '3.9.3';
 <li> <a href='./../Classes/Ptsym.html'>Ptsym</a> - (Undocumented class)
 </ul>
 <li> <a href='./../Classes/Psync.html'>Psync</a> - synchronise and limit pattern duration
-<li> <a href='./../Classes/Ptrace.html'>Ptrace</a> - (Undocumented class)
+<li> <a href='./../Classes/Ptrace.html'>Ptrace</a> - Print out the results of a stream
 <li> <a href='./../Classes/Pwrap.html'>Pwrap</a> - constrain the range of output values by wrapping
 </ul>
 </ul><h3><a class='anchor' name='event%20stream%20specific%20filter%20patterns'>event stream specific filter patterns</a></h3>
@@ -169,4 +174,5 @@ var scdoc_sc_version = '3.9.3';
 <h3><a class='anchor' name='Streams'>Streams</a></h3>
 <ul>
 <li><a href="./../Classes/BinaryOpStream.html">BinaryOpStream</a><li><a href="./../Classes/UnaryOpStream.html">UnaryOpStream</a><li><a href="./../Reference/EventStream.html">Event Stream</a><li><a href="./../Classes/EventStreamPlayer.html">EventStreamPlayer</a></ul>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Overviews/Streams.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Overviews/Streams.schelp</a><br>link::Overviews/Streams::<br></div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Overviews/Streams.schelp'>/usr/share/SuperCollider/HelpSource/Overviews/Streams.schelp</a><br>link::Overviews/Streams::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

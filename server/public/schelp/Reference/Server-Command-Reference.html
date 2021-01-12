@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Server Command Reference | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Server Command Reference | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Server Command Reference';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Server Command Reference:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Master%20Controls'>Master Controls</a></li>
@@ -104,8 +109,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc2'><a href='#Wave%20Fill%20Commands'>Wave Fill Commands</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Other%20Commands'>Other Commands</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Command%20Numbers'>Command Numbers</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Reference</span>
@@ -118,9 +123,9 @@ var scdoc_sc_version = '3.9.3';
 
 <p>The following is a list of all server commands and their arguments.
 <p>Each command has a command number which can be sent to the server as a 32 bit integer instead of an OSC style string. Command numbers are listed at the end of this document.
-<p>If a command's description contains the word <strong>Asynchronous</strong>, then that command will be passed to a background thread to complete so as not to steal CPU time from the audio synthesis thread. All asynchronous commands send a reply to the client when they are completed. Many asynchronous commands can contain an OSC message or bundle to be executed upon completion. eg.<pre class='code prettyprint lang-sc'>    ["/d_load", "synthdefs/void.scsyndef",
+<p>If a command's description contains the word <strong>Asynchronous</strong>, then that command will be passed to a background thread to complete so as not to steal CPU time from the audio synthesis thread. All asynchronous commands send a reply to the client when they are completed. Many asynchronous commands can contain an OSC message or bundle to be executed upon completion. eg.<textarea class='editor'>    ["/d_load", "synthdefs/void.scsyndef",
         ["/s_new", "void", 1001, 1, 0] // completion message
-    ]</pre>
+    ]</textarea>
 <h2><a class='anchor' name='Master%20Controls'>Master Controls</a></h2>
 <h3><a class='anchor' name='/quit'>/quit</a></h3>
 
@@ -178,10 +183,10 @@ var scdoc_sc_version = '3.9.3';
 
 <p>Query the SuperCollider version. Replies to sender with the following message:<dl>
 <dt>/version.reply<dd><table>
-<tr><td>string<td>Program name. May be "scsynth" or "supernova".<tr><td>int<td>Major version number. Equivalent to sclang's <code class='code prettyprint lang-sc'>Main.scVersionMajor</code>.<tr><td>int<td>Minor version number. Equivalent to sclang's <code class='code prettyprint lang-sc'>Main.scVersionMinor</code>.<tr><td>string<td>Patch version name. Equivalent to sclang's <code class='code prettyprint lang-sc'>Main.scVersionPostfix</code>.<tr><td>string<td>Git branch name.<tr><td>string<td>First seven hex digits of the commit hash.</table>
+<tr><td>string<td>Program name. May be "scsynth" or "supernova".<tr><td>int<td>Major version number. Equivalent to sclang's <code>Main.scVersionMajor</code>.<tr><td>int<td>Minor version number. Equivalent to sclang's <code>Main.scVersionMinor</code>.<tr><td>string<td>Patch version name. Equivalent to the sclang code <code>"." ++ Main.scVersionPatch ++ Main.scVersionTweak</code>.<tr><td>string<td>Git branch name.<tr><td>string<td>First seven hex digits of the commit hash.</table>
 </dl>
 
-<p>The standard human-readable version string can be constructed by concatenating <code class='code prettyprint lang-sc'>major_version ++ "." ++ minor_version ++ patch_version</code>. Since version information is easily accessible to sclang users via the methods described above, this command is mostly useful for alternate clients.
+<p>The standard human-readable version string can be constructed by concatenating <code>major_version ++ "." ++ minor_version ++ patch_version</code>. Since version information is easily accessible to sclang users via the methods described above, this command is mostly useful for alternate clients.
 <p>The git branch name and commit hash could be anything if the user has forked SC, so they should only be used for display and user interface purposes.<h2><a class='anchor' name='Synth%20Definition%20Commands'>Synth Definition Commands</a></h2>
 <h3><a class='anchor' name='/d_recv'>/d_recv</a></h3>
 
@@ -193,7 +198,7 @@ var scdoc_sc_version = '3.9.3';
 <h3><a class='anchor' name='/d_load'>/d_load</a></h3>
 
 <p>Load synth definition.<table>
-<tr><td><strong>string</strong><td>pathname of file. Can be a pattern like <code class='code prettyprint lang-sc'>"synthdefs/perc-*"</code><tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
+<tr><td><strong>string</strong><td>pathname of file. Can be a pattern like <code>"synthdefs/perc-*"</code><tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
 
 <p>Loads a file of synth definitions. Resident definitions with the same names are overwritten.<dl>
 <dt>Asynchronous.<dd>Replies to sender with <strong>/done</strong> when complete.</dl>
@@ -441,7 +446,7 @@ var scdoc_sc_version = '3.9.3';
 
 <p><tr><td><strong>bytes</strong><td>an OSC message to execute upon completion. (optional)</table>
 
-<p>As b_allocRead, but reads individual channels into the allocated buffer in the order specified.<dl>
+<p>As b_allocRead, but reads individual channels into the allocated buffer in the order specified. If the channels argument is absent or empty all channels are read in the order they appear in the file.<dl>
 <dt>Asynchronous.<dd>Replies to sender with <strong>/done /b_allocReadChannel bufNum</strong> when complete.</dl>
 <h3><a class='anchor' name='/b_read'>/b_read</a></h3>
 
@@ -511,7 +516,7 @@ var scdoc_sc_version = '3.9.3';
 <tr><td><strong>int</strong><td>buffer number<tr><td><strong>string</strong><td>command name<tr><td><strong>...</strong><td>command arguments</table>
 
 <p>Plug-ins can define commands that operate on buffers. The arguments after the command name are defined by the command. The currently defined <a href="./../Reference/Server-Command-Reference.html#Buffer%20Fill%20Commands">buffer fill commands</a> are listed below in a separate section.
-<p><code class='code prettyprint lang-sc'>/b_gen</code> does not accept a completion message as the final argument.<dl>
+<p><code>/b_gen</code> does not accept a completion message as the final argument.<dl>
 <dt>Asynchronous.<dd>Replies to sender with <strong>/done /b_gen bufNum</strong> when complete.</dl>
 <h3><a class='anchor' name='/b_close'>/b_close</a></h3>
 
@@ -653,7 +658,7 @@ var scdoc_sc_version = '3.9.3';
 <tr><td><strong>float</strong><td>amplitude</table>
 </table>
 
-<p>Fills a buffer with a series of chebyshev polynomials, which can be defined as:<pre class='code prettyprint lang-sc'>cheby(n) = amplitude * cos(n * acos(x))</pre>
+<p>Fills a buffer with a series of chebyshev polynomials, which can be defined as:<textarea class='editor'>cheby(n) = amplitude * cos(n * acos(x))</textarea>
 
 <p>The first float value specifies the amplitude for n = 1, the second float value specifies the amplitude for n = 2, and so on. To eliminate a DC offset when used as a waveshaper, the wavetable is offset so that the center value is zero.</dl>
 <h3><a class='anchor' name='Other%20Commands'>Other Commands</a></h3>
@@ -666,7 +671,7 @@ var scdoc_sc_version = '3.9.3';
 </dl>
 <h2><a class='anchor' name='Command%20Numbers'>Command Numbers</a></h2>
 
-<p>These are the currently defined command numbers. More may be added to the end of the list in the future.<pre class='code prettyprint lang-sc'>enum {
+<p>These are the currently defined command numbers. More may be added to the end of the list in the future.<textarea class='editor'>enum {
     cmd_none = 0,
 
     cmd_notify = 1,
@@ -757,6 +762,7 @@ var scdoc_sc_version = '3.9.3';
     cmd_version = 64,
 
     NUMBER_OF_COMMANDS = 65
-};</pre>
+};</textarea>
 
-<p>copyright © 2002 James McCartney - <span class='soft'>converted to ScDoc format 2011 by Jonatan Liljedahl</span><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Server-Command-Reference.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Server-Command-Reference.schelp</a><br>link::Reference/Server-Command-Reference::<br></div></div></body></html>
+<p>copyright © 2002 James McCartney - <span class='soft'>converted to ScDoc format 2011 by Jonatan Liljedahl</span><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Reference/Server-Command-Reference.schelp'>/usr/share/SuperCollider/HelpSource/Reference/Server-Command-Reference.schelp</a><br>link::Reference/Server-Command-Reference::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

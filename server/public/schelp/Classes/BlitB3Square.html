@@ -1,0 +1,73 @@
+<!doctype html><html lang='en'><head><title>BlitB3Square | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'BlitB3Square';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>BlitB3Square:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators'>Generators</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators>Deterministic'>Deterministic</a></span>
+</div><h1>BlitB3Square<span id='superclasses'> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Bipolar BLIT derived square waveform</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/AntiAliasingOscillators/Classes/AntiAliasingOscillators.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/AntiAliasingOscillators/Classes/AntiAliasingOscillators.sc'>AntiAliasingOscillators.sc</a></div><div id='related'>See also: <a href="./../Classes/BlitB3Saw.html">BlitB3Saw</a>, <a href="./../Classes/BlitB3.html">BlitB3</a>, <a href="./../Classes/BlitB3Tri.html">BlitB3Tri</a>, <a href="./../Classes/Pulse.html">Pulse</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Bipolar (alternates 1.0 and -1.0) band limited impulse generator based on B-Spline interpolation of order 3, integrated to create a square waveform. <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>BlitB3Square.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>freq: 440.0</span>, <span class='argstr'>leak: 0.99</span>, <span class='argstr'>mul: 1.0</span>, <span class='argstr'>add: 0.0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>freq<td class='argumentdesc'>
+<p>You start to hear aliasing over 4000 Hz or so, otherwise perceptually indistinguishable from an analogue waveform. Max frequency is half the sampling rate, but you'll hear aliasing well before that. Note that frequency can only be changed at the close of each period, so for very low frequencies, there will be a delay changing pitch. Audio rates for fundamental frequencies in the range of standard acoustic instrument pitches, ie piano keyboard or so, work best. <tr><td class='argumentname'>leak<td class='argumentdesc'>
+<p>leaky coefficient for integration. 0 would give back the impulses, higher numbers (up to near 1.0) fill out the inter-impulse space, integrating the waveform. </table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>{ BlitB3Square.ar(XLine.kr(1000, 20, 10)) }.play;
+
+{ BlitB3Square.ar(MouseX.kr(20,1000,'exponential'),MouseY.kr(0.001,0.999)) }.play;
+
+//comparison
+//blit version is cheaper, but aliases once pushed over 4000 or so at 44100 SR
+{ Pulse.ar(4000, 0.5) }.play;
+{ BlitB3Square.ar(4000) }.play;
+
+
+//spot the difference in CPU usage
+{ Mix.fill(100, {Pan2.ar(0.1*BlitB3Square.ar( ((LFNoise0.kr(rrand(2,3))).range(0,36)+36).midicps), 1.0.rand2) }) }.play;
+
+{ Mix.fill(100, {Pan2.ar(0.1*Pulse.ar( ((LFNoise0.kr(rrand(2,3))).range(0,36)+36).midicps, 0.5), 1.0.rand2) }) }.play;</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/AntiAliasingOscillators/HelpSource/Classes/BlitB3Square.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/AntiAliasingOscillators/HelpSource/Classes/BlitB3Square.schelp</a><br>link::Classes/BlitB3Square::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

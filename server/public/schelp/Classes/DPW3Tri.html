@@ -1,0 +1,81 @@
+<!doctype html><html lang='en'><head><title>DPW3Tri | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'DPW3Tri';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>DPW3Tri:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators'>Generators</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators>Deterministic'>Deterministic</a></span>
+</div><h1>DPW3Tri<span id='superclasses'> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Triangle via 3rd order differerentiated polynomial waveform</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/AntiAliasingOscillators/Classes/AntiAliasingOscillators.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/AntiAliasingOscillators/Classes/AntiAliasingOscillators.sc'>AntiAliasingOscillators.sc</a></div><div id='related'>See also: <a href="./../Classes/DPW4Saw.html">DPW4Saw</a>, <a href="./../Classes/BlitB3Tri.html">BlitB3Tri</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Distortion creeps in for changes at low frequencies when under 200Hz. But very clean above that.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>DPW3Tri.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>freq: 440.0</span>, <span class='argstr'>mul: 1.0</span>, <span class='argstr'>add: 0.0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>freq<td class='argumentdesc'></table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>//distortion creeps in under 200Hz
+{ DPW3Tri.ar(XLine.kr(2000, 20, 10)) }.play; 
+
+//very fast sweeps can have transient distortion effects
+{ DPW3Tri.ar(MouseX.kr(200,12000,'exponential')) }.play;
+
+//compare:
+{LFTri.ar(MouseX.kr(200,12000,'exponential'))}.play
+
+
+//less efficient than LFTri
+{ Mix(DPW3Tri.ar(Array.rand(10,50,5000))*0.1) }.play;
+
+{ Mix(LFTri.ar(Array.rand(10,50,5000))*0.1) }.play;
+
+
+//triangle is integration of square wave; warning loud, not so kind 
+{Integrator.ar(Pulse.ar(MouseX.kr(440,8800),0.5),0.99)}.play
+
+//differentiation of triangle is square
+{HPZ1.ar(2.0*DPW3Tri.ar(MouseX.kr(440,8800)))}.play
+
+//compare
+{Pulse.ar(MouseX.kr(440,8800),0.5)}.play</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/AntiAliasingOscillators/HelpSource/Classes/DPW3Tri.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/AntiAliasingOscillators/HelpSource/Classes/DPW3Tri.schelp</a><br>link::Classes/DPW3Tri::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Using Quarks | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Using Quarks | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Using Quarks';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Using Quarks:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Installing%20quarks'>Installing quarks</a></li>
@@ -33,8 +38,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc2'><a href='#Deprecated/ignored%20fields'>Deprecated/ignored fields</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Contributing%20fixes%20to%20a%20quark'>Contributing fixes to a quark</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Offline%20Usage'>Offline Usage</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -49,42 +54,42 @@ var scdoc_sc_version = '3.9.3';
 <p>Quarks are packages of SuperCollider code containing classes, extension methods, documentation and server UGen plugins. The Quarks class manages downloading these packages and installing or uninstalling them.<h2><a class='anchor' name='Installing%20quarks'>Installing quarks</a></h2>
 <h3><a class='anchor' name='using%20the%20GUI'>using the GUI</a></h3>
 
-<p>You can install Quarks using the interface:<pre class='code prettyprint lang-sc'>Quarks.gui</pre>
+<p>You can install Quarks using the interface:<textarea class='editor'>Quarks.gui</textarea>
 
 <p>This offers many community contributed packages most of which are hosted on github.
-<p>You can also add additional folders where you keep your personally developed quarks or those you have forked or downloaded. These will also be shown on the GUI as options for installing.<pre class='code prettyprint lang-sc'>// put this in your startup.scd
-Quarks.addFolder("~/supercollider/quarks");</pre>
+<p>You can also add additional folders where you keep your personally developed quarks or those you have forked or downloaded. These will also be shown on the GUI as options for installing.<textarea class='editor'>// put this in your startup.scd
+Quarks.addFolder("~/supercollider/quarks");</textarea>
 <h3><a class='anchor' name='by%20name'>by name</a></h3>
 
-<p>You can (un)install a Quark by name:<pre class='code prettyprint lang-sc'>Quarks.install("UnitTesting");
-Quarks.uninstall("UnitTesting");</pre>
+<p>You can (un)install a Quark by name:<textarea class='editor'>Quarks.install("MathLib");
+Quarks.uninstall("MathLib");</textarea>
 <h3><a class='anchor' name='by%20git%20URL'>by git URL</a></h3>
-<pre class='code prettyprint lang-sc'>Quarks.install("https://github.com/supercollider-quarks/UnitTesting.git");
+<textarea class='editor'>Quarks.install("https://github.com/supercollider-quarks/MathLib.git");
 // uninstall it
-Quarks.uninstall("https://github.com/supercollider-quarks/UnitTesting.git");</pre>
+Quarks.uninstall("https://github.com/supercollider-quarks/MathLib.git");</textarea>
 <h3><a class='anchor' name='from%20a%20local%20folder'>from a local folder</a></h3>
 
-<p>and you can install any local folder:<pre class='code prettyprint lang-sc'>// add your own classes
+<p>and you can install any local folder:<textarea class='editor'>// add your own classes
 Quarks.install("~/supercollider/quarks/my-thing");
 // install something that you downloaded and want to try out
-Quarks.install("~/Downloads/something-i-found");</pre>
+Quarks.install("~/Downloads/something-i-found");</textarea>
 
-<p>You can also add a folder where you keep your development quarks (your own and things you have forked):<pre class='code prettyprint lang-sc'>Quarks.addFolder("~/supercollider/quarks");</pre>
+<p>You can also add a folder where you keep your development quarks (your own and things you have forked):<textarea class='editor'>Quarks.addFolder("~/supercollider/quarks");</textarea>
 
 <p>Now each quark inside that folder will appear on the GUI for you to un/install.
-<p>If you wish to be able to uninstall local quarks, but still see them in the GUI, it is highly recommended to collect your local quark directories under a single master directory. Then, use <a href="./../Classes/Quarks.html#*addFolder">Quarks: *addFolder</a> to add the master directory. <code class='code prettyprint lang-sc'>addFolder</code> does not add individual quark directories.<h3><a class='anchor' name='Recompile%20the%20class%20library'>Recompile the class library</a></h3>
+<p>If you wish to be able to uninstall local quarks, but still see them in the GUI, it is highly recommended to collect your local quark directories under a single master directory. Then, use <a href="./../Classes/Quarks.html#*addFolder">Quarks: *addFolder</a> to add the master directory. <code>addFolder</code> does not add individual quark directories.<h3><a class='anchor' name='Recompile%20the%20class%20library'>Recompile the class library</a></h3>
 
 <p>After installing or uninstalling you need to <strong>Language &gt; Recompile Class Library</strong>
-<p>If you've made a bit of a mess:<pre class='code prettyprint lang-sc'>// remove everything
-Quarks.clear</pre>
+<p>If you've made a bit of a mess:<textarea class='editor'>// remove everything
+Quarks.clear</textarea>
 <h3><a class='anchor' name='Internals'>Internals</a></h3>
 
-<p>When you install one it is cloned using git into:<pre class='code prettyprint lang-sc'>Quarks.folder;
+<p>When you install one it is cloned using git into:<textarea class='editor'>Quarks.folder;
 // open the folder and have a look
-Quarks.openFolder;</pre>
+Quarks.openFolder;</textarea>
 
 <p>and this path is added to the <a href="./../Classes/LanguageConfig.html">LanguageConfig</a> includePaths so that the classes are in SuperCollider's class path when you recompile the library.
-<p>You can view and edit the current include paths via <strong>Preferences &gt; Interpreter &gt; Include Paths</strong>.<pre class='code prettyprint lang-sc'>LanguageConfig.includePaths</pre>
+<p>You can view and edit the current include paths via <strong>Preferences &gt; Interpreter &gt; Include Paths</strong>.<textarea class='editor'>LanguageConfig.includePaths</textarea>
 
 <p>You can also see or edit these settings in the file sclang_config.yaml<h3><a class='anchor' name='Fixing%20Conflicts'>Fixing Conflicts</a></h3>
 
@@ -94,41 +99,39 @@ Quarks.openFolder;</pre>
 <p>You can also manually edit <code>sclang_config.yaml</code><h2><a class='anchor' name='Saving%20and%20Loading%20sets%20of%20Quarks'>Saving and Loading sets of Quarks</a></h2>
 
 <p>To make project work simpler you can save and later reload your currently installed Quarks to and from a quarks.txt file. This is similar to what the LanguageConfig does but this also downloads the Quarks if needed and installs all dependencies.
-<p>This is very useful for projects because you can pin the exact releases of each Quark that your project depends on and you should be able to reload them exactly even years in the future.<pre class='code prettyprint lang-sc'>// save your current state
+<p>This is very useful for projects because you can pin the exact releases of each Quark that your project depends on and you should be able to reload them exactly even years in the future.<textarea class='editor'>// save your current state
 Quarks.save("~/supercollider/quarks.txt");
 // reload it later
-Quarks.load("~/supercollider/quarks.txt");</pre>
+Quarks.load("~/supercollider/quarks.txt");</textarea>
 
 <p>This saves both what quarks you have and what git revision they are on. If you have uncommitted changes in one of the quarks then it will warn you that its dirty.
 <p>The save format specifies the revisions using git tags with a fall back to the full sha hash that specifies the revision. In git terminology this is known as a refspec.
 <p>If you have installed local paths that are not under git source control (your own work or things you have downloaded) then the paths will be saved without any version or refspec.
-<p>The file format looks like this:<pre class='code prettyprint lang-sc'>git://github.com/author/quarkname@tags/4.1.4
+<p>The file format looks like this:<textarea class='editor'>git://github.com/author/quarkname@tags/4.1.4
 git://github.com/supercollider-quarks/ddwCommon@8ae156b460dcb08285013265cf3a1c7172bba665
-~/supercollider/quarks/my-thing</pre>
+~/supercollider/quarks/my-thing</textarea>
 
 <p>Note that in this case `quarkname` was checked out to the tag 4.1.4, and `ddwCommon` was not on a tag so the refspec is the SHA hash. In both cases this results in an exact reference. `~/supercollider/quarks/my-thing` was not a git repo so the best it can do is to specify the path.
 <p>Even if a quark was installed by name using the directory, the full repository URL will be saved to ensure that the reference is unvarying (the directory.txt could be edited and the URL changed, and that might then point to different source code).
 <p>Any packages not under git source control are specified by path, abbreviated to the most logical path relative to the quark file, the home directory or by absolute path. They do not have a version or refspec.<h2><a class='anchor' name='Making%20your%20own%20Quarks'>Making your own Quarks</a></h2>
 
 <p>Packages are a natural way to store your work.
-<p>Install any source code folder as a Quark:<pre class='code prettyprint lang-sc'>Quarks.install("~/path/to/my-quark")</pre>
+<p>Install any source code folder as a Quark:<textarea class='editor'>Quarks.install("~/path/to/my-quark")</textarea>
 
-<p>Or create a folder where you do your development work and add that to the additional folders:<pre class='code prettyprint lang-sc'>Quarks.addFolder("~/supercollider/quarks");</pre>
+<p>Or create a folder where you do your development work and add that to the additional folders:<textarea class='editor'>Quarks.addFolder("~/supercollider/quarks");</textarea>
 
 <p>Now you can (un)install your own packages from your local folder.
-<p>Managing your code with git is optional, but you should consider using it early on. Even if you do not intend to share your code with anyone else, git provides a backup system and a time machine if you break something.<pre class='code prettyprint lang-sc'># in the terminal, its easy as this:
-git init</pre>
+<p>Managing your code with git is optional, but you should consider using it early on. Even if you do not intend to share your code with anyone else, git provides a backup system and a time machine if you break something.<textarea class='editor'># in the terminal, its easy as this:
+git init</textarea>
 
 <p>Bitbucket offers free hosting for private repositories, and you can setup your own git host on any machine that you have SSH access to. But you don't even need an externally hosted repository to use git.
 <p>Hard drives die, backups fail, people make mistakes. If you keep a copy on bitbucket then your work is that much safer.<h2><a class='anchor' name='Publishing%20a%20Quark'>Publishing a Quark</a></h2>
 
-<p>Make a git repository and push it to github, bitbucket or any publicly accessible git host.
-<p>tag your releases. The name of the tag is the name of the release version. Using semver (eg "1.0.1") is recommended. This provides the Quarks system with a way to list versions in the interface and to checkout a version and for people to pin dependencies to a stable release. it also provides a downloadable version on your github releases page.
-<p>If its on github then anybody can install your quark.
-<p>You can also add your quark to the community directory:
+<p>Make a git repository and push it to github, gitlab, bitbucket or any publicly accessible git host.
+<p>Be sure to <strong>tag your releases</strong>. The name of a tag should be the release version to which it corresponds. Using <a href="https://semver.org">Semantic Versioning</a> (eg "v1.0.1") is strongly recommended. This provides the Quarks system with the ability to list available versions and allow the user to choose which version to checkout. Version tags also allow other quark developpers to pin their dependencies to specific release versions.
+<p>You can add your quark to the Community Quark Directory by adding its name and git URL to the following file:
 <p><a href="https://github.com/supercollider-quarks/quarks/blob/master/directory.txt">https://github.com/supercollider-quarks/quarks/blob/master/directory.txt</a>
-<p>Simply click <code>edit</code>, make any changes and submit a pull request.
-<p>You specify the name, the git url and optionally the most recent version as @tags/{version-name}<pre class='code prettyprint lang-sc'>quarkname=git://github.com/author/quarkname@tags/4.1.4</pre>
+<p>Simply click <code>edit</code>, add in your quark's info, and submit a pull request. Here's an example of what an entry should look like in the Quark Directory:<textarea class='editor'>quarkname=https://github.com/author/quarkname</textarea>
 <h3><a class='anchor' name='Migrated%20Quarks%20from%20SVN'>Migrated Quarks from SVN</a></h3>
 
 <p>I (felix) migrated the old SVN repository to github and preserved all the commits and authorship. You may find your old work in one of these quarks:
@@ -141,29 +144,29 @@ git init</pre>
 <p>The quark file is a SuperCollider code file containing authorship, version, copyright and dependency information. It is optional but recommended. None of the fields are required and you may include any custom fields you like.
 <p>The most important feature is to specify dependencies, version, summary and to specify the help file.
 <p>It's similar to the package.json file in npm (JavaScript package manager) or bower.json for Bower (web/frontend package manager).
-<p>The file name is the name of the quark followed by the .quark extension:<pre class='code prettyprint lang-sc'>{quark name}.quark</pre>
+<p>The file name is the name of the quark followed by the .quark extension:<textarea class='editor'>{quark name}.quark</textarea>
 
-<p>and is a SuperCollider file that returns an IdentityDictionary<pre class='code prettyprint lang-sc'>(
+<p>and is a SuperCollider file that returns an IdentityDictionary<textarea class='editor'>(
   name: "DemonWidgets",
   summary: "Widgets, gadgets and arcane devices for summoning demons.",
   version: "1.0.0",
   schelp: "DemonWidgets",
-  dependencies: ["Bjorkland", "Canvas3D", "cruciallib@tags/4.1.4"],
+  dependencies: ["Bjorklund", "Canvas3D", "cruciallib@tags/4.1.4"],
   license: "GPL",
   copyright: "Frank Furter, Dr.-Ing. 2015"
-)</pre>
+)</textarea>
 
 <p>Common fields<ul>
-<li>name<li>summary<li>author<li>copyright<li>license - default is GPL<li>version - semver compatible string is preferred eg. "1.0.0"<li>schelp - title of the primary help file<li>url - home page, defaults to the github/bitbucket url<li>dependencies - see below<li>isCompatible - a function returning a Boolean. Can check for presence of classes, features, version numbers.<li>organization<li>country<li>since<li>ext_dependancy - text describing external software like "PD" or "processing"</ul>
+<li>name<li>summary<li>author<li>copyright<li>license - default is GPL<li>version - semver compatible string is preferred eg. "1.0.0"<li>schelp - title of the primary help file<li>url - home page, defaults to the github/bitbucket url<li>dependencies - see below<li>isCompatible - a function returning a Boolean. Can check for presence of classes, features, version numbers.<li>organization<li>country<li>since<li>ext_dependency - text describing external software like "PD" or "processing"</ul>
 
-<p>dependencies is a list of Quarks or git urls with optional an @refspec<pre class='code prettyprint lang-sc'>Bjorkland
-cruciallib@tags/4.1.4</pre>
+<p>dependencies is a list of Quarks or git urls with optional an @refspec<textarea class='editor'>Bjorklund
+cruciallib@tags/4.1.4</textarea>
 <h3><a class='anchor' name='Deprecated/ignored%20fields'>Deprecated/ignored fields</a></h3>
 
 <p><code>path</code> was used for SVN
 <p><code>helpdoc</code> specifies an html help file in the Quark. It will still work and will load the helpfile, but schelp is preferred.<h2><a class='anchor' name='Contributing%20fixes%20to%20a%20quark'>Contributing fixes to a quark</a></h2>
 
-<p>Best practice is to clone the quark into a folder where you do your development work. Make a ~/supercollider/quarks (or wherever you want it) and add this to the Quarks folders:<pre class='code prettyprint lang-sc'>Quarks.addFolder("~/supercollider/quarks");</pre>
+<p>Best practice is to clone the quark into a folder where you do your development work. Make a ~/supercollider/quarks (or wherever you want it) and add this to the Quarks folders:<textarea class='editor'>Quarks.addFolder("~/supercollider/quarks");</textarea>
 
 <p>git clone the quark into that folder. You can do your development work / hacking there and submit a pull request to the repository owner.
 <p>There is a git extension that is quite useful for working with github repositories is <a href="https://hub.github.com">https://hub.github.com</a>
@@ -171,4 +174,5 @@ cruciallib@tags/4.1.4</pre>
 
 <p>Quarks should be usable even when offline. The directory is cached, refreshed every four hours. Cloned quarks can switch versions without needing to be online.
 <p>You can download a zipped release of all quarks:
-<p><a href="https://github.com/supercollider-quarks/quarks/releases">https://github.com/supercollider-quarks/quarks/releases</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/UsingQuarks.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/UsingQuarks.schelp</a><br>link::Guides/UsingQuarks::<br></div></div></body></html>
+<p><a href="https://github.com/supercollider-quarks/quarks/releases">https://github.com/supercollider-quarks/quarks/releases</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/UsingQuarks.schelp'>/usr/share/SuperCollider/HelpSource/Guides/UsingQuarks.schelp</a><br>link::Guides/UsingQuarks::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

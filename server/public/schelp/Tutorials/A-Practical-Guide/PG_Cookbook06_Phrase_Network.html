@@ -1,26 +1,31 @@
-<!doctype html><html lang='en'><head><title>Pattern Guide Cookbook 06: Phrase Network | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide Cookbook 06: Phrase Network | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'Pattern Guide Cookbook 06: Phrase Network';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pattern Guide Cookbook 06: Phrase Network:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Sequencing%20by%20a%20network%20of%20phrases'>Sequencing by a network of phrases</a></li>
 <li class='toc1'><a href='#Articulating%20notes%20with%20PmonoArtic'>Articulating notes with PmonoArtic</a></li>
 <ul class='toc'><li class='toc2'><a href='#Example'>Example</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/A-Practical-Guide</span>
@@ -38,14 +43,14 @@ var scdoc_sc_version = '3.9.3';
 <p>Most conventional synthesizers have a mode where playing a note while the previous note is still sustaining slides from one note to the other. The <a href="./../../Classes/PmonoArtic.html">PmonoArtic</a> pattern does this based on the event's sustain value. The delta value is the number of beats until the next event; sustain is the number of beats until the note releases. If sustain is shorter than delta, the note should cut off early and the next event should produce a new synth.
 <p>The example uses <a href="./../../Classes/Pfsm.html">Pfsm</a> (finite state machine) to arrange a set of predefined phrases in a partially randomized order. Each phrase is followed by a list pointing to the phrases that could legitimately follow the current phrase. That is, it might make musical sense to go from phrase 1 to phrase 2, but not from 1 to 3. Defining the successors for 1 appropriately makes sure that a nonsense transition will not be made.
 <p>This is a long example, but it's only because there are lots of phrases. The structure is very simple: just a set of phrases chosen in succession by Pfsm.
-<p>- <strong>Third-party extension alert</strong> : In this example, the selection of the next phrase is explicitly weighted by repeating array elements, such as <code class='code prettyprint lang-sc'>#[1, 1, 1, 1, 2, 2, 3, 3, 4, 4, 5]</code>. A more elegant way to do this is using the <strong>WeighBag</strong> class in the <strong>MathLib</strong> quark.<pre class='code prettyprint lang-sc'>// the following are equivalent:
+<p>- <strong>Third-party extension alert</strong> : In this example, the selection of the next phrase is explicitly weighted by repeating array elements, such as <code>#[1, 1, 1, 1, 2, 2, 3, 3, 4, 4, 5]</code>. A more elegant way to do this is using the <strong>WeighBag</strong> class in the <strong>MathLib</strong> quark.<textarea class='editor'>// the following are equivalent:
 a = #[1, 1, 1, 1, 2, 2, 3, 3, 4, 4, 5];
 ({ a.choose } ! 100).histo(5, 1, 5);
 
 a = WeighBag.with((1..5), #[4, 2, 2, 2, 1]);
-({ a.wchoose } ! 100).histo(5, 1, 5);</pre>
+({ a.wchoose } ! 100).histo(5, 1, 5);</textarea>
 <h3><a class='anchor' name='Example'>Example</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 // this SynthDef has a strong attack, emphasizing the articulation
 SynthDef(\sawpulse, { |out, freq = 440, gate = 0.5, plfofreq = 6, mw = 0, ffreq = 2000, rq = 0.3, freqlag = 0.05, amp = 1|
     var sig, plfo, fcurve;
@@ -195,7 +200,8 @@ p = Pmul(\amp, 0.4, Pfsm([
 ], inf)).play;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook05_Using_Samples.html">Pattern Guide Cookbook 05: Using Samples</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations.html">Pattern Guide Cookbook 07: Rhythmic Variations</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network::<br></div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations.html">Pattern Guide Cookbook 07: Rhythmic Variations</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

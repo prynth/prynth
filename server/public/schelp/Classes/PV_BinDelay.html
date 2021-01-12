@@ -1,0 +1,158 @@
+<!doctype html><html lang='en'><head><title>PV_BinDelay | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'PV_BinDelay';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>PV_BinDelay:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JoshUGens'>JoshUGens</a> | <a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>FFT'>FFT</a></span>
+</div><h1>PV_BinDelay<span id='superclasses'> : <a href="../Classes/PV_ChainUGen.html">PV_ChainUGen</a> : <a href="../Classes/WidthFirstUGen.html">WidthFirstUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Delay and Feedback on a bin by bin basis.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/JoshPV.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/JoshPV.sc'>JoshPV.sc</a></div></div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+<div class='warning'><span class='warninglabel'>WARNING:</span> This UGen needs to allocate a large amount of real-time memory at the outset (approx. SampleRate * maxDelayTime). This will cause a CPU spike at startup. Also, due to memory mangement restrictions, There is a limited number of previous frames that can be stored. Right now no more the 512 frames can be stored. With a frame size of 512 samples, this makes a hard limit to the max delay of about 5.9 seconds at a SR of 44100 (or (FFT size * 512) / SR). Chances are, however, that you will run out of RT memory (the memSize ServerOption) before hitting these limits, especially at larger FFT frame sizes.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>PV_BinDelay.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>buffer</span>, <span class='argstr'>maxdelay</span>, <span class='argstr'>delaybuf</span>, <span class='argstr'>fbbuf</span>, <span class='argstr'>hop: 0.5</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>buffer<td class='argumentdesc'>
+<p>The FFT buffer.<tr><td class='argumentname'>maxdelay<td class='argumentdesc'>
+<p>In seconds. Used at init time to create memory for the delays. Non-modulatable.<tr><td class='argumentname'>delaybuf<td class='argumentdesc'>
+<p>A buffer of (fft buffer size / 2) containing the delay times for each bin. Delay times will be rounded to the closest bin. Smaller FFT windows will yield better time resolution.<tr><td class='argumentname'>fbbuf<td class='argumentdesc'>
+<p>A buffer of (fft buffer size / 2) containing the fb percentages for each bin.<tr><td class='argumentname'>hop<td class='argumentdesc'>
+<p>If you are using FFT with a hop value different then the default 0.5, you need to tell PV_BinDelay so it can calculate the correct times.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>(
+// use as multislider - del time vals on top, feedback on the bottom
+// max delay time is 1 second, delaytime and fb are initialized to 0.0
+// and are controlled by the GUI. The multi-slider on the top controls
+// each bins delay time, the bottom controls FB.
+
+s.boot;
+s.doWhenBooted({
+    var size, fftSize, awin, delaySilder, fbSlider, maxdel, synth, cond, playbuf;
+    var setup, onReadyFunc, fftBuffer, delTimeBuffer, fbAmtBuffer, createGUI, liveInputMix;
+
+    size = 128;
+    fftSize = size * 2;
+    maxdel = 0.5;
+    cond = Condition.new;
+    liveInputMix = 0.0; // change to 1 to hear sound from live input, otherwise, an Impulse
+
+    SynthDef(\helpBinDelay, { arg inbus=0, inMix = 0.0, out=0, fftBuf=0, delayBuf=0, fbBuf=0;
+        var in, chain;
+        in = (Impulse.ar(0.33) * (1.0 - inMix)) + (In.ar(inbus, 1) * inMix);
+        chain = FFT(fftBuf, in, 0.25);
+        chain = PV_BinDelay(chain, maxdel, delayBuf, fbBuf, 0.25);
+        Out.ar(out,
+            in + IFFT(chain) * -24.dbamp// inverse FFT
+        );
+    }).add;
+
+    /* Functions that allocate buffers and call onReadyFunc when done */
+    setup = {
+        Routine.run({
+            "Allocating FFT buffer".postln;
+            fftBuffer = Buffer.alloc(s, fftSize, 1);
+            "Allocating DelTime buffer".postln;
+            delTimeBuffer = Buffer.alloc(s, size, 1);
+            "Allocating FB buffer".postln;
+            fbAmtBuffer = Buffer.alloc(s, size, 1);
+            s.sync(cond);
+            onReadyFunc.value()
+        });
+    };
+
+    createGUI = {
+
+        awin = Window("test", Rect(200 , 450, 10 + (size * 1), 10 + (size * 2)));
+        awin.view.decorator = FlowLayout(awin.view.bounds);
+
+        delaySilder = MultiSliderView(awin, Rect(0, 0, size * 1, size * 1));
+        delaySilder.action = {arg xb;
+            ("Deltime index: " ++ xb.index ++" value: " ++ (xb.currentvalue * maxdel)).postln;
+            delTimeBuffer.set(xb.index, xb.currentvalue * maxdel)
+        };
+
+        fbSlider = MultiSliderView(awin, Rect(0, 0, size * 1, size * 1));
+        fbSlider.action = {arg xb;
+            ("FB index: " ++ xb.index ++" value: " ++ xb.currentvalue).postln;
+            fbAmtBuffer.set(xb.index, xb.currentvalue)
+        };
+
+        [delaySilder, fbSlider].do({arg thisSliderView;
+            var initDataArray;
+            initDataArray = Array.fill(size, {0.0});
+            thisSliderView.value_(initDataArray);
+            thisSliderView.xOffset_(5);
+            thisSliderView.thumbSize_(12.0);
+
+            // value axis size of each blip in pixels
+            thisSliderView.valueThumbSize_(15.0);
+            // index axis size of each blip in pixels
+            thisSliderView.indexThumbSize_( thisSliderView.bounds.width / initDataArray.size );
+            thisSliderView.gap = 0;
+        });
+
+        awin.front;
+
+        awin.onClose_({
+            synth.free;
+            fftBuffer.free;
+            fbAmtBuffer.free;
+            delTimeBuffer.free;
+        })
+    };
+
+    onReadyFunc = {
+        createGUI.defer();
+
+        synth = Synth(\helpBinDelay, [
+            \inbus, s.options.numOutputBusChannels,
+            \inMix, liveInputMix,
+            \out, 0,
+            \fftBuf, fftBuffer.bufnum,
+            \delayBuf, delTimeBuffer.bufnum,
+            \fbBuf, fbAmtBuffer.bufnum,
+        ]);
+    };
+
+    setup.value();
+})
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/HelpSource/Classes/PV_BinDelay.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/HelpSource/Classes/PV_BinDelay.schelp</a><br>link::Classes/PV_BinDelay::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

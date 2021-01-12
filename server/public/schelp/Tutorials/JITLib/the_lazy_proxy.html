@@ -1,27 +1,32 @@
-<!doctype html><html lang='en'><head><title>the_lazy_proxy | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>the_lazy_proxy | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'the_lazy_proxy';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>the_lazy_proxy:</div>
-<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'></ul></div><div class='contents'>
-<div id='menubar'></div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/JITLib</span>
- | <span id='categories'><a href='./../../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Libraries>JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Libraries>JITLib>Tutorials'>Tutorials</a></span>
+ | <span id='categories'><a href='./../../Browse.html#JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#JITLib>Tutorials'>Tutorials</a></span>
 </div><h1>the_lazy_proxy</h1>
 <div id='summary'>the lazy proxy</div>
 </div>
@@ -29,26 +34,26 @@ var scdoc_sc_version = '3.9.3';
 <div id='related'>See also: <a href="./../../Overviews/JITLib.html">JITLib</a>, <a href="./../../Classes/NodeProxy.html">NodeProxy</a>, <a href="./../../Classes/ProxySpace.html">ProxySpace</a></div>
 </div>
 
-<p>The class <a href="./../../Classes/NodeProxy.html">NodeProxy</a> (and <a href="./../../Classes/BusPlug.html">BusPlug</a>) uses a lazy evaluation scheme to derive its appropriate rate and numChannels from the first meaningful input that is assigned to it. see <a href="./../../Classes/NodeProxy.html">NodeProxy</a> and <a href="./../../Classes/ProxySpace.html">ProxySpace</a> helpfiles for basic info. So as long as the source is not set, the proxy is <strong>neutral</strong> :<pre class='code prettyprint lang-sc'>p = ProxySpace.push;
-~x.isNeutral;</pre>
+<p>The class <a href="./../../Classes/NodeProxy.html">NodeProxy</a> (and <a href="./../../Classes/BusPlug.html">BusPlug</a>) uses a lazy evaluation scheme to derive its appropriate rate and numChannels from the first meaningful input that is assigned to it. see <a href="./../../Classes/NodeProxy.html">NodeProxy</a> and <a href="./../../Classes/ProxySpace.html">ProxySpace</a> helpfiles for basic info. So as long as the source is not set, the proxy is <strong>neutral</strong> :<textarea class='editor'>p = ProxySpace.push;
+~x.isNeutral;</textarea>
 
-<p>as soon as the first time the source is set, it derives its bus arguments from that input<pre class='code prettyprint lang-sc'>~x = { Array.fill(14, { SinOsc.kr(1.0.rand, 0, 100) }) }; //~x is now 14 channels control rate
-~x;</pre>
+<p>as soon as the first time the source is set, it derives its bus arguments from that input<textarea class='editor'>~x = { Array.fill(14, { SinOsc.kr(1.0.rand, 0, 100) }) }; //~x is now 14 channels control rate
+~x;</textarea>
 
-<p>in order to reset these properties, clear is used:<pre class='code prettyprint lang-sc'>~x.clear;
+<p>in order to reset these properties, clear is used:<textarea class='editor'>~x.clear;
 //note that no other proxy should be reading from ~x when this is done:
-//for simplicity nodeproxy currently does not care for its children, only for its parents.</pre>
+//for simplicity nodeproxy currently does not care for its children, only for its parents.</textarea>
 
-<p>for a quick initialisation, also <code class='code prettyprint lang-sc'>defineBus</code> can be used:<pre class='code prettyprint lang-sc'>~x.defineBus(\control, 5);
+<p>for a quick initialisation, also <code>defineBus</code> can be used:<textarea class='editor'>~x.defineBus(\control, 5);
 // or in another way:
-~x.kr(5)</pre>
+~x.kr(5)</textarea>
 
-<p>the properties are also set when some other proxy reads from it:<pre class='code prettyprint lang-sc'>~x = { LFPulse.kr * ~b.kr(7) }; //the first arg to kr / ar is the default number of channels</pre>
+<p>the properties are also set when some other proxy reads from it:<textarea class='editor'>~x = { LFPulse.kr * ~b.kr(7) }; //the first arg to kr / ar is the default number of channels</textarea>
 
-<p>if no number of channels is passed in, the default value is used:<pre class='code prettyprint lang-sc'>~test.ar; // 2
-~krtest.kr; // 1</pre>
+<p>if no number of channels is passed in, the default value is used:<textarea class='editor'>~test.ar; // 2
+~krtest.kr; // 1</textarea>
 
-<p>the default can be set in the class NodeProxy:<pre class='code prettyprint lang-sc'>NodeProxy.defaultNumAudio = 3;
+<p>the default can be set in the class NodeProxy:<textarea class='editor'>NodeProxy.defaultNumAudio = 3;
 NodeProxy.defaultNumControl = 13;
 
 ~test3.ar; // 3
@@ -56,13 +61,13 @@ NodeProxy.defaultNumControl = 13;
 
 // set them back:
 NodeProxy.defaultNumAudio = 2;
-NodeProxy.defaultNumControl = 1;</pre>
+NodeProxy.defaultNumControl = 1;</textarea>
 
-<p>also if a proxy is used as a map source, control rate is assumed:<pre class='code prettyprint lang-sc'>~u;
+<p>also if a proxy is used as a map source, control rate is assumed:<textarea class='editor'>~u;
 ~x.map(\zzz, ~u);
-~u;</pre>
+~u;</textarea>
 
-<p>when unary or binary operations are performed, the highest rate / numChannels is used to initialize all uninitialized proxies:<pre class='code prettyprint lang-sc'>~x.clear;
+<p>when unary or binary operations are performed, the highest rate / numChannels is used to initialize all uninitialized proxies:<textarea class='editor'>~x.clear;
 ~x.defineBus(\control, 5);
 ~x = ~e + ~f;
 
@@ -73,9 +78,9 @@ NodeProxy.defaultNumControl = 1;</pre>
 
 ~x.clear; ~e.clear; ~f.clear;
 ~e.defineBus(\audio, 3);
-~x = ~e;</pre>
+~x = ~e;</textarea>
 
-<p>if a rate-1 proxy is used as rate-2 input, the rate is converted and the channels are expanded in the usual multichannel expansion pattern:<pre class='code prettyprint lang-sc'>~f.defineBus(\control);
+<p>if a rate-1 proxy is used as rate-2 input, the rate is converted and the channels are expanded in the usual multichannel expansion pattern:<textarea class='editor'>~f.defineBus(\control);
 ~f.ar(2);
 
 ~f.defineBus(\audio);
@@ -83,14 +88,15 @@ NodeProxy.defaultNumControl = 1;</pre>
 
 // if the number of channels passed in is less, it only uses the first n channels
 ~f.defineBus(\audio, 8);
-~f.ar(2);</pre>
+~f.ar(2);</textarea>
 
-<p>an offset can be passed in as second argument to ar/kr<pre class='code prettyprint lang-sc'>//modulate offset:
+<p>an offset can be passed in as second argument to ar/kr<textarea class='editor'>//modulate offset:
 p = ProxySpace.push(s.boot);
 
 ~out.play;
 ~src = { SinOsc.ar(Array.rand(5, 400, 500.0), SinOsc.ar(Array.exprand(5, 2.1, 500.0)), 0.1) };
 ~out = { ~src.ar(1, MouseX.kr(0, 5)) };
-~out = { Mix(~src.ar(3, MouseX.kr(0, 5))) }; //the wrapping offset is moved accordingly</pre>
+~out = { Mix(~src.ar(3, MouseX.kr(0, 5))) }; //the wrapping offset is moved accordingly</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/JITLib/the_lazy_proxy.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/JITLib/the_lazy_proxy.schelp</a><br>link::Tutorials/JITLib/the_lazy_proxy::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/JITLib/the_lazy_proxy.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/JITLib/the_lazy_proxy.schelp</a><br>link::Tutorials/JITLib/the_lazy_proxy::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

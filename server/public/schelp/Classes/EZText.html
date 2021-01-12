@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>EZText | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>EZText | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'EZText';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>EZText:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -36,8 +41,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-prSetViewParams'>prSetViewParams</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -47,13 +52,13 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Wrapper class for a label, a text field and a value</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/EZText.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/EZText.sc'>EZText.sc</a></div><div id='related'>See also: <a href="./../Classes/StaticText.html">StaticText</a>, <a href="./../Classes/TextField.html">TextField</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/EZText.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/EZText.sc'>EZText.sc</a></div><div id='related'>See also: <a href="./../Classes/StaticText.html">StaticText</a>, <a href="./../Classes/TextField.html">TextField</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>EZText is a wrapper class which creates an (optional) <a href="./../Classes/StaticText.html">StaticText</a>, and a <a href="./../Classes/TextField.html">TextField</a>. The value is displayed as a compileString in the text field for editing.<h3><a class='anchor' name='Some%20Important%20Issues%20Regarding%20EZText'>Some Important Issues Regarding EZText</a></h3>
 
-<p>If the parent is <code class='code prettyprint lang-sc'>nil</code>, then EZText will create its own <a href="./../Classes/Window.html">Window</a>. See <a href="./../Classes/EZGui.html">EZGui</a> for more options.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<p>If the parent is <code>nil</code>, then EZText will create its own <a href="./../Classes/Window.html">Window</a>. See <a href="./../Classes/EZGui.html">EZGui</a> for more options.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3><a class='anchor' name='Creation%20/%20Class%20Methods'>Creation / Class Methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>EZText.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>label</span>, <span class='argstr'>action</span>, <span class='argstr'>initVal</span>, <span class='argstr'>initAction: false</span>, <span class='argstr'>labelWidth: 60</span>, <span class='argstr'>textWidth</span>, <span class='argstr'>labelHeight: 20</span>, <span class='argstr'>layout: 'horz'</span>, <span class='argstr'>gap</span>, <span class='argstr'>margin</span>)</h3>
 <div class='method'>
@@ -61,19 +66,19 @@ var scdoc_sc_version = '3.9.3';
 <table class='arguments'>
 <tr><td class='argumentname'>parent<td class='argumentdesc'>
 <p>The parent view or window. If the parent is nil, then EZText will create its own <a href="./../Classes/Window.html">Window</a>, and place it conveniently on the screen if the bounds are a <a href="./../Classes/Point.html">Point</a>. If the bounds are a <a href="./../Classes/Rect.html">Rect</a>, then the <a href="./../Classes/Rect.html">Rect</a> determines the window bounds.<tr><td class='argumentname'>bounds<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Rect.html">Rect</a> or <a href="./../Classes/Point.html">Point</a>. Default value is <code class='code prettyprint lang-sc'>160@20</code>.<tr><td class='argumentname'>label<td class='argumentdesc'>
-<p>The label. Default value is <code class='code prettyprint lang-sc'>nil</code>. If <code class='code prettyprint lang-sc'>nil</code>, then no <a href="./../Classes/StaticText.html">StaticText</a> is created.<tr><td class='argumentname'>action<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Rect.html">Rect</a> or <a href="./../Classes/Point.html">Point</a>. Default value is <code>160@20</code>.<tr><td class='argumentname'>label<td class='argumentdesc'>
+<p>The label. Default value is <code>nil</code>. If <code>nil</code>, then no <a href="./../Classes/StaticText.html">StaticText</a> is created.<tr><td class='argumentname'>action<td class='argumentdesc'>
 <p>A <a href="./../Classes/Function.html">Function</a> called when the value changes. The function is passed the EZText instance as its argument.<tr><td class='argumentname'>initVal<td class='argumentdesc'>
 <p>The value to initialize the EZText with.<tr><td class='argumentname'>initAction<td class='argumentdesc'>
 <p>A <a href="./../Classes/Boolean.html">Boolean</a> indicating whether the action function should be called when setting the initial value. The default is false.<tr><td class='argumentname'>labelWidth<td class='argumentdesc'>
-<p>Number of pixels width for the label. The default is 60. In the <code class='code prettyprint lang-sc'>\horz</code> layout, if you specify the <code class='code prettyprint lang-sc'>textWidth</code>, then the <code class='code prettyprint lang-sc'>labelWidth</code> is ignored and is set to the <code class='code prettyprint lang-sc'>bounds.width - textWidth</code>.<tr><td class='argumentname'>textWidth<td class='argumentdesc'>
-<p>Number of pixels width for the number box. The default is 45. In <code class='code prettyprint lang-sc'>\vert</code> layout, <code class='code prettyprint lang-sc'>textWidth</code> defaults to the <code class='code prettyprint lang-sc'>bounds.width</code>.<tr><td class='argumentname'>labelHeight<td class='argumentdesc'>
+<p>Number of pixels width for the label. The default is 60. In the <code>\horz</code> layout, if you specify the <code>textWidth</code>, then the <code>labelWidth</code> is ignored and is set to the <code>bounds.width - textWidth</code>.<tr><td class='argumentname'>textWidth<td class='argumentdesc'>
+<p>Number of pixels width for the number box. The default is 45. In <code>\vert</code> layout, <code>textWidth</code> defaults to the <code>bounds.width</code>.<tr><td class='argumentname'>labelHeight<td class='argumentdesc'>
 <p>Default is 20.<tr><td class='argumentname'>layout<td class='argumentdesc'>
-<p><code class='code prettyprint lang-sc'>\vert</code>, or <code class='code prettyprint lang-sc'>\horz</code>. The default is <code class='code prettyprint lang-sc'>\horz</code>; <code class='code prettyprint lang-sc'>\vert</code> is a two line version.<tr><td class='argumentname'>gap<td class='argumentdesc'>
-<p>A <a href="./../Classes/Point.html">Point</a>. By default, the view tries to get its parent's gap, otherwise it defaults to <code class='code prettyprint lang-sc'>2@2</code>. Setting it overrides these.<tr><td class='argumentname'>margin<td class='argumentdesc'>
+<p><code>\vert</code>, or <code>\horz</code>. The default is <code>\horz</code>; <code>\vert</code> is a two line version.<tr><td class='argumentname'>gap<td class='argumentdesc'>
+<p>A <a href="./../Classes/Point.html">Point</a>. By default, the view tries to get its parent's gap, otherwise it defaults to <code>2@2</code>. Setting it overrides these.<tr><td class='argumentname'>margin<td class='argumentdesc'>
 <p>A <a href="./../Classes/Point.html">Point</a>. This will inset the bounds occupied by the subviews of view.</table><h4>Discussion:</h4>
 
-<p>Example:<pre class='code prettyprint lang-sc'>(
+<p>Example:<textarea class='editor'>(
 w = Window("EZText", Rect(300, 300, 260, 60)).front;
 g = EZText( w,          // parent
             250@50,     // bounds
@@ -94,9 +99,9 @@ g.setColors(Color.grey,Color.white);
 (
     g = EZText(bounds: Rect( 100, 200, 150, 50), label:" test ", layout: \vert);
     g.action_({ |ez| (ez.value.asString ++" is the value of " ++ ez).postln });
-);</pre>
+);</textarea>
 
-<p>The contained views can be accessed via the EZText instance variables: <code class='code prettyprint lang-sc'>labelView</code>, <code class='code prettyprint lang-sc'>textField</code>.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<p>The contained views can be accessed via the EZText instance variables: <code>labelView</code>, <code>textField</code>.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-textField' href='./../Overviews/Methods.html#textField'>textField</a></h3>
 <div class='method'>
@@ -128,18 +133,18 @@ g.setColors(Color.grey,Color.white);
 <p>Sets/gets whether the textfield is enabled.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>bool<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Boolean.html">Boolean</a>. Default is <code class='code prettyprint lang-sc'>true</code>.</table></div><h3><a class='anchor' name='Changing%20Appearance'>Changing Appearance</a></h3>
+<p>An instance of <a href="./../Classes/Boolean.html">Boolean</a>. Default is <code>true</code>.</table></div><h3><a class='anchor' name='Changing%20Appearance'>Changing Appearance</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setColors' href='./../Overviews/Methods.html#setColors'>setColors</a>(<span class='argstr'>stringBackground</span>, <span class='argstr'>stringColor</span>, <span class='argstr'>textBackground</span>, <span class='argstr'>textStringColor</span>, <span class='argstr'>textNormalColor</span>, <span class='argstr'>textTypingColor</span>, <span class='argstr'>background</span>)</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>stringBackground<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>background</code> of the label and unit views.<tr><td class='argumentname'>stringColor<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>stringColor</code> of the label and unit views.<tr><td class='argumentname'>textBackground<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>background</code> of the textField.<tr><td class='argumentname'>textStringColor<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>stringColor</code> of the textField.<tr><td class='argumentname'>textNormalColor<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>normalColor</code> of the textField.<tr><td class='argumentname'>textTypingColor<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>typingColor</code> of the textField.<tr><td class='argumentname'>background<td class='argumentdesc'>
-<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code class='code prettyprint lang-sc'>background</code> of the enclosing view.</table></div></h3>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>background</code> of the label and unit views.<tr><td class='argumentname'>stringColor<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>stringColor</code> of the label and unit views.<tr><td class='argumentname'>textBackground<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>background</code> of the textField.<tr><td class='argumentname'>textStringColor<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>stringColor</code> of the textField.<tr><td class='argumentname'>textNormalColor<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>normalColor</code> of the textField.<tr><td class='argumentname'>textTypingColor<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>typingColor</code> of the textField.<tr><td class='argumentname'>background<td class='argumentdesc'>
+<p>An instance of <a href="./../Classes/Color.html">Color</a>. The <code>background</code> of the enclosing view.</table></div></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-font' href='./../Overviews/Methods.html#font'>font</a> = <span class='argstr'>font</span></h3>
 <div class='method'>
 <p>Set the Font used by all the views.<h4>Arguments:</h4>
@@ -149,7 +154,7 @@ g.setColors(Color.grey,Color.white);
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-prSetViewParams' href='./../Overviews/Methods.html#prSetViewParams'>prSetViewParams</a></h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>// Simplest version
+<textarea class='editor'>// Simplest version
 (        // basic use
         w=Window("ez", Rect(300, 300, 300, 50)).front;
         g=EZText(w, 290@40," test  ", textWidth: 220,layout:\horz);
@@ -232,6 +237,7 @@ Tdef(\text, { |ev|
 // type these or similar functions into dur and note fields and evaluate:
 
 { [0.1, 0.2, 0.3].choose }
-{ [ 0, 2, 7, 10 ].scramble.keep(rrand(0, 4)) }</pre>
+{ [ 0, 2, 7, 10 ].scramble.keep(rrand(0, 4)) }</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/EZText.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/EZText.schelp</a><br>link::Classes/EZText::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/EZText.schelp'>/usr/share/SuperCollider/HelpSource/Classes/EZText.schelp</a><br>link::Classes/EZText::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

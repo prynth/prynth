@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>PackFFT | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>PackFFT | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'PackFFT';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>PackFFT:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -25,8 +30,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-fftSize'>fftSize</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -36,7 +41,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Pack separate demand-rate FFT bin streams into an FFT chain buffer</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/FFTUnpacking.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/FFTUnpacking.sc'>FFTUnpacking.sc</a></div><div id='related'>See also: <a href="./../Classes/UnpackFFT.html">UnpackFFT</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Audio/FFTUnpacking.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Audio/FFTUnpacking.sc'>FFTUnpacking.sc</a></div><div id='related'>See also: <a href="./../Classes/UnpackFFT.html">UnpackFFT</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -49,7 +54,7 @@ var scdoc_sc_version = '3.9.3';
 <tr><td class='argumentname'>chain<td class='argumentdesc'>
 <p>The <a href="./../Classes/FFT.html">FFT</a> chain<tr><td class='argumentname'>bufsize<td class='argumentdesc'>
 <p>FFT buffer size<tr><td class='argumentname'>magsphases<td class='argumentdesc'>
-<p>The input data should be a flat array containing magnitude and phase of all bins in ascending order. e.g. <code class='code prettyprint lang-sc'>[mag0, phase0, mag1, phase1, mag2, phase2, ... magN, phaseN]</code>This input is typically demand-rate.<tr><td class='argumentname'>frombin<td class='argumentdesc'>
+<p>The input data should be a flat array containing magnitude and phase of all bins in ascending order. e.g. <code>[mag0, phase0, mag1, phase1, mag2, phase2, ... magN, phaseN]</code>This input is typically demand-rate.<tr><td class='argumentname'>frombin<td class='argumentdesc'>
 <p>restricts the frequency band<tr><td class='argumentname'>tobin<td class='argumentdesc'>
 <p>restricts the frequency band<tr><td class='argumentname'>zeroothers<td class='argumentdesc'>
 <p>set to 1 to zero all the magnitudes outside the restricted frequency band</table><h4>Discussion:</h4>
@@ -62,7 +67,7 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-fftSize' href='./../Overviews/Methods.html#fftSize'>fftSize</a></h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 
-<p>Here's an unusual example which uses PackFFT without using UnpackFFT first - essentially creating our FFT data from scratch.<pre class='code prettyprint lang-sc'>// Reminder: This isn't the intended typical usage! It's OK to do this though.
+<p>Here's an unusual example which uses PackFFT without using UnpackFFT first - essentially creating our FFT data from scratch.<textarea class='editor'>// Reminder: This isn't the intended typical usage! It's OK to do this though.
 (
 x = {
     var mags, phases, chain, sig;
@@ -83,5 +88,6 @@ x = {
     sig.dup
 }.play
 )
-x.free;</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/PackFFT.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/PackFFT.schelp</a><br>link::Classes/PackFFT::<br></div></div></body></html>
+x.free;</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/PackFFT.schelp'>/usr/share/SuperCollider/HelpSource/Classes/PackFFT.schelp</a><br>link::Classes/PackFFT::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

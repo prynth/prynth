@@ -1,27 +1,32 @@
-<!doctype html><html lang='en'><head><title>Understanding Streams, Patterns and Events - Part 3 | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Understanding Streams, Patterns and Events - Part 3 | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Understanding Streams, Patterns and Events - Part 3';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Understanding Streams, Patterns and Events - Part 3:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#ListPatterns'>ListPatterns</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Nesting%20Patterns'>Nesting Patterns</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Math%20operations%20on%20ListPatterns'>Math operations on ListPatterns</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Making%20Music%20with%20ListPatterns'>Making Music with ListPatterns</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials</span>
@@ -35,7 +40,7 @@ var scdoc_sc_version = '3.9.3';
 <h2><a class='anchor' name='ListPatterns'>ListPatterns</a></h2>
 
 <p>ListPatterns are <a href="./../Classes/Pattern.html">Pattern</a>s that iterate over arrays of objects in some fashion. All ListPatterns have in common the instance variables list and repeats. The list variable is some <a href="./../Classes/Array.html">Array</a> to be iterated over. The repeats variable is some measure of the number of times to do something, whose meaning varies from subclass to subclass. The default value for repeats is 1.
-<p>A <a href="./../Classes/Pseq.html">Pseq</a> is a Pattern that cycles over a list of values. The repeats variable gives the number of times to repeat the entire list.<pre class='code prettyprint lang-sc'>//////////////////////////////////////////////////////////////
+<p>A <a href="./../Classes/Pseq.html">Pseq</a> is a Pattern that cycles over a list of values. The repeats variable gives the number of times to repeat the entire list.<textarea class='editor'>//////////////////////////////////////////////////////////////
 // Note: This SynthDef used throughout this document
 (
 SynthDef(\help_SPE3_SimpleSine, { |out, freq=440, sustain=1.0|
@@ -54,32 +59,32 @@ var a, b;
 a = Pseq.new(#[1, 2, 3], 2);    // repeat twice
 b = a.asStream;
 7.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p>Pseq also has an offset argument which gives a starting offset into the list.<pre class='code prettyprint lang-sc'>(
+<p>Pseq also has an offset argument which gives a starting offset into the list.<textarea class='editor'>(
 var a, b;
 a = Pseq.new(#[1, 2, 3, 4], 3, 2);    // repeat 3, offset 2
 b = a.asStream;
 13.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p>You can pass a function for the repeats variable that gets evaluated when the stream is created.<pre class='code prettyprint lang-sc'>(
+<p>You can pass a function for the repeats variable that gets evaluated when the stream is created.<textarea class='editor'>(
 var a, b;
 a = Pseq.new(#[1, 2], { rrand(1, 3) });    // repeat 1,2, or 3 times
 b = a.asStream;
 7.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p>If you specify the value <code class='code prettyprint lang-sc'>inf</code> for the repeats variable, then it will repeat indefinitely.<pre class='code prettyprint lang-sc'>(
+<p>If you specify the value <code>inf</code> for the repeats variable, then it will repeat indefinitely.<textarea class='editor'>(
 var a, b;
 a = Pseq.new(#[1, 2, 3], inf);    // infinite repeat
 b = a.asStream;
 10.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
 <p>Pseq used as a sequence of pitches:
-<p>Remember that math operations like <code class='code prettyprint lang-sc'>midicps</code> can be used on streams.
-<p>The alternative <code class='code prettyprint lang-sc'>Pseq(...).midicps.asStream</code> is also possible because both pattern and stream inherit from <a href="./../Classes/AbstractFunction.html">AbstractFunction</a> for which midicps is a method. ( midicps converts a midi value to cycles per second or Hz )<pre class='code prettyprint lang-sc'>(
+<p>Remember that math operations like <code>midicps</code> can be used on streams.
+<p>The alternative <code>Pseq(...).midicps.asStream</code> is also possible because both pattern and stream inherit from <a href="./../Classes/AbstractFunction.html">AbstractFunction</a> for which midicps is a method. ( midicps converts a midi value to cycles per second or Hz )<textarea class='editor'>(
 var a, d;
 a = Pseq(#[60, 61, 63, 65, 67, 63], inf ).asStream.midicps;
 d = 0.3;
@@ -89,23 +94,23 @@ Task({
         d.wait;
     });
 }).play
-)</pre>
+)</textarea>
 
-<p><a href="./../Classes/Pser.html">Pser</a> is like Pseq, however the repeats variable gives the number of items returned instead of the number of complete cycles.<pre class='code prettyprint lang-sc'>(
+<p><a href="./../Classes/Pser.html">Pser</a> is like Pseq, however the repeats variable gives the number of items returned instead of the number of complete cycles.<textarea class='editor'>(
 var a, b;
 a = Pser.new(#[1, 2, 3], 5);    // return 5 items
 b = a.asStream;
 6.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p><a href="./../Classes/Prand.html">Prand</a> returns one item from the list at random for each repeat.<pre class='code prettyprint lang-sc'>(
+<p><a href="./../Classes/Prand.html">Prand</a> returns one item from the list at random for each repeat.<textarea class='editor'>(
 var a, b;
 a = Prand.new(#[1, 2, 3, 4, 5], 6);    // return 6 items
 b = a.asStream;
 7.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p>Prand used as a sequence of pitches:<pre class='code prettyprint lang-sc'>(
+<p>Prand used as a sequence of pitches:<textarea class='editor'>(
 var a, d;
 a = Prand(#[60, 61, 63, 65], inf).midicps.asStream;
 d = 0.3;
@@ -115,16 +120,16 @@ Task({
         d.wait;
     });
 }).play;
-)</pre>
+)</textarea>
 
-<p><a href="./../Classes/Pxrand.html">Pxrand</a>, like Prand, returns one item from the list at random for each repeat, but Pxrand never repeats the same element twice in a row.<pre class='code prettyprint lang-sc'>(
+<p><a href="./../Classes/Pxrand.html">Pxrand</a>, like Prand, returns one item from the list at random for each repeat, but Pxrand never repeats the same element twice in a row.<textarea class='editor'>(
 var a, b;
 a = Pxrand.new(#[1, 2, 3], 10);    // return 10 items
 b = a.asStream;
 11.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p>Pxrand used as a sequence of pitches:<pre class='code prettyprint lang-sc'>(
+<p>Pxrand used as a sequence of pitches:<textarea class='editor'>(
 var a;
 a = Pxrand(#[60, 61, 63, 65], inf).midicps.asStream;
 Task({
@@ -133,16 +138,16 @@ Task({
         0.8.wait;
     });
 }).play;
-)</pre>
+)</textarea>
 
-<p><a href="./../Classes/Pshuf.html">Pshuf</a> iterates over the list in scrambled order. The entire scrambled list is repeated in the same order the number of times given by the repeats variable.<pre class='code prettyprint lang-sc'>(
+<p><a href="./../Classes/Pshuf.html">Pshuf</a> iterates over the list in scrambled order. The entire scrambled list is repeated in the same order the number of times given by the repeats variable.<textarea class='editor'>(
 var a, b;
 a = Pshuf.new(#[1, 2, 3, 4], 3);
 b = a.asStream;
 13.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p>Pshuf used as a sequence of pitches:<pre class='code prettyprint lang-sc'>(
+<p>Pshuf used as a sequence of pitches:<textarea class='editor'>(
 var a, b;
 a = Pshuf(#[60, 61, 65, 67], inf).midicps.asStream;
 Task({
@@ -151,18 +156,18 @@ Task({
         0.5.wait;
     });
 }).play;
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Nesting%20Patterns'>Nesting Patterns</a></h2>
 
 <p>If a <a href="./../Classes/Pattern.html">Pattern</a> encounters another Pattern in its list, it embeds that pattern in its output. That is, it creates a stream on that pattern and iterates that pattern until it ends before moving on.
-<p>For example here is one pattern nested in another.<pre class='code prettyprint lang-sc'>(
+<p>For example here is one pattern nested in another.<textarea class='editor'>(
 var a, b;
 a = Pseq.new([1, Pseq.new([100,200], 2), 3], 3);
 b = a.asStream;
 19.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p>Pseqs nested in a Prand:<pre class='code prettyprint lang-sc'>(
+<p>Pseqs nested in a Prand:<textarea class='editor'>(
 var a, b;
 a = Prand.new([
         Pseq.new([1, 2], 2),
@@ -171,9 +176,9 @@ a = Prand.new([
     ], 3);
 b = a.asStream;
 13.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p>Nested sequences of pitches:<pre class='code prettyprint lang-sc'>(
+<p>Nested sequences of pitches:<textarea class='editor'>(
 var a;
 a = Prand([
         Pseq(#[60, 61, 63, 65, 67, 63]),
@@ -187,10 +192,10 @@ Task({
         0.3.wait;
     });
 }).play;
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Math%20operations%20on%20ListPatterns'>Math operations on ListPatterns</a></h2>
 
-<p>Pattern <code class='code prettyprint lang-sc'>b</code> plays pattern a once normally, once transposed up a fifth and once transposed up a fourth.<pre class='code prettyprint lang-sc'>(
+<p>Pattern <code>b</code> plays pattern a once normally, once transposed up a fifth and once transposed up a fourth.<textarea class='editor'>(
 var a, b;
 a = Pseq(#[60, 62, 63, 65, 67, 63]);
 b = Pseq([ a, a + 7, a + 5], inf).asStream;
@@ -200,9 +205,9 @@ Task({
         0.3.wait;
     });
 }).play;
-)</pre>
+)</textarea>
 
-<p>Adding two patterns together. The second pattern transposes each fifth note of the first pattern down an octave.<pre class='code prettyprint lang-sc'>(
+<p>Adding two patterns together. The second pattern transposes each fifth note of the first pattern down an octave.<textarea class='editor'>(
 var a;
 a = Pseq(#[60, 62, 63, 65, 67, 63], inf) + Pseq(#[0, 0, 0, 0, -12], inf);
 a = a.asStream.midicps;
@@ -212,10 +217,10 @@ Task({
         0.3.wait;
     });
 }).play;
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Making%20Music%20with%20ListPatterns'>Making Music with ListPatterns</a></h2>
 
-<p>Here is the same example given in part 2 rewritten to use ListPatterns. It uses nested patterns and results in much more concise code. SuperCollider allows you to write <code class='code prettyprint lang-sc'>SomeClass.new(params)</code> as <code class='code prettyprint lang-sc'>SomeClass(params)</code> eliminating the ".new". This can make code like the pattern examples below, which create a lot of objects, more readable.<pre class='code prettyprint lang-sc'>(
+<p>Here is the same example given in part 2 rewritten to use ListPatterns. It uses nested patterns and results in much more concise code. SuperCollider allows you to write <code>SomeClass.new(params)</code> as <code>SomeClass(params)</code> eliminating the ".new". This can make code like the pattern examples below, which create a lot of objects, more readable.<textarea class='editor'>(
 SynthDef( \help_SPE3_Allpass6, { arg freq;
     var out, env;
     out = RLPF.ar(
@@ -246,9 +251,9 @@ Task({
         0.13.wait;
     });
 }).play;
-)</pre>
+)</textarea>
 
-<p>Here is an example that uses a Pattern to create a rhythmic solo. The values in the pattern specify the amplitudes of impulses fed to the <a href="./../Classes/Decay2.html">Decay2</a> generator.<pre class='code prettyprint lang-sc'>(
+<p>Here is an example that uses a Pattern to create a rhythmic solo. The values in the pattern specify the amplitudes of impulses fed to the <a href="./../Classes/Decay2.html">Decay2</a> generator.<textarea class='editor'>(
 SynthDef( \help_SPE3_Mridangam, { |out, t_amp|
     var sound;
 
@@ -333,6 +338,7 @@ Task({
         (1/8).wait;
     })
 }).play
-)</pre>
+)</textarea>
 
-<p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events4.html">Understanding Streams, Patterns and Events - Part 4</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events3.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events3.schelp</a><br>link::Tutorials/Streams-Patterns-Events3::<br></div></div></body></html>
+<p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events4.html">Understanding Streams, Patterns and Events - Part 4</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events3.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events3.schelp</a><br>link::Tutorials/Streams-Patterns-Events3::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

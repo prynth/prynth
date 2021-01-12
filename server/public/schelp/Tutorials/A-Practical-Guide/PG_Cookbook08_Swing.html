@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Pattern Guide Cookbook 08: Swing | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide Cookbook 08: Swing | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'Pattern Guide Cookbook 08: Swing';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pattern Guide Cookbook 08: Swing:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Converting%20equal%20divisions%20into%20"swing"'>Converting equal divisions into "swing"</a></li>
@@ -21,8 +26,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Implementation'>Implementation</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Examples'>Examples</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Explanation'>Explanation</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/A-Practical-Guide</span>
@@ -38,12 +43,12 @@ var scdoc_sc_version = '3.9.3';
 <p>Most MIDI sequencers have a "swing" feature, which handles a note's timing differently depending on its metric position. A note in a stronger metric position is played on time; a note in a weaker position is delayed by some fraction of the beat.
 <p>In SuperCollider patterns, it's more convenient to express rhythm in terms of equal note durations. To mimic the swing-quantize behavior of conventional sequencers, it's helpful to have a way to modify the output events from a pattern so that the metrically-weaker notes sound later, without requiring the original pattern to be aware of the notes' metric positions.<h3><a class='anchor' name='Requirements'>Requirements</a></h3>
 <dl>
-<dt>Parameter: Base rhythmic value<dd>You should be able to swing any subdivision of the beat: 8th-, 16th-, quarter-notes. If this is 0.5 (8th-notes), then quarter notes will play unchanged.<dt>Parameter: Swing amount<dd>Fraction of the base rhythm to delay the weaker notes. The actual delay time will be <code class='code prettyprint lang-sc'>base_value * swing_amount</code>.<dt>Weaker-positioned notes<dd>The attack needs to be moved later, using the event's timingOffset (see <a href="./../../Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.html#Timing%20control">Pattern Guide 08: Event Types and Parameters: Timing control</a>). Also, if the next note is in a stronger position, this note needs to be shorter by the same amount.<dt>Stronger-positioned notes<dd>The attack will not be moved in time; but, if the next note is in a weaker position, this note needs to be slightly longer to compensate for the additional time between note onsets.<dt>Non-duple subdivisions<dd>Swing typically assumes a beat will be divided into two notes. Treating triplets, quintuplets or other divisions by the same algorithm would produce confusing rhythms. So, we may also want a parameter <code>swingThreshold</code> to disable swing for notes that are too far away from the base rhythmic value.</dl>
+<dt>Parameter: Base rhythmic value<dd>You should be able to swing any subdivision of the beat: 8th-, 16th-, quarter-notes. If this is 0.5 (8th-notes), then quarter notes will play unchanged.<dt>Parameter: Swing amount<dd>Fraction of the base rhythm to delay the weaker notes. The actual delay time will be <code>base_value * swing_amount</code>.<dt>Weaker-positioned notes<dd>The attack needs to be moved later, using the event's timingOffset (see <a href="./../../Tutorials/A-Practical-Guide/PG_08_Event_Types_and_Parameters.html#Timing%20control">Pattern Guide 08: Event Types and Parameters: Timing control</a>). Also, if the next note is in a stronger position, this note needs to be shorter by the same amount.<dt>Stronger-positioned notes<dd>The attack will not be moved in time; but, if the next note is in a weaker position, this note needs to be slightly longer to compensate for the additional time between note onsets.<dt>Non-duple subdivisions<dd>Swing typically assumes a beat will be divided into two notes. Treating triplets, quintuplets or other divisions by the same algorithm would produce confusing rhythms. So, we may also want a parameter <code>swingThreshold</code> to disable swing for notes that are too far away from the base rhythmic value.</dl>
 <h3><a class='anchor' name='Implementation'>Implementation</a></h3>
 
 <p><a href="./../../Classes/Pchain.html">Pchain</a> applies one pattern to the result of another pattern. So, if we can write a pattern that will modify the events coming from the source, Pchain will be an easy way to combine them.
 <p>The parameters noted above should be provided in the source pattern. Alternately, they may be given as an event at the end of Pchain's list of inputs. (Pchain, following the model of function composition, evaluates its patterns in reverse order. See <a href="./../../Tutorials/A-Practical-Guide/PG_06c_Composition_of_Patterns.html">Pattern Guide 06c: Composition of Patterns</a>.)
-<p>So... deep breath...<pre class='code prettyprint lang-sc'>(
+<p>So... deep breath...<textarea class='editor'>(
 ~swingify = Prout({ |ev|
     var now, nextTime = 0, thisShouldSwing, nextShouldSwing = false, adjust;
     while { ev.notNil } {
@@ -71,9 +76,9 @@ var scdoc_sc_version = '3.9.3';
         ev = ev.yield;
     };
 });
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Examples'>Examples</a></h3>
-<pre class='code prettyprint lang-sc'>p = Pbind(\degree, Pseries(0, 1, 8), \dur, 0.25);
+<textarea class='editor'>p = Pbind(\degree, Pseries(0, 1, 8), \dur, 0.25);
 
 p.play;  // straight 16ths
 
@@ -115,9 +120,9 @@ q = Ppar([
         Pfuncn({ q.stop; Event.silent(1) }, 1)
     ])
 ]).play;
-)</pre>
+)</textarea>
 
-<p>Swing should not apply to triplets. Note that the rhythmic value 1/6 introduces floating-point rounding error, so we need to raise the threshold slightly. <code class='code prettyprint lang-sc'>(1/6)+(1/6)+(1/6)</code> is within 0.05 of an eighth-note, but <code class='code prettyprint lang-sc'>1/6</code> is not, causing triplet notes to pass through unchanged.<pre class='code prettyprint lang-sc'>// swing threshold: throw a few triplets in
+<p>Swing should not apply to triplets. Note that the rhythmic value 1/6 introduces floating-point rounding error, so we need to raise the threshold slightly. <code>(1/6)+(1/6)+(1/6)</code> is within 0.05 of an eighth-note, but <code>1/6</code> is not, causing triplet notes to pass through unchanged.<textarea class='editor'>// swing threshold: throw a few triplets in
 (
 Pchain(
     ~swingify,
@@ -127,35 +132,35 @@ Pchain(
     ),
     (swingBase: 0.25, swingAmount: 0.2, swingThreshold: 0.05)
 ).play;
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Explanation'>Explanation</a></h3>
 
-<p>We need to measure the current metric position against some reference point. The most logical is the time when the pattern started processing. <a href="./../../Classes/Prout.html">Prout</a> allows variables to persist for the entire length of its stream (unlike <a href="./../../Classes/Pfunc.html">Pfunc</a>).<pre class='code prettyprint lang-sc'>(
+<p>We need to measure the current metric position against some reference point. The most logical is the time when the pattern started processing. <a href="./../../Classes/Prout.html">Prout</a> allows variables to persist for the entire length of its stream (unlike <a href="./../../Classes/Pfunc.html">Pfunc</a>).<textarea class='editor'>(
 ~swingify = Prout({ |ev|
-    var now, nextTime = 0, thisShouldSwing, nextShouldSwing = false, adjust;</pre>
+    var now, nextTime = 0, thisShouldSwing, nextShouldSwing = false, adjust;</textarea>
 
 <p>~~
-<p>If the source event is nil, errors will follow, so we should stop looping in that case.<pre class='code prettyprint lang-sc'>    while { ev.notNil } {</pre>
+<p>If the source event is nil, errors will follow, so we should stop looping in that case.<textarea class='editor'>    while { ev.notNil } {</textarea>
 
 <p>~~
-<p><code class='code prettyprint lang-sc'>now</code> is what the next time <em>was</em>. The time of the next event simply adds <code class='code prettyprint lang-sc'>ev.delta</code>.<pre class='code prettyprint lang-sc'>        now = nextTime;
-        nextTime = now + ev.delta;</pre>
+<p><code>now</code> is what the next time <em>was</em>. The time of the next event simply adds <code>ev.delta</code>.<textarea class='editor'>        now = nextTime;
+        nextTime = now + ev.delta;</textarea>
 
 <p>~~
 <p>As discussed above, there are two factors to decide whether or not this note should be delayed:<dl>
-<dt>Is it close enough to the base rhythm grid?<dd>Round the current time to the grid, and the difference between the actual and rounded times must be less than the threshold: <code class='code prettyprint lang-sc'>(now absdif: now.round(ev[\swingBase])) &lt;= (ev[\swingThreshold] ? 0)</code>.<dt>Is it in a weaker metrical position?<dd>Dividing by the base value yields an even number for stronger positions, and odd for weaker positions: <code class='code prettyprint lang-sc'>(now / ev[\swingBase]).round.asInteger.odd</code>.</dl>
+<dt>Is it close enough to the base rhythm grid?<dd>Round the current time to the grid, and the difference between the actual and rounded times must be less than the threshold: <code>(now absdif: now.round(ev[\swingBase])) &lt;= (ev[\swingThreshold] ? 0)</code>.<dt>Is it in a weaker metrical position?<dd>Dividing by the base value yields an even number for stronger positions, and odd for weaker positions: <code>(now / ev[\swingBase]).round.asInteger.odd</code>.</dl>
 
-<p>There's room also for a slight optimization. In the previous event, we decided whether the next event would need to swing or not. Now, in the current event, we are processing what used to be "next." So we can just copy the old value of <code>nextShouldSwing</code> from last time, instead of redoing the calculation. (Note that this requires <code class='code prettyprint lang-sc'>nextShouldSwing = false</code> in the beginning -- because <code>now</code> is always 0 for the first event, and consequently can never swing.)<pre class='code prettyprint lang-sc'>        // current this time is what was "next" last time
+<p>There's room also for a slight optimization. In the previous event, we decided whether the next event would need to swing or not. Now, in the current event, we are processing what used to be "next." So we can just copy the old value of <code>nextShouldSwing</code> from last time, instead of redoing the calculation. (Note that this requires <code>nextShouldSwing = false</code> in the beginning -- because <code>now</code> is always 0 for the first event, and consequently can never swing.)<textarea class='editor'>        // current this time is what was "next" last time
         thisShouldSwing = nextShouldSwing;
         nextShouldSwing = ((nextTime absdif: now.round(ev[\swingBase])) &lt;= (ev[\swingThreshold] ? 0)) and: {
             (nextTime / ev[\swingBase]).round.asInteger.odd
         };
-        adjust = ev[\swingBase] * ev[\swingAmount];</pre>
+        adjust = ev[\swingBase] * ev[\swingAmount];</textarea>
 
 <p>~~
 <p>Naming the variables appropriately makes the subsequent "if" block almost self-explanatory. Two notes:<ul>
-<li>The event's <code>timingOffset</code> may be nonzero, in which case, it would be wrong to overwrite. We need to <em>adjust</em> the timing offset: +.<li>The original <code>sustain</code> value may be calculated from <code>dur</code> and <code>legato</code>. That calculation is done by the <code class='code prettyprint lang-sc'>~sustain</code> function, which must be executed from within the event (<a href="./../../Classes/Environment.html#-use">Environment: -use</a>).</ul>
-<pre class='code prettyprint lang-sc'>        if(thisShouldSwing) {
+<li>The event's <code>timingOffset</code> may be nonzero, in which case, it would be wrong to overwrite. We need to <em>adjust</em> the timing offset: +.<li>The original <code>sustain</code> value may be calculated from <code>dur</code> and <code>legato</code>. That calculation is done by the <code>~sustain</code> function, which must be executed from within the event (<a href="./../../Classes/Environment.html#-use">Environment: -use</a>).</ul>
+<textarea class='editor'>        if(thisShouldSwing) {
             ev[\timingOffset] = (ev[\timingOffset] ? 0) + adjust;
             // if next note will not swing, this note needs to be shortened
             if(nextShouldSwing.not) {
@@ -166,14 +171,15 @@ Pchain(
             if(nextShouldSwing) {
                 ev[\sustain] = ev.use { ~sustain.value } + adjust;
             };
-        };</pre>
+        };</textarea>
 
 <p>~~
 <p><code>yield</code> is a bit of a funny method. It doesn't return its result right away. It passes the yielded value to whichever block of code called <code>next</code> on the stream, and then pauses. Then, the next time <code>next</code> is called, the <code>yield</code> method returns, taking its value from <code>next</code>'s argument. Here, that will be the event currently being processed, so we need to reassign it to <code>ev</code> and loop back.
-<p>This is the normal, correct way to handle input values from <code>next</code> within routines.<pre class='code prettyprint lang-sc'>        ev = ev.yield;
+<p>This is the normal, correct way to handle input values from <code>next</code> within routines.<textarea class='editor'>        ev = ev.yield;
     };
 });
-)</pre>
+)</textarea>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations.html">Pattern Guide Cookbook 07: Rhythmic Variations</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Ref01_Pattern_Internals.html">Pattern Guide Reference 01: Pattern Internals</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook08_Swing.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook08_Swing.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook08_Swing::<br></div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Ref01_Pattern_Internals.html">Pattern Guide Reference 01: Pattern Internals</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook08_Swing.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook08_Swing.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook08_Swing::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>ProxyMixer | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>ProxyMixer | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'ProxyMixer';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>ProxyMixer:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -49,29 +54,29 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-makeWindow'>makeWindow</a> </li>
 <li class='toc3'><a href='#-setDefaults'>setDefaults</a> </li>
 <li class='toc3'><a href='#-setEdButs'>setEdButs</a> </li>
-</ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
- | <span id='categories'><a href='./../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib>GUI'>GUI</a> | <a href='./../Browse.html#Live Coding'>Live Coding</a></span>
+ | <span id='categories'><a href='./../Browse.html#JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#JITLib>GUI'>GUI</a> | <a href='./../Browse.html#Live Coding'>Live Coding</a></span>
 </div><h1>ProxyMixer<span id='superclasses'> : <a href="../Classes/JITGui.html">JITGui</a> : <a href="../Classes/Object.html">Object</a></span>
 </h1>
 <div id='summary'>mix control for a proxyspace or Ndef.all</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/ProxyMixer.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/ProxyMixer.sc'>ProxyMixer.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/NdefMixer.html">NdefMixer</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/ProxyMixer.sc' title='/usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/ProxyMixer.sc'>ProxyMixer.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/NdefMixer.html">NdefMixer</a></div>
 <div id='related'>See also: <a href="./../Classes/ProxySpace.html">ProxySpace</a>, <a href="./../Classes/Ndef.html">Ndef</a>, <a href="./../Classes/JITGui.html">JITGui</a>, <a href="./../Classes/NdefGui.html">NdefGui</a>, <a href="./../Classes/MonitorGui.html">MonitorGui</a>, <a href="./../Classes/NdefParamGui.html">NdefParamGui</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>ProxyMixer provides controls for handling and editing the node proxies in a proxyspace and their monitors (cross-platform graphics). It replaces the earlier ProxyMixer class. For Ndefs, use <a href="./../Classes/NdefMixer.html">NdefMixer</a>.
-<p>Overview: <a href="./../Overviews/JITLib.html">JITLib</a><pre class='code prettyprint lang-sc'>// First examples:
+<p>Overview: <a href="./../Overviews/JITLib.html">JITLib</a><textarea class='editor'>// First examples:
 (
 p = ProxySpace.push(s.boot, p);
 "abcde".do { |k| p[k.asSymbol].ar };
 m = ProxyMixer(p, 8);
-n.parent.alwaysOnTop_(true); // show mixer in front of IDE
+m.parent.alwaysOnTop_(true); // show mixer in front of IDE
 )
 
 p.do(_.play(0));
@@ -92,7 +97,7 @@ if (\ProxyMeter.asClass.notNil) { ProxyMeter.addMixer(m); };
         VarSaw.ar((i + 1 * 100) + [-1, 1])
         * LFSaw.ar((i + 1 * 0.25));
     };
-};</pre>
+};</textarea>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3><a class='anchor' name='Creation'>Creation</a></h3>
 <h3 class='method-code'><span class='method-prefix'>ProxyMixer.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>obj</span>, <span class='argstr'>numItems: 16</span>, <span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>makeSkip: true</span>, <span class='argstr'>options</span>)</h3>
@@ -148,15 +153,15 @@ if (\ProxyMeter.asClass.notNil) { ProxyMeter.addMixer(m); };
 <p>if too many proxies are present, by how much to rotate arKeys or krKeys to display.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-title' href='./../Overviews/Methods.html#title'>title</a></h3>
 <div class='method'>
 <p>get the proxymixer window title.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-getNameLeftBorder' href='./../Overviews/Methods.html#getNameLeftBorder'>getNameLeftBorder</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
 <div class='method'>
 <p>gets current left border of nameView</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setNameLeftBorder' href='./../Overviews/Methods.html#setNameLeftBorder'>setNameLeftBorder</a>(<span class='argstr'>xpos: 250</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
 <div class='method'>
 <p>sets current left border of nameView, trading size with volume slider</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-shiftNameLeftBorder' href='./../Overviews/Methods.html#shiftNameLeftBorder'>shiftNameLeftBorder</a>(<span class='argstr'>x: 0</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
 <div class='method'>
-<p>shifts current left border of nameView<pre class='code prettyprint lang-sc'>m.getNameLeftBorder; // get its current left border position
+<p>shifts current left border of nameView<textarea class='editor'>m.getNameLeftBorder; // get its current left border position
 m.setNameLeftBorder(250); // default
 m.setNameLeftBorder(200); // aps left pos, smaller slider
 // relative adjust:
@@ -315,14 +320,14 @@ p.reduce(method: \clear);
 
 p.clean;
 
-p.clear;</pre>
+p.clear;</textarea>
 
 <p></div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-accepts' href='./../Overviews/Methods.html#accepts'>accepts</a>(<span class='argstr'>obj</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-checkUpdate' href='./../Overviews/Methods.html#checkUpdate'>checkUpdate</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-enableNameResize' href='./../Overviews/Methods.html#enableNameResize'>enableNameResize</a>(<span class='argstr'>flag: true</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-getState' href='./../Overviews/Methods.html#getState'>getState</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeArZone' href='./../Overviews/Methods.html#makeArZone'>makeArZone</a>(<span class='argstr'>isSmall: false</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeEditZone' href='./../Overviews/Methods.html#makeEditZone'>makeEditZone</a></h3>
@@ -330,7 +335,8 @@ p.clear;</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeTopLine' href='./../Overviews/Methods.html#makeTopLine'>makeTopLine</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeViews' href='./../Overviews/Methods.html#makeViews'>makeViews</a>(<span class='argstr'>options</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-makeWindow' href='./../Overviews/Methods.html#makeWindow'>makeWindow</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/extPxMixWindow.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setDefaults' href='./../Overviews/Methods.html#setDefaults'>setDefaults</a>(<span class='argstr'>options</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setEdButs' href='./../Overviews/Methods.html#setEdButs'>setEdButs</a>(<span class='argstr'>isSmall: false</span>)</h3>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/ProxyMixer.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/ProxyMixer.schelp</a><br>link::Classes/ProxyMixer::<br></div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/ProxyMixer.schelp'>/usr/share/SuperCollider/HelpSource/Classes/ProxyMixer.schelp</a><br>link::Classes/ProxyMixer::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

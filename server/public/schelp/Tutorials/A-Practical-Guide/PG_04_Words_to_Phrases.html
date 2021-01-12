@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Pattern Guide 04: Words to Phrases | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide 04: Words to Phrases | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'Pattern Guide 04: Words to Phrases';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pattern Guide 04: Words to Phrases:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#From%20words%20to%20phrases'>From words to phrases</a></li>
@@ -22,8 +27,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Library%20of%20named%20sub-patterns'>Library of named sub-patterns</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Switching%20between%20patterns%20for%20individual%20values'>Switching between patterns for individual values</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Related:%20Conditional%20patterns'>Related: Conditional patterns</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/A-Practical-Guide</span>
@@ -40,7 +45,7 @@ var scdoc_sc_version = '3.9.3';
 
 <p>We saw list patterns ( <a href="./../../Classes/Pseq.html">Pseq</a>, <a href="./../../Classes/Prand.html">Prand</a>, etc.) that returned numbers from a preset list, either in the order given or rearranged randomly. The list may also include other patterns. When a list pattern encounters another pattern in its list, the inner pattern is <em>embedded</em> into the stream. That is, the inner pattern takes over until it runs out of values to return. Then, control returns to the outer list pattern. This is like calling a function in the middle of another function.
 <p>There is no preset limit to the number of levels of embedding.
-<p>If a single pattern is like a word, a list pattern that uses other patterns could be more like a sentence or phrase. You can alternate between different behaviors, either in a predictable order as in the example below, or randomly by using one of the random-order list patterns.<pre class='code prettyprint lang-sc'>// Scale segments, in the sequence: up, up, down (repeat)
+<p>If a single pattern is like a word, a list pattern that uses other patterns could be more like a sentence or phrase. You can alternate between different behaviors, either in a predictable order as in the example below, or randomly by using one of the random-order list patterns.<textarea class='editor'>// Scale segments, in the sequence: up, up, down (repeat)
 (
 TempoClock.default.tempo = 1;
 p = Pbind(
@@ -53,9 +58,9 @@ p = Pbind(
 ).play;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 
-<p>But it gets even more fun -- list patterns don't care whether they're enclosing value patterns (as in the previous example) or event patterns. That means you can write a set of Pbind-style patterns, each one representing a phrase, and string them together. This next example is longer, but that's only because of a larger number of phrase patterns. The structure is very simple, though: <code class='code prettyprint lang-sc'>Pxrand([Pbind(), Pmono(), Pmono()...], inf)</code> . Some of the phrases are written with Pmono to slide between notes.<pre class='code prettyprint lang-sc'>(
+<p>But it gets even more fun -- list patterns don't care whether they're enclosing value patterns (as in the previous example) or event patterns. That means you can write a set of Pbind-style patterns, each one representing a phrase, and string them together. This next example is longer, but that's only because of a larger number of phrase patterns. The structure is very simple, though: <code>Pxrand([Pbind(), Pmono(), Pmono()...], inf)</code> . Some of the phrases are written with Pmono to slide between notes.<textarea class='editor'>(
 SynthDef(\bass, { |out, freq = 440, gate = 1, amp = 0.5, slideTime = 0.17, ffreq = 1100, width = 0.15,
         detune = 1.005, preamp = 4|
     var    sig,
@@ -96,11 +101,11 @@ p = Pxrand([
 ], inf).play(quant: 1);
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 
-<p><strong>Shortcut notation</strong> : Just like you can concatenate arrays with ++, you can also concatenate patterns the same way. Writing <code class='code prettyprint lang-sc'>pattern1 ++ pattern2</code> is the same as writing <code class='code prettyprint lang-sc'>Pseq([pattern1, pattern2], 1)</code> .<h3><a class='anchor' name='Some%20ways%20to%20string%20together%20patterns'>Some ways to string together patterns</a></h3>
+<p><strong>Shortcut notation</strong> : Just like you can concatenate arrays with ++, you can also concatenate patterns the same way. Writing <code>pattern1 ++ pattern2</code> is the same as writing <code>Pseq([pattern1, pattern2], 1)</code> .<h3><a class='anchor' name='Some%20ways%20to%20string%20together%20patterns'>Some ways to string together patterns</a></h3>
 <dl>
-<dt>Sequentially<dd>Each sub-pattern follows the next in the same order every time. Use <a href="./../../Classes/Pseq.html">Pseq</a> or <a href="./../../Classes/Pser.html">Pser</a>.<dt>Randomized order<dd>Sub-patterns in completely random order ( <a href="./../../Classes/Prand.html">Prand</a> ), random order with no repeats ( <a href="./../../Classes/Pxrand.html">Pxrand</a> ), or random order according to a set of probabilities ( <a href="./../../Classes/Pwrand.html">Pwrand</a> ). <a href="./../../Classes/Pshuf.html">Pshuf</a> creates one random ordering and uses it repeatedly.<dt>Direct array indexing<dd>Patterns can be chosen in arbitrary order by index. This gives you more control than Pwrand. Both <a href="./../../Classes/Pindex.html">Pindex</a> and <a href="./../../Classes/Pswitch.html">Pswitch</a> can be used for this.<pre class='code prettyprint lang-sc'>// scale degree segments, every fifth choice is odd-numbered only (descending)
+<dt>Sequentially<dd>Each sub-pattern follows the next in the same order every time. Use <a href="./../../Classes/Pseq.html">Pseq</a> or <a href="./../../Classes/Pser.html">Pser</a>.<dt>Randomized order<dd>Sub-patterns in completely random order ( <a href="./../../Classes/Prand.html">Prand</a> ), random order with no repeats ( <a href="./../../Classes/Pxrand.html">Pxrand</a> ), or random order according to a set of probabilities ( <a href="./../../Classes/Pwrand.html">Pwrand</a> ). <a href="./../../Classes/Pshuf.html">Pshuf</a> creates one random ordering and uses it repeatedly.<dt>Direct array indexing<dd>Patterns can be chosen in arbitrary order by index. This gives you more control than Pwrand. Both <a href="./../../Classes/Pindex.html">Pindex</a> and <a href="./../../Classes/Pswitch.html">Pswitch</a> can be used for this.<textarea class='editor'>// scale degree segments, every fifth choice is odd-numbered only (descending)
 (
 var    n = 10,
     scaleSegments = Array.fill(n, { |i|
@@ -118,7 +123,7 @@ p = Pbind(
 ).play;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 <dt>Finite state machine (Pfsm, Pdfsm)<dd>A finite state machine is a way of associating an item with its possible successors. It is closer to a "grammar" than purely random selection. <a href="./../../Classes/Pfsm.html">Pfsm</a> defines a finite state machine as a set of possible "entry points," followed by a list of the possible "states" of the machine and, for each state, a list of the possible states that may follow the current state. States may be single values or patterns, meaning that phrases can be linked to other phrases that "make sense" in succession (and unwanted transitions can be prevented).
 <p>If this sounds a bit like a Markov chain, that's because the Pfsm implementation is a special case of a Markov chain where there is an equal probability of choosing the next state from the valid successors. In a Markov chain, the probabilities are weighted according to analysis of a real-world data stream.
 <p>The Pfsm help file includes very good examples of organizing single values and pattern phrases. Also see <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network.html">Pattern Guide Cookbook 06: Phrase Network</a> for an application of Pfsm to generate a corny jazz solo.
@@ -126,7 +131,7 @@ p.stop;</pre>
 <p>- <strong>Third-party extension alert</strong> : A good Markov chain implementation for SuperCollider exists in the MathLib quark.</dl>
 <h3><a class='anchor' name='Library%20of%20named%20sub-patterns'>Library of named sub-patterns</a></h3>
 
-<p>One very effective way to manage phrases is to make a library, or more precisely <a href="./../../Classes/Dictionary.html">Dictionary</a>, of sub-patterns, and then call them up one at a time. <a href="./../../Classes/Psym.html">Psym</a> is the pattern to do this. The advantage here is that you can store the phrases in a separate place, while the pattern that you actually play is much simpler and describes the musical intent at a much higher level.<pre class='code prettyprint lang-sc'>// Uses the bass SynthDef above
+<p>One very effective way to manage phrases is to make a library, or more precisely <a href="./../../Classes/Dictionary.html">Dictionary</a>, of sub-patterns, and then call them up one at a time. <a href="./../../Classes/Psym.html">Psym</a> is the pattern to do this. The advantage here is that you can store the phrases in a separate place, while the pattern that you actually play is much simpler and describes the musical intent at a much higher level.<textarea class='editor'>// Uses the bass SynthDef above
 (
 ~phrases = (
     repeated: Pbind(
@@ -159,19 +164,19 @@ TempoClock.default.tempo = 128/60;
 p = Psym(Pxrand(#[repeated, octave, tritone, dim], inf), ~phrases).play;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 
-<p>A complicated pattern with lots of embedding can be hard to read because it's more work to separate note-level details from the larger structure. The pattern choosing the phrases -- <code class='code prettyprint lang-sc'>Pxrand(#[repeated, octave, tritone, dim], inf)</code> -- is self-explanatory, however, and Psym fills in the details transparently.<div class='note'><span class='notelabel'>NOTE:</span> Because of some special handling needed for event patterns, there are two versions of Psym. <a href="./../../Classes/Psym.html">Psym</a> handles event patterns, while <a href="./../../Classes/Pnsym.html">Pnsym</a> is for value patterns. Think of it this way: Pbind can be contained within Psym, but it contains Pnsym.<pre class='code prettyprint lang-sc'>( Psym ( Pbind ( Pnsym ) ) )</pre>
+<p>A complicated pattern with lots of embedding can be hard to read because it's more work to separate note-level details from the larger structure. The pattern choosing the phrases -- <code>Pxrand(#[repeated, octave, tritone, dim], inf)</code> -- is self-explanatory, however, and Psym fills in the details transparently.<div class='note'><span class='notelabel'>NOTE:</span> Because of some special handling needed for event patterns, there are two versions of Psym. <a href="./../../Classes/Psym.html">Psym</a> handles event patterns, while <a href="./../../Classes/Pnsym.html">Pnsym</a> is for value patterns. Think of it this way: Pbind can be contained within Psym, but it contains Pnsym.<textarea class='editor'>( Psym ( Pbind ( Pnsym ) ) )</textarea>
 <dl>
 <dt>Good:<dd><ul>
-<li><code class='code prettyprint lang-sc'>Psym(**, (pattern1: Pbind(**))</code><li><code class='code prettyprint lang-sc'>Pbind(\someValue, Pnsym(**, (pattern1: Pwhite(**)))</code></ul>
+<li><code>Psym(**, (pattern1: Pbind(**))</code><li><code>Pbind(\someValue, Pnsym(**, (pattern1: Pwhite(**)))</code></ul>
 
 <p><dt>Bad:<dd><ul>
-<li><code class='code prettyprint lang-sc'>Pbind(\someValue, Psym(**, (pattern1: Pwhite(**)))</code></ul>
+<li><code>Pbind(\someValue, Psym(**, (pattern1: Pwhite(**)))</code></ul>
 </dl>
 </div><h3><a class='anchor' name='Switching%20between%20patterns%20for%20individual%20values'>Switching between patterns for individual values</a></h3>
 
-<p>In the examples above, if a list pattern encounters another pattern in its input values, the subpattern is embedded in its entirety before the list pattern is allowed to continue. Sometimes you might want to get just one value out of the subpattern, and then choose a different subpattern on the next event. Pswitch, Psym and Pnsym have cousins that do exactly this: <a href="./../../Classes/Pswitch1.html">Pswitch1</a>, Psym1 and Pnsym1.<pre class='code prettyprint lang-sc'>// random pitches in two distinct ranges; use a coin toss to decide which for this event
+<p>In the examples above, if a list pattern encounters another pattern in its input values, the subpattern is embedded in its entirety before the list pattern is allowed to continue. Sometimes you might want to get just one value out of the subpattern, and then choose a different subpattern on the next event. Pswitch, Psym and Pnsym have cousins that do exactly this: <a href="./../../Classes/Pswitch1.html">Pswitch1</a>, Psym1 and Pnsym1.<textarea class='editor'>// random pitches in two distinct ranges; use a coin toss to decide which for this event
 // 70% low, 30% high
 (
 TempoClock.default.tempo = 1;
@@ -181,21 +186,21 @@ p = Pbind(
 ).play;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 
-<p>Compare to the following:<pre class='code prettyprint lang-sc'>(
+<p>Compare to the following:<textarea class='editor'>(
 p = Pbind(
     \degree, Pswitch([Pwhite(7, 14, inf), Pwhite(-7, 0, inf)], Pfunc { 0.7.coin.binaryValue }),
     \dur, 0.25
 ).play;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 
 <p>With Pswitch, one of the items is chosen from the list and keeps playing until it's finished. But the length of both Pwhite patterns is infinite, so whichever one is chosen first retains control. Pswitch1 does the coin toss on every event and embeds just one item.
 <p>Psym1 and Pnsym1 behave similarly, choosing the name to look up the pattern for each event.<h3><a class='anchor' name='Related:%20Conditional%20patterns'>Related: Conditional patterns</a></h3>
 
-<p><a href="./../../Classes/Pif.html">Pif</a> supports this kind of structure: If the next value from a Boolean pattern is true, return the next item from pattern A, otherwise take it from pattern B. Another way to write the Pswitch1 example is to use a Boolean test directly on Pwhite, instead of writing a Pfunc for the coin toss. This might be clearer to read. However, this works only when there are two alternatives. Pswitch1 and Psym1 allow any number of choices.<pre class='code prettyprint lang-sc'>(
+<p><a href="./../../Classes/Pif.html">Pif</a> supports this kind of structure: If the next value from a Boolean pattern is true, return the next item from pattern A, otherwise take it from pattern B. Another way to write the Pswitch1 example is to use a Boolean test directly on Pwhite, instead of writing a Pfunc for the coin toss. This might be clearer to read. However, this works only when there are two alternatives. Pswitch1 and Psym1 allow any number of choices.<textarea class='editor'>(
 TempoClock.default.tempo = 1;
 p = Pbind(
         // translation: if(0.7.coin) { rrand(-7, 0) } { rrand(7, 14 }
@@ -204,8 +209,9 @@ p = Pbind(
 ).play;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 
 <p>We will see in <a href="./../../Tutorials/A-Practical-Guide/PG_06e_Language_Control.html">Pattern Guide 06e: Language Control</a> that Pif can be used on values that were previously calculated in the Pbind. It adds considerably to the intelligence Pbind can manage, when its value streams are aware of other values in the event.
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_03_What_Is_Pbind.html">Pattern Guide 03: What Is Pbind</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_05_Math_on_Patterns.html">Pattern Guide 05: Math on Patterns</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_04_Words_to_Phrases.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_04_Words_to_Phrases.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_04_Words_to_Phrases::<br></div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_05_Math_on_Patterns.html">Pattern Guide 05: Math on Patterns</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_04_Words_to_Phrases.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_04_Words_to_Phrases.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_04_Words_to_Phrases::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,25 +1,30 @@
-<!doctype html><html lang='en'><head><title>Pattern Guide 06b: Time Based Patterns | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide 06b: Time Based Patterns | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'Pattern Guide 06b: Time Based Patterns';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pattern Guide 06b: Time Based Patterns:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Time-based%20patterns'>Time-based patterns</a></li>
 <ul class='toc'><li class='toc2'><a href='#Using%20envelopes%20as%20patterns'>Using envelopes as patterns</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/A-Practical-Guide</span>
@@ -35,15 +40,15 @@ var scdoc_sc_version = '3.9.3';
 <p>"Time-based patterns" here are value patterns that use time as part of their calculation. Event patterns are naturally time-driven when played on a clock. (Technically it's possible to request events from an event stream without running it in an EventStreamPlayer, but this is not typical usage.)
 <p>Most of these patterns work by remembering the clock's current time at the moment the pattern is embedded into a value stream. The time value used for calculation is, then, the clock's time at the moment of evaluation minus the starting time -- that is, the number of beats elapsed since the patterns started embedding. If the pattern is embedded several times, the starting time is also reset so that the pattern begins again from the beginning.
 <p>There is nothing to prevent using these patterns outside of a scheduling context. In these documents, that context would be an event pattern played on a clock, but streams made from these patterns can be used in scheduled routines or functions as well. Only a scheduling context can ensure precise timing of requests for values.<dl>
-<dt><code class='code prettyprint lang-sc'>Ptime(repeats)</code><dd>Returns the amount of time elapsed since embedding. One nice trick with this pattern is to stop a value stream/pattern after a certain amount of time.
-<p>This <a href="./../../Classes/Pif.html">Pif</a> pattern uses Ptime to get values from the true branch for exactly 4 beats after the first value is requested. After that, the condition will be false and Pif reverts to the false branch, which is nil. That causes the stream to stop. (This is like <a href="./../../Classes/Pfindur.html">Pfindur</a> for event patterns, but Pif/Ptime works for value patterns as well.)<pre class='code prettyprint lang-sc'>// This is a really useful trick: like Pfindur but for value patterns
+<dt><code>Ptime(repeats)</code><dd>Returns the amount of time elapsed since embedding. One nice trick with this pattern is to stop a value stream/pattern after a certain amount of time.
+<p>This <a href="./../../Classes/Pif.html">Pif</a> pattern uses Ptime to get values from the true branch for exactly 4 beats after the first value is requested. After that, the condition will be false and Pif reverts to the false branch, which is nil. That causes the stream to stop. (This is like <a href="./../../Classes/Pfindur.html">Pfindur</a> for event patterns, but Pif/Ptime works for value patterns as well.)<textarea class='editor'>// This is a really useful trick: like Pfindur but for value patterns
 (
 p = Pbind(
     \degree, Pif(Ptime(inf) &lt; 4.0, Pwhite(-4, 11, inf)),
     \dur, 0.25
 ).play;
-)</pre>
-<dt><code class='code prettyprint lang-sc'>Pstep(levels, durs, repeats)</code><dd>Repeat a <code class='code prettyprint lang-sc'>level</code> value for its corresponding duration, then move to the next.<dt><code class='code prettyprint lang-sc'>Pseg(levels, durs, curves, repeats)</code><dd>Similar to Pstep, but interpolates to the next value instead of stepping abruptly at the end of the duration. Interpolation is linear by default, but any envelope segment curve can be used. <code class='code prettyprint lang-sc'>levels</code>, <code class='code prettyprint lang-sc'>durs</code> and <code class='code prettyprint lang-sc'>curves</code> should be patterns.<pre class='code prettyprint lang-sc'>// curve is 5 - here's what the curve looks like, ascending first then descending
+)</textarea>
+<dt><code>Pstep(levels, durs, repeats)</code><dd>Repeat a <code>level</code> value for its corresponding duration, then move to the next.<dt><code>Pseg(levels, durs, curves, repeats)</code><dd>Similar to Pstep, but interpolates to the next value instead of stepping abruptly at the end of the duration. Interpolation is linear by default, but any envelope segment curve can be used. <code>levels</code>, <code>durs</code> and <code>curves</code> should be patterns.<textarea class='editor'>// curve is 5 - here's what the curve looks like, ascending first then descending
 Env(#[0, 1, 0], #[1, 1], 5).plot;
 
 (
@@ -61,11 +66,11 @@ p = Pbind(
 ).play;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 </dl>
 <h3><a class='anchor' name='Using%20envelopes%20as%20patterns'>Using envelopes as patterns</a></h3>
 
-<p><a href="./../../Classes/Env.html">Env</a> supports the stream protocol: <code class='code prettyprint lang-sc'>asStream</code> turns an Env into a stream, and timed values can be obtained from it using <code class='code prettyprint lang-sc'>next</code>. The envelope stream returns the value the envelope would have at the elapsed time, in the same way <code class='code prettyprint lang-sc'>.at(time)</code> returns the envelope value at the specified time.<pre class='code prettyprint lang-sc'>e = Env.linen(1, 1, 1);
+<p><a href="./../../Classes/Env.html">Env</a> supports the stream protocol: <code>asStream</code> turns an Env into a stream, and timed values can be obtained from it using <code>next</code>. The envelope stream returns the value the envelope would have at the elapsed time, in the same way <code>.at(time)</code> returns the envelope value at the specified time.<textarea class='editor'>e = Env.linen(1, 1, 1);
 e.at(2);    // == 1
 e.at(2.5);    // == 0.5
 
@@ -85,10 +90,10 @@ p = Pbind(
     \dur, 0.125
 ).play;
 
-p.stop;</pre>
+p.stop;</textarea>
 
-<p>The <code class='code prettyprint lang-sc'>releaseNode</code> and <code class='code prettyprint lang-sc'>loopNode</code> envelope parameters do not take effect, because they are meaningful only when used in a Synth with a gated EnvGen.
-<p>When the envelope ends, the stream will hold the final level indefinitely. The <code class='code prettyprint lang-sc'>Pif(Ptime(inf) &lt; totalTime, Env(...))</code> trick can make it stop instead.<pre class='code prettyprint lang-sc'>// Use an envelope to pan notes from left to right and back
+<p>The <code>releaseNode</code> and <code>loopNode</code> envelope parameters do not take effect, because they are meaningful only when used in a Synth with a gated EnvGen.
+<p>When the envelope ends, the stream will hold the final level indefinitely. The <code>Pif(Ptime(inf) &lt; totalTime, Env(...))</code> trick can make it stop instead.<textarea class='editor'>// Use an envelope to pan notes from left to right and back
 // Plays one cycle
 (
 p = Pbind(
@@ -110,7 +115,8 @@ p = Pbind(
 ).play;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns.html">Pattern Guide 06a: Repetition Constraint Patterns</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_06c_Composition_of_Patterns.html">Pattern Guide 06c: Composition of Patterns</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns::<br></div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_06c_Composition_of_Patterns.html">Pattern Guide 06c: Composition of Patterns</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

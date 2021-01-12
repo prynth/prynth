@@ -1,0 +1,177 @@
+<!doctype html><html lang='en'><head><title>Chromagram | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Chromagram';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>Chromagram:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Analysis'>Analysis</a></span>
+</div><h1>Chromagram<span id='superclasses'> : <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Octave chroma band based representation of energy in a signal; Chromagram for nTET tuning systems with any base reference</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/SCMIRUGens/Classes/Chromagram.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/SCMIRUGens/Classes/Chromagram.sc'>Chromagram.sc</a></div><div id='related'>See also: <a href="./../Classes/SensoryDissonance.html">SensoryDissonance</a></div>
+</div>
+<a class='anchor' name='kw_Chroma'>&nbsp;</a><a class='anchor' name='kw_pitch%20class'>&nbsp;</a><a class='anchor' name='kw_equal%20temperament'>&nbsp;</a><a class='anchor' name='kw_filter%20bank'>&nbsp;</a><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>A chromagram, measuring the energy at particular chroma within an nTET tuning system.
+<p>Possible extension: TODO: Could have arbitrary tuning systems if precalculated the exact fft bin + interpolation data.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>Chromagram.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a>(<span class='argstr'>fft</span>, <span class='argstr'>fftsize: 2048</span>, <span class='argstr'>n: 12</span>, <span class='argstr'>tuningbase: 32.703195662575</span>, <span class='argstr'>octaves: 8</span>, <span class='argstr'>integrationflag: 0</span>, <span class='argstr'>coeff: 0.9</span>, <span class='argstr'>octaveratio: 2</span>, <span class='argstr'>perframenormalize: 0</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>fft<td class='argumentdesc'>
+<p>input fft chain, that is, from an FFT UGen<tr><td class='argumentname'>fftsize<td class='argumentdesc'>
+<p>FFT size, required for initialisation<tr><td class='argumentname'>n<td class='argumentdesc'>
+<p>Equal divisions of an octave, e.g. n=12 is 12TET, 12 steps in an octave<tr><td class='argumentname'>tuningbase<td class='argumentdesc'>
+<p>Base frequency or tuning; will correspong to index 0 in results (conventionally, this would be a 'C' in 12TET, but its an arbitrary reference)<tr><td class='argumentname'>octaves<td class='argumentdesc'>
+<p>Number of octaves considered from tuning base up<tr><td class='argumentname'>integrationflag<td class='argumentdesc'>
+<p>Whether to integrate from frame to frame, off by default<tr><td class='argumentname'>coeff<td class='argumentdesc'>
+<p>Coefficient of integration<tr><td class='argumentname'>octaveratio<td class='argumentdesc'>
+<p>Default of 2 is a 'normal' octave; other ratios are possible, e.g. Bohlen-Pierce scale uses 13 equal divisions over the ratio of 3 for a 'tritave'<tr><td class='argumentname'>perframenormalize<td class='argumentdesc'>
+<p>Defaults to off, but if set to 1 will normalize each frame with respect to itself (as long as there is non-negligible power), potentially providing a more robust measure for comparison between frames (each frame will have then a normalized distribution over chroma, independent of volume)</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>(
+{
+
+var in, fft, chroma;
+
+//in = SinOsc.ar(440,0,0.1);
+in= SoundIn.ar;
+
+fft = FFT(LocalBuf(2048), in);
+
+chroma=Chromagram.kr(fft);
+
+chroma.poll;
+
+Out.ar(0,Pan2.ar(in));
+}.play
+)
+
+
+
+//n TET display
+
+n= 12; //19, 24
+
+(
+x = {
+
+var in, fft, chroma;
+
+//in = SinOsc.ar(440,0,0.1);
+in= SoundIn.ar;
+
+fft = FFT(LocalBuf(2048), in);
+
+chroma=Chromagram.kr(fft, 2048, n);
+
+//chroma=Chromagram.kr(fft, 2048, n, 36.midicps, 7, 1, 0.9);
+
+Out.kr(0,chroma);
+}.play;
+
+c= Bus.new('control', 0, n);
+
+)
+
+
+
+//poll coefficients snapshot
+c.getn(n,{arg val; {val.plot;}.defer});
+
+
+
+//Continuous graphical display of Chromagram values; free routine before closing window
+
+(
+var ms;
+
+w=Window.new((n.asString)++" chroma coefficients", Rect(200,400,n*20+50,300));
+
+ms= MultiSliderView.new(w, Rect(10,10,n*20,280));
+
+ms.value_(Array.fill(n,0.0));
+ms.valueThumbSize_(20.0);
+ms.indexThumbSize_(20.0);
+ms.gap_(0);
+
+w.front;
+
+r= {
+
+inf.do{
+
+c.getn(n,{arg val; {ms.value_(val)}.defer});
+
+0.04.wait; //25 frames per second
+};
+
+}.fork;
+
+w.onClose = {
+r.stop;
+c.free;
+x.free;
+};
+
+)
+
+
+
+b.free;
+
+
+
+//Bohlen-Pierce over 3 tritaves, normalized results per frame
+(
+{
+
+var in, fft, chroma;
+
+//in = SinOsc.ar(440,0,0.1);
+in= SoundIn.ar;
+
+fft = FFT(LocalBuf(2048), in);
+
+chroma=Chromagram.kr(fft,2048,13,octaves:3,octaveratio:3,perframenormalize:1);
+
+chroma.poll;
+
+Out.ar(0,Pan2.ar(in));
+}.play
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/SCMIRUGens/HelpSource/Classes/Chromagram.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/SCMIRUGens/HelpSource/Classes/Chromagram.schelp</a><br>link::Classes/Chromagram::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

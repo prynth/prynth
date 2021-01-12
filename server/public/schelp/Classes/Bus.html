@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Bus | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Bus | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Bus';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Bus:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -75,8 +80,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-realloc'>realloc</a> </li>
 <li class='toc3'><a href='#-setAll'>setAll</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -86,17 +91,17 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Representation of a bus on the server</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Bus.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Bus.sc'>Bus.sc</a></div><div id='related'>See also: <a href="./../Classes/Server.html">Server</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/Bus.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Control/Bus.sc'>Bus.sc</a></div><div id='related'>See also: <a href="./../Classes/Server.html">Server</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>The clientside representation of an audio or control bus on a server. Encapsulates all the <a href="./../Browse.html#OpenSoundControl">OSC</a> messages a Bus can receive. Manages allocation and deallocation of bus indices so that you don't need to worry about conflicts. The number of control busses, audio busses, and input and output busses is fixed and cannot be changed after the server has been booted.
 <p>For more information see <a href="./../Guides/ClientVsServer.html">Client vs Server</a> and <a href="./../Reference/Server-Architecture.html">Server Architecture</a>.
-<p>Note that using the Bus class to allocate a multichannel bus does not 'create' a multichannel bus, but rather simply reserves a series of adjacent bus indices with the bus' <a href="./../Classes/Server.html">Server</a> object's bus allocators. <code class='code prettyprint lang-sc'>abus.index</code> simply returns the first of those indices. When using a Bus with an <a href="./../Classes/In.html">In</a> or <a href="./../Classes/Out.html">Out</a> ugen there is nothing to stop you from reading to or writing from a larger range, or from hardcoding to a bus that has been allocated. You are responsible for making sure that the number of channels match and that there are no conflicts.
-<p>Bus objects should not be created or modified within a <a href="./../Classes/SynthDef.html">SynthDef</a>.<div class='note'><span class='notelabel'>NOTE:</span> The lowest <code class='code prettyprint lang-sc'>n</code> bus indices are reserved for hardware output and input, where<pre class='code prettyprint lang-sc'>n = server.options.numOutputBusChannels + server.options.numInputBusChannels</pre>
+<p>Note that using the Bus class to allocate a multichannel bus does not 'create' a multichannel bus, but rather simply reserves a series of adjacent bus indices with the bus' <a href="./../Classes/Server.html">Server</a> object's bus allocators. <code>abus.index</code> simply returns the first of those indices. When using a Bus with an <a href="./../Classes/In.html">In</a> or <a href="./../Classes/Out.html">Out</a> ugen there is nothing to stop you from reading to or writing from a larger range, or from hardcoding to a bus that has been allocated. You are responsible for making sure that the number of channels match and that there are no conflicts.
+<p>Bus objects should not be created or modified within a <a href="./../Classes/SynthDef.html">SynthDef</a>.<div class='note'><span class='notelabel'>NOTE:</span> The lowest <code>n</code> bus indices are reserved for hardware output and input, where<textarea class='editor'>n = server.options.numOutputBusChannels + server.options.numInputBusChannels</textarea>
 
 <p><dl>
-<dt>Hardware output buses<dd><code class='code prettyprint lang-sc'>0 .. (numOutputBusChannels - 1)</code><dt>Hardware input buses<dd><code class='code prettyprint lang-sc'>numOutputBusChannels .. (numOutputBusChannels + numInputBusChannels - 1)</code><dt>First private bus index<dd><code class='code prettyprint lang-sc'>numOutputBusChannels + numInputBusChannels</code></dl>
+<dt>Hardware output buses<dd><code>0 .. (numOutputBusChannels - 1)</code><dt>Hardware input buses<dd><code>numOutputBusChannels .. (numOutputBusChannels + numInputBusChannels - 1)</code><dt>First private bus index<dd><code>numOutputBusChannels + numInputBusChannels</code></dl>
 
 <p>Do not try to use hardware I/O buses as private buses.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>Bus.</span><a class='method-name' name='*control' href='./../Overviews/Methods.html#control'>control</a>(<span class='argstr'>server</span>, <span class='argstr'>numChannels: 1</span>)</h3>
@@ -113,7 +118,7 @@ var scdoc_sc_version = '3.9.3';
 <p>The <a href="./../Classes/Server.html">Server</a>. Defaults to Server.default.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
 <p>Number of channels to allocate</table></div><h3 class='method-code'><span class='method-prefix'>Bus.</span><a class='method-name' name='*alloc' href='./../Overviews/Methods.html#alloc'>alloc</a>(<span class='argstr'>rate</span>, <span class='argstr'>server</span>, <span class='argstr'>numChannels: 1</span>)</h3>
 <div class='method'>
-<p>Allocate a bus of either rate as specified by <code class='code prettyprint lang-sc'>rate</code>.<h4>Arguments:</h4>
+<p>Allocate a bus of either rate as specified by <code>rate</code>.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>rate<td class='argumentdesc'>
 <p>Rate symbol: \control or \audio<tr><td class='argumentname'>server<td class='argumentdesc'>
@@ -139,7 +144,7 @@ var scdoc_sc_version = '3.9.3';
 <div class='returnvalue'>
 <p>a symbol consisting of the letter 'c' or 'a' (for control or audio) followed by the bus's index. This may be used when setting a synth node's control inputs to map the input to the control bus.</div><h4>Discussion:</h4>
 
-<p>See the <a href="./../Classes/Node.html">Node</a> help file for more information on mapping controls to buses.<pre class='code prettyprint lang-sc'>(
+<p>See the <a href="./../Classes/Node.html">Node</a> help file for more information on mapping controls to buses.<textarea class='editor'>(
 a = Bus.control(s, 1).set(440);
 b = Bus.control(s, 1).set(0.01);
 )
@@ -147,10 +152,10 @@ b = Bus.control(s, 1).set(0.01);
 SynthDef(\rlpf, { |out, ffreq, rq|
     Out.ar(out, RLPF.ar(WhiteNoise.ar(0.2), ffreq, rq))
 }).play(s, [\ffreq, a.asMap, \rq, b.asMap]);
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-subBus' href='./../Overviews/Methods.html#subBus'>subBus</a>(<span class='argstr'>offset</span>, <span class='argstr'>numChannels: 1</span>)</h3>
 <div class='method'>
-<p>Get a new Bus that is a subset of this bus (see <code class='code prettyprint lang-sc'>newFrom</code>).</div><h3><a class='anchor' name='Asynchronous%20Control%20Bus%20Methods'>Asynchronous Control Bus Methods</a></h3>
+<p>Get a new Bus that is a subset of this bus (see <code>newFrom</code>).</div><h3><a class='anchor' name='Asynchronous%20Control%20Bus%20Methods'>Asynchronous Control Bus Methods</a></h3>
 
 <p>The following commands apply only to control buses and are asynchronous. For synchronous access to control busses please consult <a href="#Synchronous%20Control%20Bus%20Methods">Synchronous Control Bus Methods</a>.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-value' href='./../Overviews/Methods.html#value'>value</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-value' href='./../Overviews/Methods.html#value'>value</a> = <span class='argstr'>value</span></h3>
@@ -202,7 +207,7 @@ SynthDef(\rlpf, { |out, ffreq, rq|
 <p>use a bus like a UGen. The numChannels and offset arguments can be used to get a subset of the bus.<h4>Discussion:</h4>
 
 <p>By default, all the bus channels are used. E.g. in an 8 channel bus,<ul>
-<li><code class='code prettyprint lang-sc'>b.kr</code> will return an <a href="./../Classes/In.html">In</a> ugen reading from all the 8 channels of the bus;<li><code class='code prettyprint lang-sc'>b.kr(4)</code> will return the first four channels, and<li><code class='code prettyprint lang-sc'>b.kr(2, 5)</code> will return two channels, starting from the bus's channels at index 5 and 6.</ul>
+<li><code>b.kr</code> will return an <a href="./../Classes/In.html">In</a> ugen reading from all the 8 channels of the bus;<li><code>b.kr(4)</code> will return the first four channels, and<li><code>b.kr(2, 5)</code> will return two channels, starting from the bus's channels at index 5 and 6.</ul>
 </div><h3><a class='anchor' name='OSC%20Bundle%20Methods'>OSC Bundle Methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-getMsg' href='./../Overviews/Methods.html#getMsg'>getMsg</a></h3>
 <div class='method'>
@@ -225,21 +230,21 @@ SynthDef(\rlpf, { |out, ffreq, rq|
 <tr><td class='argumentname'>value<td class='argumentdesc'>
 <p>the value to which this bus' channels will be set.</table></div><h3><a class='anchor' name='Monitoring%20with%20an%20oscilloscope'>Monitoring with an oscilloscope</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-scope' href='./../Overviews/Methods.html#scope'>scope</a>(<span class='argstr'>bufsize: 4096</span>, <span class='argstr'>zoom</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Control/server-scope.sc</a></div>
 <div class='method'>
-<p>Displays a bus in a <a href="./../Classes/Stethoscope.html">Stethoscope</a>, using the Bus' <a href="#-numChannels">-numChannels</a>, <a href="#-index">-index</a>, and <a href="#-rate">-rate</a> properties.<pre class='code prettyprint lang-sc'>s.boot
+<p>Displays a bus in a <a href="./../Classes/Stethoscope.html">Stethoscope</a>, using the Bus' <a href="#-numChannels">-numChannels</a>, <a href="#-index">-index</a>, and <a href="#-rate">-rate</a> properties.<textarea class='editor'>s.boot
 b=Bus.audio(s, 2);
 a={SinOsc.ar([330,440], 0, 0.4)}.play(s, b) //you won't hear this if you only have two channels
 b.scope
 
 a.free;
-b.free;</pre>
+b.free;</textarea>
 </div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-==' href='./../Overviews/Methods.html#=='>==</a>(<span class='argstr'>aBus</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-alloc' href='./../Overviews/Methods.html#alloc'>alloc</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asBus' href='./../Overviews/Methods.html#asBus'>asBus</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asBus.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asBus.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/asBus.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/asBus.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asControlInput' href='./../Overviews/Methods.html#asControlInput'>asControlInput</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asUGenInput' href='./../Overviews/Methods.html#asUGenInput'>asUGenInput</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-fill' href='./../Overviews/Methods.html#fill'>fill</a>(<span class='argstr'>value</span>, <span class='argstr'>numChans</span>)</h3>
@@ -248,15 +253,15 @@ b.free;</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isSettable' href='./../Overviews/Methods.html#isSettable'>isSettable</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-play' href='./../Overviews/Methods.html#play'>play</a>(<span class='argstr'>target: 0</span>, <span class='argstr'>outbus</span>, <span class='argstr'>fadeTime</span>, <span class='argstr'>addAction: 'addToTail'</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-plot' href='./../Overviews/Methods.html#plot'>plot</a>(<span class='argstr'>duration: 0.01</span>, <span class='argstr'>bounds</span>, <span class='argstr'>minval</span>, <span class='argstr'>maxval</span>, <span class='argstr'>separately: false</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-plotAudio' href='./../Overviews/Methods.html#plotAudio'>plotAudio</a>(<span class='argstr'>duration: 0.01</span>, <span class='argstr'>minval: -1</span>, <span class='argstr'>maxval: 1</span>, <span class='argstr'>bounds</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/PlusGUI/Math/PlotView.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-prepareForProxySynthDef' href='./../Overviews/Methods.html#prepareForProxySynthDef'>prepareForProxySynthDef</a>(<span class='argstr'>proxy</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-realloc' href='./../Overviews/Methods.html#realloc'>realloc</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setAll' href='./../Overviews/Methods.html#setAll'>setAll</a>(<span class='argstr'>value</span>)</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>s.boot;
+<textarea class='editor'>s.boot;
 
 (
 // something to play with
@@ -366,6 +371,7 @@ b.setAt(2, 1200);
 b.setAt(3, 2400);
 
 y.free;
-b.free;</pre>
+b.free;</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Bus.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Bus.schelp</a><br>link::Classes/Bus::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Bus.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Bus.schelp</a><br>link::Classes/Bus::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

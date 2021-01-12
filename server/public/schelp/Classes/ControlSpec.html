@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>ControlSpec | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>ControlSpec | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'ControlSpec';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>ControlSpec:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -44,14 +49,15 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-normalize'>normalize</a> </li>
 <li class='toc3'><a href='#-ratio'>ratio</a> </li>
 <li class='toc3'><a href='#-roundRange'>roundRange</a> </li>
+<li class='toc3'><a href='#-setFrom'>setFrom</a> </li>
 <li class='toc3'><a href='#-shift'>shift</a> </li>
 <li class='toc3'><a href='#-step'>step</a> </li>
 <li class='toc3'><a href='#-units'>units</a> </li>
 <li class='toc3'><a href='#-warp'>warp</a> </li>
 <li class='toc3'><a href='#-zoom'>zoom</a> </li>
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -61,14 +67,14 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>numerical input specification</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Spec.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Spec.sc'>Spec.sc</a></div><div id='related'>See also: <a href="./../Classes/Warp.html">Warp</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/Spec.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Control/Spec.sc'>Spec.sc</a></div><div id='related'>See also: <a href="./../Classes/Warp.html">Warp</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>The original, and most common spec (see <a href="./../Classes/Spec.html">Spec</a>). A ControlSpec is used by GUI sliders and knobs to specify the range and curve of the controls. ControlSpec may be used in many ways to map from linear 0..1 range to your desired range and back.
-<p>The most common way to create a ControlSpec is by<pre class='code prettyprint lang-sc'>anObject.asSpec // the object may be an array or a symbol</pre>
+<p>The most common way to create a ControlSpec is by<textarea class='editor'>anObject.asSpec // the object may be an array or a symbol</textarea>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='method-code'><span class='method-prefix'>ControlSpec.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>minval: 0</span>, <span class='argstr'>maxval: 1</span>, <span class='argstr'>warp: 'lin'</span>, <span class='argstr'>step: 0</span>, <span class='argstr'>default</span>, <span class='argstr'>units</span>, <span class='argstr'>grid</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>ControlSpec.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>minval: 0.0</span>, <span class='argstr'>maxval: 1.0</span>, <span class='argstr'>warp: 'lin'</span>, <span class='argstr'>step: 0.0</span>, <span class='argstr'>default</span>, <span class='argstr'>units</span>, <span class='argstr'>grid</span>)</h3>
 <div class='method'>
 <p><h4>Arguments:</h4>
 <table class='arguments'>
@@ -86,25 +92,25 @@ var scdoc_sc_version = '3.9.3';
 <div class='method'>
 <p>Maps and constrains a <strong>value</strong> between 0 and 1 to the range between minval and maxval.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-unmap' href='./../Overviews/Methods.html#unmap'>unmap</a>(<span class='argstr'>value</span>)</h3>
 <div class='method'>
-<p>Maps and constrains a <strong>value</strong> between minval and maxval to the range between 0 and 1.<pre class='code prettyprint lang-sc'>g = ControlSpec(0.01, 2000, \exp, 0.1, 220, "Hz");
+<p>Maps and constrains a <strong>value</strong> between minval and maxval to the range between 0 and 1.<textarea class='editor'>g = ControlSpec(0.01, 2000, \exp, 0.1, 220, "Hz");
 g.map(0.5); // convert from [0..1] to [0.01..2000]
 g.unmap(1000); // convert from [0.01..2000] to [0..1]
 
 // fore and back translation should be close to identical:
-g.unmap(g.map(0.5));</pre>
+g.unmap(g.map(0.5));</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clipLo' href='./../Overviews/Methods.html#clipLo'>clipLo</a></h3>
 <div class='method'>
 <p>The lower of maxval and minval.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clipHi' href='./../Overviews/Methods.html#clipHi'>clipHi</a></h3>
 <div class='method'>
 <p>The higher of maxval and minval.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-constrain' href='./../Overviews/Methods.html#constrain'>constrain</a>(<span class='argstr'>value</span>)</h3>
 <div class='method'>
-<p>Returns <code class='code prettyprint lang-sc'>value.asFloat.clip(clipLo, clipHi).round(step)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-range' href='./../Overviews/Methods.html#range'>range</a></h3>
+<p>Returns <code>value.asFloat.clip(clipLo, clipHi).round(step)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-range' href='./../Overviews/Methods.html#range'>range</a></h3>
 <div class='method'>
-<p>Returns <code class='code prettyprint lang-sc'>maxval - minval</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-guessNumberStep' href='./../Overviews/Methods.html#guessNumberStep'>guessNumberStep</a></h3>
+<p>Returns <code>maxval - minval</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-guessNumberStep' href='./../Overviews/Methods.html#guessNumberStep'>guessNumberStep</a></h3>
 <div class='method'>
 <p>Used for EZ GUI classes for guessing a sensible <strong>step</strong> if none is specified.</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-calcRange' href='./../Overviews/Methods.html#calcRange'>calcRange</a>(<span class='argstr'>data</span>, <span class='argstr'>defaultRange: 1</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-calcRange' href='./../Overviews/Methods.html#calcRange'>calcRange</a>(<span class='argstr'>data</span>, <span class='argstr'>defaultRange: 1.0</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-copy' href='./../Overviews/Methods.html#copy'>copy</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-default' href='./../Overviews/Methods.html#default'>default</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-default' href='./../Overviews/Methods.html#default'>default</a> = value</h3>
@@ -120,6 +126,7 @@ g.unmap(g.map(0.5));</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-normalize' href='./../Overviews/Methods.html#normalize'>normalize</a>(<span class='argstr'>min</span>, <span class='argstr'>max</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ratio' href='./../Overviews/Methods.html#ratio'>ratio</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-roundRange' href='./../Overviews/Methods.html#roundRange'>roundRange</a>(<span class='argstr'>base: 10</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-setFrom' href='./../Overviews/Methods.html#setFrom'>setFrom</a>(<span class='argstr'>otherSpec</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-shift' href='./../Overviews/Methods.html#shift'>shift</a>(<span class='argstr'>amount: 1</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-step' href='./../Overviews/Methods.html#step'>step</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-step' href='./../Overviews/Methods.html#step'>step</a> = <span class='argstr'>s</span></h3>
@@ -129,7 +136,7 @@ g.unmap(g.map(0.5));</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-warp' href='./../Overviews/Methods.html#warp'>warp</a> = <span class='argstr'>w</span></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-zoom' href='./../Overviews/Methods.html#zoom'>zoom</a>(<span class='argstr'>ratio: 1</span>)</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>g = ControlSpec(0.01, 2000, \exp, 0.1, 220, "Hz");
+<textarea class='editor'>g = ControlSpec(0.01, 2000, \exp, 0.1, 220, "Hz");
 
 // or alternatively
 
@@ -137,8 +144,8 @@ g.unmap(g.map(0.5));</pre>
 
 // or add it to the ControlSpec.specs IdentityDictionary:
 
-ControlSpec.specs[\myFreq] = ControlSpec(0.01, 2000, \exp, 0.01, 440, units: "Hz");</pre>
-<pre class='code prettyprint lang-sc'>// array is used as arguments to ControlSpec.new(minval, maxval, warp, step, default)
+ControlSpec.specs[\myFreq] = ControlSpec(0.01, 2000, \exp, 0.01, 440, units: "Hz");</textarea>
+<textarea class='editor'>// array is used as arguments to ControlSpec.new(minval, maxval, warp, step, default)
 [300,3000,\exponential,100].asSpec.dump
 Instance of ControlSpec {    (0313FC08, gc=00, fmt=00, flg=00, set=03)
   instance variables [6]
@@ -184,8 +191,8 @@ Instance of ControlSpec {    (0313FF18, gc=00, fmt=00, flg=00, set=03)
     warp : Symbol 'linear'
     step : Float 0
     default : Float 0
-}</pre>
-<pre class='code prettyprint lang-sc'>// make a frequency spec with an exponential range from 20 to 20000,
+}</textarea>
+<textarea class='editor'>// make a frequency spec with an exponential range from 20 to 20000,
 // give it a rounding of 30 (Hz)
 a = \freq.asSpec;
 a.step = 100;
@@ -202,8 +209,8 @@ a.map(0.0); // returns min
 a.map(1.5); // exceeds the area: clip, returns max
 
 a.unmap(4000);
-a.unmap(22.0);</pre>
-<pre class='code prettyprint lang-sc'>// like in envelopes, a CurveWarp is created by a number:
+a.unmap(22.0);</textarea>
+<textarea class='editor'>// like in envelopes, a CurveWarp is created by a number:
 
 a = [0, 1, -4].asSpec;
 a.map(0.5);
@@ -217,8 +224,8 @@ var invals = (0..10).normalize;
     var a = [0, 1, curve].asSpec;
     a.map(invals).plot;
 }
-);</pre>
-<pre class='code prettyprint lang-sc'>// using spec for sliders:
+);</textarea>
+<textarea class='editor'>// using spec for sliders:
 (
 var w, c, d;
 w = Window.new("control", Rect(128, 64, 340, 160));
@@ -232,8 +239,8 @@ c.action = {
     + "mapped value"
     + a.map(c.value)
 };
-)</pre>
-<pre class='code prettyprint lang-sc'>// ControlSpec-map can also be used to map ugens
+)</textarea>
+<textarea class='editor'>// ControlSpec-map can also be used to map ugens
 (
 var spec;
 spec = [ 100, 18000, \exp].asSpec;
@@ -248,6 +255,7 @@ spec = [ 100, 18000, \exp].asSpec;
         freq.poll
     )
 }.play
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/ControlSpec.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/ControlSpec.schelp</a><br>link::Classes/ControlSpec::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/ControlSpec.schelp'>/usr/share/SuperCollider/HelpSource/Classes/ControlSpec.schelp</a><br>link::Classes/ControlSpec::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

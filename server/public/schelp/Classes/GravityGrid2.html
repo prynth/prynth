@@ -1,0 +1,138 @@
+<!doctype html><html lang='en'><head><title>GravityGrid2 | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'GravityGrid2';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>GravityGrid2:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators'>Generators</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators>Chaotic'>Chaotic</a></span>
+</div><h1>GravityGrid2<span id='superclasses'> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>dynamical system simulation (Newtonian gravitational force)</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/SLUGens/classes/SLUGens.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/SLUGens/classes/SLUGens.sc'>SLUGens.sc</a></div><div id='related'>See also: <a href="./../Classes/GravityGrid.html">GravityGrid</a></div>
+</div>
+
+<p>//SLUGens released under the GNU GPL as extensions for SuperCollider 3, by Nick Collins, <a href="http://composerprogrammer.com/index.html">http://composerprogrammer.com/index.html</a><a class='anchor' name='kw_SLUGens'>&nbsp;</a><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Fixed masses apply Newtonian gravitational force dynamics to a central moving mass which cannot escape the [-1, 1] grid in x or y. The position of the moving mass is sonified as an oscillator by its distance from the centre. 
+<p>This is a relatively expensive oscillator to run. <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>GravityGrid2.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>reset: 0</span>, <span class='argstr'>rate: 0.1</span>, <span class='argstr'>newx: 0.0</span>, <span class='argstr'>newy: 0.0</span>, <span class='argstr'>bufnum</span>, <span class='argstr'>mul: 1.0</span>, <span class='argstr'>add: 0.0</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>reset<td class='argumentdesc'>
+<p>Restart the moving mass at a random position within the square (k-rate input)<tr><td class='argumentname'>rate<td class='argumentdesc'>
+<p>amount of position update per sample (k-rate)<tr><td class='argumentname'>newx<td class='argumentdesc'>
+<p>kr input to be sampled for new x positions for the moving mass on reset<tr><td class='argumentname'>newy<td class='argumentdesc'>
+<p>kr input to be sampled for new y positions for the moving mass on reset<tr><td class='argumentname'>bufnum<td class='argumentdesc'>
+<p>Bufnum for a buffer containing weights and positions for the fixed influencing masses. In the format entry [0] is the number of masses, then 3 components (x, y, mass multiplier) for each mass in turn (see below). You can dynamically change this buffer as long as the data contents stay consistent- i.e. if you change suddenly to having twice as many masses, make sure you've provided x,y and weight values for them! </table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>b = Buffer.alloc(s, 1+(25*3), 1); //mass buffer big enough for up to 25 masses
+
+b.setn(0,[5]++(Array.fill(5,{[1.0.rand2,1.0.rand2,rrand(0.1,1.0)]}).flatten)); //set weights
+
+{Pan2.ar(GravityGrid2.ar(Impulse.kr(1),MouseX.kr(0.1,1,'exponential'),LFNoise0.kr(1,0.8),LFNoise0.kr(1,0.8), b.bufnum),0.0)}.play
+
+(
+var n;
+
+n=rrand(1,20); //random number of masses
+
+b.setn(0,[n]++(Array.fill(n,{[1.0.rand2,1.0.rand2,rrand(0.1,1.0)]}).flatten)); //change weights to new random values
+)
+
+
+{Pan2.ar(GravityGrid2.ar(Impulse.kr(MouseY.kr(1,1000,'exponential')),MouseX.kr(0.1,1,'exponential'),LFNoise0.kr(1,0.8),LFNoise0.kr(1,0.8), b.bufnum),0.0)}.play
+
+
+
+//lower gravity
+(
+var n;
+
+n=rrand(1,20); //random number of masses
+
+b.setn(0,[n]++(Array.fill(n,{[1.0.rand2,1.0.rand2,0.01*rrand(0.1,1.0)]}).flatten)); //change weights to new random values
+)
+
+
+{Pan2.ar(GravityGrid2.ar(Impulse.kr(0),MouseX.kr(0.1,10,'exponential'),LFNoise0.kr(1,0.8),LFNoise0.kr(1,0.8), b.bufnum),0.0)}.play
+
+
+(
+//deliberate corners
+b.setn(0,[4]++(Array.fill(4,{arg i; [if(i&lt;2,1,-1),if(i%2==0,1,-1),0.1*rrand(0.1,1.0)]}).flatten)); //set weights
+)
+
+
+(
+//deliberate corners further away
+b.setn(0,[4]++(Array.fill(4,{arg i; [if(i&lt;2,rrand(1,2.3),-1),if(i%2==0,1,rrand(-1.1,-1.5)),0.1*rrand(0.1,1.0)]}).flatten)); //set weights
+)
+
+
+
+//very fun and noisy!
+{Pan2.ar(GravityGrid2.ar(Impulse.kr(0),MouseX.kr(1,1000,'exponential'),LFNoise0.kr(1,0.8),LFNoise0.kr(1,0.8), b.bufnum),0.0)}.play
+
+
+//if something fun turns up in the four mass version
+b.getn(0,13,{arg in; in.postln;})
+
+//here's one I made earlier
+b.setn(0, [ 4, 1, 1, 0.029076481238008, 1, -1, 0.061766054481268, -1, 1, 0.096376851201057, -1, -1, 0.09320655465126 ])
+
+//and another
+b.setn(0, [ 4, 1.4228951931, 1, 0.080506414175034, 1.3617297410965, -1.3782749176025, 0.027821443974972, -1, 1, 0.038790885359049, -1, -1.3663036823273, 0.047782249748707 ])
+
+
+
+
+//higher gravity but larger placement area outside box which constrains the moving particle
+(
+var n;
+
+n=rrand(1,20); //random number of masses
+
+b.setn(0,[n]++(Array.fill(n,{[5.0.rand2,5.0.rand2,exprand(0.1,100.0)]}).flatten)); //change weights to new random values
+)
+
+
+
+
+//noise piece
+{Resonz.ar(GravityGrid2.ar(Impulse.kr(LFNoise0.kr([0.2,0.3],7,8)),MouseX.kr(0.1,10)*[11.2,12.5], LFNoise0.kr(5.4,0.4),LFNoise0.kr(10,0.8), b.bufnum),SinOsc.ar(0.03,0,2000,3000),SinOsc.ar(0.03,0,0.3,0.4))}.play</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/SLUGens/HelpSource/Classes/GravityGrid2.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/SLUGens/HelpSource/Classes/GravityGrid2.schelp</a><br>link::Classes/GravityGrid2::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

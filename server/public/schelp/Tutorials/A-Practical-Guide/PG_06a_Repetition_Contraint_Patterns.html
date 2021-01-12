@@ -1,26 +1,31 @@
-<!doctype html><html lang='en'><head><title>Pattern Guide 06a: Repetition Constraint Patterns | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide 06a: Repetition Constraint Patterns | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'Pattern Guide 06a: Repetition Constraint Patterns';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pattern Guide 06a: Repetition Constraint Patterns:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Repetition%20and%20Constraint%20patterns'>Repetition and Constraint patterns</a></li>
 <ul class='toc'><li class='toc2'><a href='#Repetition%20patterns'>Repetition patterns</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Constraint%20(or%20interruption)%20patterns'>Constraint (or interruption) patterns</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/A-Practical-Guide</span>
@@ -36,8 +41,8 @@ var scdoc_sc_version = '3.9.3';
 <p>These are essentially flow of control patterns. Each one takes a source pattern and repeats values from it, or stops the stream early based on a preset constraint.<h3><a class='anchor' name='Repetition%20patterns'>Repetition patterns</a></h3>
 
 <p>These patterns allow you to repeat single values, or (in the case of Pn) entire patterns.<dl>
-<dt><code class='code prettyprint lang-sc'>Pclutch(pattern, connected)</code><dd>If the <code class='code prettyprint lang-sc'>connected</code> pattern is true, <a href="./../../Classes/Pclutch.html">Pclutch</a> returns the next value from <code class='code prettyprint lang-sc'>pattern</code>. If <code class='code prettyprint lang-sc'>connected</code> is false, the previous pattern value is repeated. It's like a clutch in a car: when engaged, the pattern moves forward; when disconnected, it stays where it is.<dt><code class='code prettyprint lang-sc'>Pn(pattern, repeats)</code><dd>Embeds the source pattern <code class='code prettyprint lang-sc'>repeats</code> times: simple repetition. This also works on single values: <code class='code prettyprint lang-sc'>Pn(1, 5)</code> outputs the number 1 5 times.<dt><code class='code prettyprint lang-sc'>Pstutter(n, pattern)</code><dd><code class='code prettyprint lang-sc'>n</code> and <code class='code prettyprint lang-sc'>pattern</code> are both patterns. Each value from <code class='code prettyprint lang-sc'>pattern</code> is repeated <code class='code prettyprint lang-sc'>n</code> times. If <code class='code prettyprint lang-sc'>n</code> is a pattern, each value can be repeated a different number of times.<dt><code class='code prettyprint lang-sc'>PdurStutter(n, pattern)</code><dd>Like Pstutter, except the pattern value is divided by the number of repeats (so that the total time for the repeat cycle is the duration value from the source pattern).
-<p>See also <a href="./../../Classes/Pstep.html">Pstep</a>, described in <a href="./../../Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns.html">Pattern Guide 06b: Time Based Patterns</a>. Pstep can be used like <a href="./../../Classes/Pstutter.html">Pstutter</a>, but repetition is controlled by time rather than number of repeats per item.<pre class='code prettyprint lang-sc'>// play repeated notes with a different rhythmic value per new pitch
+<dt><code>Pclutch(pattern, connected)</code><dd>If the <code>connected</code> pattern is true, <a href="./../../Classes/Pclutch.html">Pclutch</a> returns the next value from <code>pattern</code>. If <code>connected</code> is false, the previous pattern value is repeated. It's like a clutch in a car: when engaged, the pattern moves forward; when disconnected, it stays where it is.<dt><code>Pn(pattern, repeats)</code><dd>Embeds the source pattern <code>repeats</code> times: simple repetition. This also works on single values: <code>Pn(1, 5)</code> outputs the number 1 5 times.<dt><code>Pstutter(n, pattern)</code><dd><code>n</code> and <code>pattern</code> are both patterns. Each value from <code>pattern</code> is repeated <code>n</code> times. If <code>n</code> is a pattern, each value can be repeated a different number of times.<dt><code>PdurStutter(n, pattern)</code><dd>Like Pstutter, except the pattern value is divided by the number of repeats (so that the total time for the repeat cycle is the duration value from the source pattern).
+<p>See also <a href="./../../Classes/Pstep.html">Pstep</a>, described in <a href="./../../Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns.html">Pattern Guide 06b: Time Based Patterns</a>. Pstep can be used like <a href="./../../Classes/Pstutter.html">Pstutter</a>, but repetition is controlled by time rather than number of repeats per item.<textarea class='editor'>// play repeated notes with a different rhythmic value per new pitch
 // using Pstutter
 p = Pbind(
         // making 'n' a separate stream so that degree and dur can share it
@@ -79,12 +84,12 @@ p = Pbind(
     \legato, 0.3
 ).play;
 
-p.stop;</pre>
+p.stop;</textarea>
 </dl>
 <h3><a class='anchor' name='Constraint%20(or%20interruption)%20patterns'>Constraint (or interruption) patterns</a></h3>
 
 <p>Instead of prolonging a stream by repetition, these patterns use different methods to stop a stream dynamically. They are especially useful for modularizing pattern construction. One section of your code might be responsible for generating numeric or event patterns. By using constraint patterns, that part of the code doesn't have to know how many events or how long to play. It can just return an infinite pattern, and another part of the code can wrap it in one of these to stop it based on the appropriate condition.<dl>
-<dt><code class='code prettyprint lang-sc'>Pfin(count, pattern)</code><dd>Returns exactly <code class='code prettyprint lang-sc'>count</code> values from the source pattern, then stops. (<a href="./../../Classes/Pfin.html">Pfin</a> has a cousin, Pfinval, that is deprecated.)<dt><code class='code prettyprint lang-sc'>Pconst(sum, pattern, tolerance)</code><dd>Output numbers until the sum goes over a predefined limit. The last output value is adjusted so that the sum matches the limit exactly.<dt><code class='code prettyprint lang-sc'>Pfindur(dur, pattern, tolerance)</code><dd>Like Pconst, but applying the "constrain" behavior to the event's rhythmic values. The source pattern runs up to the specified duration, then stops. This is very useful if you know how long a musical behavior should go on, but the number of events to fill up that time is not known.<pre class='code prettyprint lang-sc'>// Two variants on the same thing
+<dt><code>Pfin(count, pattern)</code><dd>Returns exactly <code>count</code> values from the source pattern, then stops. (<a href="./../../Classes/Pfin.html">Pfin</a> has a cousin, Pfinval, that is deprecated.)<dt><code>Pconst(sum, pattern, tolerance)</code><dd>Output numbers until the sum goes over a predefined limit. The last output value is adjusted so that the sum matches the limit exactly.<dt><code>Pfindur(dur, pattern, tolerance)</code><dd>Like Pconst, but applying the "constrain" behavior to the event's rhythmic values. The source pattern runs up to the specified duration, then stops. This is very useful if you know how long a musical behavior should go on, but the number of events to fill up that time is not known.<textarea class='editor'>// Two variants on the same thing
 // Use Pconst or Pfindur to create 4-beat segments with randomized rhythm
 // Pconst and Pfindur both can ensure the total rhythm doesn't go above 4.0
 
@@ -101,8 +106,8 @@ p = Pn(Pfindur(4, Pbind(
     \dur, Pwhite(1, 4, inf) * 0.25
 )), inf).play;
 
-p.stop;</pre>
-<dt><code class='code prettyprint lang-sc'>Psync(pattern, quant, maxdur, tolerance)</code><dd>Like Pfindur, but does not have a fixed duration limit. Instead, it plays until either it reaches <code class='code prettyprint lang-sc'>maxdur</code> (in which case it behaves like Pfindur, adjusting the last event so the total duration matches <code class='code prettyprint lang-sc'>maxdur</code>), or the pattern stops early and the last event is rounded up to the next integer multiple of <code class='code prettyprint lang-sc'>quant</code>. This is hard to explain; a couple of examples might make it clearer.<pre class='code prettyprint lang-sc'>(
+p.stop;</textarea>
+<dt><code>Psync(pattern, quant, maxdur, tolerance)</code><dd>Like Pfindur, but does not have a fixed duration limit. Instead, it plays until either it reaches <code>maxdur</code> (in which case it behaves like Pfindur, adjusting the last event so the total duration matches <code>maxdur</code>), or the pattern stops early and the last event is rounded up to the next integer multiple of <code>quant</code>. This is hard to explain; a couple of examples might make it clearer.<textarea class='editor'>(
 // in this case, the pattern stops by reaching maxdur
 // elapsed time = 4
 var    startTime;
@@ -128,8 +133,9 @@ p = (Psync(Pbind(
     (thisThread.clock.beats - startTime).debug("elapsed");
     nil
 }, 1)).play;
-)</pre>
+)</textarea>
 </dl>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_060_Filter_Patterns.html">Pattern Guide 060: Filter Patterns</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns.html">Pattern Guide 06b: Time Based Patterns</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns::<br></div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_06b_Time_Based_Patterns.html">Pattern Guide 06b: Time Based Patterns</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_06a_Repetition_Contraint_Patterns::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>BeatTrack | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>BeatTrack | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'BeatTrack';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>BeatTrack:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -23,8 +28,8 @@ var scdoc_sc_version = '3.9.3';
 </ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -34,7 +39,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Autocorrelation beat tracker</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/MachineListening.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/MachineListening.sc'>MachineListening.sc</a></div><div id='related'>See also: <a href="./../Classes/BeatTrack2.html">BeatTrack2</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Audio/MachineListening.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Audio/MachineListening.sc'>MachineListening.sc</a></div><div id='related'>See also: <a href="./../Classes/BeatTrack2.html">BeatTrack2</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -49,12 +54,12 @@ var scdoc_sc_version = '3.9.3';
 <p>[fft] Audio input to track, already passed through an FFT UGen; the expected size of FFT is 1024 for 44100 and 48000 sampling rate, and 2048 for double those. No other sampling rates are supported.<tr><td class='argumentname'>lock<td class='argumentdesc'>
 <p>[sk] If this argument is greater than 0.5, the tracker will lock at its current periodicity and continue from the current phase. Whilst it updates the model's phase and period, this is not reflected in the output until lock goes back below 0.5.</table><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>Four k-rate outputs:<pre class='code prettyprint lang-sc'>#quarternotetick, eighthnotetick, sixteenthnotetick, tempo = BeatTrack.kr(chain, 0)</pre>
+<p>Four k-rate outputs:<textarea class='editor'>#quarternotetick, eighthnotetick, sixteenthnotetick, tempo = BeatTrack.kr(chain, 0)</textarea>
 </div></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>//this is a one minute pop song; you should load something equivalent for testing
+<textarea class='editor'>//this is a one minute pop song; you should load something equivalent for testing
 d = Buffer.read(s, "/Volumes/data/stevebeattrack/samples/100.wav");
 
 
@@ -86,9 +91,9 @@ a.set(\beepvol,1.0);
 a.set(\beepvol,0.0);
 
 a.set(\lock,1); //fix it rigidly from current phase/period solution
-a.set(\lock,0); //unfix, back to tracking</pre>
+a.set(\lock,0); //unfix, back to tracking</textarea>
 
-<p>track audio in (try clapping a beat or beatboxing, but allow up to 6 seconds for tracking to begin) and spawning stuff at quarters, eighths and sixteenths:<pre class='code prettyprint lang-sc'>(
+<p>track audio in (try clapping a beat or beatboxing, but allow up to 6 seconds for tracking to begin) and spawning stuff at quarters, eighths and sixteenths:<textarea class='editor'>(
 SynthDef(\help_beattrack2, { |out|
     var trackb, trackh, trackq, tempo;
     var source;
@@ -106,7 +111,8 @@ SynthDef(\help_beattrack2, { |out|
 
     Out.ar(out, bsound + hsound + qsound);
 }).play;
-)</pre>
+)</textarea>
 <div class='footnotes'>
 <a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - Research note: This UGen is a derivation following: Davies, M. E. P. and Plumbley, M. D. Beat Tracking With A Two State Model. Proceedings of the IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP 2005), Philadelphia, USA, March 19-23, 2005
-<p>The UGen was converted by Nick Collins for beat tracking research in the course of his PhD and uses an original C implementation of Matthew Davies' MATLAB model. It first appeared as part of BBCut2 as AutoTrack but has now been added to core to enhance SuperCollider's realtime machine listening options.</div></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/BeatTrack.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/BeatTrack.schelp</a><br>link::Classes/BeatTrack::<br></div></div></body></html>
+<p>The UGen was converted by Nick Collins for beat tracking research in the course of his PhD and uses an original C implementation of Matthew Davies' MATLAB model. It first appeared as part of BBCut2 as AutoTrack but has now been added to core to enhance SuperCollider's realtime machine listening options.</div></div><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/BeatTrack.schelp'>/usr/share/SuperCollider/HelpSource/Classes/BeatTrack.schelp</a><br>link::Classes/BeatTrack::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

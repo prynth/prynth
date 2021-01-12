@@ -1,0 +1,235 @@
+<!doctype html><html lang='en'><head><title>FM7 | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'FM7';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>FM7:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc3'><a href='#*arAlgo'>arAlgo</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+<li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*algoSpec'>algoSpec</a> </li>
+<li class='toc3'><a href='#*controlArraySize'>controlArraySize</a> </li>
+<li class='toc3'><a href='#*controlMatrix'>controlMatrix</a> </li>
+<li class='toc3'><a href='#*modArraySize'>modArraySize</a> </li>
+<li class='toc3'><a href='#*modMatrix'>modMatrix</a> </li>
+<li class='toc3'><a href='#*numControls'>numControls</a> </li>
+<li class='toc3'><a href='#*numOperators'>numOperators</a> </li>
+<li class='toc3'><a href='#*numRequiredInputs'>numRequiredInputs</a> </li>
+</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#Examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators'>Generators</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators>Deterministic'>Deterministic</a></span>
+</div><h1>FM7<span id='superclasses'> : <a href="../Classes/MultiOutUGen.html">MultiOutUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Phase modulation oscillator matrix.</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/SkUGens/FM7.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/SkUGens/FM7.sc'>FM7.sc</a></div></div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>FM7 implements a 6x6 oscillator matrix, where each oscillator's phase can be modulated by any of the other oscillators' output.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>FM7.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>ctlMatrix</span>, <span class='argstr'>modMatrix</span>)</h3>
+<div class='method'>
+<p>The UGen expects two matrices: one for oscillator parameter control, one for phase modulation. It outputs six channels, one for each oscillator. To select specific outputs, you can use array methods like <code>at(indices)</code> or <code>slice(indices)</code>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>ctlMatrix<td class='argumentdesc'>
+<p>specifies the three parameters <strong>frequency</strong> (can be modulated at control rate), <strong>phase</strong> (set at initialization only) and <strong>amplitude</strong>.(control rate):<textarea class='editor'>// freq, phase, amp
+[ [ 300, 0,    1   ],
+  [ 400, pi/2, 1   ],
+  [ 730, 0,    0.5 ],
+  [ 0,   0,    0   ],
+  [ 0,   0,    0   ],
+  [ 0,   0,    0   ] ]</textarea>
+<tr><td class='argumentname'>modMatrix<td class='argumentdesc'>
+<p>The modulation matrix specifies the amount of modulation each oscillator output has on another oscillator's phase. Row i in the matrix refer to oscillator i's phase input and the columns denote the amount of phase modulation in radians.
+<p>The UGen outputs the six individual oscillator signals.<textarea class='editor'>(
+{
+    var ctls, mods, chans;
+    ctls = [
+        // freq, phase, amp
+        [LFNoise1.kr(0.5).range(300, 310), 0, 1],
+        [LFNoise1.kr(0.5).exprange(3, 310), 0, 1],
+        [LFNoise1.kr(0.5).exprange(3, 100), 0, 1],
+        [LFNoise1.kr(0.5).exprange(3, 100), 0, 1],
+        [LFNoise1.kr(0.5).exprange(3, 100), 0, 1],
+        [LFNoise1.kr(0.5).exprange(3, 100), 0, 1]
+    ];
+    mods = [
+        [Line.kr(0, 0.001, 2), Line.kr(0.1, 0, 4), 0, MouseY.kr(0, 6), 0, 0],
+        [MouseX.kr(0, 6), 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0]
+    ];
+    chans = [0, 1];
+    FM7.ar(ctls, mods).slice(chans) * -12.dbamp; // using "slice" to select specific channels
+}.play;
+)</textarea>
+</table></div><h3 class='method-code'><span class='method-prefix'>FM7.</span><a class='method-name' name='*arAlgo' href='./../Overviews/Methods.html#arAlgo'>arAlgo</a>(<span class='argstr'>algo: 0</span>, <span class='argstr'>ctlMatrix</span>, <span class='argstr'>feedback: 0.0</span>)</h3>
+<div class='method'>
+<p>Provided a number for a wiring (called 'algorithm' in the FM-world), returns an instance that has this setup. All 32 algorithms from the DX7 are implemented.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>algo<td class='argumentdesc'>
+<p>The id of the algorithms [0..31]
+<p>the algo argument chooses the algorithm when the ugen is instantiated. It cannot be modulated.<tr><td class='argumentname'>ctlMatrix<td class='argumentdesc'>
+<p>See above.<tr><td class='argumentname'>feedback<td class='argumentdesc'>
+<p>One global parameter used in all places where the interconnections result in feedback.<textarea class='editor'>(
+{
+    var ctls = [
+        // freq, phase, amp
+        [LFNoise1.kr(0.5).range(300, 310), 0, 1],
+        [LFNoise1.kr(0.5).exprange(3, 310), 0, 1],
+        [LFNoise1.kr(0.5).exprange(3, 100), 0, 1],
+        [LFNoise1.kr(0.5).exprange(3, 100), 0, 1],
+        [LFNoise1.kr(0.5).exprange(3, 100), 0, 1],
+        [LFNoise1.kr(0.5).exprange(3, 100), 0, 1]
+    ];
+    FM7.arAlgo(1, ctls, MouseX.kr(0, 2))
+}.play
+
+)</textarea>
+</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>FM7.</span><a class='method-name' name='*algoSpec' href='./../Overviews/Methods.html#algoSpec'>algoSpec</a>(<span class='argstr'>algo</span>, <span class='argstr'>feedback: 0.0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>FM7.</span><a class='method-name' name='*controlArraySize' href='./../Overviews/Methods.html#controlArraySize'>controlArraySize</a></h3>
+<h3 class='method-code'><span class='method-prefix'>FM7.</span><a class='method-name' name='*controlMatrix' href='./../Overviews/Methods.html#controlMatrix'>controlMatrix</a>( <span class='argstr'>... args</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>FM7.</span><a class='method-name' name='*modArraySize' href='./../Overviews/Methods.html#modArraySize'>modArraySize</a></h3>
+<h3 class='method-code'><span class='method-prefix'>FM7.</span><a class='method-name' name='*modMatrix' href='./../Overviews/Methods.html#modMatrix'>modMatrix</a>( <span class='argstr'>... args</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>FM7.</span><a class='method-name' name='*numControls' href='./../Overviews/Methods.html#numControls'>numControls</a></h3>
+<h3 class='method-code'><span class='method-prefix'>FM7.</span><a class='method-name' name='*numOperators' href='./../Overviews/Methods.html#numOperators'>numOperators</a></h3>
+<h3 class='method-code'><span class='method-prefix'>FM7.</span><a class='method-name' name='*numRequiredInputs' href='./../Overviews/Methods.html#numRequiredInputs'>numRequiredInputs</a></h3>
+<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='Examples'>Examples</a></h2>
+<textarea class='editor'>(
+{
+    var ctls, mods, chans, freq;
+    freq = LFNoise0.kr(3).exprange(200, 310);
+    ctls = [
+        // freq, phase, amp
+        [freq, 0, 1],
+        [freq, 0, 1],
+        [LFNoise2.kr(0.5).exprange(3, 80), 0, 1],
+        [LFNoise2.kr(0.5).exprange(3, 800), 0, 1],
+        [LFNoise2.kr(0.5).exprange(3, 800), 0, 1],
+        [LFNoise2.kr(0.5).exprange(0.3, 10), 0, 1]
+    ];
+    mods = [
+        { LFNoise1.kr(0.5).max(0) } ! 6 * MouseX.kr(0, 3),
+        { LFNoise1.kr(0.5).max(0) } ! 6 * MouseY.kr(0, 3),
+        { LFNoise1.kr(0.5).max(0) } ! 6 * MouseY.kr(0, 3),
+        { LFNoise1.kr(0.5).max(0) } ! 6 * MouseX.kr(0, 3),
+        { LFNoise1.kr(0.5).max(0) } ! 6 * MouseY.kr(0, 3),
+        { LFNoise1.kr(0.5).max(0) } ! 6 * MouseY.kr(0, 3)
+    ];
+    chans = FM7.ar(ctls, mods).slice([0, 1]) * -12.dbamp;
+}.play;
+)
+
+
+(
+// Courtesy Fredrik Olofsson (2008)
+Routine.run{
+    var syn, time = 3; // Allow each patch to run for 16sec / 8bars
+    inf.do{|i|
+        ("// FM7 patch"+i).post;
+        syn= ("
+            (
+            var x= #"++({{{ |i| rrand(0.5, 1.5).round(0.5)}!4}!3}!6).asCompileString++";
+            var y= #"++({{{ |i| rrand(0.2, 1.6).round(0.5)}!4}!6}!6).asCompileString++";
+            {
+                var ctls= x.collect{|a| a.collect{|b| LFSaw.kr(*b)}};
+                var mods= y.collect{|a| a.collect{|b| LFPar.kr(*b)}};
+                var chans= #[0, 1];
+                FM7.ar(ctls, mods).slice(chans)*0.5;
+            }.play)").postln.interpret;
+        time.wait;
+        syn.free;
+    };
+};
+)
+
+(
+// Courtesy Fredrik Olofsson (2008), edited by &lt;sk&gt;
+// FM7 patch 4 generated on Thu Jun 26 18:27:12 2008
+            (
+            var x= #[ [ [ 0.0, -0.33333333333333, -1.0, 0.0 ], [ 0.75, 0.75, 0.0, -0.5 ], [ -0.5, -0.25, 0.25, -0.75 ], [ -0.5, 1.0, 1.0, 1.0 ], [ 0.0, 0.16666666666667, -0.75, -1.0 ], [ 0.5, 0.5, -0.5, 0.33333333333333 ] ], [ [ -0.33333333333333, 0.5, -0.5, -0.5 ], [ 0.5, 0.75, 0.25, 0.75 ], [ -0.83333333333333, 0.25, -1.0, 0.5 ], [ 1.5, 0.25, 0.25, -0.25 ], [ -0.66666666666667, -0.66666666666667, -1.0, -0.5 ], [ -1.0, 0.0, -0.83333333333333, -0.33333333333333 ] ], [ [ 0.25, -0.5, -0.5, -1.0 ], [ -0.5, 1.0, -1.5, 0.0 ], [ -1.0, -1.5, -0.5, 0.0 ], [ 0.5, -1.0, 1.1666666666667, -0.5 ], [ 0.83333333333333, -0.75, -1.5, 0.5 ], [ 0.25, -1.0, 0.5, 1.0 ] ], [ [ 1.0, 0.33333333333333, 0.0, -0.75 ], [ -0.25, 0.0, 0.0, -0.5 ], [ -0.5, -0.5, 0.0, 0.5 ], [ 1.0, 0.75, 0.5, 0.5 ], [ 0.0, 1.5, -0.5, 0.0 ], [ 1.0, 0.0, -0.25, -0.5 ] ], [ [ 0.5, -0.25, 0.0, 0.33333333333333 ], [ 0.25, -0.75, 0.33333333333333, -1.0 ], [ -0.25, -0.5, 0.25, -1.1666666666667 ], [ 0.0, 0.25, 0.5, 0.16666666666667 ], [ -1.0, -0.5, 0.83333333333333, -0.5 ], [ 0.83333333333333, -0.75, -0.5, 0.0 ] ], [ [ 0.0, -0.75, -0.16666666666667, 0.0 ], [ 1.0, 0.5, 0.5, 0.0 ], [ -0.5, 0.0, -0.5, 0.0 ], [ -0.5, -0.16666666666667, 0.0, 0.5 ], [ -0.25, 0.16666666666667, -0.75, 0.25 ], [ -1.1666666666667, -1.3333333333333, -0.16666666666667, 1.5 ] ] ];
+            var y= #[ [ [ 0.0, -0.5, 1.0, 0.0 ], [ -0.5, 1.0, 0.5, -0.5 ], [ 0.0, 0.33333333333333, 1.0, 1.0 ] ], [ [ -0.5, 0.5, 1.0, 1.0 ], [ 0.0, 0.33333333333333, 0.0, 1.5 ], [ -0.5, 0.83333333333333, 1.0, 0.0 ] ], [ [ 0.25, -0.66666666666667, 0.25, 0.0 ], [ 0.5, -0.5, -0.5, -0.5 ], [ 0.5, -0.5, -0.75, 0.83333333333333 ] ], [ [ -0.25, 1.0, 0.0, 0.33333333333333 ], [ -1.25, -0.25, 0.5, 0.0 ], [ 0.0, -1.25, -0.25, -0.5 ] ], [ [ 0.75, -0.25, 1.5, 0.0 ], [ 0.25, -1.5, 0.5, 0.5 ], [ -0.5, -0.5, -0.5, -0.25 ] ], [ [ 0.0, 0.5, -0.5, 0.25 ], [ 0.25, 0.5, -0.33333333333333, 0.0 ], [ 1.0, 0.5, -0.16666666666667, 0.5 ] ] ];
+            {
+                var ctls= x.collect{|a| a.collect{|b| SinOsc.ar(*b)}};
+                var mods= y.collect{|a| a.collect{|b| Pulse.ar(*b)}};
+                var chans= #[0, 1, 2, 4, 5];
+                (FM7.ar(ctls, mods).slice(chans) * [1, 1, LFSaw.kr(0.1).range(0, -12.dbamp), 1, -3.dbamp]).clump(2).sum*0.5;
+            }.play)
+)
+
+(
+// Courtesy Fredrik Olofsson (2008), edited by &lt;sk&gt;
+// FM7 patch 4 generated on Thu Jun 26 18:27:12 2008
+            (
+            var x= #[ [ [ 0.0, -0.33333333333333, -1.0, 0.0 ], [ 0.75, 0.75, 0.0, -0.5 ], [ -0.5, -0.25, 0.25, -0.75 ], [ -0.5, 1.0, 1.0, 1.0 ], [ 0.0, 0.16666666666667, -0.75, -1.0 ], [ 0.5, 0.5, -0.5, 0.33333333333333 ] ], [ [ -0.33333333333333, 0.5, -0.5, -0.5 ], [ 0.5, 0.75, 0.25, 0.75 ], [ -0.83333333333333, 0.25, -1.0, 0.5 ], [ 1.5, 0.25, 0.25, -0.25 ], [ -0.66666666666667, -0.66666666666667, -1.0, -0.5 ], [ -1.0, 0.0, -0.83333333333333, -0.33333333333333 ] ], [ [ 0.25, -0.5, -0.5, -1.0 ], [ -0.5, 1.0, -1.5, 0.0 ], [ -1.0, -1.5, -0.5, 0.0 ], [ 0.5, -1.0, 1.1666666666667, -0.5 ], [ 0.83333333333333, -0.75, -1.5, 0.5 ], [ 0.25, -1.0, 0.5, 1.0 ] ], [ [ 1.0, 0.33333333333333, 0.0, -0.75 ], [ -0.25, 0.0, 0.0, -0.5 ], [ -0.5, -0.5, 0.0, 0.5 ], [ 1.0, 0.75, 0.5, 0.5 ], [ 0.0, 1.5, -0.5, 0.0 ], [ 1.0, 0.0, -0.25, -0.5 ] ], [ [ 0.5, -0.25, 0.0, 0.33333333333333 ], [ 0.25, -0.75, 0.33333333333333, -1.0 ], [ -0.25, -0.5, 0.25, -1.1666666666667 ], [ 0.0, 0.25, 0.5, 0.16666666666667 ], [ -1.0, -0.5, 0.83333333333333, -0.5 ], [ 0.83333333333333, -0.75, -0.5, 0.0 ] ], [ [ 0.0, -0.75, -0.16666666666667, 0.0 ], [ 1.0, 0.5, 0.5, 0.0 ], [ -0.5, 0.0, -0.5, 0.0 ], [ -0.5, -0.16666666666667, 0.0, 0.5 ], [ -0.25, 0.16666666666667, -0.75, 0.25 ], [ -1.1666666666667, -1.3333333333333, -0.16666666666667, 1.5 ] ] ];
+            var y= #[ [ [ 0.0, -0.5, 1.0, 0.0 ], [ -0.5, 1.0, 0.5, -0.5 ], [ 0.0, 0.33333333333333, 1.0, 1.0 ] ], [ [ -0.5, 0.5, 1.0, 1.0 ], [ 0.0, 0.33333333333333, 0.0, 1.5 ], [ -0.5, 0.83333333333333, 1.0, 0.0 ] ], [ [ 0.25, -0.66666666666667, 0.25, 0.0 ], [ 0.5, -0.5, -0.5, -0.5 ], [ 0.5, -0.5, -0.75, 0.83333333333333 ] ], [ [ -0.25, 1.0, 0.0, 0.33333333333333 ], [ -1.25, -0.25, 0.5, 0.0 ], [ 0.0, -1.25, -0.25, -0.5 ] ], [ [ 0.75, -0.25, 1.5, 0.0 ], [ 0.25, -1.5, 0.5, 0.5 ], [ -0.5, -0.5, -0.5, -0.25 ] ], [ [ 0.0, 0.5, -0.5, 0.25 ], [ 0.25, 0.5, -0.33333333333333, 0.0 ], [ 1.0, 0.5, -0.16666666666667, 0.5 ] ] ];
+            {
+                var ctls= x.collect{|a| a.collect{|b| SinOsc.ar(*b)}};
+                var mods= y.collect{|a| a.collect{|b| Pulse.ar(*b)}};
+                var chans= #[0, 1, 2, 4, 5];
+                (Fold.ar(FM7.ar(ctls, mods), -0.2, 0.8).slice(chans) * [1, 1, LFSaw.kr(0.1).range(0, -12.dbamp), 1, -3.dbamp]).clump(2).sum*0.5;
+            }.play)
+)
+
+(
+// Courtesy Fredrik Olofsson (2008), edited by &lt;sk&gt;
+// FM7 patch 4 generated on Thu Jun 26 18:27:12 2008
+            (
+            var x= #[ [ [ 0.0, -0.33333333333333, -1.0, 0.0 ], [ 0.75, 0.75, 0.0, -0.5 ], [ -0.5, -0.25, 0.25, -0.75 ], [ -0.5, 1.0, 1.0, 1.0 ], [ 0.0, 0.16666666666667, -0.75, -1.0 ], [ 0.5, 0.5, -0.5, 0.33333333333333 ] ], [ [ -0.33333333333333, 0.5, -0.5, -0.5 ], [ 0.5, 0.75, 0.25, 0.75 ], [ -0.83333333333333, 0.25, -1.0, 0.5 ], [ 1.5, 0.25, 0.25, -0.25 ], [ -0.66666666666667, -0.66666666666667, -1.0, -0.5 ], [ -1.0, 0.0, -0.83333333333333, -0.33333333333333 ] ], [ [ 0.25, -0.5, -0.5, -1.0 ], [ -0.5, 1.0, -1.5, 0.0 ], [ -1.0, -1.5, -0.5, 0.0 ], [ 0.5, -1.0, 1.1666666666667, -0.5 ], [ 0.83333333333333, -0.75, -1.5, 0.5 ], [ 0.25, -1.0, 0.5, 1.0 ] ], [ [ 1.0, 0.33333333333333, 0.0, -0.75 ], [ -0.25, 0.0, 0.0, -0.5 ], [ -0.5, -0.5, 0.0, 0.5 ], [ 1.0, 0.75, 0.5, 0.5 ], [ 0.0, 1.5, -0.5, 0.0 ], [ 1.0, 0.0, -0.25, -0.5 ] ], [ [ 0.5, -0.25, 0.0, 0.33333333333333 ], [ 0.25, -0.75, 0.33333333333333, -1.0 ], [ -0.25, -0.5, 0.25, -1.1666666666667 ], [ 0.0, 0.25, 0.5, 0.16666666666667 ], [ -1.0, -0.5, 0.83333333333333, -0.5 ], [ 0.83333333333333, -0.75, -0.5, 0.0 ] ], [ [ 0.0, -0.75, -0.16666666666667, 0.0 ], [ 1.0, 0.5, 0.5, 0.0 ], [ -0.5, 0.0, -0.5, 0.0 ], [ -0.5, -0.16666666666667, 0.0, 0.5 ], [ -0.25, 0.16666666666667, -0.75, 0.25 ], [ -1.1666666666667, -1.3333333333333, -0.16666666666667, 1.5 ] ] ];
+            var y= #[ [ [ 0.0, -0.5, 1.0, 0.0 ], [ -0.5, 1.0, 0.5, -0.5 ], [ 0.0, 0.33333333333333, 1.0, 1.0 ] ], [ [ -0.5, 0.5, 1.0, 1.0 ], [ 0.0, 0.33333333333333, 0.0, 1.5 ], [ -0.5, 0.83333333333333, 1.0, 0.0 ] ], [ [ 0.25, -0.66666666666667, 0.25, 0.0 ], [ 0.5, -0.5, -0.5, -0.5 ], [ 0.5, -0.5, -0.75, 0.83333333333333 ] ], [ [ -0.25, 1.0, 0.0, 0.33333333333333 ], [ -1.25, -0.25, 0.5, 0.0 ], [ 0.0, -1.25, -0.25, -0.5 ] ], [ [ 0.75, -0.25, 1.5, 0.0 ], [ 0.25, -1.5, 0.5, 0.5 ], [ -0.5, -0.5, -0.5, -0.25 ] ], [ [ 0.0, 0.5, -0.5, 0.25 ], [ 0.25, 0.5, -0.33333333333333, 0.0 ], [ 1.0, 0.5, -0.16666666666667, 0.5 ] ] ];
+            {
+                var ctls= x.collect{|a| a.collect{|b| SinOsc.ar(*b+LFNoise0.kr(0.5).range(-0.007,0.005))}};
+                var mods= y.collect{|a| a.collect{|b| Pulse.ar(*b)}};
+                var chans= #[0, 1, 2, 4, 5].scramble;
+                (FM7.ar(ctls, mods).slice(chans) * [1, 1, LFSaw.kr(0.1).range(0, -12.dbamp), 1, -3.dbamp]).clump(2).sum*0.5;
+            }.play)
+)
+
+(
+// Courtesy Fredrik Olofsson (2008), edited by &lt;sk&gt;
+// FM7 patch 4 generated on Thu Jun 26 18:27:12 2008
+            (
+            var x= #[ [ [ 0.0, -0.33333333333333, -1.0, 0.0 ], [ 0.75, 0.75, 0.0, -0.5 ], [ -0.5, -0.25, 0.25, -0.75 ], [ -0.5, 1.0, 1.0, 1.0 ], [ 0.0, 0.16666666666667, -0.75, -1.0 ], [ 0.5, 0.5, -0.5, 0.33333333333333 ] ], [ [ -0.33333333333333, 0.5, -0.5, -0.5 ], [ 0.5, 0.75, 0.25, 0.75 ], [ -0.83333333333333, 0.25, -1.0, 0.5 ], [ 1.5, 0.25, 0.25, -0.25 ], [ -0.66666666666667, -0.66666666666667, -1.0, -0.5 ], [ -1.0, 0.0, -0.83333333333333, -0.33333333333333 ] ], [ [ 0.25, -0.5, -0.5, -1.0 ], [ -0.5, 1.0, -1.5, 0.0 ], [ -1.0, -1.5, -0.5, 0.0 ], [ 0.5, -1.0, 1.1666666666667, -0.5 ], [ 0.83333333333333, -0.75, -1.5, 0.5 ], [ 0.25, -1.0, 0.5, 1.0 ] ], [ [ 1.0, 0.33333333333333, 0.0, -0.75 ], [ -0.25, 0.0, 0.0, -0.5 ], [ -0.5, -0.5, 0.0, 0.5 ], [ 1.0, 0.75, 0.5, 0.5 ], [ 0.0, 1.5, -0.5, 0.0 ], [ 1.0, 0.0, -0.25, -0.5 ] ], [ [ 0.5, -0.25, 0.0, 0.33333333333333 ], [ 0.25, -0.75, 0.33333333333333, -1.0 ], [ -0.25, -0.5, 0.25, -1.1666666666667 ], [ 0.0, 0.25, 0.5, 0.16666666666667 ], [ -1.0, -0.5, 0.83333333333333, -0.5 ], [ 0.83333333333333, -0.75, -0.5, 0.0 ] ], [ [ 0.0, -0.75, -0.16666666666667, 0.0 ], [ 1.0, 0.5, 0.5, 0.0 ], [ -0.5, 0.0, -0.5, 0.0 ], [ -0.5, -0.16666666666667, 0.0, 0.5 ], [ -0.25, 0.16666666666667, -0.75, 0.25 ], [ -1.1666666666667, -1.3333333333333, -0.16666666666667, 1.5 ] ] ];
+            var y= #[ [ [ 0.0, -0.5, 1.0, 0.0 ], [ -0.5, 1.0, 0.5, -0.5 ], [ 0.0, 0.33333333333333, 1.0, 1.0 ] ], [ [ -0.5, 0.5, 1.0, 1.0 ], [ 0.0, 0.33333333333333, 0.0, 1.5 ], [ -0.5, 0.83333333333333, 1.0, 0.0 ] ], [ [ 0.25, -0.66666666666667, 0.25, 0.0 ], [ 0.5, -0.5, -0.5, -0.5 ], [ 0.5, -0.5, -0.75, 0.83333333333333 ] ], [ [ -0.25, 1.0, 0.0, 0.33333333333333 ], [ -1.25, -0.25, 0.5, 0.0 ], [ 0.0, -1.25, -0.25, -0.5 ] ], [ [ 0.75, -0.25, 1.5, 0.0 ], [ 0.25, -1.5, 0.5, 0.5 ], [ -0.5, -0.5, -0.5, -0.25 ] ], [ [ 0.0, 0.5, -0.5, 0.25 ], [ 0.25, 0.5, -0.33333333333333, 0.0 ], [ 1.0, 0.5, -0.16666666666667, 0.5 ] ] ];
+            {
+                var ctls= x.collect{|a| a.collect{|b| VarSaw.ar(*b)}};
+                var mods= y.collect{|a| a.collect{|b| VarSaw.ar(*b)}};
+                var chans= #[0, 1, 5, 4, 2];
+                (Fold.ar(FM7.ar(ctls, mods).slice(chans), -0.3, 0.8) * [1, 1, 1, 1, LFPar.kr(0.05).range(-40.dbamp, -60.dbamp)]).clump(2).sum;
+            }.play)
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/SkUGens/HelpSource/Classes/FM7.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/SkUGens/HelpSource/Classes/FM7.schelp</a><br>link::Classes/FM7::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

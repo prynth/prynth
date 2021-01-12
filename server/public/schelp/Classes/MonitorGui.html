@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>MonitorGui | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>MonitorGui | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'MonitorGui';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>MonitorGui:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -42,23 +47,23 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-getState'>getState</a> </li>
 <li class='toc3'><a href='#-checkUpdate'>checkUpdate</a> </li>
 </ul><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
-</ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
- | <span id='categories'><a href='./../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JITLib>GUI'>GUI</a> | <a href='./../Browse.html#Live Coding'>Live Coding</a></span>
+ | <span id='categories'><a href='./../Browse.html#JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../Browse.html#JITLib>GUI'>GUI</a> | <a href='./../Browse.html#Live Coding'>Live Coding</a></span>
 </div><h1>MonitorGui<span id='superclasses'> : <a href="../Classes/JITGui.html">JITGui</a> : <a href="../Classes/Object.html">Object</a></span>
 </h1>
 <div id='summary'>display and control a Monitor</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/MonitorGui.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/GUI/MonitorGui.sc'>MonitorGui.sc</a></div><div id='related'>See also: <a href="./../Classes/NodeProxy.html">NodeProxy</a>, <a href="./../Classes/Ndef.html">Ndef</a>, <a href="./../Classes/JITGui.html">JITGui</a>, <a href="./../Classes/NdefGui.html">NdefGui</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/MonitorGui.sc' title='/usr/share/SuperCollider/SCClassLibrary/JITLib/GUI/MonitorGui.sc'>MonitorGui.sc</a></div><div id='related'>See also: <a href="./../Classes/NodeProxy.html">NodeProxy</a>, <a href="./../Classes/Ndef.html">Ndef</a>, <a href="./../Classes/JITGui.html">JITGui</a>, <a href="./../Classes/NdefGui.html">NdefGui</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>MonitorGui displays the state of a <a href="./../Classes/NodeProxy.html">NodeProxy</a>'s <a href="./../Classes/Monitor.html">Monitor</a>. It is used in <a href="./../Classes/NdefGui.html">NdefGui</a>, <a href="./../Classes/ProxyMixer.html">ProxyMixer</a>, and <a href="./../Classes/NdefMixer.html">NdefMixer</a>.<h3><a class='anchor' name='First%20examples'>First examples</a></h3>
-<pre class='code prettyprint lang-sc'>s.boot;
+<textarea class='editor'>s.boot;
 Ndef(\a).ar;
 Ndef(\k).kr;
 
@@ -79,12 +84,12 @@ Ndef(\a).vol_(0.25);
     // NOTE: shift-clicking the play button opens a playN dialog!
 
 Ndef(\a).stop;
-Ndef(\a).play(0);</pre>
+Ndef(\a).play(0);</textarea>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3><a class='anchor' name='Creation'>Creation</a></h3>
 <h3 class='method-code'><span class='method-prefix'>MonitorGui.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>object</span>, <span class='argstr'>parent</span>, <span class='argstr'>bounds</span>, <span class='argstr'>makeSkip: true</span>, <span class='argstr'>options: [  ]</span>)</h3>
 <div class='method'>
-<p><pre class='code prettyprint lang-sc'>g = MonitorGui(Ndef(\a));    // barebones
+<p><textarea class='editor'>g = MonitorGui(Ndef(\a));    // barebones
 (
 w = Window.new.front;
 w.addFlowLayout;
@@ -102,7 +107,7 @@ MonitorGui.new(Ndef(\a), options: [\level])
 MonitorGui.new(Ndef(\a), options: [\name, \fade])
 
     // all of 'em
-MonitorGui.new(Ndef(\a), options: [\level, \name, \fade])</pre>
+MonitorGui.new(Ndef(\a), options: [\level, \name, \fade])</textarea>
 <h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>object<td class='argumentdesc'>
@@ -145,4 +150,5 @@ MonitorGui.new(Ndef(\a), options: [\level, \name, \fade])</pre>
 <p>get the object's current state</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-checkUpdate' href='./../Overviews/Methods.html#checkUpdate'>checkUpdate</a></h3>
 <div class='method'>
 <p>compare previous state with current state, and update gui elements.</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
-<div id='inheritedinstmets'></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/MonitorGui.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/MonitorGui.schelp</a><br>link::Classes/MonitorGui::<br></div></div></body></html>
+<div id='inheritedinstmets'></div><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/MonitorGui.schelp'>/usr/share/SuperCollider/HelpSource/Classes/MonitorGui.schelp</a><br>link::Classes/MonitorGui::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

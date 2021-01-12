@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Control Structures | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Control Structures | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Control Structures';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Control Structures:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Basic%20Control%20Structures'>Basic Control Structures</a></li>
@@ -26,8 +31,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#.case'>case</a> </li>
 </ul><li class='toc1'><a href='#Other%20Control%20Structures'>Other Control Structures</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Inline%20optimization'>Inline optimization</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Reference</span>
@@ -42,13 +47,13 @@ var scdoc_sc_version = '3.9.3';
 <p>Control structures in SuperCollider are implemented via message sends. Here are a few of those available. See <a href="./../Reference/Syntax-Shortcuts.html">Syntax Shortcuts</a> for the various ways expressions can be written.<h2><a class='anchor' name='Basic%20Control%20Structures'>Basic Control Structures</a></h2>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='if' href='./../Overviews/Methods.html#if'>if</a></h3>
 <div class='method'>
-<p>Conditional execution is implemented via the <code class='code prettyprint lang-sc'>if</code> message. The <code class='code prettyprint lang-sc'>if</code> message is sent to an expression which must return a <a href="./../Classes/Boolean.html">Boolean</a> value. In addition it takes two arguments: a function to execute if the expression is true and another optional function to execute if the expression is false. The <code class='code prettyprint lang-sc'>if</code> message returns the value of the function which is executed. If the falseFunc is not present and the expression is false then the result of the if message is nil.<h4>Discussion:</h4>
+<p>Conditional execution is implemented via the <code>if</code> message. The <code>if</code> message is sent to an expression which must return a <a href="./../Classes/Boolean.html">Boolean</a> value. In addition it takes two arguments: a function to execute if the expression is true and another optional function to execute if the expression is false. The <code>if</code> message returns the value of the function which is executed. If the falseFunc is not present and the expression is false then the result of the if message is nil.<h4>Discussion:</h4>
 
-<p>Syntax<pre class='code prettyprint lang-sc'>if (expr, trueFunc, falseFunc);</pre>
+<p>Syntax<textarea class='editor'>if (expr, trueFunc, falseFunc);</textarea>
 
-<p>--or--<pre class='code prettyprint lang-sc'>expr.if (trueFunc, falseFunc);</pre>
+<p>--or--<textarea class='editor'>expr.if (trueFunc, falseFunc);</textarea>
 
-<p>Examples<pre class='code prettyprint lang-sc'>if ( [false, true].choose,                // Boolean expression (chooses one at random)
+<p>Examples<textarea class='editor'>if ( [false, true].choose,                // Boolean expression (chooses one at random)
     { "expression was true".postln },    // true function
     { "expression was false".postln }    // false function
 )
@@ -63,47 +68,47 @@ z.postln;
 var x;
 if (x.isNil, { x = 99 });
 x.postln;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='while' href='./../Overviews/Methods.html#while'>while</a></h3>
 <div class='method'>
 <p>The while message implements conditional execution of a loop. If the testFunc answers true when evaluated, then the bodyFunc is evaluated and the process is repeated. Once the testFunc returns false, the loop terminates.<h4>Discussion:</h4>
 
-<p>Syntax<pre class='code prettyprint lang-sc'>while ( testFunc, bodyFunc );</pre>
+<p>Syntax<textarea class='editor'>while ( testFunc, bodyFunc );</textarea>
 
-<p>--or--<pre class='code prettyprint lang-sc'>testFunc.while( bodyFunc );</pre>
+<p>--or--<textarea class='editor'>testFunc.while( bodyFunc );</textarea>
 
-<p>Example<pre class='code prettyprint lang-sc'>(
+<p>Example<textarea class='editor'>(
 i = 0;
 while ( { i &lt; 5 }, { i = i + 1; "boing".postln });
-)</pre>
+)</textarea>
 
 <p>while expressions are also optimized by the compiler if they do not contain variable declarations in the testFunc and the bodyFunc.</div><h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='for' href='./../Overviews/Methods.html#for'>for</a></h3>
 <div class='method'>
 <p>The for message implements iteration over an integer series from a starting value to an end value stepping by one each time. A function is evaluated each iteration and is passed the iterated numeric value as an argument.<h4>Discussion:</h4>
 
-<p>Syntax<pre class='code prettyprint lang-sc'>for ( startValue, endValue, function )</pre>
+<p>Syntax<textarea class='editor'>for ( startValue, endValue, function )</textarea>
 
-<p>--or--<pre class='code prettyprint lang-sc'>startValue.for ( endValue, function )</pre>
+<p>--or--<textarea class='editor'>startValue.for ( endValue, function )</textarea>
 
-<p>Example<pre class='code prettyprint lang-sc'>for (3, 7, { arg i; i.postln }); // prints values 3 through 7</pre>
+<p>Example<textarea class='editor'>for (3, 7, { arg i; i.postln }); // prints values 3 through 7</textarea>
 </div><h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='forBy' href='./../Overviews/Methods.html#forBy'>forBy</a></h3>
 <div class='method'>
 <p>The forBy selector implements iteration over an integer series with a variable step size. A function is evaluated each iteration and is passed the iterated numeric value as an argument.<h4>Discussion:</h4>
 
-<p>Syntax<pre class='code prettyprint lang-sc'>forBy ( startValue, endValue, stepValue, function );</pre>
+<p>Syntax<textarea class='editor'>forBy ( startValue, endValue, stepValue, function );</textarea>
 
-<p>--or--<pre class='code prettyprint lang-sc'>startValue.forBy ( endValue, stepValue, function );</pre>
+<p>--or--<textarea class='editor'>startValue.forBy ( endValue, stepValue, function );</textarea>
 
-<p>Example<pre class='code prettyprint lang-sc'>forBy (0, 8, 2, { arg i; i.postln }); // prints values 0 through 8 by 2's</pre>
+<p>Example<textarea class='editor'>forBy (0, 8, 2, { arg i; i.postln }); // prints values 0 through 8 by 2's</textarea>
 </div><h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='do' href='./../Overviews/Methods.html#do'>do</a></h3>
 <div class='method'>
-<p>Do is used to iterate over a <a href="./../Classes/Collection.html">Collection</a>. Positive Integers also respond to <code class='code prettyprint lang-sc'>do</code> by iterating from zero up to their value. Collections iterate, calling the function for each object they contain. Other kinds of Objects respond to do by passing themselves to the function one time. The function is called with two arguments, the item, and an iteration counter.<h4>Discussion:</h4>
+<p>Do is used to iterate over a <a href="./../Classes/Collection.html">Collection</a>. Positive Integers also respond to <code>do</code> by iterating from zero up to their value. Collections iterate, calling the function for each object they contain. Other kinds of Objects respond to do by passing themselves to the function one time. The function is called with two arguments, the item, and an iteration counter.<h4>Discussion:</h4>
 
-<p>Syntax<pre class='code prettyprint lang-sc'>do ( collection, function )</pre>
+<p>Syntax<textarea class='editor'>do ( collection, function )</textarea>
 
-<p>--or--<pre class='code prettyprint lang-sc'>collection.do(function)</pre>
+<p>--or--<textarea class='editor'>collection.do(function)</textarea>
 
-<p>Example<pre class='code prettyprint lang-sc'>[ 1, 2, "abc", (3@4) ].do({ arg item, i; [i, item].postln; });
+<p>Example<textarea class='editor'>[ 1, 2, "abc", (3@4) ].do({ arg item, i; [i, item].postln; });
 
 5.do({ arg item; item.postln }); // iterates from zero to four
 
@@ -115,20 +120,20 @@ while ( { i &lt; 5 }, { i = i + 1; "boing".postln });
 
 (8,10..20).do({ arg item; item.postln }); // iterates from eight to twenty, with stepsize two
 
-Routine({ var i=10; while { i &gt; 0 } { i.yield; i = i - 5.0.rand } }).do({ arg item; item.postln });</pre>
-<div class='note'><span class='notelabel'>NOTE:</span> The syntax <code class='code prettyprint lang-sc'>(8..20).do</code> uses an optimization to avoid generating an array that is used only for iteration (but which would be discarded thereafter). The return value of <code class='code prettyprint lang-sc'>(8..20).do({ |item| item.postln })</code> is 8, the starting value.<pre class='code prettyprint lang-sc'>(8..20) do: { |item| item.postln } // is not optimized, and returns the array.</pre>
+Routine({ var i=10; while { i &gt; 0 } { i.yield; i = i - 5.0.rand } }).do({ arg item; item.postln });</textarea>
+<div class='note'><span class='notelabel'>NOTE:</span> The syntax <code>(8..20).do</code> uses an optimization to avoid generating an array that is used only for iteration (but which would be discarded thereafter). The return value of <code>(8..20).do({ |item| item.postln })</code> is 8, the starting value.<textarea class='editor'>(8..20) do: { |item| item.postln } // is not optimized, and returns the array.</textarea>
 </div></div><h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='switch' href='./../Overviews/Methods.html#switch'>switch</a></h3>
 <div class='method'>
 <p>Object implements a switch method which allows for conditional evaluation with multiple cases. These are implemented as pairs of test objects (tested using if this == test.value) and corresponding functions to be evaluated if true. The switch statement will be inlined if the test objects are all Floats, Integers, Symbols, Chars, nil, false, true and if the functions have no variable or argument declarations. The inlined switch uses a hash lookup (which is faster than nested if statements), so it should be very fast and scale to any number of clauses.<h4>Discussion:</h4>
 
-<p>Syntax<pre class='code prettyprint lang-sc'>switch (value,
+<p>Syntax<textarea class='editor'>switch (value,
         testvalue1, trueFunction1,
         testvalue2, trueFunction2,
         ...
         testvalueN, trueFunctionN,
-        defaultFunction);</pre>
+        defaultFunction);</textarea>
 
-<p>Examples<pre class='code prettyprint lang-sc'>(
+<p>Examples<textarea class='editor'>(
 var x=0; //also try 1
 switch(x,0,{"hello"}, 1, {"goodbye"})
 )
@@ -144,9 +149,9 @@ switch (z.choose.postln,
     2,   { \wrong },
     0,   { \true }
 ).postln;
-)</pre>
+)</textarea>
 
-<p>or:<pre class='code prettyprint lang-sc'>(
+<p>or:<textarea class='editor'>(
 var x, z;
 z = [0, 1, 1.1, 1.3, 1.5, 2];
 x = switch (z.choose)
@@ -157,12 +162,12 @@ x = switch (z.choose)
     {2}   { \wrong }
     {0}   { \true };
 x.postln;
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='case' href='./../Overviews/Methods.html#case'>case</a></h3>
 <div class='method'>
 <p>Function implements a case method which allows for conditional evaluation with multiple cases. Since the receiver represents the first case this can be simply written as pairs of test functions and corresponding functions to be evaluated if true. Case is inlined and is therefore just as efficient as nested if statements.<h4>Discussion:</h4>
 
-<p>Example<pre class='code prettyprint lang-sc'>(
+<p>Example<textarea class='editor'>(
 var i, x, z;
 z = [0, 1, 1.1, 1.3, 1.5, 2];
 i = z.choose;
@@ -174,12 +179,12 @@ x = case
     { i == 2 }   { \wrong }
     { i == 0 }   { \true };
 x.postln;
-)</pre>
+)</textarea>
 </div><h2><a class='anchor' name='Other%20Control%20Structures'>Other Control Structures</a></h2>
 
 <p>Using Functions, many control structures can be defined like the ones above. In the class <a href="./../Classes/Collection.html#iteration">Collection: iteration</a> there are many more messages defined for iterating over Collections.<h2><a class='anchor' name='Inline%20optimization'>Inline optimization</a></h2>
 
-<p><code class='code prettyprint lang-sc'>if</code>, <code class='code prettyprint lang-sc'>while</code>, <code class='code prettyprint lang-sc'>switch</code> and <code class='code prettyprint lang-sc'>case</code> expressions are optimized (i.e. inlined) by the compiler if they do not contain variable declarations in the functions. The optimization plucks the code from the functions and uses a more efficient jump statement:<pre class='code prettyprint lang-sc'>(
+<p><code>if</code>, <code>while</code>, <code>switch</code> and <code>case</code> expressions are optimized (i.e. inlined) by the compiler if they do not contain variable declarations in the functions. The optimization plucks the code from the functions and uses a more efficient jump statement:<textarea class='editor'>(
 {
     if(6 == 9, {
         "hello".postln;
@@ -202,9 +207,9 @@ BYTECODES: (20)
  16   B0       TailCallReturnFromFunction
  17   C1 3A    SendSpecialMsg 'postln'
  19   F2       BlockReturn
--&gt; &lt; closed FunctionDef &gt;</pre>
+-&gt; &lt; closed FunctionDef &gt;</textarea>
 
-<p>Failure to inline due to variable declarations:<pre class='code prettyprint lang-sc'>(
+<p>Failure to inline due to variable declarations:<textarea class='editor'>(
 {
     if(6 == 9, {
         var notHere;
@@ -232,8 +237,9 @@ BYTECODES: (13)
   9   B0       TailCallReturnFromFunction
  10   C3 0B    SendSpecialMsg 'if'
  12   F2       BlockReturn
--&gt; &lt; closed FunctionDef &gt;</pre>
+-&gt; &lt; closed FunctionDef &gt;</textarea>
 
-<p>You can switch on and off the above warning (see: <a href="./../Classes/LanguageConfig.html#*postInlineWarnings">LanguageConfig: *postInlineWarnings</a>)<pre class='code prettyprint lang-sc'>LanguageConfig.postInlineWarnings_(true) // warn
-LanguageConfig.postInlineWarnings_(false) // ignore it.</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Control-Structures.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Reference/Control-Structures.schelp</a><br>link::Reference/Control-Structures::<br></div></div></body></html>
+<p>You can switch on and off the above warning (see: <a href="./../Classes/LanguageConfig.html#*postInlineWarnings">LanguageConfig: *postInlineWarnings</a>)<textarea class='editor'>LanguageConfig.postInlineWarnings_(true) // warn
+LanguageConfig.postInlineWarnings_(false) // ignore it.</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Reference/Control-Structures.schelp'>/usr/share/SuperCollider/HelpSource/Reference/Control-Structures.schelp</a><br>link::Reference/Control-Structures::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

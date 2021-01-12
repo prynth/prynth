@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>AppClock | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>AppClock | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'AppClock';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>AppClock:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -25,8 +30,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
 </ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
-</ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -36,7 +41,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Clock running on main application thread</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Clock.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Core/Clock.sc'>Clock.sc</a></div><div id='related'>See also: <a href="./../Classes/SystemClock.html">SystemClock</a>, <a href="./../Classes/TempoClock.html">TempoClock</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Core/Clock.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Core/Clock.sc'>Clock.sc</a></div><div id='related'>See also: <a href="./../Classes/SystemClock.html">SystemClock</a>, <a href="./../Classes/TempoClock.html">TempoClock</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -45,26 +50,26 @@ var scdoc_sc_version = '3.9.3';
 <p>See <a href="./../Classes/Clock.html">Clock</a> for general explanation of how clocks operate.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>AppClock.</span><a class='method-name' name='*sched' href='./../Overviews/Methods.html#sched'>sched</a>(<span class='argstr'>delta</span>, <span class='argstr'>item</span>)</h3>
 <div class='method'>
-<p>The float you return specifies the delta to resched the function for. Returning nil will stop the task from being rescheduled.<pre class='code prettyprint lang-sc'>(
+<p>The float you return specifies the delta to resched the function for. Returning nil will stop the task from being rescheduled.<textarea class='editor'>(
 AppClock.sched(0.0,{ arg time;
     ["AppClock has been playing for ",time].postln;
     rrand(0.1,0.9);
 });
-)</pre>
+)</textarea>
 
-<p><pre class='code prettyprint lang-sc'>(
+<p><textarea class='editor'>(
 AppClock.sched(2.0,{
     "2.0 seconds later".postln;
     nil;
 });
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>AppClock.</span><a class='method-name' name='*clear' href='./../Overviews/Methods.html#clear'>clear</a></h3>
 <div class='method'>
-<p>Clear the AppClock's scheduler to stop it.<pre class='code prettyprint lang-sc'>AppClock.clear;</pre>
+<p>Clear the AppClock's scheduler to stop it.<textarea class='editor'>AppClock.clear;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>AppClock.</span><a class='method-name' name='*play' href='./../Overviews/Methods.html#play'>play</a>(<span class='argstr'>task</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/Clock.html'>Clock</a></div>
 <div class='method'>
-<p>The <a href="./../Classes/Routine.html">Routine</a> (or <a href="./../Classes/Task.html">Task</a>) yields a float value indicating the delta (secs) for the AppClock to wait until resuming the Routine.<pre class='code prettyprint lang-sc'>(
+<p>The <a href="./../Classes/Routine.html">Routine</a> (or <a href="./../Classes/Task.html">Task</a>) yields a float value indicating the delta (secs) for the AppClock to wait until resuming the Routine.<textarea class='editor'>(
 var w, r;
 w = Window.new("trem", Rect(512, 256, 360, 130));
 w.front;
@@ -79,10 +84,11 @@ r = Routine({ arg appClockTime;
     w.close;
 });
 AppClock.play(r);
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>AppClock.</span><a class='method-name' name='*tick' href='./../Overviews/Methods.html#tick'>tick</a></h3>
 <div class='method'>
 <p>AppClock.tick is called periodically by the SuperCollider language interpreter. This updates the <a href="./../Classes/Scheduler.html">Scheduler</a> and causes any scheduled tasks to be executed. You should never call this method yourself.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
-<div id='inheritedinstmets'></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/AppClock.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/AppClock.schelp</a><br>link::Classes/AppClock::<br></div></div></body></html>
+<div id='inheritedinstmets'></div><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/AppClock.schelp'>/usr/share/SuperCollider/HelpSource/Classes/AppClock.schelp</a><br>link::Classes/AppClock::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Main | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Main | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Main';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Main:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -23,13 +28,15 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc3'><a href='#*version'>version</a> </li>
 <li class='toc3'><a href='#*versionAtLeast'>versionAtLeast</a> </li>
 <li class='toc3'><a href='#*versionAtMost'>versionAtMost</a> </li>
+<li class='toc3'><a href='#*scVersionMajor'>scVersionMajor</a> </li>
+<li class='toc3'><a href='#*scVersionMinor'>scVersionMinor</a> </li>
+<li class='toc3'><a href='#*scVersionPatch'>scVersionPatch</a> </li>
+<li class='toc3'><a href='#*scVersionTweak'>scVersionTweak</a> </li>
+<li class='toc3'><a href='#*scVersionPostfix'>scVersionPostfix</a> </li>
 </ul><li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
 <li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#*overwriteMsg'>overwriteMsg</a> </li>
 <li class='toc3'><a href='#*packages'>packages</a> </li>
-<li class='toc3'><a href='#*scVersionMajor'>scVersionMajor</a> </li>
-<li class='toc3'><a href='#*scVersionMinor'>scVersionMinor</a> </li>
-<li class='toc3'><a href='#*scVersionPostfix'>scVersionPostfix</a> </li>
 </ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-startup'>startup</a> </li>
 <li class='toc3'><a href='#-shutdown'>shutdown</a> </li>
@@ -45,22 +52,18 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-argv'>argv</a> </li>
 <li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 <li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
-<ul class='toc'><li class='toc3'><a href='#-applicationStart'>applicationStart</a> </li>
-<li class='toc3'><a href='#-escapeWindow'>escapeWindow</a> </li>
+<ul class='toc'><li class='toc3'><a href='#-escapeWindow'>escapeWindow</a> </li>
 <li class='toc3'><a href='#-exitFullScreen'>exitFullScreen</a> </li>
 <li class='toc3'><a href='#-hardStop'>hardStop</a> </li>
-<li class='toc3'><a href='#-isSleeping'>isSleeping</a> </li>
 <li class='toc3'><a href='#-platformClass'>platformClass</a> </li>
 <li class='toc3'><a href='#-recvOSCmessage'>recvOSCmessage</a> </li>
 <li class='toc3'><a href='#-showClassBrowser'>showClassBrowser</a> </li>
 <li class='toc3'><a href='#-showHelp'>showHelp</a> </li>
 <li class='toc3'><a href='#-showHelpBrowser'>showHelpBrowser</a> </li>
 <li class='toc3'><a href='#-showHelpSearch'>showHelpSearch</a> </li>
-<li class='toc3'><a href='#-sleep'>sleep</a> </li>
 <li class='toc3'><a href='#-stop'>stop</a> </li>
-<li class='toc3'><a href='#-wake'>wake</a> </li>
-</ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -70,13 +73,13 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>The concrete instance of Process</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/DefaultLibrary/Main.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/DefaultLibrary/Main.sc'>Main.sc</a></div><div id='related'>See also: <a href="./../Classes/StartUp.html">StartUp</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/DefaultLibrary/Main.sc' title='/usr/share/SuperCollider/SCClassLibrary/DefaultLibrary/Main.sc'>Main.sc</a></div><div id='related'>See also: <a href="./../Classes/StartUp.html">StartUp</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>Main is the concrete instance of <a href="./../Classes/Process.html">Process</a> (the runtime environment for the virtual machine and interpreter). Main overrides some methods of Process. There are two methods of interest. One is named startup and is called after the class library has been compiled. The other is called shutdown which gets called when the library gets re-compiled.<h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='thisProcess' href='./../Overviews/Methods.html#thisProcess'>thisProcess</a></h3>
 <div class='method'>
-<p>The singleton instance of Main is available through the special keyword thisProcess. For example, to find out what platform you're on:<pre class='code prettyprint lang-sc'>thisProcess.platform;    // --&gt; e.g. "an OSXPlatform", "a LinuxPlatform", ...</pre>
+<p>The singleton instance of Main is available through the special keyword thisProcess. For example, to find out what platform you're on:<textarea class='editor'>thisProcess.platform;    // --&gt; e.g. "an OSXPlatform", "a LinuxPlatform", ...</textarea>
 </div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3><a class='anchor' name='SuperCollider%20version'>SuperCollider version</a></h3>
 
@@ -84,26 +87,46 @@ var scdoc_sc_version = '3.9.3';
 <div class='method'>
 <p><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>the current version as a human readable string</div></div><h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*versionAtLeast' href='./../Overviews/Methods.html#versionAtLeast'>versionAtLeast</a>(<span class='argstr'>maj</span>, <span class='argstr'>min</span>)</h3>
+<p>the current version as a human readable string</div></div><h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*versionAtLeast' href='./../Overviews/Methods.html#versionAtLeast'>versionAtLeast</a>(<span class='argstr'>maj</span>, <span class='argstr'>min</span>, <span class='argstr'>patch</span>)</h3>
 <div class='method'>
-<p>check if we are running at least version maj.min<pre class='code prettyprint lang-sc'>Main.versionAtLeast( 3, 1 );</pre>
-
+<p>Returns <code>true</code> if we are running version maj.min.patch or newer, false otherwise. If <code>min</code> and/or <code>patch</code> are <code>nil</code>, they will be treated as wildcards. The tweak part of the version is completely ignored.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>maj<td class='argumentdesc'>
+<p>Major version number as Integer.<tr><td class='argumentname'>min<td class='argumentdesc'>
+<p>Minor version number as Integer, or <code>nil</code>.<tr><td class='argumentname'>patch<td class='argumentdesc'>
+<p>Patch version number as Integer, or <code>nil</code>.<textarea class='editor'>Main.versionAtLeast(3, 10, 4);</textarea>
+</table></div><h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*versionAtMost' href='./../Overviews/Methods.html#versionAtMost'>versionAtMost</a>(<span class='argstr'>maj</span>, <span class='argstr'>min</span>, <span class='argstr'>patch</span>)</h3>
+<div class='method'>
+<p>Returns <code>true</code> if we are running version maj.min.patch or older, false otherwise. If <code>min</code> and/or <code>patch</code> are <code>nil</code>, they will be treated as wildcards. The tweak part of the version is completely ignored.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>maj<td class='argumentdesc'>
+<p>Major version number as Integer.<tr><td class='argumentname'>min<td class='argumentdesc'>
+<p>Minor version number as Integer, or <code>nil</code>.<tr><td class='argumentname'>patch<td class='argumentdesc'>
+<p>Patch version number as Integer, or <code>nil</code>.<textarea class='editor'>Main.versionAtMost(3, 13, 9);</textarea>
+</table></div><h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*scVersionMajor' href='./../Overviews/Methods.html#scVersionMajor'>scVersionMajor</a></h3>
+<div class='method'>
 <p><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>true or false</div></div><h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*versionAtMost' href='./../Overviews/Methods.html#versionAtMost'>versionAtMost</a>(<span class='argstr'>maj</span>, <span class='argstr'>min</span>)</h3>
+<p>major version number as Integer</div></div><h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*scVersionMinor' href='./../Overviews/Methods.html#scVersionMinor'>scVersionMinor</a></h3>
 <div class='method'>
-<p>check if we are running version maj.min or older<pre class='code prettyprint lang-sc'>Main.versionAtMost( 3, 1 );</pre>
-
 <p><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>true or false</div></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<p>minor version number as Integer</div></div><h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*scVersionPatch' href='./../Overviews/Methods.html#scVersionPatch'>scVersionPatch</a></h3>
+<div class='method'>
+<p><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>patch version number as Integer</div></div><h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*scVersionTweak' href='./../Overviews/Methods.html#scVersionTweak'>scVersionTweak</a></h3>
+<div class='method'>
+<p>The "tweak" version is typically only used to distinguish pre-release versions of SC from proper releases. It may be empty.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>tweak version as a String</div></div><h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*scVersionPostfix' href='./../Overviews/Methods.html#scVersionPostfix'>scVersionPostfix</a></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/deprecated/3.10/Main.sc'>/usr/share/SuperCollider/SCClassLibrary/deprecated/3.10/Main.sc</a></div>
+<div class='method'>
+<p>Deprecated. Use <code>scVersionPatch</code> and <code>scVersionTweak</code> instead.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*overwriteMsg' href='./../Overviews/Methods.html#overwriteMsg'>overwriteMsg</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*packages' href='./../Overviews/Methods.html#packages'>packages</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Quarks/packages.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Quarks/packages.sc</a></div>
-<h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*scVersionMajor' href='./../Overviews/Methods.html#scVersionMajor'>scVersionMajor</a></h3>
-<h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*scVersionMinor' href='./../Overviews/Methods.html#scVersionMinor'>scVersionMinor</a></h3>
-<h3 class='method-code'><span class='method-prefix'>Main.</span><a class='method-name' name='*scVersionPostfix' href='./../Overviews/Methods.html#scVersionPostfix'>scVersionPostfix</a></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Quarks/packages.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Quarks/packages.sc</a></div>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-startup' href='./../Overviews/Methods.html#startup'>startup</a></h3>
 <div class='method'>
@@ -115,12 +138,12 @@ var scdoc_sc_version = '3.9.3';
 <div class='method'>
 <p>Called after SuperCollider is quit or the class library is about to be re-compiled.<h4>Discussion:</h4>
 
-<p>This will quit all audio <a href="./../Classes/Server.html">Server</a> instances, perform a platform specific shutdown (e.g. the HID subsystem is released), finally Process' shutdown method is called, resulting in successive calls to UI.shutdown, NetAddr.disconnectAll, File.closeAll, and Archive.write. To register your own shutdown code, use a call like this:<pre class='code prettyprint lang-sc'>ShutDown.add({ "Good bye!!".postln });</pre>
+<p>This will quit all audio <a href="./../Classes/Server.html">Server</a> instances, perform a platform specific shutdown (e.g. the HID subsystem is released), finally Process' shutdown method is called, resulting in successive calls to UI.shutdown, NetAddr.disconnectAll, File.closeAll, and Archive.write. To register your own shutdown code, use a call like this:<textarea class='editor'>ShutDown.add({ "Good bye!!".postln });</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-run' href='./../Overviews/Methods.html#run'>run</a></h3>
 <div class='method'>
-<p>Override this to do whatever you want, e. g. add a class extension file like this to the class library:<pre class='code prettyprint lang-sc'>+ Main {
+<p>Override this to do whatever you want, e. g. add a class extension file like this to the class library:<textarea class='editor'>+ Main {
     run { "myPatch.rtf".load }
-}</pre>
+}</textarea>
 <h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>(newFunc)<td class='argumentdesc'>
@@ -129,7 +152,7 @@ var scdoc_sc_version = '3.9.3';
 <p>Register a <a href="./../Classes/Function.html">Function</a> to be evaluated whenever SuperCollider language (the client) receives an OSC message. This will not overwrite any previously registered functions.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>func<td class='argumentdesc'>
-<p>A <a href="./../Classes/Function.html">Function</a> or similar object to be added. When evaluated, this function will be passed the arguments msg, time, replyAddr, and recvPort, corresponding to the message itself as an <a href="./../Classes/Array.html">Array</a>, the time the message was sent, the <a href="./../Classes/NetAddr.html">NetAddr</a> of the sender, and the port on which the message was received. Note that this order differs from that used by the deprecated method <a href="#-recvOSCfunc">-recvOSCfunc</a>.<pre class='code prettyprint lang-sc'>// post all incoming traffic except the server status messages
+<p>A <a href="./../Classes/Function.html">Function</a> or similar object to be added. When evaluated, this function will be passed the arguments msg, time, replyAddr, and recvPort, corresponding to the message itself as an <a href="./../Classes/Array.html">Array</a>, the time the message was sent, the <a href="./../Classes/NetAddr.html">NetAddr</a> of the sender, and the port on which the message was received. Note that this order differs from that used by the deprecated method <a href="#-recvOSCfunc">-recvOSCfunc</a>.<textarea class='editor'>// post all incoming traffic except the server status messages
 // basically the same as OSCFunc.trace
 (
 f = { |msg, time, replyAddr, recvPort|
@@ -141,7 +164,7 @@ thisProcess.addOSCRecvFunc(f);
 );
 
 // stop posting.
-thisProcess.removeOSCRecvFunc(f);</pre>
+thisProcess.removeOSCRecvFunc(f);</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-removeOSCRecvFunc' href='./../Overviews/Methods.html#removeOSCRecvFunc'>removeOSCRecvFunc</a>(<span class='argstr'>func</span>)</h3>
 <div class='method'>
 <p>Remove a <a href="./../Classes/Function.html">Function</a> from the list of those evaluated whenever SuperCollider language (the client) receives an OSC message. This will leave any other registered functions in place.<h4>Arguments:</h4>
@@ -161,11 +184,11 @@ thisProcess.removeOSCRecvFunc(f);</pre>
 <tr><td class='argumentname'>portNum<td class='argumentdesc'>
 <p>An <a href="./../Classes/Integer.html">Integer</a> indicating the port to attempt to bind.</table><h4>Returns:</h4>
 <div class='returnvalue'>
-<p>A <a href="./../Classes/Boolean.html">Boolean</a> indicating whether the attempt was successful.<pre class='code prettyprint lang-sc'>thisProcess.openUDPPort(3000); // will return true or false.
-thisProcess.openPorts; // returns all open ports</pre>
+<p>A <a href="./../Classes/Boolean.html">Boolean</a> indicating whether the attempt was successful.<textarea class='editor'>thisProcess.openUDPPort(3000); // will return true or false.
+thisProcess.openPorts; // returns all open ports</textarea>
 </div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-openPorts' href='./../Overviews/Methods.html#openPorts'>openPorts</a></h3>
 <div class='method'>
-<p>Get a collection of all active UDP ports, including the main sclang port <code class='code prettyprint lang-sc'>NetAddr.langPort</code>.<h4>Returns:</h4>
+<p>Get a collection of all active UDP ports, including the main sclang port <code>NetAddr.langPort</code>.<h4>Returns:</h4>
 <div class='returnvalue'>
 <p>A <a href="./../Classes/Set.html">Set</a>.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pid' href='./../Overviews/Methods.html#pid'>pid</a></h3>
 <div class='method'>
@@ -173,29 +196,22 @@ thisProcess.openPorts; // returns all open ports</pre>
 <div class='returnvalue'>
 <p>The operating system's pid (process ID) for the process.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recompile' href='./../Overviews/Methods.html#recompile'>recompile</a></h3>
 <div class='method'>
-<p>Recompiles the class library. This is equivalent to restarting SC. Currently macOS (SuperCollider.app) only.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-platform' href='./../Overviews/Methods.html#platform'>platform</a></h3>
+<p>Recompiles the class library.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-platform' href='./../Overviews/Methods.html#platform'>platform</a></h3>
 <div class='method'>
 <p>Get the current <a href="./../Classes/Platform.html">Platform</a></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-argv' href='./../Overviews/Methods.html#argv'>argv</a></h3>
 <div class='method'>
 <p>Get the command-line arguments passed to sclang.</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-applicationStart' href='./../Overviews/Methods.html#applicationStart'>applicationStart</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Platform/osx/extMain.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Platform/osx/extMain.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-escapeWindow' href='./../Overviews/Methods.html#escapeWindow'>escapeWindow</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-exitFullScreen' href='./../Overviews/Methods.html#exitFullScreen'>exitFullScreen</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hardStop' href='./../Overviews/Methods.html#hardStop'>hardStop</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isSleeping' href='./../Overviews/Methods.html#isSleeping'>isSleeping</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Platform/osx/extMain.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Platform/osx/extMain.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-platformClass' href='./../Overviews/Methods.html#platformClass'>platformClass</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Platform/osx/extMain.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Platform/osx/extMain.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Platform/linux/extMain.sc'>/usr/share/SuperCollider/SCClassLibrary/Platform/linux/extMain.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-recvOSCmessage' href='./../Overviews/Methods.html#recvOSCmessage'>recvOSCmessage</a>(<span class='argstr'>time</span>, <span class='argstr'>replyAddr</span>, <span class='argstr'>recvPort</span>, <span class='argstr'>msg</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-showClassBrowser' href='./../Overviews/Methods.html#showClassBrowser'>showClassBrowser</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-showHelp' href='./../Overviews/Methods.html#showHelp'>showHelp</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-showHelpBrowser' href='./../Overviews/Methods.html#showHelpBrowser'>showHelpBrowser</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-showHelpSearch' href='./../Overviews/Methods.html#showHelpSearch'>showHelpSearch</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sleep' href='./../Overviews/Methods.html#sleep'>sleep</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Platform/osx/extMain.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Platform/osx/extMain.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-stop' href='./../Overviews/Methods.html#stop'>stop</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-wake' href='./../Overviews/Methods.html#wake'>wake</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Platform/osx/extMain.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Platform/osx/extMain.sc</a></div>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Main.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Main.schelp</a><br>link::Classes/Main::<br></div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Main.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Main.schelp</a><br>link::Classes/Main::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

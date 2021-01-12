@@ -1,25 +1,30 @@
-<!doctype html><html lang='en'><head><title>16_Playbuf | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>16_Playbuf | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = '16_Playbuf';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>16_Playbuf:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Information'>Information</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Loop%20a%20sample'>Loop a sample</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/Mark_Polishook_tutorial</span>
@@ -31,7 +36,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='related'>See also: <a href="./../../Tutorials/Mark_Polishook_tutorial/00_Introductory_tutorial.html">00_Introductory tutorial</a></div>
 </div>
 
-<p>Breaking synthesis processes into parts that accomplish small well-defined tasks encourages modular design and component reuse (the oop mantra).<pre class='code prettyprint lang-sc'>(
+<p>Breaking synthesis processes into parts that accomplish small well-defined tasks encourages modular design and component reuse (the oop mantra).<textarea class='editor'>(
 // read a soundfile from disk
 b = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
 
@@ -63,22 +68,22 @@ Synth("aMonoSamplePlayer", [\bus, 0, \bufNum, b]);
 // a different playback rate for each channel makes the effect more obvious
 Synth("aMonoSamplePlayer", [\bus, 0, \bufNum, b, \rateScale, 0.99]);
 Synth("aMonoSamplePlayer", [\bus, 1, \bufNum, b, \rateScale, 1.01]);
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Information'>Information</a></h2>
 
 <p>The BufRateScale and the BufDur ugens, as shown in the previous example, control the rate at which PlayBuf plays the soundfile and the length of the envelope applied to the playbuf.
 <p>BufRateScale and BufDur are of a family of ugens that inherit from InfoUGenBase or BufInfoUGenBase.
-<p>To see the complete list of such ugens, evaluate<pre class='code prettyprint lang-sc'>InfoUGenBase.dumpClassSubtree;</pre>
+<p>To see the complete list of such ugens, evaluate<textarea class='editor'>InfoUGenBase.dumpClassSubtree;</textarea>
 
-<p>It returns<pre class='code prettyprint lang-sc'>InfoUGenBase
-[  NumRunningSynths  NumBuffers  ControlDur  NumControlBuses  SubsampleOffset  RadiansPerSample  SampleDur  ControlRate  NumInputBuses  NumAudioBuses  SampleRate  NumOutputBuses]InfoUGenBase</pre>
+<p>It returns<textarea class='editor'>InfoUGenBase
+[  NumRunningSynths  NumBuffers  ControlDur  NumControlBuses  SubsampleOffset  RadiansPerSample  SampleDur  ControlRate  NumInputBuses  NumAudioBuses  SampleRate  NumOutputBuses]InfoUGenBase</textarea>
 
-<p>Evaluate<pre class='code prettyprint lang-sc'>BufInfoUGenBase.dumpClassSubtree;</pre>
+<p>Evaluate<textarea class='editor'>BufInfoUGenBase.dumpClassSubtree;</textarea>
 
-<p>and it returns<pre class='code prettyprint lang-sc'>BufInfoUGenBase[  BufChannels  BufSampleRate  BufRateScale  BufFrames  BufDur  BufSamples]BufInfoUGenBase</pre>
+<p>and it returns<textarea class='editor'>BufInfoUGenBase[  BufChannels  BufSampleRate  BufRateScale  BufFrames  BufDur  BufSamples]BufInfoUGenBase</textarea>
 <h2><a class='anchor' name='Loop%20a%20sample'>Loop a sample</a></h2>
 
-<p>The next example uses three synthsdefs to make a chain. The first synthdef is a sample player that loops through a buffer. The second synthdef ring modulates its input. The third synthdef applies a lowpass filter.<pre class='code prettyprint lang-sc'>(
+<p>The next example uses three synthsdefs to make a chain. The first synthdef is a sample player that loops through a buffer. The second synthdef ring modulates its input. The third synthdef applies a lowpass filter.<textarea class='editor'>(
 // read a soundfile
 b = Buffer.read(s, Platform.resourceDir +/+ "sounds/a11wlk01.wav");
 
@@ -151,8 +156,8 @@ SynthDef("aLowPassFilter", { arg inBus = 0, outBus = 0, freq = 300, freqDev = 50
 // examine the nodes
 (
 s.queryAllNodes;
-)</pre>
-<pre class='code prettyprint lang-sc'>// a diagram
+)</textarea>
+<textarea class='editor'>// a diagram
 
     RootNode
     |
@@ -162,13 +167,14 @@ s.queryAllNodes;
 ~source  ~effects    // ~source and ~effects are groups
  |        |      \
  |        |       \
- synth    synth    synth</pre>
-<pre class='code prettyprint lang-sc'>// Changing argument (control) values effects timbre
+ synth    synth    synth</textarea>
+<textarea class='editor'>// Changing argument (control) values effects timbre
 (
  ~theSource.set(\rateScale, 0.95.rrand(1.05), \mul, 0.051.rrand(0.07));
  ~fx1.set(\modFreq, 800.0.rrand(1200));
  ~fx2.set(\freq, 500.rrand(700), \freqDev, 180.rrand(210), \boost, 7);
-)</pre>
+)</textarea>
 
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/17_Delays_reverbs.html">17_Delays_reverbs</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/16_Playbuf.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/16_Playbuf.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/16_Playbuf::<br></div></div></body></html>
+<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/17_Delays_reverbs.html">17_Delays_reverbs</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/16_Playbuf.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/16_Playbuf.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/16_Playbuf::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,17 +1,15 @@
-# PRYNTH DOCUMENTATION *(version 0.51)*
-
-[Assembling the PCBs](#assembling-the-pcbs)
-[Uploading the Teensy Firmware](#uploading-the-teensy-firmware)
-[Installing the Raspberry Pi Image](#installing-the-raspberry-pi-image)
-[Audio](#audio)
-[Starting Prynth for the First Time](#starting-prynth-for-the-first-time)
-[Prynth Software](#prynth-software)
-[Sensors](#sensors)
-[GUI](#gui)
-[System Settings](#system-settings)
-[Linux Tips](#linux-tips)
-[Known Issues](#known-issues)
-
+# PRYNTH DOCUMENTATION
+* [Assembling the PCBs](#assembling-the-pcbs)
+* [Uploading the Teensy Firmware](#uploading-the-teensy-firmware)
+* [Installing the Raspberry Pi Image](#installing-the-raspberry-pi-image)
+* [Audio](#audio)
+* [Starting Prynth for the First Time](#starting-prynth-for-the-first-time)
+* [Prynth Software](#prynth-software)
+* [Sensors](#sensors)
+* [GUI](#gui)
+* [System Settings](#system-settings)
+* [Linux Tips](#linux-tips)
+* [Known Issues](#known-issues)
 
 # Assembling the PCBs
 
@@ -90,13 +88,14 @@ The first step in the assembly of the Prynth Control PCB is to mount the Teensy 
 		Cons: No access to the I2C block;
 		<br>
 		1.1.1 Solder the male pins to the Teensy.
-		[![Teensy Soldering](/images/control_assembly_1_1.jpg)](images/control_assembly_1_1.jpg)
+		[![Teensy Soldering](images/control_assembly_1_1.jpg)](images/control_assembly_1_1.jpg)
 		<br>
 		1.1.2 Solder the female pins to the Muxi Control.
-		[![Teensy Soldering](/images/control_assembly_1_2.jpg)](images/control_assembly_1_2.jpg)
+		[![Teensy Soldering](images/control_assembly_1_2.jpg)](images/control_assembly_1_2.jpg)
 		<br>
 		1.1.3 Connect the Teensy to Muxi Control.
-		[![Teensy Soldering](/images/control_assembly_1_3.jpg)](images/control_assembly_1_3.jpg)
+		[![Teensy Soldering](images/control_assembly_1_3.jpg)](images/control_assembly_1_3.jpg)
+
 	<br>
 
 	1.2 **Soldering the Teensy using only male headers**
@@ -104,10 +103,10 @@ The first step in the assembly of the Prynth Control PCB is to mount the Teensy 
 		Cons: No access to the I2C block; Teensy will be not be removable.
 		<br>
 		1.2.1 Solder the male pins to the Teensy.
-		[![Teensy Soldering](/images/control_assembly_1_1.jpg)](images/control_assembly_1_1.jpg)
+		[![Teensy Soldering](images/control_assembly_1_1.jpg)](images/control_assembly_1_1.jpg)
 		<br>
 		1.2.2 Place the Teensy on Muxi Control and solder the headers.
-		[![Teensy Soldering](/images/control_assembly_2_2.jpg)](images/control_assembly_2_2.jpg)
+		[![Teensy Soldering](images/control_assembly_2_2.jpg)](images/control_assembly_2_2.jpg)
 		<br>
 		1.2.3 Clip extra leads.
 
@@ -119,24 +118,24 @@ The first step in the assembly of the Prynth Control PCB is to mount the Teensy 
 		Cons: Difficult to solder (for intermediate/advanced users); Teensy will be not be removable.
 		<br>
 		1.3.1 Set two rows of male pins on a breadboard.
-		[![Teensy Soldering](/images/control_assembly_3_1.jpg)](images/control_assembly_3_1.jpg)
+		[![Teensy Soldering](images/control_assembly_3_1.jpg)](images/control_assembly_3_1.jpg)
 		<br>
 		1.3.2 Set the Teensy on the pins, turned upside down.
-		[![Teensy Soldering](/images/control_assembly_3_2.jpg)](images/control_assembly_3_2.jpg)
+		[![Teensy Soldering](images/control_assembly_3_2.jpg)](images/control_assembly_3_2.jpg)
 		<br>
 		1.3.3 Add a very thin layer of solder on the horizontal pads. Make sure it creates a very thin film. Excess solder could create bumps that can be problematic when seating the Teensy directly on the PCB. Any excess solder can be removed using solder wick. An alternative to the solder film is the application of solder paste or flux.
-		[![Teensy Soldering](/images/control_assembly_3_3.jpg)](images/control_assembly_3_3.jpg)
+		[![Teensy Soldering](images/control_assembly_3_3.jpg)](images/control_assembly_3_3.jpg)
 		<br>
 		1.3.4 Set the Control board upside down on the Teensy's pins. Make sure the two boards are aligned, by peeking through the soldering holes. You should be able to see the pads slightly shifted outwards. Make sure the board is secure. If necessary, solder one of the other Teensy pins, but keep in mind you will desolder it afterwards.
-		[![Teensy Soldering](/images/control_assembly_3_4.jpg)](images/control_assembly_3_4.jpg)
-		[![Teensy Soldering](/images/control_assembly_3_5.jpg)](images/control_assembly_3_5.jpg)
+		[![Teensy Soldering](images/control_assembly_3_4.jpg)](images/control_assembly_3_4.jpg)
+		[![Teensy Soldering](images/control_assembly_3_5.jpg)](images/control_assembly_3_5.jpg)
 		<br>
 		1.3.5 Flow solder through each of the pins on the central column. The solder will create an air bubble that will eventually escape, creating a solder connection to the underneath pads.
-		[![Teensy Soldering](/images/control_assembly_3_6.jpg)](images/control_assembly_3_6.jpg)
+		[![Teensy Soldering](images/control_assembly_3_6.jpg)](images/control_assembly_3_6.jpg)
 		<br>
 		1.3.6 Remove the Control PCB from the breadboard pins. Put some solder wire through each of the remaining pins and apply heat to both sides, creating a soldering bridge.
-		[![Teensy Soldering](/images/control_assembly_3_7.jpg)](images/control_assembly_3_7.jpg)
-		[![Teensy Soldering](/images/control_assembly_3_8.jpg)](images/control_assembly_3_8.jpg)
+		[![Teensy Soldering](images/control_assembly_3_7.jpg)](images/control_assembly_3_7.jpg)
+		[![Teensy Soldering](images/control_assembly_3_8.jpg)](images/control_assembly_3_8.jpg)
 		<br>
 		1.3.7 Test connections with a multimeter. If necessary, flow more solder until the connection is established.
 		<br>
@@ -152,7 +151,7 @@ This female header establishes the connection between the Raspberry Pi and the C
 	<br>
 
 	2.1 Insert the 2 x 20 GPIO female header from the bottom of the board, so that the holes of the female header are facing down and the pins facing up.
-	[![Control_GPIO_Header Soldering](/images/control_assembly_gpio_header.jpg)](images/control_assembly_gpio_header.jpg)
+	[![Control_GPIO_Header Soldering](images/control_assembly_gpio_header.jpg)](images/control_assembly_gpio_header.jpg)
 	<br>
 	2.2 Solder the header from the top of the board.
 	<br>
@@ -165,7 +164,7 @@ This female header establishes the connection between the Raspberry Pi and the C
 	Install male pins according to the required connections (analog, I2C, SPI or digital).
 	<br>
 	3.1 Install male pins facing upwards.
-	[![Control_Connectors](/images/control_assembly_pins.jpg)](images/control_assembly_pins.jpg)
+	[![Control_Connectors](images/control_assembly_pins.jpg)](images/control_assembly_pins.jpg)
 	<br>
 	3.2 Solder from the bottom of the board.
 
@@ -173,13 +172,13 @@ This female header establishes the connection between the Raspberry Pi and the C
 
 4. **Result**
 	Final result (minus MIDI output). My god, it's full of pins!
-	[![Control_Full](/images/control_assembly_full.jpg)](images/control_assembly_full.jpg)
+	[![Control_Full](images/control_assembly_full.jpg)](images/control_assembly_full.jpg)
 
 <br>
 
 5. **Assembly**
 	Carefully attach the Control Board to the Raspberry Pi.
-	[![Control_Assembly](/images/control_rpi.jpg)](images/control_rpi.jpg)
+	[![Control_Assembly](images/control_rpi.jpg)](images/control_rpi.jpg)
 
 
 ## Muxi Daughterboards
@@ -188,11 +187,11 @@ The 10 analog inputs of Prynth Control can be expanded by connecting up to 10 Mu
 <br>
 1. **4051 8-channel analog multiplexer**
 	1.1 Take the Muxi PCB and the 8-channel multiplexer.
-	[![Muxi_Assembly](/images/muxi_assembly_1_1.jpg)](images/muxi_assembly_1_1.jpg)
-	[![Muxi_Assembly](/images/muxi_assembly_1_2.jpg)](images/muxi_assembly_1_2.jpg)
+	[![Muxi_Assembly](images/muxi_assembly_1_1.jpg)](images/muxi_assembly_1_1.jpg)
+	[![Muxi_Assembly](images/muxi_assembly_1_2.jpg)](images/muxi_assembly_1_2.jpg)
 	<br>
 	1.2 Position the multiplexer making sure that it is in the right orientation, which can be verified by the small indentation on the chip.
-	[![Muxi_Assembly](/images/muxi_assembly_1_3.jpg)](images/muxi_assembly_1_3.jpg)
+	[![Muxi_Assembly](images/muxi_assembly_1_3.jpg)](images/muxi_assembly_1_3.jpg)
 	<br>
 	1.3 Solder the multiplexer from the bottom of the board.
 
@@ -200,7 +199,7 @@ The 10 analog inputs of Prynth Control can be expanded by connecting up to 10 Mu
 
 2. **Connector to Prynth Control**
 	2.1 Install a 6 pin header row right in the slot above the 4051.
-	[![Muxi_Assembly](/images/muxi_assembly_1_4.jpg)](images/muxi_assembly_1_4.jpg)
+	[![Muxi_Assembly](images/muxi_assembly_1_4.jpg)](images/muxi_assembly_1_4.jpg)
 	<br>
 	2.2 Solder the pins.
 
@@ -209,7 +208,7 @@ The 10 analog inputs of Prynth Control can be expanded by connecting up to 10 Mu
 3. **Sensor connectors**
 	3.1 Populate the sensor connectors with rows of three male pins.
 	<br>
-	[![Muxi_Assembly](/images/muxi_assembly_1_5.jpg)](images/muxi_assembly_1_5.jpg)
+	[![Muxi_Assembly](images/muxi_assembly_1_5.jpg)](images/muxi_assembly_1_5.jpg)
 	3.2 Solder the pins.
 
 <br>
@@ -220,7 +219,7 @@ The 10 analog inputs of Prynth Control can be expanded by connecting up to 10 Mu
 	<br>
 
 	4.1 Insert the two leads of the resistor.
-	[![Muxi_Assembly](/images/muxi_assembly_1_6.jpg)](images/muxi_assembly_1_6.jpg)
+	[![Muxi_Assembly](images/muxi_assembly_1_6.jpg)](images/muxi_assembly_1_6.jpg)
 	<br>
 	4.2 Solder from the bottom and clip leads.
 
@@ -228,13 +227,13 @@ The 10 analog inputs of Prynth Control can be expanded by connecting up to 10 Mu
 
 5. **Result**
 	Final result (minus pulldown resistors).
-	[![Muxi_Assembly](/images/muxi_assembly_full.jpg)](images/muxi_assembly_full.jpg)
+	[![Muxi_Assembly](images/muxi_assembly_full.jpg)](images/muxi_assembly_full.jpg)
 
 <br>
 
 6. **Assembly**
 	Using a 6 pin female header cable, connect the Muxi Daughterboard to Prynth Control. Pay attention to the orientation of the cable. While facing the two boards, the pins have a direct correspondence.
-	[![Muxi_Assembly](/images/muxicontrol_muxi_connection.jpg)](images/muxicontrol_muxi_connection.jpg)
+	[![Muxi_Assembly](images/muxicontrol_muxi_connection.jpg)](images/muxicontrol_muxi_connection.jpg)
 
 ---
 
@@ -266,20 +265,20 @@ To proceed make sure to complete the steps described on the Muxi Control board a
 </table>
 
 1. Download and install the [Arduino IDE](https://www.arduino.cc/en/Main/Software).
-[![Arduino Download Page](/images/arduino_download_page.png)](images/arduino_download_page.png)
+[![Arduino Download Page](images/arduino_download_page.png)](images/arduino_download_page.png)
 <br>
 2. Open the Arduino IDE and close it again (so it is initialized before step 3).
 <br>
 3. Download and install the [Teensyduino software](https://www.pjrc.com/teensy/td_download.html) for your operating system. Instructions are included on the Teensy's download page.
-[![Teensyduino Download Page](/images/teensyduino_download_page.png)](images/teensyduino_download_page.png)
+[![Teensyduino Download Page](images/teensyduino_download_page.png)](images/teensyduino_download_page.png)
 <br>
 4. Connect the Teensy's micro USB port to the USB on the computer.
-[![teensyduino_usb_connection](/images/control_usb_connection.jpg)](images/control_usb_connection.jpg)
+[![teensyduino_usb_connection](images/control_usb_connection.jpg)](images/control_usb_connection.jpg)
 <br>
 5. Download the [Prynth's Teensy source code](https://prynth.github.io/create/downloads.html) and store it in a known location on the computer's hard drive.
 <br>
 6. Launch the Arduino IDE software and open the "Prynth.ino" file from the Teensy project folder.
-[![teensyduino_open](/images/teensy_sw_1.png)](images/teensy_sw_1.png)
+[![teensyduino_open](images/teensy_sw_1.png)](images/teensy_sw_1.png)
 <br>
 7. Choose Teensy 3.1 / 3.2 as the target board on the Arduino IDE menu.
 [![teensyduino_choose_board](images/teensy_sw_2.png)](images/teensy_sw_2.png)
@@ -390,6 +389,7 @@ The Pi's analog audio output does not use a codec. It is created through PWM mod
 <br>
 3. The web browser should load Prynth's frontend web application.
 [![Frontend](images/prynth_frontend.png)](images/prynth_frontend.png)
+Note: As of Prynth version 0.53, the first boot will happen twice to automatically expand the filesystem. Two consecutive chimes should be heard.
 
 ---
 

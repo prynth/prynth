@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>07_SynthDefs | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>07_SynthDefs | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = '07_SynthDefs';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>07_SynthDefs:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#SynthDefs'>SynthDefs</a></li>
@@ -21,8 +26,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc1'><a href='#The%20.load%20message%20and%20the%20variable%20's''>The .load message and the variable 's'</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#The%20.send%20message%20and%20a%20remote%20server'>The .send message and a remote server</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#SynthDef%20browsers'>SynthDef browsers</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/Mark_Polishook_tutorial</span>
@@ -43,14 +48,14 @@ var scdoc_sc_version = '3.9.3';
 <p>Or, go to
 <p><a href="http://www.nist.gov/dads/HTML/graph.html">http://www.nist.gov/dads/HTML/graph.html</a><h2><a class='anchor' name='Template'>Template</a></h2>
 
-<p>Here's a template for a synthdef showing that it consists of a name and a ugenGraphFunc<pre class='code prettyprint lang-sc'>SynthDef(
+<p>Here's a template for a synthdef showing that it consists of a name and a ugenGraphFunc<textarea class='editor'>SynthDef(
     "aSynthDef",                // the 1st argument is the name
     { .... i am a ugenGraphFunc ... }    // the 2nd argument is the ugenGraphFunc
-)</pre>
+)</textarea>
 
 <p>To make the template functional<ol>
 <li>put code into the ugenGraphFunc<li>send a .load message to the synthdef</ol>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 SynthDef(
     "aSynthDef",                 // the name of the synthdef
     {                     // the ugenGraphFunc with actual code
@@ -61,16 +66,16 @@ SynthDef(
         )
     }
 ).load(s);
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='The%20.load%20message%20and%20the%20variable%20's''>The .load message and the variable 's'</a></h2>
 
 <p>The .load message writes synthdefs to disk and also sends them to the default server. The default server is defined by SuperCollider at startup time (as the localhost server) at which point it's also assigned to the variable 's'.<h2><a class='anchor' name='The%20.send%20message%20and%20a%20remote%20server'>The .send message and a remote server</a></h2>
 
-<p>On the other hand, .send message,<pre class='code prettyprint lang-sc'>SynthDef( .... ).send(s);</pre>
+<p>On the other hand, .send message,<textarea class='editor'>SynthDef( .... ).send(s);</textarea>
 
-<p>instead of a .load message<pre class='code prettyprint lang-sc'>SynthDef( .... ).load(s);</pre>
+<p>instead of a .load message<textarea class='editor'>SynthDef( .... ).load(s);</textarea>
 
-<p>is another way to get a synthdef to a server. The .send message, unlike the .load message, doesn't first write the synthdef to disk; instead it just transmits the synthdef directly to the server. This is therefore the message to use to define a synthdef on one computer but send it to another.<pre class='code prettyprint lang-sc'>(
+<p>is another way to get a synthdef to a server. The .send message, unlike the .load message, doesn't first write the synthdef to disk; instead it just transmits the synthdef directly to the server. This is therefore the message to use to define a synthdef on one computer but send it to another.<textarea class='editor'>(
 var aServer;
 aServer =
     Server(
@@ -78,14 +83,14 @@ aServer =
         NetAddr("... an ip # ...", 57110)    // a server on another computer
     );
 SynthDef( .... ).send(aServer);
-)</pre>
+)</textarea>
 <div class='note'><span class='notelabel'>NOTE:</span> Since this tutorial was written, another general purpose method was added to SynthDef. It is called <strong>.add</strong> and will be the new recommended standard instead of .load and .send.</div><h2><a class='anchor' name='SynthDef%20browsers'>SynthDef browsers</a></h2>
 
-<p>Use the synthdef browser to examine synthdefs that have been written to disk.<pre class='code prettyprint lang-sc'>(
+<p>Use the synthdef browser to examine synthdefs that have been written to disk.<textarea class='editor'>(
 // a synthdef browser
 SynthDescLib.global.read;
 SynthDescLib.global.browse;
-)</pre>
+)</textarea>
 
 <p>The middle box (in the top row) shows the names of synthdefs. Each name, when selected, causes the other boxes to display the ugens, controls, and inputs and outputs for a particular synthdef.
 <p>The box labeled "SynthDef controls" is useful because it shows the arguments that can be passed to a given synthdef.
@@ -94,4 +99,5 @@ SynthDescLib.global.browse;
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
 <p>For further context, see the <a href="./../../Classes/SynthDef.html">SynthDef</a>, <a href="./../../Classes/In.html">In</a>, <a href="./../../Classes/Out.html">Out</a>, <a href="./../../Classes/SinOsc.html">SinOsc</a>, <a href="./../../Classes/Control.html">Control</a>, <a href="./../../Classes/BinaryOpUGen.html">BinaryOpUGen</a> files in the SuperCollider help system.
 <p>////////////////////////////////////////////////////////////////////////////////////////////////////
-<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/08_Rates.html">08_Rates</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/07_SynthDefs.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Mark_Polishook_tutorial/07_SynthDefs.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/07_SynthDefs::<br></div></div></body></html>
+<p>go to <a href="./../../Tutorials/Mark_Polishook_tutorial/08_Rates.html">08_Rates</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/07_SynthDefs.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/Mark_Polishook_tutorial/07_SynthDefs.schelp</a><br>link::Tutorials/Mark_Polishook_tutorial/07_SynthDefs::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

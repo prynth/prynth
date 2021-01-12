@@ -1,0 +1,127 @@
+<!doctype html><html lang='en'><head><title>PV_ExtractRepeat | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'PV_ExtractRepeat';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>PV_ExtractRepeat:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>FFT'>FFT</a> | <a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Analysis'>Analysis</a></span>
+</div><h1>PV_ExtractRepeat<span id='superclasses'> : <a href="../Classes/PV_ChainUGen.html">PV_ChainUGen</a> : <a href="../Classes/WidthFirstUGen.html">WidthFirstUGen</a> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>extract a repeating loop out from audio</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/MCLDFFTUGens.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/MCLDFFTUGens.sc'>MCLDFFTUGens.sc</a></div></div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>If you have a signal that consists of some fixed looping audio (e.g. a beat) plus some varying content (e.g. singing), this UGen uses a simple binary-masking technique to try and separate the looping bit from the non-looping bit. The quality of the separation is quite rough, but useful in some circumstances.
+<p>Note that this unit estimates the loop characteristics online in real time, meaning it takes a few times through the loop before the separation really kicks in. This means that at any point, any novel element is included in the nonrepeating part, even if it's really a loop that's starting.
+<p>You must know the loop duration - this unit will not estimate it for you.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>PV_ExtractRepeat.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>buffer</span>, <span class='argstr'>loopbuf</span>, <span class='argstr'>loopdur</span>, <span class='argstr'>memorytime: 30</span>, <span class='argstr'>which: 0</span>, <span class='argstr'>ffthop: 0.5</span>, <span class='argstr'>thresh: 1</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>array<td class='argumentdesc'>
+<p>The array of input signals.<tr><td class='argumentname'>chain<td class='argumentdesc'>
+<p>an fft chain<tr><td class='argumentname'>loopbuf<td class='argumentdesc'>
+<p>a buffer where data about the loop is calculated/stored. num frames should be enough to hold the loop (you'll get a warning if not), num channels should be (fftsize/2 + 1).<tr><td class='argumentname'>loopdur<td class='argumentdesc'>
+<p>duration in seconds of the bit you want extracted. (You can change the loop duration on-the-fly but you'll get some unhelpful results while the unit settles in to the new loop duration.)<tr><td class='argumentname'>memorytime<td class='argumentdesc'>
+<p>how quickly (in seconds) the recursive estimation converges<tr><td class='argumentname'>which<td class='argumentdesc'>
+<p>set to 0 to extract the loop, set to 1 to extract everything else<tr><td class='argumentname'>ffthop<td class='argumentdesc'>
+<p>this should match the hop size used in the FFT. typically 0.5.<tr><td class='argumentname'>(thresh)<td class='argumentdesc'>
+<p>threshold for allocating bins to repeating/nonrepeating. Default is 1, and raising it means more gets allocated to the repeating part.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>First a toy example with synthetic material; then an example reading a WAV file from disk (you'll have to find one, and also find its bpm).<textarea class='editor'>s.boot
+// Create audio containing repeating and varying components, merged in the same channel:
+(
+x = {
+    var trigs, looplen = 2, loopy, varying;
+    trigs = Impulse.kr(6/looplen) + Impulse.kr(4/looplen);
+    loopy = BPF.ar(WhiteNoise.ar * EnvGen.ar(Env.perc(0.01, 0.3), trigs), LFCub.kr(1/looplen).exprange(100, 5000));
+    varying = Pulse.ar(LFNoise0.kr(6/looplen).exprange(100, 500).cpsmidi.round.midicps) * 0.1;
+    (loopy + varying).dup
+}.play;
+)
+// Now the thing that will attempt to separate them out again (inc a buffer for it to use):
+~loopbuf = Buffer.alloc(s, 200, 513);
+(
+y = { |which=1, active=1|
+    var son = In.ar(0);
+    var chain = FFT(LocalBuf(1024), son);
+    chain = PV_ExtractRepeat(chain, ~loopbuf, 2, memorytime:30, which:which);
+    ReplaceOut.ar(0, Select.ar(active, [son, IFFT(chain)]).dup);
+}.play(x, addAction: \addAfter);
+)
+y.set(\which, 0) // focus on the nonrepeating bit
+y.set(\which, 1) // focus on the repeating bit
+y.set(\active, 0) // back to normal
+y.set(\active, 1) // filter it again
+
+y.free;
+x.free;
+
+
+//////////////////////////////////////
+// With music:
+
+~track = "~/tmpwavs/Postal Service - Such Great Heights.mp3.2.wav".standardizePath; ~bpm=116.6;
+~track = "~/tmpwavs/Amy Winehouse - Rehab.mp3.wav".standardizePath; ~bpm=145.1;
+~looplen = 480/~bpm;
+
+b = Buffer.cueSoundFile(s, ~track, 0, 2);
+x = { DiskIn.ar(2, b) }.play;
+
+// Now the thing that will attempt to separate them out again (inc a buffer for it to use):
+~loopbuf = Buffer.alloc(s, 1000, 513);
+(
+y = { |which=1, active=1, thresh=1|
+    var son = In.ar(0);
+    var chain = FFT(LocalBuf(1024), son);
+    chain = PV_ExtractRepeat(chain, ~loopbuf, ~looplen, memorytime:30, which:which, thresh:thresh);
+    ReplaceOut.ar(0, Select.ar(active, [son, IFFT(chain)]).dup);
+}.play(x, addAction: \addAfter);
+)
+y.set(\which, 0) // focus on the nonrepeating bit
+y.set(\which, 1) // focus on the repeating bit
+y.set(\active, 0) // back to normal
+y.set(\active, 1) // filter it again
+y.set(\which, 0, \thresh, 1.5) // trying a higher threshold
+
+y.free;
+x.free;
+b.close</textarea>
+
+<p>This unit is (c) Dan Stowell, based on the technique presented in this paper (but different - adapted for online estimation and with some other little differences):
+<p>Zafar Rafii and Bryan Pardo. "A Simple Music/Voice Separation Method based on the Extraction of the Repeating Musical Structure," 36th International Conference on Acoustics, Speech and Signal Processing (ICASSP 2011), Prague, Czech Republic, May 22-27, 2011. <a href="http://www.cs.northwestern.edu/~zra446/research.html">http://www.cs.northwestern.edu/~zra446/research.html</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/HelpSource/Classes/PV_ExtractRepeat.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/MCLDUGens/HelpSource/Classes/PV_ExtractRepeat.schelp</a><br>link::Classes/PV_ExtractRepeat::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

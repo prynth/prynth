@@ -1,25 +1,30 @@
-<!doctype html><html lang='en'><head><title>Pattern Guide 06f: Server Control | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide 06f: Server Control | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'Pattern Guide 06f: Server Control';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pattern Guide 06f: Server Control:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Server%20control%20methods'>Server control methods</a></li>
 <ul class='toc'><li class='toc2'><a href='#Pproto:%20Allocating%20other%20resources%20for%20the%20duration%20of%20a%20pattern'>Pproto: Allocating other resources for the duration of a pattern</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/A-Practical-Guide</span>
@@ -33,10 +38,10 @@ var scdoc_sc_version = '3.9.3';
 <h2><a class='anchor' name='Server%20control%20methods'>Server control methods</a></h2>
 
 <p>A handful of filter patterns can isolate signals on a private bus and/or group, and also apply effect synths. A nice feature is that resources allocated at the beginning of the pattern are removed at the end. This is especially useful for effects, where you don't want to have a lot of effect synths left over taking up CPU but not processing audio.<dl>
-<dt><code class='code prettyprint lang-sc'>Pbus(pattern, dur, fadeTime, numChannels, rate)</code><dd>Creates a private group and bus for the synths played by the pattern. The group and bus are released when the pattern stops. Useful for isolating signals from different patterns.<dt><code class='code prettyprint lang-sc'>Pgroup(pattern)</code><dd>Creates a private group (without private bus) for the pattern's synths.<dt><code class='code prettyprint lang-sc'>Pfx(pattern, fxname, pairs)</code><dd><dt><code class='code prettyprint lang-sc'>Pfxb(pattern, fxname, pairs)</code><dd>Both of these patterns play an effect synth at the tail of the target group. This synth should read from the bus identified by the <code class='code prettyprint lang-sc'>out</code> argument, and write the processed signal onto the same bus using either <a href="./../../Classes/ReplaceOut.html">ReplaceOut</a> or <a href="./../../Classes/XOut.html">XOut</a>. Pfx uses whatever bus and group are specified in the incoming event. Pfxb allocates a separate bus and group for the effect and the pattern.
+<dt><code>Pbus(pattern, dur, fadeTime, numChannels, rate)</code><dd>Creates a private group and bus for the synths played by the pattern. The group and bus are released when the pattern stops. Useful for isolating signals from different patterns.<dt><code>Pgroup(pattern)</code><dd>Creates a private group (without private bus) for the pattern's synths.<dt><code>Pfx(pattern, fxname, pairs)</code><dd><dt><code>Pfxb(pattern, fxname, pairs)</code><dd>Both of these patterns play an effect synth at the tail of the target group. This synth should read from the bus identified by the <code>out</code> argument, and write the processed signal onto the same bus using either <a href="./../../Classes/ReplaceOut.html">ReplaceOut</a> or <a href="./../../Classes/XOut.html">XOut</a>. Pfx uses whatever bus and group are specified in the incoming event. Pfxb allocates a separate bus and group for the effect and the pattern.
 <p>There are a lot of permutations when it comes to signal routing and effect management, too many to discuss in depth here. Some of the main scenarios are:<ul>
-<li>Separate effects that should apply individually: the patterns and effects should be isolated on separate buses. <a href="./../../Classes/Pfxb.html">Pfxb</a> handles this isolation automatically: two patterns like <code class='code prettyprint lang-sc'>Pfxb(Pbind(...), \fxname, \effectargName, value, \name, value...)</code> will play on separate buses and their signals will not interfere with each other.<li>Effects that should apply as a chain: both effects should use the same bus, and the effect patterns should be nested to string them together. The outermost effect should use Pfxb to allocate a separate group and bus for this signal chain; inner ones should use <a href="./../../Classes/Pfx.html">Pfx</a> to piggyback on the existing bus.</ul>
-<pre class='code prettyprint lang-sc'>Pfxb(
+<li>Separate effects that should apply individually: the patterns and effects should be isolated on separate buses. <a href="./../../Classes/Pfxb.html">Pfxb</a> handles this isolation automatically: two patterns like <code>Pfxb(Pbind(...), \fxname, \effectargName, value, \name, value...)</code> will play on separate buses and their signals will not interfere with each other.<li>Effects that should apply as a chain: both effects should use the same bus, and the effect patterns should be nested to string them together. The outermost effect should use Pfxb to allocate a separate group and bus for this signal chain; inner ones should use <a href="./../../Classes/Pfx.html">Pfx</a> to piggyback on the existing bus.</ul>
+<textarea class='editor'>Pfxb(
     Pfx(
         (event pattern here),
         \synthDefNameOfFirstEffectInChain,
@@ -44,12 +49,12 @@ var scdoc_sc_version = '3.9.3';
     )
     \synthDefNameOfSecondEffectInChain,
     (argument list for the second effect)
-).play;</pre>
+).play;</textarea>
 
 <p>More complex arrangements are possible through nesting, and parallelizing Pfx or Pfxb patterns using <a href="./../../Classes/Ppar.html">Ppar</a> and its cousins.
 <p>This example uses Pfxb to isolate a pair of separately-sounding patterns on different buses, and to pass the two signals' streams through separate volume controls. The effect synth, for volume, is kept deliberately simple for the example, but of course it can do any kind of signal processing you like.
 <p>It might seem odd at first to use a gated envelope for an effect, but this is important to keep the signal's integrity. If the gate is not there, the effect synth will be n_free'd (brutally cut off), probably before the nodes played by the source pattern have finished. In this case it would produce a sudden, brief jump in volume at the end. The gate, combined with the one-second release in the envelope, keeps the effect synth around long enough to allow its source synths to become silent first.
-<p>Remember that streams made from patterns don't expose their internals. That means you can't adjust the parameters of an effect synth directly, because you have no way to find out what its node ID is. The example addresses this problem by allocating a couple of control buses for the amplitude values, and mapping the volume synths to those control buses. Then the little GUI needs only to update the control bus values.<pre class='code prettyprint lang-sc'>// Demonstrates how Pfxb isolates signals on different buses
+<p>Remember that streams made from patterns don't expose their internals. That means you can't adjust the parameters of an effect synth directly, because you have no way to find out what its node ID is. The example addresses this problem by allocating a couple of control buses for the amplitude values, and mapping the volume synths to those control buses. Then the little GUI needs only to update the control bus values.<textarea class='editor'>// Demonstrates how Pfxb isolates signals on different buses
 // The fx synth is a simple volume control here
 // but it could be more complex
 
@@ -85,14 +90,14 @@ p = Ppar([
 ]).play;
 )
 
-p.stop;</pre>
+p.stop;</textarea>
 </dl>
 
-<p><strong>Third-party extension alert</strong> : Pfx and its cousins work on the philosophy that a signal routing arrangement should be created as needed (when its subpattern is playing) and removed immediately when the pattern is finished. Another approach is to treat signal routing and effects as a persistent infrastructure, created and destroyed under the user's control (not the pattern's). JITLib's proxy system offers some support for this. MixerChannels (in the ddwMixerChannel quark) are a more explicit way. Any pattern can be played on a MixerChannel: <code class='code prettyprint lang-sc'>aMixer.play(aPattern)</code>.<h3><a class='anchor' name='Pproto:%20Allocating%20other%20resources%20for%20the%20duration%20of%20a%20pattern'>Pproto: Allocating other resources for the duration of a pattern</a></h3>
+<p><strong>Third-party extension alert</strong> : Pfx and its cousins work on the philosophy that a signal routing arrangement should be created as needed (when its subpattern is playing) and removed immediately when the pattern is finished. Another approach is to treat signal routing and effects as a persistent infrastructure, created and destroyed under the user's control (not the pattern's). JITLib's proxy system offers some support for this. MixerChannels (in the ddwMixerChannel quark) are a more explicit way. Any pattern can be played on a MixerChannel: <code>aMixer.play(aPattern)</code>.<h3><a class='anchor' name='Pproto:%20Allocating%20other%20resources%20for%20the%20duration%20of%20a%20pattern'>Pproto: Allocating other resources for the duration of a pattern</a></h3>
 
 <p>It's also possible to load sound file or wavetable buffers or play synths as part of the preparation to run a Pbind-style pattern. When the Pbind stops, those resources would be removed automatically from the server.
 <p>The mechanism to do this is a bit unlike most of the other protocols to use the server in SuperCollider. To create the resources, Pproto takes a function in which one or more Event objects contain the instructions to create them. These events should use specific event types, described in Pproto's help file. The pattern is able to clean up the resources because each event has an associated cleanup action (see the event types with cleanup class). Thus, Pproto needs only to remember the events representing the resources, and execute their cleanup actions at the end.
-<p>The Pproto help file has several complex examples that are worth reading. Here is just one simple case that loads the standard a11wlk01.wav sound file and plays fragments from it.<pre class='code prettyprint lang-sc'>(
+<p>The Pproto help file has several complex examples that are worth reading. Here is just one simple case that loads the standard a11wlk01.wav sound file and plays fragments from it.<textarea class='editor'>(
 SynthDef(\playbuf, { |bufnum, start, dur = 1, amp = 0.2, out|
     var    sig = PlayBuf.ar(1, bufnum, BufRateScale.ir(bufnum), 0, start);
     sig = sig * amp * EnvGen.kr(Env.linen(0.01, dur, 0.01), doneAction: Done.freeSelf);
@@ -120,7 +125,8 @@ s.bufferAllocator.debug;
 
 p.stop;
 
-s.bufferAllocator.debug;    // after stop, the buffer is gone</pre>
+s.bufferAllocator.debug;    // after stop, the buffer is gone</textarea>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_06e_Language_Control.html">Pattern Guide 06e: Language Control</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.html">Pattern Guide 06g: Data Sharing</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_06f_Server_Control.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_06f_Server_Control.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_06f_Server_Control::<br></div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_06g_Data_Sharing.html">Pattern Guide 06g: Data Sharing</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06f_Server_Control.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_06f_Server_Control.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_06f_Server_Control::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

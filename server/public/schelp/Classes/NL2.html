@@ -1,0 +1,172 @@
+<!doctype html><html lang='en'><head><title>NL2 | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'NL2';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>NL2:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Filters'>Filters</a></span>
+</div><h1>NL2<span id='superclasses'> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Arbitrary Non Linear Filter Equation</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/SLUGens/classes/SLUGens.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/SLUGens/classes/SLUGens.sc'>SLUGens.sc</a></div><div id='related'>See also: <a href="./../Classes/NL.html">NL</a></div>
+</div>
+
+<p>//SLUGens released under the GNU GPL as extensions for SuperCollider 3, by Nick Collins, <a href="http://composerprogrammer.com/index.html">http://composerprogrammer.com/index.html</a><a class='anchor' name='kw_SLUGens'>&nbsp;</a><h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Represents the arbitrary non-linear filter difference equation in the time domain:
+<p>y(n) = sum over terms of constant * product of x terms at individual powers * product of y terms at individual powers
+<p>This allows arbitrary crossterms in x and y, but is expensive to calculate. 
+<p>Stability is definitely not guaranteed; most equations will quickly blow-up. See the guard arguments below. It is recommended that you stick to positive exponents for signals which are within -1 to 1, else explosion of values is inevitable. 
+<p>(0.1)**(-1.26) //negative exponents cause blowup for smaller signals abs(sig) &lt; 1.0
+<p>(1.1)**(2.26) //positive exponents cause blowup for larger signals abs(sig) &gt; 1.0
+<p>You need to pass in the parameters via two buffers, of arbitrary size.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>NL2.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>input</span>, <span class='argstr'>bufnum: 0</span>, <span class='argstr'>maxsizea: 10</span>, <span class='argstr'>maxsizeb: 10</span>, <span class='argstr'>guard1: 1000.0</span>, <span class='argstr'>guard2: 100.0</span>, <span class='argstr'>mul: 1.0</span>, <span class='argstr'>add: 0.0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>input<td class='argumentdesc'>
+<p>What do you want to filter?<tr><td class='argumentname'>bufnum<td class='argumentdesc'>
+<p>A single buffer containing numcrossterms in the first index, then the specification of crossterms as (constant, num x terms, list of x index/exponent pairs, num y terms, list of y index/coefficient pairs). Buffer contents can be switched at run-time as longas this data format is strictly adherred to. <tr><td class='argumentname'>maxasize<td class='argumentdesc'>
+<p>Maximum index stored for previous outputs<tr><td class='argumentname'>maxbsize<td class='argumentdesc'>
+<p>Maximum index stored for previous inputs<tr><td class='argumentname'>guard1<td class='argumentdesc'>
+<p>Watch out for blow-up and reset if necessary; this is the value of the maximum absolute output allowed. <tr><td class='argumentname'>guard2<td class='argumentdesc'>
+<p>Watch out for blow-up and reset if necessary; this is the value of the maximum absolute change of output allowed. 
+<p>On discovering blow-up, filter output is set back to zero for all stored outputs, so that feedback cannot occur. </table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>(
+a=[2,   0.5, 1, 0, 1,  0,   -0.35, 0, 2, 5, 2, 3, 0.5]; //specification of crossterms
+c=Buffer.sendCollection(s, a, 1);
+)
+
+{SinOsc.ar(MouseX.kr(440,1760),0,0.2)}.play //without
+
+//subtle distortion
+{NL2.ar(SinOsc.ar(MouseX.kr(440,1760),0,0.5),c,1, 6).clip2(1.0)}.play //with
+
+
+
+//random buffers
+(
+a=[10]++(Array.fill(10,{var bsize, asize; bsize= rrand(1,3); asize=rrand(0,3); 
+
+[0.5.rand2,bsize]++(Array.fill(bsize,{[rrand(0,20), exprand(0.1,6)]}).flatten) ++ [asize] ++ (Array.fill(asize,{[rrand(0,20), exprand(0.1,6)]}).flatten);
+
+}).flatten);
+ //feedback coefficients
+c=Buffer.sendCollection(s, a, 1);
+)
+
+
+{NL2.ar(AudioIn.ar(1),c,21,21).clip2(1.0)}.play //with
+
+
+
+//WARNING; CAN BE VERY CPU EXPENSIVE AND NOISY!
+(
+//limited update
+r= {
+
+inf.do{
+var e; 
+var num; 
+
+num=rrand(2,10);
+
+
+e=[num]++(Array.fill(num,{var bsize, asize; bsize= rrand(1,3); asize=rrand(0,3); 
+
+[0.5.rand2,bsize]++(Array.fill(bsize,{[rrand(0,20), exprand(0.1,6)]}).flatten) ++ [asize] ++ (Array.fill(asize,{[rrand(0,20), exprand(0.1,6)]}).flatten);
+
+}).flatten);
+
+if(e.size&lt;=a.size,{
+
+c.sendCollection(e);
+});
+
+
+1.0.wait;
+}
+}.fork; 
+)
+
+r.stop;
+
+
+
+
+
+
+
+
+
+
+//larger sparse arrays; some may lead to silence
+(
+a=[10]++(Array.fill(10,{var bsize, asize; bsize= rrand(1,2); asize=rrand(0,1); 
+
+[0.7.rand2,bsize]++(Array.fill(bsize,{[rrand(0,999), exprand(0.1,6)]}).flatten) ++ [asize] ++ (Array.fill(asize,{[rrand(0,999), exprand(0.1,6)]}).flatten);
+
+}).flatten);
+ //feedback coefficients
+c=Buffer.sendCollection(s, a, 1);
+)
+
+
+{NL2.ar(AudioIn.ar(1),c,1000,1000).clip2(1.0)}.play //with
+
+
+(
+var e; 
+var num; 
+
+num=rrand(2,10);
+
+e=[num]++(Array.fill(num,{var bsize, asize; bsize= rrand(1,2); asize=rrand(0,1); 
+
+[0.7.rand2,bsize]++(Array.fill(bsize,{[rrand(0,999), exprand(0.1,6)]}).flatten) ++ [asize] ++ (Array.fill(asize,{[rrand(0,999), exprand(0.1,6)]}).flatten);
+
+}).flatten);
+
+if(e.size&lt;=a.size,{
+
+c.sendCollection(e);
+});
+
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/SLUGens/HelpSource/Classes/NL2.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/SLUGens/HelpSource/Classes/NL2.schelp</a><br>link::Classes/NL2::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

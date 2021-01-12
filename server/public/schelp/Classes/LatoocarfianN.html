@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>LatoocarfianN | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>LatoocarfianN | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'LatoocarfianN';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>LatoocarfianN:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -25,8 +30,8 @@ var scdoc_sc_version = '3.9.3';
 </ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -36,24 +41,24 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Latoocarfian chaotic generator</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/Chaos.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/Chaos.sc'>Chaos.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/LatoocarfianC.html">LatoocarfianC</a>, <a href="../Classes/LatoocarfianL.html">LatoocarfianL</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Audio/Chaos.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Audio/Chaos.sc'>Chaos.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/LatoocarfianC.html">LatoocarfianC</a>, <a href="../Classes/LatoocarfianL.html">LatoocarfianL</a></div>
 <div id='related'>See also: <a href="./../Classes/LatoocarfianL.html">LatoocarfianL</a>, <a href="./../Classes/LatoocarfianC.html">LatoocarfianC</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>A non-interpolating sound generator based on a function given in Clifford Pickover's book Chaos In Wonderland, pg 26. The function is:<pre>        x(n+1) = sin(b * y(n)) + c * sin(b * x(n))
         y(n+1) = sin(a * x(n)) + d * sin(a * y(n))</pre>
-<p>According to Pickover, parameters <code class='code prettyprint lang-sc'>a</code> and <code class='code prettyprint lang-sc'>b</code> should be in the range from -3 to +3, and parameters <code class='code prettyprint lang-sc'>c</code> and <code class='code prettyprint lang-sc'>d</code> should be in the range from 0.5 to 1.5. The function can, depending on the parameters given, give continuous chaotic output, converge to a single value (silence) or oscillate in a cycle (tone).
-<p>sclang code translation:<pre class='code prettyprint lang-sc'>(
+<p>According to Pickover, parameters <code>a</code> and <code>b</code> should be in the range from -3 to +3, and parameters <code>c</code> and <code>d</code> should be in the range from 0.5 to 1.5. The function can, depending on the parameters given, give continuous chaotic output, converge to a single value (silence) or oscillate in a cycle (tone).
+<p>sclang code translation:<textarea class='editor'>(
 var a = 1, b = 3, c = 0.5, d = 0.5, xi = 0.5, yi = 0.5, size = 64;
 plot(size.collect { var x = xi;
 xi = sin(b * yi) + (c * sin(b * xi));
 yi = sin(a * x) + (d * sin(a * yi));
 xi
 });
-)</pre>
+)</textarea>
 <div class='note'><span class='notelabel'>NOTE:</span> This UGen is experimental and not optimized currently, so is rather hoggish of CPU.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='method-code'><span class='method-prefix'>LatoocarfianN.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>freq: 22050</span>, <span class='argstr'>a: 1</span>, <span class='argstr'>b: 3</span>, <span class='argstr'>c: 0.5</span>, <span class='argstr'>d: 0.5</span>, <span class='argstr'>xi: 0.5</span>, <span class='argstr'>yi: 0.5</span>, <span class='argstr'>mul: 1</span>, <span class='argstr'>add: 0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>LatoocarfianN.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>freq: 22050</span>, <span class='argstr'>a: 1</span>, <span class='argstr'>b: 3</span>, <span class='argstr'>c: 0.5</span>, <span class='argstr'>d: 0.5</span>, <span class='argstr'>xi: 0.5</span>, <span class='argstr'>yi: 0.5</span>, <span class='argstr'>mul: 1.0</span>, <span class='argstr'>add: 0.0</span>)</h3>
 <div class='method'><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>freq<td class='argumentdesc'>
@@ -69,9 +74,9 @@ xi
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>// default initial params
-{ LatoocarfianN.ar(MouseX.kr(20, SampleRate.ir)) * 0.2 }.play(s);</pre>
-<pre class='code prettyprint lang-sc'>// randomly modulate all params
+<textarea class='editor'>// default initial params
+{ LatoocarfianN.ar(MouseX.kr(20, SampleRate.ir)) * 0.2 }.play(s);</textarea>
+<textarea class='editor'>// randomly modulate all params
 (
 { LatoocarfianN.ar(
     SampleRate.ir/4,
@@ -80,6 +85,7 @@ xi
     LFNoise2.kr(2,0.5,1.5),
     LFNoise2.kr(2,0.5,1.5)
 ) * 0.2 }.play(s);
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/LatoocarfianN.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/LatoocarfianN.schelp</a><br>link::Classes/LatoocarfianN::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/LatoocarfianN.schelp'>/usr/share/SuperCollider/HelpSource/Classes/LatoocarfianN.schelp</a><br>link::Classes/LatoocarfianN::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,42 +1,47 @@
-<!doctype html><html lang='en'><head><title>SynthDefs versus Synths | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>SynthDefs versus Synths | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'SynthDefs versus Synths';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>SynthDefs versus Synths:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
- | <span id='categories'><a href='./../Browse.html#SC3 vs SC2'>SC3 vs SC2</a></span>
+ | <span id='categories'><a href='./../Browse.html#Language'>Language</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Language>SC3 vs SC2'>SC3 vs SC2</a></span>
 </div><h1>SynthDefs versus Synths</h1>
 <div id='summary'>The use of precompiled SynthDefs as opposed to always compiling on the fly</div>
 </div>
 <div class='subheader'>
 </div>
 
-<p>In SC2 <code class='code prettyprint lang-sc'>Synth.play</code> was the standard way to compile a <em>ugenGraphFunc</em> and play it. Each time you executed <code class='code prettyprint lang-sc'>Synth.play</code>, or Spawned a new event, that function was compiled anew. SC3 on the other hand, makes use of what are called SynthDefs. A <a href="./../Classes/SynthDef.html">SynthDef</a> takes a <em>ugenGraphFunc</em> and compiles it to a kind of bytecode (sort of like Java bytecode) which can be understood by the server app. The server reads the <a href="./../Classes/SynthDef.html">SynthDef</a> and creates a synth node based upon it.
+<p>In SC2 <code>Synth.play</code> was the standard way to compile a <em>ugenGraphFunc</em> and play it. Each time you executed <code>Synth.play</code>, or Spawned a new event, that function was compiled anew. SC3 on the other hand, makes use of what are called SynthDefs. A <a href="./../Classes/SynthDef.html">SynthDef</a> takes a <em>ugenGraphFunc</em> and compiles it to a kind of bytecode (sort of like Java bytecode) which can be understood by the server app. The server reads the <a href="./../Classes/SynthDef.html">SynthDef</a> and creates a synth node based upon it.
 <p>SynthDefs can be precompiled and saved to disk. Any def saved in the synthdefs/ directory (or in any directory set in the environment variable SC_SYNTHDEF_PATH) will be loaded into memory by a local <a href="./../Classes/Server.html">Server</a> when it is booted. If the def being used in a new <a href="./../Classes/Synth.html">Synth</a> is already compiled and loaded, there is much less of a CPU spike when creating a new <a href="./../Classes/Synth.html">Synth</a> than there was in SC2.
 <p>SynthDefs can also be compiled and loaded into the <a href="./../Classes/Server.html">Server</a> without writing them to disk. This can be done while performing.
 <p>The downside of this is that precompiled SynthDefs lack some of the programmatic flexibility that was one of SC2's great strengths. Much of this flexibility is gained back however, through the ability to set and change arguments (which you build into your <em>ugenGraphFunc</em>), and through new UGens such as <a href="./../Classes/Rand.html">Rand</a> and <a href="./../Classes/TRand.html">TRand</a>.
 <p>When maximum flexibility is required, it is still possible to compile and send SynthDefs 'on the fly', albeit with SC2-like CPU spikes and a small amount of messaging latency.
-<p>It is important to understand that creating and sending SynthDefs is <em>asynchronous</em>. This means that it is impossible to determine precisely how long it will take to compile and send a <a href="./../Classes/SynthDef.html">SynthDef</a>, and thus when it will be available for creating new Synths. A simple way around this is to execute code in blocks, selecting them one at a time. More complicated is to use completion messages. <code class='code prettyprint lang-sc'>SynthDef.play</code> takes care of this for you, and returns a <a href="./../Classes/Synth.html">Synth</a> object which you can then manipulate. See the example below
+<p>It is important to understand that creating and sending SynthDefs is <em>asynchronous</em>. This means that it is impossible to determine precisely how long it will take to compile and send a <a href="./../Classes/SynthDef.html">SynthDef</a>, and thus when it will be available for creating new Synths. A simple way around this is to execute code in blocks, selecting them one at a time. More complicated is to use completion messages. <code>SynthDef.play</code> takes care of this for you, and returns a <a href="./../Classes/Synth.html">Synth</a> object which you can then manipulate. See the example below
 <p>Another important distinction is between Synth in SC2 and <a href="./../Classes/Synth.html">Synth</a> in SC3. The latter is a client-side object which represents a synth node on the server. Although it has some of the same methods, it does not function in the same way. There is no top level Synth in SC3, within which all scheduling and creation of other Synths occurs. There are only <a href="./../Classes/Synth.html">Synth</a> objects which represent synth nodes on the server. These can be created at any time, within any scope.<h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>s.boot;
+<textarea class='editor'>s.boot;
 
 // Compile a SynthDef and write it to disk
 (
@@ -88,6 +93,7 @@ SynthDef("help-RandFreq", { arg out = 0;
         )
     )
 }).play(s);
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/SynthDefsVsSynths.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/SynthDefsVsSynths.schelp</a><br>link::Guides/SynthDefsVsSynths::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/SynthDefsVsSynths.schelp'>/usr/share/SuperCollider/HelpSource/Guides/SynthDefsVsSynths.schelp</a><br>link::Guides/SynthDefsVsSynths::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

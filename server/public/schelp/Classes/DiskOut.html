@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>DiskOut | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>DiskOut | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'DiskOut';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>DiskOut:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -26,8 +31,8 @@ var scdoc_sc_version = '3.9.3';
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
 <ul class='toc'><li class='toc2'><a href='#Object%20Style'>Object Style</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Messaging%20Style'>Messaging Style</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -37,7 +42,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Record to a soundfile to disk.</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/DiskIO.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/DiskIO.sc'>DiskIO.sc</a></div><div id='related'>See also: <a href="./../Classes/RecordBuf.html">RecordBuf</a>, <a href="./../Classes/DiskIn.html">DiskIn</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Audio/DiskIO.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Audio/DiskIO.sc'>DiskIO.sc</a></div><div id='related'>See also: <a href="./../Classes/RecordBuf.html">RecordBuf</a>, <a href="./../Classes/DiskIn.html">DiskIn</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -46,9 +51,9 @@ var scdoc_sc_version = '3.9.3';
 
 <p>Recording to disk involves several steps, which should be taken in the right order. <a href="./../Classes/Server.html#-record">Server: -record</a> performs these steps for you. To record arbitrary buses using DiskOut explicitly, make sure to do the following:<ol>
 <li>Define a DiskOut <a href="./../Classes/SynthDef.html">SynthDef</a>, as shown in the example below.<li>Allocate a <a href="./../Classes/Buffer.html">Buffer</a> for recording.<ul>
-<li>The buffer size should be a power of two.<li>A duration of at least one second is recommended: <code class='code prettyprint lang-sc'>s.sampleRate.nextPowerOfTwo</code>.<li>Do not allocate the buffer inside the SynthDef.<li>Keep the buffer in a variable.</ul>
+<li>The buffer size should be a power of two.<li>A duration of at least one second is recommended: <code>s.sampleRate.nextPowerOfTwo</code>.<li>Do not allocate the buffer inside the SynthDef.<li>Keep the buffer in a variable.</ul>
 
-<p><li>Specify the file path and recording format using <a href="./../Classes/Buffer.html#-write">Buffer: -write</a>, with the <code>leaveOpen</code> flag set to <code class='code prettyprint lang-sc'>true</code>. This is the only way to set the file path and recording format.<li>Create a <a href="./../Classes/Synth.html">Synth</a> node to run the DiskOut UGen.<li>When recording is finished, stop the DiskOut synth.<li>Close the buffer: <code class='code prettyprint lang-sc'>b.close</code>. This step updates the recorded file's audio header. Without it, the file will be unusable.<li>Free the buffer: <code class='code prettyprint lang-sc'>b.free</code>.</ol>
+<p><li>Specify the file path and recording format using <a href="./../Classes/Buffer.html#-write">Buffer: -write</a>, with the <code>leaveOpen</code> flag set to <code>true</code>. This is the only way to set the file path and recording format.<li>Create a <a href="./../Classes/Synth.html">Synth</a> node to run the DiskOut UGen.<li>When recording is finished, stop the DiskOut synth.<li>Close the buffer: <code>b.close</code>. This step updates the recorded file's audio header. Without it, the file will be unusable.<li>Free the buffer: <code>b.free</code>.</ol>
 
 <p>These steps are illustrated in the Examples section. In general, only the "Object Style" approach is needed. ("Messaging Style" is provided as a historical reference, but it isn't needed for typical use.)<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>DiskOut.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>bufnum</span>, <span class='argstr'>channelsArray</span>)</h3>
@@ -63,7 +68,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>s.boot; // start the server
+<textarea class='editor'>s.boot; // start the server
 (
 // something to record
 SynthDef("bubbles", { |out|
@@ -82,9 +87,9 @@ SynthDef("help-Diskout", { |bufnum|
 SynthDef("help-Diskin-2chan", { |out, bufnum = 0|
     Out.ar(out, DiskIn.ar(2, bufnum))
 }).add;
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='Object%20Style'>Object Style</a></h3>
-<pre class='code prettyprint lang-sc'>// start something to record
+<textarea class='editor'>// start something to record
 x = Synth("bubbles");
 
 // allocate a disk i/o buffer
@@ -110,9 +115,9 @@ m = { |buf| x.addToHeadMsg(nil, [\bufnum,buf])};
 
 b = Buffer.cueSoundFile(s,"~/diskouttest.aiff".standardizePath, 0, 2, completionMessage: m);
 )
-x.free; b.close; b.free; // cleanup</pre>
+x.free; b.close; b.free; // cleanup</textarea>
 <h3><a class='anchor' name='Messaging%20Style'>Messaging Style</a></h3>
-<pre class='code prettyprint lang-sc'>// The same thing done in Messaging Style (less overhead but without the convenience of objects)
+<textarea class='editor'>// The same thing done in Messaging Style (less overhead but without the convenience of objects)
 // This does nothing different from the Messaging Style example.
 // If any of the following is confusing, stick to Object Style
 // and ignore this part.
@@ -133,5 +138,6 @@ s.sendMsg("/n_free", 2004); // stop recording
 s.sendMsg("/n_free", 2003); // stop the bubbles
 
 s.sendMsg("/b_close", 0); // close the file.
-s.sendMsg("/b_free", 0);</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/DiskOut.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/DiskOut.schelp</a><br>link::Classes/DiskOut::<br></div></div></body></html>
+s.sendMsg("/b_free", 0);</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/DiskOut.schelp'>/usr/share/SuperCollider/HelpSource/Classes/DiskOut.schelp</a><br>link::Classes/DiskOut::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

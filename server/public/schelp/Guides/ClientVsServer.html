@@ -1,26 +1,31 @@
-<!doctype html><html lang='en'><head><title>Client vs Server | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Client vs Server | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Client vs Server';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Client vs Server:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Description'>Description</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Pros/Cons'>Pros/Cons</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#A%20final%20remark%20for%20the%20advanced%20reader'>A final remark for the advanced reader</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -45,22 +50,22 @@ var scdoc_sc_version = '3.9.3';
 <p>The client of this server is <em>sclang</em>. Sclang performs two distinct tasks:<dl>
 <dt>Client<dd>it is the <em>client</em> for the server, i.e. it sends OSC messages to the server. In order to write a letter to server, you need a paper sheet and a mailer: sclang is both.<dt>Interpreter<dd>it is the <em>interpreter</em> for the SuperCollider programming language, i.e. it allows to the user to write code in the aforementioned language and interactively execute the resulting commands, e.g. to control the audio server. In particular OSC messages can be cumbersome to write, as they share with the server its low-level perspective. The SuperCollider language is a high-level, fully featured object oriented language, allowing the user to gain a much more expressive power than OSC messages. Typically, the interpreter translates the code in SuperCollider language in OSC messages for the server. The user writes poetry (so to speak) in the SuperCollider language which is then paraphrased in OSC prose by the sclang interpreter, to be sent to the server.</dl>
 
-<p>From inside sclang, starting a server app can be accomplished by:<pre class='code prettyprint lang-sc'>s = Server.default; // create a new Server object and assign it to variable s
-s.boot;             // boot the server app, i.e. tell the server to be ready to work</pre>
+<p>From inside sclang, starting a server app can be accomplished by:<textarea class='editor'>s = Server.default; // create a new Server object and assign it to variable s
+s.boot;             // boot the server app, i.e. tell the server to be ready to work</textarea>
 
 <p>The sclang interpreter can send OSC messages to the server in two fashions:<dl>
-<dt>directly<dd>in this case, sclang offers a thin syntax layer which allows one to deal with raw OSC messages. All the server's functionality is in this case available "by hand" using the .sendMsg method of <a href="./../Classes/Server.html">Server</a>, and other similar messages.<pre class='code prettyprint lang-sc'>n = s.nextNodeID;                   // get an available nodeID from the server and assign it to n
+<dt>directly<dd>in this case, sclang offers a thin syntax layer which allows one to deal with raw OSC messages. All the server's functionality is in this case available "by hand" using the .sendMsg method of <a href="./../Classes/Server.html">Server</a>, and other similar messages.<textarea class='editor'>n = s.nextNodeID;                   // get an available nodeID from the server and assign it to n
 s.sendMsg("/s_new", "default", n);  // use the SynthDef "default" to create a synth with ID n
-s.sendMsg("/n_free", n);            // release the synth n</pre>
+s.sendMsg("/n_free", n);            // release the synth n</textarea>
 
-<p><dt>indirectly<dd>the language app provides you with convenient OOP functionality to keep track of and manipulate things on the server. The high-level syntax is translated into low-level OSC messages by sclang and sent to the server (language wrapping).<pre class='code prettyprint lang-sc'>x = Synth("default");   // create a synth on the default server (s) and allocate an ID for it
-x.free;                 // free the synth, its ID and resources</pre>
+<p><dt>indirectly<dd>the language app provides you with convenient OOP functionality to keep track of and manipulate things on the server. The high-level syntax is translated into low-level OSC messages by sclang and sent to the server (language wrapping).<textarea class='editor'>x = Synth("default");   // create a synth on the default server (s) and allocate an ID for it
+x.free;                 // free the synth, its ID and resources</textarea>
 </dl>
 
 <p>Working this way you have gained certain functionality. It provides a node ID for you automatically, it allows you to control the Synth in syntactically elegant and efficient ways (see the <a href="./../Classes/Synth.html">Synth</a> and <a href="./../Classes/Node.html">Node</a> helpfiles), and to access all the advantages of object oriented programming while doing so. Encapsulating the complexities and bookkeeping greatly reduces the chance of bugs in your own code.<div class='image'><img src='scEn.png'/><br><b>Figure 3. Sclang as a high-level client</b></div>
 
-<p>Language wrapping allows the user to access complex behaviours from very little code. Figure 3 (ignore for the moment that sclang is represented as a client among other possible ones, see later) schematically represents what happens when you evaluate an audio function like this:<pre class='code prettyprint lang-sc'>// assuming the server is already booted
-{SinOsc.ar}.play ;</pre>
+<p>Language wrapping allows the user to access complex behaviours from very little code. Figure 3 (ignore for the moment that sclang is represented as a client among other possible ones, see later) schematically represents what happens when you evaluate an audio function like this:<textarea class='editor'>// assuming the server is already booted
+{SinOsc.ar}.play ;</textarea>
 
 <p>In this case many server operations are hidden. To understand the passages involved in the evaluation of this code see <a href="./../Tutorials/Getting-Started/04-Functions-and-Other-Functionality.html">04. Functions and Other Functionality</a> and <a href="./../Tutorials/Getting-Started/10-SynthDefs-and-Synths.html">10. SynthDefs and Synths</a> (part of Scott Wilson's tutorial).
 <p>The OOP-style also has a small amount of overhead. It requires clientside CPU cycles and memory to create and manipulate an object. Normally this is not significant, but there may be times when you would prefer to use the less elegant, and less expensive first method, for instance when creating large numbers of grains which will simply play and then deallocate themselves.
@@ -77,4 +82,5 @@ x.free;                 // free the synth, its ID and resources</pre>
 <p>Apart from sclang, it is possible to control the server from any other client which provides for OSC messaging (e.g. from Java, Python, Max/MSP, etc.). For networking, see <a href="./../Reference/Server-Architecture.html">Server Architecture</a>, <a href="./../Classes/NetAddr.html">NetAddr</a>, <a href="./../Classes/OSCFunc.html">OSCFunc</a>.
 <p>In general however, sclang is the preferable way to communicate with the server for three reasons:<ul>
 <li>it gives you the expressive power of the SuperCollider language;<li>the language is explicitly fitted to the server's needs (and, more importantly, to musician's ones)<li>it allows one to create and load SynthDefs onto the server (see <a href="./../Classes/SynthDef.html">SynthDef</a>), which not all client apps are able to do</ul>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/ClientVsServer.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/ClientVsServer.schelp</a><br>link::Guides/ClientVsServer::<br></div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/ClientVsServer.schelp'>/usr/share/SuperCollider/HelpSource/Guides/ClientVsServer.schelp</a><br>link::Guides/ClientVsServer::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

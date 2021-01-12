@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>SequenceableCollection | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>SequenceableCollection | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'SequenceableCollection';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>SequenceableCollection:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -29,8 +34,10 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#*interpolation'>interpolation</a> </li>
 <li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
 <li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
-<ul class='toc'><li class='toc3'><a href='#*streamContents'>streamContents</a> </li>
+<ul class='toc'><li class='toc3'><a href='#*newFromFile'>newFromFile</a> </li>
+<li class='toc3'><a href='#*streamContents'>streamContents</a> </li>
 <li class='toc3'><a href='#*streamContentsLimit'>streamContentsLimit</a> </li>
+<li class='toc3'><a href='#*tuningScale'>tuningScale</a> </li>
 </ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-|@|'>|@|</a> </li>
 <li class='toc3'><a href='#-@@'>@@</a> </li>
@@ -94,37 +101,168 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-convertDigits'>convertDigits</a> </li>
 <li class='toc3'><a href='#-hammingDistance'>hammingDistance</a> </li>
 <li class='toc2'><a href='#Math%20Support%20-%20Unary%20Messages'>Math Support - Unary Messages</a></li>
-<ul class='toc'><li class='toc3'><a href='#-neg'>neg</a>  <a href='#-reciprocal'>reciprocal</a>  <a href='#-bitNot'>bitNot</a>  <a href='#-abs'>abs</a>  <a href='#-asFloat'>asFloat</a>  <a href='#-asInt'>asInt</a>  <a href='#-ceil'>ceil</a>  <a href='#-floor'>floor</a>  <a href='#-frac'>frac</a>  <a href='#-sign'>sign</a>  <a href='#-squared'>squared</a>  <a href='#-cubed'>cubed</a>  <a href='#-sqrt'>sqrt</a>  <a href='#-exp'>exp</a>  <a href='#-midicps'>midicps</a>  <a href='#-cpsmidi'>cpsmidi</a>  <a href='#-midiratio'>midiratio</a>  <a href='#-ratiomidi'>ratiomidi</a>  <a href='#-ampdb'>ampdb</a>  <a href='#-dbamp'>dbamp</a>  <a href='#-octcps'>octcps</a>  <a href='#-cpsoct'>cpsoct</a>  <a href='#-log'>log</a>  <a href='#-log2'>log2</a>  <a href='#-log10'>log10</a>  <a href='#-sin'>sin</a>  <a href='#-cos'>cos</a>  <a href='#-tan'>tan</a>  <a href='#-asin'>asin</a>  <a href='#-acos'>acos</a>  <a href='#-atan'>atan</a>  <a href='#-sinh'>sinh</a>  <a href='#-cosh'>cosh</a>  <a href='#-tanh'>tanh</a>  <a href='#-rand'>rand</a>  <a href='#-rand2'>rand2</a>  <a href='#-linrand'>linrand</a>  <a href='#-bilinrand'>bilinrand</a>  <a href='#-sum3rand'>sum3rand</a>  <a href='#-distort'>distort</a>  <a href='#-softclip'>softclip</a>  <a href='#-coin'>coin</a>  <a href='#-even'>even</a>  <a href='#-odd'>odd</a>  <a href='#-isPositive'>isPositive</a>  <a href='#-isNegative'>isNegative</a>  <a href='#-isStrictlyPositive'>isStrictlyPositive</a>  <a href='#-real'>real</a>  <a href='#-imag'>imag</a>  <a href='#-magnitude'>magnitude</a>  <a href='#-magnitudeApx'>magnitudeApx</a>  <a href='#-phase'>phase</a>  <a href='#-angle'>angle</a>  <a href='#-rho'>rho</a>  <a href='#-theta'>theta</a>  <a href='#-asFloat'>asFloat</a>  <a href='#-asInteger'>asInteger</a> </li>
+<ul class='toc'><li class='toc3'><a href='#-neg'>neg</a>  <a href='#-reciprocal'>reciprocal</a>  <a href='#-bitNot'>bitNot</a>  <a href='#-abs'>abs</a>  <a href='#-asFloat'>asFloat</a>  <a href='#-ceil'>ceil</a>  <a href='#-floor'>floor</a>  <a href='#-frac'>frac</a>  <a href='#-sign'>sign</a>  <a href='#-squared'>squared</a>  <a href='#-cubed'>cubed</a>  <a href='#-sqrt'>sqrt</a>  <a href='#-exp'>exp</a>  <a href='#-midicps'>midicps</a>  <a href='#-cpsmidi'>cpsmidi</a>  <a href='#-midiratio'>midiratio</a>  <a href='#-ratiomidi'>ratiomidi</a>  <a href='#-ampdb'>ampdb</a>  <a href='#-dbamp'>dbamp</a>  <a href='#-octcps'>octcps</a>  <a href='#-cpsoct'>cpsoct</a>  <a href='#-log'>log</a>  <a href='#-log2'>log2</a>  <a href='#-log10'>log10</a>  <a href='#-sin'>sin</a>  <a href='#-cos'>cos</a>  <a href='#-tan'>tan</a>  <a href='#-asin'>asin</a>  <a href='#-acos'>acos</a>  <a href='#-atan'>atan</a>  <a href='#-sinh'>sinh</a>  <a href='#-cosh'>cosh</a>  <a href='#-tanh'>tanh</a>  <a href='#-rand'>rand</a>  <a href='#-rand2'>rand2</a>  <a href='#-linrand'>linrand</a>  <a href='#-bilinrand'>bilinrand</a>  <a href='#-sum3rand'>sum3rand</a>  <a href='#-distort'>distort</a>  <a href='#-softclip'>softclip</a>  <a href='#-coin'>coin</a>  <a href='#-even'>even</a>  <a href='#-odd'>odd</a>  <a href='#-isPositive'>isPositive</a>  <a href='#-isNegative'>isNegative</a>  <a href='#-isStrictlyPositive'>isStrictlyPositive</a>  <a href='#-real'>real</a>  <a href='#-imag'>imag</a>  <a href='#-magnitude'>magnitude</a>  <a href='#-magnitudeApx'>magnitudeApx</a>  <a href='#-phase'>phase</a>  <a href='#-angle'>angle</a>  <a href='#-rho'>rho</a>  <a href='#-theta'>theta</a>  <a href='#-asFloat'>asFloat</a>  <a href='#-asInteger'>asInteger</a> </li>
 <li class='toc3'><a href='#-performUnaryOp'>performUnaryOp</a> </li>
 </ul><li class='toc2'><a href='#Math%20Support%20-%20Binary%20Messages'>Math Support - Binary Messages</a></li>
 <ul class='toc'><li class='toc3'><a href='#-+'>+</a>  <a href='#--'>-</a>  <a href='#-*'>*</a>  <a href='#-/'>/</a>  <a href='#-div'>div</a>  <a href='#-min'>min</a>  <a href='#-max'>max</a>  <a href='#-<'>&lt;</a>  <a href='#-<='>&lt;=</a>  <a href='#->'>&gt;</a>  <a href='#->='>&gt;=</a>  <a href='#-bitXor'>bitXor</a>  <a href='#-lcm'>lcm</a>  <a href='#-gcd'>gcd</a>  <a href='#-round'>round</a>  <a href='#-trunc'>trunc</a>  <a href='#-atan2'>atan2</a>  <a href='#-hypot'>hypot</a>  <a href='#-ring1'>ring1</a>  <a href='#-ring2'>ring2</a>  <a href='#-ring3'>ring3</a>  <a href='#-ring4'>ring4</a>  <a href='#-difsqr'>difsqr</a>  <a href='#-sumsqr'>sumsqr</a>  <a href='#-sqrdif'>sqrdif</a>  <a href='#-absdif'>absdif</a>  <a href='#-amclip'>amclip</a>  <a href='#-scaleneg'>scaleneg</a>  <a href='#-clip2'>clip2</a>  <a href='#-excess'>excess</a>  <a href='#-rrand'>rrand</a>  <a href='#-exprand'>exprand</a> </li>
 <li class='toc3'><a href='#-%'>%</a>  <a href='#-**'>**</a>  <a href='#-&'>&amp;</a>  <a href='#-|'>|</a>  <a href='#->>'>&gt;&gt;</a>  <a href='#-+>>'>+&gt;&gt;</a>  <a href='#-<!'>&lt;!</a> </li>
 <li class='toc3'><a href='#-performBinaryOp'>performBinaryOp</a> </li>
+</ul><li class='toc2'><a href='#Math%20Support%20-%20Special%20Functions'>Math Support - Special Functions</a></li>
+<ul class='toc'><li class='toc3'><a href='#-bernouliB2n'>bernouliB2n</a> </li>
+<li class='toc3'><a href='#-tangentT2n'>tangentT2n</a> </li>
+<li class='toc3'><a href='#-tgamma'>tgamma</a> </li>
+<li class='toc3'><a href='#-tgamma1pm1'>tgamma1pm1</a> </li>
+<li class='toc3'><a href='#-lgamma'>lgamma</a> </li>
+<li class='toc3'><a href='#-digamma'>digamma</a> </li>
+<li class='toc3'><a href='#-trigamma'>trigamma</a> </li>
+<li class='toc3'><a href='#-polygamma'>polygamma</a> </li>
+<li class='toc3'><a href='#-tgammaRatio'>tgammaRatio</a> </li>
+<li class='toc3'><a href='#-tgammaDeltaRatio'>tgammaDeltaRatio</a> </li>
+<li class='toc3'><a href='#-gammaP'>gammaP</a> </li>
+<li class='toc3'><a href='#-gammaQ'>gammaQ</a> </li>
+<li class='toc3'><a href='#-tgammaLower'>tgammaLower</a> </li>
+<li class='toc3'><a href='#-tgammaUpper'>tgammaUpper</a> </li>
+<li class='toc3'><a href='#-gammaPInv'>gammaPInv</a> </li>
+<li class='toc3'><a href='#-gammaQInv'>gammaQInv</a> </li>
+<li class='toc3'><a href='#-gammaPInvA'>gammaPInvA</a> </li>
+<li class='toc3'><a href='#-gammaQInvA'>gammaQInvA</a> </li>
+<li class='toc3'><a href='#-gammaPDerivative'>gammaPDerivative</a> </li>
+<li class='toc3'><a href='#-gammaQDerivative'>gammaQDerivative</a> </li>
+<li class='toc3'><a href='#-factorial'>factorial</a> </li>
+<li class='toc3'><a href='#-doubleFactorial'>doubleFactorial</a> </li>
+<li class='toc3'><a href='#-risingFactorial'>risingFactorial</a> </li>
+<li class='toc3'><a href='#-fallingFactorial'>fallingFactorial</a> </li>
+<li class='toc3'><a href='#-binomialCoefficient'>binomialCoefficient</a> </li>
+<li class='toc3'><a href='#-beta'>beta</a> </li>
+<li class='toc3'><a href='#-ibeta'>ibeta</a> </li>
+<li class='toc3'><a href='#-ibetaC'>ibetaC</a> </li>
+<li class='toc3'><a href='#-betaFull'>betaFull</a> </li>
+<li class='toc3'><a href='#-betaFullC'>betaFullC</a> </li>
+<li class='toc3'><a href='#-ibetaInv'>ibetaInv</a> </li>
+<li class='toc3'><a href='#-ibetaCInv'>ibetaCInv</a> </li>
+<li class='toc3'><a href='#-ibetaInvA'>ibetaInvA</a> </li>
+<li class='toc3'><a href='#-ibetaCInvA'>ibetaCInvA</a> </li>
+<li class='toc3'><a href='#-ibetaInvB'>ibetaInvB</a> </li>
+<li class='toc3'><a href='#-ibetaCInvB'>ibetaCInvB</a> </li>
+<li class='toc3'><a href='#-ibetaDerivative'>ibetaDerivative</a> </li>
+<li class='toc3'><a href='#-erf'>erf</a> </li>
+<li class='toc3'><a href='#-erfC'>erfC</a> </li>
+<li class='toc3'><a href='#-erfInv'>erfInv</a> </li>
+<li class='toc3'><a href='#-erfCInv'>erfCInv</a> </li>
+<li class='toc3'><a href='#-legendreP'>legendreP</a> </li>
+<li class='toc3'><a href='#-legendrePPrime'>legendrePPrime</a> </li>
+<li class='toc3'><a href='#-legendrePZeros'>legendrePZeros</a> </li>
+<li class='toc3'><a href='#-legendrePAssoc'>legendrePAssoc</a> </li>
+<li class='toc3'><a href='#-legendreQ'>legendreQ</a> </li>
+<li class='toc3'><a href='#-laguerre'>laguerre</a> </li>
+<li class='toc3'><a href='#-laguerreAssoc'>laguerreAssoc</a> </li>
+<li class='toc3'><a href='#-hermite'>hermite</a> </li>
+<li class='toc3'><a href='#-chebyshevT'>chebyshevT</a> </li>
+<li class='toc3'><a href='#-chebyshevU'>chebyshevU</a> </li>
+<li class='toc3'><a href='#-chebyshevTPrime'>chebyshevTPrime</a> </li>
+<li class='toc3'><a href='#-chebyshevTZeros'>chebyshevTZeros</a> </li>
+<li class='toc3'><a href='#-sphericalHarmonic'>sphericalHarmonic</a> </li>
+<li class='toc3'><a href='#-sphericalHarmonicR'>sphericalHarmonicR</a> </li>
+<li class='toc3'><a href='#-sphericalHarmonicI'>sphericalHarmonicI</a> </li>
+<li class='toc3'><a href='#-cylBesselJ'>cylBesselJ</a> </li>
+<li class='toc3'><a href='#-cylNeumann'>cylNeumann</a> </li>
+<li class='toc3'><a href='#-cylBesselJZero'>cylBesselJZero</a> </li>
+<li class='toc3'><a href='#-cylNeumannZero'>cylNeumannZero</a> </li>
+<li class='toc3'><a href='#-cylBesselI'>cylBesselI</a> </li>
+<li class='toc3'><a href='#-cylBesselK'>cylBesselK</a> </li>
+<li class='toc3'><a href='#-sphBessel'>sphBessel</a> </li>
+<li class='toc3'><a href='#-sphNeumann'>sphNeumann</a> </li>
+<li class='toc3'><a href='#-cylBesselJPrime'>cylBesselJPrime</a> </li>
+<li class='toc3'><a href='#-cylNeumannPrime'>cylNeumannPrime</a> </li>
+<li class='toc3'><a href='#-cylBesselIPrime'>cylBesselIPrime</a> </li>
+<li class='toc3'><a href='#-cylBesselKPrime'>cylBesselKPrime</a> </li>
+<li class='toc3'><a href='#-sphBesselPrime'>sphBesselPrime</a> </li>
+<li class='toc3'><a href='#-sphNeumannPrime'>sphNeumannPrime</a> </li>
+<li class='toc3'><a href='#-cylHankel1'>cylHankel1</a> </li>
+<li class='toc3'><a href='#-cylHankel2'>cylHankel2</a> </li>
+<li class='toc3'><a href='#-sphHankel1'>sphHankel1</a> </li>
+<li class='toc3'><a href='#-sphHankel2'>sphHankel2</a> </li>
+<li class='toc3'><a href='#-airyAi'>airyAi</a> </li>
+<li class='toc3'><a href='#-airyBi'>airyBi</a> </li>
+<li class='toc3'><a href='#-airyAiPrime'>airyAiPrime</a> </li>
+<li class='toc3'><a href='#-airyBiPrime'>airyBiPrime</a> </li>
+<li class='toc3'><a href='#-airyAiZero'>airyAiZero</a> </li>
+<li class='toc3'><a href='#-airyBiZero'>airyBiZero</a> </li>
+<li class='toc3'><a href='#-ellintRf'>ellintRf</a> </li>
+<li class='toc3'><a href='#-ellintRd'>ellintRd</a> </li>
+<li class='toc3'><a href='#-ellintRj'>ellintRj</a> </li>
+<li class='toc3'><a href='#-ellintRc'>ellintRc</a> </li>
+<li class='toc3'><a href='#-ellintRg'>ellintRg</a> </li>
+<li class='toc3'><a href='#-ellint1'>ellint1</a> </li>
+<li class='toc3'><a href='#-ellint1C'>ellint1C</a> </li>
+<li class='toc3'><a href='#-ellint2'>ellint2</a> </li>
+<li class='toc3'><a href='#-ellint2C'>ellint2C</a> </li>
+<li class='toc3'><a href='#-ellint3'>ellint3</a> </li>
+<li class='toc3'><a href='#-ellint3C'>ellint3C</a> </li>
+<li class='toc3'><a href='#-ellintD'>ellintD</a> </li>
+<li class='toc3'><a href='#-ellintDC'>ellintDC</a> </li>
+<li class='toc3'><a href='#-jacobiZeta'>jacobiZeta</a> </li>
+<li class='toc3'><a href='#-heumanLambda'>heumanLambda</a> </li>
+<li class='toc3'><a href='#-jacobiCd'>jacobiCd</a> </li>
+<li class='toc3'><a href='#-jacobiCn'>jacobiCn</a> </li>
+<li class='toc3'><a href='#-jacobiCs'>jacobiCs</a> </li>
+<li class='toc3'><a href='#-jacobiDc'>jacobiDc</a> </li>
+<li class='toc3'><a href='#-jacobiDn'>jacobiDn</a> </li>
+<li class='toc3'><a href='#-jacobiDs'>jacobiDs</a> </li>
+<li class='toc3'><a href='#-jacobiNc'>jacobiNc</a> </li>
+<li class='toc3'><a href='#-jacobiNd'>jacobiNd</a> </li>
+<li class='toc3'><a href='#-jacobiNs'>jacobiNs</a> </li>
+<li class='toc3'><a href='#-jacobiSc'>jacobiSc</a> </li>
+<li class='toc3'><a href='#-jacobiSd'>jacobiSd</a> </li>
+<li class='toc3'><a href='#-jacobiSn'>jacobiSn</a> </li>
+<li class='toc3'><a href='#-zeta'>zeta</a> </li>
+<li class='toc3'><a href='#-expintEn'>expintEn</a> </li>
+<li class='toc3'><a href='#-expintEi'>expintEi</a> </li>
+<li class='toc3'><a href='#-sinPi'>sinPi</a> </li>
+<li class='toc3'><a href='#-cosPi'>cosPi</a> </li>
+<li class='toc3'><a href='#-log1p'>log1p</a> </li>
+<li class='toc3'><a href='#-expm1'>expm1</a> </li>
+<li class='toc3'><a href='#-cbrt'>cbrt</a> </li>
+<li class='toc3'><a href='#-sqrt1pm1'>sqrt1pm1</a> </li>
+<li class='toc3'><a href='#-powm1'>powm1</a> </li>
+<li class='toc3'><a href='#-sincPi'>sincPi</a> </li>
+<li class='toc3'><a href='#-sinhcPi'>sinhcPi</a> </li>
+<li class='toc3'><a href='#-asinh'>asinh</a> </li>
+<li class='toc3'><a href='#-acosh'>acosh</a> </li>
+<li class='toc3'><a href='#-atanh'>atanh</a> </li>
+<li class='toc3'><a href='#-owensT'>owensT</a> </li>
 </ul><li class='toc2'><a href='#Multichannel%20wrappers'>Multichannel wrappers</a></li>
 <ul class='toc'><li class='toc3'><a href='#-clip'>clip</a>  <a href='#-wrap'>wrap</a>  <a href='#-fold'>fold</a>  <a href='#-prune'>prune</a>  <a href='#-linlin'>linlin</a>  <a href='#-linexp'>linexp</a>  <a href='#-explin'>explin</a>  <a href='#-expexp'>expexp</a>  <a href='#-lincurve'>lincurve</a>  <a href='#-curvelin'>curvelin</a>  <a href='#-bilin'>bilin</a>  <a href='#-biexp'>biexp</a>  <a href='#-range'>range</a>  <a href='#-exprange'>exprange</a>  <a href='#-unipolar'>unipolar</a>  <a href='#-bipolar'>bipolar</a>  <a href='#-lag'>lag</a>  <a href='#-lag2'>lag2</a>  <a href='#-lag3'>lag3</a>  <a href='#-lagud'>lagud</a>  <a href='#-lag2ud'>lag2ud</a>  <a href='#-lag3ud'>lag3ud</a>  <a href='#-varlag'>varlag</a>  <a href='#-slew'>slew</a>  <a href='#-blend'>blend</a>  <a href='#-checkBadValues'>checkBadValues</a> </li>
 <li class='toc3'><a href='#-multichannelExpandRef'>multichannelExpandRef</a> </li>
 </ul><li class='toc2'><a href='#Rhythm-lists'>Rhythm-lists</a></li>
 <ul class='toc'><li class='toc3'><a href='#-convertRhythm'>convertRhythm</a> </li>
+</ul><li class='toc2'><a href='#Starting%20UNIX%20processes'>Starting UNIX processes</a></li>
+<ul class='toc'><li class='toc3'><a href='#-unixCmd'>unixCmd</a> </li>
+<li class='toc3'><a href='#-unixCmdGetStdOut'>unixCmdGetStdOut</a> </li>
 </ul><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 <li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-++'>++</a> </li>
 <li class='toc3'><a href='#-+++'>+++</a> </li>
 <li class='toc3'><a href='#-=='>==</a> </li>
+<li class='toc3'><a href='#-asAddendsOf'>asAddendsOf</a> </li>
 <li class='toc3'><a href='#-asFraction'>asFraction</a> </li>
 <li class='toc3'><a href='#-asLayoutElement'>asLayoutElement</a> </li>
 <li class='toc3'><a href='#-asMIDIInPortUID'>asMIDIInPortUID</a> </li>
 <li class='toc3'><a href='#-asOSCArgArray'>asOSCArgArray</a> </li>
 <li class='toc3'><a href='#-asOSCArgBundle'>asOSCArgBundle</a> </li>
 <li class='toc3'><a href='#-asOSCArgEmbeddedArray'>asOSCArgEmbeddedArray</a> </li>
+<li class='toc3'><a href='#-asPaddedString'>asPaddedString</a> </li>
 <li class='toc3'><a href='#-asPoint'>asPoint</a> </li>
 <li class='toc3'><a href='#-asQuant'>asQuant</a> </li>
 <li class='toc3'><a href='#-asRect'>asRect</a> </li>
 <li class='toc3'><a href='#-asSequenceableCollection'>asSequenceableCollection</a> </li>
 <li class='toc3'><a href='#-ascii'>ascii</a> </li>
+<li class='toc3'><a href='#-aswAddendsOf'>aswAddendsOf</a> </li>
 <li class='toc3'><a href='#-bitAnd'>bitAnd</a> </li>
 <li class='toc3'><a href='#-bitHammingDistance'>bitHammingDistance</a> </li>
 <li class='toc3'><a href='#-bitOr'>bitOr</a> </li>
 <li class='toc3'><a href='#-canFreeSynth'>canFreeSynth</a> </li>
+<li class='toc3'><a href='#-cauchy'>cauchy</a> </li>
 <li class='toc3'><a href='#-containsSeqColl'>containsSeqColl</a> </li>
 <li class='toc3'><a href='#-convertOneRhythm'>convertOneRhythm</a> </li>
 <li class='toc3'><a href='#-curverange'>curverange</a> </li>
@@ -134,6 +272,7 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-firstArg'>firstArg</a> </li>
 <li class='toc3'><a href='#-flatIf'>flatIf</a> </li>
 <li class='toc3'><a href='#-fold2'>fold2</a> </li>
+<li class='toc3'><a href='#-gaussian'>gaussian</a> </li>
 <li class='toc3'><a href='#-hanWindow'>hanWindow</a> </li>
 <li class='toc3'><a href='#-hash'>hash</a> </li>
 <li class='toc3'><a href='#-hoareFind'>hoareFind</a> </li>
@@ -149,12 +288,14 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-keysValuesDo'>keysValuesDo</a> </li>
 <li class='toc3'><a href='#-lastIndex'>lastIndex</a> </li>
 <li class='toc3'><a href='#-leftShift'>leftShift</a> </li>
+<li class='toc3'><a href='#-logistic'>logistic</a> </li>
 <li class='toc3'><a href='#-median'>median</a> </li>
 <li class='toc3'><a href='#-mergeSort'>mergeSort</a> </li>
 <li class='toc3'><a href='#-mergeSortTemp'>mergeSortTemp</a> </li>
 <li class='toc3'><a href='#-mergeTemp'>mergeTemp</a> </li>
 <li class='toc3'><a href='#-middle'>middle</a> </li>
 <li class='toc3'><a href='#-middleIndex'>middleIndex</a> </li>
+<li class='toc3'><a href='#-midinote'>midinote</a> </li>
 <li class='toc3'><a href='#-minNyquist'>minNyquist</a> </li>
 <li class='toc3'><a href='#-mod'>mod</a> </li>
 <li class='toc3'><a href='#-moddif'>moddif</a> </li>
@@ -162,9 +303,13 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-multiChannelPerform'>multiChannelPerform</a> </li>
 <li class='toc3'><a href='#-nearestInList'>nearestInList</a> </li>
 <li class='toc3'><a href='#-nearestInScale'>nearestInScale</a> </li>
+<li class='toc3'><a href='#-nearestTo'>nearestTo</a> </li>
+<li class='toc3'><a href='#-nearestToList'>nearestToList</a> </li>
 <li class='toc3'><a href='#-nextPrime'>nextPrime</a> </li>
 <li class='toc3'><a href='#-nextTimeOnGrid'>nextTimeOnGrid</a> </li>
+<li class='toc3'><a href='#-notemidi'>notemidi</a> </li>
 <li class='toc3'><a href='#-nthPrime'>nthPrime</a> </li>
+<li class='toc3'><a href='#-pareto'>pareto</a> </li>
 <li class='toc3'><a href='#-performBinaryOpOnComplex'>performBinaryOpOnComplex</a> </li>
 <li class='toc3'><a href='#-performBinaryOpOnSeqColl'>performBinaryOpOnSeqColl</a> </li>
 <li class='toc3'><a href='#-performBinaryOpOnSimpleNumber'>performBinaryOpOnSimpleNumber</a> </li>
@@ -172,9 +317,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-performKeyToDegree'>performKeyToDegree</a> </li>
 <li class='toc3'><a href='#-performNearestInList'>performNearestInList</a> </li>
 <li class='toc3'><a href='#-performNearestInScale'>performNearestInScale</a> </li>
-<li class='toc3'><a href='#-pow'>pow</a> </li>
+<li class='toc3'><a href='#-poisson'>poisson</a> </li>
 <li class='toc3'><a href='#-prFlat'>prFlat</a> </li>
-<li class='toc3'><a href='#-prUnixCmd'>prUnixCmd</a> </li>
 <li class='toc3'><a href='#-prepareForProxySynthDef'>prepareForProxySynthDef</a> </li>
 <li class='toc3'><a href='#-prevPrime'>prevPrime</a> </li>
 <li class='toc3'><a href='#-quickSort'>quickSort</a> </li>
@@ -197,7 +341,6 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-top'>top</a> </li>
 <li class='toc3'><a href='#-transposeKey'>transposeKey</a> </li>
 <li class='toc3'><a href='#-triWindow'>triWindow</a> </li>
-<li class='toc3'><a href='#-unixCmd'>unixCmd</a> </li>
 <li class='toc3'><a href='#-unlace'>unlace</a> </li>
 <li class='toc3'><a href='#-unsignedRightShift'>unsignedRightShift</a> </li>
 <li class='toc3'><a href='#-welWindow'>welWindow</a> </li>
@@ -205,8 +348,9 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-wrapAt'>wrapAt</a> </li>
 <li class='toc3'><a href='#-wrapAtDepth'>wrapAtDepth</a> </li>
 <li class='toc3'><a href='#-wrapPut'>wrapPut</a> </li>
-</ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<li class='toc3'><a href='#-writeFile'>writeFile</a> </li>
+</ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -216,7 +360,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Abstract superclass of integer indexable collections</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Collections/SequenceableCollection.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Collections/SequenceableCollection.sc'>SequenceableCollection.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/ArrayedCollection.html">ArrayedCollection</a>, <a href="../Classes/LinkedList.html">LinkedList</a>, <a href="../Classes/List.html">List</a>, <a href="../Classes/Order.html">Order</a>, <span id='hiddensubclasses' style='display:none;'><a href="../Classes/RingBuffer.html">RingBuffer</a></span><a class='subclass_toggle' href='#' onclick='javascript:showAllSubclasses(this); return false'>&hellip;&nbsp;see&nbsp;all</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Collections/SequenceableCollection.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Collections/SequenceableCollection.sc'>SequenceableCollection.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/ArrayedCollection.html">ArrayedCollection</a>, <a href="../Classes/LinkedList.html">LinkedList</a>, <a href="../Classes/List.html">List</a>, <a href="../Classes/Order.html">Order</a>, <span id='hiddensubclasses' style='display:none;'><a href="../Classes/RingBuffer.html">RingBuffer</a></span><a class='subclass_toggle' href='#' onclick='javascript:showAllSubclasses(this); return false'>&hellip;&nbsp;see&nbsp;all</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -224,26 +368,26 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*fill' href='./../Overviews/Methods.html#fill'>fill</a>(<span class='argstr'>size</span>, <span class='argstr'>function</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
 <div class='method'>
-<p>Creates a Collection of the given size, the elements of which are determined by evaluation the given function. The function is passed the index as an argument.<pre class='code prettyprint lang-sc'>Array.fill(4, { arg i; i * 2 });
-Bag.fill(14, { arg i; i.rand });</pre>
+<p>Creates a Collection of the given size, the elements of which are determined by evaluation the given function. The function is passed the index as an argument.<textarea class='editor'>Array.fill(4, { arg i; i * 2 });
+Bag.fill(14, { arg i; i.rand });</textarea>
 <h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>size<td class='argumentdesc'>
-<p>The size of the collection which is returned. If nil, it returns an empty collection. If an array of sizes is given, the resulting collection has the appropriate dimensions (see: <a href="#*fillND).">*fillND).</a><pre class='code prettyprint lang-sc'>Array.fill([2, 2, 3], { arg i, j, k;  i * 100 + (j * 10) + k });</pre>
+<p>The size of the collection which is returned. If nil, it returns an empty collection. If an array of sizes is given, the resulting collection has the appropriate dimensions (see: <a href="#*fillND).">*fillND).</a><textarea class='editor'>Array.fill([2, 2, 3], { arg i, j, k;  i * 100 + (j * 10) + k });</textarea>
 <tr><td class='argumentname'>function<td class='argumentdesc'>
-<p>The function which is called for each new element - the index is passed in as a first argument. The function be anything that responds to the message "value".<pre class='code prettyprint lang-sc'>Array.fill(10, { arg i; 2 ** i });
+<p>The function which is called for each new element - the index is passed in as a first argument. The function be anything that responds to the message "value".<textarea class='editor'>Array.fill(10, { arg i; 2 ** i });
 Array.fill(10, Pxrand([0, 1, 2], inf).iter);
-Array.fill(10, 7); // an object that doesn't respond with a new value is just repeatedly added.</pre>
+Array.fill(10, 7); // an object that doesn't respond with a new value is just repeatedly added.</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*series' href='./../Overviews/Methods.html#series'>series</a>(<span class='argstr'>size</span>, <span class='argstr'>start: 0</span>, <span class='argstr'>step: 1</span>)</h3>
 <div class='method'>
-<p>Fill a SequenceableCollection with an arithmetic series.<pre class='code prettyprint lang-sc'>Array.series(5, 10, 2);</pre>
+<p>Fill a SequenceableCollection with an arithmetic series.<textarea class='editor'>Array.series(5, 10, 2);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*geom' href='./../Overviews/Methods.html#geom'>geom</a>(<span class='argstr'>size</span>, <span class='argstr'>start</span>, <span class='argstr'>grow</span>)</h3>
 <div class='method'>
-<p>Fill a SequenceableCollection with a geometric series.<pre class='code prettyprint lang-sc'>Array.geom(5, 1, 3);</pre>
-</div><h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*fib' href='./../Overviews/Methods.html#fib'>fib</a>(<span class='argstr'>size</span>, <span class='argstr'>a: 0</span>, <span class='argstr'>b: 1</span>)</h3>
+<p>Fill a SequenceableCollection with a geometric series.<textarea class='editor'>Array.geom(5, 1, 3);</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*fib' href='./../Overviews/Methods.html#fib'>fib</a>(<span class='argstr'>size</span>, <span class='argstr'>a: 0.0</span>, <span class='argstr'>b: 1.0</span>)</h3>
 <div class='method'>
-<p>Fill a SequenceableCollection with a fibonacci series.<pre class='code prettyprint lang-sc'>Array.fib(5);
-Array.fib(5, 2, 32); // start from 32 with step 2.</pre>
+<p>Fill a SequenceableCollection with a fibonacci series.<textarea class='editor'>Array.fib(5);
+Array.fib(5, 2, 32); // start from 32 with step 2.</textarea>
 
 <p><h4>Arguments:</h4>
 <table class='arguments'>
@@ -252,133 +396,137 @@ Array.fib(5, 2, 32); // start from 32 with step 2.</pre>
 <p>the starting step value<tr><td class='argumentname'>b<td class='argumentdesc'>
 <p>the starting value</table></div><h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*rand' href='./../Overviews/Methods.html#rand'>rand</a>(<span class='argstr'>size</span>, <span class='argstr'>minVal</span>, <span class='argstr'>maxVal</span>)</h3>
 <div class='method'>
-<p>Fill a SequenceableCollection with random values in the range <strong>minVal</strong> to <strong>maxVal</strong>.<pre class='code prettyprint lang-sc'>Array.rand(8, 1, 100);</pre>
+<p>Fill a SequenceableCollection with random values in the range <strong>minVal</strong> to <strong>maxVal</strong>.<textarea class='editor'>Array.rand(8, 1, 100);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*rand2' href='./../Overviews/Methods.html#rand2'>rand2</a>(<span class='argstr'>size</span>, <span class='argstr'>val</span>)</h3>
 <div class='method'>
-<p>Fill a SequenceableCollection with random values in the range -<strong>val</strong> to +<strong>val</strong>.<pre class='code prettyprint lang-sc'>Array.rand2(8, 100);</pre>
+<p>Fill a SequenceableCollection with random values in the range -<strong>val</strong> to +<strong>val</strong>.<textarea class='editor'>Array.rand2(8, 100);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*linrand' href='./../Overviews/Methods.html#linrand'>linrand</a>(<span class='argstr'>size</span>, <span class='argstr'>minVal</span>, <span class='argstr'>maxVal</span>)</h3>
 <div class='method'>
-<p>Fill a SequenceableCollection with random values in the range <strong>minVal</strong> to <strong>maxVal</strong> with a linear distribution.<pre class='code prettyprint lang-sc'>Array.linrand(8, 1, 100);</pre>
+<p>Fill a SequenceableCollection with random values in the range <strong>minVal</strong> to <strong>maxVal</strong> with a linear distribution.<textarea class='editor'>Array.linrand(8, 1, 100);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*exprand' href='./../Overviews/Methods.html#exprand'>exprand</a>(<span class='argstr'>size</span>, <span class='argstr'>minVal</span>, <span class='argstr'>maxVal</span>)</h3>
 <div class='method'>
-<p>Fill a SequenceableCollection with random values in the range <strong>minVal</strong> to <strong>maxVal</strong> with exponential distribution.<pre class='code prettyprint lang-sc'>Array.exprand(8, 1, 100);</pre>
-</div><h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*interpolation' href='./../Overviews/Methods.html#interpolation'>interpolation</a>(<span class='argstr'>size</span>, <span class='argstr'>start: 0</span>, <span class='argstr'>end: 1</span>)</h3>
+<p>Fill a SequenceableCollection with random values in the range <strong>minVal</strong> to <strong>maxVal</strong> with exponential distribution.<textarea class='editor'>Array.exprand(8, 1, 100);</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*interpolation' href='./../Overviews/Methods.html#interpolation'>interpolation</a>(<span class='argstr'>size</span>, <span class='argstr'>start: 0.0</span>, <span class='argstr'>end: 1.0</span>)</h3>
 <div class='method'>
-<p>Fill a SequenceableCollection with the interpolated values between the <strong>start</strong> and <strong>end</strong> values.<pre class='code prettyprint lang-sc'>Array.interpolation(5, 3.2, 20.5);</pre>
+<p>Fill a SequenceableCollection with the interpolated values between the <strong>start</strong> and <strong>end</strong> values.<textarea class='editor'>Array.interpolation(5, 3.2, 20.5);</textarea>
 </div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
+<h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*newFromFile' href='./../Overviews/Methods.html#newFromFile'>newFromFile</a>(<span class='argstr'>path</span>, <span class='argstr'>columnSeparator: $ </span>, <span class='argstr'>rowSeparator: $\n</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-newFromFile.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-newFromFile.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*streamContents' href='./../Overviews/Methods.html#streamContents'>streamContents</a>(<span class='argstr'>function</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*streamContentsLimit' href='./../Overviews/Methods.html#streamContentsLimit'>streamContentsLimit</a>(<span class='argstr'>function</span>, <span class='argstr'>limit: 2000</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>SequenceableCollection.</span><a class='method-name' name='*tuningScale' href='./../Overviews/Methods.html#tuningScale'>tuningScale</a>(<span class='argstr'>rootFreq: 440</span>, <span class='argstr'>stepRatios: [ 1.5, 2 ]</span>, <span class='argstr'>loFreqBound: 20</span>, <span class='argstr'>hiFreqBound: 20000</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/tuningScale.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/tuningScale.sc</a></div>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-|@|' href='./../Overviews/Methods.html#|@|'>|@|</a>(<span class='argstr'>index</span>)</h3>
 <div class='method'>
-<p>synonym for <a href="./../Classes/ArrayedCollection.html#-clipAt">ArrayedCollection: -clipAt</a>.<pre class='code prettyprint lang-sc'>[3, 4, 5]|@|6;</pre>
+<p>synonym for <a href="./../Classes/ArrayedCollection.html#-clipAt">ArrayedCollection: -clipAt</a>.<textarea class='editor'>[3, 4, 5]|@|6;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-@@' href='./../Overviews/Methods.html#@@'>@@</a>(<span class='argstr'>index</span>)</h3>
 <div class='method'>
-<p>synonym for <a href="./../Classes/ArrayedCollection.html#-wrapAt">ArrayedCollection: -wrapAt</a>.<pre class='code prettyprint lang-sc'>[3, 4, 5]@@6;
+<p>synonym for <a href="./../Classes/ArrayedCollection.html#-wrapAt">ArrayedCollection: -wrapAt</a>.<textarea class='editor'>[3, 4, 5]@@6;
 [3, 4, 5]@@ -1;
-[3, 4, 5]@@[6, 8]</pre>
+[3, 4, 5]@@[6, 8]</textarea>
 </div><h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-@|@' href='./../Overviews/Methods.html#@|@'>@|@</a>(<span class='argstr'>index</span>)</h3>
 <div class='method'>
-<p>synonym for <a href="./../Classes/ArrayedCollection.html#-foldAt">ArrayedCollection: -foldAt</a>.<pre class='code prettyprint lang-sc'>[3, 4, 5]@|@[6, 8];</pre>
+<p>synonym for <a href="./../Classes/ArrayedCollection.html#-foldAt">ArrayedCollection: -foldAt</a>.<textarea class='editor'>[3, 4, 5]@|@[6, 8];</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-first' href='./../Overviews/Methods.html#first'>first</a></h3>
 <div class='method'>
-<p>Return the first element of the collection.<pre class='code prettyprint lang-sc'>[3, 4, 5].first;</pre>
+<p>Return the first element of the collection.<textarea class='editor'>[3, 4, 5].first;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-last' href='./../Overviews/Methods.html#last'>last</a></h3>
 <div class='method'>
-<p>Return the last element of the collection.<pre class='code prettyprint lang-sc'>[3, 4, 5].last;</pre>
+<p>Return the last element of the collection.<textarea class='editor'>[3, 4, 5].last;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-putFirst' href='./../Overviews/Methods.html#putFirst'>putFirst</a>(<span class='argstr'>obj</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-putLast' href='./../Overviews/Methods.html#putLast'>putLast</a>(<span class='argstr'>obj</span>)</h3>
 <div class='method'>
-<p>Place <strong>item</strong> at the first / last index in the collection. Note that if the collection is empty (and therefore has no indexed slots) the item will not be added.<pre class='code prettyprint lang-sc'>[3, 4, 5].putFirst(100);
-[3, 4, 5].putLast(100);</pre>
+<p>Place <strong>item</strong> at the first / last index in the collection. Note that if the collection is empty (and therefore has no indexed slots) the item will not be added.<textarea class='editor'>[3, 4, 5].putFirst(100);
+[3, 4, 5].putLast(100);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-indexOf' href='./../Overviews/Methods.html#indexOf'>indexOf</a>(<span class='argstr'>item</span>)</h3>
 <div class='method'>
-<p>Return the index of an <strong>item</strong> in the collection, or nil if not found.<pre class='code prettyprint lang-sc'>[3, 4, 100, 5].indexOf(100);
-[3, 4, \foo, \bar].indexOf(\foo);</pre>
+<p>Return the index of an <strong>item</strong> in the collection, or nil if not found.<textarea class='editor'>[3, 4, 100, 5].indexOf(100);
+[3, 4, \foo, \bar].indexOf(\foo);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-indexOfEqual' href='./../Overviews/Methods.html#indexOfEqual'>indexOfEqual</a>(<span class='argstr'>item</span>, <span class='argstr'>offset: 0</span>)</h3>
 <div class='method'>
-<p>Return the index of something in the collection that equals the <strong>item</strong>, or nil if not found.<pre class='code prettyprint lang-sc'>[3, 4, "foo", "bar"].indexOfEqual("foo");</pre>
+<p>Return the index of something in the collection that equals the <strong>item</strong>, or nil if not found.<textarea class='editor'>[3, 4, "foo", "bar"].indexOfEqual("foo");</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-indicesOfEqual' href='./../Overviews/Methods.html#indicesOfEqual'>indicesOfEqual</a>(<span class='argstr'>item</span>)</h3>
 <div class='method'>
-<p>Return an array of indices of things in the collection that equal the <strong>item</strong>, or nil if not found.<pre class='code prettyprint lang-sc'>y = [7, 8, 7, 6, 5, 6, 7, 6, 7, 8, 9];
+<p>Return an array of indices of things in the collection that equal the <strong>item</strong>, or nil if not found.<textarea class='editor'>y = [7, 8, 7, 6, 5, 6, 7, 6, 7, 8, 9];
 y.indicesOfEqual(7);
-y.indicesOfEqual(5);</pre>
+y.indicesOfEqual(5);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-indexOfGreaterThan' href='./../Overviews/Methods.html#indexOfGreaterThan'>indexOfGreaterThan</a>(<span class='argstr'>val</span>)</h3>
 <div class='method'>
-<p>Return the first index containing an <strong>item</strong> which is greater than <strong>item</strong>.<pre class='code prettyprint lang-sc'>y = List[ 10, 5, 77, 55, 12, 123];
-y.indexOfGreaterThan(70);</pre>
+<p>Return the first index containing an <strong>item</strong> which is greater than <strong>item</strong>.<textarea class='editor'>y = List[ 10, 5, 77, 55, 12, 123];
+y.indexOfGreaterThan(70);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-selectIndices' href='./../Overviews/Methods.html#selectIndices'>selectIndices</a>(<span class='argstr'>function</span>)</h3>
 <div class='method'>
-<p>Return a new collection of same type as receiver which consists of all indices of those elements of the receiver for which function answers <code class='code prettyprint lang-sc'>true</code>. The function is passed two arguments, the item and an integer index.<pre class='code prettyprint lang-sc'>#[a, b, c, g, h, h, j, h].selectIndices({|item, i| item === \h})</pre>
+<p>Return a new collection of same type as receiver which consists of all indices of those elements of the receiver for which function answers <code>true</code>. The function is passed two arguments, the item and an integer index.<textarea class='editor'>#[a, b, c, g, h, h, j, h].selectIndices({|item, i| item === \h})</textarea>
 
 <p>If you want to control what type of collection is returned, use <a href="#-selectIndicesAs">-selectIndicesAs</a></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-selectIndicesAs' href='./../Overviews/Methods.html#selectIndicesAs'>selectIndicesAs</a>(<span class='argstr'>function</span>, <span class='argstr'>class</span>)</h3>
 <div class='method'>
-<p>Return a new collection of type <em>class</em> which consists of all indices of those elements of the receiver for which function answers <code class='code prettyprint lang-sc'>true</code>. The function is passed two arguments, the item and an integer index.<pre class='code prettyprint lang-sc'>#[a, b, c, g, h, h, j, h].selectIndicesAs({|item, i| item === \h}, Set)</pre>
+<p>Return a new collection of type <em>class</em> which consists of all indices of those elements of the receiver for which function answers <code>true</code>. The function is passed two arguments, the item and an integer index.<textarea class='editor'>#[a, b, c, g, h, h, j, h].selectIndicesAs({|item, i| item === \h}, Set)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-rejectIndices' href='./../Overviews/Methods.html#rejectIndices'>rejectIndices</a>(<span class='argstr'>function</span>)</h3>
 <div class='method'>
-<p>Return a new collection of same type as receiver which consists of all indices of those elements of the receiver for which function answers <code class='code prettyprint lang-sc'>false</code>. The function is passed two arguments, the item and an integer index.<pre class='code prettyprint lang-sc'>#[a, b, c, g, h, h, j, h].rejectIndices({|item, i| item === \h})</pre>
+<p>Return a new collection of same type as receiver which consists of all indices of those elements of the receiver for which function answers <code>false</code>. The function is passed two arguments, the item and an integer index.<textarea class='editor'>#[a, b, c, g, h, h, j, h].rejectIndices({|item, i| item === \h})</textarea>
 
 <p>If you want to control what type of collection is returned, use <a href="#-rejectIndicesAs">-rejectIndicesAs</a></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-rejectIndicesAs' href='./../Overviews/Methods.html#rejectIndicesAs'>rejectIndicesAs</a>(<span class='argstr'>function</span>, <span class='argstr'>class</span>)</h3>
 <div class='method'>
-<p>Return a new collection of type <em>class</em> which consists of all indices of those elements of the receiver for which function answers <code class='code prettyprint lang-sc'>false</code>. The function is passed two arguments, the item and an integer index.<pre class='code prettyprint lang-sc'>#[a, b, c, g, h, h, j, h].rejectIndicesAs({|item, i| item === \h}, Set)</pre>
+<p>Return a new collection of type <em>class</em> which consists of all indices of those elements of the receiver for which function answers <code>false</code>. The function is passed two arguments, the item and an integer index.<textarea class='editor'>#[a, b, c, g, h, h, j, h].rejectIndicesAs({|item, i| item === \h}, Set)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-maxIndex' href='./../Overviews/Methods.html#maxIndex'>maxIndex</a>(<span class='argstr'>function</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
 <div class='method'>
-<p>Answer the index of the maximum of the results of <strong>function</strong> evaluated for each item in the receiver. The function is passed two arguments, the item and an integer index. If function is nil, then answer the maximum of all items in the receiver.<pre class='code prettyprint lang-sc'>List[1, 2, 3, 4].maxIndex({ arg item, i; item + 10 });
-[3.2, 12.2, 13, 0.4].maxIndex;</pre>
+<p>Answer the index of the maximum of the results of <strong>function</strong> evaluated for each item in the receiver. The function is passed two arguments, the item and an integer index. If function is nil, then answer the maximum of all items in the receiver.<textarea class='editor'>List[1, 2, 3, 4].maxIndex({ arg item, i; item + 10 });
+[3.2, 12.2, 13, 0.4].maxIndex;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-minIndex' href='./../Overviews/Methods.html#minIndex'>minIndex</a>(<span class='argstr'>function</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
 <div class='method'>
-<p>Answer the index of the minimum of the results of <strong>function</strong> evaluated for each item in the receiver. The function is passed two arguments, the item and an integer index. If function is nil, then answer the minimum of all items in the receiver.<pre class='code prettyprint lang-sc'>List[1, 2, 3, 4].minIndex({ arg item, i; item + 10 });
-List[3.2, 12.2, 13, 0.4].minIndex;</pre>
+<p>Answer the index of the minimum of the results of <strong>function</strong> evaluated for each item in the receiver. The function is passed two arguments, the item and an integer index. If function is nil, then answer the minimum of all items in the receiver.<textarea class='editor'>List[1, 2, 3, 4].minIndex({ arg item, i; item + 10 });
+List[3.2, 12.2, 13, 0.4].minIndex;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-find' href='./../Overviews/Methods.html#find'>find</a>(<span class='argstr'>sublist</span>, <span class='argstr'>offset: 0</span>)</h3>
 <div class='method'>
-<p>If the <strong>sublist</strong> exists in the receiver (in the specified order), at an offset greater than or equal to the initial <strong>offset</strong>, then return the starting index.<pre class='code prettyprint lang-sc'>y = [7, 8, 7, 6, 5, 6, 7, 6, 7, 8, 9];
-y.find([7, 6, 5]);</pre>
+<p>If the <strong>sublist</strong> exists in the receiver (in the specified order), at an offset greater than or equal to the initial <strong>offset</strong>, then return the starting index.<textarea class='editor'>y = [7, 8, 7, 6, 5, 6, 7, 6, 7, 8, 9];
+y.find([7, 6, 5]);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-findAll' href='./../Overviews/Methods.html#findAll'>findAll</a>(<span class='argstr'>arr</span>, <span class='argstr'>offset: 0</span>)</h3>
 <div class='method'>
-<p>Similar to <a href="#-find">-find</a> but returns an array of all the indices at which the sequence is found.<pre class='code prettyprint lang-sc'>y = [7, 8, 7, 6, 5, 6, 7, 6, 7, 8, 9];
-y.findAll([7, 6]);</pre>
+<p>Similar to <a href="#-find">-find</a> but returns an array of all the indices at which the sequence is found.<textarea class='editor'>y = [7, 8, 7, 6, 5, 6, 7, 6, 7, 8, 9];
+y.findAll([7, 6]);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-indexIn' href='./../Overviews/Methods.html#indexIn'>indexIn</a>(<span class='argstr'>val</span>)</h3>
 <div class='method'>
-<p>Returns the closest index of the value in the collection (collection must be sorted).<pre class='code prettyprint lang-sc'>[2, 3, 5, 6].indexIn(5.2);</pre>
+<p>Returns the closest index of the value in the collection (collection must be sorted).<textarea class='editor'>[2, 3, 5, 6].indexIn(5.2);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-indexInBetween' href='./../Overviews/Methods.html#indexInBetween'>indexInBetween</a>(<span class='argstr'>val</span>)</h3>
 <div class='method'>
-<p>Returns a linearly interpolated float index for the value (collection must be sorted). Inverse operation is <a href="#-blendAt">-blendAt</a>.<pre class='code prettyprint lang-sc'>x = [2, 3, 5, 6].indexInBetween(5.2);
-[2, 3, 5, 6].blendAt(x);</pre>
+<p>Returns a linearly interpolated float index for the value (collection must be sorted). Inverse operation is <a href="#-blendAt">-blendAt</a>.<textarea class='editor'>x = [2, 3, 5, 6].indexInBetween(5.2);
+[2, 3, 5, 6].blendAt(x);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-blendAt' href='./../Overviews/Methods.html#blendAt'>blendAt</a>(<span class='argstr'>index</span>, <span class='argstr'>method: 'clipAt'</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
 <div class='method'>
-<p>Returns a linearly interpolated value between the two closest indices. Inverse operation is <a href="#-indexInBetween">-indexInBetween</a>.<pre class='code prettyprint lang-sc'>x = [2, 5, 6].blendAt(0.4);</pre>
+<p>Returns a linearly interpolated value between the two closest indices. Inverse operation is <a href="#-indexInBetween">-indexInBetween</a>.<textarea class='editor'>x = [2, 5, 6].blendAt(0.4);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-copyRange' href='./../Overviews/Methods.html#copyRange'>copyRange</a>(<span class='argstr'>start</span>, <span class='argstr'>end</span>)</h3>
 <div class='method'>
-<p>Return a new SequenceableCollection which is a copy of the indexed slots of the receiver from <strong>start</strong> to <strong>end</strong>. If <strong>end</strong> &lt; <strong>start</strong>, an empty collection is returned.<pre class='code prettyprint lang-sc'>(
+<p>Return a new SequenceableCollection which is a copy of the indexed slots of the receiver from <strong>start</strong> to <strong>end</strong>. If <strong>end</strong> &lt; <strong>start</strong>, an empty collection is returned.<textarea class='editor'>(
 var y, z;
 z = [1, 2, 3, 4, 5];
 y = z.copyRange(1, 3);
 z.postln;
 y.postln;
-)</pre>
+)</textarea>
 
-<p><div class='warning'><span class='warninglabel'>WARNING:</span> <code class='code prettyprint lang-sc'>x.copyRange(a, b)</code> is <strong>not</strong> equivalent to <code class='code prettyprint lang-sc'>x[a..b]</code>. The latter compiles to <a href="./../Classes/ArrayedCollection.html#-copySeries">ArrayedCollection: -copySeries</a>, which has different behavior when <strong>end</strong> &lt; <strong>start</strong>.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-copyToEnd' href='./../Overviews/Methods.html#copyToEnd'>copyToEnd</a>(<span class='argstr'>start</span>)</h3>
+<p><div class='warning'><span class='warninglabel'>WARNING:</span> <code>x.copyRange(a, b)</code> is <strong>not</strong> equivalent to <code>x[a..b]</code>. The latter compiles to <a href="./../Classes/ArrayedCollection.html#-copySeries">ArrayedCollection: -copySeries</a>, which has different behavior when <strong>end</strong> &lt; <strong>start</strong>.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-copyToEnd' href='./../Overviews/Methods.html#copyToEnd'>copyToEnd</a>(<span class='argstr'>start</span>)</h3>
 <div class='method'>
-<p>Return a new SequenceableCollection which is a copy of the indexed slots of the receiver from <strong>start</strong> to the end of the collection. <code class='code prettyprint lang-sc'>x.copyToEnd(a)</code> can also be written as <code class='code prettyprint lang-sc'>x[a..]</code></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-copyFromStart' href='./../Overviews/Methods.html#copyFromStart'>copyFromStart</a>(<span class='argstr'>end</span>)</h3>
+<p>Return a new SequenceableCollection which is a copy of the indexed slots of the receiver from <strong>start</strong> to the end of the collection. <code>x.copyToEnd(a)</code> can also be written as <code>x[a..]</code></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-copyFromStart' href='./../Overviews/Methods.html#copyFromStart'>copyFromStart</a>(<span class='argstr'>end</span>)</h3>
 <div class='method'>
-<p>Return a new SequenceableCollection which is a copy of the indexed slots of the receiver from the start of the collection to <strong>end</strong>. <code class='code prettyprint lang-sc'>x.copyFromStart(a)</code> can also be written as <code class='code prettyprint lang-sc'>x[..a]</code></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-remove' href='./../Overviews/Methods.html#remove'>remove</a>(<span class='argstr'>item</span>)</h3>
+<p>Return a new SequenceableCollection which is a copy of the indexed slots of the receiver from the start of the collection to <strong>end</strong>. <code>x.copyFromStart(a)</code> can also be written as <code>x[..a]</code></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-remove' href='./../Overviews/Methods.html#remove'>remove</a>(<span class='argstr'>item</span>)</h3>
 <div class='method'>
 <p>Remove <strong>item</strong> from collection.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-take' href='./../Overviews/Methods.html#take'>take</a>(<span class='argstr'>item</span>)</h3>
 <div class='method'>
-<p>Remove and return <strong>item</strong> from collection. The last item in the collection will move to occupy the vacated slot (and the collection size decreases by one). See also takeAt, defined for <a href="./../Classes/ArrayedCollection.html#-takeAt">ArrayedCollection: -takeAt</a>.<pre class='code prettyprint lang-sc'>a = [11, 12, 13, 14, 15];
+<p>Remove and return <strong>item</strong> from collection. The last item in the collection will move to occupy the vacated slot (and the collection size decreases by one). See also takeAt, defined for <a href="./../Classes/ArrayedCollection.html#-takeAt">ArrayedCollection: -takeAt</a>.<textarea class='editor'>a = [11, 12, 13, 14, 15];
 a.take(12);
-a;</pre>
+a;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-obtain' href='./../Overviews/Methods.html#obtain'>obtain</a>(<span class='argstr'>index</span>, <span class='argstr'>default</span>)</h3>
 <div class='method'>
 <p>Retrieve an element from a given index (like <a href="./../Classes/SequenceableCollection.html#-at">SequenceableCollection: -at</a>). This method is also implemented in <a href="./../Classes/Object.html">Object</a>, so that you can use it in situations where you don't want to know if the receiver is a collection or not. See also: <a href="./../Classes/SequenceableCollection.html#-instill">SequenceableCollection: -instill</a><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>index<td class='argumentdesc'>
 <p>The index at which to look for an element<tr><td class='argumentname'>default<td class='argumentdesc'>
-<p>If index exceeds collection size, or receiver is nil, return this instead<pre class='code prettyprint lang-sc'>(
+<p>If index exceeds collection size, or receiver is nil, return this instead<textarea class='editor'>(
 a = [10, 20, 30];
 b = [10, 20];
 c = 7;
@@ -387,7 +535,7 @@ c = 7;
  // obtain third element, if outside bounds return 1
 a.obtain(2, 1);
 b.obtain(2, 1);
-c.obtain(2, 1);</pre>
+c.obtain(2, 1);</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-instill' href='./../Overviews/Methods.html#instill'>instill</a>(<span class='argstr'>index</span>, <span class='argstr'>item</span>, <span class='argstr'>default</span>)</h3>
 <div class='method'>
 <p>Put an element at a given index (like <a href="./../Classes/SequenceableCollection.html#-put">SequenceableCollection: -put</a>). This method is also implemented in <a href="./../Classes/Object.html">Object</a>, so that you can use it in situations where you don't want to know if the receiver is a collection or not. It will always return a new collection. See also: <a href="./../Classes/SequenceableCollection.html#-obtain">SequenceableCollection: -obtain</a><h4>Arguments:</h4>
@@ -395,7 +543,7 @@ c.obtain(2, 1);</pre>
 <tr><td class='argumentname'>index<td class='argumentdesc'>
 <p>The index at which to put the item<tr><td class='argumentname'>item<td class='argumentdesc'>
 <p>The object to put into the new collection<tr><td class='argumentname'>default<td class='argumentdesc'>
-<p>If the index exceeds the current collection's size, extend the collection with this element<pre class='code prettyprint lang-sc'>(
+<p>If the index exceeds the current collection's size, extend the collection with this element<textarea class='editor'>(
 a = [10, 20, 30, 40];
 b = [10, 20];
 c = 7;
@@ -405,41 +553,41 @@ a.instill(2, -1);
 b.instill(2, -1);
 c.instill(2, -1);
 // providing a default value
-c.instill(2, -1, 0);</pre>
+c.instill(2, -1, 0);</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-keep' href='./../Overviews/Methods.html#keep'>keep</a>(<span class='argstr'>n</span>)</h3>
 <div class='method'>
-<p>Keep the first <strong>n</strong> items of the array. If <strong>n</strong> is negative, keep the last -<strong>n</strong> items.<pre class='code prettyprint lang-sc'>a = [1, 2, 3, 4, 5];
+<p>Keep the first <strong>n</strong> items of the array. If <strong>n</strong> is negative, keep the last -<strong>n</strong> items.<textarea class='editor'>a = [1, 2, 3, 4, 5];
 a.keep(3);
-a.keep(-3);</pre>
+a.keep(-3);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-drop' href='./../Overviews/Methods.html#drop'>drop</a>(<span class='argstr'>n</span>)</h3>
 <div class='method'>
-<p>Drop the first <strong>n</strong> items of the array. If <strong>n</strong> is negative, drop the last -<strong>n</strong> items.<pre class='code prettyprint lang-sc'>a = [1, 2, 3, 4, 5];
+<p>Drop the first <strong>n</strong> items of the array. If <strong>n</strong> is negative, drop the last -<strong>n</strong> items.<textarea class='editor'>a = [1, 2, 3, 4, 5];
 a.drop(3);
-a.drop(-3);</pre>
+a.drop(-3);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-join' href='./../Overviews/Methods.html#join'>join</a>(<span class='argstr'>joiner</span>)</h3>
 <div class='method'>
-<p>Returns a <a href="./../Classes/String.html">String</a> formed by connecting all the elements of the receiver, with <strong>joiner</strong> inbetween. See also <a href="./../Classes/String.html#-split">String: -split</a> as the complementary operation.<pre class='code prettyprint lang-sc'>["m", "ss", "ss", "pp", ""].join("i").postcs;
-"mississippi".split("i").postcs;</pre>
+<p>Returns a <a href="./../Classes/String.html">String</a> formed by connecting all the elements of the receiver, with <strong>joiner</strong> inbetween. See also <a href="./../Classes/String.html#-split">String: -split</a> as the complementary operation.<textarea class='editor'>["m", "ss", "ss", "pp", ""].join("i").postcs;
+"mississippi".split("i").postcs;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-flat' href='./../Overviews/Methods.html#flat'>flat</a></h3>
 <div class='method'>
-<p>Returns a collection from which all nesting has been flattened.<pre class='code prettyprint lang-sc'>[[1, 2, 3], [[4, 5], [[6]]]].flat; // [ 1, 2, 3, 4, 5, 6 ]
-[1, 2, [3, 4, [5, 6, [7, 8, [9, 0]]]]].flat; // [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]</pre>
+<p>Returns a collection from which all nesting has been flattened.<textarea class='editor'>[[1, 2, 3], [[4, 5], [[6]]]].flat; // [ 1, 2, 3, 4, 5, 6 ]
+[1, 2, [3, 4, [5, 6, [7, 8, [9, 0]]]]].flat; // [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-flatten' href='./../Overviews/Methods.html#flatten'>flatten</a>(<span class='argstr'>numLevels: 1</span>)</h3>
 <div class='method'>
 <p>Returns a collection from which <strong>numLevels</strong> of nesting has been flattened.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>numLevels<td class='argumentdesc'>
-<p>Specifies how many levels downward (inward) to flatten. Zero returns the original.<pre class='code prettyprint lang-sc'>a = [1, 2, [3, 4, [5, 6, [7, 8, [9, 0]]]]];
+<p>Specifies how many levels downward (inward) to flatten. Zero returns the original.<textarea class='editor'>a = [1, 2, [3, 4, [5, 6, [7, 8, [9, 0]]]]];
 a.flatten(1); // [ 1, 2, [ 3, 4, [ 5, 6, [ 7, 8, [ 9, 0 ] ] ] ] ]
 a.flatten(2); // [ 1, 2, 3, 4, 5, 6, [ 7, 8, [ 9, 0 ] ] ]
 a.flatten(3); // [ 1, 2, 3, 4, 5, 6, 7, 8, [ 9, 0 ] ]
-a.flatten(4); // [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]</pre>
+a.flatten(4); // [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-flatten2' href='./../Overviews/Methods.html#flatten2'>flatten2</a>(<span class='argstr'>numLevels: 1</span>)</h3>
 <div class='method'>
-<p>A symmetric version of <a href="#-flatten">-flatten</a>. For a negative <code class='code prettyprint lang-sc'>numLevels</code>, it flattens starting from the innermost arrays.<h4>Arguments:</h4>
+<p>A symmetric version of <a href="#-flatten">-flatten</a>. For a negative <code>numLevels</code>, it flattens starting from the innermost arrays.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>numLevels<td class='argumentdesc'>
-<p>Specifies how many levels downward (inward) or upward (outward) to flatten.<pre class='code prettyprint lang-sc'>a = [1, 2, [3, 4, [5, 6, [7, 8, [9, 0]]]]];
+<p>Specifies how many levels downward (inward) or upward (outward) to flatten.<textarea class='editor'>a = [1, 2, [3, 4, [5, 6, [7, 8, [9, 0]]]]];
 a.flatten2(4);  // [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]
 a.flatten2(3);  // [ 1, 2, 3, 4, 5, 6, 7, 8, [ 9, 0 ] ]
 a.flatten2(2);  // [ 1, 2, 3, 4, 5, 6, [ 7, 8, [ 9, 0 ] ] ]
@@ -448,13 +596,13 @@ a.flatten2(0);  // [ 1, 2, [ 3, 4, [ 5, 6, [ 7, 8, [ 9, 0 ] ] ] ] ]
 a.flatten2(-1); // [ 1, 2, [ 3, 4, [ 5, 6, [ 7, 8, 9, 0 ] ] ] ]
 a.flatten2(-2); // [ 1, 2, [ 3, 4, [ 5, 6, 7, 8, 9, 0 ] ] ]
 a.flatten2(-3); // [ 1, 2, [ 3, 4, 5, 6, 7, 8, 9, 0 ] ]
-a.flatten2(-4); // [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]</pre>
+a.flatten2(-4); // [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-flatBelow' href='./../Overviews/Methods.html#flatBelow'>flatBelow</a>(<span class='argstr'>level: 1</span>)</h3>
 <div class='method'>
 <p>Flatten all subarrays deeper than <strong>level</strong>.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>level<td class='argumentdesc'>
-<p>Specifies from what level onward to flatten. level 0 is outermost, so flatBelow(0) is like flat.<pre class='code prettyprint lang-sc'>a = [1, 2, [3, 4, [5, 6, [7, 8, [9, 0]]]]];
+<p>Specifies from what level onward to flatten. level 0 is outermost, so flatBelow(0) is like flat.<textarea class='editor'>a = [1, 2, [3, 4, [5, 6, [7, 8, [9, 0]]]]];
 a.flatBelow(0); // [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 ]
 a.flatBelow(1); // [ 1, 2, [ 3, 4, 5, 6, 7, 8, 9, 0 ] ]
 a.flatBelow(2); // [ 1, 2, [ 3, 4, [ 5, 6, 7, 8, 9, 0 ] ] ]
@@ -463,31 +611,31 @@ a.flatBelow(2); // [ 1, 2, [ 3, 4, [ 5, 6, 7, 8, 9, 0 ] ] ]
 // one can use coll.maxDepth. E.g. to flatten only the innermost level:
 a.flatBelow( (a.maxDepth - 1) - 1);
 // for lowest two levels:
-a.flatBelow( (a.maxDepth - 1) - 2);</pre>
+a.flatBelow( (a.maxDepth - 1) - 2);</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-flop' href='./../Overviews/Methods.html#flop'>flop</a></h3>
 <div class='method'>
-<p>Invert rows and columns in a two dimensional Collection (turn inside out). See also: <a href="./../Classes/Function.html">Function</a>.<pre class='code prettyprint lang-sc'>[[1, 2, 3], [4, 5, 6]].flop;
+<p>Invert rows and columns in a two dimensional Collection (turn inside out). See also: <a href="./../Classes/Function.html">Function</a>.<textarea class='editor'>[[1, 2, 3], [4, 5, 6]].flop;
 [[1, 2, 3], [4, 5, 6], [7, 8]].flop; // shorter array wraps
-[].flop; // result is always 2-d.</pre>
+[].flop; // result is always 2-d.</textarea>
 
-<p>Note that the innermost arrays are not copied:<pre class='code prettyprint lang-sc'>a = [1, 2];
+<p>Note that the innermost arrays are not copied:<textarea class='editor'>a = [1, 2];
 x = [[[a, 5], [a, 10]], [[a, 50, 60]]].flop;
 a[0] = pi;
-x // pi is everywhere</pre>
+x // pi is everywhere</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-flopWith' href='./../Overviews/Methods.html#flopWith'>flopWith</a>(<span class='argstr'>func</span>)</h3>
 <div class='method'>
-<p>Flop with a user defined function. Can be used to collect over several collections in parallel.<pre class='code prettyprint lang-sc'>[[1, 2, 3], [4, 5, 6]].flopWith(_+_);
+<p>Flop with a user defined function. Can be used to collect over several collections in parallel.<textarea class='editor'>[[1, 2, 3], [4, 5, 6]].flopWith(_+_);
 [[1, 2, 3], 1, [7, 8]].flopWith{ |a,b,c| a+b+c }; // shorter array wraps
 
 // typical use case (pseudocode)
-[synths, buffers].flopWith{ |a,b| a.set(\buf, b) }</pre>
+[synths, buffers].flopWith{ |a,b| a.set(\buf, b) }</textarea>
 
 <p><h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>func<td class='argumentdesc'>
 <p>A function taking as many arguments as elements in the array.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-flopTogether' href='./../Overviews/Methods.html#flopTogether'>flopTogether</a>( <span class='argstr'>... moreArrays</span>)</h3>
 <div class='method'>
-<p>Invert rows and columns in a an array of dimensional Collections (turn inside out), so that they all match up in size, but remain separated.<pre class='code prettyprint lang-sc'>(
+<p>Invert rows and columns in a an array of dimensional Collections (turn inside out), so that they all match up in size, but remain separated.<textarea class='editor'>(
 a = flopTogether(
     [[1, 2, 3], [4, 5, 6, 7, 8]] * 100,
     [[1, 2, 3], [4, 5, 6], [7, 8]],
@@ -496,76 +644,76 @@ a = flopTogether(
 );
 
 a.collect(_.size); // sizes are the same
-a.collect(_.shape) // shapes can be different</pre>
+a.collect(_.shape) // shapes can be different</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-flopDeep' href='./../Overviews/Methods.html#flopDeep'>flopDeep</a>(<span class='argstr'>rank</span>)</h3>
 <div class='method'>
 <p>Fold dimensions in a multi-dimensional Collection (turn inside out).<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>rank<td class='argumentdesc'>
-<p>The depth (dimension) from which the array is inverted inside-out.<pre class='code prettyprint lang-sc'>[[1, 2, 3], [[41, 52], 5, 6]].flopDeep(2);
+<p>The depth (dimension) from which the array is inverted inside-out.<textarea class='editor'>[[1, 2, 3], [[41, 52], 5, 6]].flopDeep(2);
 [[1, 2, 3], [[41, 52], 5, 6]].flopDeep(1);
 [[1, 2, 3], [[41, 52], 5, 6]].flopDeep(0);
 [[1, 2, 3], [[41, 52], 5, 6]].flopDeep; // without argument, flop from the deepest level
 
 [[[10, 100, 1000], 2, 3], [[41, 52], 5, 6]].flopDeep(2); // shorter array wraps
 [].flopDeep(1); // result is always one dimension higher.
-[[]].flopDeep(4);</pre>
-<div class='note'><span class='notelabel'>NOTE:</span> Note that, just like in flop, the innermost arrays (deeper than rank) are not copied.</div><pre class='code prettyprint lang-sc'>a = [1, 2];
+[[]].flopDeep(4);</textarea>
+<div class='note'><span class='notelabel'>NOTE:</span> Note that, just like in flop, the innermost arrays (deeper than rank) are not copied.</div><textarea class='editor'>a = [1, 2];
 x = [[[a, 5], [a, 10]], [[a, 50, 60]]].flopDeep(1);
 a[0] = pi;
-x // pi is everywhere</pre>
+x // pi is everywhere</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-maxSizeAtDepth' href='./../Overviews/Methods.html#maxSizeAtDepth'>maxSizeAtDepth</a>(<span class='argstr'>rank</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
 <div class='method'>
 <p>Returns the maximum size of all subarrays at a certain depth (dimension)<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>rank<td class='argumentdesc'>
-<p>The depth at which the size of the arrays is measured<pre class='code prettyprint lang-sc'>[[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxSizeAtDepth(2);
+<p>The depth at which the size of the arrays is measured<textarea class='editor'>[[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxSizeAtDepth(2);
 [[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxSizeAtDepth(1);
 [[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxSizeAtDepth(0);
 [].maxSizeAtDepth(0);
 [[]].maxSizeAtDepth(0);
-[[]].maxSizeAtDepth(1);</pre>
+[[]].maxSizeAtDepth(1);</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-maxDepth' href='./../Overviews/Methods.html#maxDepth'>maxDepth</a>(<span class='argstr'>max: 1</span>)</h3>
 <div class='supmethod'>From superclass: <a href='./../Classes/Collection.html'>Collection</a></div>
 <div class='method'>
 <p>Returns the maximum depth of all subarrays.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>max<td class='argumentdesc'>
-<p>Internally used only.<pre class='code prettyprint lang-sc'>[[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxDepth</pre>
+<p>Internally used only.<textarea class='editor'>[[1, 2, 3], [[41, 52], 5, 6], 1, 2, 3].maxDepth</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isSeries' href='./../Overviews/Methods.html#isSeries'>isSeries</a>(<span class='argstr'>step</span>)</h3>
 <div class='method'>
 <p>Returns true if the collection is an arithmetic series.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>step<td class='argumentdesc'>
-<p>Step size to look for. If none is given, any step size will match.<pre class='code prettyprint lang-sc'>[ 0, 1, 2, 3, 4, 5 ].isSeries; // true
+<p>Step size to look for. If none is given, any step size will match.<textarea class='editor'>[ 0, 1, 2, 3, 4, 5 ].isSeries; // true
 [ 1.5, 2.5, 3.5, 4.5, 5.5, 6.5 ].isSeries; // true
 [ 0, 1, 4, 5 ].isSeries; // false
 [ 0, 3, 6, 9, 12, 15 ].isSeries; // true
 [ 0, 3, 6, 9, 12, 15 ].isSeries(1); // false
 [ 2 ] // true
-[ ] // true (empty sequence)</pre>
+[ ] // true (empty sequence)</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-resamp0' href='./../Overviews/Methods.html#resamp0'>resamp0</a>(<span class='argstr'>newSize</span>)</h3>
 <div class='method'>
-<p>Returns a new Collection of the desired length, with values resampled evenly-spaced from the receiver without interpolation.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4].resamp0(12);
-[1, 2, 3, 4].resamp0(2);</pre>
+<p>Returns a new Collection of the desired length, with values resampled evenly-spaced from the receiver without interpolation.<textarea class='editor'>[1, 2, 3, 4].resamp0(12);
+[1, 2, 3, 4].resamp0(2);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-resamp1' href='./../Overviews/Methods.html#resamp1'>resamp1</a>(<span class='argstr'>newSize</span>)</h3>
 <div class='method'>
-<p>Returns a new Collection of the desired length, with values resampled evenly-spaced from the receiver with linear interpolation.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4].resamp1(12);
-[1, 2, 3, 4].resamp1(3);</pre>
+<p>Returns a new Collection of the desired length, with values resampled evenly-spaced from the receiver with linear interpolation.<textarea class='editor'>[1, 2, 3, 4].resamp1(12);
+[1, 2, 3, 4].resamp1(3);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-choose' href='./../Overviews/Methods.html#choose'>choose</a></h3>
 <div class='method'>
-<p>Choose an element from the collection at random.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4].choose;</pre>
+<p>Choose an element from the collection at random.<textarea class='editor'>[1, 2, 3, 4].choose;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-wchoose' href='./../Overviews/Methods.html#wchoose'>wchoose</a>(<span class='argstr'>weights</span>)</h3>
 <div class='method'>
-<p>Choose an element from the collection at random using a list of probabilities or weights. The weights must sum to 1.0.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4].wchoose([0.1, 0.2, 0.3, 0.4]);</pre>
+<p>Choose an element from the collection at random using a list of probabilities or weights. The weights must sum to 1.0.<textarea class='editor'>[1, 2, 3, 4].wchoose([0.1, 0.2, 0.3, 0.4]);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sort' href='./../Overviews/Methods.html#sort'>sort</a>(<span class='argstr'>function</span>)</h3>
 <div class='method'>
-<p>Sort the contents of the collection using the comparison function argument. The function should take two elements as arguments and return true if the first argument should be sorted before the second argument. If the function is nil, the following default function is used. { arg a, b; a &lt; b }<pre class='code prettyprint lang-sc'>[6, 2, 1, 7, 5].sort;
-[6, 2, 1, 7, 5].sort({ arg a, b; a &gt; b }); // reverse sort</pre>
+<p>Sort the contents of the collection using the comparison function argument. The function should take two elements as arguments and return true if the first argument should be sorted before the second argument. If the function is nil, the following default function is used. { arg a, b; a &lt; b }<textarea class='editor'>[6, 2, 1, 7, 5].sort;
+[6, 2, 1, 7, 5].sort({ arg a, b; a &gt; b }); // reverse sort</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sortBy' href='./../Overviews/Methods.html#sortBy'>sortBy</a>(<span class='argstr'>key</span>)</h3>
 <div class='method'>
-<p>Sort the contents of the collection using the key <strong>key</strong>, which is assumed to be found inside each element of the receiver.<pre class='code prettyprint lang-sc'>(
+<p>Sort the contents of the collection using the key <strong>key</strong>, which is assumed to be found inside each element of the receiver.<textarea class='editor'>(
 a = [
     Dictionary[\a-&gt;5, \b-&gt;1, \c-&gt;62],
     Dictionary[\a-&gt;2, \b-&gt;9, \c-&gt;65],
@@ -575,61 +723,61 @@ a = [
 ]
 )
 a.sortBy(\b);
-a.sortBy(\c);</pre>
+a.sortBy(\c);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-order' href='./../Overviews/Methods.html#order'>order</a>(<span class='argstr'>function</span>)</h3>
 <div class='method'>
-<p>Return an array of indices that would sort the collection into order. <strong>function</strong> is treated the same way as for the <a href="#-sort">-sort</a> method.<pre class='code prettyprint lang-sc'>[6, 2, 1, 7, 5].order;</pre>
+<p>Return an array of indices that would sort the collection into order. <strong>function</strong> is treated the same way as for the <a href="#-sort">-sort</a> method.<textarea class='editor'>[6, 2, 1, 7, 5].order;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-swap' href='./../Overviews/Methods.html#swap'>swap</a>(<span class='argstr'>i</span>, <span class='argstr'>j</span>)</h3>
 <div class='method'>
 <p>Swap two elements in the collection at indices <strong>i</strong> and <strong>j</strong>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pairsDo' href='./../Overviews/Methods.html#pairsDo'>pairsDo</a>(<span class='argstr'>function</span>)</h3>
 <div class='method'>
-<p>Calls function for each subsequent pair of elements in the SequentialCollection. The function is passed the two elements and an index.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4, 5].pairsDo({ arg a, b; [a, b].postln; });</pre>
+<p>Calls function for each subsequent pair of elements in the SequentialCollection. The function is passed the two elements and an index.<textarea class='editor'>[1, 2, 3, 4, 5].pairsDo({ arg a, b; [a, b].postln; });</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doAdjacentPairs' href='./../Overviews/Methods.html#doAdjacentPairs'>doAdjacentPairs</a>(<span class='argstr'>function</span>)</h3>
 <div class='method'>
-<p>Calls function for every adjacent pair of elements in the SequenceableCollection. The function is passed the two adjacent elements and an index.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4, 5].doAdjacentPairs({ arg a, b; [a, b].postln; });</pre>
+<p>Calls function for every adjacent pair of elements in the SequenceableCollection. The function is passed the two adjacent elements and an index.<textarea class='editor'>[1, 2, 3, 4, 5].doAdjacentPairs({ arg a, b; [a, b].postln; });</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-separate' href='./../Overviews/Methods.html#separate'>separate</a>(<span class='argstr'>function: true</span>)</h3>
 <div class='method'>
-<p>Separates the collection into sub-collections by calling the function for each adjacent pair of elements. If the function returns true, then a separation is made between the elements.<pre class='code prettyprint lang-sc'>[1, 2, 3, 5, 6, 8, 10].separate({ arg a, b; (b - a) &gt; 1 }).postcs;</pre>
+<p>Separates the collection into sub-collections by calling the function for each adjacent pair of elements. If the function returns true, then a separation is made between the elements.<textarea class='editor'>[1, 2, 3, 5, 6, 8, 10].separate({ arg a, b; (b - a) &gt; 1 }).postcs;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clump' href='./../Overviews/Methods.html#clump'>clump</a>(<span class='argstr'>groupSize</span>)</h3>
 <div class='method'>
-<p>Separates the collection into sub-collections by separating every groupSize elements.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4, 5, 6, 7, 8].clump(3).postcs;</pre>
+<p>Separates the collection into sub-collections by separating every groupSize elements.<textarea class='editor'>[1, 2, 3, 4, 5, 6, 7, 8].clump(3).postcs;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clumps' href='./../Overviews/Methods.html#clumps'>clumps</a>(<span class='argstr'>groupSizeList</span>)</h3>
 <div class='method'>
-<p>Separates the collection into sub-collections by separating elements into groupings whose size is given by integers in the groupSizeList.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4, 5, 6, 7, 8].clumps([1, 2]).postcs;</pre>
+<p>Separates the collection into sub-collections by separating elements into groupings whose size is given by integers in the groupSizeList.<textarea class='editor'>[1, 2, 3, 4, 5, 6, 7, 8].clumps([1, 2]).postcs;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-curdle' href='./../Overviews/Methods.html#curdle'>curdle</a>(<span class='argstr'>probability</span>)</h3>
 <div class='method'>
-<p>Separates the collection into sub-collections by randomly separating elements according to the given probability.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4, 5, 6, 7, 8].curdle(0.3).postcs;</pre>
+<p>Separates the collection into sub-collections by randomly separating elements according to the given probability.<textarea class='editor'>[1, 2, 3, 4, 5, 6, 7, 8].curdle(0.3).postcs;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-integrate' href='./../Overviews/Methods.html#integrate'>integrate</a></h3>
 <div class='method'>
-<p>Returns a collection with the incremental sums of all elements.<pre class='code prettyprint lang-sc'>[3, 4, 1, 1].integrate;</pre>
+<p>Returns a collection with the incremental sums of all elements.<textarea class='editor'>[3, 4, 1, 1].integrate;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-differentiate' href='./../Overviews/Methods.html#differentiate'>differentiate</a></h3>
 <div class='method'>
-<p>Returns a collection with the pairwise difference between all elements.<pre class='code prettyprint lang-sc'>[3, 4, 1, 1].differentiate;</pre>
+<p>Returns a collection with the pairwise difference between all elements.<textarea class='editor'>[3, 4, 1, 1].differentiate;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-reduce' href='./../Overviews/Methods.html#reduce'>reduce</a>(<span class='argstr'>operator</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
 <p>Applies the method named by operator to the first and second elements of the collection, and then applies the method to the result and to the third element of the collection, then applies the method to the result and to the fourth element of the collection, and so on, until the end of the array.
-<p>If the collection contains only one element, it is returned as the result. If the collection is empty, returns <code class='code prettyprint lang-sc'>nil</code>.<h4>Arguments:</h4>
+<p>If the collection contains only one element, it is returned as the result. If the collection is empty, returns <code>nil</code>.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>operator<td class='argumentdesc'>
-<p>May be a <a href="./../Classes/Function.html">Function</a> (taking two or three arguments) or a <a href="./../Classes/Symbol.html">Symbol</a> (method selector).<pre class='code prettyprint lang-sc'>[3, 4, 5, 6].reduce('*'); // this is the same as [3, 4, 5, 6].product
+<p>May be a <a href="./../Classes/Function.html">Function</a> (taking two or three arguments) or a <a href="./../Classes/Symbol.html">Symbol</a> (method selector).<textarea class='editor'>[3, 4, 5, 6].reduce('*'); // this is the same as [3, 4, 5, 6].product
 [3, 4, 5, 6].reduce(\lcm); // Lowest common multiple of the whole set of numbers
 ["d", "e", (0..9), "h"].reduce('++'); // concatenation
-[3, 4, 5, 6].reduce({ |a, b| sin(a) * sin(b) }); // product of sines</pre>
+[3, 4, 5, 6].reduce({ |a, b| sin(a) * sin(b) }); // product of sines</textarea>
 <tr><td class='argumentname'>adverb<td class='argumentdesc'>
-<p>An optional adverb to be used together with the operator (see <a href="./../Reference/Adverbs.html">Adverbs for Binary Operators</a>). If the operator is a functions, the adverb is passed as a third argument.<pre class='code prettyprint lang-sc'>// compare:
+<p>An optional adverb to be used together with the operator (see <a href="./../Reference/Adverbs.html">Adverbs for Binary Operators</a>). If the operator is a functions, the adverb is passed as a third argument.<textarea class='editor'>// compare:
 [1, 2] *.x [10, 20, 30]
 [[1, 2], [10, 20, 30]].reduce('*', 'x')
-[[1, 2], [10, 20, 30], [1000, 2000]].reduce('+', 'x') // but you can combine more</pre>
+[[1, 2], [10, 20, 30], [1000, 2000]].reduce('+', 'x') // but you can combine more</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-convertDigits' href='./../Overviews/Methods.html#convertDigits'>convertDigits</a>(<span class='argstr'>base: 10</span>)</h3>
 <div class='method'>
-<p>Returns an integer resulting from interpreting the elements as digits to a given base (default 10). See also asDigits in <a href="./../Classes/Integer.html#asDigits">Integer: asDigits</a> for the complementary method.<pre class='code prettyprint lang-sc'>[1, 0, 0, 0].convertDigits;
+<p>Returns an integer resulting from interpreting the elements as digits to a given base (default 10). See also asDigits in <a href="./../Classes/Integer.html#asDigits">Integer: asDigits</a> for the complementary method.<textarea class='editor'>[1, 0, 0, 0].convertDigits;
 [1, 0, 0, 0].convertDigits(2);
-[1, 0, 0, 0].convertDigits(3);</pre>
+[1, 0, 0, 0].convertDigits(3);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hammingDistance' href='./../Overviews/Methods.html#hammingDistance'>hammingDistance</a>(<span class='argstr'>that</span>)</h3>
 <div class='method'>
 <p>Returns the count of array elements that are not equal in identical positions. <a href="http://en.wikipedia.org/wiki/Hamming_distance">http://en.wikipedia.org/wiki/Hamming_distance</a>
-<p>The collections are not wrapped - if one array is shorter than the other, the difference in size should be included in the count.<pre class='code prettyprint lang-sc'>[0, 0, 0, 1, 1, 1, 0, 1, 0, 0].hammingDistance([0, 0, 1, 1, 0, 0, 0, 0, 1, 1]);
-"SuperMan".hammingDistance("SuperCollider");</pre>
+<p>The collections are not wrapped - if one array is shorter than the other, the difference in size should be included in the count.<textarea class='editor'>[0, 0, 0, 1, 1, 1, 0, 1, 0, 0].hammingDistance([0, 0, 1, 1, 0, 0, 0, 0, 1, 1]);
+"SuperMan".hammingDistance("SuperCollider");</textarea>
 </div><h3><a class='anchor' name='Math%20Support%20-%20Unary%20Messages'>Math Support - Unary Messages</a></h3>
 
 <p>All of the following messages send the message <a href="#-performUnaryOp">-performUnaryOp</a> to the receiver with the unary message selector as an argument.<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-neg' href='./../Overviews/Methods.html#neg'>neg</a></h3>
@@ -637,8 +785,6 @@ a.sortBy(\c);</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bitNot' href='./../Overviews/Methods.html#bitNot'>bitNot</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-abs' href='./../Overviews/Methods.html#abs'>abs</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asFloat' href='./../Overviews/Methods.html#asFloat'>asFloat</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asInt' href='./../Overviews/Methods.html#asInt'>asInt</a></h3>
-<div class='supmethod'>From superclass: <a href='./../Classes/Object.html'>Object</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ceil' href='./../Overviews/Methods.html#ceil'>ceil</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-floor' href='./../Overviews/Methods.html#floor'>floor</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-frac' href='./../Overviews/Methods.html#frac'>frac</a></h3>
@@ -693,8 +839,8 @@ a.sortBy(\c);</pre>
 <div class='method'>
 <p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performUnaryOp' href='./../Overviews/Methods.html#performUnaryOp'>performUnaryOp</a>(<span class='argstr'>aSelector</span>)</h3>
 <div class='method'>
-<p>Creates a new collection of the results of applying the selector to all elements in the receiver.<pre class='code prettyprint lang-sc'>[1, 2, 3, 4].neg;
-[1, 2, 3, 4].reciprocal;</pre>
+<p>Creates a new collection of the results of applying the selector to all elements in the receiver.<textarea class='editor'>[1, 2, 3, 4].neg;
+[1, 2, 3, 4].reciprocal;</textarea>
 </div><h3><a class='anchor' name='Math%20Support%20-%20Binary%20Messages'>Math Support - Binary Messages</a></h3>
 
 <p>All of the following messages send the message <a href="#-performBinaryOp">-performBinaryOp</a> to the receiver with the binary message selector and the second operand as arguments.<h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-+' href='./../Overviews/Methods.html#+'>+</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
@@ -726,7 +872,7 @@ a.sortBy(\c);</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-amclip' href='./../Overviews/Methods.html#amclip'>amclip</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-scaleneg' href='./../Overviews/Methods.html#scaleneg'>scaleneg</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clip2' href='./../Overviews/Methods.html#clip2'>clip2</a>(<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-excess' href='./../Overviews/Methods.html#excess'>excess</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-excess' href='./../Overviews/Methods.html#excess'>excess</a>(<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-rrand' href='./../Overviews/Methods.html#rrand'>rrand</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-exprand' href='./../Overviews/Methods.html#exprand'>exprand</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
@@ -747,9 +893,327 @@ a.sortBy(\c);</pre>
 <div class='method'>
 <p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performBinaryOp' href='./../Overviews/Methods.html#performBinaryOp'>performBinaryOp</a>(<span class='argstr'>aSelector</span>, <span class='argstr'>theOperand</span>, <span class='argstr'>adverb</span>)</h3>
 <div class='method'>
-<p>Creates a new collection of the results of applying the selector with the operand to all elements in the receiver. If the operand is a collection then elements of that collection are paired with elements of the receiver.<pre class='code prettyprint lang-sc'>([1, 2, 3, 4] * 10);
-([1, 2, 3, 4] * [4, 5, 6, 7]);</pre>
-</div><h3><a class='anchor' name='Multichannel%20wrappers'>Multichannel wrappers</a></h3>
+<p>Creates a new collection of the results of applying the selector with the operand to all elements in the receiver. If the operand is a collection then elements of that collection are paired with elements of the receiver.<textarea class='editor'>([1, 2, 3, 4] * 10);
+([1, 2, 3, 4] * [4, 5, 6, 7]);</textarea>
+</div><h3><a class='anchor' name='Math%20Support%20-%20Special%20Functions'>Math Support - Special Functions</a></h3>
+
+<p>A variety of Special Functions are supplied by the Boost C++ library. The library's <a href="http://www.boost.org/doc/libs/1_66_0/libs/math/doc/html/special.html">online documentation</a> serves as the primary reference for the following functions. The methods here match closely with those found in the source library, as do argument names.
+<p>Below you'll find descriptions of the functions and their bounds, but for visualizing the functions, have a look in <a href="./../Guides/Tour-of-Special-Functions.html">Tour of Special Functions</a>.<div class='note'><span class='notelabel'>NOTE:</span> The following methods are documented slightly clearer in <a href="./../Classes/SimpleNumber.html#Special%20Functions">SimpleNumber: Special Functions</a> using functional notation. As of this writing, a bug in the help file formatting misleadingly documents the methods in receiver notation (methods preceded by <code>.</code>), but should be read to suggests the usage: <code>foo([a], [b])</code>. The equivalent receiver notation is: <code>[a].foo([b])</code>. Note that those methods with only one argument erroneously omit that argument from the argument list; each element in the collection is implicitly passed as the method's argument, e.g. <code>foo([a])</code> or <code>[a].foo</code></div><div class='warning'><span class='warninglabel'>WARNING:</span> Many of the functions are only valid in certain numerical ranges. For the most part, error handling happens in the underlying boost functions. While these errors are often obtuse, you'll usually find a useful message at the end of the error regarding proper ranges and the erroneous value supplied. Refer to the online documentation for more detailed descriptions, and the <a href="./../Guides/Tour-of-Special-Functions.html">Tour of Special Functions</a> for plots showing ranges and asymptotes.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bernouliB2n' href='./../Overviews/Methods.html#bernouliB2n'>bernouliB2n</a></h3>
+<div class='method'>
+<p>Returns the (2*<code>n</code>)th Bernoulli number.
+<p>Because all odd numbered Bernoulli numbers are zero (apart from B(1) which is -1/2) the interface will only return the even numbered Bernoulli numbers.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tangentT2n' href='./../Overviews/Methods.html#tangentT2n'>tangentT2n</a></h3>
+<div class='method'>
+<p>Returns a single tangent number at <code>i</code>. Also called a zag function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tgamma' href='./../Overviews/Methods.html#tgamma'>tgamma</a></h3>
+<div class='method'>
+<p>Returns the "true gamma" of value <code>z</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tgamma1pm1' href='./../Overviews/Methods.html#tgamma1pm1'>tgamma1pm1</a></h3>
+<div class='method'>
+<p>Returns <code>gamma(dz + 1) - 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-lgamma' href='./../Overviews/Methods.html#lgamma'>lgamma</a></h3>
+<div class='method'>
+<p>Returns the natural logarithm of the gamma function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-digamma' href='./../Overviews/Methods.html#digamma'>digamma</a></h3>
+<div class='method'>
+<p>Returns the digamma or psi function of <code>z</code>.
+<p>Digamma is defined as the logarithmic derivative of the gamma function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-trigamma' href='./../Overviews/Methods.html#trigamma'>trigamma</a></h3>
+<div class='method'>
+<p>Returns the trigamma function of <code>z</code>.
+<p>Trigamma is defined as the derivative of the digamma function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-polygamma' href='./../Overviews/Methods.html#polygamma'>polygamma</a>(<span class='argstr'>n</span>, <span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns the polygamma function of <code>z</code>.
+<p>Polygamma is defined as the <code>n</code>'th derivative of the digamma function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tgammaRatio' href='./../Overviews/Methods.html#tgammaRatio'>tgammaRatio</a>(<span class='argstr'>a</span>, <span class='argstr'>b</span>)</h3>
+<div class='method'>
+<p>Returns the ratio of gamma functions <code>tgamma(a) / tgamma(b)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tgammaDeltaRatio' href='./../Overviews/Methods.html#tgammaDeltaRatio'>tgammaDeltaRatio</a>(<span class='argstr'>a</span>, <span class='argstr'>delta</span>)</h3>
+<div class='method'>
+<p>Returns the ratio of gamma functions <code>tgamma(a) / tgamma(a+delta)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaP' href='./../Overviews/Methods.html#gammaP'>gammaP</a>(<span class='argstr'>a</span>, <span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns the normalised lower incomplete gamma function.
+<p>Requires <code>a</code> &gt; 0 and <code>z</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaQ' href='./../Overviews/Methods.html#gammaQ'>gammaQ</a>(<span class='argstr'>a</span>, <span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns the normalised upper incomplete gamma function.
+<p>Requires <code>a</code> &gt; 0 and <code>z</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tgammaLower' href='./../Overviews/Methods.html#tgammaLower'>tgammaLower</a>(<span class='argstr'>a</span>, <span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns the full (non-normalised) lower incomplete gamma function.
+<p>Requires <code>a</code> &gt; 0 and <code>z</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tgammaUpper' href='./../Overviews/Methods.html#tgammaUpper'>tgammaUpper</a>(<span class='argstr'>a</span>, <span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns the full (non-normalised) upper incomplete gamma function.
+<p>Requires <code>a</code> &gt; 0 and <code>z</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaPInv' href='./../Overviews/Methods.html#gammaPInv'>gammaPInv</a>(<span class='argstr'>a</span>, <span class='argstr'>p</span>)</h3>
+<div class='method'>
+<p>Returns a value such that <code>p = gamma_p(a, x)</code>.
+<p>Requires <code>a</code> &gt; 0 and 1 &gt;= <code>p,q</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaQInv' href='./../Overviews/Methods.html#gammaQInv'>gammaQInv</a>(<span class='argstr'>a</span>, <span class='argstr'>q</span>)</h3>
+<div class='method'>
+<p>Returns a value x such that <code>q = gamma_q(a, x)</code>.
+<p>Requires <code>a</code> &gt; 0 and 1 &gt;= <code>p,q</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaPInvA' href='./../Overviews/Methods.html#gammaPInvA'>gammaPInvA</a>(<span class='argstr'>x</span>, <span class='argstr'>p</span>)</h3>
+<div class='method'>
+<p>Returns a value such that <code>p = gamma_p(a, x)</code>.
+<p>Requires <code>x</code> &gt; 0 and 1 &gt;= <code>p,q</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaQInvA' href='./../Overviews/Methods.html#gammaQInvA'>gammaQInvA</a>(<span class='argstr'>x</span>, <span class='argstr'>q</span>)</h3>
+<div class='method'>
+<p>Returns a value x such that <code>q = gamma_q(a, x)</code>.
+<p>Requires <code>x</code> &gt; 0 and 1 &gt;= <code>p,q</code> &gt;= 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaPDerivative' href='./../Overviews/Methods.html#gammaPDerivative'>gammaPDerivative</a>(<span class='argstr'>a</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Implements the partial derivative with respect to x of the incomplete gamma function (lower).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gammaQDerivative' href='./../Overviews/Methods.html#gammaQDerivative'>gammaQDerivative</a>(<span class='argstr'>a</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Implements the partial derivative with respect to x of the incomplete gamma function (upper).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-factorial' href='./../Overviews/Methods.html#factorial'>factorial</a></h3>
+<div class='method'>
+<p>Returns <code>i!</code>.<div class='warning'><span class='warninglabel'>WARNING:</span> <code>factorial</code> will overflow if <code>i &gt; 170</code></div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-doubleFactorial' href='./../Overviews/Methods.html#doubleFactorial'>doubleFactorial</a></h3>
+<div class='method'>
+<p>Returns <code>i!!</code>.
+<p>For <strong>even</strong> <code>i</code>, <code>i !! = i(i-2)(i-4)(i-6) ... (4)(2)</code>.
+<p>For <strong>odd</strong> <code>i</code>, <code>i !! = i(i-2)(i-4)(i-6) ... (3)(1)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-risingFactorial' href='./../Overviews/Methods.html#risingFactorial'>risingFactorial</a>(<span class='argstr'>x</span>, <span class='argstr'>i</span>)</h3>
+<div class='method'>
+<p>Returns the rising factorial of <code>x</code> and <code>i</code>:
+<p><code>x(x+1)(x+2)(x+3)...(x+i-1)</code>
+<p>Both <code>x</code> and <code>i</code> can be negative as well as positive.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-fallingFactorial' href='./../Overviews/Methods.html#fallingFactorial'>fallingFactorial</a>(<span class='argstr'>x</span>, <span class='argstr'>i</span>)</h3>
+<div class='method'>
+<p>Returns the falling factorial of <code>x</code> and <code>i</code>:
+<p><code>x(x-1)(x-2)(x-3)...(x-i+1)</code>
+<p>This function is only defined for positive <code>i</code>. Argument <code>x</code> can be either positive or negative.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-binomialCoefficient' href='./../Overviews/Methods.html#binomialCoefficient'>binomialCoefficient</a>(<span class='argstr'>n</span>, <span class='argstr'>k</span>)</h3>
+<div class='method'>
+<p>Requires <code>k</code> &lt;= <code>n</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-beta' href='./../Overviews/Methods.html#beta'>beta</a>(<span class='argstr'>a</span>, <span class='argstr'>b</span>)</h3>
+<div class='method'>
+<p>The beta function is defined by: <code>tgamma(a)*tgamma(b) / tgamma(a+b)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibeta' href='./../Overviews/Methods.html#ibeta'>ibeta</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns the normalised incomplete beta function of <code>a</code>, <code>b</code> and <code>x</code>.
+<p>Require 0 &lt;= <code>x</code> &lt;= 1, <code>a,b</code> &gt;= 0, and in addition that not both <code>a</code> and <code>b</code> are zero.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaC' href='./../Overviews/Methods.html#ibetaC'>ibetaC</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns the normalised complement of the incomplete beta function of <code>a</code>, <code>b</code> and <code>x</code>.
+<p>Require 0 &lt;= <code>x</code> &lt;= 1, <code>a,b</code> &gt;= 0, and in addition that not both <code>a</code> and <code>b</code> are zero.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-betaFull' href='./../Overviews/Methods.html#betaFull'>betaFull</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns the full (non-normalised) incomplete beta function of <code>a</code>, <code>b</code> and <code>x</code>.
+<p>Require 0 &lt;= <code>x</code> &lt;= 1, and <code>a,b</code> &gt; 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-betaFullC' href='./../Overviews/Methods.html#betaFullC'>betaFullC</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns the full (non-normalised) complement of the incomplete beta function of <code>a</code>, <code>b</code> and <code>x</code>.
+<p>Require 0 &lt;= <code>x</code> &lt;= 1, and <code>a,b</code> &gt; 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaInv' href='./../Overviews/Methods.html#ibetaInv'>ibetaInv</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns a value <code>x</code> such that: <code>p = ibeta(a, b, x)</code>.
+<p>Requires <code>a,b</code> &gt; 0 and 0 &lt;= <code>p</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaCInv' href='./../Overviews/Methods.html#ibetaCInv'>ibetaCInv</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns a value <code>x</code> such that: <code>q = ibetaC(a, b, x)</code>.
+<p>Requires <code>a,b</code> &gt; 0 and 0 &lt;= <code>q</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaInvA' href='./../Overviews/Methods.html#ibetaInvA'>ibetaInvA</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns a value <code>a</code> such that: <code>p = ibeta(a, b, x)</code>.
+<p>Requires <code>b</code> &gt; 0, 0 &lt; <code>x</code> &lt; 1, and 0 &lt;= <code>p</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaCInvA' href='./../Overviews/Methods.html#ibetaCInvA'>ibetaCInvA</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns a value <code>a</code> such that: <code>q = ibetaC(a, b, x)</code>.
+<p>Requires <code>b</code> &gt; 0, 0 &lt; <code>x</code> &lt; 1, and 0 &lt;= <code>q</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaInvB' href='./../Overviews/Methods.html#ibetaInvB'>ibetaInvB</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns a value <code>b</code> such that: <code>p = ibeta(a, b, x)</code>.
+<p>Requires <code>a</code> &gt; 0, 0 &lt; <code>x</code> &lt; 1, and 0 &lt;= <code>p</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaCInvB' href='./../Overviews/Methods.html#ibetaCInvB'>ibetaCInvB</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns a value <code>b</code> such that: <code>q = ibetaC(a, b, x)</code>.
+<p>Requires <code>a</code> &gt; 0, 0 &lt; <code>x</code> &lt; 1, and 0 &lt;= <code>q</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ibetaDerivative' href='./../Overviews/Methods.html#ibetaDerivative'>ibetaDerivative</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns the partial derivative with respect to <code>x</code> of the incomplete beta function <code>ibeta(a,b,x)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-erf' href='./../Overviews/Methods.html#erf'>erf</a></h3>
+<div class='method'>
+<p>Returns the error function of <code>z</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-erfC' href='./../Overviews/Methods.html#erfC'>erfC</a></h3>
+<div class='method'>
+<p>Returns the complement of the error function of <code>z</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-erfInv' href='./../Overviews/Methods.html#erfInv'>erfInv</a></h3>
+<div class='method'>
+<p>Returns the inverse error function of <code>z</code>, that is a value <code>x</code> such that:
+<p><code>p = erf(x)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-erfCInv' href='./../Overviews/Methods.html#erfCInv'>erfCInv</a></h3>
+<div class='method'>
+<p>Returns the inverse of the complement of the error function of <code>z</code>, that is a value <code>x</code> such that:
+<p><code>p = erfC(x)</code></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-legendreP' href='./../Overviews/Methods.html#legendreP'>legendreP</a>(<span class='argstr'>n</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the Legendre Polynomial of the first kind.
+<p>Requires -1 &lt;= <code>x</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-legendrePPrime' href='./../Overviews/Methods.html#legendrePPrime'>legendrePPrime</a>(<span class='argstr'>n</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the derivatives of the Legendre polynomials.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-legendrePZeros' href='./../Overviews/Methods.html#legendrePZeros'>legendrePZeros</a></h3>
+<div class='method'>
+<p>Since the Legendre polynomials are alternatively even and odd, only the non-negative zeros are returned. For the odd Legendre polynomials, the first zero is always zero. The rest of the zeros are returned in increasing order.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-legendrePAssoc' href='./../Overviews/Methods.html#legendrePAssoc'>legendrePAssoc</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns the associated Legendre polynomial of the first kind.
+<p>Requires -1 &lt;= <code>x</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-legendreQ' href='./../Overviews/Methods.html#legendreQ'>legendreQ</a>(<span class='argstr'>n</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the value of the Legendre polynomial that is the second solution to the Legendre differential equation.
+<p>Requires -1 &lt;= <code>x</code> &lt;= 1.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-laguerre' href='./../Overviews/Methods.html#laguerre'>laguerre</a>(<span class='argstr'>n</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the value of the Laguerre Polynomial of order <code>n</code> at point <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-laguerreAssoc' href='./../Overviews/Methods.html#laguerreAssoc'>laguerreAssoc</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns the Associated Laguerre polynomial of degree of dgree <code>n</code> and order <code>m</code> at point <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hermite' href='./../Overviews/Methods.html#hermite'>hermite</a>(<span class='argstr'>n</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the value of the Hermite Polynomial of order <code>n</code> at point <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-chebyshevT' href='./../Overviews/Methods.html#chebyshevT'>chebyshevT</a>(<span class='argstr'>n</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the Chebyshev polynomials of the first kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-chebyshevU' href='./../Overviews/Methods.html#chebyshevU'>chebyshevU</a>(<span class='argstr'>n</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the Chebyshev polynomials of the second kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-chebyshevTPrime' href='./../Overviews/Methods.html#chebyshevTPrime'>chebyshevTPrime</a>(<span class='argstr'>n</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the derivatives of the Chebyshev polynomials of the first kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-chebyshevTZeros' href='./../Overviews/Methods.html#chebyshevTZeros'>chebyshevTZeros</a></h3>
+<div class='method'>
+<p>Returns the roots (zeros) of the <code>n</code>-th Chebyshev polynomial of the first kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphericalHarmonic' href='./../Overviews/Methods.html#sphericalHarmonic'>sphericalHarmonic</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns the (<code>Complex</code>) value of the Spherical Harmonic.
+<p><code>theta</code> is taken as the polar (colatitudinal) coordinate within <code>[0, pi]</code>, and <code>phi</code> as the azimuthal (longitudinal) coordinate within <code>[0,2pi]</code>.
+<p>See boost documentation for further information, including a note about the Condon-Shortley phase term of <code>(-1)^m</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphericalHarmonicR' href='./../Overviews/Methods.html#sphericalHarmonicR'>sphericalHarmonicR</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns the real part of the Spherical Harmonic.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphericalHarmonicI' href='./../Overviews/Methods.html#sphericalHarmonicI'>sphericalHarmonicI</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns the imaginary part of the Spherical Harmonic.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselJ' href='./../Overviews/Methods.html#cylBesselJ'>cylBesselJ</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the Bessel functions of the first kind.
+<p>The functions return the result of <code>domain_error</code> whenever the result is undefined or complex. This occurs when <code>x &lt; 0</code> and <code>v</code> is not an integer, or when <code>x == 0</code> and <code>v != 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylNeumann' href='./../Overviews/Methods.html#cylNeumann'>cylNeumann</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the Bessel functions of the second kind.
+<p>The functions return the result of <code>domain_error</code> whenever the result is undefined or complex. This occurs when <code>x &lt;= 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselJZero' href='./../Overviews/Methods.html#cylBesselJZero'>cylBesselJZero</a>(<span class='argstr'>v</span>, <span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>Returns a single zero or root of the Bessel function of the first kind.
+<p><code>index</code> is a 1-based index of zero of the cylindrical Bessel function of order <code>v</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylNeumannZero' href='./../Overviews/Methods.html#cylNeumannZero'>cylNeumannZero</a>(<span class='argstr'>v</span>, <span class='argstr'>index</span>)</h3>
+<div class='method'>
+<p>Returns a single zero or root of the Neumann function (Bessel function of the second kind).
+<p><code>index</code> is a 1-based index of zero of the cylindrical Neumann function of order <code>v</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselI' href='./../Overviews/Methods.html#cylBesselI'>cylBesselI</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the modified Bessel functions of the first kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselK' href='./../Overviews/Methods.html#cylBesselK'>cylBesselK</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the modified Bessel functions of the second kind.
+<p>Requires <code>x &gt; 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphBessel' href='./../Overviews/Methods.html#sphBessel'>sphBessel</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the spherical Bessel functions of the first kind.
+<p>Requires <code>x</code> &gt; 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphNeumann' href='./../Overviews/Methods.html#sphNeumann'>sphNeumann</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the spherical Bessel functions of the first kind.
+<p>Requires <code>x</code> &gt; 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselJPrime' href='./../Overviews/Methods.html#cylBesselJPrime'>cylBesselJPrime</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the first derivative with respect to x of the corresponding Bessel function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylNeumannPrime' href='./../Overviews/Methods.html#cylNeumannPrime'>cylNeumannPrime</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the first derivative with respect to x of the corresponding Neumann function.
+<p>Requires <code>x &gt; 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselIPrime' href='./../Overviews/Methods.html#cylBesselIPrime'>cylBesselIPrime</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the first derivative with respect to x of the corresponding Bessel function.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylBesselKPrime' href='./../Overviews/Methods.html#cylBesselKPrime'>cylBesselKPrime</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the first derivative with respect to x of the corresponding Bessel function.
+<p>Requires <code>x &gt; 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphBesselPrime' href='./../Overviews/Methods.html#sphBesselPrime'>sphBesselPrime</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the first derivative with respect to x of the corresponding Bessel function.
+<p>Requires <code>x &gt; 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphNeumannPrime' href='./../Overviews/Methods.html#sphNeumannPrime'>sphNeumannPrime</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the first derivative with respect to x of the corresponding Neumann function.
+<p>Requires <code>x &gt; 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylHankel1' href='./../Overviews/Methods.html#cylHankel1'>cylHankel1</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the Hankel functions of the first kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cylHankel2' href='./../Overviews/Methods.html#cylHankel2'>cylHankel2</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the Hankel functions of the second kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphHankel1' href='./../Overviews/Methods.html#sphHankel1'>sphHankel1</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the spherical Hankel functions of the first kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sphHankel2' href='./../Overviews/Methods.html#sphHankel2'>sphHankel2</a>(<span class='argstr'>v</span>, <span class='argstr'>x</span>)</h3>
+<div class='method'>
+<p>Returns the result of the spherical Hankel functions of the second kind.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-airyAi' href='./../Overviews/Methods.html#airyAi'>airyAi</a></h3>
+<div class='method'>
+<p>Returns the result of the Airy function Ai at <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-airyBi' href='./../Overviews/Methods.html#airyBi'>airyBi</a></h3>
+<div class='method'>
+<p>Returns the result of the Airy function Bi at <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-airyAiPrime' href='./../Overviews/Methods.html#airyAiPrime'>airyAiPrime</a></h3>
+<div class='method'>
+<p>Returns the derivative of the Airy function Ai at <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-airyBiPrime' href='./../Overviews/Methods.html#airyBiPrime'>airyBiPrime</a></h3>
+<div class='method'>
+<p>Returns the derivative of the Airy function Bi at <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-airyAiZero' href='./../Overviews/Methods.html#airyAiZero'>airyAiZero</a></h3>
+<div class='method'>
+<p>Returns the <code>m</code>th zero or root of the Airy Ai function. The Airy Ai function has an infinite number of zeros on the negative real axis.
+<p><code>m</code> is 1-based.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-airyBiZero' href='./../Overviews/Methods.html#airyBiZero'>airyBiZero</a></h3>
+<div class='method'>
+<p>Returns the <code>m</code>th zero or root (1-based) of the Airy Bi function. The Airy Bi function has an infinite number of zeros on the negative real axis.
+<p><code>m</code> is 1-based.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintRf' href='./../Overviews/Methods.html#ellintRf'>ellintRf</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns Carlson's Elliptic Integral RF.
+<p>Requires that <code>x,y &gt;= 0</code>, with at most one of them zero, and that <code>z &gt;= 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintRd' href='./../Overviews/Methods.html#ellintRd'>ellintRd</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns Carlson's Elliptic Integral RD.
+<p>Requires that <code>x,y &gt;= 0</code>, with at most one of them zero, and that <code>z &gt;= 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintRj' href='./../Overviews/Methods.html#ellintRj'>ellintRj</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns Carlson's Elliptic Integral RJ.
+<p>Requires that <code>x,y,z &gt;= 0</code>, with at most one of them zero, and that <code>p != 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintRc' href='./../Overviews/Methods.html#ellintRc'>ellintRc</a>(<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<div class='method'>
+<p>Returns Carlson's Elliptic Integral RC.
+<p>Requires that <code>x &gt;= 0</code>, with at most one of them zero, and that <code>y != 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintRg' href='./../Overviews/Methods.html#ellintRg'>ellintRg</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns Carlson's Elliptic Integral RG.
+<p>Requires that <code>x,y &gt;= 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellint1' href='./../Overviews/Methods.html#ellint1'>ellint1</a>(<span class='argstr'>k</span>, <span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the incomplete elliptic integral of the first kind, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellint1C' href='./../Overviews/Methods.html#ellint1C'>ellint1C</a></h3>
+<div class='method'>
+<p>Returns the complete elliptic integral of the first kind, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellint2' href='./../Overviews/Methods.html#ellint2'>ellint2</a>(<span class='argstr'>k</span>, <span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the incomplete elliptic integral of the second kind, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellint2C' href='./../Overviews/Methods.html#ellint2C'>ellint2C</a></h3>
+<div class='method'>
+<p>Returns the complete elliptic integral of the second kind, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellint3' href='./../Overviews/Methods.html#ellint3'>ellint3</a>( <span class='argstr'>... args</span>)</h3>
+<div class='method'>
+<p>Returns the incomplete elliptic integral of the third kind, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code> and <code>n &lt; 1/sin^2(phi)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellint3C' href='./../Overviews/Methods.html#ellint3C'>ellint3C</a>(<span class='argstr'>k</span>, <span class='argstr'>n</span>)</h3>
+<div class='method'>
+<p>Returns the complete elliptic integral of the third kind, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code> and <code>n &lt; 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintD' href='./../Overviews/Methods.html#ellintD'>ellintD</a>(<span class='argstr'>k</span>, <span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the incomplete elliptic integral <strong>D(phi, k)</strong>, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ellintDC' href='./../Overviews/Methods.html#ellintDC'>ellintDC</a></h3>
+<div class='method'>
+<p>Returns the complete elliptic integral <strong>D(phi, k)</strong>, Legendre form.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiZeta' href='./../Overviews/Methods.html#jacobiZeta'>jacobiZeta</a>(<span class='argstr'>k</span>, <span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the result of the Jacobi Zeta Function.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-heumanLambda' href='./../Overviews/Methods.html#heumanLambda'>heumanLambda</a>(<span class='argstr'>k</span>, <span class='argstr'>phi</span>)</h3>
+<div class='method'>
+<p>Returns the result of the Heuman Lambda Function.
+<p>Requires <code>-1 &lt;= k &lt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiCd' href='./../Overviews/Methods.html#jacobiCd'>jacobiCd</a>(<span class='argstr'>k</span>, <span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiCn' href='./../Overviews/Methods.html#jacobiCn'>jacobiCn</a>(<span class='argstr'>k</span>, <span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiCs' href='./../Overviews/Methods.html#jacobiCs'>jacobiCs</a>(<span class='argstr'>k</span>, <span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiDc' href='./../Overviews/Methods.html#jacobiDc'>jacobiDc</a>(<span class='argstr'>k</span>, <span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiDn' href='./../Overviews/Methods.html#jacobiDn'>jacobiDn</a>(<span class='argstr'>k</span>, <span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiDs' href='./../Overviews/Methods.html#jacobiDs'>jacobiDs</a>(<span class='argstr'>k</span>, <span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiNc' href='./../Overviews/Methods.html#jacobiNc'>jacobiNc</a>(<span class='argstr'>k</span>, <span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiNd' href='./../Overviews/Methods.html#jacobiNd'>jacobiNd</a>(<span class='argstr'>k</span>, <span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiNs' href='./../Overviews/Methods.html#jacobiNs'>jacobiNs</a>(<span class='argstr'>k</span>, <span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiSc' href='./../Overviews/Methods.html#jacobiSc'>jacobiSc</a>(<span class='argstr'>k</span>, <span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiSd' href='./../Overviews/Methods.html#jacobiSd'>jacobiSd</a>(<span class='argstr'>k</span>, <span class='argstr'>u</span>)</h3>
+<div class='method'>
+<p></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-jacobiSn' href='./../Overviews/Methods.html#jacobiSn'>jacobiSn</a>(<span class='argstr'>k</span>, <span class='argstr'>u</span>)</h3>
+<div class='method'></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-zeta' href='./../Overviews/Methods.html#zeta'>zeta</a></h3>
+<div class='method'>
+<p>Returns the zeta function of <code>z</code>.
+<p>Requires <code>z != 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-expintEn' href='./../Overviews/Methods.html#expintEn'>expintEn</a>(<span class='argstr'>n</span>, <span class='argstr'>z</span>)</h3>
+<div class='method'>
+<p>Returns the exponential integral En of <code>z</code>.
+<p>Requires that when <code>n == 1</code>, <code>z !=0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-expintEi' href='./../Overviews/Methods.html#expintEi'>expintEi</a></h3>
+<div class='method'>
+<p>Returns the exponential integral of <code>z</code>.
+<p>Requires <code>z != 0</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sinPi' href='./../Overviews/Methods.html#sinPi'>sinPi</a></h3>
+<div class='method'>
+<p>Returns <code>sin(x * π)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cosPi' href='./../Overviews/Methods.html#cosPi'>cosPi</a></h3>
+<div class='method'>
+<p>Returns <code>cos(x * π)</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-log1p' href='./../Overviews/Methods.html#log1p'>log1p</a></h3>
+<div class='method'>
+<p>Returns the natural logarithm of <code>x+1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-expm1' href='./../Overviews/Methods.html#expm1'>expm1</a></h3>
+<div class='method'>
+<p>Returns <code>e^x - 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cbrt' href='./../Overviews/Methods.html#cbrt'>cbrt</a></h3>
+<div class='method'>
+<p>Returns the cube root of <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sqrt1pm1' href='./../Overviews/Methods.html#sqrt1pm1'>sqrt1pm1</a></h3>
+<div class='method'>
+<p>Returns <code>sqrt(1+x) - 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-powm1' href='./../Overviews/Methods.html#powm1'>powm1</a>(<span class='argstr'>x</span>, <span class='argstr'>y</span>)</h3>
+<div class='method'>
+<p>Returns <code>x^y - 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sincPi' href='./../Overviews/Methods.html#sincPi'>sincPi</a></h3>
+<div class='method'>
+<p>Returns the Sinus Cardinal of <code>x</code>. Also known as the "sinc" function.
+<p><code>sincPi(x) = sin(x) / x</code></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-sinhcPi' href='./../Overviews/Methods.html#sinhcPi'>sinhcPi</a></h3>
+<div class='method'>
+<p>Returns the Hyperbolic Sinus Cardinal of <code>x</code>.
+<p><code>sinhcPi(x) = sinh(x) / x</code></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asinh' href='./../Overviews/Methods.html#asinh'>asinh</a></h3>
+<div class='method'>
+<p>Returns the reciprocal of the hyperbolic sine function at <code>x</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-acosh' href='./../Overviews/Methods.html#acosh'>acosh</a></h3>
+<div class='method'>
+<p>Returns the reciprocal of the hyperbolic cosine function at <code>x</code>.
+<p>Requires <code>x &gt;= 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-atanh' href='./../Overviews/Methods.html#atanh'>atanh</a></h3>
+<div class='method'>
+<p>Returns the reciprocal of the hyperbolic sine function at <code>x</code>.
+<p>Requires <code>-1 &lt; x &lt; 1</code>.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-owensT' href='./../Overviews/Methods.html#owensT'>owensT</a>(<span class='argstr'>h</span>, <span class='argstr'>a</span>)</h3>
+<div class='method'>
+<p>Returns the Owens T function of <code>h</code> and <code>a</code>.</div><h3><a class='anchor' name='Multichannel%20wrappers'>Multichannel wrappers</a></h3>
 
 <p>All of the following messages are performed on the elements of this collection, using <a href="./../Classes/Object.html#-multiChannelPerform">Object: -multiChannelPerform</a>.
 <p>The result depends on the objects in the collection, but the main use case is for <a href="./../Classes/UGen.html">UGen</a>s.
@@ -780,21 +1244,21 @@ a.sortBy(\c);</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-blend' href='./../Overviews/Methods.html#blend'>blend</a>( <span class='argstr'>... args</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-checkBadValues' href='./../Overviews/Methods.html#checkBadValues'>checkBadValues</a>( <span class='argstr'>... args</span>)</h3>
 <div class='method'>
-<p>Calls <code class='code prettyprint lang-sc'>this.multiChannelPerform(selector, *args)</code> where selector is the name of the message.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-multichannelExpandRef' href='./../Overviews/Methods.html#multichannelExpandRef'>multichannelExpandRef</a>(<span class='argstr'>rank</span>)</h3>
+<p>Calls <code>this.multiChannelPerform(selector, *args)</code> where selector is the name of the message.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-multichannelExpandRef' href='./../Overviews/Methods.html#multichannelExpandRef'>multichannelExpandRef</a>(<span class='argstr'>rank</span>)</h3>
 <div class='method'>
 <p>This method is called internally on inputs to UGens that take multidimensional arrays, like <a href="./../Classes/Klank.html">Klank</a> and it allows proper multichannel expansion even in those cases. For SequenceableCollection, this returns the collection itself, assuming that it contains already a number of Refs. See <a href="./../Classes/Ref.html">Ref</a> for the corresponding method implementation.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>rank<td class='argumentdesc'>
-<p>The depth at which the list is expanded. For instance the Klank spec has a rank of 2. For more examples, see <a href="./../Classes/SequenceableCollection.html#-flopDeep">SequenceableCollection: -flopDeep</a><pre class='code prettyprint lang-sc'>`([[[100, 200], 500], nil, [[[0.01, 0.3], 0.8]]]).multichannelExpandRef(2);
-[`[[100, 200], nil, [0.2, 0.8]], `[[130, 202], nil, [0.2, 0.5]]].multichannelExpandRef(2);</pre>
+<p>The depth at which the list is expanded. For instance the Klank spec has a rank of 2. For more examples, see <a href="./../Classes/SequenceableCollection.html#-flopDeep">SequenceableCollection: -flopDeep</a><textarea class='editor'>`([[[100, 200], 500], nil, [[[0.01, 0.3], 0.8]]]).multichannelExpandRef(2);
+[`[[100, 200], nil, [0.2, 0.8]], `[[130, 202], nil, [0.2, 0.5]]].multichannelExpandRef(2);</textarea>
 </table></div><h3><a class='anchor' name='Rhythm-lists'>Rhythm-lists</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-convertRhythm' href='./../Overviews/Methods.html#convertRhythm'>convertRhythm</a></h3>
 <div class='method'>
 <p>Convert a rhythm-list to durations.<h4>Discussion:</h4>
 
 <p>supports a variation of Mikael Laurson's rhythm list RTM-notation.<a class='footnote anchor' name='footnote_org_1' href='#footnote_1'><sup>1</sup></a> 
-<p>The method converts a collection of the form <code class='code prettyprint lang-sc'>[beat-count, [rtm-list], repeats]</code> to a <a href="./../Classes/List.html">List</a> of <a href="./../Classes/Float.html">Float</a>s. A negative integer within the rtm-list equates to a value tied over to the duration following. The method is recursive in that any subdivision within the rtm-list can itself be a nested convertRhythm collection (see example below). The repeats integer has a default value of 1.
-<p>If the divisions in the rtm-list are events, the event durations are interpreted as relative durations, and a list of events is returned.<pre class='code prettyprint lang-sc'>// using numbers as score
+<p>The method converts a collection of the form <code>[beat-count, [rtm-list], repeats]</code> to a <a href="./../Classes/List.html">List</a> of <a href="./../Classes/Float.html">Float</a>s. A negative integer within the rtm-list equates to a value tied over to the duration following. The method is recursive in that any subdivision within the rtm-list can itself be a nested convertRhythm collection (see example below). The repeats integer has a default value of 1.
+<p>If the divisions in the rtm-list are events, the event durations are interpreted as relative durations, and a list of events is returned.<textarea class='editor'>// using numbers as score
 [3, [1, 2, 1], 1].convertRhythm; // List[ 0.75, 1.5, 0.75 ]
 [2, [1, 3, [1, [2, 1, 1, 1]], 1, 3], 1].convertRhythm;
 [2, [1, [1, [2, 1, 1, 1]]], 1].convertRhythm;
@@ -802,42 +1266,68 @@ a.sortBy(\c);</pre>
 [2, [1, [1, [2, 1, 1, -1]]], 2].convertRhythm; // negative value is tied over.
 
 // sound example
-Pbind(\degree, Pseries(0, 1, inf), \dur, Pseq([2, [1, [1, [2, 1, 1, -1]]], 2].convertRhythm)).play;</pre>
+Pbind(\degree, Pseries(0, 1, inf), \dur, Pseq([2, [1, [1, [2, 1, 1, -1]]], 2].convertRhythm)).play;</textarea>
+</div><h3><a class='anchor' name='Starting%20UNIX%20processes'>Starting UNIX processes</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-unixCmd' href='./../Overviews/Methods.html#unixCmd'>unixCmd</a>(<span class='argstr'>action</span>, <span class='argstr'>postOutput: true</span>)</h3>
+<div class='method'>
+<p>Execute a UNIX command <strong>asynchronously</strong>. This object should be an array of strings where the first string is the path to the executable to be run and all other strings are passed as arguments to the executable. This method starts the process directly without using a shell.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>action<td class='argumentdesc'>
+<p>A <a href="./../Classes/Function.html">Function</a> that is called when the process has exited. It is passed two arguments: the exit code and pid of the exited process.<tr><td class='argumentname'>postOutput<td class='argumentdesc'>
+<p>A <a href="./../Classes/Boolean.html">Boolean</a> that controls whether or not the output of the process is displayed in the post window.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>An <a href="./../Classes/Integer.html">Integer</a> - the pid of the newly created process. Use <a href="./../Classes/Integer.html#-pidRunning">Integer: -pidRunning</a> to test if a process is alive.</div><h4>Discussion:</h4>
+
+<p>Example:<textarea class='editor'>["ls","/"].unixCmd;</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-unixCmdGetStdOut' href='./../Overviews/Methods.html#unixCmdGetStdOut'>unixCmdGetStdOut</a>(<span class='argstr'>maxLineLength: 1024</span>)</h3>
+<div class='method'>
+<p>Similar to <a href="#-unixCmd">-unixCmd</a> except that the stdout of the process is returned (<strong>synchronously</strong>) rather than sent to the post window. This object should be an array of strings where the first string is the path to the executable to be run and all other strings are passed as arguments to the executable. This method starts the process directly without using a shell.<textarea class='editor'>~listing = ["ls","/"].unixCmdGetStdOut; // Grab
+~listing.reverse.as(Array).stutter.join.postln; // Mangle</textarea>
 </div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-++' href='./../Overviews/Methods.html#++'>++</a>(<span class='argstr'>aSequenceableCollection</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-+++' href='./../Overviews/Methods.html#+++'>+++</a>(<span class='argstr'>aSequenceableCollection</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'></span><a class='method-name' name='-==' href='./../Overviews/Methods.html#=='>==</a>(<span class='argstr'>aCollection</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asAddendsOf' href='./../Overviews/Methods.html#asAddendsOf'>asAddendsOf</a>(<span class='argstr'>sum</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-asAddendsOf.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-asAddendsOf.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asFraction' href='./../Overviews/Methods.html#asFraction'>asFraction</a>(<span class='argstr'>denominator: 100</span>, <span class='argstr'>fasterBetter: true</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asLayoutElement' href='./../Overviews/Methods.html#asLayoutElement'>asLayoutElement</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/ext-asLayoutElement.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/ext-asLayoutElement.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/ext-asLayoutElement.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/ext-asLayoutElement.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asMIDIInPortUID' href='./../Overviews/Methods.html#asMIDIInPortUID'>asMIDIInPortUID</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asMIDIPort.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/asMIDIPort.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/asMIDIPort.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/asMIDIPort.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asOSCArgArray' href='./../Overviews/Methods.html#asOSCArgArray'>asOSCArgArray</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extConvertToOSC.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extConvertToOSC.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extConvertToOSC.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extConvertToOSC.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asOSCArgBundle' href='./../Overviews/Methods.html#asOSCArgBundle'>asOSCArgBundle</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extConvertToOSC.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extConvertToOSC.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extConvertToOSC.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extConvertToOSC.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asOSCArgEmbeddedArray' href='./../Overviews/Methods.html#asOSCArgEmbeddedArray'>asOSCArgEmbeddedArray</a>(<span class='argstr'>array</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extConvertToOSC.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/extConvertToOSC.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/extConvertToOSC.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Control/extConvertToOSC.sc</a></div>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asPaddedString' href='./../Overviews/Methods.html#asPaddedString'>asPaddedString</a></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/Integer-asPaddedString.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/Integer-asPaddedString.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asPoint' href='./../Overviews/Methods.html#asPoint'>asPoint</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asQuant' href='./../Overviews/Methods.html#asQuant'>asQuant</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asRect' href='./../Overviews/Methods.html#asRect'>asRect</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-asSequenceableCollection' href='./../Overviews/Methods.html#asSequenceableCollection'>asSequenceableCollection</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ascii' href='./../Overviews/Methods.html#ascii'>ascii</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-aswAddendsOf' href='./../Overviews/Methods.html#aswAddendsOf'>aswAddendsOf</a>(<span class='argstr'>summation</span>, <span class='argstr'>weights</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-asAddendsOf.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-asAddendsOf.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bitAnd' href='./../Overviews/Methods.html#bitAnd'>bitAnd</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bitHammingDistance' href='./../Overviews/Methods.html#bitHammingDistance'>bitHammingDistance</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-bitOr' href='./../Overviews/Methods.html#bitOr'>bitOr</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-canFreeSynth' href='./../Overviews/Methods.html#canFreeSynth'>canFreeSynth</a></h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/canFreeSynth.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Audio/canFreeSynth.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/Audio/canFreeSynth.sc</a></div>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cauchy' href='./../Overviews/Methods.html#cauchy'>cauchy</a>(<span class='argstr'>spread: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-containsSeqColl' href='./../Overviews/Methods.html#containsSeqColl'>containsSeqColl</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-convertOneRhythm' href='./../Overviews/Methods.html#convertOneRhythm'>convertOneRhythm</a>(<span class='argstr'>list</span>, <span class='argstr'>tie: 0</span>, <span class='argstr'>stretch: 1</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-convertOneRhythm' href='./../Overviews/Methods.html#convertOneRhythm'>convertOneRhythm</a>(<span class='argstr'>list</span>, <span class='argstr'>tie: 0.0</span>, <span class='argstr'>stretch: 1.0</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-curverange' href='./../Overviews/Methods.html#curverange'>curverange</a>( <span class='argstr'>... args</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-degrad' href='./../Overviews/Methods.html#degrad'>degrad</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-degreeToKey' href='./../Overviews/Methods.html#degreeToKey'>degreeToKey</a>(<span class='argstr'>scale</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-delimit' href='./../Overviews/Methods.html#delimit'>delimit</a>(<span class='argstr'>function</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-firstArg' href='./../Overviews/Methods.html#firstArg'>firstArg</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-flatIf' href='./../Overviews/Methods.html#flatIf'>flatIf</a>(<span class='argstr'>func</span>)</h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-fold2' href='./../Overviews/Methods.html#fold2'>fold2</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-fold2' href='./../Overviews/Methods.html#fold2'>fold2</a>(<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-gaussian' href='./../Overviews/Methods.html#gaussian'>gaussian</a>(<span class='argstr'>dev: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hanWindow' href='./../Overviews/Methods.html#hanWindow'>hanWindow</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hash' href='./../Overviews/Methods.html#hash'>hash</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-hoareFind' href='./../Overviews/Methods.html#hoareFind'>hoareFind</a>(<span class='argstr'>k</span>, <span class='argstr'>function</span>, <span class='argstr'>left</span>, <span class='argstr'>right</span>)</h3>
@@ -853,12 +1343,16 @@ Pbind(\degree, Pseries(0, 1, inf), \dur, Pseq([2, [1, [1, [2, 1, 1, -1]]], 2].co
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-keysValuesDo' href='./../Overviews/Methods.html#keysValuesDo'>keysValuesDo</a>(<span class='argstr'>function</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-lastIndex' href='./../Overviews/Methods.html#lastIndex'>lastIndex</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-leftShift' href='./../Overviews/Methods.html#leftShift'>leftShift</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-logistic' href='./../Overviews/Methods.html#logistic'>logistic</a>(<span class='argstr'>spread: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-median' href='./../Overviews/Methods.html#median'>median</a>(<span class='argstr'>function</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-mergeSort' href='./../Overviews/Methods.html#mergeSort'>mergeSort</a>(<span class='argstr'>function</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-mergeSortTemp' href='./../Overviews/Methods.html#mergeSortTemp'>mergeSortTemp</a>(<span class='argstr'>function</span>, <span class='argstr'>tempArray</span>, <span class='argstr'>left</span>, <span class='argstr'>right</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-mergeTemp' href='./../Overviews/Methods.html#mergeTemp'>mergeTemp</a>(<span class='argstr'>function</span>, <span class='argstr'>tempArray</span>, <span class='argstr'>left</span>, <span class='argstr'>mid</span>, <span class='argstr'>right</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-middle' href='./../Overviews/Methods.html#middle'>middle</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-middleIndex' href='./../Overviews/Methods.html#middleIndex'>middleIndex</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-midinote' href='./../Overviews/Methods.html#midinote'>midinote</a></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/midinote.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/midinote.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-minNyquist' href='./../Overviews/Methods.html#minNyquist'>minNyquist</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-mod' href='./../Overviews/Methods.html#mod'>mod</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-moddif' href='./../Overviews/Methods.html#moddif'>moddif</a>( <span class='argstr'>... args</span>)</h3>
@@ -866,9 +1360,17 @@ Pbind(\degree, Pseries(0, 1, inf), \dur, Pseq([2, [1, [1, [2, 1, 1, -1]]], 2].co
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-multiChannelPerform' href='./../Overviews/Methods.html#multiChannelPerform'>multiChannelPerform</a>(<span class='argstr'>selector</span> <span class='argstr'>... args</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nearestInList' href='./../Overviews/Methods.html#nearestInList'>nearestInList</a>(<span class='argstr'>list</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nearestInScale' href='./../Overviews/Methods.html#nearestInScale'>nearestInScale</a>(<span class='argstr'>scale</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nearestTo' href='./../Overviews/Methods.html#nearestTo'>nearestTo</a>(<span class='argstr'>value</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/tuningScale.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/tuningScale.sc</a></div>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nearestToList' href='./../Overviews/Methods.html#nearestToList'>nearestToList</a>(<span class='argstr'>values</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/tuningScale.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/tuningScale.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nextPrime' href='./../Overviews/Methods.html#nextPrime'>nextPrime</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nextTimeOnGrid' href='./../Overviews/Methods.html#nextTimeOnGrid'>nextTimeOnGrid</a>(<span class='argstr'>clock</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-notemidi' href='./../Overviews/Methods.html#notemidi'>notemidi</a></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/midinote.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/midinote.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-nthPrime' href='./../Overviews/Methods.html#nthPrime'>nthPrime</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pareto' href='./../Overviews/Methods.html#pareto'>pareto</a>(<span class='argstr'>shape: 1</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performBinaryOpOnComplex' href='./../Overviews/Methods.html#performBinaryOpOnComplex'>performBinaryOpOnComplex</a>(<span class='argstr'>aSelector</span>, <span class='argstr'>aComplex</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performBinaryOpOnSeqColl' href='./../Overviews/Methods.html#performBinaryOpOnSeqColl'>performBinaryOpOnSeqColl</a>(<span class='argstr'>aSelector</span>, <span class='argstr'>theOperand</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performBinaryOpOnSimpleNumber' href='./../Overviews/Methods.html#performBinaryOpOnSimpleNumber'>performBinaryOpOnSimpleNumber</a>(<span class='argstr'>aSelector</span>, <span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
@@ -876,11 +1378,11 @@ Pbind(\degree, Pseries(0, 1, inf), \dur, Pseq([2, [1, [1, [2, 1, 1, -1]]], 2].co
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performKeyToDegree' href='./../Overviews/Methods.html#performKeyToDegree'>performKeyToDegree</a>(<span class='argstr'>degree</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performNearestInList' href='./../Overviews/Methods.html#performNearestInList'>performNearestInList</a>(<span class='argstr'>degree</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-performNearestInScale' href='./../Overviews/Methods.html#performNearestInScale'>performNearestInScale</a>(<span class='argstr'>degree</span>, <span class='argstr'>stepsPerOctave: 12</span>)</h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pow' href='./../Overviews/Methods.html#pow'>pow</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-poisson' href='./../Overviews/Methods.html#poisson'>poisson</a></h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/ProbabilityDistributions.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-prFlat' href='./../Overviews/Methods.html#prFlat'>prFlat</a>(<span class='argstr'>list</span>)</h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-prUnixCmd' href='./../Overviews/Methods.html#prUnixCmd'>prUnixCmd</a>(<span class='argstr'>postOutput: true</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-prepareForProxySynthDef' href='./../Overviews/Methods.html#prepareForProxySynthDef'>prepareForProxySynthDef</a>(<span class='argstr'>proxy</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc'>/usr/share/SuperCollider/SCClassLibrary/JITLib/ProxySpace/wrapForNodeProxy.sc</a></div>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-prevPrime' href='./../Overviews/Methods.html#prevPrime'>prevPrime</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quickSort' href='./../Overviews/Methods.html#quickSort'>quickSort</a>(<span class='argstr'>function</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quickSortRange' href='./../Overviews/Methods.html#quickSortRange'>quickSortRange</a>(<span class='argstr'>i</span>, <span class='argstr'>j</span>, <span class='argstr'>function</span>)</h3>
@@ -902,13 +1404,15 @@ Pbind(\degree, Pseries(0, 1, inf), \dur, Pseq([2, [1, [1, [2, 1, 1, -1]]], 2].co
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-top' href='./../Overviews/Methods.html#top'>top</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-transposeKey' href='./../Overviews/Methods.html#transposeKey'>transposeKey</a>(<span class='argstr'>amount</span>, <span class='argstr'>octave: 12</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-triWindow' href='./../Overviews/Methods.html#triWindow'>triWindow</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-unixCmd' href='./../Overviews/Methods.html#unixCmd'>unixCmd</a>(<span class='argstr'>action</span>, <span class='argstr'>postOutput: true</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-unlace' href='./../Overviews/Methods.html#unlace'>unlace</a>(<span class='argstr'>numlists</span>, <span class='argstr'>clumpSize: 1</span>, <span class='argstr'>clip: false</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-unsignedRightShift' href='./../Overviews/Methods.html#unsignedRightShift'>unsignedRightShift</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-welWindow' href='./../Overviews/Methods.html#welWindow'>welWindow</a></h3>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-wrap2' href='./../Overviews/Methods.html#wrap2'>wrap2</a>(<span class='argstr'>aNumber</span>, <span class='argstr'>adverb</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-wrap2' href='./../Overviews/Methods.html#wrap2'>wrap2</a>(<span class='argstr'>aNumber: 1</span>, <span class='argstr'>adverb</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-wrapAt' href='./../Overviews/Methods.html#wrapAt'>wrapAt</a>(<span class='argstr'>index</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-wrapAtDepth' href='./../Overviews/Methods.html#wrapAtDepth'>wrapAtDepth</a>(<span class='argstr'>rank</span>, <span class='argstr'>index</span>)</h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-wrapPut' href='./../Overviews/Methods.html#wrapPut'>wrapPut</a>(<span class='argstr'>index</span>, <span class='argstr'>value</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-writeFile' href='./../Overviews/Methods.html#writeFile'>writeFile</a>(<span class='argstr'>path</span>, <span class='argstr'>columnSeparator: $ </span>, <span class='argstr'>rowSeparator: $\n</span>)</h3>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-newFromFile.sc'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/Extensions/SeqCol-newFromFile.sc</a></div>
 <div class='footnotes'>
-<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - see Laurson and Kuuskankare's 2003, "From RTM-notation to ENP-score-notation" <a href="http://jim2003.agglo-montbeliard.fr/articles/laurson.pdf">http://jim2003.agglo-montbeliard.fr/articles/laurson.pdf</a></div></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/SequenceableCollection.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/SequenceableCollection.schelp</a><br>link::Classes/SequenceableCollection::<br></div></div></body></html>
+<a class='anchor' name='footnote_1'/><div class='footnote'>[<a href='#footnote_org_1'>1</a>] - see Laurson and Kuuskankare's 2003, "From RTM-notation to ENP-score-notation" <a href="http://jim2003.agglo-montbeliard.fr/articles/laurson.pdf">http://jim2003.agglo-montbeliard.fr/articles/laurson.pdf</a></div></div><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/SequenceableCollection.schelp'>/usr/share/SuperCollider/HelpSource/Classes/SequenceableCollection.schelp</a><br>link::Classes/SequenceableCollection::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

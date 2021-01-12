@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Pproto | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pproto | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Pproto';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pproto:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -33,8 +38,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Example%202,%20loading%20a%20waveform%20buffer%20and%20modifying%20it%20in%20performance.'>Example 2, loading a waveform buffer and modifying it in performance.</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Example%203,%20loading%20a%20waveshaper%20buffer%20and%20modifying%20it%20in%20performance.'>Example 3, loading a waveshaper buffer and modifying it in performance.</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Example%204,%20using%20an%20effect%20with%20parallel%20control.'>Example 4, using an effect with parallel control.</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -44,14 +49,14 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>provide a proto event for an event stream</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Pproto.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Pproto.sc'>Pproto.sc</a></div><div id='related'>See also: <a href="./../Classes/Pattern.html">Pattern</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Streams/Pproto.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Streams/Pproto.sc'>Pproto.sc</a></div><div id='related'>See also: <a href="./../Classes/Pattern.html">Pattern</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>Pproto uses the <strong>makeFunction</strong> to allocate resources (buffers, buses, groups) and create a protoEvent that makes those resources available to a pattern. It is fully compatible with non-realtime synthesis using <strong>render</strong>.
-<p>The <strong>makeFunction</strong> "makes" the protoEvent (i.e. protoEvent is <code class='code prettyprint lang-sc'>currentEnvironment</code>). Typically, it defines and yields a sequence of events that create the needed resources using the following <a href="./../Overviews/Event_types.html">Event types</a>:<dl>
+<p>The <strong>makeFunction</strong> "makes" the protoEvent (i.e. protoEvent is <code>currentEnvironment</code>). Typically, it defines and yields a sequence of events that create the needed resources using the following <a href="./../Overviews/Event_types.html">Event types</a>:<dl>
 <dt>\allocRead<dd>load a file from ~path, starting at ~firstFileFrame, reading ~numFrames sample frames<dt>\cue<dd>cue a file for DiskIn, with ~bufferSize frames<dt>\table<dd>load ~amps directly into a buffer<dt>\sine1<dd>generate a buffer from ~amps<dt>\sine2<dd>generate a buffer from ~freqs, ~amps<dt>\sine3<dd>generate a buffer from ~freqs, ~amps, ~phases<dt>\cheby<dd>generate a waveshape buffer from ~amps<dt>\audioBus<dd>allocate ~channels consecutive audio buses<dt>\controlBus<dd>allocate ~channels consecutive control buses<dt>\on<dd>create a synth</dl>
-<div class='note'><span class='notelabel'>NOTE:</span> These eventTypes will allocate their own buffers and buses unless they are specified. To support this, the key <code class='code prettyprint lang-sc'>\bufNum</code> is used rather than <code class='code prettyprint lang-sc'>\bufnum</code> which has a default value assigned.</div>
+<div class='note'><span class='notelabel'>NOTE:</span> These eventTypes will allocate their own buffers and buses unless they are specified. To support this, the key <code>\bufNum</code> is used rather than <code>\bufnum</code> which has a default value assigned.</div>
 <p>When Pproto ends, these eventTypes will respond to the <strong>cleanup</strong> call by <strong>deallocating any resources they have allocated</strong>. Do not assume your buffers, buses etc. will exist after Pproto stops!
 <p>The function yields each event. That event is then performed with possible modifications by enclosing patterns and the player (either an <a href="./../Classes/EventStreamPlayer.html">EventStreamPlayer</a> or a <a href="./../Classes/ScoreStreamPlayer.html">ScoreStreamPlayer</a>). The resultant event is returned to the function where it can be assigned to a key within the protoEvent.
 <p>The patternarray is played using Pfpar, a variant of Ppar that ends when any of its subpatterns end. In this way, you can use Pproto to create effects that can be controlled by a pattern that runs in parallel with the note generating pattern and ends together with that note generating pattern (see example 0 below).
@@ -70,8 +75,8 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pattern' href='./../Overviews/Methods.html#pattern'>pattern</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-pattern' href='./../Overviews/Methods.html#pattern'>pattern</a> = value</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
-<div class='note'><span class='notelabel'>NOTE:</span> The syntax used for patterns like Pbind and Pmono is a little bit different for making the code more readable. The difference has nothing to do with Pproto. This is the same: <code class='code prettyprint lang-sc'>Pbind(\freq, 700, \amp, 0.1)</code> and <code class='code prettyprint lang-sc'>Pbind(*[freq: 700, amp: 0.1])</code></div><h3><a class='anchor' name='Example%201,%20loading%20and%20granulating%20a%20sound%20file.'>Example 1, loading and granulating a sound file.</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<div class='note'><span class='notelabel'>NOTE:</span> The syntax used for patterns like Pbind and Pmono is a little bit different for making the code more readable. The difference has nothing to do with Pproto. This is the same: <code>Pbind(\freq, 700, \amp, 0.1)</code> and <code>Pbind(*[freq: 700, amp: 0.1])</code></div><h3><a class='anchor' name='Example%201,%20loading%20and%20granulating%20a%20sound%20file.'>Example 1, loading and granulating a sound file.</a></h3>
+<textarea class='editor'>(
 SynthDef(\help_playbuf, { | out=0, bufnum = 0, rate = 1, startPos = 0, amp = 0.1, sustain = 1, pan = 0, loop = 1|
     var audio;
     rate = rate * BufRateScale.kr(bufnum);
@@ -102,9 +107,9 @@ a.play;
 )
 
 //a.render("sounds/test.aif", 40)
-//SoundFile.openRead("sounds/test.aif").play</pre>
+//SoundFile.openRead("sounds/test.aif").play</textarea>
 <h3><a class='anchor' name='Example%202,%20loading%20a%20waveform%20buffer%20and%20modifying%20it%20in%20performance.'>Example 2, loading a waveform buffer and modifying it in performance.</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 SynthDef(\osc,{ arg out=0, bufnum=0, numbufs = 8, sustain = 1, freq = 500, amp = 0.1, pan = 0;
     var audio;
     audio = Osc.ar(bufnum, freq);
@@ -139,9 +144,9 @@ b.play
 )
 
 //b.render("sounds/test.aif", 40)
-//SoundFile.openRead("sounds/test.aif").play</pre>
+//SoundFile.openRead("sounds/test.aif").play</textarea>
 <h3><a class='anchor' name='Example%203,%20loading%20a%20waveshaper%20buffer%20and%20modifying%20it%20in%20performance.'>Example 3, loading a waveshaper buffer and modifying it in performance.</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 SynthDef(\shaper,{ arg out=0, bufnum=0, numbufs = 8, sustain = 1, freq = 500, amp = 0.1, pan = 0;
     var audio;
     audio = SinOsc.ar(freq);
@@ -174,9 +179,9 @@ c.play
 )
 //c.render("sounds/test.aif", 40)
 //SoundFile("sounds/test.aif").play
-//</pre>
+//</textarea>
 <h3><a class='anchor' name='Example%204,%20using%20an%20effect%20with%20parallel%20control.'>Example 4, using an effect with parallel control.</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 SynthDef(\echo, { arg out=0, maxdtime=0.2, dtime=0.2, decay=2, gate=1;
     var env, in;
     env = Linen.kr(gate, 0.05, 1, 5, 2);
@@ -222,6 +227,7 @@ Pproto({
     ])
     ]
 ).play
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Pproto.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Pproto.schelp</a><br>link::Classes/Pproto::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Pproto.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Pproto.schelp</a><br>link::Classes/Pproto::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

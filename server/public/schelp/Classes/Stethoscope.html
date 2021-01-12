@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Stethoscope | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Stethoscope | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Stethoscope';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Stethoscope:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -64,8 +69,8 @@ var scdoc_sc_version = '3.9.3';
 </ul></ul><li class='toc1'><a href='#examples'>Examples</a></li>
 <ul class='toc'><li class='toc2'><a href='#A%20step-by-step%20example'>A step-by-step example</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Embedded%20use'>Embedded use</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -75,7 +80,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>An oscilloscope</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/tools/Stethoscope.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/tools/Stethoscope.sc'>Stethoscope.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/QStethoscope.html">QStethoscope</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/tools/Stethoscope.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/GUI/tools/Stethoscope.sc'>Stethoscope.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/QStethoscope.html">QStethoscope</a></div>
 <div id='related'>See also: <a href="./../Classes/ScopeView.html">ScopeView</a>, <a href="./../Classes/FreqScope.html">FreqScope</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
@@ -87,12 +92,12 @@ var scdoc_sc_version = '3.9.3';
 <p>The following keyboard shortcuts may be used when focused on the Stethoscope display:<table>
 <tr><td><strong>Shortcut</strong><td><strong>Action</strong><tr><td>J<td>one channel back<tr><td>K<td>switch rate (audio vs. control)<tr><td>L<td>one channel forward<tr><td>O<td>jump to first hardware output channel and adjust numChannels to hardware<tr><td>I<td>jump to first hardware input channel and adjust numChannels to hardware<tr><td>space<td>run, if not running already<tr><td>. (period)<td>stop<tr><td>M<td>toggle screen size<tr><td>+ / -<td>zoom horizontally<tr><td>* / _<td>zoom vertically<tr><td>S<td>change style between parallel and overlay<tr><td>Shift+S<td>change style to lissajou<tr><td>Shift+A<td>allocate buffer size so it fills the screen (to next power of two) (this can be dangerous, might crash)</table>
 <h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='method-code'><span class='method-prefix'>Stethoscope.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>server</span>, <span class='argstr'>numChannels: 2</span>, <span class='argstr'>index: 0</span>, <span class='argstr'>bufsize: 4096</span>, <span class='argstr'>zoom: 1</span>, <span class='argstr'>rate: 'audio'</span>, <span class='argstr'>view</span>, <span class='argstr'>bufnum</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>Stethoscope.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>server</span>, <span class='argstr'>numChannels: 2</span>, <span class='argstr'>index: 0</span>, <span class='argstr'>bufsize: 4096</span>, <span class='argstr'>zoom: 1.0</span>, <span class='argstr'>rate: 'audio'</span>, <span class='argstr'>view</span>, <span class='argstr'>bufnum</span>)</h3>
 <div class='method'>
 <p> Create a Stethoscope, either as a window, or placed on a given parent view.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>server<td class='argumentdesc'>
-<p> A valid Server (either a local or the internal server), or <code class='code prettyprint lang-sc'>nil</code>, in which case the <code class='code prettyprint lang-sc'>Server.default</code> is used.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
+<p> A valid Server (either a local or the internal server), or <code>nil</code>, in which case the <code>Server.default</code> is used.<tr><td class='argumentname'>numChannels<td class='argumentdesc'>
 <p> An integer. Default value is 2.<tr><td class='argumentname'>index<td class='argumentdesc'>
 <p> The offset index. An Integer. Default is nil.<tr><td class='argumentname'>bufsize<td class='argumentdesc'>
 <p> The size of the analysis buffer. Default is 4096. See also <a href="#-bufsize">-bufsize</a>.<tr><td class='argumentname'>zoom<td class='argumentdesc'>
@@ -100,9 +105,9 @@ var scdoc_sc_version = '3.9.3';
 <p> \audio or \control. Default is \audio.<tr><td class='argumentname'>view<td class='argumentdesc'>
 <p> The optional parent view. Default is nil. If nil, then it will open in its own Window.<tr><td class='argumentname'>bufnum<td class='argumentdesc'>
 <p> The id number of the Buffer to analyze. Default value is nil. If nil, then a Buffer of size bufSize is allocated.
-<p> discussion:  Example:<pre class='code prettyprint lang-sc'>s.boot
+<p> discussion:  Example:<textarea class='editor'>s.boot
 {SinOsc.ar([330,440], 0, 0.4)}.play;
-Stethoscope(s,2);</pre>
+Stethoscope(s,2);</textarea>
 </table></div><h3 class='method-code'><span class='method-prefix'>Stethoscope.</span><a class='method-name' name='*isValidServer' href='./../Overviews/Methods.html#isValidServer'>isValidServer</a>(<span class='argstr'>aServer</span>)</h3>
 <div class='method'>
 <p> Tests whether Stethoscope can operate on the given server (any local server. See <a href="./../Classes/Server.html#-isLocal">Server: -isLocal</a>).<h4>Arguments:</h4>
@@ -112,9 +117,9 @@ Stethoscope(s,2);</pre>
 <div class='returnvalue'>
 <p>A Boolean.</div></div><h3 class='method-code'><span class='method-prefix'>Stethoscope.</span><a class='method-name' name='*ugenScopes' href='./../Overviews/Methods.html#ugenScopes'>ugenScopes</a></h3>
 <div class='method'>
-<p> Returns an array of the running ugen scopes.<pre class='code prettyprint lang-sc'>s.boot
+<p> Returns an array of the running ugen scopes.<textarea class='editor'>s.boot
 {[SinOsc.ar.scope,WhiteNoise.ar(0.5).scope]*0.1}.scope(2);
-Stethoscope.ugenScopes; // returns the ugen scopes</pre>
+Stethoscope.ugenScopes; // returns the ugen scopes</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>Stethoscope.</span><a class='method-name' name='*tileBounds' href='./../Overviews/Methods.html#tileBounds'>tileBounds</a></h3>
 <div class='method'>
 <p> A utility method used by <a href="./../Classes/UGen.html#-scope">UGen: -scope</a> to tile scope windows.<h4>Returns:</h4>
@@ -130,7 +135,7 @@ Stethoscope.ugenScopes; // returns the ugen scopes</pre>
 <p> Whether to operate on audio or control busses.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>argRate<td class='argumentdesc'>
-<p> One of the two symbols: <code class='code prettyprint lang-sc'>\audio</code> or <code class='code prettyprint lang-sc'>\control</code>.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-index' href='./../Overviews/Methods.html#index'>index</a></h3>
+<p> One of the two symbols: <code>\audio</code> or <code>\control</code>.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-index' href='./../Overviews/Methods.html#index'>index</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-index' href='./../Overviews/Methods.html#index'>index</a> = <span class='argstr'>i</span></h3>
 <div class='method'>
 <p> The starting index of the busses to scope.<h4>Arguments:</h4>
@@ -148,8 +153,8 @@ Stethoscope.ugenScopes; // returns the ugen scopes</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cycle' href='./../Overviews/Methods.html#cycle'>cycle</a> = <span class='argstr'>val</span></h3>
 <div class='method'><div class='note'><span class='notelabel'>NOTE:</span> Only available in Qt GUI</div>
 <p> The exact scoping period, in signal frames. Reciprocal to what is also known as <em>sweep speed</em> in analog oscilloscopes. It is dynamically adjustable while the scope is running.
-<p> Data from scoped signals will be accumulated into a buffer until it reaches <code class='code prettyprint lang-sc'>cycle</code> amount frames, at which point the buffering will immediately restart. The view will repeatedly display the entire buffer; it may skip a cycle if the drawing is too slow to keep up with the speed of incoming data, but the cycle boundaries will never shift with respect to signals.
-<p> If you are scoping a periodic signal, setting <code class='code prettyprint lang-sc'>cycle</code> to match the signal's period will keep the waveform locked in place.</div><h3><a class='anchor' name='Display'>Display</a></h3>
+<p> Data from scoped signals will be accumulated into a buffer until it reaches <code>cycle</code> amount frames, at which point the buffering will immediately restart. The view will repeatedly display the entire buffer; it may skip a cycle if the drawing is too slow to keep up with the speed of incoming data, but the cycle boundaries will never shift with respect to signals.
+<p> If you are scoping a periodic signal, setting <code>cycle</code> to match the signal's period will keep the waveform locked in place.</div><h3><a class='anchor' name='Display'>Display</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-window' href='./../Overviews/Methods.html#window'>window</a></h3>
 <div class='method'>
 <p> The (parent) Window of the scope.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-size' href='./../Overviews/Methods.html#size'>size</a></h3>
@@ -168,7 +173,7 @@ Stethoscope.ugenScopes; // returns the ugen scopes</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-xZoom' href='./../Overviews/Methods.html#xZoom'>xZoom</a> = <span class='argstr'>val</span></h3>
 <div class='method'>
 <p> Magnifies the displayed wave horizontally to the given factor.
-<p> This sets <a href="#-cycle">-cycle</a> to <code class='code prettyprint lang-sc'>1024 * xZoom.reciprocal</code>.<h4>Arguments:</h4>
+<p> This sets <a href="#-cycle">-cycle</a> to <code>1024 * xZoom.reciprocal</code>.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>val<td class='argumentdesc'>
 <p> A Float.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-yZoom' href='./../Overviews/Methods.html#yZoom'>yZoom</a></h3>
@@ -213,7 +218,7 @@ Stethoscope.ugenScopes; // returns the ugen scopes</pre>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-view' href='./../Overviews/Methods.html#view'>view</a></h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 <h3><a class='anchor' name='A%20step-by-step%20example'>A step-by-step example</a></h3>
-<pre class='code prettyprint lang-sc'>s.boot;
+<textarea class='editor'>s.boot;
 (
 {
     SinOsc.ar([225, 450, 900], 0, 0.2)
@@ -247,13 +252,14 @@ c = Bus.control(s, 3);
 c.scope;
 
 // note that scoping control rate buses shows block size interpolation (this is due to the
-// fact that ScopeOut.kr doesn't work yet.)</pre>
+// fact that ScopeOut.kr doesn't work yet.)</textarea>
 <h3><a class='anchor' name='Embedded%20use'>Embedded use</a></h3>
 
-<p>You can pass your own view in to add a stethoscope to it:<pre class='code prettyprint lang-sc'>w = Window.new("my own scope", Rect(20, 20, 400, 500));
+<p>You can pass your own view in to add a stethoscope to it:<textarea class='editor'>w = Window.new("my own scope", Rect(20, 20, 400, 500));
 w.view.decorator = FlowLayout(w.view.bounds);
 c = Stethoscope.new(s, view:w.view);
 w.onClose = { c.free }; // don't forget this
-w.front;</pre>
+w.front;</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Stethoscope.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Stethoscope.schelp</a><br>link::Classes/Stethoscope::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Stethoscope.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Stethoscope.schelp</a><br>link::Classes/Stethoscope::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

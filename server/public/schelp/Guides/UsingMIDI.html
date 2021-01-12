@@ -1,31 +1,37 @@
-<!doctype html><html lang='en'><head><title>Using MIDI | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Using MIDI | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Using MIDI';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Using MIDI:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Introduction'>Introduction</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Receiving%20MIDI%20input'>Receiving MIDI input</a></li>
 <ul class='toc'><li class='toc2'><a href='#MIDIFunc%20and%20MIDIdef'>MIDIFunc and MIDIdef</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#MIDIFunc%20and%20MIDIdef:%20Filtering%20based%20on%20device%20or%20message%20data'>MIDIFunc and MIDIdef: Filtering based on device or message data</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#MIDIIn'>MIDIIn</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Playing%20notes%20on%20your%20MIDI%20keyboard'>Playing notes on your MIDI keyboard</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Sending%20MIDI%20out'>Sending MIDI out</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#MIDI%20synchronization'>MIDI synchronization</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Third%20party%20libraries'>Third party libraries</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -40,19 +46,25 @@ var scdoc_sc_version = '3.9.3';
 
 <p>SuperCollider's out of the box MIDI support is fairly thorough (although not as complete as you'll find in commercial sequencers). All MIDI devices accessible to your operating system (CoreMIDI on macOS, ALSA on Linux, PortMIDI on Windows) are accessible to SuperCollider.
 <p>The main MIDI classes are:<dl>
-<dt><a href="./../Classes/MIDIClient.html">MIDIClient</a><dd>This class connects to the operating system's MIDI layer, and obtains the lists of available MIDI sources and destinations. The information about the hardware is stored in <code class='code prettyprint lang-sc'>MIDIClient.sources</code> and <code class='code prettyprint lang-sc'>MIDIClient.destinations</code> as <a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a> objects. MIDIClient must be initialized before MIDI can be received. See the example <a href="#Playing%20notes%20on%20your%20MIDI%20keyboard">Playing notes on your MIDI keyboard</a>.<dt><a href="./../Classes/MIDIFunc.html">MIDIFunc</a><dd>The optimal way to receive the most typical MIDI messages: note on/off, controller, pitch bend, aftertouch, poly-touch and program change.<dt><a href="./../Classes/MIDIdef.html">MIDIdef</a><dd>Related to <a href="./../Classes/MIDIFunc.html">MIDIFunc</a>, this class keeps several MIDIFunc objects in global storage, by name. Especially helpful for live or interactive use.<dt><a href="./../Classes/MIDIOut.html">MIDIOut</a><dd>Supports MIDI output to hardware ports or inter-application MIDI buses.<dt><a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a><dd>Represents a MIDI port published by the operating system. It contains a device name, port name and unique identifier (uid).<dt><a href="./../Classes/MIDIIn.html">MIDIIn</a><dd>The lowest-level MIDI input class. MIDIFunc and MIDIdef use this class so that you don't have to. It is strongly recommended to avoid using this class directly.</dl>
+<dt><a href="./../Classes/MIDIClient.html">MIDIClient</a><dd>This class connects to the operating system's MIDI layer, and obtains the lists of available MIDI sources and destinations. The information about the hardware is stored in <code>MIDIClient.sources</code> and <code>MIDIClient.destinations</code> as <a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a> objects. MIDIClient must be initialized before MIDI can be received. See the example <a href="#Playing%20notes%20on%20your%20MIDI%20keyboard">Playing notes on your MIDI keyboard</a>.<dt><a href="./../Classes/MIDIFunc.html">MIDIFunc</a><dd>The optimal way to receive the most typical MIDI messages: note on/off, controller, pitch bend, aftertouch, poly-touch and program change.<dt><a href="./../Classes/MIDIdef.html">MIDIdef</a><dd>Related to <a href="./../Classes/MIDIFunc.html">MIDIFunc</a>, this class keeps several MIDIFunc objects in global storage, by name. Especially helpful for live or interactive use.<dt><a href="./../Classes/MIDIOut.html">MIDIOut</a><dd>Supports MIDI output to hardware ports or inter-application MIDI buses.<dt><a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a><dd>Represents a MIDI port published by the operating system. It contains a device name, port name and unique identifier (uid).<dt><a href="./../Classes/MIDIIn.html">MIDIIn</a><dd>The lowest-level MIDI input class. MIDIFunc and MIDIdef use this class so that you don't have to. It is strongly recommended to avoid using this class directly.</dl>
 
 <p>In most cases, each physical MIDI connection (pair of in/out jacks on the MIDI interface) has one MIDIEndPoint object to represent it in the client.<h2><a class='anchor' name='Receiving%20MIDI%20input'>Receiving MIDI input</a></h2>
 <h3><a class='anchor' name='MIDIFunc%20and%20MIDIdef'>MIDIFunc and MIDIdef</a></h3>
 
 <p>For most uses, the preferred way to receive MIDI input is using the <a href="./../Classes/MIDIFunc.html">MIDIFunc</a> and <a href="./../Classes/MIDIdef.html">MIDIdef</a> classes. The advantage of this approach is that any number of responders can be registered, using extremely flexible matching.
 <p><a href="./../Classes/MIDIFunc.html">MIDIFunc</a> has a number of convenience methods allowing you to register for the different MIDI message types. It can filter incoming MIDI messages to respond to a particular device, channel number, or specific message number, or ranges thereof.
-<p>See <a href="#Playing%20notes%20on%20your%20MIDI%20keyboard">Playing notes on your MIDI keyboard</a> below for a simple example using the note-on and note-off MIDIFuncs.<h3><a class='anchor' name='MIDIIn'>MIDIIn</a></h3>
+<p>See <a href="#Playing%20notes%20on%20your%20MIDI%20keyboard">Playing notes on your MIDI keyboard</a> below for a simple example using the note-on and note-off MIDIFuncs.<h3><a class='anchor' name='MIDIFunc%20and%20MIDIdef:%20Filtering%20based%20on%20device%20or%20message%20data'>MIDIFunc and MIDIdef: Filtering based on device or message data</a></h3>
+
+<p>MIDIFunc and MIDIdef can filter incoming messages, responding to specific devices, MIDI channels or data values. For example, you may want one MIDIFunc to handle controller 1, while a different MIDIFunc handles controller 7.
+<p>Filters are set by the argument immediately following the response function: <code>MIDIFunc.incomingType({ /* function */ }, msgNum, chan, srcID)</code> where the meaning of msgNum depends on the message type.<dl>
+<dt>msgNum<dd>The first data byte of the message. Note on/off messages send <code>note_number velocity</code>; <code>msgNum</code> is the note number. Continuous controllers send <code>cc_number value</code>; <code>msgNum</code> is the CC number. Check the specific message type for details.<dt>chan<dd>The channel number. Most MIDI devices and software refer to channels 1-16. SuperCollider uses channels 0-15. In SuperCollider, you usually have to subtract 1 from the channel number set in the sending device.<dt>srcID<dd>The UID (unique identifier) of the MIDI port. This is set by the system, and is available through the <a href="./../Classes/MIDIEndPoint.html">MIDIEndPoint</a> objects in the array <code>MIDIClient.sources</code>. (For MIDI input, use <code>MIDIClient.sources</code>, not <code>destinations</code>.) If you know the device's array index, you can set <code>srcID: MIDIClient.sources[index].uid</code>. If you know the device's name, you can search the array for a matching MIDIEndPoint first: <code>srcID: MIDIClient.sources.detect { |e| e.device.containsi("searchstring") }.uid</code>.</dl>
+
+<p>Any filters that are omitted will match all values -- e.g., for an omni-channel responder, simply leave out a <code>chan</code> filter.<h3><a class='anchor' name='MIDIIn'>MIDIIn</a></h3>
 
 <p>MIDIIn has a number of class variables holding functions to be evaluated when a MIDI event comes in. Technical details on each function can be found in the <a href="./../Classes/MIDIIn.html">MIDIIn</a> help file.
 <p>Note, however, that MIDIIn provides no functionality for filtering incoming MIDI based on device, controller number or other factors. This means, for practical use, MIDIIn is significantly harder to use than <a href="./../Classes/MIDIFunc.html">MIDIFunc</a> or <a href="./../Classes/MIDIdef.html">MIDIdef</a>. <strong>It is generally recommended to avoid using MIDIIn directly.</strong> The exceptions are sysex (system exclusive) and sysrt (MIDI clock) messages, which are currently supported only by MIDIIn.<h2><a class='anchor' name='Playing%20notes%20on%20your%20MIDI%20keyboard'>Playing notes on your MIDI keyboard</a></h2>
 
-<p>The technical problem is that every note on needs to save its synth object so that the note off message can end the right server-side node.<pre class='code prettyprint lang-sc'>s.boot;
+<p>The technical problem is that every note on needs to save its synth object so that the note off message can end the right server-side node.<textarea class='editor'>s.boot;
 
 (
 var notes, on, off;
@@ -75,7 +87,7 @@ q = { on.free; off.free; };
 )
 
 // when done:
-q.value;</pre>
+q.value;</textarea>
 
 <p>The <a href="./../Classes/MIDIIn.html">MIDIIn</a> help file contains a more elaborate example.
 <p>SuperCollider does not have a built-in class to handle this automatically. However, <em>dewdrop_lib</em>, a third party library mentioned <a href="#Third%20party%20libraries">below</a>, includes Voicer (to simplify note on-off bookkeeping) and VoicerMIDISocket (to trigger Voicer notes by MIDI). Users interested in this functionality may wish to examine that library.<h2><a class='anchor' name='Sending%20MIDI%20out'>Sending MIDI out</a></h2>
@@ -94,4 +106,5 @@ q.value;</pre>
 <p>Among its features:
 <p>- user-extensible: simple functions may be used, and frequently-needed responses can be written into classes that inherit from the framework (see BasicMIDISocket and BasicMIDIControl helpfiles)
 <p>- easy to use classes for playing MIDI notes and assigning MIDI controllers to synthesis parameters
-<p>- a user-configurable array of MIDI controller numbers, to simplify assignment of events to hardware controllers<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/UsingMIDI.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/UsingMIDI.schelp</a><br>link::Guides/UsingMIDI::<br></div></div></body></html>
+<p>- a user-configurable array of MIDI controller numbers, to simplify assignment of events to hardware controllers<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/UsingMIDI.schelp'>/usr/share/SuperCollider/HelpSource/Guides/UsingMIDI.schelp</a><br>link::Guides/UsingMIDI::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

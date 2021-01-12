@@ -1,0 +1,118 @@
+<!doctype html><html lang='en'><head><title>AutoTrack | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'AutoTrack';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>AutoTrack:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Analysis'>Analysis</a></span>
+</div><h1>AutoTrack<span id='superclasses'> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>autocorrelation beat tracker</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/BBCut2UGens/AutoTrack.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/BBCut2UGens/AutoTrack.sc'>AutoTrack.sc</a></div><div id='related'>See also: <a href="./../Classes/AnalyseEvents2.html">AnalyseEvents2</a>, <a href="./../Classes/BeatTrack.html">BeatTrack</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+<div class='note'><span class='notelabel'>NOTE:</span> synonym for <a href="./../Classes/BeatTrack.html">BeatTrack</a> these days, since BeatTrack went in core</div>
+<p>Autocorrelation beat tracker by Nick Collins, following:
+<p>M. E. P. Davies and M. D. Plumbley. Beat Tracking With A Two State Model. <em>Proceedings of the IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP 2005)</em>, Philadelphia, USA, March 19-23, 2005
+<p>This is my own adaptation for my beat tracking research and uses my own C implementation of Matthew Davies' original MATLAB model. Meanwhile, Paul Brossier and Matthew have been preparing their own realtime version for Paul's aubio library.
+<p>There are four k-rate outputs, being ticks at quarter, eighth and sixteenth level from the determined beat, and the current detected tempo.
+<p>Note the following restrictions:
+<p>This beat tracker determines the beat, biased to the midtempo range by weighting functions. It does not determine the measure level, only a tactus. It is also slow reacting, using a 6 second temporal window for it's autocorrelation maneouvres. Don't expect human musician level predictive tracking.
+<p>On the other hand, it is tireless, relatively general (though obviously best at transient 4/4 heavy material without much expressive tempo variation), and can form the basis of computer processing that is decidedly faster than human.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>AutoTrack.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a>(<span class='argstr'>in</span>, <span class='argstr'>lock: 0</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>Audio input to track<tr><td class='argumentname'>lock<td class='argumentdesc'>
+<p>If this argument is greater than 0.5, the tracker will lock at its current periodicity and continue from the current phase. Whilst it updates the model's phase and period, this is not reflected in the output until lock goes back below 0.5.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>//choose some file you want to track off your hard drive (mono)
+b=Buffer.read(s,"/data/audio/mirdata/stevebeattrack/samples/100.wav");
+
+(
+a= SynthDef(\help_autotrack,{arg vol=1.0, beepvol=1.0, lock=0;
+var trackb,trackh,trackq,tempo;
+var source, beep;
+
+source= PlayBuf.ar(1,b.bufnum,1.0,1,0,1);
+
+#trackb,trackh,trackq,tempo=AutoTrack.kr(source, lock);
+
+beep= SinOsc.ar(1000,0.0,Decay.kr(trackb,0.1));
+
+Out.ar(0,Pan2.ar((vol*source)+(beepvol*beep),0.0));
+
+}).play;
+)
+
+a.set(\vol,0.0);
+
+a.set(\beepvol,1.0);
+
+a.set(\lock,1); //fix it rigidly from current phase/period solution
+
+a.set(\lock,0); //unfix, back to tracking
+
+
+
+
+
+
+
+//track audio in (try clapping a beat or beatboxing, but allow up to 6 seconds for tracking to begin) and spawning stuff at quarters, eighths and sixteenths
+(
+SynthDef(\help_autotrack2,{
+var trackb,trackh,trackq,tempo;
+var source;
+var bsound,hsound,qsound;
+
+source= SoundIn.ar;
+
+#trackb,trackh,trackq,tempo=AutoTrack.kr(source);
+
+bsound= Pan2.ar(LPF.ar(WhiteNoise.ar*(Decay.kr(trackb,0.05)),1000),0.0);
+
+hsound= Pan2.ar(BPF.ar(WhiteNoise.ar*(Decay.kr(trackh,0.05)),3000,0.66),-0.5);
+
+qsound= Pan2.ar(HPF.ar(WhiteNoise.ar*(Decay.kr(trackq,0.05)),5000),0.5);
+
+Out.ar(0, bsound+hsound+qsound);
+}).play;
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/BBCut2UGens/HelpSource/Classes/AutoTrack.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/BBCut2UGens/HelpSource/Classes/AutoTrack.schelp</a><br>link::Classes/AutoTrack::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

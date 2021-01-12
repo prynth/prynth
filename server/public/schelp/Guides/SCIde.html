@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>SuperCollider IDE | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>SuperCollider IDE | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'SuperCollider IDE';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>SuperCollider IDE:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Overview'>Overview</a></li>
@@ -36,8 +41,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Sessions'>Sessions</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Various%20handy%20shortcuts'>Various handy shortcuts</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Customization'>Customization</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -93,14 +98,14 @@ var scdoc_sc_version = '3.9.3';
 <li>Normally, the current line will be evaluated (where the cursor is).<li>If the cursor is within a <em>region</em>, the entire region will be evaluated. See below for explanation of regions.<li>If some code is selected, the selection will be evaluated.</ul>
 <dt>Shift+Return<dd>Evaluates either the current line, or the selection (if any). Use this to evaluate a single line within a region without the need to select it.</dl>
 
-<p><strong>Regions</strong> make it quick and easy to evaluate larger portions of code. A region is surrounded by parentheses; to be interpreted as a region, the parenthesis must each be the only character on a line.<pre class='code prettyprint lang-sc'>(
+<p><strong>Regions</strong> make it quick and easy to evaluate larger portions of code. A region is surrounded by parentheses; to be interpreted as a region, the parenthesis must each be the only character on a line.<textarea class='editor'>(
 Pbind(
     \degree, Pseries(0, 1, 8),
     \dur, 0.25
 ).play;
-)</pre>
+)</textarea>
 
-<p>If the cursor is anywhere between the outermost parentheses, pressing Ctrl+Return will automatically evaluate the entire contents within the parentheses, starting with <code class='code prettyprint lang-sc'>Pbind</code> and ending with <code class='code prettyprint lang-sc'>play;</code>.
+<p>If the cursor is anywhere between the outermost parentheses, pressing Ctrl+Return will automatically evaluate the entire contents within the parentheses, starting with <code>Pbind</code> and ending with <code>play;</code>.
 <p>To quickly evaluate a portion of code, you can also double-click on any bracket (round, squared, or curly), which will select everything between this and the other matching bracket, so you can quickly evaluate it.
 <p>To <strong>stop</strong> any running code, use the <strong>Ctrl+.</strong> shortcut (Ctrl+Period). This will stop all the code scheduled on the <a href="./../Tutorials/Getting-Started/14-Scheduling-Events.html">clocks</a>, as well as all the sound processes on the audio server.<div class='note'><span class='notelabel'>NOTE:</span> If some code goes into a <strong>infinite loop without a pause</strong>, using Ctrl+. will not help to stop it. In this case, you will need to restart the interpreter (see <a href="#Starting%20up%20the%20system">Starting up the system</a>).</div><h3><a class='anchor' name='Automatic%20indentation'>Automatic indentation</a></h3>
 
@@ -111,14 +116,14 @@ Pbind(
 
 <p>As you type, the editor will try to find possible continuations of your code, and pop up a list of suggestions, so you can quickly insert one instead of typing the whole text. This is called <em>autocompletion</em> and is a great aid towards writing code faster and with less errors.
 <p>In general, this works for class and method names. These are the things that the editor can autocomplete:<ul>
-<li><strong>Class names</strong><pre class='code prettyprint lang-sc'>Sin&lt;...&gt;</pre>
+<li><strong>Class names</strong><textarea class='editor'>Sin&lt;...&gt;</textarea>
 
-<p>When you have typed at least 3 letters of a class name, a list of classes beginning with these letters will be shown.<li><strong>Method names following class names</strong><pre class='code prettyprint lang-sc'>Array.&lt;...&gt;</pre>
+<p>When you have typed at least 3 letters of a class name, a list of classes beginning with these letters will be shown.<li><strong>Method names following class names</strong><textarea class='editor'>Array.&lt;...&gt;</textarea>
 
-<p>When you type a dot after a class name, a list of methods of that class will be shown.<li><strong>Method names following literals and built-ins</strong><pre class='code prettyprint lang-sc'>123.&lt;...&gt;
-currentEnvironment.&lt;...&gt;</pre>
+<p>When you type a dot after a class name, a list of methods of that class will be shown.<li><strong>Method names following literals and built-ins</strong><textarea class='editor'>123.&lt;...&gt;
+currentEnvironment.&lt;...&gt;</textarea>
 
-<p>When you type a dot after a literal (number, string, symbol, etc.) or a built-in (currentEnvironment, thisProcess, etc.), a list of instance methods of their classes will be shown.<li><strong>Method names following a variable name</strong><pre class='code prettyprint lang-sc'>value.lin&lt;...&gt;</pre>
+<p>When you type a dot after a literal (number, string, symbol, etc.) or a built-in (currentEnvironment, thisProcess, etc.), a list of instance methods of their classes will be shown.<li><strong>Method names following a variable name</strong><textarea class='editor'>value.lin&lt;...&gt;</textarea>
 
 <p>When you type a dot and 3 letters after a variable, a list of all methods of all classes starting with these letters will be shown (because the class of the variable is not known).</ul>
 
@@ -128,12 +133,12 @@ currentEnvironment.&lt;...&gt;</pre>
 
 <p>The editor helps you when writing arguments of a method by showing you a complete list of the method's arguments and their default values, as long as it manages to figure out exactly which method that is. This is called <em>method call assistance</em>. It helps you to know exactly which argument you are typing, and reduces the need to look into documentation.
 <p>The assistance is activated as soon as you type an opening parenthesis after a method name, at which point a box containing the arguments will pop up. However, if the class of the method is not known, first a menu of classes that implement the method will be shown, and after you select one of the classes using the arrow keys or the Page Up and Page Down keys, and press Return, the box with arguments will pop up.
-<p>So, for example, in the following cases method call assistance will pop up immediately:<pre class='code prettyprint lang-sc'>SinOsc.ar(
-123.forBy(</pre>
+<p>So, for example, in the following cases method call assistance will pop up immediately:<textarea class='editor'>SinOsc.ar(
+123.forBy(</textarea>
 
-<p>...while in the following cases, you will first need to select a class, because the class is not known:<pre class='code prettyprint lang-sc'>min(
+<p>...while in the following cases, you will first need to select a class, because the class is not known:<textarea class='editor'>min(
 x.play(
-[1,2,3].inject(</pre>
+[1,2,3].inject(</textarea>
 
 <p>If method call assistance is not shown, you can activate it using <strong>Ctrl+Shift+Space</strong> with the cursor between parenthesis surrounding the arguments. You can always dismiss it by pressing <strong>Escape</strong>.<h2><a class='anchor' name='Tool%20panels'>Tool panels</a></h2>
 
@@ -185,4 +190,5 @@ x.play(
 
 <p>Many customization options are available in the IDE configuration dialog, accessible via "Edit &gt; Preferences" menu action.
 <p>The options include: fonts, code colors, keyboard shortcuts,...
-<p>(More to write later)<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/SCIde.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/SCIde.schelp</a><br>link::Guides/SCIde::<br></div></div></body></html>
+<p>(More to write later)<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/SCIde.schelp'>/usr/share/SuperCollider/HelpSource/Guides/SCIde.schelp</a><br>link::Guides/SCIde::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

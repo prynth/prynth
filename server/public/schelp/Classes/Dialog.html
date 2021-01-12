@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Dialog | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Dialog | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Dialog';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Dialog:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -24,8 +29,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
 </ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
-</ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -35,46 +40,51 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Shows various system dialogs</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/QDialog.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/Base/QDialog.sc'>QDialog.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/QDialog.html">QDialog</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QDialog.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/GUI/Base/QDialog.sc'>QDialog.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/QDialog.html">QDialog</a></div>
+<div id='related'>See also: <a href="./../Classes/FileDialog.html">FileDialog</a>, <a href="./../Classes/File.html">File</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>This class allows to show various system dialogs. <a href="#*openPanel">*openPanel</a> will show a dialog for selecting a file to open, and <a href="#*savePanel">*savePanel</a> will show a dialog for selecting or creating a file to save to.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
-<h3 class='method-code'><span class='method-prefix'>Dialog.</span><a class='method-name' name='*openPanel' href='./../Overviews/Methods.html#openPanel'>openPanel</a>(<span class='argstr'>okFunc</span>, <span class='argstr'>cancelFunc</span>, <span class='argstr'>multipleSelection: false</span>)</h3>
+<p>This class allows to show various system dialogs. <a href="#*openPanel">*openPanel</a> will show a dialog for selecting a file to open, and <a href="#*savePanel">*savePanel</a> will show a dialog for selecting or creating a file to save to.
+<p>The methods here are convenience functions built on top of <a href="./../Classes/FileDialog.html">FileDialog</a>.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>Dialog.</span><a class='method-name' name='*openPanel' href='./../Overviews/Methods.html#openPanel'>openPanel</a>(<span class='argstr'>okFunc</span>, <span class='argstr'>cancelFunc</span>, <span class='argstr'>multipleSelection: false</span>, <span class='argstr'>path</span>)</h3>
 <div class='method'>
 <p> Shows a dialog for selection of an existing file (or multiple files) to open. It does not do anything with the file, instead it just passes the chosen filenames to the given result handler.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>okFunc<td class='argumentdesc'>
 <p> An object to be evaluated when OK is pressed. As argument, either a single filename is passed as a String, or an Array of Strings for multiple selected items is passed, depending on the <strong>multipleSelection</strong> argument. The paths will always be absolute paths.<tr><td class='argumentname'>cancelFunc<td class='argumentdesc'>
 <p> An object to be evaluated when Cancel is pressed.<tr><td class='argumentname'>multipleSelection<td class='argumentdesc'>
-<p> A Boolean indicating whether multiple files can be selected.</table><h4>Discussion:</h4>
+<p> A Boolean indicating whether multiple files can be selected.<tr><td class='argumentname'>path<td class='argumentdesc'>
+<p> A string. The dialog will initially display the contents of this path. The default is the current  user's home directory.</table><h4>Discussion:</h4>
 
-<p>Example:<pre class='code prettyprint lang-sc'>(
+<p>Example:<textarea class='editor'>(
 Dialog.openPanel({ arg path;
     path.postln;
 },{
     "cancelled".postln;
 });
-)</pre>
-</div><h3 class='method-code'><span class='method-prefix'>Dialog.</span><a class='method-name' name='*savePanel' href='./../Overviews/Methods.html#savePanel'>savePanel</a>(<span class='argstr'>okFunc</span>, <span class='argstr'>cancelFunc</span>)</h3>
+)</textarea>
+</div><h3 class='method-code'><span class='method-prefix'>Dialog.</span><a class='method-name' name='*savePanel' href='./../Overviews/Methods.html#savePanel'>savePanel</a>(<span class='argstr'>okFunc</span>, <span class='argstr'>cancelFunc</span>, <span class='argstr'>path</span>)</h3>
 <div class='method'>
 <p> Shows a dialog for selecting or creating a file to save to. It does not do anything with the selected file, and does not create any file; instead it just passes the chosen filename to the given result handler.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>okFunc<td class='argumentdesc'>
 <p> An object to be evaluated when OK is pressed. The chosen filename (as an absolute path) is passed as a String as argument. If the file already exists, the user will be asked to confirm.<tr><td class='argumentname'>cancelFunc<td class='argumentdesc'>
-<p> An object to be evaluated when Cancel is pressed.</table><h4>Discussion:</h4>
+<p> An object to be evaluated when Cancel is pressed.<tr><td class='argumentname'>path<td class='argumentdesc'>
+<p> A string. The dialog will initially display the contents of this path. The default is the current  user's home directory.</table><h4>Discussion:</h4>
 
-<p>Example:<pre class='code prettyprint lang-sc'>(
+<p>Example:<textarea class='editor'>(
 Dialog.savePanel({ arg path;
     path.postln;
 },{
     "cancelled".postln;
 });
-)</pre>
+)</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>Dialog.</span><a class='method-name' name='*getPaths' href='./../Overviews/Methods.html#getPaths'>getPaths</a>(<span class='argstr'>okFunc</span>, <span class='argstr'>cancelFunc</span>, <span class='argstr'>allowsMultiple: true</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/backwardsCompatibility/deprecated-3.7.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/backwardsCompatibility/deprecated-3.7.sc</a></div>
+<div class='extmethod'>From extension in <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/deprecated-3.7.sc'>/usr/share/SuperCollider/SCClassLibrary/Common/GUI/backwardsCompatibility/deprecated-3.7.sc</a></div>
 <div class='method'><div class='note'><span class='notelabel'>NOTE:</span> Deprecated. Use <a href="#*openPanel">*openPanel</a> instead.</div>
 <p> Implements the same functionality as *openPanel, only the last argument is named differently and defaults to true.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
 <div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
-<div id='inheritedinstmets'></div><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Dialog.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Dialog.schelp</a><br>link::Classes/Dialog::<br></div></div></body></html>
+<div id='inheritedinstmets'></div><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Dialog.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Dialog.schelp</a><br>link::Classes/Dialog::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

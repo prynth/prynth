@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Multi-client Setups | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Multi-client Setups | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Multi-client Setups';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Multi-client Setups:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Multi%20client-server%20setups%20-%20discussion%20and%20tests'>Multi client-server setups - discussion and tests</a></li>
@@ -23,12 +28,12 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Easy-to-trace%20nodeIDs'>Easy-to-trace nodeIDs</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Bus%20channel%20and%20buffer%20numbers'>Bus channel and buffer numbers</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Configuring%20CmdPeriod%20behavior'>Configuring CmdPeriod behavior</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
- | <span id='categories'><a href='./../Browse.html#Guides'>Guides</a></span>
+ | <span id='categories'><a href='./../Browse.html#Server'>Server</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Server>Architecture'>Architecture</a> | <a href='./../Browse.html#Tutorials'>Tutorials</a></span>
 </div><h1>Multi-client Setups</h1>
 <div id='summary'>How to set up and shared servers for multiple clients in SuperCollider</div>
 </div>
@@ -37,18 +42,18 @@ var scdoc_sc_version = '3.9.3';
 </div>
 <a class='anchor' name='kw_server'>&nbsp;</a><a class='anchor' name='kw_multi-client'>&nbsp;</a><h2><a class='anchor' name='Multi%20client-server%20setups%20-%20discussion%20and%20tests'>Multi client-server setups - discussion and tests</a></h2>
 
-<p>OSC communication between SC and its sound server offers many options for network music: Multiple computers can run both supercollider and associated sound servers. For clarity, the "server process" refers to a running scsynth or supernova process. The "server object" AKA "client" is the server's representation in sclang, such as <code class='code prettyprint lang-sc'>Server.local, s, Server(\elsewhere, NetAddr("163.234.56.78"))</code>.<h3><a class='anchor' name='What%20are%20clientIDs,%20and%20how%20do%20servers%20get%20them?'>What are clientIDs, and how do servers get them?</a></h3>
+<p>OSC communication between SC and its sound server offers many options for network music: Multiple computers can run both supercollider and associated sound servers. For clarity, the "server process" refers to a running scsynth or supernova process. The "server object" AKA "client" is the server's representation in sclang, such as <code>Server.local, s, Server(\elsewhere, NetAddr("163.234.56.78"))</code>.<h3><a class='anchor' name='What%20are%20clientIDs,%20and%20how%20do%20servers%20get%20them?'>What are clientIDs, and how do servers get them?</a></h3>
 
 <p>When more than one user plays on a given server, some resources need to be shared between users/clients:<ul>
 <li>permanent and temporary nodeIDs (handled by Server:nodeAllocator),<li>private control and audio bus channels (handled by Server:audioBusAllocator, Server:controlBusAllocator)<li>buffer numbers (handled by Server:bufferAllocator).</ul>
 
-<p>This sharing is handled by declaring how many clients/users are expected to login - <code class='code prettyprint lang-sc'>server.options.maxLogins</code> - and scsynth will automatically give a different clientID to each client when it logs in.
+<p>This sharing is handled by declaring how many clients/users are expected to login - <code>server.options.maxLogins</code> - and scsynth will automatically give a different clientID to each client when it logs in.
 <p>The most common case is that there is only a single user/client, who always gets clientID 0, and control of all available resources (i.e. the full number range of every allocator).
 <p>When multiple clients log in, this is what happens:<ul>
 <li>On startup, scsynth (the server process) is started with a fixed limit of maxLogins.<li>When a local or remote server object/client has no user-specified clientID, scsynth sends back the next free clientID, and the client uses that clientID.<li>When a local or remote server object/client was created with specific clientID, scsynth sends back that number if it was free, or the next free clientID if not; the client should use the free number in any case, as the other may clash with a client already logged in.<li>In case the client was already registered and tries to register again (after a reboot or network problem), scsynth sends back a failed message AND the clientID this client had earlier, and the client will use that clientID.<li>[After pull request #3181] scsynth also sends back the maxLogins value it was started with, so clients can also adjust their internal allocator settings to it.</ul>
 <h3><a class='anchor' name='Code%20examples%20and%20tests'>Code examples and tests</a></h3>
 
-<p>Recommended usage for multiple clients on the same server is to use identical options settings for all clients, and logging into the scsynth process from different sclang instances, which are typically on different laptops.<pre class='code prettyprint lang-sc'>// on the machine where scsynth runs, it can be the default server.
+<p>Recommended usage for multiple clients on the same server is to use identical options settings for all clients, and logging into the scsynth process from different sclang instances, which are typically on different laptops.<textarea class='editor'>// on the machine where scsynth runs, it can be the default server.
 // set the maximum number of client logins expected:
 s.options.maxLogins = 8;
 // now reboot the server, so that it will have maxLogins
@@ -57,9 +62,9 @@ s.reboot;
 // from another sclang instance, log into scsynth:
 s.options.maxLogins = 8;
 // example NetAddr of the machine that runs scsynth on standard port
-s.addr = NetAddr("168.192.1.20", 57110);</pre>
+s.addr = NetAddr("168.192.1.20", 57110);</textarea>
 
-<p>When fixed clientIDs for multiclient setups are desired, the recommended usage is to set every clientID on creation.<pre class='code prettyprint lang-sc'>s.options.maxLogins = 8;
+<p>When fixed clientIDs for multiclient setups are desired, the recommended usage is to set every clientID on creation.<textarea class='editor'>s.options.maxLogins = 8;
 
 r = Server(
     \remote4,
@@ -73,15 +78,15 @@ r = Server(
 // (because userSpecifiedClientID is false)
 s.userSpecifiedClientID;
 // and z knows to keep its clientID
-r.userSpecifiedClientID;</pre>
+r.userSpecifiedClientID;</textarea>
 <h3><a class='anchor' name='Separate%20defaultGroups'>Separate defaultGroups</a></h3>
 
 <p>For info on what a default group is, see <a href="./../Reference/default_group.html">Default Group</a>.
 <p>Every client registering with a server has its own defaultGroup. All nodes belonging to one client are in its defaultGroup and can be specifically addressed, so that a client can release only one's own nodes, and leave those of other clients on this server untouched.
 <p>A client also knows the defaultGroups of all other clients that may login, so it can reason about other clients, and be as sharing-friendly as desired, see below in subsection CmdPeriod behavior.
-<p><code class='code prettyprint lang-sc'>s.defaultGroups;</code><h3><a class='anchor' name='Easy-to-trace%20nodeIDs'>Easy-to-trace nodeIDs</a></h3>
+<p><code>s.defaultGroups;</code><h3><a class='anchor' name='Easy-to-trace%20nodeIDs'>Easy-to-trace nodeIDs</a></h3>
 
-<p>For details on node allocation, see NodeIDAllocator and ReadableNodeIDAllocator class and help files. The scheme from NodeIDAllocator is also followed by many non-sclang clients allocation ranges; in networks with these, NodeIDAllocator will be the safe choice.<pre class='code prettyprint lang-sc'>// NodeIDAllocator uses a fixed binary prefix of (2 ** 26) * clientID:
+<p>For details on node allocation, see NodeIDAllocator and ReadableNodeIDAllocator class and help files. The scheme from NodeIDAllocator is also followed by many non-sclang clients allocation ranges; in networks with these, NodeIDAllocator will be the safe choice.<textarea class='editor'>// NodeIDAllocator uses a fixed binary prefix of (2 ** 26) * clientID:
 Server.nodeAllocClass = NodeIDAllocator;
 s.newAllocators;
 r.newAllocators;  // remake allocators
@@ -156,10 +161,10 @@ Pbind(\degree, Pseq((0..7).mirror), \dur, 0.15, \server, r).play;
 Ndef(\x, { Dust.ar(10 ! 2) });
 Ndef(\x).play;
 Ndef(\x).filter(10, { |in| Ringz.ar(in, [600, 800], 0.03) }).play;
-Ndef(\x).end(3);</pre>
+Ndef(\x).end(3);</textarea>
 <h3><a class='anchor' name='Bus%20channel%20and%20buffer%20numbers'>Bus channel and buffer numbers</a></h3>
 
-<p>The allocators for audio and control busses and for buffers split the full number range of scsynth evenly for the number of clients expected.<pre class='code prettyprint lang-sc'>// default value for clientID is 0 and maxLogins is 1
+<p>The allocators for audio and control busses and for buffers split the full number range of scsynth evenly for the number of clients expected.<textarea class='editor'>// default value for clientID is 0 and maxLogins is 1
 Server.default = Server.local;
 s.clientID;   // 0
 s.options.maxLogins; // default 1
@@ -189,9 +194,9 @@ r.newBusAllocators;
 // audio bus range starts at 512 of 1024 total range
 3.collect { Bus.audio(r, 2) }; // 512, 514, 516
 // control bus range starts at 8192 of 16384 total range
-3.collect { Bus.control(r, 2) };</pre>
+3.collect { Bus.control(r, 2) };</textarea>
 
-<p>Buffer allocation uses the same class, ContiguousBlockAllocator, and thus works the same way.<pre class='code prettyprint lang-sc'>// show buffer allocation
+<p>Buffer allocation uses the same class, ContiguousBlockAllocator, and thus works the same way.<textarea class='editor'>// show buffer allocation
 Server.default = Server.local;
 s.bufferAllocator.size;
 3.collect { Buffer(s) }; // starts at 0
@@ -199,12 +204,12 @@ s.bufferAllocator.size;
 r.bufferAllocator.size;
 3.collect { Buffer(r) }; // starts at 256
 
-// more buffer alloc examples desirable here?</pre>
+// more buffer alloc examples desirable here?</textarea>
 <h3><a class='anchor' name='Configuring%20CmdPeriod%20behavior'>Configuring CmdPeriod behavior</a></h3>
 
 <p>In networked performances, it is useful that clients have well-chosen emergency access to 'their' sounds on a remote server; and it may make sense to give the local client more emergency power. Both can be configured easily.
 <p><strong>Default behavior</strong>
-<p>By default, the local client will kill all sounds, and only reconstruct its defaultGroup; on remote clients, CmdPeriod does not affect remoter servers at all.<pre class='code prettyprint lang-sc'>// default - single client:
+<p>By default, the local client will kill all sounds, and only reconstruct its defaultGroup; on remote clients, CmdPeriod does not affect remoter servers at all.<textarea class='editor'>// default - single client:
 s.options.maxLogins_(1);
 s.reboot;
 s.plotTree;        // watch to debug
@@ -233,19 +238,19 @@ s.sendDefaultGroups; // four groups in plotTree
 // s.tree gets evaluated after each CmdPeriod.
 // make sure we have nothing in s.tree:
 s.tree = nil;
-s.freeAll; // &lt;- by default, frees other client's defaultGroups too.</pre>
+s.freeAll; // &lt;- by default, frees other client's defaultGroups too.</textarea>
 
 <p><strong>Remote-friendly local master setup</strong>
 <p>Now, all sounds on the server are gone, as desired. But the other clients cannot start new synths now, because their defaultGroups are gone too!
-<p>Thus, the local client should reconstruct them, so the other clients can pick up playing again:<pre class='code prettyprint lang-sc'>// - easiest option:
+<p>Thus, the local client should reconstruct them, so the other clients can pick up playing again:<textarea class='editor'>// - easiest option:
 s.tree = { s.sendDefaultGroups; };
 (dur: inf).play;  // test sound
 Group(0);   // make second group at root level
 CmdPeriod.run; // simulate CmdPeriod key action
 // -&gt; still stops all sounds, but then remakes all defaultGroups,
-// so the other clients can continue.</pre>
+// so the other clients can continue.</textarea>
 
-<p><strong>Give remote clients control of their sounds</strong><pre class='code prettyprint lang-sc'>// create a fake remote server
+<p><strong>Give remote clients control of their sounds</strong><textarea class='editor'>// create a fake remote server
 x = Server(\pseudoRem3, s.addr, s.options, 3);
 // method to
 ~freeMyGroupX = { x.freeMyGroup };
@@ -277,10 +282,10 @@ CmdPeriod.run; // simulate CmdPeriod key action
 // -&gt; only stops s.defaultGroup, others continue untouched
 
 CmdPeriod.remove(~freeMyGroupS); // cleanup
-s.freeAll;</pre>
+s.freeAll;</textarea>
 
 <p><strong>More power to all</strong>
-<p>In a less polite symmetrical setup, CmdPeriod stops all sounds on all clients, but keeps all defaultGroups running.<pre class='code prettyprint lang-sc'>~myserver = s; // s on home machine, remote client on others
+<p>In a less polite symmetrical setup, CmdPeriod stops all sounds on all clients, but keeps all defaultGroups running.<textarea class='editor'>~myserver = s; // s on home machine, remote client on others
 ~myserver.sendDefaultGroups;
 ~freeDefaultGroups = { ~myserver.freeDefaultGroups };
 CmdPeriod.add(~freeDefaultGroups);
@@ -289,6 +294,7 @@ CmdPeriod.add(~freeDefaultGroups);
 (dur: inf, degree: 2, group: s.defaultGroups[1].nodeID).play;
 
 CmdPeriod.run; // simulate CmdPeriod key action
-// -&gt; all clients stop sound in all groups, groups remain.</pre>
+// -&gt; all clients stop sound in all groups, groups remain.</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/MultiClient_Setups.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/MultiClient_Setups.schelp</a><br>link::Guides/MultiClient_Setups::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/MultiClient_Setups.schelp'>/usr/share/SuperCollider/HelpSource/Guides/MultiClient_Setups.schelp</a><br>link::Guides/MultiClient_Setups::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Score | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Score | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Score';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Score:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -49,8 +54,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'><li class='toc2'><a href='#NRT%20Examples'>NRT Examples</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Real-time%20Examples'>Real-time Examples</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#creating%20Score%20from%20a%20pattern'>creating Score from a pattern</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -60,21 +65,21 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>score of timed OSC commands</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Score.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Control/Score.sc'>Score.sc</a></div><div id='related'>See also: <a href="./../Guides/Non-Realtime-Synthesis.html">Non-Realtime Synthesis (NRT)</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/Score.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Control/Score.sc'>Score.sc</a></div><div id='related'>See also: <a href="./../Guides/Non-Realtime-Synthesis.html">Non-Realtime Synthesis (NRT)</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
 <p>Score encapsulates a list of timed OSC commands and provides some methods for using it, as well as support for the creation of binary OSC files for non-realtime synthesis. See <a href="./../Guides/Non-Realtime-Synthesis.html">Non-Realtime Synthesis (NRT)</a> for more details.
-<p>The list should be in the following format, with times in ascending order. Bundles are okay.<pre class='code prettyprint lang-sc'>[
+<p>The list should be in the following format, with times in ascending order. Bundles are okay.<textarea class='editor'>[
 [beat1, [OSCcmd1]],
 [beat2, [OSCcmd2], [OSCcmd3]],
 ...
 [beat_n, [OSCcmdn]],
 [beatToEndNRT, [\c_set, 0, 0]] // finish
-]</pre>
+]</textarea>
 
 <p>For NRT synthesis the final event should a dummy event, after which synthesis will cease. It is thus important that this event be timed to allow previous events to complete.
-<p>Score scheduling defaults to <a href="./../Classes/TempoClock.html">TempoClock</a>. A setting of <code class='code prettyprint lang-sc'>TempoClock.default.tempo = 1</code> (60 beats per minute), may be used to express score events in seconds if desired.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<p>Score scheduling defaults to <a href="./../Classes/TempoClock.html">TempoClock</a>. A setting of <code>TempoClock.default.tempo = 1</code> (60 beats per minute), may be used to express score events in seconds if desired.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>Score.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>list</span>)</h3>
 <div class='method'>
 <p>returns a new Score object with the supplied list.<h4>Arguments:</h4>
@@ -100,16 +105,16 @@ var scdoc_sc_version = '3.9.3';
 <tr><td class='argumentname'>list<td class='argumentdesc'>
 <p>the list.<tr><td class='argumentname'>oscFilePath<td class='argumentdesc'>
 <p>a <a href="./../Classes/String.html">String</a> containing the desired path of the OSC file.<tr><td class='argumentname'>clock<td class='argumentdesc'>
-<p>Use clock as a tempo base. <code class='code prettyprint lang-sc'>TempoClock.default</code> is used if clock is nil.</table></div><h3 class='method-code'><span class='method-prefix'>Score.</span><a class='method-name' name='*writeFromFile' href='./../Overviews/Methods.html#writeFromFile'>writeFromFile</a>(<span class='argstr'>path</span>, <span class='argstr'>oscFilePath</span>, <span class='argstr'>clock</span>)</h3>
+<p>Use clock as a tempo base. <code>TempoClock.default</code> is used if clock is nil.</table></div><h3 class='method-code'><span class='method-prefix'>Score.</span><a class='method-name' name='*writeFromFile' href='./../Overviews/Methods.html#writeFromFile'>writeFromFile</a>(<span class='argstr'>path</span>, <span class='argstr'>oscFilePath</span>, <span class='argstr'>clock</span>)</h3>
 <div class='method'>
 <p>as <a href="#*write">*write</a> but reads the list from a file.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>path<td class='argumentdesc'>
 <p>a path to a file with a list.<tr><td class='argumentname'>oscFilePath<td class='argumentdesc'>
 <p>a <a href="./../Classes/String.html">String</a> containing the desired path of the OSC file.<tr><td class='argumentname'>clock<td class='argumentdesc'>
-<p>Use clock as a tempo base. <code class='code prettyprint lang-sc'>TempoClock.default</code> is used if clock is nil.</table></div><h3 class='method-code'><span class='method-prefix'>Score.</span><a class='method-name' name='*recordNRT' href='./../Overviews/Methods.html#recordNRT'>recordNRT</a>(<span class='argstr'>list</span>, <span class='argstr'>oscFilePath</span>, <span class='argstr'>outputFilePath</span>, <span class='argstr'>inputFilePath</span>, <span class='argstr'>sampleRate: 44100</span>, <span class='argstr'>headerFormat: "AIFF"</span>, <span class='argstr'>sampleFormat: "int16"</span>, <span class='argstr'>options</span>, <span class='argstr'>completionString: ""</span>, <span class='argstr'>duration</span>, <span class='argstr'>action</span>)</h3>
+<p>Use clock as a tempo base. <code>TempoClock.default</code> is used if clock is nil.</table></div><h3 class='method-code'><span class='method-prefix'>Score.</span><a class='method-name' name='*recordNRT' href='./../Overviews/Methods.html#recordNRT'>recordNRT</a>(<span class='argstr'>list</span>, <span class='argstr'>oscFilePath</span>, <span class='argstr'>outputFilePath</span>, <span class='argstr'>inputFilePath</span>, <span class='argstr'>sampleRate: 44100</span>, <span class='argstr'>headerFormat: "AIFF"</span>, <span class='argstr'>sampleFormat: "int16"</span>, <span class='argstr'>options</span>, <span class='argstr'>completionString: ""</span>, <span class='argstr'>duration</span>, <span class='argstr'>action</span>)</h3>
 <div class='method'>
-<p>a convenience method to synthesize <strong>list</strong> in non-realtime. This method writes an OSC file to <strong>oscFilePath</strong> (you have to do your own cleanup if desired) and then starts a server app to synthesize it. For details on valid headerFormats and sampleFormats see <a href="./../Classes/SoundFile.html">SoundFile</a>. Use <code class='code prettyprint lang-sc'>TempoClock.default</code> as a tempo base. Does not return an instance.<h4>Arguments:</h4>
+<p>a convenience method to synthesize <strong>list</strong> in non-realtime. This method writes an OSC file to <strong>oscFilePath</strong> (you have to do your own cleanup if desired) and then starts a server app to synthesize it. For details on valid headerFormats and sampleFormats see <a href="./../Classes/SoundFile.html">SoundFile</a>. Use <code>TempoClock.default</code> as a tempo base. Does not return an instance.<h4>Arguments:</h4>
 <table class='arguments'>
 <tr><td class='argumentname'>list<td class='argumentdesc'>
 <p>the list.<tr><td class='argumentname'>oscFilePath<td class='argumentdesc'>
@@ -127,13 +132,13 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>Score.</span><a class='method-name' name='*program' href='./../Overviews/Methods.html#program'>program</a></h3>
 <h3 class='method-code'><span class='method-prefix'>Score.</span><a class='method-name' name='*program' href='./../Overviews/Methods.html#program'>program</a> = value</h3>
 <h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
-<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-play' href='./../Overviews/Methods.html#play'>play</a>(<span class='argstr'>server</span>, <span class='argstr'>clock</span>, <span class='argstr'>quant: 0</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-play' href='./../Overviews/Methods.html#play'>play</a>(<span class='argstr'>server</span>, <span class='argstr'>clock</span>, <span class='argstr'>quant: 0.0</span>)</h3>
 <div class='method'>
-<p>play the list on <strong>server</strong>, use <strong>clock</strong> as a tempo base and quantize start time to <strong>quant</strong>. If <strong>server</strong> is nil, then on the default server. <code class='code prettyprint lang-sc'>TempoClock.default</code> if <strong>clock</strong> is nil. now if <strong>quant</strong> is 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-stop' href='./../Overviews/Methods.html#stop'>stop</a></h3>
+<p>play the list on <strong>server</strong>, use <strong>clock</strong> as a tempo base and quantize start time to <strong>quant</strong>. If <strong>server</strong> is nil, then on the default server. <code>TempoClock.default</code> if <strong>clock</strong> is nil. now if <strong>quant</strong> is 0.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-stop' href='./../Overviews/Methods.html#stop'>stop</a></h3>
 <div class='method'>
 <p>stop playing.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-write' href='./../Overviews/Methods.html#write'>write</a>(<span class='argstr'>oscFilePath</span>, <span class='argstr'>clock</span>)</h3>
 <div class='method'>
-<p>create a binary OSC file for NRT synthesis from the list. Use <strong>clock</strong> as a tempo base. <code class='code prettyprint lang-sc'>TempoClock.default</code> if <strong>clock</strong> is nil.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-score' href='./../Overviews/Methods.html#score'>score</a></h3>
+<p>create a binary OSC file for NRT synthesis from the list. Use <strong>clock</strong> as a tempo base. <code>TempoClock.default</code> if <strong>clock</strong> is nil.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-score' href='./../Overviews/Methods.html#score'>score</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-score' href='./../Overviews/Methods.html#score'>score</a> = value</h3>
 <div class='method'>
 <p>get or set the list.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-add' href='./../Overviews/Methods.html#add'>add</a>(<span class='argstr'>bundle</span>)</h3>
@@ -153,13 +158,15 @@ var scdoc_sc_version = '3.9.3';
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-writeOSCFile' href='./../Overviews/Methods.html#writeOSCFile'>writeOSCFile</a>(<span class='argstr'>path</span>, <span class='argstr'>from</span>, <span class='argstr'>to</span>, <span class='argstr'>clock</span>)</h3>
 <h2><a class='anchor' name='examples'>Examples</a></h2>
 <h3><a class='anchor' name='NRT%20Examples'>NRT Examples</a></h3>
-<pre class='code prettyprint lang-sc'>// A sample synthDef
+<textarea class='editor'>// A sample synthDef
+// Here we use store instead of add to store the compiled synthdef in Platform.defaultTempDir +/+ "synthdefs/"
+// and make it available to the NRT server
 (
 SynthDef("helpscore", { |out, freq = 440|
     Out.ar(out,
         SinOsc.ar(freq, 0, 0.2) * Line.kr(1, 0, 0.5, doneAction: Done.freeSelf)
     )
-}).add
+}).store;
 )
 
 // write a sample file for testing
@@ -172,17 +179,17 @@ g = [
     [0.3, [\s_new, \helpscore, 1002, 0, 0, \freq, 220]],
     [1, [\c_set, 0, 0]] // finish
     ];
-f = File("score-test","w");
+f = File(Platform.defaultTempDir +/+ "score-test","w");
 f.write(g.asCompileString);
 f.close;
 )
 
 //convert it to a binary OSC file for use with NRT
-Score.writeFromFile("score-test", "test.osc");</pre>
+Score.writeFromFile(Platform.defaultTempDir +/+ "score-test", Platform.defaultTempDir +/+ "test.osc");</textarea>
 
-<p>From the command line, the file can then be rendered from within the build directory:<pre class='code prettyprint lang-sc'>./scsynth -N test.osc _ test.aif 44100 AIFF int16 -o 1</pre>
+<p>From the command line, the file can then be rendered from within the build directory:<textarea class='editor'>scsynth -N test.osc _ test.aif 44100 AIFF int16 -o 1</textarea>
 
-<p>Score also provides methods to do all this more directly:<pre class='code prettyprint lang-sc'>(
+<p>Score also provides methods to do all this more directly:<textarea class='editor'>(
 var f, o;
 g = [
     [0.1, [\s_new, \helpscore, 1000, 0, 0, \freq, 440]],
@@ -192,10 +199,10 @@ g = [
     [1, [\c_set, 0, 0]] // finish
     ];
 o = ServerOptions.new.numOutputBusChannels = 1; // mono output
-Score.recordNRT(g, "help-oscFile", "helpNRT.aiff", options: o); // synthesize
-)</pre>
+Score.recordNRT(g, Platform.defaultTempDir +/+ "help-oscFile", Platform.defaultTempDir +/+ "helpNRT.aiff", options: o); // synthesize
+)</textarea>
 <h3><a class='anchor' name='Real-time%20Examples'>Real-time Examples</a></h3>
-<pre class='code prettyprint lang-sc'>s.boot; // boot the default server
+<textarea class='editor'>s.boot; // boot the default server
 
 // A sample synthDef
 (
@@ -203,7 +210,7 @@ SynthDef("helpscore", { |out, freq = 440|
     Out.ar(out,
         SinOsc.ar(freq, 0, 0.2) * Line.kr(1, 0, 0.5, doneAction: Done.freeSelf)
     )
-}).add
+}).store;
 )
 
 // write a sample file for testing
@@ -217,12 +224,12 @@ g = [
     [0.3, [\s_new, \helpscore, 1003, 0, 0, \freq, 220]],
     [1, [\c_set, 0, 0]] // finish
     ];
-f = File("score-test","w");
+f = File(Platform.defaultTempDir +/+ "score-test","w");
 f.write(g.asCompileString);
 f.close;
 )
 
-z = Score.newFromFile("score-test");
+z = Score.newFromFile(Platform.defaultTempDir +/+ "score-test");
 
 // play it on the default server
 z.play;
@@ -263,13 +270,20 @@ z.play;
 (
 z.play;
 SystemClock.sched(1.0, {z.stop;});
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='creating%20Score%20from%20a%20pattern'>creating Score from a pattern</a></h3>
-<pre class='code prettyprint lang-sc'>SynthDescLib.read;
+<textarea class='editor'>(
+SynthDef("helpscore", { |out, freq = 440|
+    Out.ar(out,
+        SinOsc.ar(freq, 0, 0.2) * Line.kr(1, 0, 0.5, doneAction: Done.freeSelf)
+    )
+}).store;
+)
 
 // new pattern
 (
 p = Pbind(
+    \instrument, \helpscore,
     \dur, Prand([0.3, 0.5], inf),
     \freq, Prand([200, 300, 500],inf)
 );
@@ -277,14 +291,12 @@ p = Pbind(
 
 // make a score from the pattern, 4 beats long
 z = p.asScore(4.0);
-
 z.score.postcs;
 z.play;
 
 // rendering a pattern to sound file directly:
-
 // render the pattern to aiff (4 beats)
+p.render(Platform.defaultTempDir +/+ "asScore-Help.aif", 4.0);</textarea>
 
-p.render("asScore-Help.aif", 4.0);</pre>
-
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Score.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Score.schelp</a><br>link::Classes/Score::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Score.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Score.schelp</a><br>link::Classes/Score::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

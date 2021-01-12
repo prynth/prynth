@@ -1,0 +1,106 @@
+<!doctype html><html lang='en'><head><title>RMS | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'RMS';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>RMS:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*kr'>kr</a>  <a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Analysis'>Analysis</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Analysis>Amplitude'>Amplitude</a></span>
+</div><h1>RMS<span id='superclasses'> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>root mean square</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/DEINDUGens/RMS.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/DEINDUGens/RMS.sc'>RMS.sc</a></div><div id='related'>See also: <a href="./../Classes/Amplitude.html">Amplitude</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>2016, Till Bovermann <a href="http://tai-studio.org">http://tai-studio.org</a>
+<p>calculates root mean square of 1st order low-pass filtered input for each sample.<textarea class='editor'>rms = sqrt(lpf1(x^2))</textarea>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>RMS.</span><a class='method-name' name='*kr' href='./../Overviews/Methods.html#kr'>kr</a>(<span class='argstr'>in</span>, <span class='argstr'>lpFreq: 10</span>)</h3>
+<h3 class='method-code'><span class='method-prefix'>RMS.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>in</span>, <span class='argstr'>lpFreq: 10</span>)</h3>
+<div class='method'><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>the input signal<tr><td class='argumentname'>lpFreq<td class='argumentdesc'>
+<p>lowpass frequency</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>Simple example<textarea class='editor'>// analyse a signal
+{
+    var sig, rms;
+    sig = SinOsc.ar(300, 0, MouseX.kr(0, 1)) * LFPulse.ar(1, 0.5);
+    rms = RMS.ar(sig, 10).poll;
+    [sig, rms]
+}.scope;</textarea>
+
+<p>More complex usage example adapted from a Pd patch by Dario Sanfilippo<textarea class='editor'>// Feedback delay modulation
+
+(
+Ndef(\fb).addSpec(\modScale,  [-20, 20, \lin, 1]);
+Ndef(\fb).addSpec(\gain,      [0, 2, \lin, 0]);
+Ndef(\fb).addSpec(\amp,       [0, 2, \lin, 0]);
+Ndef(\fb).addSpec(\limit,     [0, 1, \lin, 0]);
+Ndef(\fb).addSpec(\lookahead, [0, 1, \lin, 0]);
+Ndef(\fb).addSpec(\lpf, [0.01, 4, \exp, 0]);
+
+Ndef(\fb, {
+    // var in = SoundIn.ar([0, 1]) * \gain.kr(0);
+    var in = SoundIn.ar(0) * \gain.kr(0);
+
+    var rms = RMS.ar(in, \lpf.kr(0.01));
+    // var rms = Amplitude.ar(in, 2, 2);
+    // var rms = EnvFollow.ar(in, 0.2);
+    var snd = DelayC.ar(in, 1, 0.5 + LeakDC.ar(rms, 0.9998) * \modScale.kr(0));
+
+    //////////////////
+    // AGC2.1 ( a limiter)
+    var rms500 = RMS.ar(snd, 500);
+    var rms1   = RMS.ar(snd, 1) * 2;
+    var analytics = max(rms500 - rms1, 0) + rms1;
+
+    snd = (DelayC.ar(snd, 0.02, \lookahead.kr(0) * 0.02) / max(analytics / \limit.kr(0), 1)).clip2(1, 1);
+
+
+    // the standard SC limiter
+    // snd = Limiter.ar(snd, \limit.kr(0), \lookahead.kr(0)).sum * \amp.kr(0)
+
+    snd * \amp.kr(0.1)
+
+})
+)
+
+ProxyMeter.addMixer(NdefMixer(s));</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/DEINDUGens/HelpSource/Classes/RMS.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/DEINDUGens/HelpSource/Classes/RMS.schelp</a><br>link::Classes/RMS::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

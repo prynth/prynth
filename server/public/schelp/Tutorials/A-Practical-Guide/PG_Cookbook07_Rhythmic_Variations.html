@@ -1,25 +1,30 @@
-<!doctype html><html lang='en'><head><title>Pattern Guide Cookbook 07: Rhythmic Variations | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Pattern Guide Cookbook 07: Rhythmic Variations | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'Pattern Guide Cookbook 07: Rhythmic Variations';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Pattern Guide Cookbook 07: Rhythmic Variations:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Creating%20variations%20on%20a%20base%20rhythmic%20pattern'>Creating variations on a base rhythmic pattern</a></li>
 <ul class='toc'><li class='toc2'><a href='#Example'>Example</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/A-Practical-Guide</span>
@@ -37,7 +42,7 @@ var scdoc_sc_version = '3.9.3';
 <p>The logic in this example is a bit more involved: for each measure, start with arrays containing the basic rhythmic pattern for each part (kick drum, snare and hi-hat) and insert ornamental notes with different amplitudes and durations. Arrays hold the rhythmic data because this type of rhythm generation calls for awareness of the entire bar (future), whereas patterns generally don't look ahead.
 <p>This suggests an object for data storage that will also encapsulate the unique logic for each part. We saw earlier that <a href="./../../Classes/Penvir.html">Penvir</a> maintains a distinct environment for each stream made from the pattern. In other words, Penvir allows more complicated behavior to be modeled using an object that encapsulates both custom logic and the data on which it will operate.
 <p>The specific ornaments to be added are slightly different for the three parts, so there are three environments. Some functions are shared; rather than copy and paste them into each environment, we put them into a separate environment and use that as the parent of the environment for each drum part.
-<p>Most of the logic is in the drum parts' environments, and consist mostly of straightforward array manipulations. Let's unpack the pattern that uses the environments to generate notes:<pre class='code prettyprint lang-sc'>~kik = Penvir(~kikEnvir, Pn(Plazy({
+<p>Most of the logic is in the drum parts' environments, and consist mostly of straightforward array manipulations. Let's unpack the pattern that uses the environments to generate notes:<textarea class='editor'>~kik = Penvir(~kikEnvir, Pn(Plazy({
     ~init.value;
     ~addNotes.value;
     Pbindf(
@@ -49,12 +54,12 @@ var scdoc_sc_version = '3.9.3';
         ),
         \freq, Pif(Pkey(\amp) &gt; 0, 1, \rest)
     )
-}), inf)).play(quant: 4);</pre>
+}), inf)).play(quant: 4);</textarea>
 <dl>
-<dt><code class='code prettyprint lang-sc'>Penvir(~kikEnvir, ...)</code><dd>Tell the enclosed pattern to run inside the kick drum's environment.<dt><code class='code prettyprint lang-sc'>Pn(..., inf)</code><dd>Repeat the enclosed pattern (Plazy) an infinite number of times.<dt><code class='code prettyprint lang-sc'>Plazy({ ... })</code><dd>The function can do anything it likes, as long as it returns some kind of pattern. The first two lines of the function do the hard work, especially <code class='code prettyprint lang-sc'>~addNotes</code>.value, calling into the environment to use the rhythm generator code. This changes the data in the environment, which then get plugged into Pbind in the <code class='code prettyprint lang-sc'>~pbindPairs.value()</code> line. That pattern will play through; when it ends, Plazy gives control back to its parent -- Pn, which repeats Plazy.<dt><code class='code prettyprint lang-sc'>Pbindf(..., \freq, ...)</code><dd>Pbindf adds new values into events coming from a different pattern. This usage is to take advantage of a fact about the default event. If the <code class='code prettyprint lang-sc'>\freq</code> key is a symbol (rather than a number or array), the event represents a rest and nothing will play on the server. It doesn't matter whether or not the SynthDef has a <code class='code prettyprint lang-sc'>freq</code> control; a symbol in this space produces a rest. Here it's a simple conditional to produce a rest when <code class='code prettyprint lang-sc'>amp == 0</code>.<dt><code class='code prettyprint lang-sc'>Pbind(...)</code><dd>The meat of the notes: SynthDef name, general parameters, and rhythmic values from the environment. (The <code class='code prettyprint lang-sc'>*</code> syntax explains the need for Pbindf. The <code class='code prettyprint lang-sc'>\freq</code> expression must follow the pbindPairs result, but it isn't possible to put additional arguments after <code class='code prettyprint lang-sc'>*(...)</code>. Pbindf allows the inner Pbind to be closed while still accepting additional values.)</dl>
+<dt><code>Penvir(~kikEnvir, ...)</code><dd>Tell the enclosed pattern to run inside the kick drum's environment.<dt><code>Pn(..., inf)</code><dd>Repeat the enclosed pattern (Plazy) an infinite number of times.<dt><code>Plazy({ ... })</code><dd>The function can do anything it likes, as long as it returns some kind of pattern. The first two lines of the function do the hard work, especially <code>~addNotes</code>.value, calling into the environment to use the rhythm generator code. This changes the data in the environment, which then get plugged into Pbind in the <code>~pbindPairs.value()</code> line. That pattern will play through; when it ends, Plazy gives control back to its parent -- Pn, which repeats Plazy.<dt><code>Pbindf(..., \freq, ...)</code><dd>Pbindf adds new values into events coming from a different pattern. This usage is to take advantage of a fact about the default event. If the <code>\freq</code> key is a symbol (rather than a number or array), the event represents a rest and nothing will play on the server. It doesn't matter whether or not the SynthDef has a <code>freq</code> control; a symbol in this space produces a rest. Here it's a simple conditional to produce a rest when <code>amp == 0</code>.<dt><code>Pbind(...)</code><dd>The meat of the notes: SynthDef name, general parameters, and rhythmic values from the environment. (The <code>*</code> syntax explains the need for Pbindf. The <code>\freq</code> expression must follow the pbindPairs result, but it isn't possible to put additional arguments after <code>*(...)</code>. Pbindf allows the inner Pbind to be closed while still accepting additional values.)</dl>
 
 <p><strong>Third-party extension alert</strong> : This type of hybrid between pattern-style flow of control and object-oriented modeling is powerful but has some limitations, mainly difficulty with inheritance (subclassing). The <strong>ddwChucklib</strong> quark (which depends on ddwPrototype) expands the object-oriented modeling possibilities while supporting patterns' ability to work with data external to a pattern itself.<h3><a class='anchor' name='Example'>Example</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 // this kick drum doesn't sound so good on cheap speakers
 // but if your monitors have decent bass, it's electro-licious
 SynthDef(\kik, { |basefreq = 50, ratio = 7, sweeptime = 0.05, preamp = 1, amp = 1,
@@ -226,7 +231,8 @@ TempoClock.default.tempo = 104 / 60;
 t = TempoClock.default;
 t.schedAbs(t.nextTimeOnGrid(4, -0.001), {
     [~kik, ~snr, ~hh].do(_.stop);
-});</pre>
+});</textarea>
 
 <p>Previous: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook06_Phrase_Network.html">Pattern Guide Cookbook 06: Phrase Network</a>
-<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook08_Swing.html">Pattern Guide Cookbook 08: Swing</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations::<br></div></div></body></html>
+<p>Next: <a href="./../../Tutorials/A-Practical-Guide/PG_Cookbook08_Swing.html">Pattern Guide Cookbook 08: Swing</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations.schelp</a><br>link::Tutorials/A-Practical-Guide/PG_Cookbook07_Rhythmic_Variations::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

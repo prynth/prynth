@@ -1,0 +1,259 @@
+<!doctype html><html lang='en'><head><title>LinkClock | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'LinkClock';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>LinkClock:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Link%20behavior'>Link behavior</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Latency'>Latency</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#beatsPerBar%20and%20quantum'>beatsPerBar and quantum</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Notifications'>Notifications</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc3'><a href='#*newFromTempoClock'>newFromTempoClock</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-latency'>latency</a> </li>
+<li class='toc3'><a href='#-tempo'>tempo</a> </li>
+<li class='toc3'><a href='#-beats'>beats</a> </li>
+<li class='toc3'><a href='#-numPeers'>numPeers</a> </li>
+<li class='toc3'><a href='#-quantum'>quantum</a> </li>
+<li class='toc3'><a href='#-enableMeterSync'>enableMeterSync</a> </li>
+<li class='toc3'><a href='#-disableMeterSync'>disableMeterSync</a> </li>
+<li class='toc3'><a href='#-isSyncingMeter'>isSyncingMeter</a> </li>
+<li class='toc3'><a href='#-getMeterSync'>getMeterSync</a> </li>
+<li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#Scheduling'>Scheduling</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Scheduling>Clocks'>Clocks</a></span>
+</div><h1>LinkClock<span id='superclasses'> : <a href="../Classes/TempoClock.html">TempoClock</a> : <a href="../Classes/Clock.html">Clock</a> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
+<div id='summary'>Scheduler synchronized with Ableton Link</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/External/Ableton/LinkClock.sc' title='/usr/share/SuperCollider/SCClassLibrary/External/Ableton/LinkClock.sc'>LinkClock.sc</a></div><div id='related'>See also: <a href="./../Classes/TempoClock.html">TempoClock</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>LinkClock is a <a href="./../Classes/TempoClock.html">TempoClock</a> based on <a href="https://www.ableton.com/en/link/">Ableton Link</a>, a protocol that synchronizes phase (beat-within-bar) and tempo over a local network.<h3><a class='anchor' name='Link%20behavior'>Link behavior</a></h3>
+
+<p>Link attempts, as much as possible, to allow applications to move in their own time while synchronizing:<ul>
+<li>Tempo: Any application can change the tempo at any time.<li>Beat: Integer beats should sound at the same time in all applications.<li>Phase (analogous to SuperCollider's <a href="./../Classes/TempoClock.html#-beatInBar">TempoClock: -beatInBar</a>): A downbeat in one peer should correspond to a downbeat in other peers.</ul>
+
+<p>Link does not synchronize exact beat numbers. Two SuperCollider peers joining the same Link session, in 4/4 time, may be respectively at beats 4 and 16 (which are both barlines), but they should not be at beats 4.0 and 19.0.
+<p>Many Link-enabled applications (DAWs) can start and stop the entire timeline. SuperCollider clocks do not stop. A DAW, when starting to play, should lock into SuperCollider's phase within the bar. You can register functions to respond to other peers starting or stopping. (SuperCollider does not know which other peer started or stopped.)<h3><a class='anchor' name='Latency'>Latency</a></h3>
+
+<p>Link coordinates the <em>sounding time</em> of given beats.
+<p>All audio applications must prepare events, and audio processing, in advance, so that the signal hits the audio interface at the right time. SuperCollider uses OSC timestamps for this purpose, calculating timestamps from the current time in seconds + a <code>latency</code> offset.
+<p>To coordinate with other applications, then, the <code>LinkClock</code> must run earlier than the desired sounding time, by the same fixed offset. That is, it should have the same (positive) latency offset as the server:<textarea class='editor'>t = LinkClock.new.latency_(Server.default.latency);</textarea>
+
+<p>Server messages should then be sent with the same amount of latency. Events generated by patterns automatically apply the server object's latency. For other messages, use <a href="./../Classes/Server.html#-makeBundle">Server: -makeBundle</a>.
+<p>With a positive latency, if you examine <code>t.beats</code>, it will appear to be later than the beats shown in other applications. This is normal. The clock in SuperCollider must run early for the events to sound on time.
+<p>(Because the clock and server have separate latency settings, it is possible to adjust timing relative to other applications. If you find, for instance, that SuperCollider is sounding slightly late, you can increase the LinkClock's latency slightly, moving the clock earlier, without affecting messaging latency. Ideally, this should not be necessary, but inter-application coordination can be fiddly.)
+<p>This does have an impact on tempo changes. SuperCollider receives tempo changes from other peers only after they are sent, which is probably slightly late for our clock. In practice, it means that events falling within the latency gap may be slightly out of sync, but sync should recover very quickly. (So, Link is not ideal for music involving frequent tempo or meter changes.)<h3><a class='anchor' name='beatsPerBar%20and%20quantum'>beatsPerBar and quantum</a></h3>
+
+<p>For every moment in time, Ableton Link knows the beat, time in seconds, and <em>phase</em>. Phase is measured relative to a <em>quantum</em>. Link peers sharing the same quantum will synchronize barlines.
+<p>For instance, assume quantum = 4. Peer A is currently at beat 33. Peer B joins the network. Peer A's last barline was beat 32, so phase = 1. Peer B's beat counter should arrange to have the same phase: in practice, it will start with -3.<table>
+<tr><td><strong>Phase</strong><td><strong>Peer A beats</strong><td><strong>Peer B beats</strong><td>Notes<tr><td>0<td>32<td>--<td><tr><td>1<td>33<td>-3<td>Link calculates -3 for B<tr><td>2<td>34<td>-2<td><tr><td>3<td>35<td>-1<td><tr><td>0<td>36<td>0<td>Barline (synced)</table>
+
+<p>If you change the quantum, Link does not guarantee that beats will keep the same duration. Beats may be shorter or longer, to try to preserve phase sync.
+<p>Therefore, you should <em>not</em> change the quantum in the middle of a performance. Ableton recommends to set the quantum just before beginning. Then, you can change SuperCollider's <code>beatsPerBar</code> as needed, without changing the quantum, so that Link's phase reference remains consistent.
+<p>SuperCollider peers may optionally synchronize barlines and all meter changes by using <a href="./../Classes/LinkClock.html#-enableMeterSync">LinkClock: -enableMeterSync</a>. This is independent of Link's quantum, and is safe to use mid-performance. See <a href="./../Classes/MeterSync.html">MeterSync</a>.<h3><a class='anchor' name='Notifications'>Notifications</a></h3>
+
+<p>A LinkClock's state may be changed by other connected Link peers. LinkClock uses dependant notifications to relay the new state to other interested objects.<table>
+<tr><td><strong>Notification</strong><td><strong>Event</strong><tr><td><code>\tempo</code><td>Tempo changed<tr><td><code>\meter</code><td>The clock's <code>beatsPerBar</code> changed<tr><td><code>\linkStart</code><td>An external peer started playback<tr><td><code>\linkStop</code><td>An external peer stopped playback<tr><td><code>\numPeers</code><td>The number of connected peers changed<tr><td><code>\resynced</code><td>After <a href="#-enableMeterSync">-enableMeterSync</a>, a <code>\resynced</code> notification is sent whenever a <a href="./../Classes/MeterSync.html#-resyncMeter">MeterSync: -resyncMeter</a> call finishes successfully. One Boolean argument is passed: <code>true</code> if other SuperCollider peers were found, <code>false</code> if not.</table>
+
+<p>(Note that Link does not synchronize meter across peers; this notification is inherited from TempoClock. <a href="./../Classes/LinkClock.html#-isSyncingMeter">LinkClock: -isSyncingMeter</a> is a SuperCollider-specific way to synchronize meter; it is not part of the Link protocol.)
+<p>The most convenient way to register to receive a notification is <a href="./../Classes/SimpleController.html">SimpleController</a>. See the examples below.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>LinkClock.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>tempo</span>, <span class='argstr'>beats</span>, <span class='argstr'>seconds</span>, <span class='argstr'>queueSize: 256</span>)</h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/TempoClock.html'>TempoClock</a></div>
+<div class='method'>
+<p>Creates a new instance of LinkClock.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>tempo<td class='argumentdesc'>
+<p>The initial <a href="#-tempo">tempo</a>. Defaults to <code>1</code>.<tr><td class='argumentname'>beats<td class='argumentdesc'>
+<p>The time in beats, corresponding to the reference time. Default to <code>0</code>.<tr><td class='argumentname'>seconds<td class='argumentdesc'>
+<p>The reference time in seconds. See <a href="./../Classes/TempoClock.html#-new">TempoClock: -new</a>.<tr><td class='argumentname'>queueSize<td class='argumentdesc'>
+<p>The storage size of the scheduling queue. See <a href="./../Classes/TempoClock.html#-new">TempoClock: -new</a>.</table><h4>Discussion:</h4>
+
+<p>If an existing Link session is found on the local network, the object connects to it and use its properties: the <code>tempo</code> argument is discarded in favor of the session tempo, and the <code>beat</code> argument will be adjusted to ensure proper beat and phase synchronization across all peers. If SuperCollider is the first to join, a new Link session is locally created and initialized with the constructor arguments.</div><h3 class='method-code'><span class='method-prefix'>LinkClock.</span><a class='method-name' name='*newFromTempoClock' href='./../Overviews/Methods.html#newFromTempoClock'>newFromTempoClock</a>(<span class='argstr'>clock</span>)</h3>
+<div class='method'>
+<p>Creates a new instance of LinkClock derived from a <a href="./../Classes/TempoClock.html">TempoClock</a>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>clock<td class='argumentdesc'>
+<p>The <a href="./../Classes/TempoClock.html">TempoClock</a> used to create the LinkClock.</table><h4>Discussion:</h4>
+
+<p>The LinkClock <a href="#-tempo">tempo</a>, <a href="#-beats">beats</a>, <a href="#-seconds">seconds</a> and <a href="#-beatsPerBar">beatsPerBar</a> values are set to those of the TempoClock. The TempoClock is then stopped and all of its tasks are rescheduled by the newly created LinkClock, so that they are now synchronized with the Link session.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-latency' href='./../Overviews/Methods.html#latency'>latency</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-latency' href='./../Overviews/Methods.html#latency'>latency</a> = <span class='argstr'>lat</span></h3>
+<div class='method'>
+<p>Gets or sets the number of seconds of OSC messaging latency for which the <code>LinkClock</code> should account. In general, this should be set to match the server object's latency.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>lat<td class='argumentdesc'>
+<p>A Float.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tempo' href='./../Overviews/Methods.html#tempo'>tempo</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-tempo' href='./../Overviews/Methods.html#tempo'>tempo</a> = <span class='argstr'>newTempo</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/TempoClock.html'>TempoClock</a></div>
+<div class='method'>
+<p>Sets or gets the current session tempo at the current logical time. Note that the tempo may be changed at any time by another peer; the LinkClock broadcasts a <code>\tempo</code> notification in this case (see <a href="./../Classes/LinkClock.html#Notifications">LinkClock: Notifications</a>).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-beats' href='./../Overviews/Methods.html#beats'>beats</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-beats' href='./../Overviews/Methods.html#beats'>beats</a> = <span class='argstr'>beats</span></h3>
+<div class='supmethod'>From superclass: <a href='./../Classes/TempoClock.html'>TempoClock</a></div>
+<div class='method'>
+<p>Sets or gets the current logical time in beats. If you are trying to set the beats, Link may adjust your given value to maintain sync with other peers.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-numPeers' href='./../Overviews/Methods.html#numPeers'>numPeers</a></h3>
+<div class='method'>
+<p>Gets the number of peers connected to the current Link session. When peers join or leave the session, the LinkClock broadcasts a <code>\numPeers</code> notification (see <a href="./../Classes/LinkClock.html#Notifications">LinkClock: Notifications</a>).</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quantum' href='./../Overviews/Methods.html#quantum'>quantum</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-quantum' href='./../Overviews/Methods.html#quantum'>quantum</a> = <span class='argstr'>quantum</span></h3>
+<div class='method'>
+<p>Gets or sets Link's internal quantum (see above, <a href="#beatsPerBar%20and%20quantum">beatsPerBar and quantum</a>). Normally this should be done at the beginning of a performance, or not at all. It is risky to change quantum during a performance. Changing meter locally is the same as in TempoClock: <a href="./../Classes/TempoClock.html#-beatsPerBar">TempoClock: -beatsPerBar</a>.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>quantum<td class='argumentdesc'>
+<p>An Integer or Float.</table></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-enableMeterSync' href='./../Overviews/Methods.html#enableMeterSync'>enableMeterSync</a>(<span class='argstr'>id</span>, <span class='argstr'>ports</span>)</h3>
+<div class='method'>
+<p>Activates SuperCollider-barline sync by creating a <a href="./../Classes/MeterSync.html">MeterSync</a> object internally. (If already enabled, no new object will be created.)<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>id<td class='argumentdesc'>
+<p>Optional: An integer ID, uniquely identifying this instance. If not provided, one will be chosen randomly.<tr><td class='argumentname'>ports<td class='argumentdesc'>
+<p>Optional: An array of port numbers, to which barline-sync messages will be sent.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The LinkClock instance (to support chaining configuration methods, e.g. <code>l = LinkClock.new.latency_(s.latency).enableMeterSync</code>, in which case you want <code>l</code> to be the clock object). To get access to the MeterSync object, use <a href="#-getMeterSync">-getMeterSync</a>.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-disableMeterSync' href='./../Overviews/Methods.html#disableMeterSync'>disableMeterSync</a></h3>
+<div class='method'>
+<p>Remove all barline-sync objects.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-isSyncingMeter' href='./../Overviews/Methods.html#isSyncingMeter'>isSyncingMeter</a></h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>A Boolean, <code>true</code> if barline sync is active, <code>false</code> if not. (If you create the barline sync object independently, this answer is likely to be incorrect.)</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-getMeterSync' href='./../Overviews/Methods.html#getMeterSync'>getMeterSync</a></h3>
+<div class='method'><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The MeterSync object previously created by <a href="#-enableMeterSync">-enableMeterSync</a>.<div class='note'><span class='notelabel'>NOTE:</span> It is possible, though redundant and not recommended, to create multiple barline-sync objects by doing <code>clock.enableMeterSync</code> and <code>m = SCClockMeterSync(clock)</code>. <code>getMeterSync</code> has access <em>only</em> to the object created by <code>clock.enableMeterSync</code>. Therefore, it is recommended to use <code>clock.enableMeterSync</code> in all cases.</div></div></div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>(
+s.waitForBoot({
+    SynthDef(\click, { |freq=400, amp=0.2|
+        var sig = SinOsc.ar(freq, 0.5pi) *
+            Env.perc(0.001,0.06).ar(Done.freeSelf, levelScale: amp);
+        OffsetOut.ar(0, sig.dup)
+    }).add;
+});
+)
+
+// create a synchronized clock
+l = LinkClock(1).latency_(Server.default.latency);
+
+// GUI to watch status
+(
+var win = Window("LinkClock", Rect(200, 200, 500, 100)).front,
+peersBox, tempoBox, barsBox, beatsBox,
+font = Font.default.copy.size_(32),
+boldFont = font.boldVariant,
+controller, task;
+
+win.layout = HLayout(
+    StaticText().font_(font).string_("Peers:"),
+    peersBox = NumberBox().font_(boldFont).align_(\center).fixedWidth_(80),
+    StaticText().font_(font).string_("Tempo:"),
+    tempoBox = NumberBox().font_(boldFont).align_(\center).fixedWidth_(120),
+    StaticText().font_(font).string_("Now:"),
+    barsBox = NumberBox().font_(boldFont).align_(\center).fixedWidth_(80),
+    beatsBox = NumberBox().font_(boldFont).align_(\center).fixedWidth_(80)
+);
+
+[peersBox, barsBox, beatsBox].do { |view| view.enabled_(false) };
+
+tempoBox.action = { |view| l.tempo = view.value / 60 };
+tempoBox.value = l.tempo * 60;
+peersBox.value = l.numPeers;
+
+task = Routine {
+    var bars, beats;
+    loop {
+        bars = l.bar;
+        beats = l.beatInBar;
+        {
+            barsBox.value = bars;
+            beatsBox.value = beats;
+        }.defer(l.latency);
+        1.0.wait;
+    }
+}.play(l, quant: 1);
+
+controller = SimpleController(l)
+.put(\tempo, {
+    defer { tempoBox.value = l.tempo * 60 }
+})
+.put(\numPeers, {
+    defer { peersBox.value = l.numPeers }
+})
+.put(\stop, { defer { win.close } });
+
+win.onClose = { task.stop; controller.remove };
+)
+
+// now launch a program using Ableton Link to test synchronization
+
+// patterns automatically apply server latency,
+// so this should be in sync
+p = Pbind(\instrument, \click, \freq, Pseq([900, Pn(400,3)], inf)).play(l, quant:4);
+
+// In Tasks, you should handle latency yourself:
+(
+r = Task {
+    loop {
+        s.makeBundle(s.latency, {
+            Synth(\click, [freq: exprand(500, 1200)])
+        });
+        1.wait;
+    }
+}.play(l, quant: 4);
+)
+
+// changing the tempo in another application should affect tempo in SC
+// changing the tempo in SC should affect every connected application
+l.tempo = 90/60;
+
+// start/stop notifications
+// the remote peer should enable start/stop sync
+(
+q = nil;
+c = SimpleController(l)
+.put(\linkStart, {
+    if(q.isNil) {
+        q = Pbind(
+            \degree, Pn(Pseries(0, 1, 8), inf),
+            \dur, 0.25
+        ).play(l, quant: -1);
+    }
+})
+.put(\linkStop, {
+    q.stop;
+    q = nil;
+})
+.put(\stop, { c.remove });  // clean up if clock stops
+)
+
+p.stop;
+r.stop;
+l.stop;</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/LinkClock.schelp'>/usr/share/SuperCollider/HelpSource/Classes/LinkClock.schelp</a><br>link::Classes/LinkClock::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

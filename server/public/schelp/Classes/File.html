@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>File | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>File | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'File';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>File:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -32,17 +37,15 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#*systemIsCaseSensitive'>systemIsCaseSensitive</a> </li>
 <li class='toc3'><a href='#*mkdir'>mkdir</a> </li>
 <li class='toc3'><a href='#*delete'>delete</a> </li>
+<li class='toc3'><a href='#*deleteAll'>deleteAll</a> </li>
 <li class='toc3'><a href='#*realpath'>realpath</a> </li>
 <li class='toc3'><a href='#*copy'>copy</a> </li>
 <li class='toc3'><a href='#*type'>type</a> </li>
 <li class='toc3'><a href='#*fileSize'>fileSize</a> </li>
 <li class='toc3'><a href='#*mtime'>mtime</a> </li>
-</ul><li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
-<li class='toc2'><a href='#Undocumented%20class%20methods'>Undocumented class methods</a></li>
-<ul class='toc'><li class='toc3'><a href='#*openDialog'>openDialog</a> </li>
-<li class='toc3'><a href='#*openDialogs'>openDialogs</a> </li>
-<li class='toc3'><a href='#*saveDialog'>saveDialog</a> </li>
-</ul></ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+</ul><li class='toc2'><a href='#Error%20handling%20in%20filesystem%20utilities'>Error handling in filesystem utilities</a></li>
+<ul class='toc'></ul><li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-open'>open</a> </li>
 <li class='toc3'><a href='#-close'>close</a> </li>
 <li class='toc3'><a href='#-readAllString'>readAllString</a> </li>
@@ -54,8 +57,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc3'><a href='#-length'>length</a> </li>
 <li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -65,7 +68,8 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>A class for reading and writing files</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Files/File.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Files/File.sc'>File.sc</a></div><div id='related'>See also: <a href="./../Classes/FileReader.html">FileReader</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Files/File.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Files/File.sc'>File.sc</a></div><div id='subclasses'>Subclasses: <a href="../Classes/AtsFile.html">AtsFile</a></div>
+<div id='related'>See also: <a href="./../Classes/FileReader.html">FileReader</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -82,17 +86,17 @@ var scdoc_sc_version = '3.9.3';
 <div class='method'>
 <p>Same as <a href="#*new">*new</a>, but a more intuitive name.</div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*getcwd' href='./../Overviews/Methods.html#getcwd'>getcwd</a></h3>
 <div class='method'>
-<p>POSIX standard 'get current working directory'.<pre class='code prettyprint lang-sc'>// example;
-File.getcwd;</pre>
+<p>POSIX standard 'get current working directory'.<textarea class='editor'>// example;
+File.getcwd;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*use' href='./../Overviews/Methods.html#use'>use</a>(<span class='argstr'>pathName</span>, <span class='argstr'>mode</span>, <span class='argstr'>function</span>)</h3>
 <div class='method'>
 <p>Open the file, evaluate the function with the file as argument, and close it again. If the process fails, close the file and throw an error.</div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*readAllString' href='./../Overviews/Methods.html#readAllString'>readAllString</a>(<span class='argstr'>pathName</span>)</h3>
 <div class='method'>
-<p>Open the file at the given path, call <a href="#-readAllString">-readAllString</a>, and return the string. Whether the process succeeds or fails, the file will always be closed.<pre class='code prettyprint lang-sc'>// write a file
+<p>Open the file at the given path, call <a href="#-readAllString">-readAllString</a>, and return the string. Whether the process succeeds or fails, the file will always be closed.<textarea class='editor'>// write a file
 File.use("~/test.txt".standardizePath, "w", { |f| f.write("The green fox fell into the blue lake") });
 
 // read it again
-File.readAllString("~/test.txt".standardizePath);</pre>
+File.readAllString("~/test.txt".standardizePath);</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*readAllSignal' href='./../Overviews/Methods.html#readAllSignal'>readAllSignal</a>(<span class='argstr'>pathName</span>)</h3>
 <div class='method'>
 <p>Open the file at the given path, call <a href="#-readAllSignal">-readAllSignal</a>, and return the signal. Whether the process succeeds or fails, the file will always be closed.</div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*readAllStringHTML' href='./../Overviews/Methods.html#readAllStringHTML'>readAllStringHTML</a>(<span class='argstr'>pathName</span>)</h3>
@@ -107,22 +111,37 @@ File.readAllString("~/test.txt".standardizePath);</pre>
 <div class='returnvalue'>
 <p>a <a href="./../Classes/Boolean.html">Boolean</a></div></div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*existsCaseSensitive' href='./../Overviews/Methods.html#existsCaseSensitive'>existsCaseSensitive</a>(<span class='argstr'>pathName</span>)</h3>
 <div class='method'>
-<p>Like <a href="#*exists">*exists</a> but ensure case sensitivity <em>of the last path component</em> on case insensitive filesystems. On case sensitive systems, it falls back to using <code class='code prettyprint lang-sc'>exists</code>.<div class='note'><span class='notelabel'>NOTE:</span> This is slower than the normal <code class='code prettyprint lang-sc'>exists</code> method, so use it only when really needed.</div></div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*systemIsCaseSensitive' href='./../Overviews/Methods.html#systemIsCaseSensitive'>systemIsCaseSensitive</a></h3>
+<p>Like <a href="#*exists">*exists</a> but ensure case sensitivity <em>of the last path component</em> on case insensitive filesystems. On case sensitive systems, it falls back to using <code>exists</code>.<div class='note'><span class='notelabel'>NOTE:</span> This is slower than the normal <code>exists</code> method, so use it only when really needed.</div></div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*systemIsCaseSensitive' href='./../Overviews/Methods.html#systemIsCaseSensitive'>systemIsCaseSensitive</a></h3>
 <div class='method'>
 <p>Answers if the filesystem is case sensitive or not.</div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*mkdir' href='./../Overviews/Methods.html#mkdir'>mkdir</a>(<span class='argstr'>pathName</span>)</h3>
 <div class='method'>
-<p>Create directory at path, including any missing parent directories.</div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*delete' href='./../Overviews/Methods.html#delete'>delete</a>(<span class='argstr'>pathName</span>)</h3>
+<p>Create directory at path, including any missing parent directories.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a <a href="./../Classes/Boolean.html">Boolean</a>, as follows:<ul>
+<li><code>true</code> -- A new directory was created at <code>path</code>.<li><code>false</code> -- A directory already existed at <code>path</code>; a new one was not created.</ul>
+</div></div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*delete' href='./../Overviews/Methods.html#delete'>delete</a>(<span class='argstr'>pathName</span>)</h3>
 <div class='method'>
-<p>Deletes the file at that path. Use only for good, never for evil.</div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*realpath' href='./../Overviews/Methods.html#realpath'>realpath</a>(<span class='argstr'>pathName</span>)</h3>
+<p>Deletes the file at that path. Use only for good, never for evil.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a <a href="./../Classes/Boolean.html">Boolean</a>, as follows:<ul>
+<li><code>true</code> -- You can assume that the path no longer exists. (Either it existed and was deleted, or it didn't exist and it still doesn't exist.)<li><code>false</code> -- The file could not be deleted (probably a permissions error). Your code should assume that the path still exists.</ul>
+</div></div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*deleteAll' href='./../Overviews/Methods.html#deleteAll'>deleteAll</a>(<span class='argstr'>pathName</span>)</h3>
+<div class='method'>
+<p>Deletes the file and all children at that path. Use only for good, never for evil.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>a <a href="./../Classes/Boolean.html">Boolean</a>, as follows:<ul>
+<li><code>true</code> -- At least one file was deleted.<li><code>false</code> -- No files were deleted.</ul>
+
+<p>If deletion fails, a PrimitiveFailedError object will be thrown.</div></div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*realpath' href='./../Overviews/Methods.html#realpath'>realpath</a>(<span class='argstr'>pathName</span>)</h3>
 <div class='method'>
 <p>Follow symbolic links (and aliases on macOS) and any parent directory references (like "..") and return the true absolute path.<h4>Returns:</h4>
 <div class='returnvalue'>
-<p>a <a href="./../Classes/String.html">String</a> or <code class='code prettyprint lang-sc'>nil</code> if path did not exist.</div></div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*copy' href='./../Overviews/Methods.html#copy'>copy</a>(<span class='argstr'>pathNameFrom</span>, <span class='argstr'>pathNameTo</span>)</h3>
+<p>a <a href="./../Classes/String.html">String</a> or <code>nil</code> if path did not exist.</div></div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*copy' href='./../Overviews/Methods.html#copy'>copy</a>(<span class='argstr'>pathNameFrom</span>, <span class='argstr'>pathNameTo</span>)</h3>
 <div class='method'>
 <p>Copy file, symlink or directory. this method will fail if pathNameTo already exists.
 <p>Symlinks are copied as symlinks (re-created).</div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*type' href='./../Overviews/Methods.html#type'>type</a>(<span class='argstr'>pathName</span>)</h3>
 <div class='method'>
-<p>Get file type as one of <code class='code prettyprint lang-sc'>\error, \not_found, \regular, \directory, \symlink, \block, \character, \fifo, \socket, \unknown</code><h4>Returns:</h4>
+<p>Get file type as one of <code>\error, \not_found, \regular, \directory, \symlink, \block, \character, \fifo, \socket, \unknown</code><h4>Returns:</h4>
 <div class='returnvalue'>
 <p>a <a href="./../Classes/Symbol.html">Symbol</a></div></div><h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*fileSize' href='./../Overviews/Methods.html#fileSize'>fileSize</a>(<span class='argstr'>pathName</span>)</h3>
 <div class='method'>
@@ -132,14 +151,14 @@ File.readAllString("~/test.txt".standardizePath);</pre>
 <div class='method'>
 <p>Get last modification time in seconds since the Epoch.<h4>Returns:</h4>
 <div class='returnvalue'>
-<p>an <a href="./../Classes/Integer.html">Integer</a></div></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
-<div id='inheritedclassmets'></div><h3><a class='anchor' name='Undocumented%20class%20methods'>Undocumented class methods</a></h3>
-<h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*openDialog' href='./../Overviews/Methods.html#openDialog'>openDialog</a>(<span class='argstr'>prompt</span>, <span class='argstr'>successFunc</span>, <span class='argstr'>cancelFunc</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Files/FilePlusGUI.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Files/FilePlusGUI.sc</a></div>
-<h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*openDialogs' href='./../Overviews/Methods.html#openDialogs'>openDialogs</a></h3>
-<h3 class='method-code'><span class='method-prefix'>File.</span><a class='method-name' name='*saveDialog' href='./../Overviews/Methods.html#saveDialog'>saveDialog</a>(<span class='argstr'>prompt</span>, <span class='argstr'>defaultName</span>, <span class='argstr'>successFunc</span>, <span class='argstr'>cancelFunc</span>)</h3>
-<div class='extmethod'>From extension in <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Files/FilePlusGUI.sc'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/PlusGUI/Files/FilePlusGUI.sc</a></div>
-<h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<p>an <a href="./../Classes/Integer.html">Integer</a></div></div><h3><a class='anchor' name='Error%20handling%20in%20filesystem%20utilities'>Error handling in filesystem utilities</a></h3>
+
+<p>If one of the above filesystem primitives fails, in most cases, a PrimitiveFailedError object will be thrown:<textarea class='editor'>File.mkdir("/usr/oh-no-you-cant");</textarea>
+<pre>ERROR: Primitive '_FileMkDir' failed.
+caught exception 'boost::filesystem::create_directory: Permission denied: "/usr/oh-no-you-cant"' in primitive in method Meta_File:mkdir</pre>
+<p>The methods <a href="./../Classes/Function.html#-try">Function: -try</a> and <a href="./../Classes/Function.html#-protect">Function: -protect</a> can detect and handle these errors. See <a href="./../Guides/Understanding-Errors.html">Understanding errors</a> for details.
+<p>Currently, <a href="./../Classes/File.html#*copy">File: *copy</a>, <a href="./../Classes/File.html#*fileSize">File: *fileSize</a>, <a href="./../Classes/File.html#*mkdir">File: *mkdir</a>, <a href="./../Classes/File.html#*mtime">File: *mtime</a>, and <a href="./../Classes/File.html#*type">File: *type</a> throw errors upon failure. (<a href="./../Classes/File.html#*delete">File: *delete</a> does not throw an error, but instead returns a Boolean.)<h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-open' href='./../Overviews/Methods.html#open'>open</a>(<span class='argstr'>pathName</span>, <span class='argstr'>mode</span>)</h3>
 <div class='method'>
 <p>Open the file. Files are automatically opened upon creation, so this call is only necessary if you are closing and opening the same file object repeatedly.<div class='note'><span class='notelabel'>NOTE:</span> it is possible when saving files with a standard file dialog to elect to "hide the extension" and save it as RTF. When opening the file you must specify the real filename: "filename.rtf", even though you can't see in file load dialogs or in the Finder.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-close' href='./../Overviews/Methods.html#close'>close</a></h3>
@@ -163,7 +182,7 @@ File.readAllString("~/test.txt".standardizePath);</pre>
 <div class='method'>
 <p>Returns the current file size in bytes.</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
-<pre class='code prettyprint lang-sc'>// write some string to a file:
+<textarea class='editor'>// write some string to a file:
 (
 var f, g;
 f = File("~/test.txt".standardizePath,"w");
@@ -242,6 +261,7 @@ g.close;
 f = File("~/test.dat".standardizePath,"r");
 f.inspect;
 f.close;
-)</pre>
+)</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/File.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/File.schelp</a><br>link::Classes/File::<br></div></div></body></html>
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/File.schelp'>/usr/share/SuperCollider/HelpSource/Classes/File.schelp</a><br>link::Classes/File::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

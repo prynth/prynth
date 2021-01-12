@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Understanding Streams, Patterns and Events - Part 1 | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Understanding Streams, Patterns and Events - Part 1 | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Understanding Streams, Patterns and Events - Part 1';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Understanding Streams, Patterns and Events - Part 1:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Streams'>Streams</a></li>
@@ -22,8 +27,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc1'><a href='#Filtering%20operations%20on%20streams'>Filtering operations on streams</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Making%20Music%20with%20Streams'>Making Music with Streams</a></li>
 <ul class='toc'></ul><li class='toc1'><a href='#Optional:'>Optional:</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials</span>
@@ -40,26 +45,26 @@ var scdoc_sc_version = '3.9.3';
 <p>In order to understand the framework, a number of concepts must be covered. These concepts are embodied in the classes for Streams, Patterns, and Events. You should learn these concepts in the order presented. The framework is built up in layers. If you skip ahead to get to the cool stuff first, you will have missed some important points.<h2><a class='anchor' name='Streams'>Streams</a></h2>
 
 <p>A stream represents a lazy sequence of values. The next value in the sequence is obtained by sending the message next to the stream object. The sequence can be restarted from the beginning by sending the message reset to the stream object. A stream can be of finite or infinite length. When a finite length stream has reached the end, it returns nil.
-<p>A stream can be any object that responds to the next and reset messages. Any object that responds to these messages can act as a stream. It happens that the class <a href="./../Classes/Object.html">Object</a> defines next and reset for all objects. In Object, both next and reset are defined to return <code class='code prettyprint lang-sc'>this</code>. Thus any object is by default a stream that represents an infinite sequence of itself.<pre class='code prettyprint lang-sc'>7.next.postln;    // 7 responds to next by returning itself</pre>
+<p>A stream can be any object that responds to the next and reset messages. Any object that responds to these messages can act as a stream. It happens that the class <a href="./../Classes/Object.html">Object</a> defines next and reset for all objects. In Object, both next and reset are defined to return <code>this</code>. Thus any object is by default a stream that represents an infinite sequence of itself.<textarea class='editor'>7.next.postln;    // 7 responds to next by returning itself</textarea>
 <h2><a class='anchor' name='Stream%20and%20its%20subclasses'>Stream and its subclasses</a></h2>
 
 <p>In addition to the default streams implemented by <a href="./../Classes/Object.html">Object</a>, there is a class <a href="./../Classes/Stream.html">Stream</a> that provides more functionality such as math operations on streams and filtering of streams.
-<p>A generally useful subclass of Stream is the class <a href="./../Classes/FuncStream.html">FuncStream</a> which allows the user to provide functions to execute in response to next and reset. Here is a FuncStream that represents an infinite random sequence:<pre class='code prettyprint lang-sc'>(
+<p>A generally useful subclass of Stream is the class <a href="./../Classes/FuncStream.html">FuncStream</a> which allows the user to provide functions to execute in response to next and reset. Here is a FuncStream that represents an infinite random sequence:<textarea class='editor'>(
 var a;
 a = FuncStream.new({ #[1, 2, 3, 4].choose });
 5.do({ a.next.postln; });    // print 5 values from the stream
-)</pre>
+)</textarea>
 
 <p>Another useful subclass of Stream is <a href="./../Classes/Routine.html">Routine</a> which is a special kind of function that can act like a Stream. Routines are functions that can return a value from the middle and then be resumed from that point when called again. The yield message returns a value from the Routine. The next time the Routine is called it begins by returning from the yield and continues from that point. See the <a href="./../Classes/Routine.html">Routine</a> help file.
-<p>Here is a Routine that represents a finite sequence of values:<pre class='code prettyprint lang-sc'>(
+<p>Here is a Routine that represents a finite sequence of values:<textarea class='editor'>(
 var a;
 a = Routine.new({
         3.do({ arg i; i.yield; })
     });
 4.do({ a.next.postln; });    // print 4 values from stream
-)</pre>
+)</textarea>
 
-<p>and another:<pre class='code prettyprint lang-sc'>(
+<p>and another:<textarea class='editor'>(
 var a;
 a = Routine.new({
         3.do({ arg i;
@@ -67,11 +72,11 @@ a = Routine.new({
         })
     });
 8.do({ a.next.postln; });    // print 8 values from stream
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Math%20operations%20on%20Streams'>Math operations on Streams</a></h2>
 
 <p>Stream is a subclass of <a href="./../Classes/AbstractFunction.html">AbstractFunction</a> which means that one can do math operations on streams to produce other streams.
-<p>Applying a unary operator to a stream:<pre class='code prettyprint lang-sc'>(
+<p>Applying a unary operator to a stream:<textarea class='editor'>(
 var a, b;
 // a is a stream that counts from 0 to 9
 a = Routine.new({
@@ -79,9 +84,9 @@ a = Routine.new({
     });
 b = a.squared;    // stream b is a square of the stream a
 12.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p>Using a binary operator on a stream:<pre class='code prettyprint lang-sc'>(
+<p>Using a binary operator on a stream:<textarea class='editor'>(
 var a, b;
 // a is a stream that counts from 0 to 9
 a = Routine.new({
@@ -89,9 +94,9 @@ a = Routine.new({
     });
 b = a + 100;    // add a constant value to stream a
 12.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p>Using a binary operator on two streams:<pre class='code prettyprint lang-sc'>(
+<p>Using a binary operator on two streams:<textarea class='editor'>(
 var a, b, c;
 // a is a stream that counts from 0 to 9
 a = Routine.new({
@@ -103,11 +108,11 @@ b = Routine.new({
     });
 c = a + b;    // add streams a and b
 12.do({ c.next.postln; });
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Filtering%20operations%20on%20streams'>Filtering operations on streams</a></h2>
 
-<p>Streams respond to the messages <code class='code prettyprint lang-sc'>collect</code>, <code class='code prettyprint lang-sc'>select</code>, and <code class='code prettyprint lang-sc'>reject</code> by returning a new <a href="./../Classes/Stream.html">Stream</a>.
-<p>The <code class='code prettyprint lang-sc'>collect</code> message returns a stream that is modified by a function in the same way as the collect message sent to a <a href="./../Classes/Collection.html">Collection</a> returns a modified Collection.<pre class='code prettyprint lang-sc'>(
+<p>Streams respond to the messages <code>collect</code>, <code>select</code>, and <code>reject</code> by returning a new <a href="./../Classes/Stream.html">Stream</a>.
+<p>The <code>collect</code> message returns a stream that is modified by a function in the same way as the collect message sent to a <a href="./../Classes/Collection.html">Collection</a> returns a modified Collection.<textarea class='editor'>(
 var a, b;
 // a is a stream that counts from 0 to 9
 a = Routine.new({
@@ -116,9 +121,9 @@ a = Routine.new({
 // b is a stream that adds 100 to even values
 b = a.collect({ arg item; if (item.even, { item + 100 },{ item }); });
 6.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p>The <code class='code prettyprint lang-sc'>select</code> message creates a stream that passes only items that return true from a user supplied function.<pre class='code prettyprint lang-sc'>(
+<p>The <code>select</code> message creates a stream that passes only items that return true from a user supplied function.<textarea class='editor'>(
 var a, b;
 // a is a stream that counts from 0 to 9
 a = Routine.new({
@@ -127,9 +132,9 @@ a = Routine.new({
 // b is a stream that only returns the odd values from stream a
 b = a.select({ arg item; item.odd; });
 6.do({ b.next.postln; });
-)</pre>
+)</textarea>
 
-<p>The <code class='code prettyprint lang-sc'>reject</code> message creates a stream that passes only items that return false from a user supplied function.<pre class='code prettyprint lang-sc'>(
+<p>The <code>reject</code> message creates a stream that passes only items that return false from a user supplied function.<textarea class='editor'>(
 var a, b;
 // a is a stream that counts from 0 to 9
 a = Routine.new({
@@ -138,10 +143,10 @@ a = Routine.new({
 // b is a stream that only returns the non-odd values from stream a
 b = a.reject({ arg item; item.odd; });
 6.do({ b.next.postln; });
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Making%20Music%20with%20Streams'>Making Music with Streams</a></h2>
 
-<p>Here is a sound example to show how you might use Streams to generate musical material.<pre class='code prettyprint lang-sc'>(
+<p>Here is a sound example to show how you might use Streams to generate musical material.<textarea class='editor'>(
     s = Server.local;
     SynthDef(\help_SPE1, { arg i_out=0, freq;
         var out;
@@ -187,8 +192,9 @@ b = a.reject({ arg item; item.odd; });
             dur.wait; // synonym for yield, used by .play to schedule next occurence
         })
     }).play
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Optional:'>Optional:</a></h2>
 
 <p>More about Streams can be learned from the book A Little Smalltalk by Timothy Budd. He calls them Generators and shows how they can be used to solve problems like the "eight queens" problem etc.
-<p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events2.html">Understanding Streams, Patterns and Events - Part 2</a><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events1.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/Streams-Patterns-Events1.schelp</a><br>link::Tutorials/Streams-Patterns-Events1::<br></div></div></body></html>
+<p>To go to the next file: <a href="./../Tutorials/Streams-Patterns-Events2.html">Understanding Streams, Patterns and Events - Part 2</a><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events1.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/Streams-Patterns-Events1.schelp</a><br>link::Tutorials/Streams-Patterns-Events1::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

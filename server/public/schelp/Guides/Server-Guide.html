@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Server Guide | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Server Guide | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Server Guide';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Server Guide:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -22,17 +27,17 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Local%20vs.%20Internal'>Local vs. Internal</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#The%20default%20Server'>The default Server</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#Local%20vs.%20Remote%20Servers,%20Multi-client%20Configurations'>Local vs. Remote Servers, Multi-client Configurations</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
  | <span id='categories'><a href='./../Browse.html#Server'>Server</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Server>Abstractions'>Abstractions</a></span>
 </div><h1>Server Guide</h1>
-<div id='summary'>Using Server objecs in different situations</div>
+<div id='summary'>Using Server objects in different situations</div>
 </div>
 <div class='subheader'>
-<div id='related'>See also: <a href="./../Classes/Server.html">Server</a>, <a href="./../Classes/ServerOptions.html">ServerOptions</a>, <a href="./../Reference/Server-Architecture.html">Server Architecture</a>, <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a></div>
+<div id='related'>See also: <a href="./../Classes/Server.html">Server</a>, <a href="./../Classes/ServerOptions.html">ServerOptions</a>, <a href="./../Reference/Server-Architecture.html">Server Architecture</a>, <a href="./../Reference/Server-Command-Reference.html">Server Command Reference</a>, <a href="./../Guides/MultiClient_Setups.html">Multi-client Setups</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -41,14 +46,14 @@ var scdoc_sc_version = '3.9.3';
 <p>The server application represented by a Server object might be running on the same machine as the client (in the same address space as the language application or separately; see below), or it may be running on a remote machine.
 <p>Most of a Server's options are contolled through its instance of ServerOptions. See the <a href="./../Classes/ServerOptions.html">ServerOptions</a> helpfile for more detail.<h3><a class='anchor' name='Paths'>Paths</a></h3>
 
-<p>Server apps running on the local machine have two UNIX environment variables: <code class='code prettyprint lang-sc'>SC_SYNTHDEF_PATH</code> and <code class='code prettyprint lang-sc'>SC_PLUGIN_PATH</code>. These indicate directories of synthdefs and ugen plugins that will be loaded at startup. These are in addition to the default synthdef/ and plugin/ directories which are hard-coded.
-<p>These can be set within SC using the getenv and setenv methods of class <a href="./../Classes/String.html">String</a>.<pre class='code prettyprint lang-sc'>// all defs in this directory will be loaded when a local server boots
+<p>Server apps running on the local machine have two UNIX environment variables: <code>SC_SYNTHDEF_PATH</code> and <code>SC_PLUGIN_PATH</code>. These indicate directories of synthdefs and ugen plugins that will be loaded at startup. These are in addition to the default synthdef/ and plugin/ directories which are hard-coded.
+<p>These can be set within SC using the getenv and setenv methods of class <a href="./../Classes/String.html">String</a>.<textarea class='editor'>// all defs in this directory will be loaded when a local server boots
 "SC_SYNTHDEF_PATH".setenv("~/scwork/".standardizePath);
-"echo $SC_SYNTHDEF_PATH".unixCmd;</pre>
+"echo $SC_SYNTHDEF_PATH".unixCmd;</textarea>
 <h3><a class='anchor' name='The%20default%20group'>The default group</a></h3>
 
-<p>When a Server is booted there is a top level group with an ID of 0 that defines the root of the node tree. (This is represented by a subclass of <a href="./../Classes/Group.html">Group</a> : <a href="./../Classes/RootNode.html">RootNode</a>.) If the server app was booted from within SCLang (as opposed to from the command line) the method <code class='code prettyprint lang-sc'>initTree</code> will be called automatically after booting. This will also create a <a href="./../Reference/default_group.html">Default Group</a> with an ID of 1, which is the default group for all <a href="./../Classes/Node.html">Node</a>s when using object style. This provides a predictable basic node tree so that methods such as Server-scope, Server-record, etc. can function without running into order of execution problems.
-<p>The default group is persistent, i.e. it is recreated after a reboot, pressing cmd-., etc. See <a href="./../Classes/RootNode.html">RootNode</a> and <a href="./../Reference/default_group.html">Default Group</a> for more information.<div class='note'><span class='notelabel'>NOTE:</span> If a Server has been booted from the command line you must call <code class='code prettyprint lang-sc'>initTree</code> manually in order to initialize the default group, if you want it. See <code class='code prettyprint lang-sc'>initTree</code> below.</div><h3><a class='anchor' name='Local%20vs.%20Internal'>Local vs. Internal</a></h3>
+<p>When a Server is booted there is a top level group with an ID of 0 that defines the root of the node tree. (This is represented by a subclass of <a href="./../Classes/Group.html">Group</a> : <a href="./../Classes/RootNode.html">RootNode</a>.) If the server app was booted from within SCLang (as opposed to from the command line) the method <code>initTree</code> will be called automatically after booting. This will also create a <a href="./../Reference/default_group.html">Default Group</a> with an ID of 1, which is the default group for all <a href="./../Classes/Node.html">Node</a>s when using object style. This provides a predictable basic node tree so that methods such as Server-scope, Server-record, etc. can function without running into order of execution problems.
+<p>The default group is persistent, i.e. it is recreated after a reboot, pressing cmd-., etc. See <a href="./../Classes/RootNode.html">RootNode</a> and <a href="./../Reference/default_group.html">Default Group</a> for more information.<div class='note'><span class='notelabel'>NOTE:</span> If a Server has been booted from the command line you must call <code>initTree</code> manually in order to initialize the default group, if you want it. See <code>initTree</code> below.</div><h3><a class='anchor' name='Local%20vs.%20Internal'>Local vs. Internal</a></h3>
 
 <p>In general, when working with a single machine one will probably be using one of two Server objects which are created at startup and stored in the class variables <a href="#*local">*local</a> and <a href="#*internal">*internal</a>. In SuperCollider.app (OSX), two GUI windows are created to control these. Use <a href="#-makeGui">-makeGui</a> to create a GUI window manually.
 <p>The difference between the two is that the local server runs as a separate application with its own address space, and the internal server runs within the same space as the language/client app.
@@ -56,14 +61,26 @@ var scdoc_sc_version = '3.9.3';
 <p>The local server, and any other server apps running on your local machine, have the advantage that if the language app crashes, it (and thus possibly your piece) will continue to run. It is thus an inherently more robust arrangement. But note that even if the synths on the server continue to run, any language-side sequencing and control will terminate if the language app crashes.
 <p>At the current time, there is generally no benefit in using the internal server, but it remains for the purposes of backwards compatibility.<h3><a class='anchor' name='The%20default%20Server'>The default Server</a></h3>
 
-<p>There is always a default Server, which is stored in the class variable <code class='code prettyprint lang-sc'>default</code>. Any <a href="./../Classes/Synth.html">Synth</a>s or <a href="./../Classes/Group.html">Group</a>s created without a target will be created on the default server. At startup this is set to be the local server (see above), but can be set to be any Server.<h3><a class='anchor' name='Local%20vs.%20Remote%20Servers,%20Multi-client%20Configurations'>Local vs. Remote Servers, Multi-client Configurations</a></h3>
+<p>There is always a default Server, which is stored in the class variable <code>default</code>. Any <a href="./../Classes/Synth.html">Synth</a>s or <a href="./../Classes/Group.html">Group</a>s created without a target will be created on the default server. At startup this is set to be the local server (see above), but can be set to be any Server.<h3><a class='anchor' name='Local%20vs.%20Remote%20Servers,%20Multi-client%20Configurations'>Local vs. Remote Servers, Multi-client Configurations</a></h3>
 
-<p>Most of the time users work with a server app running on the same machine as the SC language client. It is possible to use a server running on a different machine via a network, providing you know the IP address and port of that server. The <a href="#*remote">*remote</a> method provides a convenient way to do this.
-<p>One common variant of this approach is multiple clients using the same server. If you wish to do this you will need to set the server's <a href="./../Classes/ServerOptions.html#-maxLogins">ServerOptions: -maxLogins</a> to at least the number of clients you wish to allow. When a client registers for <a href="#-notify">notifications</a> the server will supply a client ID. This also configures the allocators to avoid conflicts when allocating <a href="./../Classes/Node.html">Nodes</a>, <a href="./../Classes/Buffer.html">Buffers</a>, or <a href="./../Classes/Bus.html">Busses</a>.
-<p>In order to use a remote server with tcp one should first boot the remote server using the <code class='code prettyprint lang-sc'>-t</code> option and then run the following code:<pre class='code prettyprint lang-sc'>(
-s.options.protocol_(\tcp);
-s.addr.connect;
-s.startAliveThread( 0 );
-s.doWhenBooted({ "remote tcp server started".postln; s.notify; s.initTree });
-)</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Server-Guide.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Server-Guide.schelp</a><br>link::Guides/Server-Guide::<br></div></div></body></html>
+<p>Most of the time users work with a server app running on the same machine as the SC language client. It is possible to use a server running on a different machine via a network, providing you know the IP address and port of that server. The <a href="#*remote">*remote</a> method provides a convenient way to do this.<div class='note'><span class='notelabel'>NOTE:</span> To enable remote connections you will need to change <a href="./../Classes/ServerOptions.html#-bindAddress">ServerOptions: -bindAddress</a> in the server's <a href="./../Classes/ServerOptions.html">ServerOptions</a> as the default value only allows connections from the local machine. <code>s.options.bindAddress = "0.0.0.0"</code> will allow connections from any address.</div>
+<p>One common variant of this approach is multiple clients using the same server. If you wish to do this you will need to set the server's <a href="./../Classes/ServerOptions.html#-maxLogins">ServerOptions: -maxLogins</a> to at least the number of clients you wish to allow. When a client registers for <a href="#-notify">notifications</a> the server will supply a client ID. This also configures the allocators to avoid conflicts when allocating <a href="./../Classes/Node.html">Nodes</a>, <a href="./../Classes/Buffer.html">Buffers</a>, or <a href="./../Classes/Bus.html">Busses</a>. For more info see <a href="./../Guides/MultiClient_Setups.html">Multi-client Setups</a>.
+<p>In order to use a remote server with tcp one should first boot the remote server using the <code>-t</code> option e.g. as follows:<textarea class='editor'>// on machine running the server
+(
+s.options.protocol = \tcp; // set to use tcp
+s.options.bindAddress = "0.0.0.0"; // allow connections from any address
+s.options.maxLogins = 2; // set to correct number of clients
+s.boot;
+)</textarea>
+
+<p>then run the following code:<textarea class='editor'>// on remote machine connecting to server
+(
+o = ServerOptions.new;
+o.protocol_(\tcp);
+t = Server.remote(\remote, NetAddr("192.168.0.130", 57110), o); // set to correct address and port
+t.addr.connect;
+t.startAliveThread( 0 );
+t.doWhenBooted({ "remote tcp server started".postln; t.notify; t.initTree });
+)</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/Server-Guide.schelp'>/usr/share/SuperCollider/HelpSource/Guides/Server-Guide.schelp</a><br>link::Guides/Server-Guide::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

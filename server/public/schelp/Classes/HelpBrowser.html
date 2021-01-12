@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>HelpBrowser | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>HelpBrowser | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'HelpBrowser';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>HelpBrowser:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -42,8 +47,8 @@ var scdoc_sc_version = '3.9.3';
 <li class='toc2'><a href='#Undocumented%20instance%20methods'>Undocumented instance methods</a></li>
 <ul class='toc'><li class='toc3'><a href='#-cmdPeriod'>cmdPeriod</a> </li>
 <li class='toc3'><a href='#-redirectTextFile'>redirectTextFile</a> </li>
-</ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+</ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -53,11 +58,13 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>Browse the SuperCollider help documentation</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/tools/HelpBrowser.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/GUI/tools/HelpBrowser.sc'>HelpBrowser.sc</a></div><div id='related'>See also: <a href="./../Classes/SCDoc.html">SCDoc</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/GUI/tools/HelpBrowser.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/GUI/tools/HelpBrowser.sc'>HelpBrowser.sc</a></div><div id='related'>See also: <a href="./../Classes/SCDoc.html">SCDoc</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
-<p>HelpBrowser is the GUI help browser that lets you browse the documentation of SuperCollider. It is coupled with SCDoc to allow on-the-fly rendering of HTML help files.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<p>HelpBrowser is a GUI help browser that lets you browse the documentation of SuperCollider. It is coupled with SCDoc to allow on-the-fly rendering of HTML help files.
+<p>There are two different help browsers in SuperCollider: the help browser built into SCIDE, and this HelpBrowser class implemented with sclang's GUI features. Both are implemented with the same underlying Qt WebEngine browser.
+<p>Since the Qt WebEngine dependency is hefty and difficult to install on some systems, it is possible for sclang to have been built without WebView support (using the CMake flag <code>-DSC_USE_QTWEBENGINE=OFF</code> at compile). If so, attempting to invoke this class will throw an error.<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
 <h3 class='method-code'><span class='method-prefix'>HelpBrowser.</span><a class='method-name' name='*instance' href='./../Overviews/Methods.html#instance'>instance</a></h3>
 <div class='method'>
 <p>The singleton HelpBrowser instance.</div><h3 class='method-code'><span class='method-prefix'>HelpBrowser.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>aHomeUrl</span>, <span class='argstr'>newWin</span>)</h3>
@@ -70,7 +77,7 @@ var scdoc_sc_version = '3.9.3';
 <div class='method'>
 <p>Get or set the default for "open in new windows" toggle.</div><h3 class='method-code'><span class='method-prefix'>HelpBrowser.</span><a class='method-name' name='*goTo' href='./../Overviews/Methods.html#goTo'>goTo</a>(<span class='argstr'>url</span>)</h3>
 <div class='method'>
-<p>Go to url with singleton instance or a new window, depending on the <code class='code prettyprint lang-sc'>openNewWindows</code> setting.</div><h3 class='method-code'><span class='method-prefix'>HelpBrowser.</span><a class='method-name' name='*openHelpFor' href='./../Overviews/Methods.html#openHelpFor'>openHelpFor</a>(<span class='argstr'>text</span>)</h3>
+<p>Go to url with singleton instance or a new window, depending on the <code>openNewWindows</code> setting.</div><h3 class='method-code'><span class='method-prefix'>HelpBrowser.</span><a class='method-name' name='*openHelpFor' href='./../Overviews/Methods.html#openHelpFor'>openHelpFor</a>(<span class='argstr'>text</span>)</h3>
 <div class='method'>
 <p>Open the relevant help page for given text in the singleton HelpBrowser instance.</div><h3 class='method-code'><span class='method-prefix'>HelpBrowser.</span><a class='method-name' name='*openSearchPage' href='./../Overviews/Methods.html#openSearchPage'>openSearchPage</a>(<span class='argstr'>text</span>)</h3>
 <div class='method'>
@@ -96,7 +103,7 @@ var scdoc_sc_version = '3.9.3';
 <div class='method'>
 <p>The GUI window for this HelpBrowser.<h4>Discussion:</h4>
 
-<p>Mainly useful for when you need to show the browser:<pre class='code prettyprint lang-sc'>HelpBrowser.instance.window.front;</pre>
+<p>Mainly useful for when you need to show the browser:<textarea class='editor'>HelpBrowser.instance.window.front;</textarea>
 </div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-goTo' href='./../Overviews/Methods.html#goTo'>goTo</a>(<span class='argstr'>urlString</span>, <span class='argstr'>brokenAction</span>)</h3>
 <div class='method'>
 <p>Go to specific URL. If the URL points to a file under <a href="./../Classes/SCDoc.html#*helpTargetDir">SCDoc: *helpTargetDir</a> it will be rendered on demand if needed.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-goHome' href='./../Overviews/Methods.html#goHome'>goHome</a></h3>
@@ -109,4 +116,5 @@ var scdoc_sc_version = '3.9.3';
 <div id='inheritedinstmets'></div><h3><a class='anchor' name='Undocumented%20instance%20methods'>Undocumented instance methods</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-cmdPeriod' href='./../Overviews/Methods.html#cmdPeriod'>cmdPeriod</a></h3>
 <h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-redirectTextFile' href='./../Overviews/Methods.html#redirectTextFile'>redirectTextFile</a>(<span class='argstr'>url</span>)</h3>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/HelpBrowser.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/HelpBrowser.schelp</a><br>link::Classes/HelpBrowser::<br></div></div></body></html>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/HelpBrowser.schelp'>/usr/share/SuperCollider/HelpSource/Classes/HelpBrowser.schelp</a><br>link::Classes/HelpBrowser::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,0 +1,165 @@
+<!doctype html><html lang='en'><head><title>MeterSync | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'MeterSync';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>MeterSync:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'><li class='toc2'><a href='#Background'>Background</a></li>
+<ul class='toc'></ul></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*new'>new</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#-free'>free</a> </li>
+<li class='toc3'><a href='#-resyncMeter'>resyncMeter</a> </li>
+<li class='toc3'><a href='#-queryMeter'>queryMeter</a> </li>
+<li class='toc3'><a href='#-id'>id</a> </li>
+<li class='toc3'><a href='#-ports'>ports</a> </li>
+<li class='toc3'><a href='#-adjustMeterBase'>adjustMeterBase</a> </li>
+<li class='toc3'><a href='#-enabled'>enabled</a> </li>
+<li class='toc3'><a href='#-clock'>clock</a> </li>
+<li class='toc3'><a href='#-repeats'>repeats</a> </li>
+<li class='toc3'><a href='#-delta'>delta</a> </li>
+<li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes</span>
+ | <span id='categories'><a href='./../Browse.html#Scheduling'>Scheduling</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Scheduling>Clocks'>Clocks</a></span>
+</div><h1>MeterSync<span id='superclasses'> : <a href="../Classes/Object.html">Object</a></span>
+</h1>
+<div id='summary'>Synchronize barlines of SuperCollider LinkClock peers</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Control/MeterSync.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Control/MeterSync.sc'>MeterSync.sc</a></div><div id='related'>See also: <a href="./../Classes/LinkClock.html">LinkClock</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>This class implements additional network messaging, beyond the Ableton Link protocol, to ensure that SuperCollider <a href="./../Classes/LinkClock.html">LinkClock</a> peers follow the same meter (beatsPerBar) and barlines as other LinkClock peers.
+<p>This class, or the associated methods <a href="./../Classes/LinkClock.html#-enableMeterSync">LinkClock: -enableMeterSync</a> and <a href="./../Classes/LinkClock.html#-disableMeterSync">LinkClock: -disableMeterSync</a>, should be used for performances where all linked machines should follow the same meter <em>and</em> the meter will change during the performance.
+<p>If the meter will not change (typical use case being 4/4 time throughout), then it is necessary only to set <code>myLinkClock.quantum = beatsPerBar</code> on all peers. (See <a href="./../Classes/LinkClock.html#-quantum">LinkClock: -quantum</a>.)
+<p>In theory, MeterSync may be used with any SuperCollider clock that answers the methods <code>beatsPerBar</code>, <code>beatInBar</code> and <code>baseBarBeats</code>. It is currently tested only with <a href="./../Classes/LinkClock.html">LinkClock</a>. It is not meaningful to use with <a href="./../Classes/TempoClock.html">TempoClock</a>, because TempoClock does nothing to synchronize its beats with any other machines.<div class='note'><span class='notelabel'>NOTE:</span> This class considers only the barline positions of SuperCollider LinkClock peers! Other Link-capable applications do not implement this protocol.</div><h3><a class='anchor' name='Background'>Background</a></h3>
+
+<p>SuperCollider defines <em>meter</em> using two numbers:<dl>
+<dt><a href="./../Classes/TempoClock.html#-beatsPerBar">TempoClock: -beatsPerBar</a><dd>How many beats comprise one bar (4 = 4/4 time, 3 = 3/4 time).<dt><a href="./../Classes/TempoClock.html#-baseBarBeat">TempoClock: -baseBarBeat</a><dd>The beat value at which the meter last changed.</dl>
+
+<p>For example, if a clock runs four bars of 4/4 time, and then switches to 3/4 time, the barlines are <em>not</em> multiples of 3. The meter changed at beat 16, so the new barlines will be <code>16 + (3 * n)</code> (<code>n</code> is an integer). At this point, then, beatsPerBar = 3 and baseBarBeat = 16.
+<p>Ableton Link maintains a <em>quantum</em>, which is analogous to <a href="./../Classes/TempoClock.html#-beatsPerBar">TempoClock: -beatsPerBar</a>. If all peers are following the same meter and have the same quantum, then Link itself will synchronize the barlines. (Thus, in the normal use case of a consistent meter throughout, it is not necessary to use <code>MeterSync</code> at all.)
+<p>However, when changing the Link quantum, Link does not guarantee that beat values will increment consistently. Setting the quantum is meant to be done before the performance begins, not during.
+<p>SuperCollider can change its <code>beatsPerBar</code> independently of the Link quantum. But, in that case, barlines across peers may not be synchronized.
+<p><code>MeterSync</code> resolves this by querying other SuperCollider Link peers for their current metrical position. If the local machine differs from the other peers, then the local machine adjusts its <code>baseBarBeat</code> to be in metrical sync with the others. (Beats proceed as normal; only the barline position is adjusted.)<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>MeterSync.</span><a class='method-name' name='*new' href='./../Overviews/Methods.html#new'>new</a>(<span class='argstr'>clock</span>, <span class='argstr'>id</span>, <span class='argstr'>ports</span>)</h3>
+<div class='method'>
+<p>Returns a new instance, associated with a specific clock object.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>clock<td class='argumentdesc'>
+<p>The clock which this instance controls.<tr><td class='argumentname'>id<td class='argumentdesc'>
+<p>Optional. An integer, uniquely identifying this instance. If not provided, a random integer will be chosen.<tr><td class='argumentname'>ports<td class='argumentdesc'>
+<p>Optional. An array of port numbers to which sync messages will be sent. (sclang instances normally use port 57120, but if that port is in use, they will try 57121 and so on, successively. The default here is to try all of 57120-57127.)</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-free' href='./../Overviews/Methods.html#free'>free</a></h3>
+<div class='method'>
+<p>Release this instance, disabling metric sync for the associated clock.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-resyncMeter' href='./../Overviews/Methods.html#resyncMeter'>resyncMeter</a>(<span class='argstr'>round</span>, <span class='argstr'>verbose: true</span>)</h3>
+<div class='method'>
+<p>Adjust the clock's barline position to match other SuperCollider peers on the network.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>round<td class='argumentdesc'>
+<p>Optional. Force a specific subdivision: round = 1 assumes quarter-notes as the metric base; round = 0.5 assumes eighth-notes (e.g. 5/8 time). If not provided, it will be calculated based on the incoming beatsPerBar values from other peers.<tr><td class='argumentname'>verbose<td class='argumentdesc'>
+<p>Boolean. If false, suppress information messages.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The instance.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-queryMeter' href='./../Overviews/Methods.html#queryMeter'>queryMeter</a>(<span class='argstr'>action</span>, <span class='argstr'>timeout: 0.2</span>)</h3>
+<div class='method'>
+<p>Query metrical information from other peers, and collect the results. Normally, you should not need to call this method. It is provided in case you want to verify sync, or implement a custom behavior.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>action<td class='argumentdesc'>
+<p>A function to evaluate, after the results have been obtained. Results are passed to this function as an argument: a List of Events containing:<ul>
+<li>id: The remote peer's ID (integer).<li>beats: The remote clock's beats, at the time of answering.<li>beatsPerBar: The remote clock's meter.<li>baseBarBeat: The remote clock's metrical base.<li>beatInBar: The remote clock's metrical position within the bar.<li>queriedAtBeat: The <em>querying</em> clock's query time, in beats.<li>syncMeter: Boolean. If true, the remote clock is syncing barlines. If false, the remote clock has an answering MeterSync object, but it is disabled.</ul>
+<tr><td class='argumentname'>timeout<td class='argumentdesc'>
+<p>Float. A number of seconds to wait for replies. (It will always wait for the entire timeout period. LinkClock knows its <a href="./../Classes/LinkClock.html#-numPeers">LinkClock: -numPeers</a>, but only SuperCollider peers will answer queries, and there is no way to know how many of the peers are SuperCollider.)</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The instance. Replies are asynchronous; use the <code>action</code> function to respond.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-id' href='./../Overviews/Methods.html#id'>id</a></h3>
+<div class='method'>
+<p>Get the integer ID uniquely identifying this instance. The ID is set at initialization time (<a href="./../Classes/LinkClock.html#-enableMeterSync">LinkClock: -enableMeterSync</a> or <a href="#*new">*new</a>). To change it, free the current instance and create a new one.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-ports' href='./../Overviews/Methods.html#ports'>ports</a></h3>
+<div class='method'>
+<p>Get the array of ports to which sync messages will be sent. The ports are set at initialization time (<a href="./../Classes/LinkClock.html#-enableMeterSync">LinkClock: -enableMeterSync</a> or <a href="#*new">*new</a>). To change them, free the current instance and create a new one.<h4>Returns:</h4>
+<div class='returnvalue'>
+<p>An array of integer port numbers.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-adjustMeterBase' href='./../Overviews/Methods.html#adjustMeterBase'>adjustMeterBase</a>(<span class='argstr'>localBeats</span>, <span class='argstr'>remoteBeats</span>, <span class='argstr'>round: 1</span>)</h3>
+<div class='method'>
+<p>A convenience method to adjust the clock's baseBarBeat, given the local metrical position and the remote metrical position. Normally, you do not need to call this method. It is provided in case you do your own analysis of <a href="./../Classes/MeterSync.html#-queryMeter">MeterSync: -queryMeter</a> results and you want to adjust barlines in your own way.<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>localBeats<td class='argumentdesc'>
+<p>The local clock's beats. Usually this should be derived from <code>result[index][\queriedAtBeat]</code> (where <code>result</code> comes from <a href="./../Classes/MeterSync.html#-queryMeter">MeterSync: -queryMeter</a>). Strongly recommended to use this instead of <code>clock.beats</code>, because the query time does not add the timeout.<tr><td class='argumentname'>remoteBeats<td class='argumentdesc'>
+<p>The local clock's beats. Usually this should be derived from <code>result[index][\beats]</code>.<tr><td class='argumentname'>round<td class='argumentdesc'>
+<p>Optional. Force a specific subdivision: round = 1 (the default) assumes quarter-notes as the metric base; round = 0.5 assumes eighth-notes (e.g. 5/8 time).</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>The instance.<textarea class='editor'>// You *may* do something like this optionally,
+// if something went wrong.
+// Normally you should just call 'resyncMeter'
+// and it's all done for you.
+
+l = LinkClock.new.latency_(s.latency);
+m = MeterSync(l);
+
+(
+m.queryMeter({ |result|
+    result.postln;
+    m.adjustMeterBase(result[0][\queriedAtBeat], result[0][\beatInBar]);
+});
+)
+
+l.stop;  // cleans up 'm' automatically</textarea>
+</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-enabled' href='./../Overviews/Methods.html#enabled'>enabled</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-enabled' href='./../Overviews/Methods.html#enabled'>enabled</a> = <span class='argstr'>bool</span></h3>
+<div class='method'>
+<p>Enable or disable meter sync. If disabled, this instance will no longer respond to meter changes from peers. It will still answer queryMeter, with <code>'syncMeter': false</code> in the reply (so you can filter the queryMeter results accordingly).<h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>bool<td class='argumentdesc'>
+<p>True = enabled, false = disabled.</table><h4>Returns:</h4>
+<div class='returnvalue'>
+<p>Boolean.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clock' href='./../Overviews/Methods.html#clock'>clock</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-clock' href='./../Overviews/Methods.html#clock'>clock</a> = </h3>
+<div class='method'>
+<p>Answers with the clock being controlled by this instance.<div class='note'><span class='notelabel'>NOTE:</span> You cannot change the associated clock object. You should instead <a href="./../Classes/MeterSync.html#-free">MeterSync: -free</a> this instance, and create a new instance for the other clock.</div></div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-repeats' href='./../Overviews/Methods.html#repeats'>repeats</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-repeats' href='./../Overviews/Methods.html#repeats'>repeats</a> = <span class='argstr'>value</span></h3>
+<div class='method'>
+<p>Get or set the number of repeats for OSC messaging.
+<p>UDP does not detect failure to deliver messages; therefore, messages may be lost. If that happens, LinkClock peers may fail to synchronize properly and <a href="#-resyncMeter">-resyncMeter</a> may be unable to recover. To prevent this, sync messages are sent 'repeats' times. The default is 4.</div><h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-delta' href='./../Overviews/Methods.html#delta'>delta</a></h3>
+<h3 class='method-code'><span class='method-prefix'>.</span><a class='method-name' name='-delta' href='./../Overviews/Methods.html#delta'>delta</a> = <span class='argstr'>value</span></h3>
+<div class='method'>
+<p>Get or set the number of seconds between OSC messaging repeats.</div><h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>l = LinkClock.new.latency_(s.latency).enableMeterSync;
+
+// If meter gets off, try to resync:
+l.getMeterSync.resyncMeter;
+
+// What are other clocks' timebases?
+l.getMeterSync.queryMeter({ |result|
+    result.do { |row| row.postln };
+});
+
+// I want a different ID and/or ports: free, then recreate
+l.disableMeterSync;
+l.enableMeterSync(1000, (57120..57135));</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/MeterSync.schelp'>/usr/share/SuperCollider/HelpSource/Classes/MeterSync.schelp</a><br>link::Classes/MeterSync::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

@@ -1,0 +1,142 @@
+<!doctype html><html lang='en'><head><title>FormantTable | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'FormantTable';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>FormantTable:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*keys'>keys</a> </li>
+<li class='toc3'><a href='#*get'>get</a> </li>
+<li class='toc3'><a href='#*at'>at</a> </li>
+<li class='toc3'><a href='#*rand'>rand</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#Collections'>Collections</a></span>
+</div><h1>FormantTable<span id='superclasses'> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Lookup table for emulating vocal tracts</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/FormantTable.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/classes/LJP Classes/FormantTable.sc'>FormantTable.sc</a></div><div id='related'>See also: <a href="./../Classes/Formant.html">Formant</a>, <a href="./../Classes/Harmonics.html">Harmonics</a></div>
+</div>
+<h2><a class='anchor' name='description'>Description</a></h2>
+
+<p>Returns a set of frequencies+resonances+amplitudes for a set of 5 bandpass filters, useful for emulating the main 5 formants of a vocal tract. To see the available voice types run this line:<textarea class='editor'>FormantTable.keys</textarea>
+<h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>FormantTable.</span><a class='method-name' name='*keys' href='./../Overviews/Methods.html#keys'>keys</a></h3>
+<div class='method'>
+<p>returns a <a href="./../Classes/Set.html">Set</a> with all available voice types.</div><h3 class='method-code'><span class='method-prefix'>FormantTable.</span><a class='method-name' name='*get' href='./../Overviews/Methods.html#get'>get</a>(<span class='argstr'>preset</span>)</h3>
+<div class='method'>
+<p>returns an <a href="./../Classes/Array.html">Array</a> of arrays. <code>[[frequencies], [resonances], [amplitudes]]</code><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>preset<td class='argumentdesc'>
+<p>a <a href="./../Classes/Symbol.html">Symbol</a>.<textarea class='editor'>FormantTable.get(\bassO)</textarea>
+</table></div><h3 class='method-code'><span class='method-prefix'>FormantTable.</span><a class='method-name' name='*at' href='./../Overviews/Methods.html#at'>at</a>(<span class='argstr'>preset</span>)</h3>
+<div class='method'>
+<p>alias of <a href="#*get">*get</a></div><h3 class='method-code'><span class='method-prefix'>FormantTable.</span><a class='method-name' name='*rand' href='./../Overviews/Methods.html#rand'>rand</a></h3>
+<div class='method'>
+<p>returns <code>[[frequencies], [resonances], [amplitudes]]</code> for a random voice type.</div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+
+<p>(by Eric Skogen)<textarea class='editor'>// first boot the server
+s.boot;
+
+// Saw freq is controlled by mouse X position
+// BBandPass filter is controlled by
+// FormantTable data (frequencies, resonances, amplitudes)
+(
+    SynthDef(\formantVoice, { arg
+        f = #[ 400, 750, 2400, 2600, 2900 ],
+        a = #[ 1, 0.28183829312645, 0.089125093813375, 0.1, 0.01 ],
+        q = #[ 0.1, 0.10666666666667, 0.041666666666667,
+            0.046153846153846, 0.041379310344828 ];
+    var scale = [0, 2, 4, 7, 9]; // pentatonic major
+    var scaleBuf = LocalBuf(scale.size, 1).set(scale);
+    var degree = Index.kr(scaleBuf, MouseX.kr(0, BufFrames.kr(scaleBuf)));
+    var vibrato = SinOsc.kr(6, mul:4);
+    var base = 4 * 12;
+    var in = Saw.ar(((degree + base).midicps + vibrato).lag(0.3));
+    Out.ar(0, Mix.new(BBandPass.ar(in, f, q) * a).dup);
+}).send(s);
+)
+
+// create a menu of the FormantTable options for preview
+(
+    var voices = FormantTable.keys.asArray;
+    voices.sort;
+
+    // start an instance of the synth
+    #f, a, q = FormantTable.get( voices.first );
+    x = Synth(\formantVoice, [\f, f, \a, a, \q, q]);
+    w = Window("FormantTable Browser",
+        Rect(Window.screenBounds.width/2 - 150,
+        Window.screenBounds.height/2 - 30,
+        300, 60));
+    StaticText(w, Rect(0, 5, w.view.bounds.width, 20))
+        .font_(Font("Helvetica", 11))
+        .string_("Move mouse left/right to change pitch")
+        .align_(\center);
+    PopUpMenu(w, w.view.bounds.insetBy(15, 20).moveBy(0, 10))
+        .items_(voices)
+        .action_({ |v|
+            // change the data based on user action
+            #f, a, q = FormantTable.get( v.item );
+            x.setn(\f, f);
+            x.setn(\a, a);
+            x.setn(\q, q);
+        });
+    w.onClose_({ x.free });
+    w.front;
+)
+
+
+// A laughter generator
+// NB mac-only at the moment, sorry
+(
+#f, a, q = FormantTable.get(\altoA);
+e = Env(
+[ 1.6315789222717, 2.8684210777283, 0, 1.1526317596436, 0, 0.63157892227173, 0, 0, 0.39473664164831, 0.41710549016785, 0, 0.33685091589462, 0.3538348548878, 0, 0.10526323318481, 0 ],
+[ 0.099179289557717, 0.029608596454967, 0.070896452123469, 0.015656579624523, 0.045265132730657, 0.08636364069852, 0.027344267630401, 0.021196740851856, 0.025568173912275, 0.020519098486223, 0.029819674626466, 0.025645296259773, 0.057419430367461, 0.18465909090909, 0.16357317837802 ]
+);
+w = Window("Laugh Editor", Rect(200,200,400,300));
+v = SCEnvelopeEdit(w, w.view.bounds.moveBy(20,20).resizeBy(-40,-140), e, 20).resize_(5);
+b = Button(w, w.view.bounds.moveBy(20,200).resizeBy(-40,-240)).states_([["Laugh"]]).resize_(5)
+    .action_({
+        x = {
+            var saw = Saw.ar((EnvGen.kr(v.env, doneAction:2) * 440)); // lazy
+            var out = Mix.new(BBandPass.ar(saw, f, q) * a).dup;
+            HPF.ar(out, 250); // avoid blowups
+        }.play;
+    });
+w.front;
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/HelpSource/Classes/FormantTable.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/LoopBufUGens/HelpSource/Classes/FormantTable.schelp</a><br>link::Classes/FormantTable::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

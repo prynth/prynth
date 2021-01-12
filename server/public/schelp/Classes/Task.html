@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Task | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Task | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Task';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Task:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
@@ -32,8 +37,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
 </ul><li class='toc1'><a href='#examples'>Examples</a></li>
 <ul class='toc'><li class='toc2'><a href='#What%20happens%20if%20you%20stop%20and%20start%20the%20task%20too%20quickly?'>What happens if you stop and start the task too quickly?</a></li>
-<ul class='toc'></ul></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Classes</span>
@@ -43,7 +48,7 @@ var scdoc_sc_version = '3.9.3';
 <div id='summary'>a pauseable process</div>
 </div>
 <div class='subheader'>
-<div id='filename'>Source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Stream.sc' title='/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/SCClassLibrary/Common/Streams/Stream.sc'>Stream.sc</a></div><div id='related'>See also: <a href="./../Classes/Routine.html">Routine</a></div>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/SCClassLibrary/Common/Streams/Stream.sc' title='/usr/share/SuperCollider/SCClassLibrary/Common/Streams/Stream.sc'>Stream.sc</a></div><div id='related'>See also: <a href="./../Classes/Routine.html">Routine</a></div>
 </div>
 <h2><a class='anchor' name='description'>Description</a></h2>
 
@@ -88,7 +93,7 @@ var scdoc_sc_version = '3.9.3';
 <h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
 <div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
 <h3><a class='anchor' name='What%20happens%20if%20you%20stop%20and%20start%20the%20task%20too%20quickly?'>What happens if you stop and start the task too quickly?</a></h3>
-<pre class='code prettyprint lang-sc'>(
+<textarea class='editor'>(
 t = Task({
     50.do({ arg i;
         i.squared.postln;
@@ -125,7 +130,8 @@ fork {
 )
 
 [ go, 1702.114411906 ]
-[ go, 1704.114411906 ]</pre>
+[ go, 1704.114411906 ]</textarea>
 
 <p>Based on the forked thread, you would expect the second "go" line of output to occur 0.2 seconds after the first, but in fact it happens two seconds later (the same amount of time the task waits between iterations). This is because the task must not schedule itself on the clock more than once. When the task is stopped, it remains scheduled until it wakes up again (based on its wait time). If, during this interval, the task were restarted, there would be two references to the task in the scheduler queue -- a situation that is irrecoverable short of stopping everything with command-period.
-<p>As a result, Task should be used for processes that need to start and stop relatively infrequently, but for which maximum stability is required. If you need fine-grained control over when and how the process stops and resumes (as is the case, for instance, with condition), <a href="./../Classes/Routine.html">Routine</a> is preferred.<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Task.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Classes/Task.schelp</a><br>link::Classes/Task::<br></div></div></body></html>
+<p>As a result, Task should be used for processes that need to start and stop relatively infrequently, but for which maximum stability is required. If you need fine-grained control over when and how the process stops and resumes (as is the case, for instance, with condition), <a href="./../Classes/Routine.html">Routine</a> is preferred.<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Classes/Task.schelp'>/usr/share/SuperCollider/HelpSource/Classes/Task.schelp</a><br>link::Classes/Task::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

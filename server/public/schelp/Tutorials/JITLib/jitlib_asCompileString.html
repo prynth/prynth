@@ -1,35 +1,40 @@
-<!doctype html><html lang='en'><head><title>jitlib_asCompileString | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>jitlib_asCompileString | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../../lib/jquery.min.js'></script>
+<script src='./../../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './../..';
 var scdoc_title = 'jitlib_asCompileString';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../../scdoc.js' type='text/javascript'></script>
 <script src='./../../docmap.js' type='text/javascript'></script>
-<script src='./../../prettify.js' type='text/javascript'></script>
-<script src='./../../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>jitlib_asCompileString:</div>
-<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'></ul></div><div class='contents'>
-<div id='menubar'></div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Tutorials/JITLib</span>
- | <span id='categories'><a href='./../../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Libraries>JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#Libraries>JITLib>Tutorials'>Tutorials</a></span>
+ | <span id='categories'><a href='./../../Browse.html#JITLib'>JITLib</a>&#8201;&gt;&#8201;<a href='./../../Browse.html#JITLib>Tutorials'>Tutorials</a></span>
 </div><h1>jitlib_asCompileString</h1>
 <div id='summary'>asCompileString in JITLib</div>
 </div>
 <div class='subheader'>
 </div>
-<pre class='code prettyprint lang-sc'>{ 10 + 6 * ~harry }.asCompileString;</pre>
+<textarea class='editor'>{ 10 + 6 * ~harry }.asCompileString;</textarea>
 
-<p>many objects understand <strong>.storeOn</strong>, which a way to post their string that is needed to reproduce them by compilation. sometimes one wants to store a certain configuration of a proxy space, which can be done if all functions used are closed functions.<pre class='code prettyprint lang-sc'>// an example how ProxySpace can document its current state:
+<p>Many objects understand <strong>.storeOn</strong>, which a way to post their string that is needed to reproduce them by compilation. Sometimes one wants to store a certain configuration of a proxy space, which can be done if all functions used are closed functions.<textarea class='editor'>// an example how ProxySpace can document its current state:
 
 p = ProxySpace.push(s);
 
@@ -64,6 +69,44 @@ p.asCompileString;
 
 p.document;        // document everything
 p.document([\out]);     // document all dependants of ~out
-p.document([\ctl1]);    // document all dependants of ~ctl1</pre>
+p.document([\ctl1]);    // document all dependants of ~ctl1</textarea>
 
-<p><div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/JITLib/jitlib_asCompileString.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Tutorials/JITLib/jitlib_asCompileString.schelp</a><br>link::Tutorials/JITLib/jitlib_asCompileString::<br></div></div></body></html>
+<p>Ndefs and NodeProxies can also store their full state as a code string:<textarea class='editor'>// Ndef with source
+Ndef(\x, { Saw.ar(\freq.kr(234), 0.1) });
+Ndef(\x).asCode;
+// returns:
+"Ndef('x', { Saw.ar(\freq.kr(234), 0.1) });
+"
+
+// Ndef with source and settings
+Ndef(\a,  { Saw.ar(\freq.kr, 0.1) }).set(\freq, 123);
+Ndef(\a).asCode;
+// returns:
+"(
+Ndef('a', { Saw.ar(\freq.kr, 0.1) });
+Ndef('a').set('freq', 123);
+);
+"
+
+// anonymous nodeproxy - returns example code with interpreter variable "a = ..."
+z = NodeProxy.new.source = { DC.ar };
+z.asCode
+// returns:
+"a = NodeProxy.new.source_({ DC.ar });"
+
+// nodeproxy  in a pushed proxyspace, which is also playing
+p = ProxySpace.push(s);
+~x = { Saw.ar(\freq.kr(234), 0.1) };
+~x.play;
+~x.asCode;
+// returns code that assumes there is a pushed proxyspace:
+"(
+~x = { Saw.ar(\freq.kr(234), 0.1) };
+~x.play;
+);
+"
+~x.end.clear;
+p.pop; p.clear;</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Tutorials/JITLib/jitlib_asCompileString.schelp'>/usr/share/SuperCollider/HelpSource/Tutorials/JITLib/jitlib_asCompileString.schelp</a><br>link::Tutorials/JITLib/jitlib_asCompileString::<br></div></div><script src='./../../editor.js' type='text/javascript'></script>
+</body></html>

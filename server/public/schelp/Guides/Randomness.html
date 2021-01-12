@@ -1,19 +1,24 @@
-<!doctype html><html lang='en'><head><title>Randomness | SuperCollider 3.9.3 Help</title>
+<!doctype html><html lang='en'><head><title>Randomness | SuperCollider 3.11.2 Help</title>
 <link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
 <link rel='stylesheet' href='./../frontend.css' type='text/css' />
 <link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
 <script>
 var helpRoot = './..';
 var scdoc_title = 'Randomness';
-var scdoc_sc_version = '3.9.3';
+var scdoc_sc_version = '3.11.2';
 </script>
 <script src='./../scdoc.js' type='text/javascript'></script>
 <script src='./../docmap.js' type='text/javascript'></script>
-<script src='./../prettify.js' type='text/javascript'></script>
-<script src='./../lang-sc.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
 </head>
-<body onload='fixTOC();prettyPrint()'>
+<body onload='fixTOC()'>
 <div id='toc'>
 <div id='toctitle'>Randomness:</div>
 <span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#Create%20single%20random%20numbers'>Create single random numbers</a></li>
@@ -38,8 +43,8 @@ var scdoc_sc_version = '3.9.3';
 <ul class='toc'></ul><li class='toc2'><a href='#Seeding'>Seeding</a></li>
 <ul class='toc'></ul><li class='toc2'><a href='#UGens%20that%20generate%20random%20numbers%20on%20demand'>UGens that generate random numbers on demand</a></li>
 <ul class='toc'></ul></ul><li class='toc1'><a href='#Random%20Patterns'>Random Patterns</a></li>
-<ul class='toc'></ul></ul></div><div class='contents'>
-<div id='menubar'></div>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
 <div class='header'>
 <div id='label'>
 <span id='folder'>Guides</span>
@@ -54,25 +59,25 @@ var scdoc_sc_version = '3.9.3';
 <p>As in any computer program, there are no "truly random" number generators in SC. They are pseudo-random, meaning they use very complex, but deterministic algorithms to generate sequences of numbers that are long enough and complicated enough to seem "random" for human beings. (i.e. the patterns are too complex for us to detect.)
 <p>If you start a random number generator algorithm with the same "seed" number several times, you get the same sequence of random numbers. (See example below, randomSeed)<h2><a class='anchor' name='Create%20single%20random%20numbers'>Create single random numbers</a></h2>
 <h3><a class='anchor' name='Between%20zero%20and%20<number>'>Between zero and &lt;number&gt;</a></h3>
-<pre class='code prettyprint lang-sc'>5.rand          // evenly distributed.
+<textarea class='editor'>5.rand          // evenly distributed.
 
-1.0.linrand     // probability decreases linearly from 0 to &lt;number&gt;.</pre>
+1.0.linrand     // probability decreases linearly from 0 to &lt;number&gt;.</textarea>
 <h3><a class='anchor' name='Between%20-<number>%20and%20<number>'>Between -&lt;number&gt; and &lt;number&gt;</a></h3>
-<pre class='code prettyprint lang-sc'>5.0.rand2       // evenly distributed.
+<textarea class='editor'>5.0.rand2       // evenly distributed.
 
 10.bilinrand    // probability is highest around 0,
                 // decreases linearly toward +-&lt;number&gt;.
 
-1.0.sum3rand    // quasi-gaussian, bell-shaped distribution.</pre>
+1.0.sum3rand    // quasi-gaussian, bell-shaped distribution.</textarea>
 <h3><a class='anchor' name='Within%20a%20given%20range'>Within a given range</a></h3>
-<pre class='code prettyprint lang-sc'>rrand(24, 48)       // linear distribution in the given range.
+<textarea class='editor'>rrand(24, 48)       // linear distribution in the given range.
 
 exprand(0.01, 1)    // exponential distribution;
                     // both numbers must have the same sign.
                     // (Note that the distribution of numbers is not exactly an exponential distribution,
-                    // since that would be unbounded: we might call it a logarithmic uniform distribution.)</pre>
+                    // since that would be unbounded: we might call it a logarithmic uniform distribution.)</textarea>
 <h3><a class='anchor' name='Test%20them%20multiple%20times%20with%20a%20do%20loop'>Test them multiple times with a do loop</a></h3>
-<pre class='code prettyprint lang-sc'>20.do({ 5.rand.postln; });            // evenly distributed
+<textarea class='editor'>20.do({ 5.rand.postln; });            // evenly distributed
 
 20.do({ 1.0.linrand.postln; });        // probability decreases linearly from 0 to 1.0
 
@@ -81,9 +86,9 @@ exprand(0.01, 1)    // exponential distribution;
 20.do({ 10.bilinrand.postln; });        // probability is highest around 0,
                             // decreases linearly toward +-&lt;number&gt;.
 
-20.do({ 1.0.sum3rand.postln; });    // quasi-gaussian, bell-shaped.</pre>
+20.do({ 1.0.sum3rand.postln; });    // quasi-gaussian, bell-shaped.</textarea>
 <h3><a class='anchor' name='Collect%20the%20results%20in%20an%20array'>Collect the results in an array</a></h3>
-<pre class='code prettyprint lang-sc'>Array.fill(10, { 1000.linrand }).postln;
+<textarea class='editor'>Array.fill(10, { 1000.linrand }).postln;
 
 // or more compact:
 
@@ -91,10 +96,10 @@ exprand(0.01, 1)    // exponential distribution;
 
 // or:
 
-({ 1.0.sum3rand } ! 100)</pre>
+({ 1.0.sum3rand } ! 100)</textarea>
 <h3><a class='anchor' name='Seeding'>Seeding</a></h3>
 
-<p>You can seed a random generator in order to repeat the same sequence of random numbers:<pre class='code prettyprint lang-sc'>(
+<p>You can seed a random generator in order to repeat the same sequence of random numbers:<textarea class='editor'>(
 5.do({
     thisThread.randSeed = 4;
     Array.fill(10, { 1000.linrand}).postln;
@@ -105,62 +110,62 @@ exprand(0.01, 1)    // exponential distribution;
 
 (
 5.do({ Array.fill(10, { 1000.linrand }).postln; });
-)</pre>
+)</textarea>
 
 <p>See also <a href="./../Reference/randomSeed.html">Random Seed</a>.<h3><a class='anchor' name='Histograms'>Histograms</a></h3>
 
-<p>Demonstrate the various statistical distributions visually, with histograms:<pre class='code prettyprint lang-sc'>Array.fill(500, {  1.0.rand }).plot("Sequence of 500x 1.0.rand");
+<p>Demonstrate the various statistical distributions visually, with histograms:<textarea class='editor'>Array.fill(500, {  1.0.rand }).plot("Sequence of 500x 1.0.rand");
 
 Array.fill(500, {  1.0.linrand }).plot("Sequence of 500x 1.0.linrand");
 
-Array.fill(500, {  1.0.sum3rand }).plot("Sequence of 500x 1.0.sum3rand");</pre>
+Array.fill(500, {  1.0.sum3rand }).plot("Sequence of 500x 1.0.sum3rand");</textarea>
 
-<p>Use a histogram to display how often each (integer) occurs in a collection of random numbers, :<pre class='code prettyprint lang-sc'>(
+<p>Use a histogram to display how often each (integer) occurs in a collection of random numbers, :<textarea class='editor'>(
 var randomNumbers, histogram, maxValue = 500, numVals = 10000, numBins = 500;
 
 randomNumbers = Array.fill(numVals, { maxValue.rand; });
 histogram = randomNumbers.histo(numBins, 0, maxValue);
 histogram.plot("histogram for rand 0 - " ++ maxValue);
-)</pre>
+)</textarea>
 
-<p>A histogram for linrand:<pre class='code prettyprint lang-sc'>(
+<p>A histogram for linrand:<textarea class='editor'>(
 var randomNumbers, histogram, maxValue = 500.0, numVals = 10000, numBins = 500;
 
 randomNumbers = Array.fill(numVals, { maxValue.linrand; });
 histogram = randomNumbers.histo(numBins, 0, maxValue);
 histogram.plot("histogram for linrand 0 - " ++ maxValue);
-)</pre>
+)</textarea>
 
-<p>A histogram for bilinrand:<pre class='code prettyprint lang-sc'>(
+<p>A histogram for bilinrand:<textarea class='editor'>(
 var randomNumbers, histogram, minValue = -250, maxValue = 250, numVals = 10000, numBins = 500;
 
 randomNumbers = Array.fill(numVals, { maxValue.bilinrand; });
 histogram = randomNumbers.histo(numBins, minValue, maxValue);
 histogram.plot("histogram for bilinrand" + minValue + "to" + maxValue);
-)</pre>
+)</textarea>
 
-<p>A histogram for exprand:<pre class='code prettyprint lang-sc'>(
+<p>A histogram for exprand:<textarea class='editor'>(
 var randomNumbers, histogram, minValue = 5.0, maxValue = 500, numVals = 10000, numBins = 500;
 
 randomNumbers = Array.fill(numVals, { exprand(minValue, maxValue); });
 histogram = randomNumbers.histo(numBins, minValue, maxValue);
 histogram.plot("histogram for exprand: " ++ minValue ++ " to " ++ maxValue);
-)</pre>
+)</textarea>
 
-<p>And for sum3rand (cheap quasi-gaussian):<pre class='code prettyprint lang-sc'>(
+<p>And for sum3rand (cheap quasi-gaussian):<textarea class='editor'>(
 var randomNumbers, histogram, minValue = -250, maxValue = 250, numVals = 10000, numBins = 500;
 
 randomNumbers = Array.fill(numVals, { maxValue.sum3rand; });
 histogram = randomNumbers.histo(numBins, minValue, maxValue);
 histogram.plot("histogram for sum3rand " ++ minValue ++ " to " ++ maxValue);
-)</pre>
+)</textarea>
 <h3><a class='anchor' name='on%20Collections'>on Collections</a></h3>
 
-<p>All of the single-number methods also work for (Sequenceable)Collections, simply by applying the given random message to each element of the collection:<pre class='code prettyprint lang-sc'>[ 1.0, 10, 100.0, \aSymbol ].rand.postln;        // note: Symbols are left as they are.
-List[ 10, -3.0, \aSymbol ].sum3rand.postln;</pre>
+<p>All of the single-number methods also work for (Sequenceable)Collections, simply by applying the given random message to each element of the collection:<textarea class='editor'>[ 1.0, 10, 100.0, \aSymbol ].rand.postln;        // note: Symbols are left as they are.
+List[ 10, -3.0, \aSymbol ].sum3rand.postln;</textarea>
 <h3><a class='anchor' name='Arbitrary%20random%20distributions'>Arbitrary random distributions</a></h3>
 
-<p>An integral table can be used to create an arbitrary random distribution quite efficiently. The table building is expensive though. The more points there are in the random table, the more accurate the distribution.<pre class='code prettyprint lang-sc'>(
+<p>An integral table can be used to create an arbitrary random distribution quite efficiently. The table building is expensive though. The more points there are in the random table, the more accurate the distribution.<textarea class='editor'>(
 var randomNumbers, histogram, distribution, randomTable, randTableSize=200;
 var minValue = -250, maxValue = 250, numVals = 10000, numBins = 500;
 
@@ -180,59 +185,59 @@ histogram = randomNumbers.histo(numBins, minValue, maxValue);
 
 histogram.plot("this is the histogram we got");
 distribution.plot("this was the histogram we wanted");
-)</pre>
+)</textarea>
 <h2><a class='anchor' name='Random%20decisions'>Random decisions</a></h2>
 
-<p><code class='code prettyprint lang-sc'>coin</code> simulates a coin toss and results in true or false. 1.0 is always true, 0.0 is always false, 0.5 is 50:50 chance.<pre class='code prettyprint lang-sc'>20.do({ 0.5.coin.postln });</pre>
+<p><code>coin</code> simulates a coin toss and results in true or false. 1.0 is always true, 0.0 is always false, 0.5 is 50:50 chance.<textarea class='editor'>20.do({ 0.5.coin.postln });</textarea>
 
-<p>biased random decision can be simulated bygenerating a single value and check against a threshhold:<pre class='code prettyprint lang-sc'>20.do({ (1.0.linrand &gt; 0.5).postln });
-20.do({ (exprand(0.05, 1.0) &gt; 0.5).postln });</pre>
+<p>biased random decision can be simulated bygenerating a single value and check against a threshhold:<textarea class='editor'>20.do({ (1.0.linrand &gt; 0.5).postln });
+20.do({ (exprand(0.05, 1.0) &gt; 0.5).postln });</textarea>
 <h2><a class='anchor' name='Generating%20Collections%20of%20random%20numbers'>Generating Collections of random numbers</a></h2>
-<pre class='code prettyprint lang-sc'>        // size, minVal, maxVal
+<textarea class='editor'>        // size, minVal, maxVal
 Array.rand(7, 0.0, 1.0).postln;
 
 // is short for:
 
-Array.fill(7, { rrand(0.0, 1.0) }).postln;</pre>
+Array.fill(7, { rrand(0.0, 1.0) }).postln;</textarea>
 
-<p><pre class='code prettyprint lang-sc'>        // size, minVal, maxVal
+<p><textarea class='editor'>        // size, minVal, maxVal
 List.linrand(7, 10.0, 15.0).postln;
 
 // is short for:
 
-List.fill(7, { 10 + 5.0.linrand }).postln;</pre>
-<pre class='code prettyprint lang-sc'>Signal.exprand(10, 0.1, 1);
+List.fill(7, { 10 + 5.0.linrand }).postln;</textarea>
+<textarea class='editor'>Signal.exprand(10, 0.1, 1);
 
-Signal.rand2(10, 1.0);</pre>
+Signal.rand2(10, 1.0);</textarea>
 <h2><a class='anchor' name='Random%20choice%20from%20Collections'>Random choice from Collections</a></h2>
 
-<p><code class='code prettyprint lang-sc'>choose</code> : equal chance for each element.<pre class='code prettyprint lang-sc'>10.do({ [ 1, 2, 3 ].choose.postln });</pre>
+<p><code>choose</code> : equal chance for each element.<textarea class='editor'>10.do({ [ 1, 2, 3 ].choose.postln });</textarea>
 
 <p>Weighted choice:
-<p><code class='code prettyprint lang-sc'>wchoose(weights)</code> : An array of weights sets the chance for each element.<pre class='code prettyprint lang-sc'>10.do({ [ 1, 2, 3 ].wchoose([0.1, 0.2, 0.7]).postln });</pre>
+<p><code>wchoose(weights)</code> : An array of weights sets the chance for each element.<textarea class='editor'>10.do({ [ 1, 2, 3 ].wchoose([0.1, 0.2, 0.7]).postln });</textarea>
 <h2><a class='anchor' name='Randomize%20the%20order%20of%20a%20Collection'>Randomize the order of a Collection</a></h2>
-<pre class='code prettyprint lang-sc'>List[ 1, 2, 3, 4, 5 ].scramble.postln;</pre>
+<textarea class='editor'>List[ 1, 2, 3, 4, 5 ].scramble.postln;</textarea>
 <h2><a class='anchor' name='Generate%20random%20numbers%20without%20duplicates'>Generate random numbers without duplicates</a></h2>
-<pre class='code prettyprint lang-sc'>f = { |n=8, min=0, max=7| (min..max).scramble.keep(n) };
-f.value(8, 0, 7)</pre>
+<textarea class='editor'>f = { |n=8, min=0, max=7| (min..max).scramble.keep(n) };
+f.value(8, 0, 7)</textarea>
 <h2><a class='anchor' name='Randomly%20group%20a%20Collection'>Randomly group a Collection</a></h2>
-<pre class='code prettyprint lang-sc'>curdle(probability)</pre>
+<textarea class='editor'>curdle(probability)</textarea>
 
-<p>The probability argument sets the chance that two adjacent elements will be separated.<pre class='code prettyprint lang-sc'>[ 1, 2, 3, 4, 5, 6, 7, 8 ].curdle(0.2).postln;    // big groups
+<p>The probability argument sets the chance that two adjacent elements will be separated.<textarea class='editor'>[ 1, 2, 3, 4, 5, 6, 7, 8 ].curdle(0.2).postln;    // big groups
 
-[ 1, 2, 3, 4, 5, 6, 7, 8 ].curdle(0.75).postln;    // small groups</pre>
+[ 1, 2, 3, 4, 5, 6, 7, 8 ].curdle(0.75).postln;    // small groups</textarea>
 <h2><a class='anchor' name='Random%20signal%20generators,%20i.e.%20UGens'>Random signal generators, i.e. UGens</a></h2>
 <ul>
 <li><a href="./../Classes/PinkNoise.html">PinkNoise</a><li><a href="./../Classes/WhiteNoise.html">WhiteNoise</a><li><a href="./../Classes/GrayNoise.html">GrayNoise</a><li><a href="./../Classes/BrownNoise.html">BrownNoise</a><li><a href="./../Classes/ClipNoise.html">ClipNoise</a><li><a href="./../Classes/LFNoise0.html">LFNoise0</a><li><a href="./../Classes/LFNoise1.html">LFNoise1</a><li><a href="./../Classes/LFNoise2.html">LFNoise2</a><li><a href="./../Classes/LFClipNoise.html">LFClipNoise</a><li><a href="./../Classes/LFDNoise0.html">LFDNoise0</a><li><a href="./../Classes/LFDNoise1.html">LFDNoise1</a><li><a href="./../Classes/LFDNoise3.html">LFDNoise3</a><li><a href="./../Classes/LFDClipNoise.html">LFDClipNoise</a><li><a href="./../Classes/Dust.html">Dust</a><li><a href="./../Classes/Dust2.html">Dust2</a><li><a href="./../Classes/Crackle.html">Crackle</a><li><a href="./../Classes/TWChoose.html">TWChoose</a></ul>
 
 <p>Also see UGens&gt;Generators&gt;Stochastic in the <a href="./../Browse.html#UGens>Generators>Stochastic">Browse: UGens&gt;Generators&gt;Stochastic</a> page.<h3><a class='anchor' name='Random%20operators%20on%20signals'>Random operators on signals</a></h3>
 
-<p>Unary or binary random method produce a random value for each frame (not implemented in some cases). This can be used to implement tendency masks.<pre class='code prettyprint lang-sc'>{ rrand(SinOsc.ar(0.1), SinOsc.ar(0.42)) * 0.1 }.play
-{ exprand(SinOsc.ar(0.1)) * 0.1 }.play
+<p>Unary or binary random method produce a random value for each frame (not implemented in some cases). This can be used to implement tendency masks.<textarea class='editor'>{ rrand(SinOsc.ar(0.1), SinOsc.ar(0.42)) * 0.1 }.play
 { linrand(SinOsc.ar(0.1)) * 0.1 }.play
 { bilinrand(SinOsc.ar(0.1)) * 0.1 }.play
 { sum3rand(SinOsc.ar(0.1)) * 0.1 }.play
-{ coin(SinOsc.ar(0.1)) * 0.1 }.play</pre>
+{ coin(SinOsc.ar(0.1)) * 0.1 }.play
+{ exprand(SinOsc.ar(0.1).range(0.1, 1), 0.1) - 1 * 0.1 }.play // exprand must not touch zero</textarea>
 <h3><a class='anchor' name='UGens%20that%20generate%20random%20numbers%20once,%20or%20on%20trigger:'>UGens that generate random numbers once, or on trigger:</a></h3>
 <dl>
 <dt><a href="./../Classes/Rand.html">Rand</a><dd>uniform distribution of float between (lo, hi), as for numbers.<dt><a href="./../Classes/IRand.html">IRand</a><dd>uniform distribution of integer numbers.<dt><a href="./../Classes/TRand.html">TRand</a><dd>uniform distribution of float numbers, triggered<dt><a href="./../Classes/TIRand.html">TIRand</a><dd>uniform distribution of integer numbers, triggered<dt><a href="./../Classes/LinRand.html">LinRand</a><dd>skewed distribution of float numbers, triggered<dt><a href="./../Classes/NRand.html">NRand</a><dd>sum of n uniform distributions, approximates gaussian distr. with higher n.<dt><a href="./../Classes/ExpRand.html">ExpRand</a><dd>exponential distribution<dt><a href="./../Classes/TExpRand.html">TExpRand</a><dd>exponential distribution, triggered<dt><a href="./../Classes/CoinGate.html">CoinGate</a><dd>statistical gate for a trigger<dt><a href="./../Classes/TWindex.html">TWindex</a><dd>triggered weighted choice between a list.</dl>
@@ -247,10 +252,10 @@ f.value(8, 0, 7)</pre>
 
 <p>see random patterns with analogous names<h2><a class='anchor' name='Random%20Patterns'>Random Patterns</a></h2>
 <dl>
-<dt><a href="./../Classes/Prand.html">Prand</a><dd>choose randomly one from a list ( list, numRepeats)<dt><a href="./../Classes/Pxrand.html">Pxrand</a><dd>choose one element from a list, no repeat of previous choice<dt><a href="./../Classes/Pwhite.html">Pwhite</a><dd>within range [&lt;hi&gt;, &lt;lo&gt;], choose a random value.<dt><a href="./../Classes/Pbrown.html">Pbrown</a><dd>within range [&lt;hi&gt;, &lt;lo&gt;], do a random walk with a maximum &lt;step&gt; to the next value.<dt><a href="./../Classes/Pgbrown.html">Pgbrown</a><dd>geometric brownian motion<dt><a href="./../Classes/Plprand.html">Plprand</a><dt><a href="./../Classes/Phprand.html">Phprand</a><dt><a href="./../Classes/Pmeanrand.html">Pmeanrand</a><dt><a href="./../Classes/Pbeta.html">Pbeta</a><dt><a href="./../Classes/Pcauchy.html">Pcauchy</a><dt><a href="./../Classes/Pgauss.html">Pgauss</a><dt><a href="./../Classes/Ppoisson.html">Ppoisson</a><dt><a href="./../Classes/Pexprand.html">Pexprand</a><dt><a href="./../Classes/Pwrand.html">Pwrand</a><dd>choose from a list, probabilities by weights<pre class='code prettyprint lang-sc'>Pwrand([ 1, 2, 3 ], [0.1, 0.3, 0.6], 20);</pre>
-<dt><a href="./../Classes/Pshuf.html">Pshuf</a><dd>scramble the list, then repeat that order &lt;repeats&gt; times.<dt><a href="./../Classes/Pwalk.html">Pwalk</a><dd><code class='code prettyprint lang-sc'>Pwalk( (0 .. 10), Prand([ -2,-1, 1, 2], inf));</code> random walk.<dt><a href="./../Classes/Pfsm.html">Pfsm</a><dd>random finite state machine pattern, see its help file. see also MarkovSet in MathLib quark<dt><a href="./../Classes/Pseed.html">Pseed</a><dd>sets the random seed for that stream.</dl>
+<dt><a href="./../Classes/Prand.html">Prand</a><dd>choose randomly one from a list ( list, numRepeats)<dt><a href="./../Classes/Pxrand.html">Pxrand</a><dd>choose one element from a list, no repeat of previous choice<dt><a href="./../Classes/Pwhite.html">Pwhite</a><dd>within range [&lt;hi&gt;, &lt;lo&gt;], choose a random value.<dt><a href="./../Classes/Pbrown.html">Pbrown</a><dd>within range [&lt;hi&gt;, &lt;lo&gt;], do a random walk with a maximum &lt;step&gt; to the next value.<dt><a href="./../Classes/Pgbrown.html">Pgbrown</a><dd>geometric brownian motion<dt><a href="./../Classes/Plprand.html">Plprand</a><dt><a href="./../Classes/Phprand.html">Phprand</a><dt><a href="./../Classes/Pmeanrand.html">Pmeanrand</a><dt><a href="./../Classes/Pbeta.html">Pbeta</a><dt><a href="./../Classes/Pcauchy.html">Pcauchy</a><dt><a href="./../Classes/Pgauss.html">Pgauss</a><dt><a href="./../Classes/Ppoisson.html">Ppoisson</a><dt><a href="./../Classes/Pexprand.html">Pexprand</a><dt><a href="./../Classes/Pwrand.html">Pwrand</a><dd>choose from a list, probabilities by weights<textarea class='editor'>Pwrand([ 1, 2, 3 ], [0.1, 0.3, 0.6], 20);</textarea>
+<dt><a href="./../Classes/Pshuf.html">Pshuf</a><dd>scramble the list, then repeat that order &lt;repeats&gt; times.<dt><a href="./../Classes/Pwalk.html">Pwalk</a><dd><code>Pwalk( (0 .. 10), Prand([ -2,-1, 1, 2], inf));</code> random walk.<dt><a href="./../Classes/Pfsm.html">Pfsm</a><dd>random finite state machine pattern, see its help file. see also MarkovSet in MathLib quark<dt><a href="./../Classes/Pseed.html">Pseed</a><dd>sets the random seed for that stream.</dl>
 
-<p>some basic examples<pre class='code prettyprint lang-sc'>(
+<p>some basic examples<textarea class='editor'>(
 Pbind(\note, Prand([ 0, 2, 4 ], inf),
     \dur, 0.2
 ).play;
@@ -289,5 +294,6 @@ Pbind(
     \midinote, Pgbrown(48, 72, 0.5, inf).round,
     \dur, 0.2
 ).play;
-)</pre>
-<div class='doclink'>helpfile source: <a href='file:///private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Randomness.schelp'>/private/var/folders/qf/zrk81q7s6ygdbbgwm1_h5gc80000gn/T/AppTranslocation/8BAA739F-B195-446C-A6B4-C103296EBF70/d/SuperCollider.app/Contents/Resources/HelpSource/Guides/Randomness.schelp</a><br>link::Guides/Randomness::<br></div></div></body></html>
+)</textarea>
+<div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/HelpSource/Guides/Randomness.schelp'>/usr/share/SuperCollider/HelpSource/Guides/Randomness.schelp</a><br>link::Guides/Randomness::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

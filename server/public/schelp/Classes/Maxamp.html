@@ -1,0 +1,99 @@
+<!doctype html><html lang='en'><head><title>Maxamp | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Maxamp';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>Maxamp:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#description'>Description</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#classmethods'>Class methods</a></li>
+<ul class='toc'><li class='toc3'><a href='#*ar'>ar</a> </li>
+<li class='toc2'><a href='#Inherited%20class%20methods'>Inherited class methods</a></li>
+</ul><li class='toc1'><a href='#instancemethods'>Instance methods</a></li>
+<ul class='toc'><li class='toc2'><a href='#Inherited%20instance%20methods'>Inherited instance methods</a></li>
+</ul><li class='toc1'><a href='#examples'>Examples</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Classes (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#Libraries'>Libraries</a>&#8201;&gt;&#8201;<a href='./../Browse.html#Libraries>JoshUGens'>JoshUGens</a> | <a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Analysis:Synthesis'>Analysis:Synthesis</a></span>
+</div><h1>Maxamp<span id='superclasses'> : <a href="../Classes/UGen.html">UGen</a> : <a href="../Classes/AbstractFunction.html">AbstractFunction</a> : <a href="../Classes/Object.html">Object</a></span>
+<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>Tracks and prints amplitudes</div>
+</div>
+<div class='subheader'>
+<div id='filename'>Source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/Maxamp.sc' title='/usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/classes/Maxamp.sc'>Maxamp.sc</a></div></div>
+<a class='anchor' name='kw_JoshUGens'>&nbsp;</a><h2><a class='anchor' name='description'>Description</a></h2>
+<div class='warning'><span class='warninglabel'>WARNING:</span> Printing from the server is very expensive on the client side (lang). This CPU usage will not show up in your CPU usage on the server side.</div><h2><a class='anchor' name='classmethods'>Class Methods</a></h2>
+<h3 class='method-code'><span class='method-prefix'>Maxamp.</span><a class='method-name' name='*ar' href='./../Overviews/Methods.html#ar'>ar</a>(<span class='argstr'>in</span>, <span class='argstr'>numSamps: 1000</span>)</h3>
+<div class='method'>
+<p><h4>Arguments:</h4>
+<table class='arguments'>
+<tr><td class='argumentname'>in<td class='argumentdesc'>
+<p>The input you would like to track.<tr><td class='argumentname'>numSamps<td class='argumentdesc'>
+<p>The period in which Maxamp will post amp information.</table></div><h3><a class='anchor' name='Inherited%20class%20methods'>Inherited class methods</a></h3>
+<div id='inheritedclassmets'></div><h2><a class='anchor' name='instancemethods'>Instance Methods</a></h2>
+<h3><a class='anchor' name='Inherited%20instance%20methods'>Inherited instance methods</a></h3>
+<div id='inheritedinstmets'></div><h2><a class='anchor' name='examples'>Examples</a></h2>
+<textarea class='editor'>s.boot;
+
+(
+SynthDef(\sample, {|dur|
+    Out.ar(0, SinOsc.ar(440, 0, LFNoise1.ar(0.5)) *
+        EnvGen.kr(Env([0.01, 1, 1, 0.01], [0.01, dur - 0.02, 0.01]), doneAction: 2))
+}).add;
+
+SynthDef(\maxamptest, {|inbus|
+    Maxamp.ar(In.ar(inbus, 1), SampleRate.ir / 10)
+}).add;
+)
+
+s.sendBundle(0.1, [\s_new, \sample, -1, 0, 1, \dur, 4],
+    // run maxamp test at the tail of group 1
+    [\s_new, \maxamptest, -1, 1, 1, \inbus, 0]);
+
+// run a couple more synths
+s.sendBundle(0.1, [\s_new, \sample, -1, 0, 1, \dur, 2],
+    [\s_new, \sample, -1, 0, 1, \dur, 3],
+    [\s_new, \sample, -1, 0, 1, \dur, 4]);
+
+// kill maxamptest
+s.sendBundle(0.1, [\g_freeAll, 1]);</textarea>
+
+<p>Here is a sample of what prints:<pre>Maxamp from 1.8 to 1.9: 0.87646, Overall Maxamp at 1.89903: 0.87646
+Maxamp from 1.9 to 2: 0.930082, Overall Maxamp at 1.999: 0.930082
+Maxamp from 2 to 2.1: 0.930123, Overall Maxamp at 2.00011: 0.930123
+Maxamp from 2.1 to 2.2: 0.88386, Overall Maxamp at 2.00011: 0.930123
+Maxamp from 2.2 to 2.3: 0.837598, Overall Maxamp at 2.00011: 0.930123
+Maxamp from 2.3 to 2.4: 0.791335, Overall Maxamp at 2.00011: 0.930123</pre>
+<p>The last line shows that the Maxamp from 2.3 - 2.4 seconds was 0.791335. The overall Maxamp occurred at 2.00011 seconds, with a value of 0.930123.
+<p><strong>For NRT</strong>This UGen can be particularly useful during NRT synthesis:<textarea class='editor'>a = [
+    [0, [\g_new, 1], [\s_new, \sample, -1, 0, 1, \dur, 4], [\s_new, \maxamptest, -1, 1, 1]],
+    [6, [\s_new, \sample, -1, 0, 1, \dur, 2]],
+    [8, [\s_new, \sample, -1, 0, 1, \dur, 3]],
+    [11, [\c_set, 0, 0]]
+    ]
+
+// make sure the local server is not booted
+
+Score.recordNRT(a, "/tmp/sc.sc", "test.aiff");</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/HelpSource/Classes/Maxamp.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/JoshUGens/HelpSource/Classes/Maxamp.schelp</a><br>link::Classes/Maxamp::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>

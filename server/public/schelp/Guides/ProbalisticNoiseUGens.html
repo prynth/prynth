@@ -1,0 +1,71 @@
+<!doctype html><html lang='en'><head><title>Probalistic Noise UGens | SuperCollider 3.11.2 Help</title>
+<link rel='stylesheet' href='./../scdoc.css' type='text/css' />
+<link rel='stylesheet' href='./../codemirror.css' type='text/css' />
+<link rel='stylesheet' href='./../editor.css' type='text/css' />
+<link rel='stylesheet' href='./../frontend.css' type='text/css' />
+<link rel='stylesheet' href='./../custom.css' type='text/css' />
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />
+<script src='./../lib/jquery.min.js'></script>
+<script src='./../lib/codemirror-5.39.2.min.js' type='text/javascript'></script>
+<script src='./../lib/codemirror-addon-simple-5.39.2.min.js' type='text/javascript'></script>
+<script>
+var helpRoot = './..';
+var scdoc_title = 'Probalistic Noise UGens';
+var scdoc_sc_version = '3.11.2';
+</script>
+<script src='./../scdoc.js' type='text/javascript'></script>
+<script src='./../docmap.js' type='text/javascript'></script>
+<script src='qrc:///qtwebchannel/qwebchannel.js' type='text/javascript'></script>
+</head>
+<body onload='fixTOC()'>
+<div id='toc'>
+<div id='toctitle'>Probalistic Noise UGens:</div>
+<span class='toc_search'>Filter: <input id='toc_search'></span><ul class='toc'><li class='toc1'><a href='#LFBrownNoise0.kr(freq,%20dev,%20mul,%20add)...%20(also%20LFBrownNoise1,%20LFBrownNoise2)'>LFBrownNoise0.kr(freq, dev, mul, add)... (also LFBrownNoise1, LFBrownNoise2)</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#TBetaRand.kr(lo,%20hi,%20prob1,%20prob2,%20trig)...'>TBetaRand.kr(lo, hi, prob1, prob2, trig)...</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#TBrownRand.kr(lo,%20hi,%20dev,%20trig)...'>TBrownRand.kr(lo, hi, dev, trig)...</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#TGaussRand.kr(lo,%20hi,%20trig)...'>TGaussRand.kr(lo, hi, trig)...</a></li>
+<ul class='toc'></ul><li class='toc1'><a href='#GaussTrig.kr(freq,%20dev)...'>GaussTrig.kr(freq, dev)...</a></li>
+<ul class='toc'></ul></ul></div><div id='menubar'></div>
+<div class='contents'>
+<div class='header'>
+<div id='label'>
+<span id='folder'>Guides (extension)</span>
+ | <span id='categories'><a href='./../Browse.html#UGens'>UGens</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators'>Generators</a>&#8201;&gt;&#8201;<a href='./../Browse.html#UGens>Generators>Stochastic'>Stochastic</a></span>
+</div><h1>Probalistic Noise UGens<div class='extension-indicator-ctr' title='This help file originates from a third-party quark or plugin for SuperCollider.'><img class='extension-indicator-icon' alt='Extension' src='./../images/plugin.png'><span class='extension-indicator-text'>Extension</span></div></h1>
+<div id='summary'>some notes on probalistic noise ugens (BhobUGens)</div>
+</div>
+<div class='subheader'>
+</div>
+<h2><a class='anchor' name='LFBrownNoise0.kr(freq,%20dev,%20mul,%20add)...%20(also%20LFBrownNoise1,%20LFBrownNoise2)'>LFBrownNoise0.kr(freq, dev, mul, add)... (also LFBrownNoise1, LFBrownNoise2)</a></h2>
+
+<p>0 &lt; dev &lt;= 2. higher values mean bigger steps.<h2><a class='anchor' name='TBetaRand.kr(lo,%20hi,%20prob1,%20prob2,%20trig)...'>TBetaRand.kr(lo, hi, prob1, prob2, trig)...</a></h2>
+
+<p>prob1 &lt; prob2 means lo is more likely. and vice versa. prob1 &amp; prob2 &lt; 1 leans towards lo and hi values. prob1 &amp; prob2 = 1 is linear random. &gt; 1 tends towards guassian distribution.<h2><a class='anchor' name='TBrownRand.kr(lo,%20hi,%20dev,%20trig)...'>TBrownRand.kr(lo, hi, dev, trig)...</a></h2>
+
+<p>0 &lt; dev &lt;= 2. higher values mean bigger steps.<h2><a class='anchor' name='TGaussRand.kr(lo,%20hi,%20trig)...'>TGaussRand.kr(lo, hi, trig)...</a></h2>
+
+<p>gaussian distribution between lo and hi.<h2><a class='anchor' name='GaussTrig.kr(freq,%20dev)...'>GaussTrig.kr(freq, dev)...</a></h2>
+
+<p>emits a trigger around freq. 0.0 &lt;= dev &lt; 1. 0.0 is like Impulse, higher values introduce more randomness.<textarea class='editor'>(
+{ Pan2.ar(
+    SinOsc.ar(
+        Lag.ar(
+            LinExp.ar(
+                TBrownRand.ar(0, 1, 1.0, Dust.ar(8)),
+                0, 1,
+                120, 6000
+            ),
+            0.02
+        ),
+        mul: LFBrownNoise2.kr(6, 1.0, 0.4, 0.5)
+    ).squared *
+        Decay2.kr(GaussTrig.kr(8.0, 0.2), 0.02, 0.2),
+    Lag.kr(
+        TBetaRand.kr(-1.0, 1.0, Line.kr(4, 0.1, 5), Line.kr(2, 0.1, 5), Impulse.kr(8.0)),     0.2)
+    )
+}.play
+)</textarea>
+
+<p><div class='doclink'>helpfile source: <a href='file:///usr/share/SuperCollider/Extensions/SC3plugins/BhobUGens/HelpSource/Guides/ProbalisticNoiseUGens.schelp'>/usr/share/SuperCollider/Extensions/SC3plugins/BhobUGens/HelpSource/Guides/ProbalisticNoiseUGens.schelp</a><br>link::Guides/ProbalisticNoiseUGens::<br></div></div><script src='./../editor.js' type='text/javascript'></script>
+</body></html>
